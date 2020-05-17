@@ -1,7 +1,3 @@
 library fast_immutable_collections;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/i_list.dart';
