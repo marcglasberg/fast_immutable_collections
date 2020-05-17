@@ -60,4 +60,18 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('IList.add', () {
+    var ilist1 = [1, 2, 3].lock;
+    var ilist2 = ilist1.add(4);
+    var ilist3 = ilist2.addAll([5, 6]);
+    expect(ilist1.unlock, [1, 2, 3]);
+    expect(ilist2.unlock, [1, 2, 3, 4]);
+    expect(ilist3.unlock, [1, 2, 3, 4, 5, 6]);
+
+    // Methods are chainable.
+    expect(ilist1.add(10).addAll([20, 30]).unlock, [1, 2, 3, 10, 20, 30]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

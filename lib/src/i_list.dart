@@ -13,11 +13,17 @@ class IList<T> implements Iterable<T> {
             ? (iterable as IList)._list
             : (iterable == null ? const [] : List.of(iterable));
 
+  IList.__(this._list);
+
   List<T> get unlock => List.of(_list);
 
   bool get isEmpty => _list.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
+
+  IList add(T item) => IList.__(List.of(_list)..add(item));
+
+  IList addAll(Iterable<T> items) => IList.__(List.of(_list)..addAll(items));
 
   @override
   bool any(bool Function(T) test) => _list.any(test);
