@@ -1,15 +1,16 @@
-import '../fast_immutable_collections.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class L1<T> extends L<T> {
-  List<T> _list;
+  final List<T> _list;
 
-  L1(this._list);
+  L1(this._list) : assert(_list != null);
 
   @override
   Iterator<T> get iterator => _list.iterator;
 
+  @override
   bool get isEmpty => _list.isEmpty;
 
   @override
@@ -17,13 +18,17 @@ class L1<T> extends L<T> {
 
   @override
   IList<R> cast<R>() => throw UnsupportedError('cast');
+
 //  IList<R> cast<R>() => _list.cast<R>();
 
   @override
   bool contains(Object element) => _list.contains(element);
 
   @override
-  elementAt(int index) => _list.elementAt(index);
+  T operator [](int index) => _list[index];
+
+  @override
+  T elementAt(int index) => this[index];
 
   @override
   bool every(bool Function(T) test) => _list.every(test);
@@ -35,7 +40,7 @@ class L1<T> extends L<T> {
   int get length => _list.length;
 
   @override
-  get first => _list.first;
+  T get first => _list.first;
 
   @override
   T get last => _list.last;
@@ -44,7 +49,8 @@ class L1<T> extends L<T> {
   T get single => _list.single;
 
   @override
-  firstWhere(bool Function(T) test, {Function() orElse}) => _list.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {Function() orElse}) =>
+      _list.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -64,7 +70,7 @@ class L1<T> extends L<T> {
       _list.lastWhere(test, orElse: orElse);
 
   @override
-  IList<E> map<E>(E Function(T e) f) => _list.map(f);
+  IList<E> map<E>(E Function(T e) f) => IList(_list.map(f));
 
   @override
   T reduce(T Function(T value, T element) combine) => _list.reduce(combine);

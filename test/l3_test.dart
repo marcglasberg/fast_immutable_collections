@@ -2,18 +2,17 @@ import 'package:fast_immutable_collections/src/l1.dart';
 import 'package:fast_immutable_collections/src/l2.dart';
 import 'package:fast_immutable_collections/src/l3.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test('L3', () {
-    var l3 = L3(L1([1, 2]), [3, 4]);
+    var l3 = L3(L1([1, 2]), [3, 4, 5]);
 
     expect(l3.runtimeType.toString(), "L3<int>");
     expect(l3.isEmpty, isFalse);
     expect(l3.isNotEmpty, isTrue);
-    expect(l3.length, 4);
+    expect(l3.length, 5);
 
     var iter = l3.iterator;
     expect(iter.current, null);
@@ -25,10 +24,12 @@ void main() {
     expect(iter.current, 3);
     expect(iter.moveNext(), true);
     expect(iter.current, 4);
+    expect(iter.moveNext(), true);
+    expect(iter.current, 5);
     expect(iter.moveNext(), false);
     expect(iter.current, null);
 
-    expect(l3.unlock, [1, 2, 3, 4]);
+    expect(l3.unlock, [1, 2, 3, 4, 5]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,4 +67,19 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('L3[index]', () {
+    var l3 = L3(L1([1, 2, 3]), [4, 5, 6, 7]);
+
+    expect(l3[0], 1);
+    expect(l3[1], 2);
+    expect(l3[2], 3);
+    expect(l3[3], 4);
+    expect(l3[4], 5);
+    expect(l3[5], 6);
+    expect(l3[6], 7);
+
+    expect(() => l3[7], throwsA(isA<RangeError>()));
+    expect(() => l3[-1], throwsA(isA<RangeError>()));
+  });
 }

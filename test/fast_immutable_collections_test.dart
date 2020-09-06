@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +86,29 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  test('IList.remove', () {
+    var ilist1 = [1, 2, 3].lock;
+
+    var ilist2 = ilist1.remove(2);
+    expect(ilist2.unlock, [1, 3]);
+
+    var ilist3 = ilist2.remove(5);
+    expect(ilist3.unlock, [1, 3]);
+
+    var ilist4 = ilist3.remove(1);
+    expect(ilist4.unlock, [3]);
+
+    var ilist5 = ilist4.remove(3);
+    expect(ilist5.unlock, []);
+
+    var ilist6 = ilist5.remove(7);
+    expect(ilist6.unlock, []);
+
+    expect(identical(ilist1, ilist2), false);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   test('Test IList methods that belong to Iterable.', () {
     var list = [1, 2, 3].lock.add(4).addAll([5, 6]);
 
@@ -145,7 +168,7 @@ void main() {
 
     // followedBy
     expect(list.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(list.followedBy([].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(list.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
     // forEach
     var result = 100;

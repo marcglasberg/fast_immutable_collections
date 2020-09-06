@@ -28,8 +28,10 @@ class IList<T> implements Iterable<T> {
   @override
   Iterator<T> get iterator => _l.iterator;
 
+  @override
   bool get isEmpty => _l.isEmpty;
 
+  @override
   bool get isNotEmpty => !isEmpty;
 
   // --- IList methods: ---------------
@@ -41,9 +43,17 @@ class IList<T> implements Iterable<T> {
 
   bool get isFlushed => _l is L1;
 
-  IList add(T item) => IList.__(_l.add(item));
+  IList<T> add(T item) => IList<T>.__(_l.add(item));
 
-  IList addAll(Iterable<T> items) => IList.__(_l.addAll(items));
+  IList<T> addAll(Iterable<T> items) => IList<T>.__(_l.addAll(items));
+
+  IList<T> remove(T element) => IList<T>.__(_l.remove(element));
+
+  /// Removes the element, if it exists in the list.
+  /// Otherwise, adds it to the list.
+  IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
+
+  T operator [](int index) => _l[index];
 
   // --- Iterable methods: ---------------
 
@@ -57,7 +67,7 @@ class IList<T> implements Iterable<T> {
   bool contains(Object element) => _l.contains(element);
 
   @override
-  elementAt(int index) => _l.elementAt(index);
+  T elementAt(int index) => _l[index];
 
   @override
   bool every(bool Function(T) test) => _l.every(test);
@@ -69,7 +79,7 @@ class IList<T> implements Iterable<T> {
   int get length => _l.length;
 
   @override
-  get first => _l.first;
+  T get first => _l.first;
 
   @override
   T get last => _l.last;
@@ -78,7 +88,7 @@ class IList<T> implements Iterable<T> {
   T get single => _l.single;
 
   @override
-  firstWhere(bool Function(T) test, {Function() orElse}) => _l.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {Function() orElse}) => _l.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -146,7 +156,7 @@ abstract class IterableL<T> implements Iterable<T> {
   bool contains(Object element);
 
   @override
-  elementAt(int index);
+  T elementAt(int index);
 
   @override
   bool every(bool Function(T) test);
@@ -158,7 +168,7 @@ abstract class IterableL<T> implements Iterable<T> {
   int get length;
 
   @override
-  get first;
+  T get first;
 
   @override
   T get last;
@@ -167,7 +177,7 @@ abstract class IterableL<T> implements Iterable<T> {
   T get single;
 
   @override
-  firstWhere(bool Function(T) test, {Function() orElse});
+  T firstWhere(bool Function(T) test, {Function() orElse});
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine);
@@ -234,18 +244,25 @@ abstract class L<T> implements IterableL<T> {
   }
 
   /// Returns a regular Dart (mutable) List.
-  List<T> get unlock => List.of(this);
+  List<T> get unlock => List<T>.of(this);
 
   @override
   Iterator<T> get iterator;
 
-  bool get isNotEmpty => !isEmpty;
+  L<T> add(T item) => L2<T>(this, item);
 
-  L add(T item) => L2(this, item);
+  L<T> addAll(Iterable<T> items) => L3<T>(this, items);
 
-  L addAll(Iterable<T> items) => L3(this, items);
+  /// TODO: FALTA FAZER!!!
+  L<T> remove(T element) {
+    return !contains(element) ? this : L1<T>(List.of(this)..remove(element));
+  }
 
+  @override
   bool get isEmpty => _getFlushed.isEmpty;
+
+  @override
+  bool get isNotEmpty => !isEmpty;
 
   @override
   bool any(bool Function(T) test) => _getFlushed.any(test);
@@ -258,8 +275,10 @@ abstract class L<T> implements IterableL<T> {
   @override
   bool contains(Object element) => _getFlushed.contains(element);
 
+  T operator [](int index) => _getFlushed[index];
+
   @override
-  elementAt(int index) => _getFlushed.elementAt(index);
+  T elementAt(int index) => _getFlushed[index];
 
   @override
   bool every(bool Function(T) test) => _getFlushed.every(test);
@@ -271,7 +290,7 @@ abstract class L<T> implements IterableL<T> {
   int get length => _getFlushed.length;
 
   @override
-  get first => _getFlushed.first;
+  T get first => _getFlushed.first;
 
   @override
   T get last => _getFlushed.last;
@@ -280,7 +299,7 @@ abstract class L<T> implements IterableL<T> {
   T get single => _getFlushed.single;
 
   @override
-  firstWhere(bool Function(T) test, {Function() orElse}) =>
+  T firstWhere(bool Function(T) test, {Function() orElse}) =>
       _getFlushed.firstWhere(test, orElse: orElse);
 
   @override

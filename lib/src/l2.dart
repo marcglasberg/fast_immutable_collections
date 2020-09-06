@@ -1,17 +1,29 @@
-import '../fast_immutable_collections.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class L2<T> extends L<T> {
-  L<T> l;
-  T item;
+  final L<T> _l;
+  final T _item;
 
-  L2(this.l, this.item);
+  L2(this._l, this._item)
+      : assert(_l != null),
+        assert(_item != null);
 
+  @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorL2(l.iterator, item);
+  Iterator<T> get iterator => IteratorL2(_l.iterator, _item);
+
+  @override
+  T operator [](int index) {
+    if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, "index");
+    return (index == length - 1) ? _item : _l[index];
+  }
+
+  @override
+  int get length => _l.length + 1;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

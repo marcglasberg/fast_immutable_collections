@@ -1,17 +1,34 @@
-import '../fast_immutable_collections.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class L3<T> extends L<T> {
-  L<T> l;
-  Iterable<T> items;
+  final L<T> _l;
+  final Iterable<T> _items;
 
-  L3(this.l, this.items);
+  L3(this._l, this._items)
+      : assert(_l != null),
+        assert(_items != null);
 
+  @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorL3(l.iterator, items);
+  Iterator<T> get iterator => IteratorL3(_l.iterator, _items);
+
+  @override
+  T operator [](int index) {
+    if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, "index");
+
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    return super[index];
+  }
+
+  @override
+  int get length => _l.length + _items.length;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +55,7 @@ class IteratorL3<T> implements Iterator<T> {
     if (isMoving)
       _current = iterator.current;
     else {
-      if (iteratorItems == null) iteratorItems = items.iterator;
+      iteratorItems ??= items.iterator;
       isMoving = iteratorItems.moveNext();
       if (isMoving)
         _current = iteratorItems.current;
