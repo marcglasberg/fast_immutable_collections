@@ -140,6 +140,10 @@ class IList<T> implements Iterable<T> {
 
   @override
   IList<E> whereType<E>() => _l.whereType<E>();
+
+  /// Se a lista tem mais que maxLength elementos, corta em maxLength.
+  /// Caso contrário, remove os últimos elementos, de modo que a lista fique com maxLength.
+  IList<T> maxLength(int maxLength) => IList.__(_l.maxLength(maxLength));
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,6 +260,14 @@ abstract class L<T> implements IterableL<T> {
   /// TODO: FALTA FAZER!!!
   L<T> remove(T element) {
     return !contains(element) ? this : L1<T>(List.of(this)..remove(element));
+  }
+
+  /// TODO: FALTA FAZER!!!
+  /// Se a lista tem mais que maxLength elementos, corta em maxLength.
+  /// Caso contrário, remove os últimos elementos, de modo que a lista fique com maxLength.
+  L<T> maxLength(int maxLength) {
+    if (maxLength < 0) throw ArgumentError(maxLength);
+    return (length <= maxLength) ? this : L1<T>(List.of(this)..length = maxLength);
   }
 
   @override
