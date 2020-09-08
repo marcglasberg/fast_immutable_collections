@@ -2,39 +2,47 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class L2<T> extends L<T> {
+class LAddAll<T> extends L<T> {
   final L<T> _l;
-  final T _item;
+  final Iterable<T> _items;
 
-  L2(this._l, this._item)
+  LAddAll(this._l, this._items)
       : assert(_l != null),
-        assert(_item != null);
+        assert(_items != null);
 
   @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorL2(_l.iterator, _item);
+  Iterator<T> get iterator => IteratorL3(_l.iterator, _items);
 
   @override
   T operator [](int index) {
     if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, "index");
-    return (index == length - 1) ? _item : _l[index];
+
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    /// FALTA FAZER DE FORMA EFICIENTE:
+    return super[index];
   }
 
   @override
-  int get length => _l.length + 1;
+  int get length => _l.length + _items.length;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IteratorL2<T> implements Iterator<T> {
+class IteratorL3<T> implements Iterator<T> {
   Iterator<T> iterator;
-  T item;
+
+  Iterable<T> items;
+  Iterator<T> iteratorItems;
+
   T _current;
   int extraMove;
 
-  IteratorL2(this.iterator, this.item)
+  IteratorL3(this.iterator, this.items)
       : _current = iterator.current,
         extraMove = 0;
 
@@ -47,10 +55,14 @@ class IteratorL2<T> implements Iterator<T> {
     if (isMoving)
       _current = iterator.current;
     else {
-      extraMove++;
-      _current = (extraMove == 1) ? item : null;
+      iteratorItems ??= items.iterator;
+      isMoving = iteratorItems.moveNext();
+      if (isMoving)
+        _current = iteratorItems.current;
+      else
+        _current = null;
     }
-    return extraMove <= 1;
+    return isMoving;
   }
 }
 

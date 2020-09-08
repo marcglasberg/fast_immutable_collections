@@ -2,10 +2,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class L1<T> extends L<T> {
+class LFlat<T> extends L<T> {
   final List<T> _list;
 
-  L1(this._list) : assert(_list != null);
+  LFlat(this._list) : assert(_list != null);
 
   @override
   Iterator<T> get iterator => _list.iterator;

@@ -2,47 +2,39 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class L3<T> extends L<T> {
+class LAdd<T> extends L<T> {
   final L<T> _l;
-  final Iterable<T> _items;
+  final T _item;
 
-  L3(this._l, this._items)
+  LAdd(this._l, this._item)
       : assert(_l != null),
-        assert(_items != null);
+        assert(_item != null);
 
   @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorL3(_l.iterator, _items);
+  Iterator<T> get iterator => IteratorL2(_l.iterator, _item);
 
   @override
   T operator [](int index) {
     if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, "index");
-
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    return super[index];
+    return (index == length - 1) ? _item : _l[index];
   }
 
   @override
-  int get length => _l.length + _items.length;
+  int get length => _l.length + 1;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IteratorL3<T> implements Iterator<T> {
+class IteratorL2<T> implements Iterator<T> {
   Iterator<T> iterator;
-
-  Iterable<T> items;
-  Iterator<T> iteratorItems;
-
+  T item;
   T _current;
   int extraMove;
 
-  IteratorL3(this.iterator, this.items)
+  IteratorL2(this.iterator, this.item)
       : _current = iterator.current,
         extraMove = 0;
 
@@ -55,14 +47,10 @@ class IteratorL3<T> implements Iterator<T> {
     if (isMoving)
       _current = iterator.current;
     else {
-      iteratorItems ??= items.iterator;
-      isMoving = iteratorItems.moveNext();
-      if (isMoving)
-        _current = iteratorItems.current;
-      else
-        _current = null;
+      extraMove++;
+      _current = (extraMove == 1) ? item : null;
     }
-    return isMoving;
+    return extraMove <= 1;
   }
 }
 

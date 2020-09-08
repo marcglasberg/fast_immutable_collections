@@ -1,20 +1,20 @@
-import 'package:fast_immutable_collections/src/l1.dart';
-import 'package:fast_immutable_collections/src/l2.dart';
-import 'package:fast_immutable_collections/src/l3.dart';
+import 'package:fast_immutable_collections/src/l_flat.dart';
+import 'package:fast_immutable_collections/src/l_add.dart';
+import 'package:fast_immutable_collections/src/l_add_all.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('L3', () {
-    var l3 = L3(L1([1, 2]), [3, 4, 5]);
+  test('LAddAll', () {
+    var l = LAddAll(LFlat([1, 2]), [3, 4, 5]);
 
-    expect(l3.runtimeType.toString(), "L3<int>");
-    expect(l3.isEmpty, isFalse);
-    expect(l3.isNotEmpty, isTrue);
-    expect(l3.length, 5);
+    expect(l.runtimeType.toString(), "LAddAll<int>");
+    expect(l.isEmpty, isFalse);
+    expect(l.isNotEmpty, isTrue);
+    expect(l.length, 5);
 
-    var iter = l3.iterator;
+    var iter = l.iterator;
     expect(iter.current, null);
     expect(iter.moveNext(), true);
     expect(iter.current, 1);
@@ -29,15 +29,16 @@ void main() {
     expect(iter.moveNext(), false);
     expect(iter.current, null);
 
-    expect(l3.unlock, [1, 2, 3, 4, 5]);
+    expect(l.unlock, [1, 2, 3, 4, 5]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('Combining various L3 and L2', () {
-    var l = L3(L3(L3(L2(L3(L1([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
+  test('Combining various LAddAll and LAdd', () {
+    var l =
+        LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
 
-    expect(l.runtimeType.toString(), "L3<int>");
+    expect(l.runtimeType.toString(), "LAddAll<int>");
     expect(l.isEmpty, isFalse);
     expect(l.isNotEmpty, isTrue);
     expect(l.length, 8);
@@ -68,18 +69,18 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('L3[index]', () {
-    var l3 = L3(L1([1, 2, 3]), [4, 5, 6, 7]);
+  test('LAddAll[index]', () {
+    var l = LAddAll(LFlat([1, 2, 3]), [4, 5, 6, 7]);
 
-    expect(l3[0], 1);
-    expect(l3[1], 2);
-    expect(l3[2], 3);
-    expect(l3[3], 4);
-    expect(l3[4], 5);
-    expect(l3[5], 6);
-    expect(l3[6], 7);
+    expect(l[0], 1);
+    expect(l[1], 2);
+    expect(l[2], 3);
+    expect(l[3], 4);
+    expect(l[4], 5);
+    expect(l[5], 6);
+    expect(l[6], 7);
 
-    expect(() => l3[7], throwsA(isA<RangeError>()));
-    expect(() => l3[-1], throwsA(isA<RangeError>()));
+    expect(() => l[7], throwsA(isA<RangeError>()));
+    expect(() => l[-1], throwsA(isA<RangeError>()));
   });
 }
