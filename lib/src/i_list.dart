@@ -37,8 +37,9 @@ class IList<T> implements Iterable<T> {
   // --- IList methods: ---------------
 
   /// Compacts the list.
-  void flush() {
+  IList<T> get flush {
     if (!isFlushed) _l = LFlat(List.of(_l));
+    return this;
   }
 
   bool get isFlushed => _l is LFlat;

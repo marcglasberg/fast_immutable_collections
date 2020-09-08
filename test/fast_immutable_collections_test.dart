@@ -65,7 +65,7 @@ void main() {
     var ilist = [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
 
     expect(ilist.isFlushed, isFalse);
-    ilist.flush();
+    ilist.flush;
     expect(ilist.isFlushed, isTrue);
     expect(ilist.unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
