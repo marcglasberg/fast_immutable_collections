@@ -16,6 +16,7 @@ class L2<T> extends L<T> {
   @override
   Iterator<T> get iterator => IteratorL2(_l.iterator, _item);
 
+  /// Implicitly uniting the lists.
   @override
   T operator [](int index) {
     if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, "index");

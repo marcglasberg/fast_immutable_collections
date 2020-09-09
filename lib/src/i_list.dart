@@ -36,7 +36,7 @@ class IList<T> implements Iterable<T> {
 
   // --- IList methods: ---------------
 
-  /// Compacts the list.
+  /// Compacts the list. Linearizes the list.
   void flush() {
     if (!isFlushed) _l = L1(List.of(_l));
   }
