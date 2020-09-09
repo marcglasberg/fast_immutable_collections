@@ -18,7 +18,8 @@ class L3<T> extends L<T> {
 
   @override
   T operator [](int index) {
-    if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, "index");
+    if (index < 0 || index >= length)
+      throw RangeError.range(index, 0, length - 1, "index");
 
     /// FALTA FAZER DE FORMA EFICIENTE:
     /// FALTA FAZER DE FORMA EFICIENTE:

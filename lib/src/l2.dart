@@ -19,7 +19,8 @@ class L2<T> extends L<T> {
   /// Implicitly uniting the lists.
   @override
   T operator [](int index) {
-    if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, "index");
+    if (index < 0 || index >= length)
+      throw RangeError.range(index, 0, length - 1, "index");
     return (index == length - 1) ? _item : _l[index];
   }
 

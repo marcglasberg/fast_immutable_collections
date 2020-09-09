@@ -51,7 +51,8 @@ class IList<T> implements Iterable<T> {
 
   /// Removes the element, if it exists in the list.
   /// Otherwise, adds it to the list.
-  IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
+  IList<T> toggle(T element) =>
+      contains(element) ? remove(element) : add(element);
 
   T operator [](int index) => _l[index];
 
@@ -88,7 +89,8 @@ class IList<T> implements Iterable<T> {
   T get single => _l.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) => _l.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {Function() orElse}) =>
+      _l.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -284,7 +286,8 @@ abstract class L<T> implements IterableL<T> {
   bool every(bool Function(T) test) => _getFlushed.every(test);
 
   @override
-  IList<E> expand<E>(Iterable<E> Function(T) f) => IList._(_getFlushed.expand(f));
+  IList<E> expand<E>(Iterable<E> Function(T) f) =>
+      IList._(_getFlushed.expand(f));
 
   @override
   int get length => _getFlushed.length;
@@ -307,7 +310,8 @@ abstract class L<T> implements IterableL<T> {
       _getFlushed.fold(initialValue, combine);
 
   @override
-  IList<T> followedBy(Iterable<T> other) => IList._(_getFlushed.followedBy(other));
+  IList<T> followedBy(Iterable<T> other) =>
+      IList._(_getFlushed.followedBy(other));
 
   @override
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
@@ -323,7 +327,8 @@ abstract class L<T> implements IterableL<T> {
   IList<E> map<E>(E Function(T e) f) => IList._(_getFlushed.map(f));
 
   @override
-  T reduce(T Function(T value, T element) combine) => _getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) =>
+      _getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -333,16 +338,19 @@ abstract class L<T> implements IterableL<T> {
   IList<T> skip(int count) => IList._(_getFlushed.skip(count));
 
   @override
-  IList<T> skipWhile(bool Function(T value) test) => IList._(_getFlushed.skipWhile(test));
+  IList<T> skipWhile(bool Function(T value) test) =>
+      IList._(_getFlushed.skipWhile(test));
 
   @override
   IList<T> take(int count) => IList._(_getFlushed.take(count));
 
   @override
-  IList<T> takeWhile(bool Function(T value) test) => IList._(_getFlushed.takeWhile(test));
+  IList<T> takeWhile(bool Function(T value) test) =>
+      IList._(_getFlushed.takeWhile(test));
 
   @override
-  IList<T> where(bool Function(T element) test) => IList._(_getFlushed.where(test));
+  IList<T> where(bool Function(T element) test) =>
+      IList._(_getFlushed.where(test));
 
   @override
   IList<E> whereType<E>() => IList._(_getFlushed.whereType<E>());

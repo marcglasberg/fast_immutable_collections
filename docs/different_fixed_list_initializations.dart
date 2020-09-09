@@ -5,14 +5,14 @@
 /// ```
 
 /// For more, check out the [`List` docs][list_docs].
-/// 
+///
 /// The `UnmodifiableListMixin` and `FixedLengthListMixin` are actually
 /// abstract classes, not mixins. They are both inside
 /// [`sdk/lib/internal/list.dart`][list_internal].
-/// 
-/// Note that the only way of working with an empty `const` `List` is by using 
+///
+/// Note that the only way of working with an empty `const` `List` is by using
 /// `const []`, which uses the `UnmodifiableListMixin` in the background.
-/// 
+///
 /// | List Constructor | Underlying Implementation |
 /// |------------------|---------------------------|
 /// | `const`          | `UnmodifiableListMixin`   |
@@ -36,8 +36,8 @@ void main() {
   }.forEach((String listName, List<int> list) {
     try {
       list.add(1);
-    } on UnsupportedError catch(e) {
-      print('$listName | ${e.message}');
+    } on UnsupportedError catch (e) {
+      print('${listName.padRight(12)} | ${e.message}');
     }
   });
 }

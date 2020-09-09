@@ -62,7 +62,8 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test('IList.flush', () {
-    var ilist = [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
+    var ilist =
+        [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
 
     expect(ilist.isFlushed, isFalse);
     ilist.flush();
@@ -168,7 +169,8 @@ void main() {
 
     // followedBy
     expect(list.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(list.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(list.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock,
+        [1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
     // forEach
     var result = 100;
@@ -199,7 +201,8 @@ void main() {
     // singleWhere
     expect(list.singleWhere((v) => v == 4, orElse: () => 100), 4);
     expect(list.singleWhere((v) => v == 50, orElse: () => 100), 100);
-    expect(() => list.singleWhere((v) => v < 4, orElse: () => 100), throwsStateError);
+    expect(() => list.singleWhere((v) => v < 4, orElse: () => 100),
+        throwsStateError);
 
     // skip
     expect(list.skip(1).unlock, [2, 3, 4, 5, 6]);
