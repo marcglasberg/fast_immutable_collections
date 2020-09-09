@@ -1,18 +1,20 @@
 import 'package:benchmark_harness/benchmark_harness.dart' show BenchmarkBase;
 import 'package:meta/meta.dart' show immutable;
-import 'package:test/test.dart' show test;
+import 'package:test/test.dart' show group, test;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
 
 void main() {
-  test('Empty IList Initialization', () {
-    final IListEmptyBenchmark iListEmptyBenchmark = IListEmptyBenchmark();
-    iListEmptyBenchmark.report();
-    // iListEmptyBenchmark.measure();
+  group('Empty Lists Initialization', () {
+    test('IList', () => IListEmptyBenchmark().report());
+    test('List', () => ListEmptyBenchmark().report());
   });
 
-  test('Empty List Initialization', () => ListEmptyBenchmark().report());
+  group('Adding items to a list', () {
+    test('Ilist', () => IListAddBenchmark().report());    
+    test('List', () => ListAddBenchmark().report());    
+  });
 }
 
 @immutable
@@ -23,8 +25,7 @@ class IListBenchmarkBase extends BenchmarkBase {
 
   @override
   void exercise() {
-    for (int i = 0; i < totalRuns; i++)
-      run();
+    for (int i = 0; i < totalRuns; i++) run();
   }
 }
 
@@ -38,4 +39,16 @@ class IListEmptyBenchmark extends IListBenchmarkBase {
 class ListEmptyBenchmark extends IListBenchmarkBase {
   @override
   void run() => <int>[];
+}
+
+@immutable
+class IListAddBenchmark extends IListBenchmarkBase {
+  @override
+  void run() => IList<int>().add(1);
+}
+
+@immutable
+class ListAddBenchmark extends IListBenchmarkBase {
+  @override
+  void run() => <int>[].add(1);
 }

@@ -9,7 +9,7 @@ void main() {
   test('L2', () {
     var l2 = L2(L1([1, 2, 3]), 4);
 
-    expect(l2.runtimeType.toString(), "L2<int>");
+    expect(l2.runtimeType.toString(), 'L2<int>');
     expect(l2.isEmpty, isFalse);
     expect(l2.isNotEmpty, isTrue);
     expect(l2.length, 4);

@@ -103,7 +103,7 @@ class IList<T> implements Iterable<T> {
   void forEach(void Function(T element) f) => _l.forEach(f);
 
   @override
-  String join([String separator = ""]) => _l.join(separator);
+  String join([String separator = '']) => _l.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -191,7 +191,7 @@ abstract class IterableL<T> implements Iterable<T> {
   void forEach(void Function(T element) f);
 
   @override
-  String join([String separator = ""]);
+  String join([String separator = '']);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse});
@@ -317,7 +317,7 @@ abstract class L<T> implements IterableL<T> {
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
 
   @override
-  String join([String separator = ""]) => _getFlushed.join(separator);
+  String join([String separator = '']) => _getFlushed.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

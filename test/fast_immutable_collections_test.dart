@@ -16,10 +16,10 @@ void main() {
     expect(list2.isNotEmpty, isFalse);
 
     var list3 = IList<String>([]);
-    expect(list3.runtimeType.toString(), "IList<String>");
+    expect(list3.runtimeType.toString(), 'IList<String>');
 
     var list4 = IList([1]);
-    expect(list4.runtimeType.toString(), "IList<int>");
+    expect(list4.runtimeType.toString(), 'IList<int>');
     expect(list4.isEmpty, isFalse);
     expect(list4.isNotEmpty, isTrue);
   });
@@ -33,16 +33,16 @@ void main() {
     expect(list1.isNotEmpty, isFalse);
 
     var list2 = [1].lock;
-    expect(list2.runtimeType.toString(), "IList<int>");
+    expect(list2.runtimeType.toString(), 'IList<int>');
     expect(list2.isEmpty, isFalse);
     expect(list2.isNotEmpty, isTrue);
 
     String text;
     IList<String> typedList1 = [text].lock;
-    expect(typedList1.runtimeType.toString(), "IList<String>");
+    expect(typedList1.runtimeType.toString(), 'IList<String>');
 
     var typedList2 = <String>[].lock;
-    expect(typedList2.runtimeType.toString(), "IList<String>");
+    expect(typedList2.runtimeType.toString(), 'IList<String>');
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,8 +178,8 @@ void main() {
     expect(result, 504000);
 
     // join
-    expect(list.join(','), "1,2,3,4,5,6");
-    expect([].lock.join(','), "");
+    expect(list.join(','), '1,2,3,4,5,6');
+    expect([].lock.join(','), '');
 
     // lastWhere
     expect(list.lastWhere((v) => v < 2, orElse: () => 100), 1);

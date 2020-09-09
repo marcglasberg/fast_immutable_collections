@@ -63,7 +63,7 @@ class L1<T> extends L<T> {
   void forEach(void Function(T element) f) => _list.forEach(f);
 
   @override
-  String join([String separator = ""]) => _list.join(separator);
+  String join([String separator = '']) => _list.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

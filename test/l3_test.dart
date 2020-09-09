@@ -9,7 +9,7 @@ void main() {
   test('L3', () {
     var l3 = L3(L1([1, 2]), [3, 4, 5]);
 
-    expect(l3.runtimeType.toString(), "L3<int>");
+    expect(l3.runtimeType.toString(), 'L3<int>');
     expect(l3.isEmpty, isFalse);
     expect(l3.isNotEmpty, isTrue);
     expect(l3.length, 5);
@@ -37,7 +37,7 @@ void main() {
   test('Combining various L3 and L2', () {
     var l = L3(L3(L3(L2(L3(L1([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
 
-    expect(l.runtimeType.toString(), "L3<int>");
+    expect(l.runtimeType.toString(), 'L3<int>');
     expect(l.isEmpty, isFalse);
     expect(l.isNotEmpty, isTrue);
     expect(l.length, 8);
