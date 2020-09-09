@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/src/l1.dart';
 import 'package:fast_immutable_collections/src/l2.dart';
-import 'package:fast_immutable_collections/src/l3.dart';
+// import 'package:fast_immutable_collections/src/l3.dart';
 import 'package:test/test.dart';
 
 void main() {

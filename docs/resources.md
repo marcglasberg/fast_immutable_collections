@@ -15,20 +15,22 @@ The sub, unordered lists are my highlights, it's probably simpler if you go thro
 ### 1.1. Dart
 
 1. [persistent][persistent_dart]
-    - Dart
     - They've implemented *operators* for the objects, something which converges to the assumption that immutable objects should be treated just like values.
-1. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
-1. [kt.dart][kt_dart]
+    - Is very old apparently. It depends on Dart `>=0.8.10+6 <2.0.0`.
+2. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
+    - Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
+3. [kt.dart][kt_dart]
     - Features interesting annotations from Kotlin, though some will become useless after non-nullable integration to Dart.
     - Doesn't seem to use a recursive data structure in the background to ease copying, just simple iterators, but I would have to study it more to be sure.
     - Not that many worries about speed.
-1. [built_collection][built_collection]
+4. [built_collection][built_collection]
     - Each of the core SDK collections is split in two: a mutable builder class and an immutable "built" class. Builders are for computation, "built" classes are for safely sharing with no need to copy defensively.
     - Uses the [Builder Pattern][builder_pattern], which simplifies the creation of objects, and even allows for lazy optimizations.
     - Uses (deep) hash codes.
     - (...) do not make a copy, but return a copy-on-write wrapper.
 
 
+[benchmark_harness]: https://pub.dev/packages/benchmark_harness
 [builder_pattern]: https://en.wikipedia.org/wiki/Builder_pattern
 [built_collection]: https://github.com/google/built_collection.dart
 [kt_dart]: https://github.com/passsy/kt.dart
