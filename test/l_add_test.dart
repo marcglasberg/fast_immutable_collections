@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/src/l_flat.dart';
 import 'package:fast_immutable_collections/src/l_add.dart';
-import 'package:fast_immutable_collections/src/l_add_all.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -9,7 +8,7 @@ void main() {
   test('LAdd', () {
     var l = LAdd(LFlat([1, 2, 3]), 4);
 
-    expect(l.runtimeType.toString(), "LAdd<int>");
+    expect(l.runtimeType.toString(), 'LAdd<int>');
     expect(l.isEmpty, isFalse);
     expect(l.isNotEmpty, isTrue);
     expect(l.length, 4);
