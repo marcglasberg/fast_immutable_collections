@@ -1,8 +1,6 @@
 import 'package:benchmark_harness/benchmark_harness.dart'
     show BenchmarkBase, ScoreEmitter;
-import 'package:meta/meta.dart' show immutable;
 
-@immutable
 class ListBenchmarkBase extends BenchmarkBase {
   static const int totalRuns = 10000;
 

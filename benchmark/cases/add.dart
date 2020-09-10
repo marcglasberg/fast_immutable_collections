@@ -1,8 +1,7 @@
 import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter;
 import 'package:built_collection/built_collection.dart'
     show BuiltList, ListBuilder;
-import 'package:kt_dart/collection.dart' show KtMutableList;
-import 'package:meta/meta.dart' show immutable;
+import 'package:kt_dart/collection.dart' show KtList;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
@@ -24,39 +23,42 @@ class AddBenchmark {
   }
 }
 
-@immutable
 class _IListAddBenchmark extends ListBenchmarkBase {
-  const _IListAddBenchmark({ScoreEmitter emitter})
-      : super('IList', emitter: emitter);
+  _IListAddBenchmark({ScoreEmitter emitter}) : super('IList', emitter: emitter);
+
+  IList iList = IList<int>();
 
   @override
-  void run() => IList<int>().add(1);
+  void run() => iList = IList<int>().add(1);
 }
 
-@immutable
 class _ListAddBenchmark extends ListBenchmarkBase {
-  const _ListAddBenchmark({ScoreEmitter emitter})
+  _ListAddBenchmark({ScoreEmitter emitter})
       : super('List (Mutable)', emitter: emitter);
 
+  List<int> list = [];
+
   @override
-  void run() => <int>[].add(1);
+  void run() => list.add(1);
 }
 
-@immutable
 class _KtListAddBenchmark extends ListBenchmarkBase {
-  const _KtListAddBenchmark({ScoreEmitter emitter})
+  _KtListAddBenchmark({ScoreEmitter emitter})
       : super('KtList', emitter: emitter);
 
+  KtList<int> ktList = KtList.empty();
+
   @override
-  void run() => KtMutableList<int>.empty().add(1);
+  void run() => ktList = KtList.from([...ktList.asList(), 1]);
 }
 
-@immutable
 class _BuiltListAddBenchmark extends ListBenchmarkBase {
-  const _BuiltListAddBenchmark({ScoreEmitter emitter})
+  _BuiltListAddBenchmark({ScoreEmitter emitter})
       : super('BuiltList', emitter: emitter);
 
+  BuiltList<int> builtList = BuiltList();
+
   @override
-  void run() => BuiltList<int>()
-      .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(1));
+  void run() =>
+      builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(1));
 }
