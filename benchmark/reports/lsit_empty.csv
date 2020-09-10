@@ -1,0 +1,5 @@
+Test,Time (μs)
+IList Empty,126.33668119512349
+List Empty (Mutable),55.970504281636536
+KtList Empty,11.873024636390621
+BuiltList Empty,3580.2808586762076

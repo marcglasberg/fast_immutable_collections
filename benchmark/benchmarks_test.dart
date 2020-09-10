@@ -11,10 +11,10 @@ import 'package:test/test.dart' show group, tearDownAll, test;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
 
-/// Run the benchmarks with: `pub run test test/benchmarks_test.dart`
+/// Run the benchmarks with: `dart benchmark/benchmarks_test.dart`
 void main() {
   group('Empty Lists Initialization |', () {
-    final ListScores listScores = ListScores(reportName: 'lsit_empty');
+    final ListScores listScores = ListScores(reportName: 'list_empty');
 
     test('IList', () => IListEmptyBenchmark(listScores).report());
     test('List', () => ListEmptyBenchmark(listScores).report());
@@ -47,10 +47,10 @@ class ListScores implements ScoreEmitter {
   void emit(String testName, double value) => scores[testName] = value;
 
   void scoreReport() {
-    final File reportFile = File('test/reports/$_reportName.csv');
-    String report = 'Test, Time (${_mu}s)\n';
+    final File reportFile = File('benchmark/reports/$_reportName.csv');
+    String report = 'Test,Time (${_mu}s)\n';
     scores.forEach((String testName, double score) =>
-        report += '$testName, ${score.toString()}\n');
+        report += '$testName,${score.toString()}\n');
     reportFile.writeAsStringSync(report);
   }
 
