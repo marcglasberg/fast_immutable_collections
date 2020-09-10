@@ -14,22 +14,13 @@ class EmptyBenchmark {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_empty');
 
-    _IListEmptyBenchmark(emitter: tableScoreEmitter).report();
     _ListEmptyBenchmark(emitter: tableScoreEmitter).report();
+    _IListEmptyBenchmark(emitter: tableScoreEmitter).report();
     _KtListEmptyBenchmark(emitter: tableScoreEmitter).report();
     _BuiltListEmptyBenchmark(emitter: tableScoreEmitter).report();
 
     tableScoreEmitter.saveReport();
   }
-}
-
-@immutable
-class _IListEmptyBenchmark extends ListBenchmarkBase {
-  const _IListEmptyBenchmark({ScoreEmitter emitter})
-      : super('IList', emitter: emitter);
-
-  @override
-  void run() => IList<int>();
 }
 
 @immutable
@@ -39,6 +30,15 @@ class _ListEmptyBenchmark extends ListBenchmarkBase {
 
   @override
   void run() => <int>[];
+}
+
+@immutable
+class _IListEmptyBenchmark extends ListBenchmarkBase {
+  const _IListEmptyBenchmark({ScoreEmitter emitter})
+      : super('IList', emitter: emitter);
+
+  @override
+  void run() => IList<int>();
 }
 
 @immutable

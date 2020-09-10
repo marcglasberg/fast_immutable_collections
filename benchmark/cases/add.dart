@@ -14,22 +14,13 @@ class AddBenchmark {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_add');
 
-    _IListAddBenchmark(emitter: tableScoreEmitter).report();
     _ListAddBenchmark(emitter: tableScoreEmitter).report();
+    _IListAddBenchmark(emitter: tableScoreEmitter).report();
     _KtListAddBenchmark(emitter: tableScoreEmitter).report();
     _BuiltListAddBenchmark(emitter: tableScoreEmitter).report();
 
     tableScoreEmitter.saveReport();
   }
-}
-
-class _IListAddBenchmark extends ListBenchmarkBase {
-  _IListAddBenchmark({ScoreEmitter emitter}) : super('IList', emitter: emitter);
-
-  IList iList = IList<int>();
-
-  @override
-  void run() => iList = IList<int>().add(1);
 }
 
 class _ListAddBenchmark extends ListBenchmarkBase {
@@ -42,12 +33,23 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   void run() => list.add(1);
 }
 
+class _IListAddBenchmark extends ListBenchmarkBase {
+  _IListAddBenchmark({ScoreEmitter emitter}) : super('IList', emitter: emitter);
+
+  IList iList = IList<int>();
+
+  @override
+  void run() => iList = IList<int>().add(1);
+}
+
 class _KtListAddBenchmark extends ListBenchmarkBase {
   _KtListAddBenchmark({ScoreEmitter emitter})
       : super('KtList', emitter: emitter);
 
   KtList<int> ktList = KtList.empty();
 
+  /// `_ktList.asList()` gives back an unmodifiable list, so we need `List.of` 
+  /// to add an item.
   @override
   void run() => ktList = KtList.from([...ktList.asList(), 1]);
 }
