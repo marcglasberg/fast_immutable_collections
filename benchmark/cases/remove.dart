@@ -46,7 +46,7 @@ class _IListRemoveBenchmark extends ListBenchmarkBase {
   IList<int> _iList;
 
   @override
-  void setup() => _iList = IList(getDummyList());
+  void setup() => _iList = IList<int>(getDummyList());
 
   @override
   void run() => _iList = _iList.remove(1);
@@ -59,12 +59,12 @@ class _KtListRemoveBenchmark extends ListBenchmarkBase {
   KtList<int> _ktList;
 
   @override
-  void setup() => _ktList = KtList.from(getDummyList());
+  void setup() => _ktList = KtList<int>.from(getDummyList());
 
   /// `_ktList.asList()` gives back an unmodifiable list, so we need `List.of`
   /// to remove an item.
   @override
-  void run() => _ktList = KtList.from(List.of(_ktList.asList())..remove(1));
+  void run() => _ktList = KtList<int>.from(List.of(_ktList.asList())..remove(1));
 }
 
 class _BuiltListRemoveBenchmark extends ListBenchmarkBase {
@@ -74,7 +74,7 @@ class _BuiltListRemoveBenchmark extends ListBenchmarkBase {
   BuiltList<int> _builtList;
 
   @override
-  void setup() => _builtList = BuiltList.of(getDummyList());
+  void setup() => _builtList = BuiltList<int>.of(getDummyList());
 
   @override
   void run() => _builtList

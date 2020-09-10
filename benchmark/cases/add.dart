@@ -27,40 +27,52 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   _ListAddBenchmark({ScoreEmitter emitter})
       : super('List (Mutable)', emitter: emitter);
 
-  List<int> list = [];
+  List<int> _list;
 
   @override
-  void run() => list.add(1);
+  void setup() => _list = [];
+
+  @override
+  void run() => _list.add(1);
 }
 
 class _IListAddBenchmark extends ListBenchmarkBase {
   _IListAddBenchmark({ScoreEmitter emitter}) : super('IList', emitter: emitter);
 
-  IList iList = IList<int>();
+  IList<int> _iList;
 
   @override
-  void run() => iList = IList<int>().add(1);
+  void setup() => _iList = IList<int>();
+
+  @override
+  void run() => _iList = _iList.add(1);
 }
 
 class _KtListAddBenchmark extends ListBenchmarkBase {
   _KtListAddBenchmark({ScoreEmitter emitter})
       : super('KtList', emitter: emitter);
 
-  KtList<int> ktList = KtList.empty();
+  KtList<int> _ktList;
+
+  @override
+  void setup() => _ktList = KtList<int>.empty();
 
   /// `_ktList.asList()` gives back an unmodifiable list, so we need `List.of` 
   /// to add an item.
   @override
-  void run() => ktList = KtList.from([...ktList.asList(), 1]);
+  void run() => _ktList = KtList<int>.from([..._ktList.asList(), 1]);
 }
 
 class _BuiltListAddBenchmark extends ListBenchmarkBase {
   _BuiltListAddBenchmark({ScoreEmitter emitter})
       : super('BuiltList', emitter: emitter);
 
-  BuiltList<int> builtList = BuiltList();
+  BuiltList<int> _builtList;
+
+  @override
+  void setup() => _builtList = BuiltList<int>();
 
   @override
   void run() =>
-      builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(1));
+      _builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(1));
 }
