@@ -6,7 +6,7 @@ import 'package:meta/meta.dart' show immutable;
 class ListBenchmarkBase extends BenchmarkBase {
   static const int totalRuns = 10000;
 
-  const ListBenchmarkBase(String name, ScoreEmitter emitter)
+  const ListBenchmarkBase(String name, {ScoreEmitter emitter})
       : super(name, emitter: emitter);
 
   @override

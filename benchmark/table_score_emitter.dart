@@ -2,17 +2,17 @@ import 'dart:io' show File;
 
 import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter;
 
-class ListScoreEmitter implements ScoreEmitter {
+class TableScoreEmitter implements ScoreEmitter {
   final String _reportName;
 
   final Map<String, double> scores = {};
 
-  ListScoreEmitter({String reportName}) : _reportName = reportName;
+  TableScoreEmitter({String reportName = ''}) : _reportName = reportName;
 
   @override
   void emit(String testName, double value) => scores[testName] = value;
 
-  void scoreReport() {
+  void saveReport() {
     final File reportFile = File('benchmark/reports/$_reportName.csv');
     String report = 'Data Object,Time (${_mu}s)\n';
     scores.forEach((String testName, double score) =>
