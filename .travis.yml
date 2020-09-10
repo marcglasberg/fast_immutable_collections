@@ -1,0 +1,6 @@
+language: dart
+
+dart_task:
+  - dartanalyzer
+  - dartfmt
+  - test
