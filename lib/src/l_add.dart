@@ -2,11 +2,11 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class L2<T> extends L<T> {
+class LAdd<T> extends L<T> {
   final L<T> _l;
   final T _item;
 
-  L2(this._l, this._item)
+  LAdd(this._l, this._item)
       : assert(_l != null),
         assert(_item != null);
 

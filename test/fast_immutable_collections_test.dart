@@ -66,7 +66,7 @@ void main() {
         [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
 
     expect(ilist.isFlushed, isFalse);
-    ilist.flush();
+    ilist.flush;
     expect(ilist.isFlushed, isTrue);
     expect(ilist.unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
@@ -106,6 +106,26 @@ void main() {
     expect(ilist6.unlock, []);
 
     expect(identical(ilist1, ilist2), false);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('IList.maxLength', () {
+    var ilist1 = [1, 2, 3, 4, 5].lock;
+
+    var ilist2 = ilist1.maxLength(2);
+    expect(ilist2.unlock, [1, 2]);
+
+    var ilist3 = ilist1.maxLength(3);
+    expect(ilist3.unlock, [1, 2, 3]);
+
+    var ilist4 = ilist1.maxLength(1);
+    expect(ilist4.unlock, [1]);
+
+    var ilist5 = ilist1.maxLength(0);
+    expect(ilist5.unlock, []);
+
+    expect(() => ilist1.maxLength(-1), throwsArgumentError);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

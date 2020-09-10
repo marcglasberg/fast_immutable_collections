@@ -1,6 +1,6 @@
-import 'l1.dart';
-import 'l2.dart';
-import 'l3.dart';
+import 'l_flat.dart';
+import 'l_add.dart';
+import 'l_add_all.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@ class IList<T> implements Iterable<T> {
   IList._([Iterable<T> iterable])
       : _l = (iterable is IList)
             ? (iterable as IList)._l
-            : L1(iterable == null ? const [] : List.of(iterable));
+            : LFlat(iterable == null ? const [] : List.of(iterable));
 
   IList.__(this._l);
 
@@ -36,12 +36,13 @@ class IList<T> implements Iterable<T> {
 
   // --- IList methods: ---------------
 
-  /// Compacts the list. Linearizes the list.
-  void flush() {
-    if (!isFlushed) _l = L1(List.of(_l));
+  /// Compacts the list.
+  IList<T> get flush {
+    if (!isFlushed) _l = LFlat(List.of(_l));
+    return this;
   }
 
-  bool get isFlushed => _l is L1;
+  bool get isFlushed => _l is LFlat;
 
   IList<T> add(T item) => IList<T>.__(_l.add(item));
 
@@ -142,6 +143,10 @@ class IList<T> implements Iterable<T> {
 
   @override
   IList<E> whereType<E>() => _l.whereType<E>();
+
+  /// Se a lista tem mais que maxLength elementos, corta em maxLength.
+  /// Caso contrário, remove os últimos elementos, de modo que a lista fique com maxLength.
+  IList<T> maxLength(int maxLength) => IList.__(_l.maxLength(maxLength));
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -251,13 +256,21 @@ abstract class L<T> implements IterableL<T> {
   @override
   Iterator<T> get iterator;
 
-  L<T> add(T item) => L2<T>(this, item);
+  L<T> add(T item) => LAdd<T>(this, item);
 
-  L<T> addAll(Iterable<T> items) => L3<T>(this, items);
+  L<T> addAll(Iterable<T> items) => LAddAll<T>(this, items);
 
   /// TODO: FALTA FAZER!!!
   L<T> remove(T element) {
-    return !contains(element) ? this : L1<T>(List.of(this)..remove(element));
+    return !contains(element) ? this : LFlat<T>(List.of(this)..remove(element));
+  }
+
+  /// TODO: FALTA FAZER!!!
+  /// Se a lista tem mais que maxLength elementos, corta em maxLength.
+  /// Caso contrário, remove os últimos elementos, de modo que a lista fique com maxLength.
+  L<T> maxLength(int maxLength) {
+    if (maxLength < 0) throw ArgumentError(maxLength);
+    return (length <= maxLength) ? this : LFlat<T>(List.of(this)..length = maxLength);
   }
 
   @override

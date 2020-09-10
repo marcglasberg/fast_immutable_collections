@@ -2,11 +2,11 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class L3<T> extends L<T> {
+class LAddAll<T> extends L<T> {
   final L<T> _l;
   final Iterable<T> _items;
 
-  L3(this._l, this._items)
+  LAddAll(this._l, this._items)
       : assert(_l != null),
         assert(_items != null);
 
