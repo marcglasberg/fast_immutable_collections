@@ -270,7 +270,9 @@ abstract class L<T> implements IterableL<T> {
   /// Caso contrário, remove os últimos elementos, de modo que a lista fique com maxLength.
   L<T> maxLength(int maxLength) {
     if (maxLength < 0) throw ArgumentError(maxLength);
-    return (length <= maxLength) ? this : LFlat<T>(List.of(this)..length = maxLength);
+    return (length <= maxLength)
+        ? this
+        : LFlat<T>(List.of(this)..length = maxLength);
   }
 
   @override

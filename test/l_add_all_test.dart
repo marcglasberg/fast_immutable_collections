@@ -35,8 +35,10 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test('Combining various LAddAll and LAdd', () {
-    var l =
-        LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
+    var l = LAddAll(
+        LAddAll(
+            LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]),
+        [8]);
 
     expect(l.runtimeType.toString(), 'LAddAll<int>');
     expect(l.isEmpty, isFalse);

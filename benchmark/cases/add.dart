@@ -15,10 +15,10 @@ class AddBenchmark {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_add');
 
-    _IListAddBenchmark(emitter: tableScoreEmitter);
-    _ListAddBenchmark(emitter: tableScoreEmitter);
-    _KtListAddBenchmark(emitter: tableScoreEmitter);
-    _BuiltListAddBenchmark(emitter: tableScoreEmitter);
+    _IListAddBenchmark(emitter: tableScoreEmitter).report();
+    _ListAddBenchmark(emitter: tableScoreEmitter).report();
+    _KtListAddBenchmark(emitter: tableScoreEmitter).report();
+    _BuiltListAddBenchmark(emitter: tableScoreEmitter).report();
 
     tableScoreEmitter.saveReport();
   }
@@ -36,7 +36,7 @@ class _IListAddBenchmark extends ListBenchmarkBase {
 @immutable
 class _ListAddBenchmark extends ListBenchmarkBase {
   const _ListAddBenchmark({ScoreEmitter emitter})
-      : super('List', emitter: emitter);
+      : super('List (Mutable)', emitter: emitter);
 
   @override
   void run() => <int>[].add(1);
