@@ -7,6 +7,8 @@ import 'package:kt_dart/collection.dart' show KtList;
 import '../utils/list_benchmark_base.dart' show getDummyList, ListBenchmarkBase;
 import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
+const int _indexToRead = 100;
+
 class ReadBenchmark {
   static void report() {
     final TableScoreEmitter tableScoreEmitter =
@@ -31,7 +33,7 @@ class _ListReadBenchmark extends ListBenchmarkBase {
   void setup() => _list = getDummyList();
 
   @override
-  void run() => _list[100];
+  void run() => _list[_indexToRead];
 }
 
 class _IListReadBenchmark extends ListBenchmarkBase {
@@ -44,7 +46,7 @@ class _IListReadBenchmark extends ListBenchmarkBase {
   void setup() => _iList = IList<int>(getDummyList());
 
   @override
-  void run() => _iList[100];
+  void run() => _iList[_indexToRead];
 }
 
 class _KtListReadBenchmark extends ListBenchmarkBase {
@@ -57,7 +59,7 @@ class _KtListReadBenchmark extends ListBenchmarkBase {
   void setup() => _ktList = KtList<int>.from(getDummyList());
 
   @override
-  void run() => _ktList[100];
+  void run() => _ktList[_indexToRead];
 }
 
 class _BuiltListReadBenchmark extends ListBenchmarkBase {
@@ -70,5 +72,5 @@ class _BuiltListReadBenchmark extends ListBenchmarkBase {
   void setup() => _builtList = BuiltList<int>.of(getDummyList());
 
   @override
-  void run() => _builtList[100];
+  void run() => _builtList[_indexToRead];
 }
