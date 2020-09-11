@@ -1,5 +1,5 @@
 import 'cases/add.dart' show AddBenchmark;
-import 'cases/add_list.dart' show AddListBenchmark;
+import 'cases/add_all.dart' show AddAllBenchmark;
 import 'cases/empty.dart' show EmptyBenchmark;
 import 'cases/read.dart' show ReadBenchmark;
 import 'cases/remove.dart' show RemoveBenchmark;
@@ -10,5 +10,5 @@ void main() {
   AddBenchmark.report();
   RemoveBenchmark.report();
   ReadBenchmark.report();
-  AddListBenchmark.report();
+  AddAllBenchmark.report();
 }
