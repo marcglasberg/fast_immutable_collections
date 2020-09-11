@@ -3,3 +3,13 @@
 > **THIS IS VERY EARLY STAGE. DON'T USE IT**
 
 Immutable lists and other collections, which are as fast as their native Flutter mutable counterparts.
+
+## Resources & Documentation
+
+The `docs` folder features information which might be useful for you either as an end user or a developer:
+
+| File                                        | Purpose                                                                                          |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------|
+| `different_fixed_list_initializations.dart` | Different ways of creating an *immutable* list in pure Dart and their underlying implementations |
+| `how_to_create_a_benchmark.md`              | How to create a benchmark in the context of this project                                         |
+| `resources.md`                              | Resources for studying the topic of immutable collections                                        |
