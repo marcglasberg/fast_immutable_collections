@@ -28,7 +28,7 @@ List<int> getDummyList() =>
 
 class _ListRemoveBenchmark extends ListBenchmarkBase {
   _ListRemoveBenchmark({ScoreEmitter emitter})
-      : super('List (mutable)', emitter: emitter);
+      : super('List (Mutable)', emitter: emitter);
 
   List<int> _list;
 
