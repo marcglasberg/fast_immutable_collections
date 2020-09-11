@@ -6,7 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
 import 'package:kt_dart/collection.dart' show KtList;
 
-import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
+import '../utils/list_benchmark_base.dart' show getDummyList, ListBenchmarkBase;
 import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
 class RemoveBenchmark {
@@ -22,9 +22,6 @@ class RemoveBenchmark {
     tableScoreEmitter.saveReport();
   }
 }
-
-List<int> getDummyList() =>
-    List.generate(ListBenchmarkBase.totalRuns, (_) => 1);
 
 class _ListRemoveBenchmark extends ListBenchmarkBase {
   _ListRemoveBenchmark({ScoreEmitter emitter})
@@ -64,7 +61,8 @@ class _KtListRemoveBenchmark extends ListBenchmarkBase {
   /// `_ktList.asList()` gives back an unmodifiable list, so we need `List.of`
   /// to remove an item.
   @override
-  void run() => _ktList = KtList<int>.from(List.of(_ktList.asList())..remove(1));
+  void run() =>
+      _ktList = KtList<int>.from(List.of(_ktList.asList())..remove(1));
 }
 
 class _BuiltListRemoveBenchmark extends ListBenchmarkBase {

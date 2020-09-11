@@ -1,6 +1,9 @@
 import 'package:benchmark_harness/benchmark_harness.dart'
     show BenchmarkBase, ScoreEmitter;
 
+List<int> getDummyList({int length = ListBenchmarkBase.totalRuns}) =>
+    List<int>.generate(length, (_) => 1);
+
 class ListBenchmarkBase extends BenchmarkBase {
   static const int totalRuns = 10000;
 

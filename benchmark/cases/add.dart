@@ -30,7 +30,7 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   List<int> _list;
 
   @override
-  void setup() => _list = [];
+  void setup() => _list = <int>[];
 
   @override
   void run() => _list.add(1);
