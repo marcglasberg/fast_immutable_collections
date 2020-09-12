@@ -1,5 +1,5 @@
 Data Object,Time (μs),Normalized Score,Normalized Against Mutable List
-List (Mutable),48.81210035632352,0.0,1.0
-IList,203.71460582603382,0.0,4.17
-KtList,4306.941935483871,0.01,88.24
-BuiltList,826850.0,1.0,16939.45
+List (Mutable),46.72762955002103,0.0,1.0
+IList,166.61587804065312,0.0,3.57
+KtList,3949.4240631163707,0.01,84.52
+BuiltList,718511.0,1.0,15376.58
