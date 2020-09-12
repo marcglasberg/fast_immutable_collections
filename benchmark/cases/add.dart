@@ -13,11 +13,29 @@ class AddBenchmark {
   static void report() {
     final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_add');
 
-    _ListAddBenchmark(runs: 10000, size: 1000, emitter: tableScoreEmitter).report();
-    _IListAddBenchmark(runs: 10000, size: 1000, emitter: tableScoreEmitter).report();
-    _KtListAddBenchmark(runs: 10000, size: 1000, emitter: tableScoreEmitter).report();
-    _BuiltListAddBenchmark1(runs: 10000, size: 1000, emitter: tableScoreEmitter).report();
-    _BuiltListAddBenchmark2(runs: 10000, size: 1000, emitter: tableScoreEmitter).report();
+    int runs = 10000;
+    int size =  10;
+    _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _BuiltListAddBenchmark1(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _BuiltListAddBenchmark2(runs: runs, size: size, emitter: tableScoreEmitter).report();
+
+    runs = 10000;
+    size =  1000;
+    _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _BuiltListAddBenchmark1(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _BuiltListAddBenchmark2(runs: runs, size: size, emitter: tableScoreEmitter).report();
+
+    runs = 10000;
+    size =  100000;
+    _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _BuiltListAddBenchmark1(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    _BuiltListAddBenchmark2(runs: runs, size: size, emitter: tableScoreEmitter).report();
 
     tableScoreEmitter.saveReport();
   }
@@ -89,7 +107,7 @@ class _KtListAddBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    _ktList = _ktList.plusElement(1);
+    _ktList.plusElement(1);
   }
 }
 
@@ -120,7 +138,7 @@ class _BuiltListAddBenchmark1 extends ListBenchmarkBase {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class _BuiltListAddBenchmark2 extends ListBenchmarkBase {
-  static const innerRuns = 1000;
+  static const innerRuns = 100;
 
   _BuiltListAddBenchmark2({
     @required int runs,
