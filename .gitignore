@@ -1,3 +1,6 @@
+# Benchmarks
+benchmarks/reports/
+
 # Miscellaneous
 *.class
 *.log
