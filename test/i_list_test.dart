@@ -95,22 +95,25 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('IList.flush', () {
-    var ilist =
+  test('`flush`', () {
+    final IList<int> ilist =
         [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
 
     expect(ilist.isFlushed, isFalse);
+
     ilist.flush;
+
     expect(ilist.isFlushed, isTrue);
     expect(ilist.unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('IList.add e addAll', () {
-    var ilist1 = [1, 2, 3].lock;
-    var ilist2 = ilist1.add(4);
-    var ilist3 = ilist2.addAll([5, 6]);
+  test('`add` and `addAll`', () {
+    final IList<int> ilist1 = [1, 2, 3].lock;
+    final IList<int> ilist2 = ilist1.add(4);
+    final IList<int> ilist3 = ilist2.addAll([5, 6]);
+
     expect(ilist1.unlock, [1, 2, 3]);
     expect(ilist2.unlock, [1, 2, 3, 4]);
     expect(ilist3.unlock, [1, 2, 3, 4, 5, 6]);
@@ -121,22 +124,22 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('IList.remove', () {
-    var ilist1 = [1, 2, 3].lock;
+  test('`remove`', () {
+    final IList<int> ilist1 = [1, 2, 3].lock;
 
-    var ilist2 = ilist1.remove(2);
+    final IList<int> ilist2 = ilist1.remove(2);
     expect(ilist2.unlock, [1, 3]);
 
-    var ilist3 = ilist2.remove(5);
+    final IList<int> ilist3 = ilist2.remove(5);
     expect(ilist3.unlock, [1, 3]);
 
-    var ilist4 = ilist3.remove(1);
+    final IList<int> ilist4 = ilist3.remove(1);
     expect(ilist4.unlock, [3]);
 
-    var ilist5 = ilist4.remove(3);
+    final IList<int> ilist5 = ilist4.remove(3);
     expect(ilist5.unlock, []);
 
-    var ilist6 = ilist5.remove(7);
+    final IList<int> ilist6 = ilist5.remove(7);
     expect(ilist6.unlock, []);
 
     expect(identical(ilist1, ilist2), false);
@@ -144,22 +147,25 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('IList.maxLength', () {
-    var ilist1 = [1, 2, 3, 4, 5].lock;
+  group('`maxLength`', () {
+    final IList<int> ilist1 = [1, 2, 3, 4, 5].lock;
 
-    var ilist2 = ilist1.maxLength(2);
-    expect(ilist2.unlock, [1, 2]);
+    test('Cutting the list off', () {
+      final IList<int> ilist2 = ilist1.maxLength(2);
+      expect(ilist2.unlock, [1, 2]);
 
-    var ilist3 = ilist1.maxLength(3);
-    expect(ilist3.unlock, [1, 2, 3]);
+      final IList<int> ilist3 = ilist1.maxLength(3);
+      expect(ilist3.unlock, [1, 2, 3]);
 
-    var ilist4 = ilist1.maxLength(1);
-    expect(ilist4.unlock, [1]);
+      final IList<int> ilist4 = ilist1.maxLength(1);
+      expect(ilist4.unlock, [1]);
 
-    var ilist5 = ilist1.maxLength(0);
-    expect(ilist5.unlock, []);
+      final IList<int> ilist5 = ilist1.maxLength(0);
+      expect(ilist5.unlock, []);
+    });
 
-    expect(() => ilist1.maxLength(-1), throwsArgumentError);
+    test('Invalid argument',
+        () => expect(() => ilist1.maxLength(-1), throwsArgumentError));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
