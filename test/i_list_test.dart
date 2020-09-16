@@ -75,7 +75,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group('Creating native mutable lists from immutable lists', () {
+  group('Creating native mutable lists from immutable lists |', () {
     final List<int> list = [1, 2, 3];
 
     test('From the default factory constructor', () {
@@ -147,7 +147,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group('`maxLength`', () {
+  group('`maxLength` |', () {
     final IList<int> ilist1 = [1, 2, 3, 4, 5].lock;
 
     test('Cutting the list off', () {
@@ -188,7 +188,7 @@ void main() {
       expect(iList.contains(100), isFalse);
     });
 
-    group('`elementAt', () {
+    group('`elementAt` |', () {
       test('Regular element access', () {
         expect(iList.elementAt(0), 1);
         expect(iList.elementAt(1), 2);
@@ -222,109 +222,135 @@ void main() {
 
     test('`last`', () => expect(iList.last, 6));
 
-    group('`single`', () {
-      test('State exception', () {
-        
-      });
+    group('`single` |', () {
+      test('State exception',
+          () => expect(() => iList.single, throwsStateError));
+
+      test('Access', () => expect([10].lock.single, 10));
     });
+
+    test('`firstWhere`', () {
+      expect(iList.firstWhere((int v) => v > 1, orElse: () => 100), 2);
+      expect(iList.firstWhere((int v) => v > 4, orElse: () => 100), 5);
+      expect(iList.firstWhere((int v) => v > 5, orElse: () => 100), 6);
+      expect(iList.firstWhere((int v) => v > 6, orElse: () => 100), 100);
+    });
+
+    test('`fold`',
+        () => expect(iList.fold(100, (int p, int e) => p * (1 + e)), 504000));
+
+    test('`followedBy`', () {
+      expect(iList.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
+      expect(iList.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock,
+          [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    });
+
+    test('`forEach`', () {
+      int result = 100;
+      iList.forEach((int v) => result *= 1 + v);
+      expect(result, 504000);
+    });
+
+    test('`join`', () {
+      expect(iList.join(','), '1,2,3,4,5,6');
+      expect([].lock.join(','), '');
+    });
+
+    test('`lastWhere`', () {
+      expect(iList.lastWhere((int v) => v < 2, orElse: () => 100), 1);
+      expect(iList.lastWhere((int v) => v < 5, orElse: () => 100), 4);
+      expect(iList.lastWhere((int v) => v < 6, orElse: () => 100), 5);
+      expect(iList.lastWhere((int v) => v < 7, orElse: () => 100), 6);
+      expect(iList.lastWhere((int v) => v < 50, orElse: () => 100), 6);
+      expect(iList.lastWhere((int v) => v < 1, orElse: () => 100), 100);
+    });
+
+    test('`map`', () {
+      expect([1, 2, 3].lock.map((int v) => v + 1).unlock, [2, 3, 4]);
+      expect(iList.map((int v) => v + 1).unlock, [2, 3, 4, 5, 6, 7]);
+    });
+
+    group('`reduce` |', () {
+      test('Regular usage', () {
+        expect(iList.reduce((int p, int e) => p * (1 + e)), 2520);
+        expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
+      });
+
+      test(
+          'State exception',
+          () => expect(() => [].reduce((dynamic p, dynamic e) => p * (1 + e)),
+              throwsStateError));
+    });
+
+    group('`singleWhere` |', () {
+      test('Regular usage', () {
+        expect(iList.singleWhere((int v) => v == 4, orElse: () => 100), 4);
+        expect(iList.singleWhere((int v) => v == 50, orElse: () => 100), 100);
+      });
+
+      test(
+          'State exception',
+          () => expect(
+              () => iList.singleWhere((int v) => v < 4, orElse: () => 100),
+              throwsStateError));
+    });
+
+    test('`skip`', () {
+      expect(iList.skip(1).unlock, [2, 3, 4, 5, 6]);
+      expect(iList.skip(3).unlock, [4, 5, 6]);
+      expect(iList.skip(5).unlock, [6]);
+      expect(iList.skip(10).unlock, []);
+    });
+
+    test('`skipWhile`', () {
+      expect(iList.skipWhile((int v) => v < 3).unlock, [3, 4, 5, 6]);
+      expect(iList.skipWhile((int v) => v < 5).unlock, [5, 6]);
+      expect(iList.skipWhile((int v) => v < 6).unlock, [6]);
+      expect(iList.skipWhile((int v) => v < 100).unlock, []);
+    });
+
+    test('`take`', () {
+      expect(iList.take(0).unlock, []);
+      expect(iList.take(1).unlock, [1]);
+      expect(iList.take(3).unlock, [1, 2, 3]);
+      expect(iList.take(5).unlock, [1, 2, 3, 4, 5]);
+      expect(iList.take(10).unlock, [1, 2, 3, 4, 5, 6]);
+    });
+
+    test('`takeWhile`', () {
+      expect(iList.takeWhile((int v) => v < 3).unlock, [1, 2]);
+      expect(iList.takeWhile((int v) => v < 5).unlock, [1, 2, 3, 4]);
+      expect(iList.takeWhile((int v) => v < 6).unlock, [1, 2, 3, 4, 5]);
+      expect(iList.takeWhile((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
+    });
+
+    group('`toList` |', () {
+      test('Regular usage', () {
+        expect(iList.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
+        expect(iList.unlock, [1, 2, 3, 4, 5, 6]);
+      });
+
+      test(
+          'Unsupported exception',
+          () => expect(() => iList.toList(growable: false)..add(7),
+              throwsUnsupportedError));
+    });
+
+    test('`toSet`', () {
+      expect(iList.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
+      expect(iList.unlock, [1, 2, 3, 4, 5, 6]);
+    });
+
+    test('`where`', () {
+      expect(iList.where((int v) => v < 0).unlock, []);
+      expect(iList.where((int v) => v < 3).unlock, [1, 2]);
+      expect(iList.where((int v) => v < 5).unlock, [1, 2, 3, 4]);
+      expect(iList.where((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
+    });
+
+    test(
+        '`whereType`',
+        () =>
+            expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]));
   });
-
-  test('Test IList methods that belong to Iterable.', () {
-    var list = [1, 2, 3].lock.add(4).addAll([5, 6]);
-
-    // single
-    expect(() => list.single, throwsStateError);
-    expect([10].lock.single, 10);
-
-    // firstWhere
-    expect(list.firstWhere((v) => v > 1, orElse: () => 100), 2);
-    expect(list.firstWhere((v) => v > 4, orElse: () => 100), 5);
-    expect(list.firstWhere((v) => v > 5, orElse: () => 100), 6);
-    expect(list.firstWhere((v) => v > 6, orElse: () => 100), 100);
-
-    // fold
-    expect(list.fold(100, (p, e) => p * (1 + e)), 504000);
-
-    // followedBy
-    expect(list.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(list.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock,
-        [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-
-    // forEach
-    var result = 100;
-    list.forEach((v) => result *= 1 + v);
-    expect(result, 504000);
-
-    // join
-    expect(list.join(','), '1,2,3,4,5,6');
-    expect([].lock.join(','), '');
-
-    // lastWhere
-    expect(list.lastWhere((v) => v < 2, orElse: () => 100), 1);
-    expect(list.lastWhere((v) => v < 5, orElse: () => 100), 4);
-    expect(list.lastWhere((v) => v < 6, orElse: () => 100), 5);
-    expect(list.lastWhere((v) => v < 7, orElse: () => 100), 6);
-    expect(list.lastWhere((v) => v < 50, orElse: () => 100), 6);
-    expect(list.lastWhere((v) => v < 1, orElse: () => 100), 100);
-
-    // map
-    expect([1, 2, 3].lock.map((v) => v + 1).unlock, [2, 3, 4]);
-    expect(list.map((v) => v + 1).unlock, [2, 3, 4, 5, 6, 7]);
-
-    // reduce
-    expect(list.reduce((p, e) => p * (1 + e)), 2520);
-    expect([5].lock.reduce((p, e) => p * (1 + e)), 5);
-    expect(() => [].reduce((p, e) => p * (1 + e)), throwsStateError);
-
-    // singleWhere
-    expect(list.singleWhere((v) => v == 4, orElse: () => 100), 4);
-    expect(list.singleWhere((v) => v == 50, orElse: () => 100), 100);
-    expect(() => list.singleWhere((v) => v < 4, orElse: () => 100),
-        throwsStateError);
-
-    // skip
-    expect(list.skip(1).unlock, [2, 3, 4, 5, 6]);
-    expect(list.skip(3).unlock, [4, 5, 6]);
-    expect(list.skip(5).unlock, [6]);
-    expect(list.skip(10).unlock, []);
-
-    // skipWhile
-    expect(list.skipWhile((v) => v < 3).unlock, [3, 4, 5, 6]);
-    expect(list.skipWhile((v) => v < 5).unlock, [5, 6]);
-    expect(list.skipWhile((v) => v < 6).unlock, [6]);
-    expect(list.skipWhile((v) => v < 100).unlock, []);
-
-    // take
-    expect(list.take(0).unlock, []);
-    expect(list.take(1).unlock, [1]);
-    expect(list.take(3).unlock, [1, 2, 3]);
-    expect(list.take(5).unlock, [1, 2, 3, 4, 5]);
-    expect(list.take(10).unlock, [1, 2, 3, 4, 5, 6]);
-
-    // takeWhile
-    expect(list.takeWhile((v) => v < 3).unlock, [1, 2]);
-    expect(list.takeWhile((v) => v < 5).unlock, [1, 2, 3, 4]);
-    expect(list.takeWhile((v) => v < 6).unlock, [1, 2, 3, 4, 5]);
-    expect(list.takeWhile((v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
-
-    // toList
-    expect(list.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
-    expect(list.unlock, [1, 2, 3, 4, 5, 6]);
-    expect(() => list.toList(growable: false)..add(7), throwsUnsupportedError);
-
-    // toSet
-    expect(list.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
-    expect(list.unlock, [1, 2, 3, 4, 5, 6]);
-
-    // where
-    expect(list.where((v) => v < 0).unlock, []);
-    expect(list.where((v) => v < 3).unlock, [1, 2]);
-    expect(list.where((v) => v < 5).unlock, [1, 2, 3, 4]);
-    expect(list.where((v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
-
-    // whereType
-    expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
 }
