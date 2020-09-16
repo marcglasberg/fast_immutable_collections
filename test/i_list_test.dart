@@ -1,27 +1,43 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:test/test.dart';
+import 'package:test/test.dart'
+    show
+        expect,
+        group,
+        isA,
+        isFalse,
+        isTrue,
+        test,
+        throwsArgumentError,
+        throwsRangeError,
+        throwsStateError,
+        throwsUnsupportedError;
+
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    show IList, IListExtension;
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+  group('Creating immutable lists', () {
+    final IList iList1 = IList(), iList2 = IList([]);
+    final iList3 = IList<String>([]);
+    final iList4 = IList([1]);
 
-  test('Create immutable list.', () {
-    var list1 = IList();
-    expect(list1.runtimeType, IList);
-    expect(list1.isEmpty, isTrue);
-    expect(list1.isNotEmpty, isFalse);
+    test('Runtime Type', () {
+      expect(iList1, isA<IList>());
+      expect(iList2, isA<IList>());
+      expect(iList3, isA<IList<String>>());
+      expect(iList4, isA<IList<int>>());
+    });
 
-    var list2 = IList([]);
-    expect(list2.runtimeType, IList);
-    expect(list2.isEmpty, isTrue);
-    expect(list2.isNotEmpty, isFalse);
+    test('Emptiness Properties', () {
+      expect(iList1.isEmpty, isTrue);
+      expect(iList2.isEmpty, isTrue);
+      expect(iList3.isEmpty, isTrue);
+      expect(iList4.isEmpty, isFalse);
 
-    var list3 = IList<String>([]);
-    expect(list3.runtimeType.toString(), 'IList<String>');
-
-    var list4 = IList([1]);
-    expect(list4.runtimeType.toString(), 'IList<int>');
-    expect(list4.isEmpty, isFalse);
-    expect(list4.isNotEmpty, isTrue);
+      expect(iList1.isNotEmpty, isFalse);
+      expect(iList2.isNotEmpty, isFalse);
+      expect(iList3.isNotEmpty, isFalse);
+      expect(iList4.isNotEmpty, isTrue);
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
