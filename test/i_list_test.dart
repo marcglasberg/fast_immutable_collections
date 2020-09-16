@@ -75,16 +75,22 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('Create native mutable list from immutable list.', () {
-    var list = [1, 2, 3];
+  group('Creating native mutable lists from immutable lists', () {
+    final List<int> list = [1, 2, 3];
 
-    var ilist1 = IList(list);
-    expect(ilist1.unlock, list);
-    expect(identical(ilist1.unlock, list), isFalse);
+    test('From the default factory constructor', () {
+      final IList<int> ilist = IList(list);
 
-    var ilist2 = list.lock;
-    expect(ilist2.unlock, list);
-    expect(identical(ilist2.unlock, list), isFalse);
+      expect(ilist.unlock, list);
+      expect(identical(ilist.unlock, list), isFalse);
+    });
+
+    test('From `lock`', () {
+      final IList<int> iList = list.lock;
+
+      expect(iList.unlock, list);
+      expect(identical(iList.unlock, list), isFalse);
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
