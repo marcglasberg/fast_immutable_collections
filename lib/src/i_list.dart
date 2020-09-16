@@ -17,7 +17,7 @@ class IList<T> implements Iterable<T> {
       (iterable is IList) ? (iterable as IList) : IList._(iterable);
 
   IList._([Iterable<T> iterable])
-      : _l = (iterable is IList)
+      : _l = iterable is IList
             ? (iterable as IList)._l
             : LFlat(iterable == null ? const [] : List.of(iterable));
 

@@ -1,0 +1,207 @@
+@startuml fast_immutable_collections
+set namespaceSeparator ::
+
+class "fast_immutable_collections::src::i_list.dart::IList<T>" {
+  -L<T> _l
+  +List<T> unlock
+  +Iterator<T> iterator
+  +bool isEmpty
+  +bool isNotEmpty
+  +IList<T> flush
+  +bool isFlushed
+  +int length
+  +T first
+  +T last
+  +T single
+  +IList add()
+  +IList addAll()
+  +IList remove()
+  +IList toggle()
+  +T []()
+  +bool any()
+  +IList cast()
+  +bool contains()
+  +T elementAt()
+  +bool every()
+  +IList expand()
+  +T firstWhere()
+  +E fold()
+  +IList followedBy()
+  +void forEach()
+  +String join()
+  +T lastWhere()
+  +IList map()
+  +T reduce()
+  +T singleWhere()
+  +IList skip()
+  +IList skipWhile()
+  +IList take()
+  +IList takeWhile()
+  +List toList()
+  +Set toSet()
+  +IList where()
+  +IList whereType()
+  +IList maxLength()
+}
+
+"fast_immutable_collections::src::i_list.dart::IList<T>" o-- "fast_immutable_collections::src::i_list.dart::L<T>"
+"fast_immutable_collections::src::i_list.dart::IList<T>" o-- "fast_immutable_collections::src::i_list.dart::IList<T>"
+
+abstract class "fast_immutable_collections::src::i_list.dart::IterableL<T>" {
+  +int length
+  +T first
+  +T last
+  +T single
+  +bool any()
+  +IList cast()
+  +bool contains()
+  +T elementAt()
+  +bool every()
+  +IList expand()
+  +T firstWhere()
+  +E fold()
+  +IList followedBy()
+  +void forEach()
+  +String join()
+  +T lastWhere()
+  +IList map()
+  +T reduce()
+  +T singleWhere()
+  +IList skip()
+  +IList skipWhile()
+  +IList take()
+  +IList takeWhile()
+  +List toList()
+  +Set toSet()
+  +IList where()
+  +IList whereType()
+}
+
+abstract class "fast_immutable_collections::src::i_list.dart::L<T>" {
+  -List<T> _flushed
+  -List<T> _getFlushed
+  +List<T> unlock
+  +Iterator<T> iterator
+  +bool isEmpty
+  +bool isNotEmpty
+  +int length
+  +T first
+  +T last
+  +T single
+  +L add()
+  +L addAll()
+  +L remove()
+  +L maxLength()
+  +bool any()
+  +IList cast()
+  +bool contains()
+  +T []()
+  +T elementAt()
+  +bool every()
+  +IList expand()
+  +T firstWhere()
+  +E fold()
+  +IList followedBy()
+  +void forEach()
+  +String join()
+  +T lastWhere()
+  +IList map()
+  +T reduce()
+  +T singleWhere()
+  +IList skip()
+  +IList skipWhile()
+  +IList take()
+  +IList takeWhile()
+  +IList where()
+  +IList whereType()
+  +List toList()
+  +Set toSet()
+}
+
+"fast_immutable_collections::src::i_list.dart::IterableL<T>" <|-- "fast_immutable_collections::src::i_list.dart::L<T>"
+
+class "fast_immutable_collections::src::l_add.dart::LAdd<T>" {
+  -L<T> _l
+  -T _item
+  +bool isEmpty
+  +Iterator<T> iterator
+  +int length
+  +T []()
+}
+
+"fast_immutable_collections::src::l_add.dart::LAdd<T>" o-- "fast_immutable_collections::src::i_list.dart::L<T>"
+"fast_immutable_collections::src::i_list.dart::L<T>" <|-- "fast_immutable_collections::src::l_add.dart::LAdd<T>"
+
+class "fast_immutable_collections::src::l_add.dart::IteratorL2<T>" {
+  +Iterator<T> iterator
+  +T item
+  -T _current
+  +int extraMove
+  +T current
+  +bool moveNext()
+}
+
+"dart::core::Iterator<E>" <|-- "fast_immutable_collections::src::l_add.dart::IteratorL2<T>"
+
+class "fast_immutable_collections::src::l_add_all.dart::LAddAll<T>" {
+  -L<T> _l
+  -dynamic _items
+  +bool isEmpty
+  +Iterator<T> iterator
+  +int length
+  +T []()
+}
+
+"fast_immutable_collections::src::l_add_all.dart::LAddAll<T>" o-- "fast_immutable_collections::src::i_list.dart::L<T>"
+"fast_immutable_collections::src::i_list.dart::L<T>" <|-- "fast_immutable_collections::src::l_add_all.dart::LAddAll<T>"
+
+class "fast_immutable_collections::src::l_add_all.dart::IteratorL3<T>" {
+  +Iterator<T> iterator
+  +dynamic items
+  +Iterator<T> iteratorItems
+  -T _current
+  +int extraMove
+  +T current
+  +bool moveNext()
+}
+
+"dart::core::Iterator<E>" <|-- "fast_immutable_collections::src::l_add_all.dart::IteratorL3<T>"
+
+class "fast_immutable_collections::src::l_flat.dart::LFlat<T>" {
+  -List<T> _list
+  +Iterator<T> iterator
+  +bool isEmpty
+  +int length
+  +T first
+  +T last
+  +T single
+  +bool any()
+  +IList cast()
+  +bool contains()
+  +T []()
+  +T elementAt()
+  +bool every()
+  +IList expand()
+  +T firstWhere()
+  +E fold()
+  +IList followedBy()
+  +void forEach()
+  +String join()
+  +T lastWhere()
+  +IList map()
+  +T reduce()
+  +T singleWhere()
+  +IList skip()
+  +IList skipWhile()
+  +IList take()
+  +IList takeWhile()
+  +List toList()
+  +Set toSet()
+  +IList where()
+  +IList whereType()
+}
+
+"fast_immutable_collections::src::i_list.dart::L<T>" <|-- "fast_immutable_collections::src::l_flat.dart::LFlat<T>"
+
+
+@enduml
