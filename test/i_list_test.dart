@@ -15,7 +15,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList, IListExtension;
 
 void main() {
-  group('Creating immutable lists', () {
+  group('Creating immutable lists |', () {
     final IList iList1 = IList(), iList2 = IList([]);
     final iList3 = IList<String>([]);
     final iList4 = IList([1]);
@@ -42,23 +42,35 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('Create immutable list with extensions.', () {
-    var list1 = [].lock;
-    expect(list1.runtimeType, IList);
-    expect(list1.isEmpty, isTrue);
-    expect(list1.isNotEmpty, isFalse);
+  group('Creating immutable lists with extensions |', () {
+    test('From an empty list', () {
+      final IList iList = [].lock;
 
-    var list2 = [1].lock;
-    expect(list2.runtimeType.toString(), 'IList<int>');
-    expect(list2.isEmpty, isFalse);
-    expect(list2.isNotEmpty, isTrue);
+      expect(iList, isA<IList>());
+      expect(iList.isEmpty, isTrue);
+      expect(iList.isNotEmpty, isFalse);
+    });
 
-    String text;
-    IList<String> typedList1 = [text].lock;
-    expect(typedList1.runtimeType.toString(), 'IList<String>');
+    test('From a list with one `int` item', () {
+      final IList iList = [1].lock;
 
-    var typedList2 = <String>[].lock;
-    expect(typedList2.runtimeType.toString(), 'IList<String>');
+      expect(iList, isA<IList<int>>());
+      expect(iList.isEmpty, isFalse);
+      expect(iList.isNotEmpty, isTrue);
+    });
+
+    test('From a list with one `null` string', () {
+      final String text = null;
+      final IList<String> typedList = [text].lock;
+
+      expect(typedList, isA<IList<String>>());
+    });
+
+    test('From an empty list typed with `String`', () {
+      final typedList = <String>[].lock;
+
+      expect(typedList, isA<IList<String>>());
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
