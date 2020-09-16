@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/src/l_flat.dart' show LFlat;
-import 'package:fast_immutable_collections/src/l_add.dart'
-    show LAdd;
+import 'package:fast_immutable_collections/src/l_add.dart' show LAdd;
 import 'package:test/test.dart'
     show expect, isA, isFalse, isTrue, test, throwsA;
 

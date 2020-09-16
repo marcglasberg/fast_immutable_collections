@@ -1,4 +1,5 @@
-import 'package:benchmark_harness/benchmark_harness.dart' show BenchmarkBase, ScoreEmitter;
+import 'package:benchmark_harness/benchmark_harness.dart'
+    show BenchmarkBase, ScoreEmitter;
 import 'package:meta/meta.dart';
 
 // List<int> getDummyList({int length = ListBenchmarkBase.totalRuns}) =>
