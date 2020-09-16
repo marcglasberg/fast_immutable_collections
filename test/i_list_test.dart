@@ -170,49 +170,67 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  group('`IList` methods from `Iterable` |', () {
+    final IList<int> iList = [1, 2, 3].lock.add(4).addAll([5, 6]);
+
+    test('`any`', () {
+      expect(iList.any((int v) => v == 4), isTrue);
+      expect(iList.any((int v) => v == 100), isFalse);
+    });
+
+    test('`cast`', () => expect(iList.cast<num>(), isA<IList<num>>()),
+        skip: true);
+
+    test('`contains`', () {
+      expect(iList.contains(2), isTrue);
+      expect(iList.contains(4), isTrue);
+      expect(iList.contains(5), isTrue);
+      expect(iList.contains(100), isFalse);
+    });
+
+    group('`elementAt', () {
+      test('Regular element access', () {
+        expect(iList.elementAt(0), 1);
+        expect(iList.elementAt(1), 2);
+        expect(iList.elementAt(2), 3);
+        expect(iList.elementAt(3), 4);
+        expect(iList.elementAt(4), 5);
+        expect(iList.elementAt(5), 6);
+      });
+
+      test('Range exceptions', () {
+        expect(() => iList.elementAt(6), throwsRangeError);
+        expect(() => iList.elementAt(-1), throwsRangeError);
+      });
+    });
+
+    test('`every`', () {
+      expect(iList.every((int v) => v > 0), isTrue);
+      expect(iList.every((int v) => v < 0), isFalse);
+      expect(iList.every((int v) => v != 4), isFalse);
+    });
+
+    test('`expand`', () {
+      expect(iList.expand((int v) => [v, v]),
+          [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
+      expect(iList.expand((int v) => []), []);
+    });
+
+    test('`length`', () => expect(iList.length, 6));
+
+    test('`first`', () => expect(iList.first, 1));
+
+    test('`last`', () => expect(iList.last, 6));
+
+    group('`single`', () {
+      test('State exception', () {
+        
+      });
+    });
+  });
+
   test('Test IList methods that belong to Iterable.', () {
     var list = [1, 2, 3].lock.add(4).addAll([5, 6]);
-
-    // any
-    expect(list.any((v) => v == 4), isTrue);
-    expect(list.any((v) => v == 100), isFalse);
-
-    // cast
-    // expect(list.cast<num>().runtimeType, "<CastList<dynamic, num>>");
-
-    // contains
-    expect(list.contains(2), isTrue);
-    expect(list.contains(4), isTrue);
-    expect(list.contains(5), isTrue);
-    expect(list.contains(100), isFalse);
-
-    // elementAt
-    expect(list.elementAt(0), 1);
-    expect(list.elementAt(1), 2);
-    expect(list.elementAt(2), 3);
-    expect(list.elementAt(3), 4);
-    expect(list.elementAt(4), 5);
-    expect(list.elementAt(5), 6);
-    expect(() => list.elementAt(6), throwsRangeError);
-    expect(() => list.elementAt(-1), throwsRangeError);
-
-    // every
-    expect(list.every((v) => v > 0), isTrue);
-    expect(list.every((v) => v < 0), isFalse);
-    expect(list.every((v) => v != 4), isFalse);
-
-    // every
-    expect(list.expand((v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
-    expect(list.expand((v) => []), []);
-
-    // length
-    expect(list.length, 6);
-
-    // first
-    expect(list.first, 1);
-
-    // last
-    expect(list.last, 6);
 
     // single
     expect(() => list.single, throwsStateError);
