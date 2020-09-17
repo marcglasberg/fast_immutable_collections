@@ -23,7 +23,7 @@ class TableScoreEmitter implements ScoreEmitter {
     String report = 'Data Object,Time (${_mu}s),Normalized Score,'
         'Normalized Against Mutable List\n';
     _scores.forEach((String testName, double score) => report += '$testName,'
-        '${score.toStringAsFixed(2).toString()},'
+        '${score.toStringAsFixed(0).toString()},'
         '${normalizedColumn[testName].toString()},'
         '${normalizedAgainstListColumn[testName].toString()}\n');
 

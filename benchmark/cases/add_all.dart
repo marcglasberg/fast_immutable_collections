@@ -3,13 +3,13 @@ import 'package:built_collection/built_collection.dart'
     show BuiltList, ListBuilder;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
-import 'package:kt_dart/collection.dart' show KtList;
+import 'package:kt_dart/collection.dart';
 
 import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
 import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
-final List<int> _baseList = [1, 2, 3];
-final List<int> _listToAdd = [4, 5, 6];
+const List<int> _baseList = [1, 2, 3];
+const List<int> _listToAdd = [4, 5, 6];
 
 class AddAllBenchmark {
   static void report() {

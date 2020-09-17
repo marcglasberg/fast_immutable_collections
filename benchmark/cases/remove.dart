@@ -4,78 +4,87 @@ import 'package:built_collection/built_collection.dart'
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
-import 'package:kt_dart/collection.dart' show KtList;
+import 'package:kt_dart/collection.dart' show KtList, KtIterableExtensions;
+import 'package:meta/meta.dart' show required;
 
 import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
 import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
 class RemoveBenchmark {
   static void report() {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_remove');
+    const List<int> benchmarksConfigurations = [100, 10000, 100000];
 
-    _ListRemoveBenchmark(emitter: tableScoreEmitter).report();
-    _IListRemoveBenchmark(emitter: tableScoreEmitter).report();
-    _KtListRemoveBenchmark(emitter: tableScoreEmitter).report();
-    _BuiltListRemoveBenchmark(emitter: tableScoreEmitter).report();
+    benchmarksConfigurations.forEach((int runs) {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(reportName: 'list_remove_runs_$runs');
 
-    tableScoreEmitter.saveReport();
+      _ListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter).report();
+      _IListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter).report();
+      _KtListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter).report();
+      _BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter)
+          .report();
+
+      tableScoreEmitter.saveReport();
+    });
   }
 }
 
 class _ListRemoveBenchmark extends ListBenchmarkBase {
-  _ListRemoveBenchmark({ScoreEmitter emitter})
-      : super('List (Mutable)', emitter: emitter);
+  _ListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
+      : super('List (Mutable)', runs: runs, size: 0, emitter: emitter);
 
   List<int> _list;
 
   @override
-  void setup() => _list = ListBenchmarkBase.getDummyList();
+  void setup() => _list = ListBenchmarkBase.getDummyGeneratedList();
 
   @override
   void run() => _list.remove(1);
 }
 
 class _IListRemoveBenchmark extends ListBenchmarkBase {
-  _IListRemoveBenchmark({ScoreEmitter emitter})
-      : super('IList', emitter: emitter);
+  _IListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
+      : super('IList', runs: runs, size: 0, emitter: emitter);
 
   IList<int> _iList;
 
   @override
-  void setup() => _iList = IList<int>(ListBenchmarkBase.getDummyList());
+  void setup() =>
+      _iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
   void run() => _iList = _iList.remove(1);
 }
 
 class _KtListRemoveBenchmark extends ListBenchmarkBase {
-  _KtListRemoveBenchmark({ScoreEmitter emitter})
-      : super('KtList', emitter: emitter);
+  _KtListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
+      : super('KtList', runs: runs, size: 0, emitter: emitter);
 
   KtList<int> _ktList;
 
   @override
-  void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.getDummyList());
+  void setup() =>
+      _ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList());
 
   /// `_ktList.asList()` gives back an unmodifiable list, so we need `List.of`
   /// to remove an item.
   @override
   void run() =>
-      _ktList = KtList<int>.from(List.of(_ktList.asList())..remove(1));
+      _ktList = _ktList.minusElement(1);
 }
 
 class _BuiltListRemoveBenchmark extends ListBenchmarkBase {
-  _BuiltListRemoveBenchmark({ScoreEmitter emitter})
-      : super('BuiltList', emitter: emitter);
+  _BuiltListRemoveBenchmark(
+      {@required int runs, @required ScoreEmitter emitter})
+      : super('BuiltList', runs: runs, size: 0, emitter: emitter);
 
   BuiltList<int> _builtList;
 
   @override
   void setup() =>
-      _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyList());
+      _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
-  void run() => _builtList
+  void run() => _builtList = _builtList
       .rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(1));
 }

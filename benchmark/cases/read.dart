@@ -3,74 +3,77 @@ import 'package:built_collection/built_collection.dart' show BuiltList;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
 import 'package:kt_dart/collection.dart' show KtList;
+import 'package:meta/meta.dart' show required;
 
 import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
 import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
-const int _indexToRead = 100;
-
 class ReadBenchmark {
   static void report() {
+    const int runs = 10000;
+
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_read');
 
-    _ListReadBenchmark(emitter: tableScoreEmitter).report();
-    _IListReadBenchmark(emitter: tableScoreEmitter).report();
-    _KtListReadBenchmark(emitter: tableScoreEmitter).report();
-    _BuiltListReadBenchmark(emitter: tableScoreEmitter).report();
+    _ListReadBenchmark(runs: runs, emitter: tableScoreEmitter).report();
+    _IListReadBenchmark(runs: runs, emitter: tableScoreEmitter).report();
+    _KtListReadBenchmark(runs: runs, emitter: tableScoreEmitter).report();
+    _BuiltListReadBenchmark(runs: runs, emitter: tableScoreEmitter).report();
 
     tableScoreEmitter.saveReport();
   }
 }
 
+const int _indexToRead = 100;
+
 class _ListReadBenchmark extends ListBenchmarkBase {
-  _ListReadBenchmark({ScoreEmitter emitter})
-      : super('List (Mutable)', emitter: emitter);
+  _ListReadBenchmark({@required int runs, @required ScoreEmitter emitter})
+      : super('List (Mutable)', runs: runs, size: 0, emitter: emitter);
 
   List<int> _list;
 
   @override
-  void setup() => _list = ListBenchmarkBase.getDummyList();
+  void setup() => _list = ListBenchmarkBase.dummyStaticList;
 
   @override
   void run() => _list[_indexToRead];
 }
 
 class _IListReadBenchmark extends ListBenchmarkBase {
-  _IListReadBenchmark({ScoreEmitter emitter})
-      : super('IList', emitter: emitter);
+  _IListReadBenchmark({@required int runs, @required ScoreEmitter emitter})
+      : super('IList', runs: runs, size: 0, emitter: emitter);
 
   IList<int> _iList;
 
   @override
-  void setup() => _iList = IList<int>(ListBenchmarkBase.getDummyList());
+  void setup() => _iList = IList<int>(ListBenchmarkBase.dummyStaticList);
 
   @override
   void run() => _iList[_indexToRead];
 }
 
 class _KtListReadBenchmark extends ListBenchmarkBase {
-  _KtListReadBenchmark({ScoreEmitter emitter})
-      : super('KtList', emitter: emitter);
+  _KtListReadBenchmark({@required int runs, @required ScoreEmitter emitter})
+      : super('KtList', runs: runs, size: 0, emitter: emitter);
 
   KtList<int> _ktList;
 
   @override
-  void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.getDummyList());
+  void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.dummyStaticList);
 
   @override
   void run() => _ktList[_indexToRead];
 }
 
 class _BuiltListReadBenchmark extends ListBenchmarkBase {
-  _BuiltListReadBenchmark({ScoreEmitter emitter})
-      : super('BuiltList', emitter: emitter);
+  _BuiltListReadBenchmark({@required int runs, @required ScoreEmitter emitter})
+      : super('BuiltList', runs: runs, size: 0, emitter: emitter);
 
   BuiltList<int> _builtList;
 
   @override
   void setup() =>
-      _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyList());
+      _builtList = BuiltList<int>.of(ListBenchmarkBase.dummyStaticList);
 
   @override
   void run() => _builtList[_indexToRead];

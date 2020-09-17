@@ -50,7 +50,7 @@ class _ListAddBenchmark extends ListBenchmarkBase {
     @required int runs,
     @required int size,
     @required ScoreEmitter emitter,
-  }) : super('List (Mutable) $size', runs: runs, size: size, emitter: emitter);
+  }) : super('List (Mutable)', runs: runs, size: size, emitter: emitter);
 
   List<int> list;
 
@@ -71,7 +71,7 @@ class _IListAddBenchmark extends ListBenchmarkBase {
     @required int runs,
     @required int size,
     @required ScoreEmitter emitter,
-  }) : super('IList $size', runs: runs, size: size, emitter: emitter);
+  }) : super('IList', runs: runs, size: size, emitter: emitter);
 
   IList<int> iList;
   IList<int> result;
@@ -95,7 +95,7 @@ class _KtListAddBenchmark extends ListBenchmarkBase {
     @required int runs,
     @required int size,
     @required ScoreEmitter emitter,
-  }) : super('KtList $size', runs: runs, size: size, emitter: emitter);
+  }) : super('KtList', runs: runs, size: size, emitter: emitter);
 
   KtList<int> ktList;
   KtList<int> result;
@@ -119,7 +119,7 @@ class _BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
     @required int runs,
     @required int size,
     @required ScoreEmitter emitter,
-  }) : super('BuiltList1 $size', runs: runs, size: size, emitter: emitter);
+  }) : super('BuiltList with Rebuild', runs: runs, size: size, emitter: emitter);
 
   BuiltList<int> builtList;
   BuiltList<int> result;
@@ -149,7 +149,7 @@ class _BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
     @required int runs,
     @required int size,
     @required ScoreEmitter emitter,
-  }) : super('BuiltList2 $size',
+  }) : super('BuiltList with List Builder',
             runs: runs ~/ innerRuns, size: size, emitter: emitter);
 
   BuiltList<int> builtList;

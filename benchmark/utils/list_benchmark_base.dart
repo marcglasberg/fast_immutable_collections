@@ -11,10 +11,13 @@ class ListBenchmarkBase extends BenchmarkBase {
     @required this.size,
     @required ScoreEmitter emitter,
   })  : assert(runs != null && runs > 0),
-        assert(size != null && size > 0),
+        assert(size != null && size >= 0),
         super(name, emitter: emitter);
 
-  static List<int> getDummyList({int length = 10000}) =>
+  static final List<int> dummyStaticList =
+      List<int>.generate(10000, (int index) => index);
+
+  static List<int> getDummyGeneratedList({int length = 10000}) =>
       List<int>.generate(length, (int index) => index);
 
   @override
