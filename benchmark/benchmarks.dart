@@ -10,5 +10,5 @@ void main() {
   ReadBenchmark.report();
   AddBenchmark.report();
   RemoveBenchmark.report();
-  // AddAllBenchmark.report();
+  AddAllBenchmark.report();
 }

@@ -143,7 +143,7 @@ class _BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
 ////////////////////////////////////////////////////////////////////////////////
 
 class _BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
-  static const innerRuns = 50;
+  static const int innerRuns = 50;
 
   _BuiltListAddWithListBuilderBenchmark({
     @required int runs,
