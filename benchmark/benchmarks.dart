@@ -1,3 +1,7 @@
+/// A library for the benchmarks for the `fast_immutable_collections` package.
+/// {@category Collections, Immutable, Flutter}
+library fast_immutable_collections_benchmarks;
+
 import 'cases/add.dart' show AddBenchmark;
 import 'cases/add_all.dart' show AddAllBenchmark;
 import 'cases/empty.dart' show EmptyBenchmark;
