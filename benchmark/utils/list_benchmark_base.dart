@@ -1,23 +1,25 @@
 import 'package:benchmark_harness/benchmark_harness.dart'
     show BenchmarkBase, ScoreEmitter;
-import 'package:meta/meta.dart';
-
-// List<int> getDummyList({int length = ListBenchmarkBase.totalRuns}) =>
-//     List<int>.generate(length, (_) => 1);
 
 class ListBenchmarkBase extends BenchmarkBase {
-  //
-  final int runs;
-  final int size;
+  static const int smallSize = 10,
+      mediumSize = 1000,
+      bigSize = 100000,
+      normalRuns = 5000;
+
+  final int runs, size;
 
   const ListBenchmarkBase(
     String name, {
-    @required this.runs,
-    @required this.size,
+    this.runs = normalRuns,
+    this.size = mediumSize,
     ScoreEmitter emitter,
   })  : assert(runs != null && runs > 0),
         assert(size != null && size > 0),
         super(name, emitter: emitter);
+
+  static List<int> getDummyList({int length = bigSize}) =>
+      List<int>.generate(length, (_) => 1);
 
   @override
   void exercise() {
