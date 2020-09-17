@@ -1,7 +1,8 @@
-import 'dart:io' show File;
+import 'dart:io' show Directory, File;
 import 'dart:math' show max;
 
 import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter;
+import 'package:path/path.dart' as p;
 
 class TableScoreEmitter implements ScoreEmitter {
   final String _reportName;
@@ -13,19 +14,26 @@ class TableScoreEmitter implements ScoreEmitter {
   void emit(String testName, double value) => _scores[testName] = value;
 
   void saveReport() {
+    _createReportsFolderIfNonExistent();
+
     final File reportFile = File('benchmark/reports/$_reportName.csv');
-    final Map<String, double> normalizedColumn = _normalizedColumn();
-    final Map<String, double> normalizedAgainstListColumn =
-        _normalizedAgainstListColumn();
+    final Map<String, double> normalizedColumn = _normalizedColumn(),
+        normalizedAgainstListColumn = _normalizedAgainstListColumn();
 
     String report = 'Data Object,Time (${_mu}s),Normalized Score,'
         'Normalized Against Mutable List\n';
     _scores.forEach((String testName, double score) => report += '$testName,'
-        '${score.toString()},'
+        '${score.toStringAsFixed(2).toString()},'
         '${normalizedColumn[testName].toString()},'
         '${normalizedAgainstListColumn[testName].toString()}\n');
 
     reportFile.writeAsStringSync(report);
+  }
+
+  void _createReportsFolderIfNonExistent() {
+    final Directory reportsDir =
+        Directory(p.join(p.current, 'benchmark', 'reports'));
+    if (!reportsDir.existsSync()) reportsDir.createSync();
   }
 
   static const String _mu = '\u{03BC}';

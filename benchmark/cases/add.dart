@@ -13,25 +13,33 @@ import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
 class AddBenchmark {
   static void report() {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_add');
+    const List<List<int>> benchmarksConfigurations = [
+      [5000, 10],
+      [5000, 1000],
+      [5000, 100000],
+    ];
 
-    final int runs = 5000;
-    final int size = 10;
-    _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
-        .report();
-    _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
-        .report();
-    _KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
-        .report();
-    _BuiltListAddWithRebuildBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter)
-        .report();
-    _BuiltListAddWithListBuilderBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter)
-        .report();
+    benchmarksConfigurations.forEach((List<int> configurations) {
+      final int runs = configurations[0], size = configurations[1];
 
-    tableScoreEmitter.saveReport();
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(reportName: 'list_add_runs_${runs}_size_${size}');
+
+      _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
+          .report();
+      _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
+          .report();
+      _KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
+          .report();
+      _BuiltListAddWithRebuildBenchmark(
+              runs: runs, size: size, emitter: tableScoreEmitter)
+          .report();
+      _BuiltListAddWithListBuilderBenchmark(
+              runs: runs, size: size, emitter: tableScoreEmitter)
+          .report();
+
+      tableScoreEmitter.saveReport();
+    });
   }
 }
 

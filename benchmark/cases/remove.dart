@@ -72,7 +72,8 @@ class _BuiltListRemoveBenchmark extends ListBenchmarkBase {
   BuiltList<int> _builtList;
 
   @override
-  void setup() => _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyList());
+  void setup() =>
+      _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyList());
 
   @override
   void run() => _builtList
