@@ -55,10 +55,7 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   List<int> list;
 
   @override
-  void setup() {
-    list = <int>[];
-    for (int i = 0; i < size; i++) list.add(i);
-  }
+  void setup() => list = ListBenchmarkBase.getDummyGeneratedList(length: size);
 
   @override
   void run() => list..add(123)..add(345)..add(567);
@@ -102,8 +99,8 @@ class _KtListAddBenchmark extends ListBenchmarkBase {
 
   @override
   void setup() {
-    var list = <int>[];
-    for (int i = 0; i < size; i++) list.add(i);
+    final List<int> list =
+        ListBenchmarkBase.getDummyGeneratedList(length: size);
     ktList = list.toImmutableList();
   }
 
@@ -119,15 +116,16 @@ class _BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
     @required int runs,
     @required int size,
     @required ScoreEmitter emitter,
-  }) : super('BuiltList with Rebuild', runs: runs, size: size, emitter: emitter);
+  }) : super('BuiltList with Rebuild',
+            runs: runs, size: size, emitter: emitter);
 
   BuiltList<int> builtList;
   BuiltList<int> result;
 
   @override
   void setup() {
-    var list = <int>[];
-    for (int i = 0; i < size; i++) list.add(i);
+    final List<int> list =
+        ListBenchmarkBase.getDummyGeneratedList(length: size);
     builtList = BuiltList<int>(list);
   }
 
@@ -157,8 +155,8 @@ class _BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
 
   @override
   void setup() {
-    final list = <int>[];
-    for (int i = 0; i < size; i++) list.add(i);
+    final List<int> list =
+        ListBenchmarkBase.getDummyGeneratedList(length: size);
     builtList = BuiltList<int>(list);
   }
 

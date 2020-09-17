@@ -51,7 +51,7 @@ Size here is the length of the list being read.
 | Data Object      | Setup                         | Run                                  | Teardown       |
 | ---------------- | ----------------------------- | ------------------------------------ | -------------- |
 | `List` (Mutable) | `List.generate`               | 3x `..add()`                         | Log Final List |
-| `IList`          | `IList(List.generate)`        | 3x `.add()`                          | Log Final List |
+| `IList`          | N times `IList().add()`       | 3x `.add()`                          | Log Final List |
 | `KtList`         | `KtList.from(List.generate)`  | 3x `.plusElement()`                  | Log Final List |
 | `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.add())`                | Log Final List |
 | `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` | Log Final List |
