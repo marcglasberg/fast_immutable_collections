@@ -1,0 +1,23 @@
+name: fast_immutable_collections_benchmarks
+description: >-
+  An isolated package for benchmarking the `fast_immutable_collections` package.
+version: 0.0.1
+author: Philippe Fanaro
+
+environment:
+  sdk: ">=2.8.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  benchmark_harness: ^1.0.5
+  meta: ^1.2.3
+  path: ^1.7.0
+  test: ^1.15.3
+
+  built_collection: ^4.3.2
+  kt_dart: ^0.7.0+1
+
+  fast_immutable_collections:
+    path: ../

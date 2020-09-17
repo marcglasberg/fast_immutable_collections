@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart'
-    show Container, MaterialApp, runApp, StatelessWidget, Widget;
+    show MaterialApp, runApp, SizedBox, StatelessWidget, Widget;
 
 void main() => runApp(ExampleFastImmutableCollectionsApp());
 
 class ExampleFastImmutableCollectionsApp extends StatelessWidget {
   @override
-  Widget build(_) => MaterialApp(home: Container());
+  Widget build(_) => const MaterialApp(home: SizedBox());
 }

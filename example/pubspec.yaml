@@ -12,3 +12,6 @@ dependencies:
 
   fast_immutable_collections:
     path: ../
+
+  fast_immutable_collections_benchmarks:
+    path: ../benchmark/
