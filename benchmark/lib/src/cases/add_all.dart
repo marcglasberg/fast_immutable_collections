@@ -6,8 +6,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:kt_dart/collection.dart' show KtList, KtIterableExtensions;
 import 'package:meta/meta.dart' show required;
 
-import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
-import '../utils/table_score_emitter.dart' show TableScoreEmitter;
+import '../list_benchmark_base.dart' show ListBenchmarkBase;
+import '../table_score_emitter.dart' show TableScoreEmitter;
 
 const List<int> _baseList = [1, 2, 3];
 const List<int> _listToAdd = [4, 5, 6];

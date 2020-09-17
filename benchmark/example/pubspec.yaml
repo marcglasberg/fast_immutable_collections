@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   fast_immutable_collections:
-    path: ../
+    path: ../../
 
   fast_immutable_collections_benchmarks:
-    path: ../benchmark/
+    path: ../

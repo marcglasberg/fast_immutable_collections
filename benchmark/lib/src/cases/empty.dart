@@ -6,8 +6,8 @@ import 'package:meta/meta.dart' show immutable, required;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
 
-import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
-import '../utils/table_score_emitter.dart' show TableScoreEmitter;
+import '../list_benchmark_base.dart' show ListBenchmarkBase;
+import '../table_score_emitter.dart' show TableScoreEmitter;
 
 class EmptyBenchmark {
   static void report() {
