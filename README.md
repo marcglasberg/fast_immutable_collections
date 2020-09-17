@@ -9,7 +9,7 @@ Immutable lists and other collections, which are as fast as their native Flutter
 
 [github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
 
-## Resources & Documentation
+## 1. Resources & Documentation
 
 The `docs` folder features information which might be useful for you either as an end user or a developer:
 
@@ -22,3 +22,7 @@ The `docs` folder features information which might be useful for you either as a
 
 
 [plant_uml]: https://plantuml.com/
+
+## 2. Example
+
+This project features an `example` folder with a Flutter project where *release-mode* benchmarks will take place.

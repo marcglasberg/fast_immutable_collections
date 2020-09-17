@@ -1,19 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show Container, MaterialApp, runApp, StatelessWidget, Widget;
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(ExampleFastImmutableCollectionsApp());
 
-class MyApp extends StatelessWidget {
+class ExampleFastImmutableCollectionsApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Container(),
-    );
-  }
+  Widget build(_) => MaterialApp(home: Container());
 }
