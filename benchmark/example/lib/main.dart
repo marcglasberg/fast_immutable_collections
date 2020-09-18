@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart'
-    show MaterialApp, runApp, SizedBox, StatelessWidget, Widget;
+import 'package:fast_immutable_collections_benchmarks/'
+    'fast_immutable_collections_benchmarks.dart' show fullReport;
 
-void main() => runApp(ExampleFastImmutableCollectionsApp());
-
-class ExampleFastImmutableCollectionsApp extends StatelessWidget {
-  @override
-  Widget build(_) => const MaterialApp(home: SizedBox());
+void main() {
+  fullReport();
 }
