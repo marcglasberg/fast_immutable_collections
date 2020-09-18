@@ -22,7 +22,3 @@ The `docs` folder features information which might be useful for you either as a
 
 
 [plant_uml]: https://plantuml.com/
-
-## 2. Example
-
-This project features an `example` folder with a Flutter project where *release-mode* benchmarks will take place.
