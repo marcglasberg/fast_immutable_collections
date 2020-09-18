@@ -12,28 +12,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Setup Dart SDK Step 1
-        run: sudo apt-get update
-      - name: Setup Dart SDK Step 2
-        run: sudo apt-get install apt-transport-https
-      - name: Setup Dart SDK Step 3
-        run: sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
-      - name: Setup Dart SDK Step 4
-        run: sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
-      - name: Setup Dart SDK Step 5
-        run: sudo apt-get update
-      - name: Setup Dart SDK Step 6
-        run: sudo apt-get -y install dart
+    container:
+      image: google/dart:latest
 
-      - uses: actions/checkout@v1
+    steps:
+      - uses: actions/checkout@v2
       - name: Install dependencies
-        run: PATH="$PATH:/usr/lib/dart/bin" pub get
-      - name: Run Tests
-        run: PATH="$PATH:/usr/lib/dart/bin" pub run test
-      - name: Dart Formatter
-        run: PATH="$PATH:/usr/lib/dart/bin" dartfmt -n --set-exit-if-changed .
-        if: always()
-      - name: Dart Analyzer
-        run: PATH="$PATH:/usr/lib/dart/bin" dartanalyzer --fatal-infos --fatal-warnings .
-        if: always()
+        run: pub get
+      - name: Run tests
+        run: pub run test
+      - name: Formattting
+        run: dartfmt -n --set-exit-if-changed .
+      - name: Static Analysis
+        run: dartanalyzer --fatal-infos --fatal-warnings .
