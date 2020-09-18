@@ -69,8 +69,7 @@ class _KtListRemoveBenchmark extends ListBenchmarkBase {
   /// `_ktList.asList()` gives back an unmodifiable list, so we need `List.of`
   /// to remove an item.
   @override
-  void run() =>
-      _ktList = _ktList.minusElement(1);
+  void run() => _ktList = _ktList.minusElement(1);
 }
 
 class _BuiltListRemoveBenchmark extends ListBenchmarkBase {
