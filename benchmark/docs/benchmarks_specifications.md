@@ -2,7 +2,7 @@
 
 This is a summary of the benchmarks and how they are executed.
 
-> **Note that the specifications below have not been programmatically tied to this file, so please do check the code itself if you want to *really* confirm what's going on in the benchmarks.**
+> **Note that the specifications below have not been programmatically tied to the benchmark files, so please do check the code itself if you want to *really* confirm what's going on in the benchmarks, specially when it comes to how many times they're run.**
 
 ## 1. Lists
 
@@ -14,10 +14,6 @@ This is a summary of the benchmarks and how they are executed.
 
 ### 1.1. Empty Initialization
 
-| # Runs |
-| ------ |
-| 10k    |
-
 | Data Object      | Setup | Run                   | Teardown       |
 | ---------------- | ----- | --------------------- | -------------- |
 | `List` (Mutable) | -     | `<int>[]`             | Log Empty List |
@@ -27,11 +23,11 @@ This is a summary of the benchmarks and how they are executed.
 
 ### 1.2. Reading an Element
 
-Size here is the length of the list being read.
+Size here is the *length* of the list being read.
 
-| # Runs | Size |
-| ------ | ---- |
-| 10k    | 10k  |
+| Size |
+| ---- |
+| 10k  |
 
 | Data Object      | Setup                         | Run  | Teardown       |
 | ---------------- | ----------------------------- | ---- | -------------- |
@@ -42,11 +38,13 @@ Size here is the length of the list being read.
 
 ### 1.3. Adding 1 or Multiple Elements
 
-| # Runs | Size |
-| ------ | ---- |
-| 5k     | 10   |
-| 5k     | 1k   |
-| 5k     | 100k |
+Size refers to the *length* of the original list before the insertion of the new element(s).
+
+| Size |
+| ---- |
+| 10   |
+| 1k   |
+| 100k |
 
 | Data Object      | Setup                         | Run                                  | Teardown       |
 | ---------------- | ----------------------------- | ------------------------------------ | -------------- |
@@ -58,25 +56,27 @@ Size here is the length of the list being read.
 
 ### 1.4. Removing 1 Element
 
-| # Runs | Size |
-| ------ | ---- |
-| 100    | 10k  |
-| 10k    | 10k  |
-| 100k   | 10k  |
+| Size |
+| ---- |
+| 10   |
+| 1k   |
+| 100k |
 
 | Data Object      | Setup                         | Run                                  | Teardown       |
 | ---------------- | ----------------------------- | ------------------------------------ | -------------- |
-| `List` (Mutable) | `List.generate`               | 3x `..add()`                         | Log Final List |
-| `IList`          | `IList(List.generate)`        | 3x `.add()`                          | Log Final List |
-| `KtList`         | `KtList.from(List.generate)`  | 3x `.plusElement()`                  | Log Final List |
-| `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.add())`                | Log Final List |
+| `List` (Mutable) | `List.generate`               | 3x `..remove()`                      | Log Final List |
+| `IList`          | `IList(List.generate)`        | 3x `.remove()`                       | Log Final List |
+| `KtList`         | `KtList.from(List.generate)`  | 3x `.minusElement()`                 | Log Final List |
+| `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.remove())`             | Log Final List |
 | `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` | Log Final List |
 
 ### 1.5. Adding Multiple Elements at Once with `addAll`
 
-| # Runs | Size of Original List | Size of List to be Added |
-| ------ | --------------------- | ------------------------ |
-| 10k    | 3                     | 3                        |
+| Size of Original List | Size of List to be Added |
+| --------------------- | ------------------------ |
+| 10                    | 10                       |
+| 1k                    | 1k                       |
+| 10k                   | 10k                      |
 
 | Data Object      | Setup          | Run                    | Teardown       |
 | ---------------- | -------------- | ---------------------- | -------------- |
