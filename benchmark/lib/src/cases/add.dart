@@ -6,13 +6,15 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
 import 'package:meta/meta.dart' show required;
 
-import '../list_benchmark_base.dart' show ListBenchmarkBase;
-import '../table_score_emitter.dart' show TableScoreEmitter;
+import '../utils/benchmark_reporter.dart' show BenchmarkReporter;
+import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
+import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class AddBenchmark {
-  static void report() {
+class AddBenchmark extends BenchmarkReporter {
+  @override
+  void report() {
     const List<List<int>> benchmarksConfigurations = [
       [5000, 10],
       [5000, 1000],
@@ -38,7 +40,7 @@ class AddBenchmark {
               runs: runs, size: size, emitter: tableScoreEmitter)
           .report();
 
-      tableScoreEmitter.saveReport();
+      tableScoreEmitters.add(tableScoreEmitter);
     });
   }
 }

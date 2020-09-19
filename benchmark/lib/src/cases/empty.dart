@@ -6,12 +6,14 @@ import 'package:meta/meta.dart' show immutable, required;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     show IList;
 
-import '../list_benchmark_base.dart' show ListBenchmarkBase;
-import '../table_score_emitter.dart' show TableScoreEmitter;
+import '../utils/benchmark_reporter.dart' show BenchmarkReporter;
+import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
+import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
-class EmptyBenchmark {
-  static void report() {
-    const int runs = 10000;
+class EmptyBenchmark extends BenchmarkReporter {
+  @override
+  void report() {
+    const int runs = 100000;
 
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_empty');
@@ -21,7 +23,7 @@ class EmptyBenchmark {
     _KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter).report();
     _BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter).report();
 
-    tableScoreEmitter.saveReport();
+    tableScoreEmitters.add(tableScoreEmitter);
   }
 }
 

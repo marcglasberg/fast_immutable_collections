@@ -8,15 +8,14 @@ class TableScoreEmitter implements ScoreEmitter {
   final String _reportName;
   final Map<String, double> _scores = {};
 
+  Map<String, double> get scores => _scores;
+
   TableScoreEmitter({String reportName = ''}) : _reportName = reportName;
 
   @override
   void emit(String testName, double value) => _scores[testName] = value;
 
-  void saveReport() {
-    _createReportsFolderIfNonExistent();
-
-    final File reportFile = File('benchmark/reports/$_reportName.csv');
+  String get table {
     final Map<String, double> normalizedColumn = _normalizedColumn(),
         normalizedAgainstListColumn = _normalizedAgainstListColumn();
 
@@ -27,7 +26,15 @@ class TableScoreEmitter implements ScoreEmitter {
         '${normalizedColumn[testName].toString()},'
         '${normalizedAgainstListColumn[testName].toString()}\n');
 
-    reportFile.writeAsStringSync(report);
+    return report;
+  }
+
+  void saveReport() {
+    _createReportsFolderIfNonExistent();
+
+    final File reportFile = File('benchmark/reports/$_reportName.csv');
+    
+    reportFile.writeAsStringSync(table);
   }
 
   void _createReportsFolderIfNonExistent() {

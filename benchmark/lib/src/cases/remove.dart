@@ -7,11 +7,13 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:kt_dart/collection.dart' show KtList, KtIterableExtensions;
 import 'package:meta/meta.dart' show required;
 
-import '../list_benchmark_base.dart' show ListBenchmarkBase;
-import '../table_score_emitter.dart' show TableScoreEmitter;
+import '../utils/benchmark_reporter.dart' show BenchmarkReporter;
+import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
+import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
-class RemoveBenchmark {
-  static void report() {
+class RemoveBenchmark extends BenchmarkReporter{
+  @override
+  void report() {
     const List<int> benchmarksConfigurations = [100, 10000, 100000];
 
     benchmarksConfigurations.forEach((int runs) {
@@ -24,7 +26,7 @@ class RemoveBenchmark {
       _BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter)
           .report();
 
-      tableScoreEmitter.saveReport();
+      tableScoreEmitters.add(tableScoreEmitter);
     });
   }
 }

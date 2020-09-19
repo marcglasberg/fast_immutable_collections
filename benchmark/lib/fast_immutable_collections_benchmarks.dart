@@ -2,4 +2,5 @@
 /// {@category Collections, Immutable, Flutter}
 library fast_immutable_collections_benchmarks;
 
-export 'src/benchmarks.dart' show fullReport;
+export 'src/cases/add.dart' show AddBenchmark;
+export 'src/cases/empty.dart' show EmptyBenchmark;

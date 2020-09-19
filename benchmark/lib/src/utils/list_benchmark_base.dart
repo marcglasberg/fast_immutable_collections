@@ -2,7 +2,7 @@ import 'package:benchmark_harness/benchmark_harness.dart'
     show BenchmarkBase, ScoreEmitter;
 import 'package:meta/meta.dart' show required;
 
-class ListBenchmarkBase extends BenchmarkBase {
+abstract class ListBenchmarkBase extends BenchmarkBase {
   final int runs, size;
 
   const ListBenchmarkBase(

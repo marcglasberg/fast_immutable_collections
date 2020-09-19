@@ -5,11 +5,14 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:kt_dart/collection.dart' show KtList;
 import 'package:meta/meta.dart' show required;
 
-import '../list_benchmark_base.dart' show ListBenchmarkBase;
-import '../table_score_emitter.dart' show TableScoreEmitter;
+import '../utils/benchmark_reporter.dart' show BenchmarkReporter;
+import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
+import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
-class ReadBenchmark {
-  static void report() {
+class ReadBenchmark extends BenchmarkReporter{
+
+  @override
+  void report() {
     const int runs = 10000;
 
     final TableScoreEmitter tableScoreEmitter =
@@ -20,7 +23,7 @@ class ReadBenchmark {
     _KtListReadBenchmark(runs: runs, emitter: tableScoreEmitter).report();
     _BuiltListReadBenchmark(runs: runs, emitter: tableScoreEmitter).report();
 
-    tableScoreEmitter.saveReport();
+    tableScoreEmitters.add(tableScoreEmitter);
   }
 }
 
