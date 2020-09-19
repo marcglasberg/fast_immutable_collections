@@ -1,11 +1,16 @@
 import 'package:fast_immutable_collections_benchmarks/'
         'fast_immutable_collections_benchmarks.dart'
-    show AddBenchmark, EmptyBenchmark;
+    show BenchmarkReporter, FullReporter, TableScoreEmitter;
 
 void main() {
-  final EmptyBenchmark emptyBenchmark = EmptyBenchmark()..report();
-  final AddBenchmark addBenchmark = AddBenchmark()..report();
+  final FullReporter fullReporter = FullReporter()..report();
 
-  emptyBenchmark.tableScoreEmitters.forEach((element) => print(element.table));
-  addBenchmark.tableScoreEmitters.forEach((element) => print(element.table));
+  fullReporter.benchmarks
+      .forEach((String name, BenchmarkReporter benchmarkReporter) {
+    benchmarkReporter.tableScoreEmitters
+        .forEach((TableScoreEmitter tableScoreEmitter) {
+      print(name);
+      print(tableScoreEmitter.table);
+    });
+  });
 }
