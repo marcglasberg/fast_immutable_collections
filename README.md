@@ -15,10 +15,12 @@ The `docs` folder features information which might be useful for you either as a
 
 | File                                        | Purpose                                                                                          |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `different_fixed_list_initializations.dart` | Different ways of creating an *immutable* list in pure Dart and their underlying implementations |
-| `how_to_create_a_benchmark.md`              | How to create a benchmark in the context of this project                                         |
-| `resources.md`                              | Resources for studying the topic of immutable collections                                        |
-| `uml.puml`                                  | The UML diagram for this package (Uses [PlantUML][plant_uml])                                    |
+| [`different_fixed_list_initializations.dart`][different_fixed_list_initializations] | Different ways of creating an *immutable* list in pure Dart and their underlying implementations |
+| [`resources.md`][resources]                              | Resources for studying the topic of immutable collections                                        |
+| [`uml.puml`][uml]                                  | The UML diagram for this package (Uses [PlantUML][plant_uml])                                    |
 
 
+[different_fixed_list_initializations]: docs/different_fixed_list_initializations.dart
 [plant_uml]: https://plantuml.com/
+[resources]: docs/resources.md
+[uml]: docs/uml.puml
