@@ -80,9 +80,7 @@ class _IListAddBenchmark extends ListBenchmarkBase {
   }
 
   @override
-  void run() {
-    result = iList.add(123).add(345).add(567);
-  }
+  void run() => result = iList.add(123).add(345).add(567);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -130,12 +128,10 @@ class _BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   }
 
   @override
-  void run() {
-    result = builtList
-        .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(123))
-        .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(345))
-        .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(678));
-  }
+  void run() => result = builtList
+      .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(123))
+      .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(345))
+      .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(678));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +158,7 @@ class _BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    ListBuilder<int> listBuilder = builtList.toBuilder();
+    final ListBuilder<int> listBuilder = builtList.toBuilder();
     for (int i = 0; i < innerRuns; i++) listBuilder.add(123);
     result = listBuilder.build();
   }
