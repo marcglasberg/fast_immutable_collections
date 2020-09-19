@@ -11,7 +11,7 @@ Immutable lists and other collections, which are as fast as their native Flutter
 
 ## 1. Resources & Documentation
 
-The `docs` folder features information which might be useful for you either as an end user or a developer:
+The [`docs`][docs] folder features information which might be useful for you either as an end user or a developer:
 
 | File                                        | Purpose                                                                                          |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -20,6 +20,7 @@ The `docs` folder features information which might be useful for you either as a
 | [`uml.puml`][uml]                                  | The UML diagram for this package (Uses [PlantUML][plant_uml])                                    |
 
 
+[docs]: docs/
 [different_fixed_list_initializations]: docs/different_fixed_list_initializations.dart
 [plant_uml]: https://plantuml.com/
 [resources]: docs/resources.md
