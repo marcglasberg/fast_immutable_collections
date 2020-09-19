@@ -72,11 +72,11 @@ Size refers to the *length* of the original list before the insertion of the new
 
 ### 1.5. Adding Multiple Elements at Once with `addAll`
 
-| Size of Original List | Size of List to be Added |
-| --------------------- | ------------------------ |
-| 10                    | 10                       |
-| 1k                    | 1k                       |
-| 10k                   | 10k                      |
+| Size of the Original List | Size of the List to be Added |
+| ------------------------- | ---------------------------- |
+| 10                        | 10                           |
+| 1k                        | 1k                           |
+| 10k                       | 10k                          |
 
 | Data Object      | Setup          | Run                    | Teardown       |
 | ---------------- | -------------- | ---------------------- | -------------- |
