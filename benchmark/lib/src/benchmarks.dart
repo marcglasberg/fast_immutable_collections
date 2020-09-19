@@ -7,7 +7,9 @@ import 'cases/remove.dart' show RemoveBenchmark;
 
 /// Run the benchmarks with, for example &mdash; from the top of the project
 /// &mdash;: `dart benchmark/lib/src/benchmarks.dart`
-void main() => FullReporter()..report()..save();
+void main() => FullReporter()
+  ..report()
+  ..save();
 
 class FullReporter {
   final Map<String, BenchmarkReporter> benchmarks = {

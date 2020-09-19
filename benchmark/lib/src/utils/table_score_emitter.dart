@@ -33,7 +33,7 @@ class TableScoreEmitter implements ScoreEmitter {
     _createReportsFolderIfNonExistent();
 
     final File reportFile = File('benchmark/reports/$_reportName.csv');
-    
+
     reportFile.writeAsStringSync(table);
   }
 

@@ -13,7 +13,7 @@ import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 const List<int> _baseList = [1, 2, 3];
 const List<int> _listToAdd = [4, 5, 6];
 
-class AddAllBenchmark extends BenchmarkReporter{
+class AddAllBenchmark extends BenchmarkReporter {
   @override
   void report() {
     const int runs = 10000;

@@ -9,8 +9,7 @@ import '../utils/benchmark_reporter.dart' show BenchmarkReporter;
 import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
 import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
-class ReadBenchmark extends BenchmarkReporter{
-
+class ReadBenchmark extends BenchmarkReporter {
   @override
   void report() {
     const int runs = 10000;
