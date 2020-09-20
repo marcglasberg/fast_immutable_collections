@@ -19,9 +19,14 @@ class LAdd<T> extends L<T> {
   /// Implicitly uniting the lists.
   @override
   T operator [](int index) {
-    if (index < 0 || index >= length)
-      throw RangeError.range(index, 0, length - 1, 'index');
+    if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, 'index');
     return (index == length - 1) ? _item : _l[index];
+  }
+
+  @override
+  bool contains(Object element) {
+    if (_l.contains(element)) return true;
+    return _item == element;
   }
 
   @override

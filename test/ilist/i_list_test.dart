@@ -1,18 +1,5 @@
-import 'package:test/test.dart'
-    show
-        expect,
-        group,
-        isA,
-        isFalse,
-        isTrue,
-        test,
-        throwsArgumentError,
-        throwsRangeError,
-        throwsStateError,
-        throwsUnsupportedError;
-
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    show IList, IListExtension;
+import 'package:fast_immutable_collections/src/ilist/ilist.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Creating immutable lists |', () {

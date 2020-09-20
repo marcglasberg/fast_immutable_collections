@@ -1,7 +1,6 @@
-import 'package:fast_immutable_collections/src/l_flat.dart' show LFlat;
-import 'package:fast_immutable_collections/src/l_add.dart' show LAdd;
-import 'package:test/test.dart'
-    show expect, isA, isFalse, isTrue, test, throwsA;
+import 'package:fast_immutable_collections/src/ilist/l_add.dart';
+import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
+import 'package:test/test.dart';
 
 void main() {
   final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
