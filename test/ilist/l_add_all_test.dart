@@ -1,9 +1,8 @@
-import 'package:test/test.dart'
-    show expect, isA, isFalse, isTrue, group, test, throwsA;
+import 'package:fast_immutable_collections/src/ilist/l_add.dart';
+import 'package:fast_immutable_collections/src/ilist/l_add_all.dart';
+import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
+import 'package:test/test.dart';
 
-import 'package:fast_immutable_collections/src/l_flat.dart' show LFlat;
-import 'package:fast_immutable_collections/src/l_add.dart' show LAdd;
-import 'package:fast_immutable_collections/src/l_add_all.dart' show LAddAll;
 
 void main() {
   group('Basic Usage Tests and Checks |', () {
