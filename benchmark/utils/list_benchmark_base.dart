@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 // List<int> getDummyList({int length = ListBenchmarkBase.totalRuns}) =>
 //     List<int>.generate(length, (_) => 1);
 
-class ListBenchmarkBase extends BenchmarkBase {
+abstract class ListBenchmarkBase extends BenchmarkBase {
   //
   final int runs;
   final int size;
@@ -21,5 +21,13 @@ class ListBenchmarkBase extends BenchmarkBase {
   @override
   void exercise() {
     for (int i = 0; i < runs; i++) run();
+  }
+
+  List toList();
+
+  @override
+  List report() {
+    super.report();
+    return toList();
   }
 }

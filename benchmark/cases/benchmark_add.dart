@@ -3,11 +3,14 @@ import 'package:built_collection/built_collection.dart' show BuiltList, ListBuil
 import 'package:kt_dart/kt.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:meta/meta.dart';
+import 'package:test/test.dart';
 
 import '../utils/list_benchmark_base.dart' show ListBenchmarkBase;
 import '../utils/table_score_emitter.dart' show TableScoreEmitter;
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
+
+int innerRuns = 300;
 
 class AddBenchmark {
   static void report() {
@@ -15,11 +18,15 @@ class AddBenchmark {
 
     int runs = 5000;
     int size = 10;
-    _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
-    _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
-    _KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
-    _BuiltListAddBenchmark1(runs: runs, size: size, emitter: tableScoreEmitter).report();
-    _BuiltListAddBenchmark2(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    var r1 = _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    var r2 = _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    var r3 = _KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    var r4 = _BuiltListAddBenchmark1(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    var r5 = _BuiltListAddBenchmark2(runs: runs, size: size, emitter: tableScoreEmitter).report();
+    expect(r1, r2);
+    expect(r1, r3);
+    expect(r1, r4);
+    expect(r1, r5);
 
     runs = 5000;
     size = 1000;
@@ -53,6 +60,9 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   List<int> list;
 
   @override
+  List toList() => list;
+
+  @override
   void setup() {
     list = <int>[];
     for (int i = 0; i < size; i++) list.add(i);
@@ -60,9 +70,8 @@ class _ListAddBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    list.add(123);
-    list.add(345);
-    list.add(567);
+    list.clear();
+    for (int i = 0; i < innerRuns; i++) list.add(i);
   }
 }
 
@@ -79,6 +88,9 @@ class _IListAddBenchmark extends ListBenchmarkBase {
   IList<int> result;
 
   @override
+  List toList() => result.unlock;
+
+  @override
   void setup() {
     iList = IList<int>();
     for (int i = 0; i < size; i++) iList = iList.add(i);
@@ -86,7 +98,8 @@ class _IListAddBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    result = iList.add(123).add(345).add(567);
+    result = iList;
+    for (int i = 0; i < innerRuns; i++) result = result.add(i);
   }
 }
 
@@ -103,6 +116,9 @@ class _KtListAddBenchmark extends ListBenchmarkBase {
   KtList<int> result;
 
   @override
+  List toList() => result.asList();
+
+  @override
   void setup() {
     var list = <int>[];
     for (int i = 0; i < size; i++) list.add(i);
@@ -111,7 +127,8 @@ class _KtListAddBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    result = ktList.plusElement(123).plusElement(345).plusElement(567);
+    result = ktList;
+    for (int i = 0; i < innerRuns; i++) result = result.plusElement(i);
   }
 }
 
@@ -136,18 +153,18 @@ class _BuiltListAddBenchmark1 extends ListBenchmarkBase {
 
   @override
   void run() {
-    result = builtList
-        .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(123))
-        .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(345))
-        .rebuild((ListBuilder<int> listBuilder) => listBuilder.add(678));
+    result = builtList;
+    for (int i = 0; i < innerRuns; i++)
+      result = result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
   }
+
+  @override
+  List toList() => result.asList();
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class _BuiltListAddBenchmark2 extends ListBenchmarkBase {
-  static const innerRuns = 50;
-
   _BuiltListAddBenchmark2({
     @required int runs,
     @required int size,
@@ -167,9 +184,12 @@ class _BuiltListAddBenchmark2 extends ListBenchmarkBase {
   @override
   void run() {
     ListBuilder<int> listBuilder = builtList.toBuilder();
-    for (int i = 0; i < innerRuns; i++) listBuilder.add(123);
+    for (int i = 0; i < innerRuns; i++) listBuilder.add(i);
     result = listBuilder.build();
   }
+
+  @override
+  List toList() => result.asList();
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
