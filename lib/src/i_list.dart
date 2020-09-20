@@ -17,7 +17,7 @@ class IList<T> implements Iterable<T> {
       (iterable is IList) ? (iterable as IList) : IList._(iterable);
 
   IList._([Iterable<T> iterable])
-      : _l = (iterable is IList)
+      : _l = iterable is IList
             ? (iterable as IList)._l
             : LFlat(iterable == null ? const [] : List.of(iterable));
 
@@ -287,7 +287,7 @@ abstract class L<T> implements IterableL<T> {
   @override
   IList<R> cast<R>() => throw UnsupportedError('cast');
 
-//  IList<R> cast<R>() => _getFlushed.cast<R>();
+  // IList<R> cast<R>() => _getFlushed.cast<R>();
 
   @override
   bool contains(Object element) => _getFlushed.contains(element);

@@ -14,7 +14,7 @@ class LAddAll<T> extends L<T> {
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorL3(_l.iterator, _items);
+  Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _items);
 
   @override
   T operator [](int index) {
@@ -34,7 +34,7 @@ class LAddAll<T> extends L<T> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IteratorL3<T> implements Iterator<T> {
+class IteratorLAddAll<T> implements Iterator<T> {
   Iterator<T> iterator;
 
   Iterable<T> items;
@@ -43,7 +43,7 @@ class IteratorL3<T> implements Iterator<T> {
   T _current;
   int extraMove;
 
-  IteratorL3(this.iterator, this.items)
+  IteratorLAddAll(this.iterator, this.items)
       : _current = iterator.current,
         extraMove = 0;
 

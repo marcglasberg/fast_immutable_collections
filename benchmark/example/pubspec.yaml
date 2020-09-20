@@ -1,0 +1,15 @@
+name: example_fast_immutable_collections
+description: >-
+  The example project for the `fast_immutable_collections` package.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <1.23.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  fast_immutable_collections_benchmarks:
+    path: ../

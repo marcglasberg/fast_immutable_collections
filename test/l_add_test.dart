@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/src/l_flat.dart' show LFlat;
-import 'package:fast_immutable_collections/src/l_add.dart'
-    show IteratorL2, LAdd;
+import 'package:fast_immutable_collections/src/l_add.dart' show LAdd;
 import 'package:test/test.dart'
     show expect, isA, isFalse, isTrue, test, throwsA;
 
@@ -17,7 +16,7 @@ void main() {
   test('Length', () => expect(lAdd.length, 4));
 
   test('Iterating on the underlying iterator', () {
-    final IteratorL2<int> iter = lAdd.iterator;
+    final Iterator<int> iter = lAdd.iterator;
 
     expect(iter.current, null);
     expect(iter.moveNext(), true);

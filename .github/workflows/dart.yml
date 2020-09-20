@@ -1,0 +1,27 @@
+name: Dart || Tests | Formatting | Analyzer
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: google/dart:latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: pub get
+      - name: Run tests
+        run: pub run test
+      - name: Formattting
+        run: dartfmt -n --set-exit-if-changed .
+      - name: Static Analysis
+        run: dartanalyzer --fatal-infos --fatal-warnings .

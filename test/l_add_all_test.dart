@@ -1,88 +1,98 @@
-import 'package:fast_immutable_collections/src/l_flat.dart';
-import 'package:fast_immutable_collections/src/l_add.dart';
-import 'package:fast_immutable_collections/src/l_add_all.dart';
-import 'package:test/test.dart';
+import 'package:test/test.dart'
+    show expect, isA, isFalse, isTrue, group, test, throwsA;
+
+import 'package:fast_immutable_collections/src/l_flat.dart' show LFlat;
+import 'package:fast_immutable_collections/src/l_add.dart' show LAdd;
+import 'package:fast_immutable_collections/src/l_add_all.dart' show LAddAll;
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+  group('Basic Usage Tests and Checks |', () {
+    final LAddAll<int> lAddAll = LAddAll<int>(LFlat<int>([1, 2]), [3, 4, 5]);
 
-  test('LAddAll', () {
-    var l = LAddAll(LFlat([1, 2]), [3, 4, 5]);
+    test('Runtime Type', () => expect(lAddAll, isA<LAddAll<int>>()));
 
-    expect(l.runtimeType.toString(), 'LAddAll<int>');
-    expect(l.isEmpty, isFalse);
-    expect(l.isNotEmpty, isTrue);
-    expect(l.length, 5);
+    test('Emptiness Properties', () {
+      expect(lAddAll.isEmpty, isFalse);
+      expect(lAddAll.isNotEmpty, isTrue);
+    });
 
-    var iter = l.iterator;
-    expect(iter.current, null);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 1);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 2);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 3);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 4);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 5);
-    expect(iter.moveNext(), false);
-    expect(iter.current, null);
+    test('Length', () => expect(lAddAll.length, 5));
 
-    expect(l.unlock, [1, 2, 3, 4, 5]);
+    test('Iterating on the underlying iterator', () {
+      final Iterator<int> iter = lAddAll.iterator;
+
+      expect(iter.current, null);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 1);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 2);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 3);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 4);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 5);
+      expect(iter.moveNext(), false);
+      expect(iter.current, null);
+
+      expect(lAddAll.unlock, [1, 2, 3, 4, 5]);
+    });
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-
-  test('Combining various LAddAll and LAdd', () {
-    var l = LAddAll(
+  group('Combining various `LAddAll` and `LAdd` |', () {
+    final lAddAll = LAddAll(
         LAddAll(
             LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]),
         [8]);
 
-    expect(l.runtimeType.toString(), 'LAddAll<int>');
-    expect(l.isEmpty, isFalse);
-    expect(l.isNotEmpty, isTrue);
-    expect(l.length, 8);
+    test('Runtime Type', () => expect(lAddAll, isA<LAddAll<int>>()));
 
-    var iter = l.iterator;
-    expect(iter.current, null);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 1);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 2);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 3);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 4);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 5);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 6);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 7);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 8);
-    expect(iter.moveNext(), false);
-    expect(iter.current, null);
+    test('Emptiness Properties', () {
+      expect(lAddAll.isEmpty, isFalse);
+      expect(lAddAll.isNotEmpty, isTrue);
+    });
 
-    expect(l.unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
+    test('Length', () => expect(lAddAll.length, 8));
+
+    test('Iterating on the underlying iterator', () {
+      final Iterator<int> iter = lAddAll.iterator;
+
+      expect(iter.current, null);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 1);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 2);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 3);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 4);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 5);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 6);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 7);
+      expect(iter.moveNext(), true);
+      expect(iter.current, 8);
+      expect(iter.moveNext(), false);
+      expect(iter.current, null);
+
+      expect(lAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
+    });
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+  test('Index Access', () {
+    final LAddAll<int> lAddAll = LAddAll(LFlat([1, 2, 3]), [4, 5, 6, 7]);
 
-  test('LAddAll[index]', () {
-    var l = LAddAll(LFlat([1, 2, 3]), [4, 5, 6, 7]);
+    expect(lAddAll[0], 1);
+    expect(lAddAll[1], 2);
+    expect(lAddAll[2], 3);
+    expect(lAddAll[3], 4);
+    expect(lAddAll[4], 5);
+    expect(lAddAll[5], 6);
+    expect(lAddAll[6], 7);
 
-    expect(l[0], 1);
-    expect(l[1], 2);
-    expect(l[2], 3);
-    expect(l[3], 4);
-    expect(l[4], 5);
-    expect(l[5], 6);
-    expect(l[6], 7);
-
-    expect(() => l[7], throwsA(isA<RangeError>()));
-    expect(() => l[-1], throwsA(isA<RangeError>()));
+    expect(() => lAddAll[7], throwsA(isA<RangeError>()));
+    expect(() => lAddAll[-1], throwsA(isA<RangeError>()));
   });
 }

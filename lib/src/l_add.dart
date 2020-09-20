@@ -14,7 +14,7 @@ class LAdd<T> extends L<T> {
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorL2(_l.iterator, _item);
+  Iterator<T> get iterator => IteratorLAdd(_l.iterator, _item);
 
   /// Implicitly uniting the lists.
   @override
@@ -30,13 +30,13 @@ class LAdd<T> extends L<T> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IteratorL2<T> implements Iterator<T> {
+class IteratorLAdd<T> implements Iterator<T> {
   Iterator<T> iterator;
   T item;
   T _current;
   int extraMove;
 
-  IteratorL2(this.iterator, this.item)
+  IteratorLAdd(this.iterator, this.item)
       : _current = iterator.current,
         extraMove = 0;
 
