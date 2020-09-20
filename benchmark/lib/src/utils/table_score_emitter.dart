@@ -19,6 +19,7 @@ class TableScoreEmitter implements ScoreEmitter {
     final Map<String, double> normalizedColumn = _normalizedColumn(),
         normalizedAgainstListColumn = _normalizedAgainstListColumn();
 
+    const String _mu = '\u{03BC}';
     String report = 'Data Object,Time (${_mu}s),Normalized Score,'
         'Normalized Against Mutable List\n';
     _scores.forEach((String testName, double score) => report += '$testName,'
@@ -42,8 +43,6 @@ class TableScoreEmitter implements ScoreEmitter {
         Directory(p.join(p.current, 'benchmark', 'reports'));
     if (!reportsDir.existsSync()) reportsDir.createSync();
   }
-
-  static const String _mu = '\u{03BC}';
 
   Map<String, double> _normalizedColumn() {
     final Map<String, double> normalizedColumn = {};
