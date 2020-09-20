@@ -2,7 +2,7 @@ import 'dart:io' show Directory, File;
 import 'dart:math' show max;
 
 import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter;
-import 'package:path/path.dart' as p;
+import 'package:path/path.dart' as p show current, join;
 
 class TableScoreEmitter implements ScoreEmitter {
   final String _reportName;
