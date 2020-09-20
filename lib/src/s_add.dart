@@ -2,46 +2,39 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class LAdd<T> extends L<T> {
-  final L<T> _l;
+class SAdd<T> extends S<T> {
+  final S<T> _s;
   final T _item;
 
-  LAdd(this._l, this._item)
-      : assert(_l != null),
+  SAdd(this._s, this._item)
+      : assert(_s != null),
         assert(_item != null);
 
   @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorLAdd(_l.iterator, _item);
-
-  /// Implicitly uniting the lists.
-  @override
-  T operator [](int index) {
-    if (index < 0 || index >= length) throw RangeError.range(index, 0, length - 1, 'index');
-    return (index == length - 1) ? _item : _l[index];
-  }
+  Iterator<T> get iterator => IteratorSAdd(_s.iterator, _item);
 
   @override
   bool contains(Object element) {
-    if (_l.contains(element)) return true;
-    return _item == element;
+    if (_item == element) return true;
+    return _s.contains(element);
   }
 
   @override
-  int get length => _l.length + 1;
+  int get length => _s.length + 1;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IteratorLAdd<T> implements Iterator<T> {
+class IteratorSAdd<T> implements Iterator<T> {
   Iterator<T> iterator;
   T item;
   T _current;
   int extraMove;
 
-  IteratorLAdd(this.iterator, this.item)
+  IteratorSAdd(this.iterator, this.item)
       : _current = iterator.current,
         extraMove = 0;
 
