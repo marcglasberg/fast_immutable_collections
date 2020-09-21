@@ -17,6 +17,7 @@ The sub, unordered lists are my highlights, it's probably simpler if you go thro
 1. [persistent][persistent_dart]
     - They've implemented *operators* for the objects, something which converges to the assumption that immutable objects should be treated just like values.
     - Is very old apparently. It depends on Dart `>=0.8.10+6 <2.0.0`.
+        - It's so old that *typing* is very weak throughout the package. So a major refactor would be necessary in order to use it with more recent versions of Dart, which will likely not happen.
 2. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
     - Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
 3. [kt.dart][kt_dart]
