@@ -8,6 +8,6 @@ export 'src/cases/list/add.dart';
 export 'src/cases/list/empty.dart';
 export 'src/cases/list/read.dart';
 
-export 'src/utils/benchmark_reporter.dart';
+export 'src/utils/multi_benchmark_reporter.dart';
 export 'src/utils/list_benchmark_base.dart';
 export 'src/utils/table_score_emitter.dart';
