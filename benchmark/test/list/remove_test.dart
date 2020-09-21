@@ -10,7 +10,7 @@ void main() {
   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList()
     ..remove(1);
 
-  test('List (Mutable)', () {
+  test('`List` (Mutable)', () {
     final ListRemoveBenchmark listRemoveBenchmark =
         ListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
     expect(listRemoveBenchmark.toList(), expectedList);
   });
 
-  test('IList', () {
+  test('`IList`', () {
     final IListRemoveBenchmark iListRemoveBenchmark =
         IListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -28,7 +28,7 @@ void main() {
     expect(iListRemoveBenchmark.toList(), expectedList);
   });
 
-  test('KtList', () {
+  test('`KtList`', () {
     final KtListRemoveBenchmark ktListRemoveBenchmark =
         KtListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -37,7 +37,7 @@ void main() {
     expect(ktListRemoveBenchmark.toList(), expectedList);
   });
 
-  test('BuiltList', () {
+  test('`BuiltList`', () {
     final BuiltListRemoveBenchmark builtListRemoveBenchmark =
         BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
 

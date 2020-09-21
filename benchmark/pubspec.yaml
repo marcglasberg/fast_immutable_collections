@@ -11,7 +11,6 @@ dependencies:
   benchmark_harness: ^1.0.5
   meta: ^1.2.3
   path: ^1.7.0
-  test: ^1.15.3
 
   built_collection: ^4.3.2
   kt_dart: ^0.7.0+1
@@ -23,3 +22,6 @@ dependencies:
 
   fast_immutable_collections:
     path: ../
+
+dev_dependencies:
+  test: ^1.15.3
