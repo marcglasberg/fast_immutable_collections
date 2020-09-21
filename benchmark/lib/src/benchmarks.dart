@@ -14,7 +14,7 @@ void main() => FullReporter()
 class FullReporter {
   final Map<String, BenchmarkReporter> benchmarks = {
     'empty': EmptyBenchmark(),
-    // 'read': ReadBenchmark(),
+    'read': ReadBenchmark(),
     'add': AddBenchmark(),
     // 'remove': RemoveBenchmark(),
     // 'addAll': AddAllBenchmark(),
