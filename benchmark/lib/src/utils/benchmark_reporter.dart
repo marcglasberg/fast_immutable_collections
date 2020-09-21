@@ -1,4 +1,4 @@
-import 'table_score_emitter.dart' show TableScoreEmitter;
+import 'table_score_emitter.dart';
 
 abstract class BenchmarkReporter {
   final List<TableScoreEmitter> tableScoreEmitters = [];

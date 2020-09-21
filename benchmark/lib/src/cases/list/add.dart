@@ -1,9 +1,10 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:kt_dart/kt.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
+
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
@@ -45,7 +46,8 @@ class AddBenchmark extends BenchmarkReporter {
                       runs: runs, size: size, emitter: tableScoreEmitter)
                   .report();
 
-      group('Testing if all lists conform to the basic, mutable one |', () {
+      group('Add | Testing if all lists conform to the basic, mutable one |',
+          () {
         test('IList', () => expect(listResult, iListResult));
         test('KtList', () => expect(listResult, ktListResult));
         test('BuiltList with Rebuild',
@@ -75,7 +77,8 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   List<int> toList() => list;
 
   @override
-  void setup() => fixedList = ListBenchmarkBase.getDummyGeneratedList(length: size);
+  void setup() =>
+      fixedList = ListBenchmarkBase.getDummyGeneratedList(length: size);
 
   @override
   void run() {

@@ -1,6 +1,5 @@
-import 'package:benchmark_harness/benchmark_harness.dart'
-    show BenchmarkBase, ScoreEmitter;
-import 'package:meta/meta.dart' show required;
+import 'package:benchmark_harness/benchmark_harness.dart';
+import 'package:meta/meta.dart';
 
 abstract class ListBenchmarkBase extends BenchmarkBase {
   final int runs, size;
