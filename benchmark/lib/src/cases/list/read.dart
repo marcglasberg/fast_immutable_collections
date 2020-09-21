@@ -9,7 +9,7 @@ import '../../utils/benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
 import '../../utils/table_score_emitter.dart';
 
-class ReadBenchmark extends BenchmarkReporter {
+class ReadBenchmark extends MultiBenchmarkReporter {
   static const int indexToRead = 100;
 
   @override
@@ -19,15 +19,14 @@ class ReadBenchmark extends BenchmarkReporter {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_read');
 
-    final Map<String, ListBenchmarkBase> benchmarks = {
-      'List': ListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
-      'IList': IListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
-      'KtList': KtListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
-      'BuiltList':
-          BuiltListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
-    };
+    final List<ListBenchmarkBase> benchmarks = [
+      ListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
+      IListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
+      KtListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
+      BuiltListReadBenchmark(runs: runs, emitter: tableScoreEmitter),
+    ];
 
-    benchmarks.forEach((_, ListBenchmarkBase benchmark) => benchmark.report());
+    benchmarks.forEach((ListBenchmarkBase benchmark) => benchmark.report());
 
     tableScoreEmitters.add(tableScoreEmitter);
   }

@@ -1,6 +1,6 @@
 import 'table_score_emitter.dart';
 
-abstract class BenchmarkReporter {
+abstract class MultiBenchmarkReporter {
   final List<TableScoreEmitter> tableScoreEmitters = [];
 
   void report();

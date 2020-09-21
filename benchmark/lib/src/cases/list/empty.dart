@@ -9,7 +9,7 @@ import '../../utils/benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
 import '../../utils/table_score_emitter.dart';
 
-class EmptyBenchmark extends BenchmarkReporter {
+class EmptyBenchmark extends MultiBenchmarkReporter {
   @override
   void report() {
     const int runs = 10000;
@@ -17,15 +17,14 @@ class EmptyBenchmark extends BenchmarkReporter {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_empty');
 
-    final Map<String, ListBenchmarkBase> benchmarks = {
-      'List': ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
-      'IList': IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
-      'KtList': KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
-      'BuiltList':
-          BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
-    };
+    final List<ListBenchmarkBase> benchmarks = [
+      ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+      IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+      KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+      BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+    ];
 
-    benchmarks.forEach((_, ListBenchmarkBase benchmark) => benchmark.report());
+    benchmarks.forEach((ListBenchmarkBase benchmark) => benchmark.report());
 
     tableScoreEmitters.add(tableScoreEmitter);
   }
