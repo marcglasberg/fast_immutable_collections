@@ -16,7 +16,7 @@ class FullReporter {
     'empty': EmptyBenchmark(),
     'read': ReadBenchmark(),
     'add': AddBenchmark(),
-    // 'remove': RemoveBenchmark(),
+    'remove': RemoveBenchmark(),
     // 'addAll': AddAllBenchmark(),
   };
 

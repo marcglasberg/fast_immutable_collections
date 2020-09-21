@@ -24,6 +24,8 @@ abstract class ListBenchmarkBase extends BenchmarkBase {
     for (int i = 0; i < runs; i++) run();
   }
 
+  /// This will be important for later checking if the resulting list of the
+  /// benchmark is indeed the one we expected (TDD).
   List<int> toList();
 
   @override
