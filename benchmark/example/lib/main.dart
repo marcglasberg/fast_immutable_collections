@@ -1,12 +1,11 @@
 import 'package:fast_immutable_collections_benchmarks/'
-        'fast_immutable_collections_benchmarks.dart'
-    show BenchmarkReporter, FullReporter, TableScoreEmitter;
+    'fast_immutable_collections_benchmarks.dart';
 
 void main() {
   final FullReporter fullReporter = FullReporter()..report();
 
   fullReporter.benchmarks
-      .forEach((String name, BenchmarkReporter benchmarkReporter) {
+      .forEach((String name, MultiBenchmarkReporter benchmarkReporter) {
     benchmarkReporter.tableScoreEmitters
         .forEach((TableScoreEmitter tableScoreEmitter) {
       print(name);
