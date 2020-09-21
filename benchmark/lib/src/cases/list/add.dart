@@ -12,8 +12,6 @@ import '../../utils/table_score_emitter.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-const int innerRuns = 100;
-
 class AddBenchmark extends BenchmarkReporter {
   @override
   void report() {
@@ -63,6 +61,8 @@ class AddBenchmark extends BenchmarkReporter {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+const int _innerRuns = 100;
+
 class _ListAddBenchmark extends ListBenchmarkBase {
   _ListAddBenchmark({
     @required int runs,
@@ -83,7 +83,7 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     list = List<int>.of(fixedList);
-    for (int i = 0; i < innerRuns; i++) list.add(i);
+    for (int i = 0; i < _innerRuns; i++) list.add(i);
   }
 }
 
@@ -111,7 +111,7 @@ class _IListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = iList;
-    for (int i = 0; i < innerRuns; i++) result = result.add(i);
+    for (int i = 0; i < _innerRuns; i++) result = result.add(i);
   }
 }
 
@@ -140,7 +140,7 @@ class _KtListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = ktList;
-    for (int i = 0; i < innerRuns; i++) result = result.plusElement(i);
+    for (int i = 0; i < _innerRuns; i++) result = result.plusElement(i);
   }
 }
 
@@ -170,7 +170,7 @@ class _BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = builtList;
-    for (int i = 0; i < innerRuns; i++)
+    for (int i = 0; i < _innerRuns; i++)
       result =
           result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
   }
@@ -202,7 +202,7 @@ class _BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     final ListBuilder<int> listBuilder = builtList.toBuilder();
-    for (int i = 0; i < innerRuns; i++) listBuilder.add(i);
+    for (int i = 0; i < _innerRuns; i++) listBuilder.add(i);
     result = listBuilder.build();
   }
 }

@@ -17,7 +17,7 @@ class FullReporter {
     'read': ReadBenchmark(),
     'add': AddBenchmark(),
     'remove': RemoveBenchmark(),
-    // 'addAll': AddAllBenchmark(),
+    'addAll': AddAllBenchmark(),
   };
 
   void report() => benchmarks.forEach(
