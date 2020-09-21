@@ -1,9 +1,6 @@
-import 'package:fast_immutable_collections/src/s_add.dart';
-import 'package:fast_immutable_collections/src/s_flat.dart';
-
-import '../s_flat.dart';
-import '../s_add.dart';
-import '../s_add_all.dart';
+import 's_flat.dart';
+import 's_add.dart';
+import 's_add_all.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 

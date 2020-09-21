@@ -24,4 +24,12 @@ abstract class ListBenchmarkBase extends BenchmarkBase {
   void exercise() {
     for (int i = 0; i < runs; i++) run();
   }
+
+  List toList();
+
+  @override
+  List report() {
+    super.report();
+    return toList();
+  }
 }
