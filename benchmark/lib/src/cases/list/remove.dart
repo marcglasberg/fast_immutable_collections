@@ -32,7 +32,7 @@ class RemoveBenchmark extends BenchmarkReporter {
               _BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter)
                   .report();
 
-      group('Empty | Testing if all lists conform to the basic, mutable one |',
+      group('Remove | Testing if all lists conform to the basic, mutable one |',
           () {
         test('IList', () => expect(listResult, iListResult));
         test('KtList', () => expect(listResult, ktListResult));
