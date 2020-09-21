@@ -50,15 +50,19 @@ class _ListAddAllBenchmark extends ListBenchmarkBase {
       : super('List (Mutable)', runs: runs, size: 0, emitter: emitter);
 
   List<int> _list;
+  List<int> _fixedList;
 
   @override
   List<int> toList() => _list;
 
   @override
-  void setup() => _list = List<int>.of(_baseList);
+  void setup() => _fixedList = List<int>.of(_baseList);
 
   @override
-  void run() => _list.addAll(_listToAdd);
+  void run() {
+    _list = List<int>.of(_fixedList);
+    _list.addAll(_listToAdd);
+  }
 }
 
 class _IListAddAllBenchmark extends ListBenchmarkBase {
@@ -66,15 +70,16 @@ class _IListAddAllBenchmark extends ListBenchmarkBase {
       : super('IList', runs: runs, size: 0, emitter: emitter);
 
   IList<int> _iList;
+  IList<int> _result;
 
   @override
-  List<int> toList() => _iList.unlock;
+  List<int> toList() => _result.unlock;
 
   @override
   void setup() => _iList = IList<int>(_baseList);
 
   @override
-  void run() => _iList = _iList.addAll(_listToAdd);
+  void run() => _result = _iList.addAll(_listToAdd);
 }
 
 class _KtListAddAllBenchmark extends ListBenchmarkBase {
@@ -82,9 +87,10 @@ class _KtListAddAllBenchmark extends ListBenchmarkBase {
       : super('KtList', runs: runs, size: 0, emitter: emitter);
 
   KtList<int> _ktList;
+  KtList<int> _result;
 
   @override
-  List<int> toList() => _ktList.asList();
+  List<int> toList() => _result.asList();
 
   @override
   void setup() => _ktList = KtList<int>.from(_baseList);
@@ -92,7 +98,7 @@ class _KtListAddAllBenchmark extends ListBenchmarkBase {
   /// If the added list were already of type `KtList`, then it would be much
   /// faster.
   @override
-  void run() => _ktList = _ktList.plus(KtList<int>.from(_listToAdd));
+  void run() => _result = _ktList.plus(KtList<int>.from(_listToAdd));
 }
 
 class _BuiltListAddAllBenchmark extends ListBenchmarkBase {
@@ -101,14 +107,15 @@ class _BuiltListAddAllBenchmark extends ListBenchmarkBase {
       : super('BuiltList', runs: runs, size: 0, emitter: emitter);
 
   BuiltList<int> _builtList;
+  BuiltList<int> _result;
 
   @override
-  List<int> toList() => _builtList.asList();
+  List<int> toList() => _result.asList();
 
   @override
   void setup() => _builtList = BuiltList<int>.of(_baseList);
 
   @override
-  void run() => _builtList = _builtList.rebuild(
+  void run() => _result = _builtList.rebuild(
       (ListBuilder<int> listBuilder) => listBuilder.addAll(_listToAdd));
 }

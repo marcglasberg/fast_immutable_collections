@@ -26,6 +26,8 @@ abstract class ListBenchmarkBase extends BenchmarkBase {
 
   /// This will be important for later checking if the resulting list of the
   /// benchmark is indeed the one we expected (TDD).
+  @visibleForTesting
+  @visibleForOverriding
   List<int> toList();
 
   @override
