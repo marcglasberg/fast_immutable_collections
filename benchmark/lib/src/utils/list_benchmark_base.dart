@@ -29,10 +29,4 @@ abstract class ListBenchmarkBase extends BenchmarkBase {
   @visibleForTesting
   @visibleForOverriding
   List<int> toList();
-
-  // @override
-  // List<int> report() {
-  //   super.report();
-  //   return toList();
-  // }
 }

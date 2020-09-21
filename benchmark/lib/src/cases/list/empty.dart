@@ -2,7 +2,6 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:kt_dart/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:test/test.dart';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -18,25 +17,15 @@ class EmptyBenchmark extends BenchmarkReporter {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_empty');
 
-    final List<int> listResult =
-            ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
-                .report(),
-        iListResult =
-            IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
-                .report(),
-        ktListResult =
-            KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
-                .report(),
-        builtListResult =
-            BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
-                .report();
+    final Map<String, ListBenchmarkBase> benchmarks = {
+      'List': ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+      'IList': IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+      'KtList': KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+      'BuiltList':
+          BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter),
+    };
 
-    group('Empty | Testing if all lists conform to the basic, mutable one |',
-        () {
-      test('IList', () => expect(listResult, iListResult));
-      test('KtList', () => expect(listResult, ktListResult));
-      test('BuiltList', () => expect(listResult, builtListResult));
-    });
+    benchmarks.forEach((_, ListBenchmarkBase benchmark) => benchmark.report());
 
     tableScoreEmitters.add(tableScoreEmitter);
   }
