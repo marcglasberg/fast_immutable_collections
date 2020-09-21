@@ -6,4 +6,5 @@ export 'src/benchmarks.dart' show FullReporter;
 export 'src/utils/benchmark_reporter.dart' show BenchmarkReporter;
 export 'src/utils/table_score_emitter.dart' show TableScoreEmitter;
 
-export 'src/cases/list/empty.dart' show ListEmptyBenchmark;
+export 'src/cases/list/empty.dart';
+export 'src/cases/list/read.dart';
