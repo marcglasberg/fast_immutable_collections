@@ -19,16 +19,16 @@ class EmptyBenchmark extends BenchmarkReporter {
         TableScoreEmitter(reportName: 'list_empty');
 
     final List<int> listResult =
-            _ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
+            ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
                 .report(),
         iListResult =
-            _IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
+            IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
                 .report(),
         ktListResult =
-            _KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
+            KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
                 .report(),
         builtListResult =
-            _BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
+            BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter)
                 .report();
 
     group('Empty | Testing if all lists conform to the basic, mutable one |',
@@ -42,8 +42,8 @@ class EmptyBenchmark extends BenchmarkReporter {
   }
 }
 
-class _ListEmptyBenchmark extends ListBenchmarkBase {
-  _ListEmptyBenchmark({
+class ListEmptyBenchmark extends ListBenchmarkBase {
+  ListEmptyBenchmark({
     @required int runs,
     @required ScoreEmitter emitter,
   }) : super('List (Mutable)', runs: runs, size: 0, emitter: emitter);
@@ -57,8 +57,8 @@ class _ListEmptyBenchmark extends ListBenchmarkBase {
   void run() => _list = <int>[];
 }
 
-class _IListEmptyBenchmark extends ListBenchmarkBase {
-  _IListEmptyBenchmark({
+class IListEmptyBenchmark extends ListBenchmarkBase {
+  IListEmptyBenchmark({
     @required int runs,
     @required ScoreEmitter emitter,
   }) : super('IList', runs: runs, size: 0, emitter: emitter);
@@ -72,8 +72,8 @@ class _IListEmptyBenchmark extends ListBenchmarkBase {
   void run() => _iList = IList<int>();
 }
 
-class _KtListEmptyBenchmark extends ListBenchmarkBase {
-  _KtListEmptyBenchmark({
+class KtListEmptyBenchmark extends ListBenchmarkBase {
+  KtListEmptyBenchmark({
     @required int runs,
     @required ScoreEmitter emitter,
   }) : super('KtList', runs: runs, size: 0, emitter: emitter);
@@ -87,8 +87,8 @@ class _KtListEmptyBenchmark extends ListBenchmarkBase {
   void run() => _ktList = KtList<int>.empty();
 }
 
-class _BuiltListEmptyBenchmark extends ListBenchmarkBase {
-  _BuiltListEmptyBenchmark({
+class BuiltListEmptyBenchmark extends ListBenchmarkBase {
+  BuiltListEmptyBenchmark({
     @required int runs,
     @required ScoreEmitter emitter,
   }) : super('BuiltList', runs: runs, size: 0, emitter: emitter);
