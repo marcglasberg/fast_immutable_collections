@@ -13,11 +13,11 @@ void main() => FullReporter()
 
 class FullReporter {
   final Map<String, BenchmarkReporter> benchmarks = {
-    'empty': EmptyBenchmark(),
-    'read': ReadBenchmark(),
+    // 'empty': EmptyBenchmark(),
+    // 'read': ReadBenchmark(),
     'add': AddBenchmark(),
-    'remove': RemoveBenchmark(),
-    'addAll': AddAllBenchmark(),
+    // 'remove': RemoveBenchmark(),
+    // 'addAll': AddAllBenchmark(),
   };
 
   void report() => benchmarks.forEach(

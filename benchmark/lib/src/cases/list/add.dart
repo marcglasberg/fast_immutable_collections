@@ -11,15 +11,15 @@ import '../../utils/table_score_emitter.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-const int innerRuns = 300;
+const int innerRuns = 100;
 
 class AddBenchmark extends BenchmarkReporter {
   @override
   void report() {
     const List<List<int>> benchmarksConfigurations = [
-      [5000, 10],
+      [5000, 100],
       [5000, 1000],
-      [5000, 100000],
+      [5000, 10000],
     ];
 
     benchmarksConfigurations.forEach((List<int> configurations) {
@@ -28,28 +28,29 @@ class AddBenchmark extends BenchmarkReporter {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(reportName: 'list_add_runs_${runs}_size_${size}');
 
-      final List<int> listResult =
-          _ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
-              .report();
-      final List<int> iListResult =
-          _IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter)
-              .report();
-      final List<int> ktListResult = _KtListAddBenchmark(
-              runs: runs, size: size, emitter: tableScoreEmitter)
-          .report();
-      final List<int> builtListWithRebuildResult =
-          _BuiltListAddWithRebuildBenchmark(
+      final List<int> listResult = _ListAddBenchmark(
                   runs: runs, size: size, emitter: tableScoreEmitter)
-              .report();
-      final List<int> builtListWithListBuilderResult =
-          _BuiltListAddWithListBuilderBenchmark(
+              .report(),
+          iListResult = _IListAddBenchmark(
                   runs: runs, size: size, emitter: tableScoreEmitter)
-              .report();
+              .report(),
+          ktListResult = _KtListAddBenchmark(
+                  runs: runs, size: size, emitter: tableScoreEmitter)
+              .report(),
+          builtListWithRebuildResult = _BuiltListAddWithRebuildBenchmark(
+                  runs: runs, size: size, emitter: tableScoreEmitter)
+              .report(),
+          builtListWithListBuilderResult =
+              _BuiltListAddWithListBuilderBenchmark(
+                      runs: runs, size: size, emitter: tableScoreEmitter)
+                  .report();
 
-      expect(listResult, iListResult);
-      expect(listResult, ktListResult);
-      expect(listResult, builtListWithRebuildResult);
-      expect(listResult, builtListWithListBuilderResult);
+      test('Testing if all lists conform to the basic, mutable one', () {
+        expect(listResult, iListResult);
+        expect(listResult, ktListResult);
+        expect(listResult, builtListWithRebuildResult);
+        expect(listResult, builtListWithListBuilderResult);
+      });
 
       tableScoreEmitters.add(tableScoreEmitter);
     });
