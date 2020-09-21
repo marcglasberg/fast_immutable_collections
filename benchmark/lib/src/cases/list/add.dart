@@ -45,11 +45,13 @@ class AddBenchmark extends BenchmarkReporter {
                       runs: runs, size: size, emitter: tableScoreEmitter)
                   .report();
 
-      test('Testing if all lists conform to the basic, mutable one', () {
-        expect(listResult, iListResult);
-        expect(listResult, ktListResult);
-        expect(listResult, builtListWithRebuildResult);
-        expect(listResult, builtListWithListBuilderResult);
+      group('Testing if all lists conform to the basic, mutable one |', () {
+        test('IList', () => expect(listResult, iListResult));
+        test('KtList', () => expect(listResult, ktListResult));
+        test('BuiltList with Rebuild',
+            () => expect(listResult, builtListWithRebuildResult));
+        test('BuiltList with ListBuilder',
+            () => expect(listResult, builtListWithListBuilderResult));
       });
 
       tableScoreEmitters.add(tableScoreEmitter);
@@ -67,16 +69,17 @@ class _ListAddBenchmark extends ListBenchmarkBase {
   }) : super('List (Mutable)', runs: runs, size: size, emitter: emitter);
 
   List<int> list;
+  List<int> fixedList;
 
   @override
   List<int> toList() => list;
 
   @override
-  void setup() => list = ListBenchmarkBase.getDummyGeneratedList(length: size);
+  void setup() => fixedList = ListBenchmarkBase.getDummyGeneratedList(length: size);
 
   @override
   void run() {
-    list.clear();
+    list = List<int>.of(fixedList);
     for (int i = 0; i < innerRuns; i++) list.add(i);
   }
 }
