@@ -1,9 +1,9 @@
-import 'utils/benchmark_reporter.dart' show BenchmarkReporter;
-import 'cases/benchmark_add.dart' show AddBenchmark;
-import 'cases/benchmark_add_all.dart' show AddAllBenchmark;
-import 'cases/benchmark_empty.dart' show EmptyBenchmark;
-import 'cases/benchmark_read.dart' show ReadBenchmark;
-import 'cases/benchmark_remove.dart' show RemoveBenchmark;
+import 'utils/benchmark_reporter.dart';
+import 'cases/list/add.dart';
+import 'cases/list/add_all.dart';
+import 'cases/list/empty.dart';
+import 'cases/list/read.dart';
+import 'cases/list/remove.dart';
 
 /// Run the benchmarks with, for example &mdash; from the top of the project
 /// &mdash;: `dart benchmark/lib/src/benchmarks.dart`
