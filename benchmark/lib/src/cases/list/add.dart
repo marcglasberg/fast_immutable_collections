@@ -70,20 +70,20 @@ class _ListAddBenchmark extends ListBenchmarkBase {
     @required ScoreEmitter emitter,
   }) : super('List (Mutable)', runs: runs, size: size, emitter: emitter);
 
-  List<int> list;
-  List<int> fixedList;
+  List<int> _list;
+  List<int> _fixedList;
 
   @override
-  List<int> toList() => list;
+  List<int> toList() => _list;
 
   @override
   void setup() =>
-      fixedList = ListBenchmarkBase.getDummyGeneratedList(length: size);
+      _fixedList = ListBenchmarkBase.getDummyGeneratedList(length: size);
 
   @override
   void run() {
-    list = List<int>.of(fixedList);
-    for (int i = 0; i < _innerRuns; i++) list.add(i);
+    _list = List<int>.of(_fixedList);
+    for (int i = 0; i < _innerRuns; i++) _list.add(i);
   }
 }
 
@@ -96,22 +96,22 @@ class _IListAddBenchmark extends ListBenchmarkBase {
     @required ScoreEmitter emitter,
   }) : super('IList', runs: runs, size: size, emitter: emitter);
 
-  IList<int> iList;
-  IList<int> result;
+  IList<int> _iList;
+  IList<int> _result;
 
   @override
-  List<int> toList() => result.unlock;
+  List<int> toList() => _result.unlock;
 
   @override
   void setup() {
-    iList = IList<int>();
-    for (int i = 0; i < size; i++) iList = iList.add(i);
+    _iList = IList<int>();
+    for (int i = 0; i < size; i++) _iList = _iList.add(i);
   }
 
   @override
   void run() {
-    result = iList;
-    for (int i = 0; i < _innerRuns; i++) result = result.add(i);
+    _result = _iList;
+    for (int i = 0; i < _innerRuns; i++) _result = _result.add(i);
   }
 }
 
@@ -124,23 +124,23 @@ class _KtListAddBenchmark extends ListBenchmarkBase {
     @required ScoreEmitter emitter,
   }) : super('KtList', runs: runs, size: size, emitter: emitter);
 
-  KtList<int> ktList;
-  KtList<int> result;
+  KtList<int> _ktList;
+  KtList<int> _result;
 
   @override
-  List<int> toList() => result.asList();
+  List<int> toList() => _result.asList();
 
   @override
   void setup() {
     final List<int> list =
         ListBenchmarkBase.getDummyGeneratedList(length: size);
-    ktList = list.toImmutableList();
+    _ktList = list.toImmutableList();
   }
 
   @override
   void run() {
-    result = ktList;
-    for (int i = 0; i < _innerRuns; i++) result = result.plusElement(i);
+    _result = _ktList;
+    for (int i = 0; i < _innerRuns; i++) _result = _result.plusElement(i);
   }
 }
 
@@ -154,25 +154,25 @@ class _BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   }) : super('BuiltList with Rebuild',
             runs: runs, size: size, emitter: emitter);
 
-  BuiltList<int> builtList;
-  BuiltList<int> result;
+  BuiltList<int> _builtList;
+  BuiltList<int> _result;
 
   @override
-  List<int> toList() => result.asList();
+  List<int> toList() => _result.asList();
 
   @override
   void setup() {
     final List<int> list =
         ListBenchmarkBase.getDummyGeneratedList(length: size);
-    builtList = BuiltList<int>(list);
+    _builtList = BuiltList<int>(list);
   }
 
   @override
   void run() {
-    result = builtList;
+    _result = _builtList;
     for (int i = 0; i < _innerRuns; i++)
-      result =
-          result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
+      _result =
+          _result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
   }
 }
 
@@ -186,24 +186,24 @@ class _BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   }) : super('BuiltList with List Builder',
             runs: runs, size: size, emitter: emitter);
 
-  BuiltList<int> builtList;
-  BuiltList<int> result;
+  BuiltList<int> _builtList;
+  BuiltList<int> _result;
 
   @override
-  List<int> toList() => result.asList();
+  List<int> toList() => _result.asList();
 
   @override
   void setup() {
     final List<int> list =
         ListBenchmarkBase.getDummyGeneratedList(length: size);
-    builtList = BuiltList<int>(list);
+    _builtList = BuiltList<int>(list);
   }
 
   @override
   void run() {
-    final ListBuilder<int> listBuilder = builtList.toBuilder();
+    final ListBuilder<int> listBuilder = _builtList.toBuilder();
     for (int i = 0; i < _innerRuns; i++) listBuilder.add(i);
-    result = listBuilder.build();
+    _result = listBuilder.build();
   }
 }
 
