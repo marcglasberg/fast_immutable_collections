@@ -11,7 +11,7 @@ void main() {
   final TableScoreEmitter tableScoreEmitter =
       TableScoreEmitter(reportName: 'list_empty');
 
-  test('List (Mutable)', () {
+  test('`List` (Mutable)', () {
     final ListEmptyBenchmark listResult =
         ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -20,7 +20,7 @@ void main() {
     expect(listResult.toList(), emptyList);
   });
 
-  test('IList', () {
+  test('`IList`', () {
     final IListEmptyBenchmark iListEmptyBenchmark =
         IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -29,7 +29,7 @@ void main() {
     expect(iListEmptyBenchmark.toList(), emptyList);
   });
 
-  test('KtList', () {
+  test('`KtList`', () {
     final KtListEmptyBenchmark ktListEmptyBenchmark =
         KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -38,7 +38,7 @@ void main() {
     expect(ktListEmptyBenchmark.toList(), emptyList);
   });
 
-  test('BuiltList', () {
+  test('`BuiltList`', () {
     final BuiltListEmptyBenchmark builtListEmptyBenchmark =
         BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
 

@@ -11,7 +11,7 @@ void main() {
   final int numberToRead =
       ListBenchmarkBase.dummyStaticList[ReadBenchmark.indexToRead];
 
-  test('List (Mutable)', () {
+  test('`List` (Mutable)', () {
     final ListReadBenchmark listReadBenchmark =
         ListReadBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -20,7 +20,7 @@ void main() {
     expect(listReadBenchmark.toList()[ReadBenchmark.indexToRead], numberToRead);
   });
 
-  test('IList', () {
+  test('`IList`', () {
     final IListReadBenchmark iListReadBenchmark =
         IListReadBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -30,7 +30,7 @@ void main() {
         iListReadBenchmark.toList()[ReadBenchmark.indexToRead], numberToRead);
   });
 
-  test('KtList', () {
+  test('`KtList`', () {
     final KtListReadBenchmark ktListReadBenchmark =
         KtListReadBenchmark(runs: runs, emitter: tableScoreEmitter);
 
@@ -40,7 +40,7 @@ void main() {
         ktListReadBenchmark.toList()[ReadBenchmark.indexToRead], numberToRead);
   });
 
-  test('BuiltList', () {
+  test('`BuiltList`', () {
     final BuiltListReadBenchmark builtListReadBenchmark =
         BuiltListReadBenchmark(runs: runs, emitter: tableScoreEmitter);
 
