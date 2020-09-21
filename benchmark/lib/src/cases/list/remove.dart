@@ -2,7 +2,6 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:kt_dart/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:test/test.dart';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -19,33 +18,29 @@ class RemoveBenchmark extends MultiBenchmarkReporter {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(reportName: 'list_remove_runs_$runs');
 
-      final List<int> listResult =
-              _ListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter)
-                  .report(),
-          iListResult =
-              _IListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter)
-                  .report(),
-          ktListResult =
-              _KtListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter)
-                  .report(),
-          builtListResult =
-              _BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter)
-                  .report();
+      final List<ListBenchmarkBase> benchmarks = [
+        ListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
+        IListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
+        KtListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
+        BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
+      ];
 
-      group('Remove | Testing if all lists conform to the basic, mutable one |',
-          () {
-        test('IList', () => expect(listResult, iListResult));
-        test('KtList', () => expect(listResult, ktListResult));
-        test('BuiltList', () => expect(listResult, builtListResult));
-      });
+      benchmarks.forEach((ListBenchmarkBase benchmark) => benchmark.report());
+
+      // group('Remove | Testing if all lists conform to the basic, mutable one |',
+      //     () {
+      //   test('IList', () => expect(listResult, iListResult));
+      //   test('KtList', () => expect(listResult, ktListResult));
+      //   test('BuiltList', () => expect(listResult, builtListResult));
+      // });
 
       tableScoreEmitters.add(tableScoreEmitter);
     });
   }
 }
 
-class _ListRemoveBenchmark extends ListBenchmarkBase {
-  _ListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
+class ListRemoveBenchmark extends ListBenchmarkBase {
+  ListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
       : super('List (Mutable)', runs: runs, size: 0, emitter: emitter);
 
   List<int> _list;
@@ -60,8 +55,8 @@ class _ListRemoveBenchmark extends ListBenchmarkBase {
   void run() => _list.remove(1);
 }
 
-class _IListRemoveBenchmark extends ListBenchmarkBase {
-  _IListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
+class IListRemoveBenchmark extends ListBenchmarkBase {
+  IListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
       : super('IList', runs: runs, size: 0, emitter: emitter);
 
   IList<int> _iList;
@@ -77,8 +72,8 @@ class _IListRemoveBenchmark extends ListBenchmarkBase {
   void run() => _iList = _iList.remove(1);
 }
 
-class _KtListRemoveBenchmark extends ListBenchmarkBase {
-  _KtListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
+class KtListRemoveBenchmark extends ListBenchmarkBase {
+  KtListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
       : super('KtList', runs: runs, size: 0, emitter: emitter);
 
   KtList<int> _ktList;
@@ -94,8 +89,8 @@ class _KtListRemoveBenchmark extends ListBenchmarkBase {
   void run() => _ktList = _ktList.minusElement(1);
 }
 
-class _BuiltListRemoveBenchmark extends ListBenchmarkBase {
-  _BuiltListRemoveBenchmark(
+class BuiltListRemoveBenchmark extends ListBenchmarkBase {
+  BuiltListRemoveBenchmark(
       {@required int runs, @required ScoreEmitter emitter})
       : super('BuiltList', runs: runs, size: 0, emitter: emitter);
 
