@@ -6,6 +6,7 @@ export 'src/benchmarks.dart';
 
 export 'src/cases/list/add.dart';
 export 'src/cases/list/add_all.dart';
+export 'src/cases/list/contains.dart';
 export 'src/cases/list/empty.dart';
 export 'src/cases/list/read.dart';
 export 'src/cases/list/remove.dart';

@@ -27,8 +27,11 @@ class ListContainsBenchmark extends ListBenchmarkBase {
   List<int> toList() => _list;
 
   @override
-  void setup() {}
+  void setup() =>
+      _list = ListBenchmarkBase.getDummyGeneratedList(length: size);
 
   @override
-  void run() {}
+  void run() {
+    for (int i = 0; i < _list.length + 1; i++) _list.contains(i);
+  }
 }

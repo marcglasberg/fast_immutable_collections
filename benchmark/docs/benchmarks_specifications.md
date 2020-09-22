@@ -14,12 +14,12 @@ This is a summary of the benchmarks and how they are executed.
 
 ### 1.1. Empty Initialization
 
-| Data Object      | Setup | Run                   | Teardown       |
-| ---------------- | ----- | --------------------- | -------------- |
-| `List` (Mutable) | -     | `<int>[]`             | Log Empty List |
-| `IList`          | -     | `IList<int>()`        | Log Empty List |
-| `KtList`         | -     | `KtList<int>.empty()` | Log Empty List |
-| `BuiltList`      | -     | `BuiltList<int>()`    | Log Empty List |
+| Data Object      | Setup | Run                   |
+| ---------------- | ----- | --------------------- |
+| `List` (Mutable) | -     | `<int>[]`             |
+| `IList`          | -     | `IList<int>()`        |
+| `KtList`         | -     | `KtList<int>.empty()` |
+| `BuiltList`      | -     | `BuiltList<int>()`    |
 
 ### 1.2. Reading an Element
 
@@ -29,12 +29,12 @@ Size here is the *length* of the list being read.
 | ---- |
 | 10k  |
 
-| Data Object      | Setup                         | Run  | Teardown       |
-| ---------------- | ----------------------------- | ---- | -------------- |
-| `List` (Mutable) | `List.generate`               | `[]` | Log Value Read |
-| `IList`          | `IList(List.generate)`        | `[]` | Log Value Read |
-| `KtList`         | `KtList.from(List.generate)`  | `[]` | Log Value Read |
-| `BuiltList`      | `BuiltList.of(List.generate)` | `[]` | Log Value Read |
+| Data Object      | Setup                         | Run  |
+| ---------------- | ----------------------------- | ---- |
+| `List` (Mutable) | `List.generate`               | `[]` |
+| `IList`          | `IList(List.generate)`        | `[]` |
+| `KtList`         | `KtList.from(List.generate)`  | `[]` |
+| `BuiltList`      | `BuiltList.of(List.generate)` | `[]` |
 
 ### 1.3. Adding 1 or Multiple Elements
 
@@ -46,13 +46,13 @@ Size refers to the *length* of the original list before the insertion of the new
 | 1k   |
 | 100k |
 
-| Data Object      | Setup                         | Run                                  | Teardown       |
-| ---------------- | ----------------------------- | ------------------------------------ | -------------- |
-| `List` (Mutable) | `List.generate`               | 3x `..add()`                         | Log Final List |
-| `IList`          | N times `IList().add()`       | 3x `.add()`                          | Log Final List |
-| `KtList`         | `KtList.from(List.generate)`  | 3x `.plusElement()`                  | Log Final List |
-| `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.add())`                | Log Final List |
-| `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` | Log Final List |
+| Data Object      | Setup                         | Run                                  |
+| ---------------- | ----------------------------- | ------------------------------------ |
+| `List` (Mutable) | `List.generate`               | 3x `..add()`                         |
+| `IList`          | N times `IList().add()`       | 3x `.add()`                          |
+| `KtList`         | `KtList.from(List.generate)`  | 3x `.plusElement()`                  |
+| `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.add())`                |
+| `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` |
 
 ### 1.4. Removing 1 Element
 
@@ -62,13 +62,13 @@ Size refers to the *length* of the original list before the insertion of the new
 | 1k   |
 | 100k |
 
-| Data Object      | Setup                         | Run                                  | Teardown       |
-| ---------------- | ----------------------------- | ------------------------------------ | -------------- |
-| `List` (Mutable) | `List.generate`               | 3x `..remove()`                      | Log Final List |
-| `IList`          | `IList(List.generate)`        | 3x `.remove()`                       | Log Final List |
-| `KtList`         | `KtList.from(List.generate)`  | 3x `.minusElement()`                 | Log Final List |
-| `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.remove())`             | Log Final List |
-| `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` | Log Final List |
+| Data Object      | Setup                         | Run                                  |
+| ---------------- | ----------------------------- | ------------------------------------ |
+| `List` (Mutable) | `List.generate`               | 3x `..remove()`                      |
+| `IList`          | `IList(List.generate)`        | 3x `.remove()`                       |
+| `KtList`         | `KtList.from(List.generate)`  | 3x `.minusElement()`                 |
+| `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.remove())`             |
+| `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` |
 
 ### 1.5. Adding Multiple Elements at Once with `addAll`
 
@@ -78,9 +78,24 @@ Size refers to the *length* of the original list before the insertion of the new
 | 1k                        | 1k                           |
 | 10k                       | 10k                          |
 
-| Data Object      | Setup          | Run                    | Teardown       |
-| ---------------- | -------------- | ---------------------- | -------------- |
-| `List` (Mutable) | `List.of`      | `.addAll()`            | Log Final List |
-| `IList`          | `IList`        | `.addAll()`            | Log Final List |
-| `KtList`         | `KtList.from`  | `.plus(KtList.from())` | Log Final List |
-| `BuiltList`      | `BuiltList.of` | `.rebuild(.addAll())`  | Log Final List |
+| Data Object      | Setup          | Run                    |
+| ---------------- | -------------- | ---------------------- |
+| `List` (Mutable) | `List.of`      | `.addAll()`            |
+| `IList`          | `IList`        | `.addAll()`            |
+| `KtList`         | `KtList.from`  | `.plus(KtList.from())` |
+| `BuiltList`      | `BuiltList.of` | `.rebuild(.addAll())`  |
+
+### 1.6. Contains
+
+This benchmark tests contains for *all* elements and, lastly, tries an inexistent one.
+
+| Size |
+| ---- |
+| 100  |
+| 1k   |
+| 10k  |
+| 100k |
+
+| Data Object      | Setup           | Run                                  |
+| ---------------- | --------------- | ------------------------------------ |
+| `List` (Mutable) | `List.generate` | `.contains()` on `length + elements` |
