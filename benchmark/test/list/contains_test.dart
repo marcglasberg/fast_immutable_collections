@@ -21,6 +21,30 @@ void main() {
   });
 
   test('`IList`', () {
-    
+    final IListContainsBenchmark iListContainsBenchmark =
+        IListContainsBenchmark(
+            runs: runs, size: size, emitter: tableScoreEmitter);
+
+    iListContainsBenchmark.report();
+
+    expect(iListContainsBenchmark.toList(), expectedList);
+  });
+
+  test('`KtList`', () {
+    final KtListContainsBenchmark ktListContainsBenchmark =
+        KtListContainsBenchmark(
+            runs: runs, size: size, emitter: tableScoreEmitter);
+
+    ktListContainsBenchmark.report();
+
+    expect(ktListContainsBenchmark.toList(), expectedList);
+  });
+
+  test('`BuiltList`', () {
+    final BuiltListContainsBenchmark builtListContainsBenchmark = BuiltListContainsBenchmark(runs:runs, size: size, emitter: tableScoreEmitter);
+
+    builtListContainsBenchmark.report();
+
+    expect(builtListContainsBenchmark.toList(), expectedList);
   });
 }

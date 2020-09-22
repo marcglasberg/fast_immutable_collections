@@ -28,13 +28,6 @@ class AddAllBenchmark extends MultiBenchmarkReporter {
 
     benchmarks.forEach((ListBenchmarkBase benchmarks) => benchmarks.report());
 
-    // group('AddAll | Testing if all lists conform to the basic, mutable one |',
-    //     () {
-    //   test('IList', () => expect(listResult, iListResult));
-    //   test('KtList', () => expect(listResult, ktListResult));
-    //   test('BuiltList', () => expect(listResult, builtListResult));
-    // });
-
     tableScoreEmitters.add(tableScoreEmitter);
   }
 }

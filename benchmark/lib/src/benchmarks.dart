@@ -1,6 +1,7 @@
 import 'utils/multi_benchmark_reporter.dart';
 import 'cases/list/add.dart';
 import 'cases/list/add_all.dart';
+import 'cases/list/contains.dart';
 import 'cases/list/empty.dart';
 import 'cases/list/read.dart';
 import 'cases/list/remove.dart';
@@ -18,6 +19,7 @@ class FullReporter {
     'add': AddBenchmark(),
     'remove': RemoveBenchmark(),
     'addAll': AddAllBenchmark(),
+    'contains': ContainsBenchmark(),
   };
 
   void report() =>
