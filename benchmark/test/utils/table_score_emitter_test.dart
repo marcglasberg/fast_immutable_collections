@@ -24,4 +24,16 @@ void main() {
     expect(
         tableScoreEmitter.completeTable['normalizedAgainstList']['Test2'], 10);
   });
+
+  group('Other stuff |', () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(reportName: 'report');
+
+    tableScoreEmitter.emit('Test1', 1);
+
+    test(
+        'Printing',
+        () => expect(
+            tableScoreEmitter.toString(), 'Table Score Emitter: {Test1: 1.0}'));
+  });
 }

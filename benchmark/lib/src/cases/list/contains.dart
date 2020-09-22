@@ -7,38 +7,35 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
-import '../../utils/table_score_emitter.dart';
 
 class ContainsBenchmark extends MultiBenchmarkReporter2 {
   @override
+  final String prefixName;
+  @override
   final List<Config> configs;
 
-  ContainsBenchmark({@required this.configs}) {
-    configure();
-  }
-
   @override
-  void configure() {
-    configs.forEach((Config config) {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          reportName: 'list_contains_runs_${config.runs}_size_${config.size}');
+  final List<ListBenchmarkBase2> baseBenchmarks = [
+    ListContainsBenchmark(config: null, emitter: null),
+    IListContainsBenchmark(config: null, emitter: null),
+    KtListContainsBenchmark(config: null, emitter: null),
+    BuiltListContainsBenchmark(config: null, emitter: null),
+  ];
 
-      benchmarks.add(
-          ListContainsBenchmark(config: config, emitter: tableScoreEmitter));
-      benchmarks.add(
-          IListContainsBenchmark(config: config, emitter: tableScoreEmitter));
-      benchmarks.add(
-          KtListContainsBenchmark(config: config, emitter: tableScoreEmitter));
-      benchmarks.add(BuiltListContainsBenchmark(
-          config: config, emitter: tableScoreEmitter));
-    });
-  }
+  ContainsBenchmark(
+      {this.prefixName = 'list_contains', @required this.configs});
 }
 
 class ListContainsBenchmark extends ListBenchmarkBase2 {
   ListContainsBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super('List (Mutable)', config: config, emitter: emitter);
+      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+
+  @override
+  ListContainsBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      ListContainsBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
 
@@ -58,7 +55,13 @@ class ListContainsBenchmark extends ListBenchmarkBase2 {
 class IListContainsBenchmark extends ListBenchmarkBase2 {
   IListContainsBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super('IList', config: config, emitter: emitter);
+      : super(name: 'IList', config: config, emitter: emitter);
+
+  @override
+  IListContainsBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      IListContainsBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   IList<int> _iList;
 
@@ -78,7 +81,13 @@ class IListContainsBenchmark extends ListBenchmarkBase2 {
 class KtListContainsBenchmark extends ListBenchmarkBase2 {
   KtListContainsBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super('KtList', config: config, emitter: emitter);
+      : super(name: 'KtList', config: config, emitter: emitter);
+
+  @override
+  KtListContainsBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      KtListContainsBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtList<int> _ktList;
 
@@ -98,7 +107,13 @@ class KtListContainsBenchmark extends ListBenchmarkBase2 {
 class BuiltListContainsBenchmark extends ListBenchmarkBase2 {
   BuiltListContainsBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super('BuiltList', config: config, emitter: emitter);
+      : super(name: 'BuiltList', config: config, emitter: emitter);
+
+  @override
+  BuiltListContainsBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltListContainsBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltList<int> _builtList;
 

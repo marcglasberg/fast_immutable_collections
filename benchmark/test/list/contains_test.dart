@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections_benchmarks/'
 
 void main() {
   const int size = 10;
-  const Config config = Config(runs: 10, size: size);
+  const Config config = Config(runs: 100, size: size);
   final List<int> expectedList =
       ListBenchmarkBase2.getDummyGeneratedList(size: size);
 
@@ -54,7 +54,7 @@ void main() {
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
       final ContainsBenchmark containsBenchmark =
-          ContainsBenchmark(configs: [config, config]);
+          ContainsBenchmark(configs: [config]);
 
       containsBenchmark.report();
 

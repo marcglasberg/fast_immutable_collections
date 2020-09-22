@@ -77,4 +77,7 @@ class TableScoreEmitter implements ScoreEmitter {
 
     return normalizedAgainstListColumn;
   }
+
+  @override
+  String toString() => 'Table Score Emitter: ${_scores.toString()}';
 }

@@ -36,8 +36,8 @@ abstract class ListBenchmarkBase extends BenchmarkBase {
 abstract class ListBenchmarkBase2 extends BenchmarkBase {
   final Config config;
 
-  const ListBenchmarkBase2(
-    String name, {
+  const ListBenchmarkBase2({
+    @required String name,
     @required this.config,
     @required ScoreEmitter emitter,
   }) : super(name, emitter: emitter);
@@ -58,6 +58,11 @@ abstract class ListBenchmarkBase2 extends BenchmarkBase {
   @visibleForTesting
   @visibleForOverriding
   List<int> toList();
+
+  /// If one of the parameters is not passed, then the current one is used.
+  /// This method will be important later on for reconfiguring the benchmark in 
+  /// the [MultiBenchmarkReporter]'s [.configure] method.
+  ListBenchmarkBase2 reconfigure({Config newConfig, ScoreEmitter newEmitter});
 }
 
 class Config {
