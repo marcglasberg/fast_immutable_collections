@@ -9,7 +9,7 @@ void main() {
     benchmarkReporter.tableScoreEmitters
         .forEach((TableScoreEmitter tableScoreEmitter) {
       print(name);
-      print(tableScoreEmitter.table);
+      print(tableScoreEmitter.tableAsString);
     });
   });
 }

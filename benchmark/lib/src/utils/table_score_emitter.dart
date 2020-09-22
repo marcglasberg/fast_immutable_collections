@@ -17,17 +17,26 @@ class TableScoreEmitter implements ScoreEmitter {
 
   /// You can't get the [table] before the benchmarks have finished because all
   /// data is needed to build it.
-  String get table {
-    final Map<String, double> normalizedColumn = _normalizedColumn(),
-        normalizedAgainstListColumn = _normalizedAgainstListColumn();
+  Map<String, Map<String, double>> get completeTable {
+    final Map<String, Map<String, double>> table = {};
+
+    table['scores'] = _scores;
+    table['normalized'] = _normalizedColumn();
+    table['normalizedAgainstList'] = _normalizedColumnAgainstList();
+
+    return table;
+  }
+
+  String get tableAsString {
+    final Map<String, Map<String, double>> table = completeTable;
 
     const String _mu = '\u{03BC}';
     String report = 'Data Object,Time (${_mu}s),Normalized Score,'
         'Normalized Against Mutable List\n';
     _scores.forEach((String testName, double score) => report += '$testName,'
         '${score.toStringAsFixed(0).toString()},'
-        '${normalizedColumn[testName].toString()},'
-        '${normalizedAgainstListColumn[testName].toString()}\n');
+        '${table['normalized'][testName].toString()},'
+        '${table['normalizedAgainstList'][testName].toString()}\n');
 
     return report;
   }
@@ -37,7 +46,7 @@ class TableScoreEmitter implements ScoreEmitter {
 
     final File reportFile = File('benchmark/reports/$_reportName.csv');
 
-    reportFile.writeAsStringSync(table);
+    reportFile.writeAsStringSync(tableAsString);
   }
 
   void _createReportsFolderIfNonExistent() {
@@ -57,7 +66,7 @@ class TableScoreEmitter implements ScoreEmitter {
     return normalizedColumn;
   }
 
-  Map<String, double> _normalizedAgainstListColumn() {
+  Map<String, double> _normalizedColumnAgainstList() {
     final Map<String, double> normalizedAgainstListColumn = {};
     final double listScore = _scores[_scores.keys
         .firstWhere((String key) => key.toLowerCase().contains('mutable'))];

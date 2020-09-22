@@ -4,12 +4,24 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  test('`emit` adds values to the `scores`', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'report');
+  final TableScoreEmitter tableScoreEmitter =
+      TableScoreEmitter(reportName: 'report');
 
-    tableScoreEmitter.emit('test', 1);
+  tableScoreEmitter.emit('Test1', 1);
+  tableScoreEmitter.emit('List (Mutable)', 10);
 
-    expect(tableScoreEmitter.scores['test'], 1);
+  test('`emit` adds values to the `scores`',
+      () => expect(tableScoreEmitter.scores['Test1'], 1));
+
+  test('Normalized column', () {
+    expect(tableScoreEmitter.completeTable['normalized']['Test1'], 0.1);
+    expect(tableScoreEmitter.completeTable['normalized']['List (Mutable)'], 1);
+  });
+
+  test('Normalized column against the mutable list', () {
+    tableScoreEmitter.emit('Test2', 100);
+
+    expect(
+        tableScoreEmitter.completeTable['normalizedAgainstList']['Test2'], 10);
   });
 }
