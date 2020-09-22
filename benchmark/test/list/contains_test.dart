@@ -4,47 +4,62 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  const int runs = 100, size = 100;
-
-  final TableScoreEmitter tableScoreEmitter =
-      TableScoreEmitter(reportName: 'list_contains');
+  const int size = 10;
+  const Config config = Config(runs: 10, size: size);
   final List<int> expectedList =
-      ListBenchmarkBase.getDummyGeneratedList(length: 100);
+      ListBenchmarkBase2.getDummyGeneratedList(size: size);
 
-  test('`List` (Mutable)', () {
-    final ListContainsBenchmark listContainsBenchmark = ListContainsBenchmark(
-        runs: runs, size: size, emitter: tableScoreEmitter);
+  group('Separate Benchmarks |', () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(reportName: 'list_contains');
 
-    listContainsBenchmark.report();
+    test('`List` (Mutable)', () {
+      final ListContainsBenchmark listContainsBenchmark =
+          ListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
-    expect(listContainsBenchmark.toList(), expectedList);
+      listContainsBenchmark.report();
+
+      expect(listContainsBenchmark.toList(), expectedList);
+    });
+
+    test('`IList`', () {
+      final IListContainsBenchmark iListContainsBenchmark =
+          IListContainsBenchmark(config: config, emitter: tableScoreEmitter);
+
+      iListContainsBenchmark.report();
+
+      expect(iListContainsBenchmark.toList(), expectedList);
+    });
+
+    test('`KtList`', () {
+      final KtListContainsBenchmark ktListContainsBenchmark =
+          KtListContainsBenchmark(config: config, emitter: tableScoreEmitter);
+
+      ktListContainsBenchmark.report();
+
+      expect(ktListContainsBenchmark.toList(), expectedList);
+    });
+
+    test('`BuiltList`', () {
+      final BuiltListContainsBenchmark builtListContainsBenchmark =
+          BuiltListContainsBenchmark(
+              config: config, emitter: tableScoreEmitter);
+
+      builtListContainsBenchmark.report();
+
+      expect(builtListContainsBenchmark.toList(), expectedList);
+    });
   });
 
-  test('`IList`', () {
-    final IListContainsBenchmark iListContainsBenchmark =
-        IListContainsBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter);
+  group('Multiple Benchmarks |', () {
+    test('Simple run', () {
+      final ContainsBenchmark containsBenchmark =
+          ContainsBenchmark(configs: [config, config]);
 
-    iListContainsBenchmark.report();
+      containsBenchmark.report();
 
-    expect(iListContainsBenchmark.toList(), expectedList);
-  });
-
-  test('`KtList`', () {
-    final KtListContainsBenchmark ktListContainsBenchmark =
-        KtListContainsBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter);
-
-    ktListContainsBenchmark.report();
-
-    expect(ktListContainsBenchmark.toList(), expectedList);
-  });
-
-  test('`BuiltList`', () {
-    final BuiltListContainsBenchmark builtListContainsBenchmark = BuiltListContainsBenchmark(runs:runs, size: size, emitter: tableScoreEmitter);
-
-    builtListContainsBenchmark.report();
-
-    expect(builtListContainsBenchmark.toList(), expectedList);
+      containsBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+          expect(benchmark.toList(), expectedList));
+    });
   });
 }

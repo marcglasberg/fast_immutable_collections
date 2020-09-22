@@ -1,4 +1,6 @@
 import 'utils/multi_benchmark_reporter.dart';
+import 'utils/list_benchmark_base.dart';
+
 import 'cases/list/add.dart';
 import 'cases/list/add_all.dart';
 import 'cases/list/contains.dart';
@@ -13,20 +15,22 @@ void main() => FullReporter()
   ..save();
 
 class FullReporter {
-  final Map<String, MultiBenchmarkReporter> benchmarks = {
-    'empty': EmptyBenchmark(),
-    'read': ReadBenchmark(),
-    'add': AddBenchmark(),
-    'remove': RemoveBenchmark(),
-    'addAll': AddAllBenchmark(),
-    'contains': ContainsBenchmark(),
+  final Map<String, MultiBenchmarkReporter2> benchmarks = {
+    // 'empty': EmptyBenchmark(),
+    // 'read': ReadBenchmark(),
+    // 'add': AddBenchmark(),
+    // 'remove': RemoveBenchmark(),
+    // 'addAll': AddAllBenchmark(),
+    'contains': ContainsBenchmark(configs: const <Config>[
+      Config(runs: 1000, size: 1000),
+    ]),
   };
 
   void report() =>
-      benchmarks.forEach((_, MultiBenchmarkReporter benchmarkReporter) =>
+      benchmarks.forEach((_, MultiBenchmarkReporter2 benchmarkReporter) =>
           benchmarkReporter.report());
 
   void save() =>
-      benchmarks.forEach((_, MultiBenchmarkReporter benchmarkReporter) =>
+      benchmarks.forEach((_, MultiBenchmarkReporter2 benchmarkReporter) =>
           benchmarkReporter.save());
 }
