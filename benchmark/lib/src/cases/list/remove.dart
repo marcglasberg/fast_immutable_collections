@@ -83,8 +83,7 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
 }
 
 class BuiltListRemoveBenchmark extends ListBenchmarkBase {
-  BuiltListRemoveBenchmark(
-      {@required int runs, @required ScoreEmitter emitter})
+  BuiltListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
       : super('BuiltList', runs: runs, size: 0, emitter: emitter);
 
   BuiltList<int> _builtList;

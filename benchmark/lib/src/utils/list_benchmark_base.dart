@@ -60,7 +60,7 @@ abstract class ListBenchmarkBase2 extends BenchmarkBase {
   List<int> toList();
 
   /// If one of the parameters is not passed, then the current one is used.
-  /// This method will be important later on for reconfiguring the benchmark in 
+  /// This method will be important later on for reconfiguring the benchmark in
   /// the [MultiBenchmarkReporter]'s [.configure] method.
   ListBenchmarkBase2 reconfigure({Config newConfig, ScoreEmitter newEmitter});
 }

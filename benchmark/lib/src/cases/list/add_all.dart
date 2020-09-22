@@ -85,7 +85,8 @@ class KtListAddAllBenchmark extends ListBenchmarkBase {
   /// If the added list were already of type `KtList`, then it would be much
   /// faster.
   @override
-  void run() => _result = _ktList.plus(KtList<int>.from(AddAllBenchmark.listToAdd));
+  void run() =>
+      _result = _ktList.plus(KtList<int>.from(AddAllBenchmark.listToAdd));
 }
 
 class BuiltListAddAllBenchmark extends ListBenchmarkBase {
@@ -102,6 +103,6 @@ class BuiltListAddAllBenchmark extends ListBenchmarkBase {
   void setup() => _builtList = BuiltList<int>.of(AddAllBenchmark.baseList);
 
   @override
-  void run() => _result = _builtList.rebuild(
-      (ListBuilder<int> listBuilder) => listBuilder.addAll(AddAllBenchmark.listToAdd));
+  void run() => _result = _builtList.rebuild((ListBuilder<int> listBuilder) =>
+      listBuilder.addAll(AddAllBenchmark.listToAdd));
 }
