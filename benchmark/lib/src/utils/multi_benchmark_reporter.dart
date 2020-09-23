@@ -31,7 +31,8 @@ abstract class MultiBenchmarkReporter2 {
           reportName: '${prefixName}_runs_${config.runs}_size_${config.size}');
 
       baseBenchmarks.forEach((ListBenchmarkBase2 baseBenchmark) =>
-          benchmarks.add(baseBenchmark.reconfigure(
+          benchmarks.add(
+            baseBenchmark.reconfigure(
               newConfig: config, newEmitter: tableScoreEmitter)));
     });
   }

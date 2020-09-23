@@ -10,27 +10,31 @@ import 'cases/list/remove.dart';
 
 /// Run the benchmarks with, for example &mdash; from the top of the project
 /// &mdash;: `dart benchmark/lib/src/benchmarks.dart`
-void main() => FullReporter()
+void main() => FullListReporter()
   ..report()
   ..save();
 
-class FullReporter {
-  final Map<String, MultiBenchmarkReporter2> benchmarks = {
+class FullListReporter {
+  final List<MultiBenchmarkReporter2> benchmarks = [
     // 'empty': EmptyBenchmark(),
     // 'read': ReadBenchmark(),
-    // 'add': AddBenchmark(),
+    AddBenchmark(configs: const <Config>[
+      Config(runs: 5000, size: 100),
+      Config(runs: 5000, size: 1000),
+      Config(runs: 5000, size: 10000),
+      Config(runs: 5000, size: 100000),
+    ]),
     // 'remove': RemoveBenchmark(),
     // 'addAll': AddAllBenchmark(),
-    'contains': ContainsBenchmark(configs: const <Config>[
+    ContainsBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 1000),
     ]),
-  };
+  ];
 
   void report() =>
-      benchmarks.forEach((_, MultiBenchmarkReporter2 benchmarkReporter) =>
+      benchmarks.forEach((MultiBenchmarkReporter2 benchmarkReporter) =>
           benchmarkReporter.report());
 
-  void save() =>
-      benchmarks.forEach((_, MultiBenchmarkReporter2 benchmarkReporter) =>
-          benchmarkReporter.save());
+  void save() => benchmarks.forEach(
+      (MultiBenchmarkReporter2 benchmarkReporter) => benchmarkReporter.save());
 }
