@@ -8,13 +8,13 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
 
-class RemoveBenchmark extends MultiBenchmarkReporter2 {
+class RemoveBenchmark extends MultiBenchmarkReporter {
   @override
   final String prefixName;
   @override
   final List<Config> configs;
   @override
-  final List<ListBenchmarkBase2> baseBenchmarks = [
+  final List<ListBenchmarkBase> baseBenchmarks = [
     ListRemoveBenchmark(config: null, emitter: null),
     IListRemoveBenchmark(config: null, emitter: null),
     KtListRemoveBenchmark(config: null, emitter: null),
@@ -24,7 +24,7 @@ class RemoveBenchmark extends MultiBenchmarkReporter2 {
   RemoveBenchmark({this.prefixName = 'list_remove', @required this.configs});
 }
 
-class ListRemoveBenchmark extends ListBenchmarkBase2 {
+class ListRemoveBenchmark extends ListBenchmarkBase {
   ListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
@@ -46,7 +46,7 @@ class ListRemoveBenchmark extends ListBenchmarkBase2 {
   void run() => _list.remove(1);
 }
 
-class IListRemoveBenchmark extends ListBenchmarkBase2 {
+class IListRemoveBenchmark extends ListBenchmarkBase {
   IListRemoveBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'IList', config: config, emitter: emitter);
@@ -70,7 +70,7 @@ class IListRemoveBenchmark extends ListBenchmarkBase2 {
   void run() => _iList = _iList.remove(1);
 }
 
-class KtListRemoveBenchmark extends ListBenchmarkBase2 {
+class KtListRemoveBenchmark extends ListBenchmarkBase {
   KtListRemoveBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtList', config: config, emitter: emitter);
@@ -94,7 +94,7 @@ class KtListRemoveBenchmark extends ListBenchmarkBase2 {
   void run() => _ktList = _ktList.minusElement(1);
 }
 
-class BuiltListRemoveBenchmark extends ListBenchmarkBase2 {
+class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   BuiltListRemoveBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltList', config: config, emitter: emitter);

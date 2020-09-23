@@ -8,13 +8,13 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
 
-class EmptyBenchmark extends MultiBenchmarkReporter2 {
+class EmptyBenchmark extends MultiBenchmarkReporter {
   @override
   final String prefixName;
   @override
   final List<Config> configs;
   @override
-  final List<ListBenchmarkBase2> baseBenchmarks = [
+  final List<ListBenchmarkBase> baseBenchmarks = [
     ListEmptyBenchmark(config: null, emitter: null),
     IListEmptyBenchmark(config: null, emitter: null),
     KtListEmptyBenchmark(config: null, emitter: null),
@@ -24,7 +24,7 @@ class EmptyBenchmark extends MultiBenchmarkReporter2 {
   EmptyBenchmark({this.prefixName = 'list_empty', @required this.configs});
 }
 
-class ListEmptyBenchmark extends ListBenchmarkBase2 {
+class ListEmptyBenchmark extends ListBenchmarkBase {
   ListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
@@ -42,7 +42,7 @@ class ListEmptyBenchmark extends ListBenchmarkBase2 {
   void run() => _list = <int>[];
 }
 
-class IListEmptyBenchmark extends ListBenchmarkBase2 {
+class IListEmptyBenchmark extends ListBenchmarkBase {
   IListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'IList', config: config, emitter: emitter);
 
@@ -61,7 +61,7 @@ class IListEmptyBenchmark extends ListBenchmarkBase2 {
   void run() => _iList = IList<int>();
 }
 
-class KtListEmptyBenchmark extends ListBenchmarkBase2 {
+class KtListEmptyBenchmark extends ListBenchmarkBase {
   KtListEmptyBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtList', config: config, emitter: emitter);
@@ -81,7 +81,7 @@ class KtListEmptyBenchmark extends ListBenchmarkBase2 {
   void run() => _ktList = KtList<int>.empty();
 }
 
-class BuiltListEmptyBenchmark extends ListBenchmarkBase2 {
+class BuiltListEmptyBenchmark extends ListBenchmarkBase {
   BuiltListEmptyBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltList', config: config, emitter: emitter);

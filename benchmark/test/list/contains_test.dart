@@ -7,7 +7,7 @@ void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
   final List<int> expectedList =
-      ListBenchmarkBase2.getDummyGeneratedList(size: size);
+      ListBenchmarkBase.getDummyGeneratedList(size: size);
 
   group('Separate Benchmarks |', () {
     final TableScoreEmitter tableScoreEmitter =
@@ -58,7 +58,7 @@ void main() {
 
       containsBenchmark.report();
 
-      containsBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+      containsBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
           expect(benchmark.toList(), expectedList));
     });
   });

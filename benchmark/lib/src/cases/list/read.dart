@@ -8,7 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
 
-class ReadBenchmark extends MultiBenchmarkReporter2 {
+class ReadBenchmark extends MultiBenchmarkReporter {
   static const int indexToRead = 100;
 
   @override
@@ -16,7 +16,7 @@ class ReadBenchmark extends MultiBenchmarkReporter2 {
   @override
   final List<Config> configs;
   @override
-  final List<ListBenchmarkBase2> baseBenchmarks = [
+  final List<ListBenchmarkBase> baseBenchmarks = [
     ListReadBenchmark(config: null, emitter: null),
     IListReadBenchmark(config: null, emitter: null),
     KtListReadBenchmark(config: null, emitter: null),
@@ -26,7 +26,7 @@ class ReadBenchmark extends MultiBenchmarkReporter2 {
   ReadBenchmark({this.prefixName = 'list_read', @required this.configs});
 }
 
-class ListReadBenchmark extends ListBenchmarkBase2 {
+class ListReadBenchmark extends ListBenchmarkBase {
   ListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
@@ -47,7 +47,7 @@ class ListReadBenchmark extends ListBenchmarkBase2 {
   void run() => _list[ReadBenchmark.indexToRead];
 }
 
-class IListReadBenchmark extends ListBenchmarkBase2 {
+class IListReadBenchmark extends ListBenchmarkBase {
   IListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'IList', config: config, emitter: emitter);
 
@@ -68,7 +68,7 @@ class IListReadBenchmark extends ListBenchmarkBase2 {
   void run() => _iList[ReadBenchmark.indexToRead];
 }
 
-class KtListReadBenchmark extends ListBenchmarkBase2 {
+class KtListReadBenchmark extends ListBenchmarkBase {
   KtListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtList', config: config, emitter: emitter);
 
@@ -89,7 +89,7 @@ class KtListReadBenchmark extends ListBenchmarkBase2 {
   void run() => _ktList[ReadBenchmark.indexToRead];
 }
 
-class BuiltListReadBenchmark extends ListBenchmarkBase2 {
+class BuiltListReadBenchmark extends ListBenchmarkBase {
   BuiltListReadBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltList', config: config, emitter: emitter);

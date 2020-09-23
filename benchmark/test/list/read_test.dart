@@ -61,7 +61,7 @@ void main() {
 
       readBenchmark.report();
 
-      readBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+      readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
           expect(benchmark.toList()[ReadBenchmark.indexToRead], numberToRead));
     });
   });

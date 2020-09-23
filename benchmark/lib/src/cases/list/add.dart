@@ -10,7 +10,7 @@ import '../../utils/list_benchmark_base.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class AddBenchmark extends MultiBenchmarkReporter2 {
+class AddBenchmark extends MultiBenchmarkReporter {
   static const int innerRuns = 100;
 
   @override
@@ -18,7 +18,7 @@ class AddBenchmark extends MultiBenchmarkReporter2 {
   @override
   final List<Config> configs;
   @override
-  final List<ListBenchmarkBase2> baseBenchmarks = [
+  final List<ListBenchmarkBase> baseBenchmarks = [
     ListAddBenchmark(config: null, emitter: null),
     IListAddBenchmark(config: null, emitter: null),
     KtListAddBenchmark(config: null, emitter: null),
@@ -31,7 +31,7 @@ class AddBenchmark extends MultiBenchmarkReporter2 {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ListAddBenchmark extends ListBenchmarkBase2 {
+class ListAddBenchmark extends ListBenchmarkBase {
   ListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
@@ -48,7 +48,7 @@ class ListAddBenchmark extends ListBenchmarkBase2 {
 
   @override
   void setup() =>
-      _fixedList = ListBenchmarkBase2.getDummyGeneratedList(size: config.size);
+      _fixedList = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
 
   @override
   void run() {
@@ -59,7 +59,7 @@ class ListAddBenchmark extends ListBenchmarkBase2 {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IListAddBenchmark extends ListBenchmarkBase2 {
+class IListAddBenchmark extends ListBenchmarkBase {
   IListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'IList', config: config, emitter: emitter);
 
@@ -89,7 +89,7 @@ class IListAddBenchmark extends ListBenchmarkBase2 {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class KtListAddBenchmark extends ListBenchmarkBase2 {
+class KtListAddBenchmark extends ListBenchmarkBase {
   KtListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtList', config: config, emitter: emitter);
 
@@ -107,7 +107,7 @@ class KtListAddBenchmark extends ListBenchmarkBase2 {
   @override
   void setup() {
     final List<int> list =
-        ListBenchmarkBase.getDummyGeneratedList(length: config.size);
+        ListBenchmarkBase.getDummyGeneratedList(size: config.size);
     _ktList = list.toImmutableList();
   }
 
@@ -121,7 +121,7 @@ class KtListAddBenchmark extends ListBenchmarkBase2 {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase2 {
+class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   BuiltListAddWithRebuildBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltList with Rebuild', config: config, emitter: emitter);
@@ -141,7 +141,7 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase2 {
   @override
   void setup() {
     final List<int> list =
-        ListBenchmarkBase2.getDummyGeneratedList(size: config.size);
+        ListBenchmarkBase.getDummyGeneratedList(size: config.size);
     _builtList = BuiltList<int>(list);
   }
 
@@ -156,7 +156,7 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase2 {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase2 {
+class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   BuiltListAddWithListBuilderBenchmark({
     @required Config config,
     @required ScoreEmitter emitter,
@@ -180,7 +180,7 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase2 {
   @override
   void setup() {
     final List<int> list =
-        ListBenchmarkBase2.getDummyGeneratedList(size: config.size);
+        ListBenchmarkBase.getDummyGeneratedList(size: config.size);
     _builtList = BuiltList<int>(list);
   }
 

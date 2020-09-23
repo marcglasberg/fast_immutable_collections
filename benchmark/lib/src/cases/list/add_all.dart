@@ -9,7 +9,7 @@ import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
 import '../../utils/table_score_emitter.dart';
 
-class AddAllBenchmark extends MultiBenchmarkReporter2 {
+class AddAllBenchmark extends MultiBenchmarkReporter {
   static const List<int> baseList = [1, 2, 3], listToAdd = [4, 5, 6];
 
   @override
@@ -17,7 +17,7 @@ class AddAllBenchmark extends MultiBenchmarkReporter2 {
   @override
   final List<Config> configs;
   @override
-  final List<ListBenchmarkBase2> baseBenchmarks = [
+  final List<ListBenchmarkBase> baseBenchmarks = [
     ListAddAllBenchmark(config: null, emitter: null),
     IListAddAllBenchmark(config: null, emitter: null),
     KtListAddAllBenchmark(config: null, emitter: null),
@@ -27,7 +27,7 @@ class AddAllBenchmark extends MultiBenchmarkReporter2 {
   AddAllBenchmark({this.prefixName = 'list_add_all', @required this.configs});
 }
 
-class ListAddAllBenchmark extends ListBenchmarkBase2 {
+class ListAddAllBenchmark extends ListBenchmarkBase {
   ListAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
@@ -53,7 +53,7 @@ class ListAddAllBenchmark extends ListBenchmarkBase2 {
   }
 }
 
-class IListAddAllBenchmark extends ListBenchmarkBase2 {
+class IListAddAllBenchmark extends ListBenchmarkBase {
   IListAddAllBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'IList', config: config, emitter: emitter);
@@ -77,7 +77,7 @@ class IListAddAllBenchmark extends ListBenchmarkBase2 {
   void run() => _result = _iList.addAll(AddAllBenchmark.listToAdd);
 }
 
-class KtListAddAllBenchmark extends ListBenchmarkBase2 {
+class KtListAddAllBenchmark extends ListBenchmarkBase {
   KtListAddAllBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtList', config: config, emitter: emitter);
@@ -104,7 +104,7 @@ class KtListAddAllBenchmark extends ListBenchmarkBase2 {
       _result = _ktList.plus(KtList<int>.from(AddAllBenchmark.listToAdd));
 }
 
-class BuiltListAddAllBenchmark extends ListBenchmarkBase2 {
+class BuiltListAddAllBenchmark extends ListBenchmarkBase {
   BuiltListAddAllBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltList', config: config, emitter: emitter);

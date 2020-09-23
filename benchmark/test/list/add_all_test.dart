@@ -57,7 +57,7 @@ void main() {
 
       addAllBenchmark.report();
 
-      addAllBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+      addAllBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
           expect(benchmark.toList(), expectedList));
     });
   });

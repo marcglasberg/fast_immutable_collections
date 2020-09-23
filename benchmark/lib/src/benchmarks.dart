@@ -15,7 +15,7 @@ void main() => FullListReporter()
   ..save();
 
 class FullListReporter {
-  final List<MultiBenchmarkReporter2> benchmarks = [
+  final List<MultiBenchmarkReporter> benchmarks = [
     AddAllBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 0),
     ]),
@@ -23,7 +23,6 @@ class FullListReporter {
       Config(runs: 5000, size: 100),
       Config(runs: 5000, size: 1000),
       Config(runs: 5000, size: 10000),
-      Config(runs: 5000, size: 100000),
     ]),
     ContainsBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 1000),
@@ -40,9 +39,9 @@ class FullListReporter {
   ];
 
   void report() =>
-      benchmarks.forEach((MultiBenchmarkReporter2 benchmarkReporter) =>
+      benchmarks.forEach((MultiBenchmarkReporter benchmarkReporter) =>
           benchmarkReporter.report());
 
   void save() => benchmarks.forEach(
-      (MultiBenchmarkReporter2 benchmarkReporter) => benchmarkReporter.save());
+      (MultiBenchmarkReporter benchmarkReporter) => benchmarkReporter.save());
 }

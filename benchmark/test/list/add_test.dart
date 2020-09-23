@@ -7,7 +7,7 @@ void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
   final List<int> expectedList =
-      ListBenchmarkBase.getDummyGeneratedList(length: size) +
+      ListBenchmarkBase.getDummyGeneratedList(size: size) +
           List<int>.generate(AddBenchmark.innerRuns, (int index) => index);
 
   group('Separate Benchmarks |', () {
@@ -69,7 +69,7 @@ void main() {
 
       addBenchmark.report();
 
-      addBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+      addBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
           expect(benchmark.toList(), expectedList));
     });
   });
