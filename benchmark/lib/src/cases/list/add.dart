@@ -17,7 +17,6 @@ class AddBenchmark extends MultiBenchmarkReporter2 {
   final String prefixName;
   @override
   final List<Config> configs;
-
   @override
   final List<ListBenchmarkBase2> baseBenchmarks = [
     ListAddBenchmark(config: null, emitter: null),
