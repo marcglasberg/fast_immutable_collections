@@ -1,3 +1,4 @@
+import 'utils/config.dart';
 import 'utils/multi_benchmark_reporter.dart';
 import 'utils/list_benchmark_base.dart';
 

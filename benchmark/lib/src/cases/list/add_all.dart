@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
+import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
 

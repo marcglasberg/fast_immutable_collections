@@ -1,6 +1,8 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:meta/meta.dart';
 
+import 'config.dart';
+
 abstract class ListBenchmarkBase extends BenchmarkBase {
   final Config config;
 
@@ -29,14 +31,6 @@ abstract class ListBenchmarkBase extends BenchmarkBase {
 
   /// If one of the parameters is not passed, then the current one is used.
   /// This method will be important later on for reconfiguring the benchmark in
-  /// the [MultiBenchmarkReporter]'s [.configure] method.
+  /// the [MultiBenchmarkReporter]'s [configure] method.
   ListBenchmarkBase reconfigure({Config newConfig, ScoreEmitter newEmitter});
-}
-
-class Config {
-  final int runs, size;
-
-  const Config({@required this.runs, @required this.size})
-      : assert(runs != null && runs > 0),
-        assert(size != null && size >= 0);
 }
