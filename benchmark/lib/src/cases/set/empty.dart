@@ -8,7 +8,7 @@ import '../../utils/collection_benchmark_base.dart';
 import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 
-class SetEmptyBenchmark extends MultiBenchmarkReporter {
+class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final String prefixName;
   @override
@@ -25,11 +25,13 @@ class SetEmptyBenchmark extends MultiBenchmarkReporter {
 }
 
 class MutableSetEmptyBenchmark extends SetBenchmarkBase {
-  MutableSetEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
+  MutableSetEmptyBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'Set (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableSetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+  MutableSetEmptyBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
       MutableSetEmptyBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 

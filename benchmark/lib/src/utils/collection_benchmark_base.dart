@@ -30,7 +30,7 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
       {Config newConfig, ScoreEmitter newEmitter});
 }
 
-abstract class ListBenchmarkBase extends CollectionBenchmarkBase {
+abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   const ListBenchmarkBase({
     @required String name,
     @required Config config,
@@ -49,12 +49,17 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase {
   List<int> toMutable();
 }
 
-abstract class SetBenchmarkBase extends CollectionBenchmarkBase {
+abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   const SetBenchmarkBase({
     @required String name,
     @required Config config,
     @required ScoreEmitter emitter,
   }) : super(name: name, config: config, emitter: emitter);
+
+  static final Set<int> dummyStaticSet = getDummyGeneratedSet(size: 10000);
+
+  static Set<int> getDummyGeneratedSet({int size = 10000}) =>
+      Set<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: size));
 
   @visibleForTesting
   @visibleForOverriding

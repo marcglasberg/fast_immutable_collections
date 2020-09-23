@@ -11,6 +11,7 @@ export 'src/cases/list/empty.dart';
 export 'src/cases/list/read.dart';
 export 'src/cases/list/remove.dart';
 
+export 'src/cases/set/contains.dart';
 export 'src/cases/set/empty.dart';
 
 export 'src/utils/config.dart';

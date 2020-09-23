@@ -1,6 +1,5 @@
 import 'utils/config.dart';
 import 'utils/multi_benchmark_reporter.dart';
-import 'utils/collection_benchmark_base.dart';
 
 import 'cases/list/add.dart';
 import 'cases/list/add_all.dart';
