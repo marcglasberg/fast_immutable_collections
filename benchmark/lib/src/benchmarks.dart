@@ -27,9 +27,15 @@ class FullListReporter {
     ]),
     ContainsBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 1000),
-    // 'empty': EmptyBenchmark(),
-    // 'read': ReadBenchmark(),
-    // 'remove': RemoveBenchmark(),
+    ]),
+    EmptyBenchmark(configs: const <Config>[
+      Config(runs: 1000, size: 0),
+    ]),
+    ReadBenchmark(configs: const <Config>[
+      Config(runs: 1000, size: 1000),
+    ]),
+    RemoveBenchmark(configs: const <Config>[
+      Config(runs: 1000, size: 1000),
     ]),
   ];
 

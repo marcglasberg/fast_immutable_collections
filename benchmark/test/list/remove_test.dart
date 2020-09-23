@@ -4,46 +4,62 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  const int runs = 100;
+  const int size = 100;
+  const Config config = Config(runs: 100, size: size);
 
-  final TableScoreEmitter tableScoreEmitter =
-      TableScoreEmitter(reportName: 'list_remove');
   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList()
     ..remove(1);
 
-  test('`List` (Mutable)', () {
-    final ListRemoveBenchmark listRemoveBenchmark =
-        ListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
+  group('Separate Benchmarks |', () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(reportName: 'list_remove');
 
-    listRemoveBenchmark.report();
+    test('`List` (Mutable)', () {
+      final ListRemoveBenchmark listRemoveBenchmark =
+          ListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
-    expect(listRemoveBenchmark.toList(), expectedList);
+      listRemoveBenchmark.report();
+
+      expect(listRemoveBenchmark.toList(), expectedList);
+    });
+
+    test('`IList`', () {
+      final IListRemoveBenchmark iListRemoveBenchmark =
+          IListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+
+      iListRemoveBenchmark.report();
+
+      expect(iListRemoveBenchmark.toList(), expectedList);
+    });
+
+    test('`KtList`', () {
+      final KtListRemoveBenchmark ktListRemoveBenchmark =
+          KtListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+
+      ktListRemoveBenchmark.report();
+
+      expect(ktListRemoveBenchmark.toList(), expectedList);
+    });
+
+    test('`BuiltList`', () {
+      final BuiltListRemoveBenchmark builtListRemoveBenchmark =
+          BuiltListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+
+      builtListRemoveBenchmark.report();
+
+      expect(builtListRemoveBenchmark.toList(), expectedList);
+    });
   });
 
-  test('`IList`', () {
-    final IListRemoveBenchmark iListRemoveBenchmark =
-        IListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
+  group('Multiple Benchmarks |', () {
+    test('Simple run', () {
+      final RemoveBenchmark removeBenchmark =
+          RemoveBenchmark(configs: [config, config]);
 
-    iListRemoveBenchmark.report();
+      removeBenchmark.report();
 
-    expect(iListRemoveBenchmark.toList(), expectedList);
-  });
-
-  test('`KtList`', () {
-    final KtListRemoveBenchmark ktListRemoveBenchmark =
-        KtListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
-
-    ktListRemoveBenchmark.report();
-
-    expect(ktListRemoveBenchmark.toList(), expectedList);
-  });
-
-  test('`BuiltList`', () {
-    final BuiltListRemoveBenchmark builtListRemoveBenchmark =
-        BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter);
-
-    builtListRemoveBenchmark.report();
-
-    expect(builtListRemoveBenchmark.toList(), expectedList);
+      removeBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+          expect(benchmark.toList(), expectedList));
+    });
   });
 }

@@ -7,34 +7,32 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
-import '../../utils/table_score_emitter.dart';
 
-class RemoveBenchmark extends MultiBenchmarkReporter {
+class RemoveBenchmark extends MultiBenchmarkReporter2 {
   @override
-  void report() {
-    const List<int> benchmarksConfigurations = [100, 10000, 100000];
+  final String prefixName;
+  @override
+  final List<Config> configs;
+  @override
+  final List<ListBenchmarkBase2> baseBenchmarks = [
+    ListRemoveBenchmark(config: null, emitter: null),
+    IListRemoveBenchmark(config: null, emitter: null),
+    KtListRemoveBenchmark(config: null, emitter: null),
+    BuiltListRemoveBenchmark(config: null, emitter: null),
+  ];
 
-    benchmarksConfigurations.forEach((int runs) {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(reportName: 'list_remove_runs_$runs');
-
-      final List<ListBenchmarkBase> benchmarks = [
-        ListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
-        IListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
-        KtListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
-        BuiltListRemoveBenchmark(runs: runs, emitter: tableScoreEmitter),
-      ];
-
-      benchmarks.forEach((ListBenchmarkBase benchmark) => benchmark.report());
-
-      tableScoreEmitters.add(tableScoreEmitter);
-    });
-  }
+  RemoveBenchmark({this.prefixName = 'list_remove', @required this.configs});
 }
 
-class ListRemoveBenchmark extends ListBenchmarkBase {
-  ListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
-      : super('List (Mutable)', runs: runs, size: 0, emitter: emitter);
+class ListRemoveBenchmark extends ListBenchmarkBase2 {
+  ListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+
+  @override
+  ListRemoveBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      ListRemoveBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
 
@@ -48,9 +46,16 @@ class ListRemoveBenchmark extends ListBenchmarkBase {
   void run() => _list.remove(1);
 }
 
-class IListRemoveBenchmark extends ListBenchmarkBase {
-  IListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
-      : super('IList', runs: runs, size: 0, emitter: emitter);
+class IListRemoveBenchmark extends ListBenchmarkBase2 {
+  IListRemoveBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'IList', config: config, emitter: emitter);
+
+  @override
+  IListRemoveBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      IListRemoveBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   IList<int> _iList;
 
@@ -65,9 +70,16 @@ class IListRemoveBenchmark extends ListBenchmarkBase {
   void run() => _iList = _iList.remove(1);
 }
 
-class KtListRemoveBenchmark extends ListBenchmarkBase {
-  KtListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
-      : super('KtList', runs: runs, size: 0, emitter: emitter);
+class KtListRemoveBenchmark extends ListBenchmarkBase2 {
+  KtListRemoveBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'KtList', config: config, emitter: emitter);
+
+  @override
+  KtListRemoveBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      KtListRemoveBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtList<int> _ktList;
 
@@ -82,9 +94,16 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
   void run() => _ktList = _ktList.minusElement(1);
 }
 
-class BuiltListRemoveBenchmark extends ListBenchmarkBase {
-  BuiltListRemoveBenchmark({@required int runs, @required ScoreEmitter emitter})
-      : super('BuiltList', runs: runs, size: 0, emitter: emitter);
+class BuiltListRemoveBenchmark extends ListBenchmarkBase2 {
+  BuiltListRemoveBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'BuiltList', config: config, emitter: emitter);
+
+  @override
+  BuiltListRemoveBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltListRemoveBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltList<int> _builtList;
 
