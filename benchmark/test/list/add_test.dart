@@ -8,15 +8,15 @@ void main() {
   const Config config = Config(runs: 100, size: size);
   final List<int> expectedList =
       ListBenchmarkBase.getDummyGeneratedList(size: size) +
-          List<int>.generate(AddBenchmark.innerRuns, (int index) => index);
+          List<int>.generate(ListAddBenchmark.innerRuns, (int index) => index);
 
   group('Separate Benchmarks |', () {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_add');
 
     test('`List` (Mutable)', () {
-      final ListAddBenchmark listAddBenchmark =
-          ListAddBenchmark(config: config, emitter: tableScoreEmitter);
+      final MutableListAddBenchmark listAddBenchmark =
+          MutableListAddBenchmark(config: config, emitter: tableScoreEmitter);
 
       listAddBenchmark.report();
 
@@ -65,7 +65,7 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final AddBenchmark addBenchmark = AddBenchmark(configs: [config, config]);
+      final ListAddBenchmark addBenchmark = ListAddBenchmark(configs: [config, config]);
 
       addBenchmark.report();
 

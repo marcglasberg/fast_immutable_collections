@@ -17,24 +17,24 @@ void main() => FullListReporter()
 
 class FullListReporter {
   final List<MultiBenchmarkReporter> benchmarks = [
-    AddAllBenchmark(configs: const <Config>[
+    ListAddAllBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 0),
     ]),
-    AddBenchmark(configs: const <Config>[
+    ListAddBenchmark(configs: const <Config>[
       Config(runs: 5000, size: 100),
       Config(runs: 5000, size: 1000),
       Config(runs: 5000, size: 10000),
     ]),
-    ContainsBenchmark(configs: const <Config>[
+    ListContainsBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 1000),
     ]),
-    EmptyBenchmark(configs: const <Config>[
+    ListEmptyBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 0),
     ]),
-    ReadBenchmark(configs: const <Config>[
+    ListReadBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 1000),
     ]),
-    RemoveBenchmark(configs: const <Config>[
+    ListRemoveBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 1000),
     ]),
   ];

@@ -11,7 +11,7 @@ import '../../utils/collection_benchmark_base.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class AddBenchmark extends MultiBenchmarkReporter {
+class ListAddBenchmark extends MultiBenchmarkReporter {
   static const int innerRuns = 100;
 
   @override
@@ -20,25 +20,25 @@ class AddBenchmark extends MultiBenchmarkReporter {
   final List<Config> configs;
   @override
   final List<ListBenchmarkBase> baseBenchmarks = [
-    ListAddBenchmark(config: null, emitter: null),
+    MutableListAddBenchmark(config: null, emitter: null),
     IListAddBenchmark(config: null, emitter: null),
     KtListAddBenchmark(config: null, emitter: null),
     BuiltListAddWithRebuildBenchmark(config: null, emitter: null),
     BuiltListAddWithListBuilderBenchmark(config: null, emitter: null),
   ];
 
-  AddBenchmark({this.prefixName = 'list_add', @required this.configs});
+  ListAddBenchmark({this.prefixName = 'list_add', @required this.configs});
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ListAddBenchmark extends ListBenchmarkBase {
-  ListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
+class MutableListAddBenchmark extends ListBenchmarkBase {
+  MutableListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  ListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      ListAddBenchmark(
+  MutableListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableListAddBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
@@ -54,7 +54,7 @@ class ListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     _list = List<int>.of(_fixedList);
-    for (int i = 0; i < AddBenchmark.innerRuns; i++) _list.add(i);
+    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) _list.add(i);
   }
 }
 
@@ -84,7 +84,7 @@ class IListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     _result = _iList;
-    for (int i = 0; i < AddBenchmark.innerRuns; i++) _result = _result.add(i);
+    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) _result = _result.add(i);
   }
 }
 
@@ -115,7 +115,7 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     _result = _ktList;
-    for (int i = 0; i < AddBenchmark.innerRuns; i++)
+    for (int i = 0; i < ListAddBenchmark.innerRuns; i++)
       _result = _result.plusElement(i);
   }
 }
@@ -149,7 +149,7 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     _result = _builtList;
-    for (int i = 0; i < AddBenchmark.innerRuns; i++)
+    for (int i = 0; i < ListAddBenchmark.innerRuns; i++)
       _result =
           _result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
   }
@@ -188,7 +188,7 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     final ListBuilder<int> listBuilder = _builtList.toBuilder();
-    for (int i = 0; i < AddBenchmark.innerRuns; i++) listBuilder.add(i);
+    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) listBuilder.add(i);
     _result = listBuilder.build();
   }
 }

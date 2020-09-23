@@ -14,8 +14,8 @@ void main() {
         TableScoreEmitter(reportName: 'list_contains');
 
     test('`List` (Mutable)', () {
-      final ListContainsBenchmark listContainsBenchmark =
-          ListContainsBenchmark(config: config, emitter: tableScoreEmitter);
+      final MutableListContainsBenchmark listContainsBenchmark =
+          MutableListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
       listContainsBenchmark.report();
 
@@ -53,8 +53,8 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ContainsBenchmark containsBenchmark =
-          ContainsBenchmark(configs: [config, config]);
+      final ListContainsBenchmark containsBenchmark =
+          ListContainsBenchmark(configs: [config, config]);
 
       containsBenchmark.report();
 

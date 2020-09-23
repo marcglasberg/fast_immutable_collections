@@ -9,32 +9,32 @@ import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/collection_benchmark_base.dart';
 
-class ContainsBenchmark extends MultiBenchmarkReporter {
+class ListContainsBenchmark extends MultiBenchmarkReporter {
   @override
   final String prefixName;
   @override
   final List<Config> configs;
   @override
   final List<ListBenchmarkBase> baseBenchmarks = [
-    ListContainsBenchmark(config: null, emitter: null),
+    MutableListContainsBenchmark(config: null, emitter: null),
     IListContainsBenchmark(config: null, emitter: null),
     KtListContainsBenchmark(config: null, emitter: null),
     BuiltListContainsBenchmark(config: null, emitter: null),
   ];
 
-  ContainsBenchmark(
+  ListContainsBenchmark(
       {this.prefixName = 'list_contains', @required this.configs});
 }
 
-class ListContainsBenchmark extends ListBenchmarkBase {
-  ListContainsBenchmark(
+class MutableListContainsBenchmark extends ListBenchmarkBase {
+  MutableListContainsBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  ListContainsBenchmark reconfigure(
+  MutableListContainsBenchmark reconfigure(
           {Config newConfig, ScoreEmitter newEmitter}) =>
-      ListContainsBenchmark(
+      MutableListContainsBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;

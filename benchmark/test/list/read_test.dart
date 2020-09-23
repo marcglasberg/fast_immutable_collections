@@ -7,15 +7,15 @@ void main() {
   const int size = 100;
   const Config config = Config(runs: 100, size: size);
   final int numberToRead =
-      ListBenchmarkBase.dummyStaticList[ReadBenchmark.indexToRead];
+      ListBenchmarkBase.dummyStaticList[ListReadBenchmark.indexToRead];
 
   group('Separate Benchmarks |', () {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_read');
 
     test('`List` (Mutable)', () {
-      final ListReadBenchmark listReadBenchmark =
-          ListReadBenchmark(config: config, emitter: tableScoreEmitter);
+      final MutableListReadBenchmark listReadBenchmark =
+          MutableListReadBenchmark(config: config, emitter: tableScoreEmitter);
 
       listReadBenchmark.report();
 
@@ -52,13 +52,13 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ReadBenchmark readBenchmark =
-          ReadBenchmark(configs: [config, config]);
+      final ListReadBenchmark readBenchmark =
+          ListReadBenchmark(configs: [config, config]);
 
       readBenchmark.report();
 
       readBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) => expect(
-          benchmark.toMutable()[ReadBenchmark.indexToRead], numberToRead));
+          benchmark.toMutable()[ListReadBenchmark.indexToRead], numberToRead));
     });
   });
 }

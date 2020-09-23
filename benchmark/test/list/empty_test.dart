@@ -12,8 +12,8 @@ void main() {
         TableScoreEmitter(reportName: 'list_empty');
 
     test('`List` (Mutable)', () {
-      final ListEmptyBenchmark listResult =
-          ListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+      final MutableListEmptyBenchmark listResult =
+          MutableListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
 
       listResult.report();
 
@@ -50,8 +50,8 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final EmptyBenchmark emptyBenchmark =
-          EmptyBenchmark(configs: [config, config]);
+      final ListEmptyBenchmark emptyBenchmark =
+          ListEmptyBenchmark(configs: [config, config]);
 
       emptyBenchmark.report();
 

@@ -9,29 +9,29 @@ import '../../utils/config.dart';
 import '../../utils/collection_benchmark_base.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 
-class EmptyBenchmark extends MultiBenchmarkReporter {
+class ListEmptyBenchmark extends MultiBenchmarkReporter {
   @override
   final String prefixName;
   @override
   final List<Config> configs;
   @override
   final List<ListBenchmarkBase> baseBenchmarks = [
-    ListEmptyBenchmark(config: null, emitter: null),
+    MutableListEmptyBenchmark(config: null, emitter: null),
     IListEmptyBenchmark(config: null, emitter: null),
     KtListEmptyBenchmark(config: null, emitter: null),
     BuiltListEmptyBenchmark(config: null, emitter: null),
   ];
 
-  EmptyBenchmark({this.prefixName = 'list_empty', @required this.configs});
+  ListEmptyBenchmark({this.prefixName = 'list_empty', @required this.configs});
 }
 
-class ListEmptyBenchmark extends ListBenchmarkBase {
-  ListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
+class MutableListEmptyBenchmark extends ListBenchmarkBase {
+  MutableListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  ListEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      ListEmptyBenchmark(
+  MutableListEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableListEmptyBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;

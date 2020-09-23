@@ -15,8 +15,8 @@ void main() {
         TableScoreEmitter(reportName: 'list_remove');
 
     test('`List` (Mutable)', () {
-      final ListRemoveBenchmark listRemoveBenchmark =
-          ListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+      final MutableListRemoveBenchmark listRemoveBenchmark =
+          MutableListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
       listRemoveBenchmark.report();
 
@@ -53,8 +53,8 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final RemoveBenchmark removeBenchmark =
-          RemoveBenchmark(configs: [config, config]);
+      final ListRemoveBenchmark removeBenchmark =
+          ListRemoveBenchmark(configs: [config, config]);
 
       removeBenchmark.report();
 

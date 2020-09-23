@@ -7,15 +7,15 @@ void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
   final List<int> expectedList =
-      AddAllBenchmark.baseList + AddAllBenchmark.listToAdd;
+      ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
 
   group('Separate Benchmarks |', () {
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(reportName: 'list_add_all');
 
     test('`List` (Mutable)', () {
-      final ListAddAllBenchmark listAddAllBenchmark =
-          ListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+      final MutableListAddAllBenchmark listAddAllBenchmark =
+          MutableListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
       listAddAllBenchmark.report();
 
@@ -52,8 +52,8 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final AddAllBenchmark addAllBenchmark =
-          AddAllBenchmark(configs: [config, config]);
+      final ListAddAllBenchmark addAllBenchmark =
+          ListAddAllBenchmark(configs: [config, config]);
 
       addAllBenchmark.report();
 

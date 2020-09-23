@@ -5,7 +5,7 @@ void main() {
   final FullListReporter fullReporter = FullListReporter()..report();
 
   fullReporter.benchmarks.forEach((MultiBenchmarkReporter benchmarkReporter) {
-    benchmarkReporter.benchmarks.forEach((ListBenchmarkBase benchmark) {
+    benchmarkReporter.benchmarks.forEach((CollectionBenchmarkBase benchmark) {
       print(benchmark.emitter);
     });
   });

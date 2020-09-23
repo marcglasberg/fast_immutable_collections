@@ -9,7 +9,7 @@ import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/collection_benchmark_base.dart';
 
-class ReadBenchmark extends MultiBenchmarkReporter {
+class ListReadBenchmark extends MultiBenchmarkReporter {
   static const int indexToRead = 100;
 
   @override
@@ -18,22 +18,22 @@ class ReadBenchmark extends MultiBenchmarkReporter {
   final List<Config> configs;
   @override
   final List<ListBenchmarkBase> baseBenchmarks = [
-    ListReadBenchmark(config: null, emitter: null),
+    MutableListReadBenchmark(config: null, emitter: null),
     IListReadBenchmark(config: null, emitter: null),
     KtListReadBenchmark(config: null, emitter: null),
     BuiltListReadBenchmark(config: null, emitter: null),
   ];
 
-  ReadBenchmark({this.prefixName = 'list_read', @required this.configs});
+  ListReadBenchmark({this.prefixName = 'list_read', @required this.configs});
 }
 
-class ListReadBenchmark extends ListBenchmarkBase {
-  ListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
+class MutableListReadBenchmark extends ListBenchmarkBase {
+  MutableListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  ListReadBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      ListReadBenchmark(
+  MutableListReadBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableListReadBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
@@ -46,7 +46,7 @@ class ListReadBenchmark extends ListBenchmarkBase {
   void setup() => _list = ListBenchmarkBase.dummyStaticList;
 
   @override
-  void run() => newVar = _list[ReadBenchmark.indexToRead];
+  void run() => newVar = _list[ListReadBenchmark.indexToRead];
 }
 
 class IListReadBenchmark extends ListBenchmarkBase {
@@ -68,7 +68,7 @@ class IListReadBenchmark extends ListBenchmarkBase {
   void setup() => _iList = IList<int>(ListBenchmarkBase.dummyStaticList);
 
   @override
-  void run() => newVar = _iList[ReadBenchmark.indexToRead];
+  void run() => newVar = _iList[ListReadBenchmark.indexToRead];
 }
 
 class KtListReadBenchmark extends ListBenchmarkBase {
@@ -90,7 +90,7 @@ class KtListReadBenchmark extends ListBenchmarkBase {
   void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.dummyStaticList);
 
   @override
-  void run() => newVar = _ktList[ReadBenchmark.indexToRead];
+  void run() => newVar = _ktList[ListReadBenchmark.indexToRead];
 }
 
 class BuiltListReadBenchmark extends ListBenchmarkBase {
@@ -114,5 +114,5 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
       _builtList = BuiltList<int>.of(ListBenchmarkBase.dummyStaticList);
 
   @override
-  void run() => newVar = _builtList[ReadBenchmark.indexToRead];
+  void run() => newVar = _builtList[ListReadBenchmark.indexToRead];
 }
