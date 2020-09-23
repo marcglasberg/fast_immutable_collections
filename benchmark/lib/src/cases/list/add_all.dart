@@ -9,7 +9,7 @@ import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/collection_benchmark_base.dart';
 
-class ListAddAllBenchmark extends MultiBenchmarkReporter {
+class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   static const List<int> baseList = [1, 2, 3], listToAdd = [4, 5, 6];
 
   @override
@@ -24,11 +24,13 @@ class ListAddAllBenchmark extends MultiBenchmarkReporter {
     BuiltListAddAllBenchmark(config: null, emitter: null),
   ];
 
-  ListAddAllBenchmark({this.prefixName = 'list_add_all', @required this.configs});
+  ListAddAllBenchmark(
+      {this.prefixName = 'list_add_all', @required this.configs});
 }
 
 class MutableListAddAllBenchmark extends ListBenchmarkBase {
-  MutableListAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
+  MutableListAddAllBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override

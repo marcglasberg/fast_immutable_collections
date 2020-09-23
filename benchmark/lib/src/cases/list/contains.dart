@@ -9,7 +9,7 @@ import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/collection_benchmark_base.dart';
 
-class ListContainsBenchmark extends MultiBenchmarkReporter {
+class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final String prefixName;
   @override

@@ -9,7 +9,7 @@ import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/collection_benchmark_base.dart';
 
-class ListRemoveBenchmark extends MultiBenchmarkReporter {
+class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final String prefixName;
   @override
@@ -22,11 +22,13 @@ class ListRemoveBenchmark extends MultiBenchmarkReporter {
     BuiltListRemoveBenchmark(config: null, emitter: null),
   ];
 
-  ListRemoveBenchmark({this.prefixName = 'list_remove', @required this.configs});
+  ListRemoveBenchmark(
+      {this.prefixName = 'list_remove', @required this.configs});
 }
 
 class MutableListRemoveBenchmark extends ListBenchmarkBase {
-  MutableListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
+  MutableListRemoveBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override

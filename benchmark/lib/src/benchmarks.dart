@@ -38,9 +38,8 @@ class FullListReporter {
     ]),
   ];
 
-  void report() =>
-      benchmarks.forEach((MultiBenchmarkReporter benchmarkReporter) =>
-          benchmarkReporter.report());
+  void report() => benchmarks.forEach(
+      (MultiBenchmarkReporter benchmarkReporter) => benchmarkReporter.report());
 
   void save() => benchmarks.forEach(
       (MultiBenchmarkReporter benchmarkReporter) => benchmarkReporter.save());

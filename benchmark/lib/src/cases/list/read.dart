@@ -9,7 +9,7 @@ import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/collection_benchmark_base.dart';
 
-class ListReadBenchmark extends MultiBenchmarkReporter {
+class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   static const int indexToRead = 100;
 
   @override
@@ -28,11 +28,13 @@ class ListReadBenchmark extends MultiBenchmarkReporter {
 }
 
 class MutableListReadBenchmark extends ListBenchmarkBase {
-  MutableListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
+  MutableListReadBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableListReadBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+  MutableListReadBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
       MutableListReadBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 

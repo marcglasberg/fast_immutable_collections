@@ -15,7 +15,8 @@ void main() {
 
     test('`List` (Mutable)', () {
       final MutableListAddAllBenchmark listAddAllBenchmark =
-          MutableListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+          MutableListAddAllBenchmark(
+              config: config, emitter: tableScoreEmitter);
 
       listAddAllBenchmark.report();
 
@@ -57,7 +58,7 @@ void main() {
 
       addAllBenchmark.report();
 
-      addAllBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) =>
+      addAllBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
           expect(benchmark.toMutable(), expectedList));
     });
   });

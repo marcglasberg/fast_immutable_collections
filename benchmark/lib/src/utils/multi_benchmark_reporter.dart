@@ -22,15 +22,13 @@ abstract class MultiBenchmarkReporter<T extends CollectionBenchmarkBase> {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
           reportName: '${prefixName}_runs_${config.runs}_size_${config.size}');
 
-      baseBenchmarks.forEach((T baseBenchmark) =>
-          benchmarks.add(baseBenchmark.reconfigure(
-              newConfig: config, newEmitter: tableScoreEmitter)));
+      baseBenchmarks.forEach((T baseBenchmark) => benchmarks.add(baseBenchmark
+          .reconfigure(newConfig: config, newEmitter: tableScoreEmitter)));
     });
   }
 
-  void report() => benchmarks
-      .forEach((T benchmark) => benchmark.report());
+  void report() => benchmarks.forEach((T benchmark) => benchmark.report());
 
-  void save() => benchmarks.forEach((T benchmark) =>
-      (benchmark.emitter as TableScoreEmitter).saveReport());
+  void save() => benchmarks.forEach(
+      (T benchmark) => (benchmark.emitter as TableScoreEmitter).saveReport());
 }

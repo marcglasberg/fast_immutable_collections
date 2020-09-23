@@ -11,7 +11,7 @@ import '../../utils/collection_benchmark_base.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ListAddBenchmark extends MultiBenchmarkReporter {
+class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   static const int innerRuns = 100;
 
   @override
@@ -33,11 +33,13 @@ class ListAddBenchmark extends MultiBenchmarkReporter {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListAddBenchmark extends ListBenchmarkBase {
-  MutableListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
+  MutableListAddBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+  MutableListAddBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
       MutableListAddBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
@@ -84,7 +86,8 @@ class IListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     _result = _iList;
-    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) _result = _result.add(i);
+    for (int i = 0; i < ListAddBenchmark.innerRuns; i++)
+      _result = _result.add(i);
   }
 }
 

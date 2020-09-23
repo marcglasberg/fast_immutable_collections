@@ -65,11 +65,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ListAddBenchmark addBenchmark = ListAddBenchmark(configs: [config, config]);
+      final ListAddBenchmark addBenchmark =
+          ListAddBenchmark(configs: [config, config]);
 
       addBenchmark.report();
 
-      addBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) =>
+      addBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
           expect(benchmark.toMutable(), expectedList));
     });
   });

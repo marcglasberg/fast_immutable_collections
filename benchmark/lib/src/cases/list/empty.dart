@@ -9,7 +9,7 @@ import '../../utils/config.dart';
 import '../../utils/collection_benchmark_base.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 
-class ListEmptyBenchmark extends MultiBenchmarkReporter {
+class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final String prefixName;
   @override
@@ -26,11 +26,13 @@ class ListEmptyBenchmark extends MultiBenchmarkReporter {
 }
 
 class MutableListEmptyBenchmark extends ListBenchmarkBase {
-  MutableListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
+  MutableListEmptyBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableListEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+  MutableListEmptyBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
       MutableListEmptyBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 

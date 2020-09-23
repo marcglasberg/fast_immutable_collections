@@ -16,7 +16,8 @@ void main() {
 
     test('`List` (Mutable)', () {
       final MutableListRemoveBenchmark listRemoveBenchmark =
-          MutableListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+          MutableListRemoveBenchmark(
+              config: config, emitter: tableScoreEmitter);
 
       listRemoveBenchmark.report();
 
@@ -58,7 +59,7 @@ void main() {
 
       removeBenchmark.report();
 
-      removeBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) =>
+      removeBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
           expect(benchmark.toMutable(), expectedList));
     });
   });
