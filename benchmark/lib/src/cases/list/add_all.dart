@@ -7,7 +7,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
-import '../../utils/table_score_emitter.dart';
 
 class AddAllBenchmark extends MultiBenchmarkReporter {
   static const List<int> baseList = [1, 2, 3], listToAdd = [4, 5, 6];
