@@ -37,6 +37,7 @@ class ListReadBenchmark extends ListBenchmarkBase {
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
+  int newVar;
 
   @override
   List<int> toMutable() => _list;
@@ -45,7 +46,7 @@ class ListReadBenchmark extends ListBenchmarkBase {
   void setup() => _list = ListBenchmarkBase.dummyStaticList;
 
   @override
-  void run() => _list[ReadBenchmark.indexToRead];
+  void run() => newVar = _list[ReadBenchmark.indexToRead];
 }
 
 class IListReadBenchmark extends ListBenchmarkBase {
@@ -58,6 +59,7 @@ class IListReadBenchmark extends ListBenchmarkBase {
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   IList<int> _iList;
+  int newVar;
 
   @override
   List<int> toMutable() => _iList.unlock;
@@ -66,7 +68,7 @@ class IListReadBenchmark extends ListBenchmarkBase {
   void setup() => _iList = IList<int>(ListBenchmarkBase.dummyStaticList);
 
   @override
-  void run() => _iList[ReadBenchmark.indexToRead];
+  void run() => newVar = _iList[ReadBenchmark.indexToRead];
 }
 
 class KtListReadBenchmark extends ListBenchmarkBase {
@@ -79,6 +81,7 @@ class KtListReadBenchmark extends ListBenchmarkBase {
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtList<int> _ktList;
+  int newVar;
 
   @override
   List<int> toMutable() => _ktList.asList();
@@ -87,7 +90,7 @@ class KtListReadBenchmark extends ListBenchmarkBase {
   void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.dummyStaticList);
 
   @override
-  void run() => _ktList[ReadBenchmark.indexToRead];
+  void run() => newVar = _ktList[ReadBenchmark.indexToRead];
 }
 
 class BuiltListReadBenchmark extends ListBenchmarkBase {
@@ -101,6 +104,7 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltList<int> _builtList;
+  int newVar;
 
   @override
   List<int> toMutable() => _builtList.asList();
@@ -110,5 +114,5 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
       _builtList = BuiltList<int>.of(ListBenchmarkBase.dummyStaticList);
 
   @override
-  void run() => _builtList[ReadBenchmark.indexToRead];
+  void run() => newVar = _builtList[ReadBenchmark.indexToRead];
 }

@@ -19,8 +19,7 @@ void main() {
 
       listReadBenchmark.report();
 
-      expect(
-          listReadBenchmark.toMutable()[ReadBenchmark.indexToRead], numberToRead);
+      expect(listReadBenchmark.newVar, numberToRead);
     });
 
     test('`IList`', () {
@@ -29,8 +28,8 @@ void main() {
 
       iListReadBenchmark.report();
 
-      expect(
-          iListReadBenchmark.toMutable()[ReadBenchmark.indexToRead], numberToRead);
+      expect(iListReadBenchmark.newVar,
+          numberToRead);
     });
 
     test('`KtList`', () {
@@ -39,7 +38,7 @@ void main() {
 
       ktListReadBenchmark.report();
 
-      expect(ktListReadBenchmark.toMutable()[ReadBenchmark.indexToRead],
+      expect(ktListReadBenchmark.newVar,
           numberToRead);
     });
 
@@ -49,8 +48,7 @@ void main() {
 
       builtListReadBenchmark.report();
 
-      expect(builtListReadBenchmark.toMutable()[ReadBenchmark.indexToRead],
-          numberToRead);
+      expect(builtListReadBenchmark.newVar, numberToRead);
     });
   });
 
@@ -61,8 +59,8 @@ void main() {
 
       readBenchmark.report();
 
-      readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable()[ReadBenchmark.indexToRead], numberToRead));
+      readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) => expect(
+          benchmark.toMutable()[ReadBenchmark.indexToRead], numberToRead));
     });
   });
 }
