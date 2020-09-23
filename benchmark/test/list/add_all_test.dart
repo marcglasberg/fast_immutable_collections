@@ -19,7 +19,7 @@ void main() {
 
       listAddAllBenchmark.report();
 
-      expect(listAddAllBenchmark.toList(), expectedList);
+      expect(listAddAllBenchmark.toMutable(), expectedList);
     });
 
     test('`IList`', () {
@@ -28,7 +28,7 @@ void main() {
 
       iListAddAllBenchmark.report();
 
-      expect(iListAddAllBenchmark.toList(), expectedList);
+      expect(iListAddAllBenchmark.toMutable(), expectedList);
     });
 
     test('`KtList`', () {
@@ -37,7 +37,7 @@ void main() {
 
       ktListAddAllBenchmark.report();
 
-      expect(ktListAddAllBenchmark.toList(), expectedList);
+      expect(ktListAddAllBenchmark.toMutable(), expectedList);
     });
 
     test('`BuiltList`', () {
@@ -46,7 +46,7 @@ void main() {
 
       builtListAddAllBenchmark.report();
 
-      expect(builtListAddAllBenchmark.toList(), expectedList);
+      expect(builtListAddAllBenchmark.toMutable(), expectedList);
     });
   });
 
@@ -58,7 +58,7 @@ void main() {
       addAllBenchmark.report();
 
       addAllBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toList(), expectedList));
+          expect(benchmark.toMutable(), expectedList));
     });
   });
 }

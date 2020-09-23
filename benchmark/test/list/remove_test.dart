@@ -20,7 +20,7 @@ void main() {
 
       listRemoveBenchmark.report();
 
-      expect(listRemoveBenchmark.toList(), expectedList);
+      expect(listRemoveBenchmark.toMutable(), expectedList);
     });
 
     test('`IList`', () {
@@ -29,7 +29,7 @@ void main() {
 
       iListRemoveBenchmark.report();
 
-      expect(iListRemoveBenchmark.toList(), expectedList);
+      expect(iListRemoveBenchmark.toMutable(), expectedList);
     });
 
     test('`KtList`', () {
@@ -38,7 +38,7 @@ void main() {
 
       ktListRemoveBenchmark.report();
 
-      expect(ktListRemoveBenchmark.toList(), expectedList);
+      expect(ktListRemoveBenchmark.toMutable(), expectedList);
     });
 
     test('`BuiltList`', () {
@@ -47,7 +47,7 @@ void main() {
 
       builtListRemoveBenchmark.report();
 
-      expect(builtListRemoveBenchmark.toList(), expectedList);
+      expect(builtListRemoveBenchmark.toMutable(), expectedList);
     });
   });
 
@@ -59,7 +59,7 @@ void main() {
       removeBenchmark.report();
 
       removeBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toList(), expectedList));
+          expect(benchmark.toMutable(), expectedList));
     });
   });
 }

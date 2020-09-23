@@ -1,5 +1,5 @@
 import 'config.dart';
-import 'list_benchmark_base.dart';
+import 'collection_benchmark_base.dart';
 import 'table_score_emitter.dart';
 
 abstract class MultiBenchmarkReporter {

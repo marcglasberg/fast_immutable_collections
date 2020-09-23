@@ -7,7 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
-import '../../utils/list_benchmark_base.dart';
+import '../../utils/collection_benchmark_base.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@ class ListAddBenchmark extends ListBenchmarkBase {
   List<int> _fixedList;
 
   @override
-  List<int> toList() => _list;
+  List<int> toMutable() => _list;
 
   @override
   void setup() =>
@@ -73,7 +73,7 @@ class IListAddBenchmark extends ListBenchmarkBase {
   IList<int> _result;
 
   @override
-  List<int> toList() => _result.unlock;
+  List<int> toMutable() => _result.unlock;
 
   @override
   void setup() {
@@ -103,7 +103,7 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   KtList<int> _result;
 
   @override
-  List<int> toList() => _result.asList();
+  List<int> toMutable() => _result.asList();
 
   @override
   void setup() {
@@ -137,7 +137,7 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   BuiltList<int> _result;
 
   @override
-  List<int> toList() => _result.asList();
+  List<int> toMutable() => _result.asList();
 
   @override
   void setup() {
@@ -176,7 +176,7 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   BuiltList<int> _result;
 
   @override
-  List<int> toList() => _result.asList();
+  List<int> toMutable() => _result.asList();
 
   @override
   void setup() {

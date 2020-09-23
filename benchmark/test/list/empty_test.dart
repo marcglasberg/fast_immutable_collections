@@ -17,7 +17,7 @@ void main() {
 
       listResult.report();
 
-      expect(listResult.toList(), emptyList);
+      expect(listResult.toMutable(), emptyList);
     });
 
     test('`IList`', () {
@@ -26,7 +26,7 @@ void main() {
 
       iListEmptyBenchmark.report();
 
-      expect(iListEmptyBenchmark.toList(), emptyList);
+      expect(iListEmptyBenchmark.toMutable(), emptyList);
     });
 
     test('`KtList`', () {
@@ -35,7 +35,7 @@ void main() {
 
       ktListEmptyBenchmark.report();
 
-      expect(ktListEmptyBenchmark.toList(), emptyList);
+      expect(ktListEmptyBenchmark.toMutable(), emptyList);
     });
 
     test('`BuiltList`', () {
@@ -44,7 +44,7 @@ void main() {
 
       builtListEmptyBenchmark.report();
 
-      expect(builtListEmptyBenchmark.toList(), emptyList);
+      expect(builtListEmptyBenchmark.toMutable(), emptyList);
     });
   });
 
@@ -56,7 +56,7 @@ void main() {
       emptyBenchmark.report();
 
       emptyBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toList(), emptyList));
+          expect(benchmark.toMutable(), emptyList));
     });
   });
 }

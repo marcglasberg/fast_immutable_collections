@@ -7,7 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
-import '../../utils/list_benchmark_base.dart';
+import '../../utils/collection_benchmark_base.dart';
 
 class RemoveBenchmark extends MultiBenchmarkReporter {
   @override
@@ -38,7 +38,7 @@ class ListRemoveBenchmark extends ListBenchmarkBase {
   List<int> _list;
 
   @override
-  List<int> toList() => _list;
+  List<int> toMutable() => _list;
 
   @override
   void setup() => _list = ListBenchmarkBase.getDummyGeneratedList();
@@ -61,7 +61,7 @@ class IListRemoveBenchmark extends ListBenchmarkBase {
   IList<int> _iList;
 
   @override
-  List<int> toList() => _iList.unlock;
+  List<int> toMutable() => _iList.unlock;
 
   @override
   void setup() =>
@@ -85,7 +85,7 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
   KtList<int> _ktList;
 
   @override
-  List<int> toList() => _ktList.asList();
+  List<int> toMutable() => _ktList.asList();
 
   @override
   void setup() =>
@@ -109,7 +109,7 @@ class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   BuiltList<int> _builtList;
 
   @override
-  List<int> toList() => _builtList.asList();
+  List<int> toMutable() => _builtList.asList();
 
   @override
   void setup() =>

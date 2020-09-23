@@ -7,7 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/config.dart';
 import '../../utils/multi_benchmark_reporter.dart';
-import '../../utils/list_benchmark_base.dart';
+import '../../utils/collection_benchmark_base.dart';
 
 class ReadBenchmark extends MultiBenchmarkReporter {
   static const int indexToRead = 100;
@@ -39,7 +39,7 @@ class ListReadBenchmark extends ListBenchmarkBase {
   List<int> _list;
 
   @override
-  List<int> toList() => _list;
+  List<int> toMutable() => _list;
 
   @override
   void setup() => _list = ListBenchmarkBase.dummyStaticList;
@@ -60,7 +60,7 @@ class IListReadBenchmark extends ListBenchmarkBase {
   IList<int> _iList;
 
   @override
-  List<int> toList() => _iList.unlock;
+  List<int> toMutable() => _iList.unlock;
 
   @override
   void setup() => _iList = IList<int>(ListBenchmarkBase.dummyStaticList);
@@ -81,7 +81,7 @@ class KtListReadBenchmark extends ListBenchmarkBase {
   KtList<int> _ktList;
 
   @override
-  List<int> toList() => _ktList.asList();
+  List<int> toMutable() => _ktList.asList();
 
   @override
   void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.dummyStaticList);
@@ -103,7 +103,7 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
   BuiltList<int> _builtList;
 
   @override
-  List<int> toList() => _builtList.asList();
+  List<int> toMutable() => _builtList.asList();
 
   @override
   void setup() =>
