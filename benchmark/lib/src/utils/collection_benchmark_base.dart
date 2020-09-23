@@ -48,3 +48,16 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase {
   @override
   List<int> toMutable();
 }
+
+abstract class SetBenchmarkBase extends CollectionBenchmarkBase {
+  const SetBenchmarkBase({
+    @required String name,
+    @required Config config,
+    @required ScoreEmitter emitter,
+  }) : super(name: name, config: config, emitter: emitter);
+
+  @visibleForTesting
+  @visibleForOverriding
+  @override
+  Set<int> toMutable();
+}

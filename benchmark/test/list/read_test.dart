@@ -6,13 +6,13 @@ import 'package:fast_immutable_collections_benchmarks/'
 void main() {
   const int size = 100;
   const Config config = Config(runs: 100, size: size);
-
-  final TableScoreEmitter tableScoreEmitter =
-      TableScoreEmitter(reportName: 'list_read');
   final int numberToRead =
       ListBenchmarkBase.dummyStaticList[ReadBenchmark.indexToRead];
 
   group('Separate Benchmarks |', () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(reportName: 'list_read');
+
     test('`List` (Mutable)', () {
       final ListReadBenchmark listReadBenchmark =
           ListReadBenchmark(config: config, emitter: tableScoreEmitter);
@@ -28,8 +28,7 @@ void main() {
 
       iListReadBenchmark.report();
 
-      expect(iListReadBenchmark.newVar,
-          numberToRead);
+      expect(iListReadBenchmark.newVar, numberToRead);
     });
 
     test('`KtList`', () {
@@ -38,8 +37,7 @@ void main() {
 
       ktListReadBenchmark.report();
 
-      expect(ktListReadBenchmark.newVar,
-          numberToRead);
+      expect(ktListReadBenchmark.newVar, numberToRead);
     });
 
     test('`BuiltList`', () {
