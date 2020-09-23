@@ -4,13 +4,13 @@ This is a summary of the benchmarks and how they are executed.
 
 > **Note that the specifications below have not been programmatically tied to the benchmark files, so please do check the code itself if you want to *really* confirm what's going on in the benchmarks, specially when it comes to how many times they're run.**
 
-## 1. Lists
-
-> Note that, currently, with the [`benchmark_harness`][benchmark_harness] package, both `setup` and `teardown` are equivalent to `setUpAll` and `tearDownAll` in the [`test`][test] package.
+> Also note that, currently, with the [`benchmark_harness`][benchmark_harness] package, both `setup` and `teardown` are equivalent to `setUpAll` and `tearDownAll` in the [`test`][test] package.
 
 
 [benchmark_harness]: https://pub.dev/packages/benchmark_harness
 [test]: https://pub.dev/packages/test
+
+## 1. Lists
 
 ### 1.1. Empty Initialization
 
@@ -99,3 +99,31 @@ This benchmark tests contains for *all* elements and, lastly, tries an inexisten
 | Data Object      | Setup           | Run                                  |
 | ---------------- | --------------- | ------------------------------------ |
 | `List` (Mutable) | `List.generate` | `.contains()` on `length + elements` |
+
+## 2. Sets
+
+As mentioned in the [Dart Docs][set_docs], `Set`s represent:
+
+> A collection of objects in which each object can occur only once.
+
+There are mainly 3 set implementations:
+
+| Implementation  | Characteristics                           |
+| --------------- | ----------------------------------------- |
+| `HashSet`       | unordered, iteration order is unspecified |
+| `LinkedHashSet` | iterates on the in insertion order        |
+| `SplayTreeSet`  | iterates over a pre-specified ordering    |
+
+The **default** set implemenation is the `HashSet`.
+
+
+[set_docs]: https://api.dart.dev/stable/2.9.1/dart-core/Set-class.html
+
+### 2.1. Empty Initialization
+
+| Data Object     | Setup | Run                  |
+| --------------- | ----- | -------------------- |
+| `Set` (Mutable) | -     | `Set<int>()`         |
+| `ISet`          | -     | `ISet<int>()`        |
+| `KtSet`         | -     | `KtSet<int>.empty()` |
+| `BuiltSet`      | -     | `BuiltSet<int>()`    |
