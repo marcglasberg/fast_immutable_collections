@@ -2,14 +2,11 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  final FullReporter fullReporter = FullReporter()..report();
+  final FullListReporter fullReporter = FullListReporter()..report();
 
-  fullReporter.benchmarks
-      .forEach((String name, MultiBenchmarkReporter benchmarkReporter) {
-    benchmarkReporter.tableScoreEmitters
-        .forEach((TableScoreEmitter tableScoreEmitter) {
-      print(name);
-      print(tableScoreEmitter.tableAsString);
+  fullReporter.benchmarks.forEach((MultiBenchmarkReporter benchmarkReporter) {
+    benchmarkReporter.benchmarks.forEach((ListBenchmarkBase benchmark) {
+      print(benchmark.emitter);
     });
   });
 }
