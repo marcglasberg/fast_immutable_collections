@@ -4,45 +4,59 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  const int runs = 100;
+  const Config config = Config(runs: 100, size: 0);
   const List<int> emptyList = [];
 
-  final TableScoreEmitter tableScoreEmitter =
-      TableScoreEmitter(reportName: 'list_empty');
+  group('Separate Benchmarks |', () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(reportName: 'list_empty');
 
-  test('`List` (Mutable)', () {
-    final ListEmptyBenchmark listResult =
-        ListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
+    test('`List` (Mutable)', () {
+      final ListEmptyBenchmark listResult =
+          ListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
 
-    listResult.report();
+      listResult.report();
 
-    expect(listResult.toList(), emptyList);
+      expect(listResult.toList(), emptyList);
+    });
+
+    test('`IList`', () {
+      final IListEmptyBenchmark iListEmptyBenchmark =
+          IListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+
+      iListEmptyBenchmark.report();
+
+      expect(iListEmptyBenchmark.toList(), emptyList);
+    });
+
+    test('`KtList`', () {
+      final KtListEmptyBenchmark ktListEmptyBenchmark =
+          KtListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+
+      ktListEmptyBenchmark.report();
+
+      expect(ktListEmptyBenchmark.toList(), emptyList);
+    });
+
+    test('`BuiltList`', () {
+      final BuiltListEmptyBenchmark builtListEmptyBenchmark =
+          BuiltListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+
+      builtListEmptyBenchmark.report();
+
+      expect(builtListEmptyBenchmark.toList(), emptyList);
+    });
   });
 
-  test('`IList`', () {
-    final IListEmptyBenchmark iListEmptyBenchmark =
-        IListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
+  group('Multiple Benchmarks |', () {
+    test('Simple run', () {
+      final EmptyBenchmark emptyBenchmark =
+          EmptyBenchmark(configs: [config, config]);
 
-    iListEmptyBenchmark.report();
+      emptyBenchmark.report();
 
-    expect(iListEmptyBenchmark.toList(), emptyList);
-  });
-
-  test('`KtList`', () {
-    final KtListEmptyBenchmark ktListEmptyBenchmark =
-        KtListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
-
-    ktListEmptyBenchmark.report();
-
-    expect(ktListEmptyBenchmark.toList(), emptyList);
-  });
-
-  test('`BuiltList`', () {
-    final BuiltListEmptyBenchmark builtListEmptyBenchmark =
-        BuiltListEmptyBenchmark(runs: runs, emitter: tableScoreEmitter);
-
-    builtListEmptyBenchmark.report();
-
-    expect(builtListEmptyBenchmark.toList(), emptyList);
+      emptyBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+          expect(benchmark.toList(), emptyList));
+    });
   });
 }
