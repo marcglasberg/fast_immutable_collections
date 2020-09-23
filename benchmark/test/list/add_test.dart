@@ -62,4 +62,15 @@ void main() {
       expect(builtListAddWithListBuilderBenchmark.toList(), expectedList);
     });
   });
+
+  group('Multiple Benchmarks |', () {
+    test('Simple run', () {
+      final AddBenchmark addBenchmark = AddBenchmark(configs: [config, config]);
+
+      addBenchmark.report();
+
+      addBenchmark.benchmarks.forEach((ListBenchmarkBase2 benchmark) =>
+          expect(benchmark.toList(), expectedList));
+    });
+  });
 }

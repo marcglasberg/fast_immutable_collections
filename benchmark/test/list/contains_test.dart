@@ -54,7 +54,7 @@ void main() {
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
       final ContainsBenchmark containsBenchmark =
-          ContainsBenchmark(configs: [config]);
+          ContainsBenchmark(configs: [config, config]);
 
       containsBenchmark.report();
 
