@@ -55,7 +55,7 @@ void main() {
 
       emptyBenchmark.report();
 
-      emptyBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
+      emptyBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) =>
           expect(benchmark.toMutable(), emptyList));
     });
   });

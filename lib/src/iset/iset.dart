@@ -19,7 +19,7 @@ class ISet<T> implements Iterable<T> {
   ISet._([Iterable<T> iterable])
       : _s = (iterable is ISet)
             ? (iterable as ISet)._s
-            : SFlat(iterable == null ? const [] : Set.of(iterable));
+            : SFlat(iterable == null ? const {} : Set.of(iterable));
 
   ISet.__(this._s);
 

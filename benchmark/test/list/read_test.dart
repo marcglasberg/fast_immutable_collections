@@ -57,7 +57,7 @@ void main() {
 
       readBenchmark.report();
 
-      readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) => expect(
+      readBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) => expect(
           benchmark.toMutable()[ReadBenchmark.indexToRead], numberToRead));
     });
   });

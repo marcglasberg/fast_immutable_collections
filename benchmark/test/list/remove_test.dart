@@ -58,7 +58,7 @@ void main() {
 
       removeBenchmark.report();
 
-      removeBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
+      removeBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) =>
           expect(benchmark.toMutable(), expectedList));
     });
   });

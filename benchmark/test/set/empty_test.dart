@@ -13,8 +13,8 @@ void main() {
         TableScoreEmitter(reportName: 'set_empty');
 
     test('`Set` (Mutable)', () {
-      final SetEmptyBenchmark setEmptyBenchmark =
-          SetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+      final MutableSetEmptyBenchmark setEmptyBenchmark =
+          MutableSetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
 
       setEmptyBenchmark.report();
 
@@ -28,6 +28,36 @@ void main() {
       iSetEmptyBenchmark.report();
 
       expect(iSetEmptyBenchmark.toMutable(), expectedSet);
+    });
+
+    test('`KtSet`', () {
+      final KtSetEmptyBenchmark ktSetEmptyBenchmark =
+          KtSetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+
+      ktSetEmptyBenchmark.report();
+
+      expect(ktSetEmptyBenchmark.toMutable(), expectedSet);
+    });
+
+    test('`BuiltSet`', () {
+      final BuiltSetEmptyBenchmark builtSetEmptyBenchmark =
+          BuiltSetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+
+      builtSetEmptyBenchmark.report();
+
+      expect(builtSetEmptyBenchmark.toMutable(), expectedSet);
+    });
+  });
+
+  group('Multiple Benchmarks |', () {
+    test('Simple run', () {
+      final SetEmptyBenchmark emptyBenchmark =
+          SetEmptyBenchmark(configs: [config, config]);
+
+      emptyBenchmark.report();
+
+      emptyBenchmark.benchmarks.forEach((CollectionBenchmarkBase benchmark) =>
+          expect(benchmark.toMutable(), expectedSet));
     });
   });
 }
