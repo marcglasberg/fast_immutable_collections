@@ -109,11 +109,9 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => _result.asList();
 
   @override
-  void setup() {
-    final List<int> list =
-        ListBenchmarkBase.getDummyGeneratedList(size: config.size);
-    _ktList = list.toImmutableList();
-  }
+  void setup() =>
+      _ktList = ListBenchmarkBase.getDummyGeneratedList(size: config.size)
+          .toImmutableList();
 
   @override
   void run() {
@@ -144,9 +142,8 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
 
   @override
   void setup() {
-    final List<int> list =
-        ListBenchmarkBase.getDummyGeneratedList(size: config.size);
-    _builtList = BuiltList<int>(list);
+    _builtList = BuiltList<int>(
+        ListBenchmarkBase.getDummyGeneratedList(size: config.size));
   }
 
   @override

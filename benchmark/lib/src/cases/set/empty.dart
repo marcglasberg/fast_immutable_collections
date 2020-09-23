@@ -1,4 +1,5 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:kt_dart/collection.dart';
 import 'package:meta/meta.dart';
 
@@ -53,13 +54,13 @@ class ISetEmptyBenchmark extends SetBenchmarkBase {
       ISetEmptyBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
-  ISet<int> _set;
+  ISet<int> _iSet;
 
   @override
-  Set<int> toMutable() => _set.unlock;
+  Set<int> toMutable() => _iSet.unlock;
 
   @override
-  void run() => _set = ISet<int>();
+  void run() => _iSet = ISet<int>();
 }
 
 class KtSetEmptyBenchmark extends SetBenchmarkBase {
@@ -72,13 +73,13 @@ class KtSetEmptyBenchmark extends SetBenchmarkBase {
       KtSetEmptyBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
-  KtSet<int> _set;
+  KtSet<int> _ktSet;
 
   @override
-  Set<int> toMutable() => _set.asSet();
+  Set<int> toMutable() => _ktSet.asSet();
 
   @override
-  void run() => _set = KtSet<int>.empty();
+  void run() => _ktSet = KtSet<int>.empty();
 }
 
 class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
@@ -92,11 +93,11 @@ class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
       BuiltSetEmptyBenchmark(
           config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
-  KtSet<int> _set;
+  BuiltSet<int> _builtSet;
 
   @override
-  Set<int> toMutable() => _set.asSet();
+  Set<int> toMutable() => _builtSet.asSet();
 
   @override
-  void run() => _set = KtSet<int>.empty();
+  void run() => _builtSet = BuiltSet<int>();
 }
