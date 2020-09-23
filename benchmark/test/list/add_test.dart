@@ -4,59 +4,62 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  const int runs = 100, size = 100;
-
-  final TableScoreEmitter tableScoreEmitter =
-      TableScoreEmitter(reportName: 'list_add');
+  const int size = 10;
+  const Config config = Config(runs: 100, size: size);
   final List<int> expectedList =
-      ListBenchmarkBase.getDummyGeneratedList(length: 100) +
+      ListBenchmarkBase.getDummyGeneratedList(length: size) +
           List<int>.generate(AddBenchmark.innerRuns, (int index) => index);
 
-  test('`List` (Mutable)', () {
-    final ListAddBenchmark listAddBenchmark =
-        ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter);
+  group('Separate Benchmarks |', () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(reportName: 'list_add');
 
-    listAddBenchmark.report();
+    test('`List` (Mutable)', () {
+      final ListAddBenchmark listAddBenchmark =
+          ListAddBenchmark(config: config, emitter: tableScoreEmitter);
 
-    expect(listAddBenchmark.toList(), expectedList);
-  });
+      listAddBenchmark.report();
 
-  test('`IList`', () {
-    final IListAddBenchmark iListAddBenchmark =
-        IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter);
+      expect(listAddBenchmark.toList(), expectedList);
+    });
 
-    iListAddBenchmark.report();
+    test('`IList`', () {
+      final IListAddBenchmark iListAddBenchmark =
+          IListAddBenchmark(config: config, emitter: tableScoreEmitter);
 
-    expect(iListAddBenchmark.toList(), expectedList);
-  });
+      iListAddBenchmark.report();
 
-  test('`KtList`', () {
-    final KtListAddBenchmark ktListAddBenchmark =
-        KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter);
+      expect(iListAddBenchmark.toList(), expectedList);
+    });
 
-    ktListAddBenchmark.report();
+    test('`KtList`', () {
+      final KtListAddBenchmark ktListAddBenchmark =
+          KtListAddBenchmark(config: config, emitter: tableScoreEmitter);
 
-    expect(ktListAddBenchmark.toList(), expectedList);
-  });
+      ktListAddBenchmark.report();
 
-  test('`BuiltList` with `rebuild`', () {
-    final BuiltListAddWithRebuildBenchmark builtListAddWithRebuildBenchmark =
-        BuiltListAddWithRebuildBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter);
+      expect(ktListAddBenchmark.toList(), expectedList);
+    });
 
-    builtListAddWithRebuildBenchmark.report();
+    test('`BuiltList` with `rebuild`', () {
+      final BuiltListAddWithRebuildBenchmark builtListAddWithRebuildBenchmark =
+          BuiltListAddWithRebuildBenchmark(
+              config: config, emitter: tableScoreEmitter);
 
-    expect(builtListAddWithRebuildBenchmark.toList(), expectedList);
-  });
+      builtListAddWithRebuildBenchmark.report();
 
-  test('`BuiltList` with `ListBuilder`', () {
-    final BuiltListAddWithListBuilderBenchmark
-        builtListAddWithListBuilderBenchmark =
-        BuiltListAddWithListBuilderBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter);
+      expect(builtListAddWithRebuildBenchmark.toList(), expectedList);
+    });
 
-    builtListAddWithListBuilderBenchmark.report();
+    test('`BuiltList` with `ListBuilder`', () {
+      final BuiltListAddWithListBuilderBenchmark
+          builtListAddWithListBuilderBenchmark =
+          BuiltListAddWithListBuilderBenchmark(
+              config: config, emitter: tableScoreEmitter);
 
-    expect(builtListAddWithListBuilderBenchmark.toList(), expectedList);
+      builtListAddWithListBuilderBenchmark.report();
+
+      expect(builtListAddWithListBuilderBenchmark.toList(), expectedList);
+    });
   });
 }

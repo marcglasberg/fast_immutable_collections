@@ -7,52 +7,39 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import '../../utils/multi_benchmark_reporter.dart';
 import '../../utils/list_benchmark_base.dart';
-import '../../utils/table_score_emitter.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class AddBenchmark extends MultiBenchmarkReporter {
+class AddBenchmark extends MultiBenchmarkReporter2 {
   static const int innerRuns = 100;
 
   @override
-  void report() {
-    const List<List<int>> benchmarksConfigurations = [
-      [5000, 10],
-      [5000, 100],
-      [5000, 1000],
-    ];
+  final String prefixName;
+  @override
+  final List<Config> configs;
 
-    benchmarksConfigurations.forEach((List<int> configurations) {
-      final int runs = configurations[0], size = configurations[1];
+  @override
+  final List<ListBenchmarkBase2> baseBenchmarks = [
+    ListAddBenchmark(config: null, emitter: null),
+    IListAddBenchmark(config: null, emitter: null),
+    KtListAddBenchmark(config: null, emitter: null),
+    BuiltListAddWithRebuildBenchmark(config: null, emitter: null),
+    BuiltListAddWithListBuilderBenchmark(config: null, emitter: null),
+  ];
 
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(reportName: 'list_add_runs_${runs}_size_${size}');
-
-      final List<ListBenchmarkBase> benchmarks = [
-        ListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter),
-        IListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter),
-        KtListAddBenchmark(runs: runs, size: size, emitter: tableScoreEmitter),
-        BuiltListAddWithRebuildBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter),
-        BuiltListAddWithListBuilderBenchmark(
-            runs: runs, size: size, emitter: tableScoreEmitter),
-      ];
-
-      benchmarks.forEach((ListBenchmarkBase benchmark) => benchmark.report());
-
-      tableScoreEmitters.add(tableScoreEmitter);
-    });
-  }
+  AddBenchmark({this.prefixName = 'list_add', @required this.configs});
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ListAddBenchmark extends ListBenchmarkBase {
-  ListAddBenchmark({
-    @required int runs,
-    @required int size,
-    @required ScoreEmitter emitter,
-  }) : super('List (Mutable)', runs: runs, size: size, emitter: emitter);
+class ListAddBenchmark extends ListBenchmarkBase2 {
+  ListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+
+  @override
+  ListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      ListAddBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
   List<int> _fixedList;
@@ -62,7 +49,7 @@ class ListAddBenchmark extends ListBenchmarkBase {
 
   @override
   void setup() =>
-      _fixedList = ListBenchmarkBase.getDummyGeneratedList(length: size);
+      _fixedList = ListBenchmarkBase2.getDummyGeneratedList(size: config.size);
 
   @override
   void run() {
@@ -73,12 +60,14 @@ class ListAddBenchmark extends ListBenchmarkBase {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IListAddBenchmark extends ListBenchmarkBase {
-  IListAddBenchmark({
-    @required int runs,
-    @required int size,
-    @required ScoreEmitter emitter,
-  }) : super('IList', runs: runs, size: size, emitter: emitter);
+class IListAddBenchmark extends ListBenchmarkBase2 {
+  IListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'IList', config: config, emitter: emitter);
+
+  @override
+  IListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      IListAddBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   IList<int> _iList;
   IList<int> _result;
@@ -89,7 +78,7 @@ class IListAddBenchmark extends ListBenchmarkBase {
   @override
   void setup() {
     _iList = IList<int>();
-    for (int i = 0; i < size; i++) _iList = _iList.add(i);
+    for (int i = 0; i < config.size; i++) _iList = _iList.add(i);
   }
 
   @override
@@ -101,12 +90,14 @@ class IListAddBenchmark extends ListBenchmarkBase {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class KtListAddBenchmark extends ListBenchmarkBase {
-  KtListAddBenchmark({
-    @required int runs,
-    @required int size,
-    @required ScoreEmitter emitter,
-  }) : super('KtList', runs: runs, size: size, emitter: emitter);
+class KtListAddBenchmark extends ListBenchmarkBase2 {
+  KtListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'KtList', config: config, emitter: emitter);
+
+  @override
+  KtListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      KtListAddBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtList<int> _ktList;
   KtList<int> _result;
@@ -117,7 +108,7 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   @override
   void setup() {
     final List<int> list =
-        ListBenchmarkBase.getDummyGeneratedList(length: size);
+        ListBenchmarkBase.getDummyGeneratedList(length: config.size);
     _ktList = list.toImmutableList();
   }
 
@@ -131,13 +122,16 @@ class KtListAddBenchmark extends ListBenchmarkBase {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
-  BuiltListAddWithRebuildBenchmark({
-    @required int runs,
-    @required int size,
-    @required ScoreEmitter emitter,
-  }) : super('BuiltList with Rebuild',
-            runs: runs, size: size, emitter: emitter);
+class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase2 {
+  BuiltListAddWithRebuildBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'BuiltList with Rebuild', config: config, emitter: emitter);
+
+  @override
+  BuiltListAddWithRebuildBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltListAddWithRebuildBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltList<int> _builtList;
   BuiltList<int> _result;
@@ -148,7 +142,7 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   @override
   void setup() {
     final List<int> list =
-        ListBenchmarkBase.getDummyGeneratedList(length: size);
+        ListBenchmarkBase2.getDummyGeneratedList(size: config.size);
     _builtList = BuiltList<int>(list);
   }
 
@@ -163,13 +157,20 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
+class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase2 {
   BuiltListAddWithListBuilderBenchmark({
-    @required int runs,
-    @required int size,
+    @required Config config,
     @required ScoreEmitter emitter,
-  }) : super('BuiltList with List Builder',
-            runs: runs, size: size, emitter: emitter);
+  }) : super(
+            name: 'BuiltList with List Builder',
+            config: config,
+            emitter: emitter);
+
+  @override
+  BuiltListAddWithListBuilderBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltListAddWithListBuilderBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltList<int> _builtList;
   BuiltList<int> _result;
@@ -180,7 +181,7 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   @override
   void setup() {
     final List<int> list =
-        ListBenchmarkBase.getDummyGeneratedList(length: size);
+        ListBenchmarkBase2.getDummyGeneratedList(size: config.size);
     _builtList = BuiltList<int>(list);
   }
 

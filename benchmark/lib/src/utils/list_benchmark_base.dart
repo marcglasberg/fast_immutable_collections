@@ -1,8 +1,6 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:meta/meta.dart';
 
-import 'table_score_emitter.dart';
-
 abstract class ListBenchmarkBase extends BenchmarkBase {
   final int runs, size;
 
