@@ -1,3 +1,4 @@
+import 'utils/collection_benchmark_base.dart';
 import 'utils/config.dart';
 import 'utils/multi_benchmark_reporter.dart';
 
@@ -15,7 +16,7 @@ void main() => FullListReporter()
   ..save();
 
 class FullListReporter {
-  final List<MultiBenchmarkReporter> benchmarks = [
+  final List<MultiBenchmarkReporter<ListBenchmarkBase>> benchmarks = [
     ListAddAllBenchmark(configs: const <Config>[
       Config(runs: 1000, size: 0),
     ]),
