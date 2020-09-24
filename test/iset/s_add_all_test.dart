@@ -33,9 +33,9 @@ void main() {
       expect(iter.current, 5);
       expect(iter.moveNext(), false);
       expect(iter.current, null);
-
-      expect(sAddAll.unlock, [1, 2, 3, 4, 5]);
     });
+
+    test('Unlocking', () => expect(sAddAll.unlock, [1, 2, 3, 4, 5]));
   });
 
   group('Combining various `SAddAll`s and `SAdd`s', () {
@@ -77,8 +77,6 @@ void main() {
       expect(iter.current, null);
     });
 
-    test('Unlocking', () {
-      expect(sAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    });
+    test('Unlocking', () => expect(sAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]));
   });
 }

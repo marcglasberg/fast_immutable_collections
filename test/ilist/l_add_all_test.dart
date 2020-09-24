@@ -34,9 +34,7 @@ void main() {
       expect(iter.current, null);
     });
 
-    test('Unlocking', () {
-      expect(lAddAll.unlock, [1, 2, 3, 4, 5]);
-    });
+    test('Unlocking', () => expect(lAddAll.unlock, [1, 2, 3, 4, 5]));
   });
 
   group('Combining various `LAddAll`s and `LAdd`s |', () {
@@ -78,9 +76,7 @@ void main() {
       expect(iter.current, null);
     });
 
-    test('Unlocking', () {
-      expect(lAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    });
+    test('Unlocking', () => expect(lAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]));
   });
 
   test('Index Access', () {
