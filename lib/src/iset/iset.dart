@@ -44,7 +44,7 @@ class ISet<T> implements Iterable<T> {
 
   bool get isFlushed => _s is SFlat;
 
-  ISet<T> add(T item) => ISet<T>.__(_s.add(item));
+  ISet<T> add(T item) => contains(item) ? this : ISet<T>.__(_s.add(item));
 
   ISet<T> addAll(Iterable<T> items) => ISet<T>.__(_s.addAll(items));
 

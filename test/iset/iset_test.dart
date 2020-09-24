@@ -3,6 +3,28 @@ import 'package:test/test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
+  group('Adding repeated elements |', () {
+    final ISet<int> baseSet = ISet<int>({1, 2, 3});
+
+    test('`add`ing a repeated element', () {
+      final ISet<int> iSet = baseSet.add(1);
+
+      expect(iSet.length, 3);
+    });
+
+    test('`add`ing multiple repeated elements', () {
+      final ISet<int> iSet = baseSet.addAll({1, 2});
+
+      expect(iSet.length, 3);
+    });
+
+    test('`adding` some repeated elements and other new ones', () {
+      final ISet<int> iSet = baseSet.addAll({1, 2, 5, 7});
+      
+      expect(iSet.length, 5);
+    });
+  });
+
   group('Creating immutable sets |', () {
     final ISet iSet1 = ISet(), iSet2 = ISet({});
     final iSet3 = ISet<String>({});
