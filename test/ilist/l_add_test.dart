@@ -1,6 +1,7 @@
+import 'package:test/test.dart';
+
 import 'package:fast_immutable_collections/src/ilist/l_add.dart';
 import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
-import 'package:test/test.dart';
 
 void main() {
   final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
