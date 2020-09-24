@@ -20,16 +20,16 @@ void main() {
   test('Iterating on the underlying iterator', () {
     final Iterator<int> iter = sAdd.iterator;
 
-    expect(iter.current, null);
-    expect(iter.moveNext(), true);
+    expect(iter.current, isNull);
+    expect(iter.moveNext(), isTrue);
     expect(iter.current, 1);
-    expect(iter.moveNext(), true);
+    expect(iter.moveNext(), isTrue);
     expect(iter.current, 2);
-    expect(iter.moveNext(), true);
+    expect(iter.moveNext(), isTrue);
     expect(iter.current, 3);
-    expect(iter.moveNext(), true);
+    expect(iter.moveNext(), isTrue);
     expect(iter.current, 4);
-    expect(iter.moveNext(), false);
-    expect(iter.current, null);
+    expect(iter.moveNext(), isFalse);
+    expect(iter.current, isNull);
   });
 }

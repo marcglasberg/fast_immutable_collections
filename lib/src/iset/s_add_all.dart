@@ -17,10 +17,8 @@ class SAddAll<T> extends S<T> {
   Iterator<T> get iterator => IteratorSAddAll(_l.iterator, _items);
 
   @override
-  bool contains(Object element) {
-    if (_l.contains(element)) return true;
-    return _items.contains(element);
-  }
+  bool contains(Object element) =>
+      _l.contains(element) ? true : _items.contains(element);
 
   @override
   int get length => _l.length + _items.length;
@@ -29,10 +27,8 @@ class SAddAll<T> extends S<T> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IteratorSAddAll<T> implements Iterator<T> {
-  Iterator<T> iterator;
-
+  Iterator<T> iterator, iteratorItems;
   Iterable<T> items;
-  Iterator<T> iteratorItems;
 
   T _current;
   int extraMove;
@@ -47,15 +43,16 @@ class IteratorSAddAll<T> implements Iterator<T> {
   @override
   bool moveNext() {
     bool isMoving = iterator.moveNext();
-    if (isMoving)
+    if (isMoving) {
       _current = iterator.current;
-    else {
+    } else {
       iteratorItems ??= items.iterator;
       isMoving = iteratorItems.moveNext();
-      if (isMoving)
+      if (isMoving) {
         _current = iteratorItems.current;
-      else
+      } else {
         _current = null;
+      }
     }
     return isMoving;
   }

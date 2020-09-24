@@ -90,6 +90,20 @@ void main() {
   });
 
   group('Adding Elements', () {
+    final ISet<int> baseSet = ISet<int>([1]);
+
+    test('`add`', () {
+      ISet<int> iSet = baseSet.add(2);
+
+      expect(iSet.unlock, <int>{1, 2});
+    });
+
+    test('`add` with a repeated element', () {
+      ISet<int> iSet = baseSet.add(1);
+
+      expect(iSet.unlock, <int>{1});
+    });
+
     test('`add` and `addAll`', () {
       final ISet<int> iSet1 = {1, 2, 3}.lock;
       final ISet<int> iSet2 = iSet1.add(4);
@@ -101,14 +115,6 @@ void main() {
 
       // Methods are chainable.
       expect(iSet1.add(10).addAll({20, 30}).unlock, {1, 2, 3, 10, 20, 30});
-    });
-
-    test('`add`', () {
-      final ISet<int> iSet = ISet<int>([1]);
-
-      iSet.add(2);
-
-      expect(iSet.unlock, <int>{1, 2});
     });
   });
 

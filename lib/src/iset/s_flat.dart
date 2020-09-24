@@ -19,7 +19,7 @@ class SFlat<T> extends S<T> {
   @override
   ISet<R> cast<R>() => throw UnsupportedError('cast');
 
-//  ISet<R> cast<R>() => _set.cast<R>();
+  // ISet<R> cast<R>() => _set.cast<R>();
 
   @override
   bool contains(Object element) => _set.contains(element);

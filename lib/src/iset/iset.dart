@@ -14,10 +14,10 @@ class ISet<T> implements Iterable<T> {
   S<T> _s;
 
   factory ISet([Iterable<T> iterable]) =>
-      (iterable is ISet) ? (iterable as ISet) : ISet._(iterable);
+      iterable is ISet ? iterable as ISet : ISet._(iterable);
 
   ISet._([Iterable<T> iterable])
-      : _s = (iterable is ISet)
+      : _s = iterable is ISet
             ? (iterable as ISet)._s
             : SFlat(iterable == null ? const {} : Set.of(iterable));
 
@@ -36,9 +36,9 @@ class ISet<T> implements Iterable<T> {
 
   // --- ISet methods: ---------------
 
-  /// Compacts the set.
+  /// Compacts the set *and* returns it.
   ISet<T> get flush {
-    if (!isFlushed) _s = SFlat(Set.of(_s));
+    if (!isFlushed) _s = SFlat<T>(Set<T>.of(_s));
     return this;
   }
 
@@ -147,7 +147,6 @@ class ISet<T> implements Iterable<T> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class IterableS<T> implements Iterable<T> {
-  //
   @override
   bool any(bool Function(T) test);
 
@@ -233,11 +232,10 @@ abstract class IterableS<T> implements Iterable<T> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class S<T> implements IterableS<T> {
-  //
-  /// The [S] class provides the default fallback methods of Iterable, but
+  /// The [S] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed set, but
-  /// because that's immutable, we cache it.
+  /// because that's immutable, we **cache** it.
   Set<T> _flushed;
 
   Set<T> get _getFlushed {
@@ -256,9 +254,8 @@ abstract class S<T> implements IterableS<T> {
   S<T> addAll(Iterable<T> items) => SAddAll<T>(this, items);
 
   /// TODO: FALTA FAZER!!!
-  S<T> remove(T element) {
-    return !contains(element) ? this : SFlat<T>(Set.of(this)..remove(element));
-  }
+  S<T> remove(T element) =>
+      !contains(element) ? this : SFlat<T>(Set<T>.of(this)..remove(element));
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;

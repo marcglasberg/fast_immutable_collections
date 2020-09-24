@@ -17,10 +17,8 @@ class SAdd<T> extends S<T> {
   Iterator<T> get iterator => IteratorSAdd(_s.iterator, _item);
 
   @override
-  bool contains(Object element) {
-    if (_item == element) return true;
-    return _s.contains(element);
-  }
+  bool contains(Object element) =>
+      _item == element ? true : _s.contains(element);
 
   @override
   int get length => _s.length + 1;
@@ -30,8 +28,7 @@ class SAdd<T> extends S<T> {
 
 class IteratorSAdd<T> implements Iterator<T> {
   Iterator<T> iterator;
-  T item;
-  T _current;
+  T item, _current;
   int extraMove;
 
   IteratorSAdd(this.iterator, this.item)
@@ -43,12 +40,12 @@ class IteratorSAdd<T> implements Iterator<T> {
 
   @override
   bool moveNext() {
-    bool isMoving = iterator.moveNext();
-    if (isMoving)
+    final bool isMoving = iterator.moveNext();
+    if (isMoving) {
       _current = iterator.current;
-    else {
+    } else {
       extraMove++;
-      _current = (extraMove == 1) ? item : null;
+      _current = extraMove == 1 ? item : null;
     }
     return extraMove <= 1;
   }
