@@ -52,7 +52,8 @@ class ISet<T> implements Iterable<T> {
 
   /// Removes the element, if it exists in the set.
   /// Otherwise, adds it to the set.
-  ISet<T> toggle(T element) => contains(element) ? remove(element) : add(element);
+  ISet<T> toggle(T element) =>
+      contains(element) ? remove(element) : add(element);
 
   // --- Iterable methods: ---------------
 
@@ -66,7 +67,8 @@ class ISet<T> implements Iterable<T> {
   bool contains(Object element) => _s.contains(element);
 
   @override
-  T elementAt(int index) => throw UnsupportedError('elementAt in ISet is not allowed');
+  T elementAt(int index) =>
+      throw UnsupportedError('elementAt in ISet is not allowed');
 
   @override
   bool every(bool Function(T) test) => _s.every(test);
@@ -87,7 +89,8 @@ class ISet<T> implements Iterable<T> {
   T get single => _s.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) => _s.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {Function() orElse}) =>
+      _s.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -269,7 +272,7 @@ abstract class S<T> implements IterableS<T> {
   @override
   ISet<R> cast<R>() => throw UnsupportedError('cast');
 
-//  ISet<R> cast<R>() => _getFlushed.cast<R>();
+  // ISet<R> cast<R>() => _getFlushed.cast<R>();
 
   @override
   bool contains(Object element) => _getFlushed.contains(element);
@@ -301,7 +304,8 @@ abstract class S<T> implements IterableS<T> {
       _getFlushed.fold(initialValue, combine);
 
   @override
-  ISet<T> followedBy(Iterable<T> other) => ISet._(_getFlushed.followedBy(other));
+  ISet<T> followedBy(Iterable<T> other) =>
+      ISet._(_getFlushed.followedBy(other));
 
   @override
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
@@ -317,7 +321,8 @@ abstract class S<T> implements IterableS<T> {
   ISet<E> map<E>(E Function(T e) f) => ISet._(_getFlushed.map(f));
 
   @override
-  T reduce(T Function(T value, T element) combine) => _getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) =>
+      _getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -327,16 +332,19 @@ abstract class S<T> implements IterableS<T> {
   ISet<T> skip(int count) => ISet._(_getFlushed.skip(count));
 
   @override
-  ISet<T> skipWhile(bool Function(T value) test) => ISet._(_getFlushed.skipWhile(test));
+  ISet<T> skipWhile(bool Function(T value) test) =>
+      ISet._(_getFlushed.skipWhile(test));
 
   @override
   ISet<T> take(int count) => ISet._(_getFlushed.take(count));
 
   @override
-  ISet<T> takeWhile(bool Function(T value) test) => ISet._(_getFlushed.takeWhile(test));
+  ISet<T> takeWhile(bool Function(T value) test) =>
+      ISet._(_getFlushed.takeWhile(test));
 
   @override
-  ISet<T> where(bool Function(T element) test) => ISet._(_getFlushed.where(test));
+  ISet<T> where(bool Function(T element) test) =>
+      ISet._(_getFlushed.where(test));
 
   @override
   ISet<E> whereType<E>() => ISet._(_getFlushed.whereType<E>());
@@ -348,7 +356,8 @@ abstract class S<T> implements IterableS<T> {
   Set<T> toSet() => Set.of(this);
 
   @override
-  T elementAt(int index) => throw UnsupportedError('elementAt in ISet is not allowed');
+  T elementAt(int index) =>
+      throw UnsupportedError('elementAt in ISet is not allowed');
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
