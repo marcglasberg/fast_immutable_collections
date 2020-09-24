@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections_benchmarks/'
 
 void main() {
   const int size = 10;
-  const Config config = Config(runs: 10, size: size);
+  const Config config = Config(runs: 1, size: size);
   final Set<int> expectedSet = Set<int>.of(
       SetBenchmarkBase.getDummyGeneratedSet(size: size).toList() +
           List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
@@ -24,7 +24,8 @@ void main() {
     });
 
     test('`ISet`', () {
-      final ISetAddBenchmark iSetAddBenchmark = ISetAddBenchmark(config: config, emitter: tableScoreEmitter);
+      final ISetAddBenchmark iSetAddBenchmark =
+          ISetAddBenchmark(config: config, emitter: tableScoreEmitter);
 
       iSetAddBenchmark.report();
 
@@ -32,18 +33,21 @@ void main() {
     });
 
     test('`KtSet`', () {
-      final KtSetAddBenchmark ktSetAddBenchmark = KtSetAddBenchmark(config: config, emitter: tableScoreEmitter);
+      final KtSetAddBenchmark ktSetAddBenchmark =
+          KtSetAddBenchmark(config: config, emitter: tableScoreEmitter);
 
       ktSetAddBenchmark.report();
 
-      print(ktSetAddBenchmark.toMutable());
-      print(ktSetAddBenchmark.ktSet);
+      // print(ktSetAddBenchmark.toMutable());
+      // print(ktSetAddBenchmark.ktSet);
 
       expect(ktSetAddBenchmark.toMutable(), expectedSet);
     });
 
     test('`BuiltSet`', () {
-      final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark = BuiltSetAddWithRebuildBenchmark(config: config, emitter: tableScoreEmitter);
+      final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark =
+          BuiltSetAddWithRebuildBenchmark(
+              config: config, emitter: tableScoreEmitter);
 
       builtSetAddWithRebuildBenchmark.report();
 
