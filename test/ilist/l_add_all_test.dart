@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/src/ilist/l_add_all.dart';
 import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
 import 'package:test/test.dart';
 
-
 void main() {
   group('Basic Usage Tests and Checks |', () {
     final LAddAll<int> lAddAll = LAddAll<int>(LFlat<int>([1, 2]), [3, 4, 5]);
@@ -33,12 +32,14 @@ void main() {
       expect(iter.current, 5);
       expect(iter.moveNext(), false);
       expect(iter.current, null);
+    });
 
+    test('Unlocking', () {
       expect(lAddAll.unlock, [1, 2, 3, 4, 5]);
     });
   });
 
-  group('Combining various `LAddAll` and `LAdd` |', () {
+  group('Combining various `LAddAll`s and `LAdd`s |', () {
     final lAddAll = LAddAll(
         LAddAll(
             LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]),
@@ -75,7 +76,9 @@ void main() {
       expect(iter.current, 8);
       expect(iter.moveNext(), false);
       expect(iter.current, null);
+    });
 
+    test('Unlocking', () {
       expect(lAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
     });
   });
