@@ -5,7 +5,7 @@ import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
 
-extension IListExtension<T> on Iterable<T> {
+extension IListExtension<T> on List<T> {
   IList<T> get lock => IList<T>(this);
 }
 

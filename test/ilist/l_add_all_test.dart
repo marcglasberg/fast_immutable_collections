@@ -1,7 +1,8 @@
+import 'package:test/test.dart';
+
 import 'package:fast_immutable_collections/src/ilist/l_add.dart';
 import 'package:fast_immutable_collections/src/ilist/l_add_all.dart';
 import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('Basic Usage Tests and Checks |', () {

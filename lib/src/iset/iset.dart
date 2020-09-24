@@ -4,7 +4,7 @@ import 's_add_all.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-extension ISetExtension<T> on Iterable<T> {
+extension ISetExtension<T> on Set<T> {
   ISet<T> get lock => ISet<T>(this);
 }
 

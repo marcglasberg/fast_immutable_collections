@@ -1,5 +1,6 @@
-import 'package:fast_immutable_collections/src/ilist/ilist.dart';
 import 'package:test/test.dart';
+
+import 'package:fast_immutable_collections/src/ilist/ilist.dart';
 
 void main() {
   group('Creating immutable lists |', () {
