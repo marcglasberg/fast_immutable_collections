@@ -46,7 +46,17 @@ class ISet<T> implements Iterable<T> {
 
   ISet<T> add(T item) => contains(item) ? this : ISet<T>.__(_s.add(item));
 
-  ISet<T> addAll(Iterable<T> items) => ISet<T>.__(_s.addAll(items));
+  ISet<T> addAll(Iterable<T> items) {
+    // We could use an `ISet` itself for the `setToBeAdded` variable. 
+    // Which one would be better? I guess the benchmarks will have to tell us...
+    final Set<T> setToBeAdded = {};
+
+    items.forEach((T item) { 
+      if (!_s.contains(item)) setToBeAdded.add(item);
+    });
+
+    return ISet<T>.__(_s.addAll(setToBeAdded));
+  }
 
   ISet<T> remove(T element) => ISet<T>.__(_s.remove(element));
 
