@@ -37,9 +37,6 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
     @required ScoreEmitter emitter,
   }) : super(name: name, config: config, emitter: emitter);
 
-  static final List<int> dummyStaticList =
-      List<int>.generate(10000, (int index) => index);
-
   static List<int> getDummyGeneratedList({int size = 10000}) =>
       List<int>.generate(size, (int index) => index);
 
@@ -55,8 +52,6 @@ abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
     @required Config config,
     @required ScoreEmitter emitter,
   }) : super(name: name, config: config, emitter: emitter);
-
-  static final Set<int> dummyStaticSet = getDummyGeneratedSet(size: 10000);
 
   static Set<int> getDummyGeneratedSet({int size = 10000}) =>
       Set<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: size));

@@ -87,7 +87,7 @@ class ISetContainsBenchmark extends SetBenchmarkBase {
 class KtSetContainsBenchmark extends SetBenchmarkBase {
   KtSetContainsBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'ISet', config: config, emitter: emitter);
+      : super(name: 'KtSet', config: config, emitter: emitter);
 
   @override
   KtSetContainsBenchmark reconfigure(
@@ -116,7 +116,7 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
 class BuiltSetContainsBenchmark extends SetBenchmarkBase {
   BuiltSetContainsBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'ISet', config: config, emitter: emitter);
+      : super(name: 'BuiltSet', config: config, emitter: emitter);
 
   @override
   BuiltSetContainsBenchmark reconfigure(
@@ -138,6 +138,7 @@ class BuiltSetContainsBenchmark extends SetBenchmarkBase {
 
   @override
   void run() {
-    for (int i = 0; i < _builtSet.length + 1; i++) _contains = _builtSet.contains(i);
+    for (int i = 0; i < _builtSet.length + 1; i++)
+      _contains = _builtSet.contains(i);
   }
 }

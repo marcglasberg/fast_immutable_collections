@@ -6,8 +6,8 @@ import 'package:fast_immutable_collections_benchmarks/'
 void main() {
   const int size = 100;
   const Config config = Config(runs: 100, size: size);
-  final int numberToRead =
-      ListBenchmarkBase.dummyStaticList[ListReadBenchmark.indexToRead];
+  final int numberToRead = ListBenchmarkBase.getDummyGeneratedList(
+      size: config.size)[ListReadBenchmark.indexToRead];
 
   group('Separate Benchmarks |', () {
     final TableScoreEmitter tableScoreEmitter =

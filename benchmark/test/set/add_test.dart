@@ -41,7 +41,7 @@ void main() {
       expect(ktSetAddBenchmark.toMutable(), expectedSet);
     });
 
-    test('`BuiltSet`', () {
+    test('`BuiltSet` with `.rebuild()`', () {
       final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark =
           BuiltSetAddWithRebuildBenchmark(
               config: config, emitter: tableScoreEmitter);
@@ -49,6 +49,29 @@ void main() {
       builtSetAddWithRebuildBenchmark.report();
 
       expect(builtSetAddWithRebuildBenchmark.toMutable(), expectedSet);
+    });
+
+    test('`BuiltSet` with `ListBuilder', () {
+      final BuiltSetAddWithSetBuilderBenchmark
+          builtSetAddWithListBuilderBenchmark =
+          BuiltSetAddWithSetBuilderBenchmark(
+              config: config, emitter: tableScoreEmitter);
+
+      builtSetAddWithListBuilderBenchmark.report();
+
+      expect(builtSetAddWithListBuilderBenchmark.toMutable(), expectedSet);
+    });
+  });
+
+  group('Multiple Benchmarks |', () {
+    test('Simple run', () {
+      final SetAddBenchmark setAddBenchmark =
+          SetAddBenchmark(configs: [config, config]);
+
+      setAddBenchmark.report();
+
+      setAddBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
+          expect(benchmark.toMutable(), expectedSet));
     });
   });
 }

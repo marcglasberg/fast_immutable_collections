@@ -28,6 +28,7 @@ class LFlat<T> extends L<T> {
   @override
   IList<R> cast<R>() => throw UnsupportedError('cast');
 
+  // TODO: FALTA FAZER!!!
   // IList<R> cast<R>() => _list.cast<R>();
 
   @override

@@ -34,7 +34,6 @@ class SAddAll<T> extends S<T> {
 class IteratorSAddAll<T> implements Iterator<T> {
   Iterator<T> iterator, iteratorItems;
   Iterable<T> items;
-
   T _current;
   int extraMove;
 

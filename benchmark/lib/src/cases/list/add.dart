@@ -179,11 +179,8 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => _result.asList();
 
   @override
-  void setup() {
-    final List<int> list =
-        ListBenchmarkBase.getDummyGeneratedList(size: config.size);
-    _builtList = BuiltList<int>(list);
-  }
+  void setup() => _builtList = BuiltList<int>(
+      ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
   void run() {

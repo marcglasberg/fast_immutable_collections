@@ -9,8 +9,23 @@ import '../../utils/config.dart';
 import '../../utils/collection_benchmark_base.dart';
 import '../../utils/multi_benchmark_reporter.dart';
 
-class SetAddBenchmark {
+class SetAddBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   static const int innerRuns = 100;
+
+  @override
+  final String prefixName;
+  @override
+  final List<Config> configs;
+  @override
+  final List<SetBenchmarkBase> baseBenchmarks = [
+    MutableSetAddBenchmark(config: null, emitter: null),
+    ISetAddBenchmark(config: null, emitter: null),
+    KtSetAddBenchmark(config: null, emitter: null),
+    BuiltSetAddWithRebuildBenchmark(config: null, emitter: null),
+    BuiltSetAddWithSetBuilderBenchmark(config: null, emitter: null),
+  ];
+
+  SetAddBenchmark({this.prefixName = 'set_add', @required this.configs});
 }
 
 class MutableSetAddBenchmark extends SetBenchmarkBase {
@@ -124,5 +139,37 @@ class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
     for (int i = 0; i < SetAddBenchmark.innerRuns; i++)
       _result =
           _result.rebuild((SetBuilder<int> setBuilder) => setBuilder.add(i));
+  }
+}
+
+class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
+  BuiltSetAddWithSetBuilderBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
+      : super(
+            name: 'BuiltSet with ListBuilder',
+            config: config,
+            emitter: emitter);
+
+  @override
+  BuiltSetAddWithSetBuilderBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltSetAddWithSetBuilderBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+
+  BuiltSet<int> _builtSet;
+  BuiltSet<int> _result;
+
+  @override
+  Set<int> toMutable() => _result.asSet();
+
+  @override
+  void setup() => _builtSet =
+      BuiltSet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+
+  @override
+  void run() {
+    final SetBuilder<int> setBuilder = _builtSet.toBuilder();
+    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) setBuilder.add(i);
+    _result = setBuilder.build();
   }
 }

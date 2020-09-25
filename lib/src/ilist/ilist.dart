@@ -336,7 +336,8 @@ abstract class L<T> implements IterableL<T> {
   @override
   Iterable<R> cast<R>() => throw UnsupportedError('cast');
 
-  // Iterable<R> cast<R>() => _getFlushed.cast<R>();
+  // TODO: FALTA FAZER!!!
+  // IList<R> cast<R>() => _getFlushed.cast<R>();
 
   @override
   bool contains(Object element) => _getFlushed.contains(element);
