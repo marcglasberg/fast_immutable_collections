@@ -19,7 +19,7 @@ class LFlat<T> extends L<T> {
   @override
   IList<R> cast<R>() => throw UnsupportedError('cast');
 
-//  IList<R> cast<R>() => _list.cast<R>();
+  // IList<R> cast<R>() => _list.cast<R>();
 
   @override
   bool contains(Object element) => _list.contains(element);
