@@ -16,8 +16,6 @@ class SAddAll<T> extends S<T> {
   @override
   Iterator<T> get iterator => IteratorSAddAll(_l.iterator, _items);
 
-  // Queries the smaller `Iterable` first so it returns `true` faster on
-  // average.
   @override
   bool contains(Object element) => _l.length <= _items.length
       ? _l.contains(element)

@@ -134,11 +134,18 @@ void main() {
         expect(iSet.unlock, {1, 2, 3});
       });
 
-      test('`adding` some repeated elements and other new ones', () {
+      test('`adding` some repeated elements and another, new one', () {
         final ISet<int> iSet = baseSet.addAll({1, 2, 5, 7});
 
         expect(iSet.length, 5);
         expect(iSet.unlock, {1, 2, 3, 5, 7});
+      });
+
+      test('`adding` some repeated elements and new ones', () {
+        final ISet<int> iSet = baseSet.addAll({1, 2, 5, 7, 11, 13});
+
+        expect(iSet.length, 7);
+        expect(iSet.unlock, {1, 2, 3, 5, 7, 11, 13});
       });
     });
   });
