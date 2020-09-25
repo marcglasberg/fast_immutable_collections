@@ -199,6 +199,7 @@ abstract class S<T> implements IterableS<T> {
   @override
   ISet<R> cast<R>() => throw UnsupportedError('cast');
 
+  // TODO: FALTA FAZER!!!
   // ISet<R> cast<R>() => _getFlushed.cast<R>();
 
   @override

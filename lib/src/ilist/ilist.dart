@@ -200,6 +200,7 @@ abstract class L<T> implements IterableL<T> {
   @override
   IList<R> cast<R>() => throw UnsupportedError('cast');
 
+  // TODO: FALTA FAZER!!!
   // IList<R> cast<R>() => _getFlushed.cast<R>();
 
   @override
