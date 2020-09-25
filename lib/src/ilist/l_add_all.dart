@@ -16,17 +16,11 @@ class LAddAll<T> extends L<T> {
   @override
   Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _items);
 
+  /// TODO: FALTA FAZER DE FORMA EFICIENTE:
   @override
-  T operator [](int index) {
-    if (index < 0 || index >= length)
-      throw RangeError.range(index, 0, length - 1, 'index');
-
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    /// FALTA FAZER DE FORMA EFICIENTE:
-    return super[index];
-  }
+  T operator [](int index) => index < 0 || index >= length
+      ? throw RangeError.range(index, 0, length - 1, 'index')
+      : super[index];
 
   @override
   int get length => _l.length + _items.length;
@@ -35,11 +29,8 @@ class LAddAll<T> extends L<T> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IteratorLAddAll<T> implements Iterator<T> {
-  Iterator<T> iterator;
-
+  Iterator<T> iterator, iteratorItems;
   Iterable<T> items;
-  Iterator<T> iteratorItems;
-
   T _current;
   int extraMove;
 
@@ -53,15 +44,16 @@ class IteratorLAddAll<T> implements Iterator<T> {
   @override
   bool moveNext() {
     bool isMoving = iterator.moveNext();
-    if (isMoving)
+    if (isMoving) {
       _current = iterator.current;
-    else {
+    } else {
       iteratorItems ??= items.iterator;
       isMoving = iteratorItems.moveNext();
-      if (isMoving)
+      if (isMoving) {
         _current = iteratorItems.current;
-      else
+      } else {
         _current = null;
+      }
     }
     return isMoving;
   }
