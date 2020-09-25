@@ -1,6 +1,3 @@
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
@@ -15,7 +12,7 @@ class IList<T> implements Iterable<T> {
   L<T> _l;
 
   factory IList([Iterable<T> iterable]) =>
-      (iterable is IList) ? (iterable as IList) : IList._(iterable);
+      iterable is IList ? iterable as IList : IList._(iterable);
 
   IList._([Iterable<T> iterable])
       : _l = iterable is IList
@@ -145,15 +142,15 @@ class IList<T> implements Iterable<T> {
   @override
   IList<E> whereType<E>() => _l.whereType<E>();
 
-  /// Se a lista tem mais que maxLength elementos, corta em maxLength.
-  /// Caso contrário, remove os últimos elementos, de modo que a lista fique com maxLength.
+  /// If the list has more than `maxLength` elements, it gets cut on
+  /// `maxLength`. Otherwise, it removes the last elements so it remains with
+  /// only `maxLength` elements.
   IList<T> maxLength(int maxLength) => IList.__(_l.maxLength(maxLength));
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class IterableL<T> implements Iterable<T> {
-  //
   @override
   bool any(bool Function(T) test);
 
@@ -239,7 +236,6 @@ abstract class IterableL<T> implements Iterable<T> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class L<T> implements IterableL<T> {
-  //
   /// The [L] class provides the default fallback methods of Iterable, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed list, but
@@ -267,14 +263,14 @@ abstract class L<T> implements IterableL<T> {
   }
 
   /// TODO: FALTA FAZER!!!
-  /// Se a lista tem mais que maxLength elementos, corta em maxLength.
-  /// Caso contrário, remove os últimos elementos, de modo que a lista fique com maxLength.
-  L<T> maxLength(int maxLength) {
-    if (maxLength < 0) throw ArgumentError(maxLength);
-    return (length <= maxLength)
-        ? this
-        : LFlat<T>(List.of(this)..length = maxLength);
-  }
+  /// If the list has more than `maxLength` elements, it gets cut on
+  /// `maxLength`. Otherwise, it removes the last elements so it remains with
+  /// only `maxLength` elements.
+  L<T> maxLength(int maxLength) => maxLength < 0
+      ? throw ArgumentError(maxLength)
+      : length <= maxLength
+          ? this
+          : LFlat<T>(List.of(this)..length = maxLength);
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;
