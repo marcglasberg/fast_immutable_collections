@@ -38,9 +38,6 @@ void main() {
 
       ktSetAddBenchmark.report();
 
-      // print(ktSetAddBenchmark.toMutable());
-      // print(ktSetAddBenchmark.ktSet);
-
       expect(ktSetAddBenchmark.toMutable(), expectedSet);
     });
 

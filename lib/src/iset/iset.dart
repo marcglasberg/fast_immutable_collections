@@ -23,7 +23,7 @@ class ISet<T> implements Iterable<T> {
 
   ISet.__(this._s);
 
-  Set<T> get unlock => Set.of(_s);
+  Set<T> get unlock => Set<T>.of(_s);
 
   @override
   Iterator<T> get iterator => _s.iterator;

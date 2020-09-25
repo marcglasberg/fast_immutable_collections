@@ -124,18 +124,21 @@ void main() {
         final ISet<int> iSet = baseSet.add(1);
 
         expect(iSet.length, 3);
+        expect(iSet.unlock, {1, 2, 3});
       });
 
       test('`add`ing multiple repeated elements', () {
         final ISet<int> iSet = baseSet.addAll({1, 2});
 
         expect(iSet.length, 3);
+        expect(iSet.unlock, {1, 2, 3});
       });
 
       test('`adding` some repeated elements and other new ones', () {
         final ISet<int> iSet = baseSet.addAll({1, 2, 5, 7});
 
         expect(iSet.length, 5);
+        expect(iSet.unlock, {1, 2, 3, 5, 7});
       });
     });
   });

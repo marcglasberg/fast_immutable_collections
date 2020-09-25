@@ -54,7 +54,7 @@ class ISetAddBenchmark extends SetBenchmarkBase {
   ISet<int> _result;
 
   @override
-  Set<int> toMutable() => _iSet.unlock;
+  Set<int> toMutable() => _result.unlock;
 
   @override
   void setup() =>
