@@ -51,7 +51,7 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
 
 class ISetRemoveBenchmark extends SetBenchmarkBase {
   ISetRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+      : super(name: 'ISet', config: config, emitter: emitter);
 
   @override
   ISetRemoveBenchmark reconfigure(
@@ -76,7 +76,7 @@ class ISetRemoveBenchmark extends SetBenchmarkBase {
 class KtSetRemoveBenchmark extends SetBenchmarkBase {
   KtSetRemoveBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+      : super(name: 'KtSet', config: config, emitter: emitter);
 
   @override
   KtSetRemoveBenchmark reconfigure(
@@ -101,7 +101,7 @@ class KtSetRemoveBenchmark extends SetBenchmarkBase {
 class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
   BuiltSetRemoveBenchmark(
       {@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+      : super(name: 'BuiltSet', config: config, emitter: emitter);
 
   @override
   BuiltSetRemoveBenchmark reconfigure(
