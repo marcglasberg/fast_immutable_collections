@@ -17,5 +17,6 @@ export 'src/cases/set/empty.dart';
 
 export 'src/utils/config.dart';
 export 'src/utils/collection_benchmark_base.dart';
+export 'src/utils/collection_full_reporter.dart';
 export 'src/utils/multi_benchmark_reporter.dart';
 export 'src/utils/table_score_emitter.dart';
