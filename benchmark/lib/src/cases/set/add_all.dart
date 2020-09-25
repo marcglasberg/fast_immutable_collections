@@ -19,6 +19,9 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> baseBenchmarks = [
     MutableSetAddAllBenchmark(config: null, emitter: null),
+    ISetAddAllBenchmark(config: null, emitter: null),
+    KtSetAddAllBenchmark(config: null, emitter: null),
+    BuiltSetAddAllBenchmark(config: null, emitter: null),
   ];
 
   SetAddAllBenchmark({this.prefixName = 'set_add_all', @required this.configs});
@@ -71,8 +74,55 @@ class ISetAddAllBenchmark extends SetBenchmarkBase {
   void setup() => _fixedISet = ISet(SetAddAllBenchmark.baseSet);
 
   @override
-  void run() {
-    _iSet = ISet(_fixedISet);
-    _iSet = _iSet.addAll(SetAddAllBenchmark.setToAdd);
-  }
+  void run() => _iSet = _fixedISet.addAll(SetAddAllBenchmark.setToAdd);
+}
+
+class KtSetAddAllBenchmark extends SetBenchmarkBase {
+  KtSetAddAllBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'KtSet', config: config, emitter: emitter);
+
+  @override
+  KtSetAddAllBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      KtSetAddAllBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+
+  KtSet<int> _ktSet;
+  KtSet<int> _fixedISet;
+
+  @override
+  Set<int> toMutable() => _ktSet.asSet();
+
+  @override
+  void setup() => _fixedISet = KtSet.from(SetAddAllBenchmark.baseSet);
+
+  @override
+  void run() => _ktSet =
+      _fixedISet.plus(SetAddAllBenchmark.setToAdd.toImmutableSet()).toSet();
+}
+
+class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
+  BuiltSetAddAllBenchmark(
+      {@required Config config, @required ScoreEmitter emitter})
+      : super(name: 'BuiltSet', config: config, emitter: emitter);
+
+  @override
+  BuiltSetAddAllBenchmark reconfigure(
+          {Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltSetAddAllBenchmark(
+          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+
+  BuiltSet<int> _builtSet;
+  BuiltSet<int> _fixedISet;
+
+  @override
+  Set<int> toMutable() => _builtSet.asSet();
+
+  @override
+  void setup() => _fixedISet = BuiltSet.of(SetAddAllBenchmark.baseSet);
+
+  @override
+  void run() => _builtSet = _fixedISet.rebuild((SetBuilder<int> setBuilder) =>
+      setBuilder.addAll(SetAddAllBenchmark.setToAdd));
 }

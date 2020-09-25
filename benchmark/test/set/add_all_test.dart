@@ -33,7 +33,33 @@ void main() {
     });
 
     test('`KtSet`', () {
-      
+      final KtSetAddAllBenchmark ktSetAddAllBenchmark =
+          KtSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+
+      ktSetAddAllBenchmark.report();
+
+      expect(ktSetAddAllBenchmark.toMutable(), expectedSet);
+    });
+
+    test('`BuiltSet`', () {
+      final BuiltSetAddAllBenchmark builtSetAddAllBenchmark =
+          BuiltSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+
+      builtSetAddAllBenchmark.report();
+
+      expect(builtSetAddAllBenchmark.toMutable(), expectedSet);
+    });
+  });
+
+  group('Multiple Benchmarks |', () {
+    test('Simple run', () {
+      final SetAddAllBenchmark setAddAllBenchmark =
+          SetAddAllBenchmark(configs: [config, config]);
+
+      setAddAllBenchmark.report();
+
+      setAddAllBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
+          expect(benchmark.toMutable(), expectedSet));
     });
   });
 }
