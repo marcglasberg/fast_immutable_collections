@@ -138,6 +138,7 @@ class BuiltSetContainsBenchmark extends SetBenchmarkBase {
 
   @override
   void run() {
-    for (int i = 0; i < _builtSet.length + 1; i++) _contains = _builtSet.contains(i);
+    for (int i = 0; i < _builtSet.length + 1; i++)
+      _contains = _builtSet.contains(i);
   }
 }
