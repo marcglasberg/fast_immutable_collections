@@ -7,12 +7,14 @@ void main() {
     final IList iList1 = IList(), iList2 = IList([]);
     final iList3 = IList<String>([]);
     final iList4 = IList([1]);
+    final iList5 = IList.empty<int>();
 
     test('Runtime Type', () {
       expect(iList1, isA<IList>());
       expect(iList2, isA<IList>());
       expect(iList3, isA<IList<String>>());
       expect(iList4, isA<IList<int>>());
+      expect(iList5, isA<IList<int>>());
     });
 
     test('Emptiness Properties', () {
@@ -20,11 +22,53 @@ void main() {
       expect(iList2.isEmpty, isTrue);
       expect(iList3.isEmpty, isTrue);
       expect(iList4.isEmpty, isFalse);
+      expect(iList5.isEmpty, isTrue);
 
       expect(iList1.isNotEmpty, isFalse);
       expect(iList2.isNotEmpty, isFalse);
       expect(iList3.isNotEmpty, isFalse);
       expect(iList4.isNotEmpty, isTrue);
+      expect(iList5.isNotEmpty, isFalse);
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group('Equals |', () {
+    //
+
+    test(
+        'IList with identity-equals compares the list instance, '
+        'not the items.', () {
+      var myList = IList([1, 2]);
+      expect(myList == myList, isTrue);
+      expect(myList == IList([1, 2]), isFalse);
+      expect(myList == [1, 2].lock, isFalse);
+      expect(myList == IList([1, 2, 3]), isFalse);
+
+      myList = IList([1, 2]).identityEquals;
+      expect(myList == myList, isTrue);
+      expect(myList == IList([1, 2]).identityEquals, isFalse);
+      expect(myList == IList([1, 2, 3]).identityEquals, isFalse);
+    });
+
+    test(
+        'IList with deep-equals compares the items, '
+        'not the list instance.', () {
+      var myList = IList([1, 2]).deepEquals;
+      expect(myList == myList, isTrue);
+      expect(myList == IList([1, 2]).deepEquals, isTrue);
+      expect(myList == [1, 2].deep, isTrue);
+      expect(myList == IList([1, 2, 3]).deepEquals, isFalse);
+    });
+
+    test(
+        'IList with deep-equals is always different '
+        'from iList with identity-equals.', () {
+      expect(IList([1, 2]).deepEquals == IList([1, 2]).identityEquals, isFalse);
+      expect(IList([1, 2]).identityEquals == IList([1, 2]).deepEquals, isFalse);
+      expect(IList([1, 2]).deepEquals == IList([1, 2]), isFalse);
+      expect(IList([1, 2]) == IList([1, 2]).deepEquals, isFalse);
     });
   });
 
@@ -84,8 +128,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test('`flush`', () {
-    final IList<int> ilist =
-        [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
+    final IList<int> ilist = [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
 
     expect(ilist.isFlushed, isFalse);
 
@@ -152,8 +195,7 @@ void main() {
       expect(ilist5.unlock, []);
     });
 
-    test('Invalid argument',
-        () => expect(() => ilist1.maxLength(-1), throwsArgumentError));
+    test('Invalid argument', () => expect(() => ilist1.maxLength(-1), throwsArgumentError));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,8 +208,7 @@ void main() {
       expect(iList.any((int v) => v == 100), isFalse);
     });
 
-    test('`cast`', () => expect(iList.cast<num>(), isA<IList<num>>()),
-        skip: true);
+    test('`cast`', () => expect(iList.cast<num>(), isA<IList<num>>()), skip: true);
 
     test('`contains`', () {
       expect(iList.contains(2), isTrue);
@@ -199,8 +240,7 @@ void main() {
     });
 
     test('`expand`', () {
-      expect(iList.expand((int v) => [v, v]),
-          [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
+      expect(iList.expand((int v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
       expect(iList.expand((int v) => []), []);
     });
 
@@ -211,8 +251,7 @@ void main() {
     test('`last`', () => expect(iList.last, 6));
 
     group('`single` |', () {
-      test('State exception',
-          () => expect(() => iList.single, throwsStateError));
+      test('State exception', () => expect(() => iList.single, throwsStateError));
 
       test('Access', () => expect([10].lock.single, 10));
     });
@@ -224,13 +263,12 @@ void main() {
       expect(iList.firstWhere((int v) => v > 6, orElse: () => 100), 100);
     });
 
-    test('`fold`',
-        () => expect(iList.fold(100, (int p, int e) => p * (1 + e)), 504000));
+    test('`fold`', () => expect(iList.fold(100, (int p, int e) => p * (1 + e)), 504000));
 
     test('`followedBy`', () {
       expect(iList.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-      expect(iList.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock,
-          [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(
+          iList.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
     test('`forEach`', () {
@@ -264,10 +302,8 @@ void main() {
         expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
       });
 
-      test(
-          'State exception',
-          () => expect(() => [].reduce((dynamic p, dynamic e) => p * (1 + e)),
-              throwsStateError));
+      test('State exception',
+          () => expect(() => [].reduce((dynamic p, dynamic e) => p * (1 + e)), throwsStateError));
     });
 
     group('`singleWhere` |', () {
@@ -279,8 +315,7 @@ void main() {
       test(
           'State exception',
           () => expect(
-              () => iList.singleWhere((int v) => v < 4, orElse: () => 100),
-              throwsStateError));
+              () => iList.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError));
     });
 
     test('`skip`', () {
@@ -318,10 +353,8 @@ void main() {
         expect(iList.unlock, [1, 2, 3, 4, 5, 6]);
       });
 
-      test(
-          'Unsupported exception',
-          () => expect(() => iList.toList(growable: false)..add(7),
-              throwsUnsupportedError));
+      test('Unsupported exception',
+          () => expect(() => iList.toList(growable: false)..add(7), throwsUnsupportedError));
     });
 
     test('`toSet`', () {
@@ -336,9 +369,6 @@ void main() {
       expect(iList.where((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
     });
 
-    test(
-        '`whereType`',
-        () =>
-            expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]));
+    test('`whereType`', () => expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]));
   });
 }

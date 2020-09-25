@@ -5,7 +5,16 @@ import 'ilist.dart';
 class LFlat<T> extends L<T> {
   final List<T> _list;
 
-  LFlat(this._list) : assert(_list != null);
+  static L<T> empty<T>() => LFlat.unsafe(const []);
+
+  // Unsafe return.
+  bool listEquals(LFlat<T> other) => (other == null) ? false : _listEquals<T>(_list, other._list);
+
+  LFlat(Iterable<T> iterable)
+      : assert(iterable != null),
+        _list = List.of(iterable, growable: false);
+
+  LFlat.unsafe(this._list) : assert(_list != null);
 
   @override
   Iterator<T> get iterator => _list.iterator;
@@ -102,6 +111,18 @@ class LFlat<T> extends L<T> {
 
   @override
   IList<E> whereType<E>() => IList(_list.whereType<E>());
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool _listEquals<T>(List<T> a, List<T> b) {
+  if (a == null) return b == null;
+  if (b == null || a.length != b.length) return false;
+  if (identical(a, b)) return true;
+  for (int index = 0; index < a.length; index += 1) {
+    if (a[index] != b[index]) return false;
+  }
+  return true;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

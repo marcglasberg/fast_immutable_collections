@@ -6,6 +6,7 @@ class LAdd<T> extends L<T> {
   final L<T> _l;
   final T _item;
 
+  /// Safe.
   LAdd(this._l, this._item)
       : assert(_l != null),
         assert(_item != null);
@@ -20,13 +21,10 @@ class LAdd<T> extends L<T> {
   @override
   T operator [](int index) => index < 0 || index >= length
       ? throw RangeError.range(index, 0, length - 1, 'index')
-      : index == length - 1
-          ? _item
-          : _l[index];
+      : index == length - 1 ? _item : _l[index];
 
   @override
-  bool contains(Object element) =>
-      _l.contains(element) ? true : _item == element;
+  bool contains(Object element) => _l.contains(element) ? true : _item == element;
 
   @override
   int get length => _l.length + 1;

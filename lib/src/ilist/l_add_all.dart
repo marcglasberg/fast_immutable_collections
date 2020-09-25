@@ -4,9 +4,15 @@ import 'ilist.dart';
 
 class LAddAll<T> extends L<T> {
   final L<T> _l;
-  final Iterable<T> _items;
+  final List<T> _items;
 
-  LAddAll(this._l, this._items)
+  /// Safe.
+  LAddAll(this._l, Iterable<T> items)
+      : assert(_l != null),
+        assert(items != null),
+        _items = List.of(items, growable: false);
+
+  LAddAll.unsafe(this._l, this._items)
       : assert(_l != null),
         assert(_items != null);
 
