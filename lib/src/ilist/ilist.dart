@@ -1,3 +1,4 @@
+import '../immutable_collection.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
@@ -7,7 +8,8 @@ extension IListExtension<T> on List<T> {
   //
 
   /// Locks the list, returning an immutable list (IList).
-  /// The equals operator compares by identity.
+  /// The equals operator compares by identity (it's only
+  /// equal when the list instance is the same).
   IList<T> get lock => IList<T>(this);
 
   /// Locks the list, returning an immutable list (IList).
@@ -17,10 +19,12 @@ extension IListExtension<T> on List<T> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+/// An immutable list.
 @immutable
-// ignore: must_be_immutable
-class IList<T> implements Iterable<T> {
+class IList<T> // ignore: must_be_immutable
+    extends ImmutableCollection<IList<T>> implements Iterable<T> {
   //
+
   L<T> _l;
 
   /// If false (the default), the equals operator compares by identity.
@@ -29,26 +33,28 @@ class IList<T> implements Iterable<T> {
 
   static IList<T> empty<T>() => IList.__(LFlat.empty<T>(), isDeepEquals: false);
 
-  factory IList([Iterable<T> iterable]) {
-    return (iterable is IList<T>)
-        ? iterable
-        : (iterable == null || iterable.isEmpty)
-            ? IList.empty()
-            : IList.__(LFlat<T>(iterable), isDeepEquals: false);
-  }
+  factory IList([
+    Iterable<T> iterable,
+  ]) =>
+      iterable is IList<T>
+          ? iterable
+          : (iterable == null || iterable.isEmpty)
+              ? IList.empty<T>()
+              : IList<T>.__(LFlat<T>(iterable), isDeepEquals: false);
+
+  IList._(Iterable<T> iterable, {@required this.isDeepEquals})
+      : _l = iterable is IList<T>
+            ? iterable._l
+            : (iterable == null) ? LFlat.empty<T>() : LFlat<T>(iterable);
+
+  /// Unsafe.
+  IList.__(this._l, {@required this.isDeepEquals});
 
   /// Convert this list to identityEquals (compares by identity).
   IList<T> get identityEquals => isDeepEquals ? IList.__(_l, isDeepEquals: false) : this;
 
   /// Convert this list to deepEquals (compares all list items).
   IList<T> get deepEquals => isDeepEquals ? this : IList.__(_l, isDeepEquals: true);
-
-  /// Unsafe. Do not pass [IList] as the iterable.
-  IList._unsafe(Iterable<T> iterable, {@required this.isDeepEquals})
-      : _l = (iterable == null) ? LFlat.empty<T>() : LFlat<T>(iterable);
-
-  /// Unsafe.
-  IList.__(this._l, {@required this.isDeepEquals});
 
   List<T> get unlock => List.of(_l);
 
@@ -62,19 +68,22 @@ class IList<T> implements Iterable<T> {
   bool get isNotEmpty => !isEmpty;
 
   @override
-  bool operator ==(Object other) {
-    if (!isDeepEquals)
-      return identical(this, other);
-    else {
-      return other is IList &&
-          runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals &&
-          (flush._l as LFlat).listEquals(other.flush._l);
-    }
-  }
+  bool operator ==(Object other) =>
+      !isDeepEquals ? identical(this, other) : (other is IList<T> && equals(other));
 
   @override
-  int get hashCode => _l.hashCode ^ isDeepEquals.hashCode;
+  bool equals(IList<T> other) =>
+      runtimeType == other.runtimeType &&
+      isDeepEquals == other.isDeepEquals &&
+      (flush._l as LFlat).listEquals(other.flush._l);
+
+  @override
+  int get hashCode {
+    if (!isDeepEquals)
+      return _l.hashCode ^ isDeepEquals.hashCode;
+    else
+      return (flush._l as LFlat).listHashcode();
+  }
 
   // --- IList methods: ---------------
 
@@ -90,7 +99,13 @@ class IList<T> implements Iterable<T> {
 
   IList<T> addAll(Iterable<T> items) => IList<T>.__(_l.addAll(items), isDeepEquals: isDeepEquals);
 
-  IList<T> remove(T element) => IList<T>.__(_l.remove(element), isDeepEquals: isDeepEquals);
+  IList<T> remove(T item) {
+    var result = _l.remove(item);
+    if (identical(result, _l))
+      return this;
+    else
+      return IList<T>.__(result, isDeepEquals: isDeepEquals);
+  }
 
   /// Removes the element, if it exists in the list.
   /// Otherwise, adds it to the list.
@@ -117,12 +132,12 @@ class IList<T> implements Iterable<T> {
 
   @override
   IList<E> expand<E>(Iterable<E> Function(T) f) =>
-      IList._unsafe(_l.expand(f), isDeepEquals: isDeepEquals);
+      IList._(_l.expand(f), isDeepEquals: isDeepEquals);
 
   @override
   int get length {
     int length = _l.length;
-    if (length == 0 && _l is! LFlat) _l = LFlat.empty();
+    if (length == 0 && _l is! LFlat) _l = LFlat.empty<T>();
     return length;
   }
 
@@ -144,7 +159,7 @@ class IList<T> implements Iterable<T> {
 
   @override
   IList<T> followedBy(Iterable<T> other) =>
-      IList._unsafe(_l.followedBy(other), isDeepEquals: isDeepEquals);
+      IList._(_l.followedBy(other), isDeepEquals: isDeepEquals);
 
   @override
   void forEach(void Function(T element) f) => _l.forEach(f);
@@ -157,7 +172,7 @@ class IList<T> implements Iterable<T> {
       _l.lastWhere(test, orElse: orElse);
 
   @override
-  IList<E> map<E>(E Function(T e) f) => IList._unsafe(_l.map(f), isDeepEquals: isDeepEquals);
+  IList<E> map<E>(E Function(T e) f) => IList._(_l.map(f), isDeepEquals: isDeepEquals);
 
   @override
   T reduce(T Function(T value, T element) combine) => _l.reduce(combine);
@@ -167,127 +182,44 @@ class IList<T> implements Iterable<T> {
       _l.singleWhere(test, orElse: orElse);
 
   @override
-  IList<T> skip(int count) => IList._unsafe(_l.skip(count), isDeepEquals: isDeepEquals);
+  IList<T> skip(int count) => IList._(_l.skip(count), isDeepEquals: isDeepEquals);
 
   @override
   IList<T> skipWhile(bool Function(T value) test) =>
-      IList._unsafe(_l.skipWhile(test), isDeepEquals: isDeepEquals);
+      IList._(_l.skipWhile(test), isDeepEquals: isDeepEquals);
 
   @override
-  IList<T> take(int count) => IList._unsafe(_l.take(count), isDeepEquals: isDeepEquals);
+  IList<T> take(int count) => IList._(_l.take(count), isDeepEquals: isDeepEquals);
 
   @override
   IList<T> takeWhile(bool Function(T value) test) =>
-      IList._unsafe(_l.takeWhile(test), isDeepEquals: isDeepEquals);
-
-  @override
-  List<T> toList({bool growable = true}) => _l.toList(growable: growable);
-
-  @override
-  Set<T> toSet() => _l.toSet();
+      IList._(_l.takeWhile(test), isDeepEquals: isDeepEquals);
 
   @override
   IList<T> where(bool Function(T element) test) =>
-      IList._unsafe(_l.where(test), isDeepEquals: isDeepEquals);
+      IList._(_l.where(test), isDeepEquals: isDeepEquals);
 
   @override
-  IList<E> whereType<E>() => _l.whereType<E>();
+  IList<E> whereType<E>() => IList._(_l.whereType<E>(), isDeepEquals: isDeepEquals);
 
   /// If the list has more than `maxLength` elements, it gets cut on
   /// `maxLength`. Otherwise, it removes the last elements so it remains with
   /// only `maxLength` elements.
   IList<T> maxLength(int maxLength) =>
       IList.__(_l.maxLength(maxLength), isDeepEquals: isDeepEquals);
+
+  @override
+  List<T> toList({bool growable = true}) => _l.toList(growable: growable);
+
+  @override
+  Set<T> toSet() => _l.toSet();
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-abstract class IterableL<T> implements Iterable<T> {
-  @override
-  bool any(bool Function(T) test);
+abstract class L<T> implements Iterable<T> {
+  //
 
-  @override
-  Iterable<R> cast<R>();
-
-  @override
-  bool contains(Object element);
-
-  @override
-  T elementAt(int index);
-
-  @override
-  bool every(bool Function(T) test);
-
-  @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f);
-
-  @override
-  int get length;
-
-  @override
-  T get first;
-
-  @override
-  T get last;
-
-  @override
-  T get single;
-
-  @override
-  T firstWhere(bool Function(T) test, {Function() orElse});
-
-  @override
-  E fold<E>(E initialValue, E Function(E previousValue, T element) combine);
-
-  @override
-  Iterable<T> followedBy(Iterable<T> other);
-
-  @override
-  void forEach(void Function(T element) f);
-
-  @override
-  String join([String separator = '']);
-
-  @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse});
-
-  @override
-  Iterable<E> map<E>(E Function(T e) f);
-
-  @override
-  T reduce(T Function(T value, T element) combine);
-
-  @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse});
-
-  @override
-  Iterable<T> skip(int count);
-
-  @override
-  Iterable<T> skipWhile(bool Function(T value) test);
-
-  @override
-  Iterable<T> take(int count);
-
-  @override
-  Iterable<T> takeWhile(bool Function(T value) test);
-
-  @override
-  List<T> toList({bool growable = true});
-
-  @override
-  Set<T> toSet();
-
-  @override
-  Iterable<T> where(bool Function(T element) test);
-
-  @override
-  Iterable<E> whereType<E>();
-}
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-abstract class L<T> implements IterableL<T> {
   /// The [L] class provides the default fallback methods of Iterable, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed list, but

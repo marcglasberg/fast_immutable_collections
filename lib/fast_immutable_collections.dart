@@ -2,5 +2,6 @@
 /// {@category Collections, Immutable, Flutter}
 library fast_immutable_collections;
 
+export 'src/immutable_collection.dart';
 export 'src/ilist/ilist.dart';
 export 'src/iset/iset.dart';

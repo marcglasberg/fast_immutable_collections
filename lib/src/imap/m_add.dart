@@ -10,6 +10,18 @@ class MAdd<K, V> extends M<K, V> {
   @override
   bool get isEmpty => false;
 
+  @override
+  Iterable<MapEntry<K, V>> get entries {
+    Iterable<MapEntry<K, V>> nextEntry = [MapEntry<K, V>(_key, _value)];
+    return _m.entries.followedBy(nextEntry);
+  }
+
+  @override
+  Iterable<K> get keys => _m.keys.followedBy(<K>[_key]);
+
+  @override
+  Iterable<V> get values => _m.values.followedBy(<V>[_value]);
+
   /// Implicitly uniting the maps.
   @override
   V operator [](K key) => (key == _key) ? _value : _m[key];

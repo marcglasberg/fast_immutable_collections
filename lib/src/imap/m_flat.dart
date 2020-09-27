@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'imap.dart';
+import 'package:collection/collection.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -9,22 +10,20 @@ class MFlat<K, V> extends M<K, V> {
 
   final Map<K, V> _map;
 
+  MFlat(Map<K, V> _map)
+      : assert(_map != null),
+        _map = Map.of(_map);
+
   MFlat.unsafe(this._map) : assert(_map != null);
 
   @override
-  Iterable<MapEntry<K, V>> get iterable => _map.entries;
+  Iterable<MapEntry<K, V>> get entries => _map.entries;
 
   @override
-  IList<MapEntry<K, V>> get entries => IList(_map.entries);
+  Iterable<K> get keys => IList(_map.keys);
 
   @override
-  IList<K> get keys => IList(_map.keys);
-
-  @override
-  IList<V> get values => IList(_map.values);
-
-  @override
-  Iterator<MapEntry<K, V>> get iterator => _map.entries.iterator;
+  Iterable<V> get values => IList(_map.values);
 
   @override
   bool get isEmpty => _map.isEmpty;
@@ -49,6 +48,11 @@ class MFlat<K, V> extends M<K, V> {
 
   @override
   int get length => _map.length;
+
+  bool mapEquals(MFlat<K, V> other) =>
+      (other == null) ? false : const MapEquality().equals(_map, other._map);
+
+  int mapHashcode() => const MapEquality().hash(_map);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

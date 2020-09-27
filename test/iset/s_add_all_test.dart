@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections/src/iset/s_add.dart';
 import 'package:fast_immutable_collections/src/iset/s_flat.dart';
 
 void main() {
-  final SAddAll<int> sAddAll = SAddAll.unsafe(SFlat<int>({1, 2}), {3, 4, 5});
+  final SAddAll<int> sAddAll = SAddAll.unsafe(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
 
   group('Basic Usage Tests and Checks |', () {
     test('Runtime Type', () => expect(sAddAll, isA<SAddAll<int>>()));
@@ -41,7 +41,7 @@ void main() {
   group('Combining various `SAddAll`s and `SAdd`s', () {
     final sAddAll = SAddAll.unsafe(
         SAddAll.unsafe(
-            SAddAll.unsafe(SAdd(SAddAll.unsafe(SFlat({1, 2}), {3, 4}), 5), {6, 7}), <int>{}),
+            SAddAll.unsafe(SAdd(SAddAll.unsafe(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}),
         {8});
 
     test('Runtime Type', () => expect(sAddAll, isA<SAddAll<int>>()));

@@ -8,33 +8,48 @@ import 'm_flat.dart';
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 extension IMapExtension<K, V> on Map<K, V> {
+  //
+
+  /// Locks the map, returning an immutable map (IMap).
+  /// The equals operator compares by identity (it's only
+  /// equal when the map instance is the same).
   IMap<K, V> get lock => IMap<K, V>(this);
+
+  /// Locks the map, returning an immutable map (IMap).
+  /// The equals operator compares all items, unordered.
+  IMap<K, V> get deep => IMap<K, V>(this).deepEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// Doesn't maintain original insertion order when iterating.
-class IMap<K, V> {
+/// An immutable unordered map.
+@immutable
+class IMap<K, V> // ignore: must_be_immutable
+    extends ImmutableCollection<IMap<K, V>> {
+  //
+
   M<K, V> _m;
 
-  static IMap<K, V> empty<K, V>() => IMap.__(MFlat.empty<K, V>());
+  /// If false (the default), the equals operator compares by identity.
+  /// If true, the equals operator compares all items, unordered.
+  final bool isDeepEquals;
 
-  static Map Function() unlockBuilder = unlockBuilder_HashMap;
+  static IMap<K, V> empty<K, V>() => IMap.__(MFlat.empty<K, V>(), isDeepEquals: false);
 
-  static Map<K, V> unlockBuilder_LinkedHashMap<K, V>() => LinkedHashMap<K, V>();
-
-  static Map<K, V> unlockBuilder_HashMap<K, V>() => HashMap<K, V>();
-
-  factory IMap([Map<K, V> map]) =>
-      IMap._(MFlat.unsafe(map == null || map.isEmpty ? const {} : Map.of(map)));
+  factory IMap([
+    Map<K, V> map,
+  ]) =>
+      (map == null || map.isEmpty)
+          ? IMap.empty<K, V>()
+          : IMap<K, V>.__(MFlat<K, V>(map), isDeepEquals: false);
 
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries) {
-    if (entries is IMap)
-      return IMap.__((entries as IMap)._m);
+    if (entries is IMap<K, V>)
+      return IMap.__((entries as IMap<K, V>)._m, isDeepEquals: false);
     else {
       var map = HashMap<K, V>();
       map.addEntries(entries);
-      return IMap._(MFlat.unsafe(map));
+      return IMap.__(MFlat.unsafe(map), isDeepEquals: false);
     }
   }
 
@@ -51,7 +66,7 @@ class IMap<K, V> {
       map[key] = valueMapper(key);
     }
 
-    return IMap._map(map);
+    return IMap._map(map, isDeepEquals: false);
   }
 
   factory IMap.fromValues({
@@ -67,7 +82,7 @@ class IMap<K, V> {
       map[keyMapper(value)] = value;
     }
 
-    return IMap._map(map);
+    return IMap._map(map, isDeepEquals: false);
   }
 
   factory IMap.fromIterable(
@@ -76,21 +91,19 @@ class IMap<K, V> {
     V Function(dynamic) valueMapper,
   }) {
     Map<K, V> map = Map.fromIterable(iterable, key: keyMapper, value: valueMapper);
-    return IMap._map(map);
+    return IMap._map(map, isDeepEquals: false);
   }
 
   factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values) {
     Map<K, V> map = Map.fromIterables(keys, values);
-    return IMap._map(map);
+    return IMap._map(map, isDeepEquals: false);
   }
 
   /// Unsafe.
-  IMap._map(Map<K, V> map) : _m = MFlat.unsafe(map);
-
-  IMap._([M<K, V> m]) : _m = m is IMap ? (m as IMap)._m : (m ?? MFlat.unsafe(HashMap.of(const {})));
+  IMap._map(Map<K, V> map, {@required this.isDeepEquals}) : _m = MFlat.unsafe(map);
 
   /// Unsafe.
-  IMap.__(this._m);
+  IMap.__(this._m, {@required this.isDeepEquals});
 
   IList<MapEntry<K, V>> get entries => IList(_m.entries);
 
@@ -98,14 +111,38 @@ class IMap<K, V> {
 
   IList<V> get values => IList(_m.values);
 
+  Iterator<MapEntry<K, V>> get iterator => _m.iterator;
+
+  /// Convert this map to identityEquals (compares by identity).
+  IMap<K, V> get identityEquals => isDeepEquals ? IMap.__(_m, isDeepEquals: false) : this;
+
+  /// Convert this map to deepEquals (compares all map entries).
+  IMap<K, V> get deepEquals => isDeepEquals ? this : IMap.__(_m, isDeepEquals: true);
+
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
-
-  Iterator<MapEntry<K, V>> get iterator => _m.iterator;
 
   bool get isEmpty => _m.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
+
+  @override
+  bool operator ==(Object other) =>
+      !isDeepEquals ? identical(this, other) : (other is IMap<K, V> && equals(other));
+
+  @override
+  bool equals(IMap<K, V> other) =>
+      runtimeType == other.runtimeType &&
+      isDeepEquals == other.isDeepEquals &&
+      (flush._m as MFlat<K, V>).mapEquals(other.flush._m);
+
+  @override
+  int get hashCode {
+    if (!isDeepEquals)
+      return _m.hashCode ^ isDeepEquals.hashCode;
+    else
+      return (flush._m as MFlat).mapHashcode();
+  }
 
   // --- IMap methods: ---------------
 
@@ -119,30 +156,37 @@ class IMap<K, V> {
 
   /// Returns a new map containing the current map plus the given key:value.
   /// (if necessary, the given will override the current).
-  IMap<K, V> add({@required K key, @required V value}) =>
-      IMap<K, V>.__(_m.add(key: key, value: value));
+  IMap<K, V> add(K key, V value) =>
+      IMap<K, V>.__(_m.add(key: key, value: value), isDeepEquals: isDeepEquals);
 
   /// Returns a new map containing the current map plus the given key:value.
   /// (if necessary, the given will override the current).
   IMap<K, V> addEntry(MapEntry<K, V> entry) =>
-      IMap<K, V>.__(_m.add(key: entry.key, value: entry.value));
+      IMap<K, V>.__(_m.add(key: entry.key, value: entry.value), isDeepEquals: isDeepEquals);
 
   /// Returns a new map containing the current map plus the given map.
   /// (if necessary, the given will override the current).
-  IMap<K, V> addAll(IMap<K, V> iMap) => IMap<K, V>.__(_m.addAll(iMap));
+  IMap<K, V> addAll(IMap<K, V> iMap) => IMap<K, V>.__(_m.addAll(iMap), isDeepEquals: isDeepEquals);
 
   /// Returns a new map containing the current map plus the given map.
   /// (if necessary, the given will override the current).
-  IMap<K, V> addMap(Map<K, V> map) => IMap<K, V>.__(_m.addMap(map));
+  IMap<K, V> addMap(Map<K, V> map) => IMap<K, V>.__(_m.addMap(map), isDeepEquals: isDeepEquals);
 
   /// Returns a new map containing the current map plus the given map entries.
   /// (if necessary, the given will override the current).
-  IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) => IMap<K, V>.__(_m.addEntries(entries));
+  IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) =>
+      IMap<K, V>.__(_m.addEntries(entries), isDeepEquals: isDeepEquals);
 
   /// Returns a new map containing the current map minus the given key and its value.
   /// However, if the current map doesn't contain the key,
   /// it will return the current map (same instance).
-  IMap<K, V> remove(K key) => IMap<K, V>.__(_m.remove(key));
+  IMap<K, V> remove(K key) {
+    M<K, V> result = _m.remove(key);
+    if (identical(result, _m))
+      return this;
+    else
+      return IMap<K, V>.__(result, isDeepEquals: isDeepEquals);
+  }
 
   V operator [](K k) => _m[k];
 
@@ -181,16 +225,15 @@ class IMap<K, V> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-// abstract class M<K, V> implements IterableM<K, V> {
 abstract class M<K, V> {
   //
-  Iterable<MapEntry<K, V>> get iterable => _getFlushed.entries;
+  Iterable<MapEntry<K, V>> get entries => _getFlushed.entries;
 
-  IList<MapEntry<K, V>> get entries => IList(_getFlushed.entries);
+  Iterable<K> get keys => _getFlushed.keys;
 
-  IList<K> get keys => IList(_getFlushed.keys);
+  Iterable<V> get values => _getFlushed.values;
 
-  IList<V> get values => IList(_getFlushed.values);
+  Iterator<MapEntry<K, V>> get iterator => _getFlushed.entries.iterator;
 
   /// The [M] class provides the default fallback methods of Iterable, but
   /// ideally all of its methods are implemented in all of its subclasses.
@@ -205,14 +248,12 @@ abstract class M<K, V> {
 
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock {
-    Map<K, V> map = IMap.unlockBuilder();
-    map.addEntries(iterable);
+    Map<K, V> map = HashMap<K, V>();
+    map.addEntries(entries);
     return map;
   }
 
   int get length => _getFlushed.length;
-
-  Iterator<MapEntry<K, V>> get iterator;
 
   M<K, V> add({@required K key, @required V value}) => MAdd<K, V>(this, key, value);
 
@@ -225,7 +266,7 @@ abstract class M<K, V> {
 
   /// TODO: FALTA FAZER!!!
   M<K, V> remove(K key) {
-    return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map.of(_getFlushed)..remove(key));
+    return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(_getFlushed)..remove(key));
   }
 
   bool get isEmpty => _getFlushed.isEmpty;

@@ -1,4 +1,5 @@
 import 'ilist.dart';
+import 'package:collection/collection.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -6,9 +7,6 @@ class LFlat<T> extends L<T> {
   final List<T> _list;
 
   static L<T> empty<T>() => LFlat.unsafe(const []);
-
-  // Unsafe return.
-  bool listEquals(LFlat<T> other) => (other == null) ? false : _listEquals<T>(_list, other._list);
 
   LFlat(Iterable<T> iterable)
       : assert(iterable != null),
@@ -26,10 +24,10 @@ class LFlat<T> extends L<T> {
   bool any(bool Function(T) test) => _list.any(test);
 
   @override
-  IList<R> cast<R>() => throw UnsupportedError('cast');
+  Iterable<R> cast<R>() => throw UnsupportedError('cast');
 
   // TODO: FALTA FAZER!!!
-  // IList<R> cast<R>() => _list.cast<R>();
+  // Iterable<R> cast<R>() => _list.cast<R>();
 
   @override
   bool contains(Object element) => _list.contains(element);
@@ -44,7 +42,7 @@ class LFlat<T> extends L<T> {
   bool every(bool Function(T) test) => _list.every(test);
 
   @override
-  IList<E> expand<E>(Iterable<E> Function(T) f) => _list.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f) => _list.expand(f);
 
   @override
   int get length => _list.length;
@@ -67,7 +65,7 @@ class LFlat<T> extends L<T> {
       _list.fold(initialValue, combine);
 
   @override
-  IList<T> followedBy(Iterable<T> other) => _list.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => _list.followedBy(other);
 
   @override
   void forEach(void Function(T element) f) => _list.forEach(f);
@@ -80,7 +78,7 @@ class LFlat<T> extends L<T> {
       _list.lastWhere(test, orElse: orElse);
 
   @override
-  IList<E> map<E>(E Function(T e) f) => IList(_list.map(f));
+  Iterable<E> map<E>(E Function(T e) f) => IList(_list.map(f));
 
   @override
   T reduce(T Function(T value, T element) combine) => _list.reduce(combine);
@@ -90,16 +88,16 @@ class LFlat<T> extends L<T> {
       _list.singleWhere(test, orElse: orElse);
 
   @override
-  IList<T> skip(int count) => _list.skip(count);
+  Iterable<T> skip(int count) => _list.skip(count);
 
   @override
-  IList<T> skipWhile(bool Function(T value) test) => _list.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) => _list.skipWhile(test);
 
   @override
-  IList<T> take(int count) => _list.take(count);
+  Iterable<T> take(int count) => _list.take(count);
 
   @override
-  IList<T> takeWhile(bool Function(T value) test) => _list.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) => _list.takeWhile(test);
 
   @override
   List<T> toList({bool growable = true}) => _list.toList(growable: growable);
@@ -108,22 +106,15 @@ class LFlat<T> extends L<T> {
   Set<T> toSet() => _list.toSet();
 
   @override
-  IList<T> where(bool Function(T element) test) => _list.where(test);
+  Iterable<T> where(bool Function(T element) test) => _list.where(test);
 
   @override
-  IList<E> whereType<E>() => IList(_list.whereType<E>());
-}
+  Iterable<E> whereType<E>() => _list.whereType<E>();
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+  bool listEquals(LFlat<T> other) =>
+      (other == null) ? false : const ListEquality().equals(_list, other._list);
 
-bool _listEquals<T>(List<T> a, List<T> b) {
-  if (a == null) return b == null;
-  if (b == null || a.length != b.length) return false;
-  if (identical(a, b)) return true;
-  for (int index = 0; index < a.length; index += 1) {
-    if (a[index] != b[index]) return false;
-  }
-  return true;
+  int listHashcode() => const ListEquality().hash(_list);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

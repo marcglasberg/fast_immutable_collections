@@ -14,6 +14,15 @@ class MAddAll<K, V> extends M<K, V> {
   bool get isEmpty => _m.isEmpty && _items.isEmpty;
 
   @override
+  Iterable<MapEntry<K, V>> get entries => _m.entries.followedBy(_items.entries);
+
+  @override
+  Iterable<K> get keys => _m.keys.followedBy(_items.keys);
+
+  @override
+  Iterable<V> get values => _m.values.followedBy(_items.values);
+
+  @override
   V operator [](K key) {
     // Check the real map first (it's faster).
     return _items[key] ?? _m[key];
