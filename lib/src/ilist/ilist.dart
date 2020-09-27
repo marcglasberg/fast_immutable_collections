@@ -309,7 +309,10 @@ abstract class L<T> implements IterableL<T> {
     return LAdd<T>(this, item);
   }
 
-  L<T> addAll(Iterable<T> items) => LAddAll<T>(this, items);
+  L<T> addAll(Iterable<T> items) => LAddAll<T>(
+        this,
+        (items is IList) ? (items as IList)._l : items,
+      );
 
   /// TODO: FALTA FAZER!!!
   L<T> remove(T element) {

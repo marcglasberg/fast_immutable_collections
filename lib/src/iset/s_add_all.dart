@@ -3,30 +3,28 @@ import 'iset.dart';
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SAddAll<T> extends S<T> {
-  final S<T> _l;
-  final Iterable<T> _items;
+  final S<T> _s;
+  final Set<T> _items;
 
-  SAddAll(this._l, this._items)
-      : assert(_l != null),
+  SAddAll.unsafe(this._s, this._items)
+      : assert(_s != null),
         assert(_items != null);
 
   @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorSAddAll(_l.iterator, _items);
+  Iterator<T> get iterator => IteratorSAddAll(_s.iterator, _items);
 
   @override
-  bool contains(Object element) => _l.length <= _items.length
-      ? _l.contains(element)
-          ? true
-          : _items.contains(element)
-      : _items.contains(element)
-          ? true
-          : _l.contains(element);
+  bool contains(Object element) {
+    // Check the real set first (it's faster).
+    if (_items.contains(element)) return true;
+    return _s.contains(element);
+  }
 
   @override
-  int get length => _l.length + _items.length;
+  int get length => _s.length + _items.length;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

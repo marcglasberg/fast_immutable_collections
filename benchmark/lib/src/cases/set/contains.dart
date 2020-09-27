@@ -105,7 +105,7 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
 
   @override
   void setup() => _ktSet =
-      KtSet<int>.from(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+      KtSet<int>.of(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {

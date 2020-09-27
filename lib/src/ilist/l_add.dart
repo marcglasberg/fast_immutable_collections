@@ -6,7 +6,6 @@ class LAdd<T> extends L<T> {
   final L<T> _l;
   final T _item;
 
-  /// Safe.
   LAdd(this._l, this._item)
       : assert(_l != null),
         assert(_item != null);

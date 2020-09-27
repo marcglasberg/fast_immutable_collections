@@ -3,6 +3,8 @@ import 'package:test/test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   group('Creating immutable sets |', () {
     final ISet iSet1 = ISet(), iSet2 = ISet({});
     final iSet3 = ISet<String>({});
@@ -28,7 +30,9 @@ void main() {
     });
   });
 
-  group('Creating immutable sets with extensiong |', () {
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group('Creating immutable sets with extension |', () {
     test('From an empty set', () {
       final ISet iList = <int>{}.lock;
 
@@ -58,6 +62,8 @@ void main() {
       expect(typedList, isA<ISet<String>>());
     });
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group('Creating native mutable sets from immutable sets |', () {
     final Set<int> exampleSet = {1, 2, 3};
@@ -89,6 +95,8 @@ void main() {
     expect(iSet.unlock, {1, 2, 3, 4, 5, 6, 7, 8, 9});
   });
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   group('Adding Elements', () {
     final ISet<int> baseSet = ISet<int>([1]);
 
@@ -116,6 +124,8 @@ void main() {
       // Methods are chainable.
       expect(iSet1.add(10).addAll({20, 30}).unlock, {1, 2, 3, 10, 20, 30});
     });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
     group('Adding repeated elements |', () {
       final ISet<int> baseSet = ISet<int>({1, 2, 3});
@@ -171,6 +181,8 @@ void main() {
     expect(identical(iSet1, iSet2), false);
   });
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   group('`ISet` methods from `Iterable |', () {
     final ISet<int> iSet = {1, 2, 3}.lock.add(4).addAll({5, 6});
 
@@ -207,6 +219,8 @@ void main() {
     test('`first`', () => expect(iSet.first, 1));
 
     test('`last`', () => expect(iSet.last, 6));
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
     group('`single` |', () {
       test(
@@ -256,6 +270,8 @@ void main() {
       expect(iSet.map((int v) => v + 1).unlock, {2, 3, 4, 5, 6, 7});
     });
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
     group('`reduce` |', () {
       test('Regular usage', () {
         expect(iSet.reduce((int p, int e) => p * (1 + e)), 2520);
@@ -268,6 +284,8 @@ void main() {
               () => <int>{}.reduce((dynamic p, dynamic e) => p * (1 + e)),
               throwsStateError));
     });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
     group('`singleWhere` |', () {
       test('Regular usage', () {
@@ -311,6 +329,8 @@ void main() {
       expect(iSet.takeWhile((int v) => v < 100).unlock, {1, 2, 3, 4, 5, 6});
     });
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
     group('`toList` |', () {
       test('Regular usage', () {
         expect(iSet.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
@@ -340,4 +360,6 @@ void main() {
         () =>
             expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -29,7 +29,7 @@ void main() {
     'default': List(0),
     'empty': List.empty(growable: false),
     'filled': List.filled(0, null, growable: false),
-    'from': List.from([], growable: false),
+    'from': List.of([], growable: false),
     'generate': List.generate(0, (_) => null, growable: false),
     'of': List.of([], growable: false),
     'unmodifiable': List.unmodifiable([]),

@@ -96,7 +96,7 @@ class KtListContainsBenchmark extends ListBenchmarkBase {
 
   @override
   void setup() => _ktList =
-      KtList.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+      KtList.of(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
   void run() {

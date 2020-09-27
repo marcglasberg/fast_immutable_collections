@@ -4,20 +4,20 @@ import 'ilist.dart';
 
 class LAddAll<T> extends L<T> {
   final L<T> _l;
-  final List<T> _items;
+
+  // Will always store this as List or L.
+  final Iterable<T> _items;
 
   /// Safe.
+  /// Note: If you need to pass an IList, pass its [L] instead.
   LAddAll(this._l, Iterable<T> items)
       : assert(_l != null),
         assert(items != null),
-        _items = List.of(items, growable: false);
-
-  LAddAll.unsafe(this._l, this._items)
-      : assert(_l != null),
-        assert(_items != null);
+        assert(items is! IList),
+        _items = (items is L) ? items : List.of(items, growable: false);
 
   @override
-  bool get isEmpty => false;
+  bool get isEmpty => _l.isEmpty && _items.isEmpty;
 
   @override
   Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _items);

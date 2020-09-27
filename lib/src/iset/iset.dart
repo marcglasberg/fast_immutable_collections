@@ -2,6 +2,7 @@ import 'iterable_s.dart';
 import 's_flat.dart';
 import 's_add.dart';
 import 's_add_all.dart';
+import 'package:meta/meta.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -14,8 +15,7 @@ extension ISetExtension<T> on Set<T> {
 class ISet<T> implements Iterable<T> {
   S<T> _s;
 
-  factory ISet([Iterable<T> iterable]) =>
-      iterable is ISet ? iterable as ISet : ISet._(iterable);
+  factory ISet([Iterable<T> iterable]) => iterable is ISet ? iterable as ISet : ISet._(iterable);
 
   ISet._([Iterable<T> iterable])
       : _s = iterable is ISet
@@ -45,30 +45,30 @@ class ISet<T> implements Iterable<T> {
 
   bool get isFlushed => _s is SFlat;
 
+  /// Returns a new set containing the current set plus the given item.
+  /// However, if the given item already exists in the set,
+  /// it will return the current set (same instance).
   ISet<T> add(T item) => contains(item) ? this : ISet<T>.__(_s.add(item));
 
+  /// Returns a new set containing the current set plus all the given items.
+  /// However, if all given items already exists in the set,
+  /// it will return the current set (same instance).
   ISet<T> addAll(Iterable<T> items) {
-    // TODO: We could use an `ISet` itself for the `setToBeAdded` variable.
-    // Which one would be better? I guess the benchmarks will have to tell us...
-    if (items.length <= _s.length) {
-      final Set<T> setToBeAdded = {};
-
-      items.forEach((T item) {
-        if (!_s.contains(item)) setToBeAdded.add(item);
-      });
-
-      return ISet<T>.__(_s.addAll(setToBeAdded));
-    } else {
-      return ISet<T>._(items).addAll(_s);
+    final Set<T> setToBeAdded = {};
+    for (T item in items) {
+      if (!_s.contains(item)) setToBeAdded.add(item);
     }
+    return (setToBeAdded.isEmpty) ? this : ISet<T>.__(_s.addAll(setToBeAdded));
   }
 
-  ISet<T> remove(T element) => ISet<T>.__(_s.remove(element));
+  /// Returns a new set containing the current set minus the given item.
+  /// However, if the given item didn't exist in the current set,
+  /// it will return the current set (same instance).
+  ISet<T> remove(T item) => !contains(item) ? this : ISet<T>.__(_s.remove(item));
 
   /// Removes the element, if it exists in the set.
   /// Otherwise, adds it to the set.
-  ISet<T> toggle(T element) =>
-      contains(element) ? remove(element) : add(element);
+  ISet<T> toggle(T item) => ISet<T>.__(contains(item) ? _s.remove(item) : _s.add(item));
 
   // --- Iterable methods: ---------------
 
@@ -82,8 +82,7 @@ class ISet<T> implements Iterable<T> {
   bool contains(Object element) => _s.contains(element);
 
   @override
-  T elementAt(int index) =>
-      throw UnsupportedError('elementAt in ISet is not allowed');
+  T elementAt(int index) => throw UnsupportedError('elementAt in ISet is not allowed');
 
   @override
   bool every(bool Function(T) test) => _s.every(test);
@@ -104,8 +103,7 @@ class ISet<T> implements Iterable<T> {
   T get single => _s.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) =>
-      _s.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {Function() orElse}) => _s.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -181,11 +179,10 @@ abstract class S<T> implements IterableS<T> {
 
   S<T> add(T item) => SAdd<T>(this, item);
 
-  S<T> addAll(Iterable<T> items) => SAddAll<T>(this, items);
+  S<T> addAll(Iterable<T> items) => SAddAll<T>.unsafe(this, items);
 
   /// TODO: FALTA FAZER!!!
-  S<T> remove(T element) =>
-      !contains(element) ? this : SFlat<T>(Set<T>.of(this)..remove(element));
+  S<T> remove(T element) => !contains(element) ? this : SFlat<T>(Set<T>.of(this)..remove(element));
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;
@@ -232,8 +229,7 @@ abstract class S<T> implements IterableS<T> {
       _getFlushed.fold(initialValue, combine);
 
   @override
-  ISet<T> followedBy(Iterable<T> other) =>
-      ISet._(_getFlushed.followedBy(other));
+  ISet<T> followedBy(Iterable<T> other) => ISet._(_getFlushed.followedBy(other));
 
   @override
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
@@ -249,8 +245,7 @@ abstract class S<T> implements IterableS<T> {
   ISet<E> map<E>(E Function(T e) f) => ISet._(_getFlushed.map(f));
 
   @override
-  T reduce(T Function(T value, T element) combine) =>
-      _getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) => _getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -260,19 +255,16 @@ abstract class S<T> implements IterableS<T> {
   ISet<T> skip(int count) => ISet._(_getFlushed.skip(count));
 
   @override
-  ISet<T> skipWhile(bool Function(T value) test) =>
-      ISet._(_getFlushed.skipWhile(test));
+  ISet<T> skipWhile(bool Function(T value) test) => ISet._(_getFlushed.skipWhile(test));
 
   @override
   ISet<T> take(int count) => ISet._(_getFlushed.take(count));
 
   @override
-  ISet<T> takeWhile(bool Function(T value) test) =>
-      ISet._(_getFlushed.takeWhile(test));
+  ISet<T> takeWhile(bool Function(T value) test) => ISet._(_getFlushed.takeWhile(test));
 
   @override
-  ISet<T> where(bool Function(T element) test) =>
-      ISet._(_getFlushed.where(test));
+  ISet<T> where(bool Function(T element) test) => ISet._(_getFlushed.where(test));
 
   @override
   ISet<E> whereType<E>() => ISet._(_getFlushed.whereType<E>());
@@ -284,8 +276,7 @@ abstract class S<T> implements IterableS<T> {
   Set<T> toSet() => Set.of(this);
 
   @override
-  T elementAt(int index) =>
-      throw UnsupportedError('elementAt in ISet is not allowed');
+  T elementAt(int index) => throw UnsupportedError('elementAt in ISet is not allowed');
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

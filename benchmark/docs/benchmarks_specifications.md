@@ -33,7 +33,7 @@ Size here is the *length* of the list being read.
 | ---------------- | ----------------------------- | ---- |
 | `List` (Mutable) | `List.generate`               | `[]` |
 | `IList`          | `IList(List.generate)`        | `[]` |
-| `KtList`         | `KtList.from(List.generate)`  | `[]` |
+| `KtList`         | `KtList.of(List.generate)`  | `[]` |
 | `BuiltList`      | `BuiltList.of(List.generate)` | `[]` |
 
 ### 1.3. Adding 1 or Multiple Elements
@@ -50,7 +50,7 @@ Size refers to the *length* of the original list before the insertion of the new
 | ---------------- | ----------------------------- | ------------------------------------ |
 | `List` (Mutable) | `List.generate`               | 3x `..add()`                         |
 | `IList`          | N times `IList().add()`       | 3x `.add()`                          |
-| `KtList`         | `KtList.from(List.generate)`  | 3x `.plusElement()`                  |
+| `KtList`         | `KtList.of(List.generate)`  | 3x `.plusElement()`                  |
 | `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.add())`                |
 | `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` |
 
@@ -66,7 +66,7 @@ Size refers to the *length* of the original list before the insertion of the new
 | ---------------- | ----------------------------- | ------------------------------------ |
 | `List` (Mutable) | `List.generate`               | 3x `..remove()`                      |
 | `IList`          | `IList(List.generate)`        | 3x `.remove()`                       |
-| `KtList`         | `KtList.from(List.generate)`  | 3x `.minusElement()`                 |
+| `KtList`         | `KtList.of(List.generate)`  | 3x `.minusElement()`                 |
 | `BuiltList`      | `BuiltList.of(List.generate)` | 3x `.rebuild(.remove())`             |
 | `BuiltList`      | `BuiltList.of(List.generate)` | (# Runs / 50)x `ListBuilder.build()` |
 
@@ -82,7 +82,7 @@ Size refers to the *length* of the original list before the insertion of the new
 | ---------------- | -------------- | ---------------------- |
 | `List` (Mutable) | `List.of`      | `.addAll()`            |
 | `IList`          | `IList`        | `.addAll()`            |
-| `KtList`         | `KtList.from`  | `.plus(KtList.from())` |
+| `KtList`         | `KtList.of`  | `.plus(KtList.of())` |
 | `BuiltList`      | `BuiltList.of` | `.rebuild(.addAll())`  |
 
 ### 1.6. Contains
