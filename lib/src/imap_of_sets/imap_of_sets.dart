@@ -68,7 +68,7 @@ class IMapOfSets<K, V> {
 
     if (identical(set, newSet))
       return this;
-    else if (set.isEmpty)
+    else if (newSet.isEmpty)
       return removeSet(key);
     else
       return addSet(key, newSet);
