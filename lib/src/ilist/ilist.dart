@@ -38,14 +38,16 @@ class IList<T> // ignore: must_be_immutable
   ]) =>
       iterable is IList<T>
           ? iterable
-          : (iterable == null || iterable.isEmpty)
+          : iterable == null || iterable.isEmpty
               ? IList.empty<T>()
               : IList<T>.__(LFlat<T>(iterable), isDeepEquals: false);
 
   IList._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _l = iterable is IList<T>
             ? iterable._l
-            : (iterable == null) ? LFlat.empty<T>() : LFlat<T>(iterable);
+            : iterable == null
+                ? LFlat.empty<T>()
+                : LFlat<T>(iterable);
 
   /// Unsafe.
   IList.__(this._l, {@required this.isDeepEquals});
@@ -78,12 +80,8 @@ class IList<T> // ignore: must_be_immutable
       (flush._l as LFlat).listEquals(other.flush._l);
 
   @override
-  int get hashCode {
-    if (!isDeepEquals)
-      return _l.hashCode ^ isDeepEquals.hashCode;
-    else
-      return (flush._l as LFlat).listHashcode();
-  }
+  int get hashCode =>
+      !isDeepEquals ? _l.hashCode ^ isDeepEquals.hashCode : (flush._l as LFlat).listHashcode();
 
   // --- IList methods: ---------------
 
@@ -100,11 +98,8 @@ class IList<T> // ignore: must_be_immutable
   IList<T> addAll(Iterable<T> items) => IList<T>.__(_l.addAll(items), isDeepEquals: isDeepEquals);
 
   IList<T> remove(T item) {
-    var result = _l.remove(item);
-    if (identical(result, _l))
-      return this;
-    else
-      return IList<T>.__(result, isDeepEquals: isDeepEquals);
+    final L<T> result = _l.remove(item);
+    return identical(result, _l) ? this : IList<T>.__(result, isDeepEquals: isDeepEquals);
   }
 
   /// Removes the element, if it exists in the list.
@@ -247,9 +242,8 @@ abstract class L<T> implements Iterable<T> {
       );
 
   /// TODO: FALTA FAZER!!!
-  L<T> remove(T element) {
-    return !contains(element) ? this : LFlat<T>.unsafe(List.of(this)..remove(element));
-  }
+  L<T> remove(T element) =>
+      !contains(element) ? this : LFlat<T>.unsafe(List.of(this)..remove(element));
 
   /// TODO: FALTA FAZER!!!
   /// If the list has more than `maxLength` elements, it gets cut on
@@ -257,7 +251,9 @@ abstract class L<T> implements Iterable<T> {
   /// only `maxLength` elements.
   L<T> maxLength(int maxLength) => maxLength < 0
       ? throw ArgumentError(maxLength)
-      : length <= maxLength ? this : LFlat<T>.unsafe(List.of(this)..length = maxLength);
+      : length <= maxLength
+          ? this
+          : LFlat<T>.unsafe(List.of(this)..length = maxLength);
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;
