@@ -1,5 +1,6 @@
-import 'iset.dart';
 import 'package:collection/collection.dart';
+
+import 'iset.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -104,7 +105,7 @@ class SFlat<T> extends S<T> {
   Iterable<E> whereType<E>() => ISet(_set.whereType<E>());
 
   bool setEquals(SFlat<T> other) =>
-      (other == null) ? false : const SetEquality().equals(_set, other._set);
+      other == null ? false : const SetEquality().equals(_set, other._set);
 
   int setHashcode() => const SetEquality().hash(_set);
 }

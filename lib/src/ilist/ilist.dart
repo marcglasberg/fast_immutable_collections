@@ -9,11 +9,12 @@ extension IListExtension<T> on List<T> {
   //
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  /// The equals operator compares by identity (it's only equal when the list instance is the same).
+  /// The equals operator (`==`) compares by identity (it's only equal when the list instance is the
+  /// same).
   IList<T> get lock => IList<T>(this);
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  /// The equals operator compares all items, ordered.
+  /// The equals operator (`==`) compares all items, ordered.
   IList<T> get deep => IList<T>(this).deepEquals;
 }
 

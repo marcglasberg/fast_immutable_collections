@@ -17,11 +17,8 @@ class SAddAll<T> extends S<T> {
   Iterator<T> get iterator => IteratorSAddAll(_s.iterator, _items);
 
   @override
-  bool contains(Object element) {
-    // Check the real set first (it's faster).
-    if (_items.contains(element)) return true;
-    return _s.contains(element);
-  }
+  // Check the real set first (it's faster).
+  bool contains(Object element) => _items.contains(element) ? true : _s.contains(element);
 
   @override
   int get length => _s.length + _items.length;

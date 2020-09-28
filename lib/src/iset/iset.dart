@@ -1,22 +1,23 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:meta/meta.dart';
 
+import '../immutable_collection.dart';
+import '../ilist/ilist.dart';
 import 's_flat.dart';
 import 's_add.dart';
 import 's_add_all.dart';
-import 'package:meta/meta.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 extension ISetExtension<T> on Set<T> {
   //
 
-  /// Locks the set, returning an immutable set (ISet).
-  /// The equals operator compares by identity (it's only
-  /// equal when the set instance is the same).
+  /// Locks the set, returning an *immutable* set ([ISet]).
+  /// The equals operator (`==`) compares by identity (it's only equal when the set instance is the
+  /// same).
   ISet<T> get lock => ISet<T>(this);
 
-  /// Locks the set, returning an immutable set (ISet).
-  /// The equals operator compares all items, unordered.
+  /// Locks the set, returning an *immutable* set ([ISet]).
+  /// The equals operator (`==`) compares all items, unordered.
   ISet<T> get deep => ISet<T>(this).deepEquals;
 }
 
@@ -30,8 +31,8 @@ class ISet<T> // ignore: must_be_immutable
 
   S<T> _s;
 
-  /// If false (the default), the equals operator compares by identity.
-  /// If true, the equals operator compares all items, unordered.
+  /// If `false` (the default), the equals operator (`==`)  compares by identity.
+  /// If `true`, the equals operator (`==`) compares all items, unordered.
   final bool isDeepEquals;
 
   static ISet<T> empty<T>() => ISet.__(SFlat.empty<T>(), isDeepEquals: false);
@@ -41,14 +42,14 @@ class ISet<T> // ignore: must_be_immutable
   ]) =>
       iterable is ISet<T>
           ? iterable
-          : (iterable == null || iterable.isEmpty)
+          : iterable == null || iterable.isEmpty
               ? ISet.empty<T>()
               : ISet<T>.__(SFlat<T>(iterable), isDeepEquals: false);
 
   ISet._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _s = iterable is ISet<T>
             ? iterable._s
-            : (iterable == null)
+            : iterable == null
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable);
 
@@ -73,7 +74,7 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   bool operator ==(Object other) =>
-      (!isDeepEquals) ? identical(this, other) : (other is ISet<T> && equals(other));
+      !isDeepEquals ? identical(this, other) : (other is ISet<T> && equals(other));
 
   @override
   bool equals(ISet<T> other) =>
@@ -82,12 +83,8 @@ class ISet<T> // ignore: must_be_immutable
       (flush._s as SFlat<T>).setEquals(other.flush._s);
 
   @override
-  int get hashCode {
-    if (!isDeepEquals)
-      return _s.hashCode ^ isDeepEquals.hashCode;
-    else
-      return (flush._s as SFlat).setHashcode();
-  }
+  int get hashCode =>
+      !isDeepEquals ? _s.hashCode ^ isDeepEquals.hashCode : (flush._s as SFlat).setHashcode();
 
   // --- ISet methods: ---------------
 
@@ -122,11 +119,8 @@ class ISet<T> // ignore: must_be_immutable
   /// However, if the given item didn't exist in the current set,
   /// it will return the current set (same instance).
   ISet<T> remove(T item) {
-    var result = _s.remove(item);
-    if (identical(result, _s))
-      return this;
-    else
-      return ISet<T>.__(result, isDeepEquals: isDeepEquals);
+    final S<T> result = _s.remove(item);
+    return identical(result, _s) ? this : ISet<T>.__(result, isDeepEquals: isDeepEquals);
   }
 
   /// Removes the element, if it exists in the set.
