@@ -75,14 +75,14 @@ class IList<T> // ignore: must_be_immutable
   bool equals(IList<T> other) =>
       runtimeType == other.runtimeType &&
       isDeepEquals == other.isDeepEquals &&
-      (flush._l as LFlat).listEquals(other.flush._l);
+      (flush._l as LFlat<T>).listEquals(other.flush._l as LFlat<T>);
 
   @override
   int get hashCode {
     if (!isDeepEquals)
       return _l.hashCode ^ isDeepEquals.hashCode;
     else
-      return (flush._l as LFlat).listHashcode();
+      return (flush._l as LFlat<T>).listHashcode();
   }
 
   // --- IList methods: ---------------
@@ -119,7 +119,7 @@ class IList<T> // ignore: must_be_immutable
   bool any(bool Function(T) test) => _l.any(test);
 
   @override
-  IList<R> cast<R>() => _l.cast<R>();
+  IList<R> cast<R>() => IList._(_l.cast<R>(), isDeepEquals: isDeepEquals);
 
   @override
   bool contains(Object element) => _l.contains(element);
@@ -151,7 +151,7 @@ class IList<T> // ignore: must_be_immutable
   T get single => _l.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) => _l.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {T Function() orElse}) => _l.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -213,6 +213,9 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   Set<T> toSet() => _l.toSet();
+
+  @override
+  String toString() => "[${_l.join(", ")}]";
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,7 +246,7 @@ abstract class L<T> implements Iterable<T> {
 
   L<T> addAll(Iterable<T> items) => LAddAll<T>(
         this,
-        (items is IList) ? (items as IList)._l : items,
+        (items is IList<T>) ? items._l : items,
       );
 
   /// TODO: FALTA FAZER!!!
@@ -301,7 +304,7 @@ abstract class L<T> implements Iterable<T> {
   T get single => _getFlushed.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) =>
+  T firstWhere(bool Function(T) test, {T Function() orElse}) =>
       _getFlushed.firstWhere(test, orElse: orElse);
 
   @override

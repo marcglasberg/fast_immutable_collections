@@ -100,7 +100,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Unsafe.
-  IMap._map(Map<K, V> map, {@required this.isDeepEquals}) : _m = MFlat.unsafe(map);
+  IMap._map(Map<K, V> map, {@required this.isDeepEquals}) : _m = MFlat<K, V>.unsafe(map);
 
   /// Unsafe.
   IMap.__(this._m, {@required this.isDeepEquals});
@@ -134,7 +134,7 @@ class IMap<K, V> // ignore: must_be_immutable
   bool equals(IMap<K, V> other) =>
       runtimeType == other.runtimeType &&
       isDeepEquals == other.isDeepEquals &&
-      (flush._m as MFlat<K, V>).mapEquals(other.flush._m);
+      (flush._m as MFlat<K, V>).mapEquals(other.flush._m as MFlat<K, V>);
 
   @override
   int get hashCode {
@@ -148,7 +148,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Compacts the list.
   IMap<K, V> get flush {
-    if (!isFlushed) _m = MFlat.unsafe(unlock);
+    if (!isFlushed) _m = MFlat<K, V>.unsafe(unlock);
     return this;
   }
 
@@ -221,13 +221,17 @@ class IMap<K, V> // ignore: must_be_immutable
   ISet<V> toValueISet() => ISet(values);
 
   int get length => _m.length;
+
+  @override
+  String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class M<K, V> {
   //
-  Iterable<MapEntry<K, V>> get entries => _getFlushed.entries;
+  // Implemented by subclasses.
+  Iterable<MapEntry<K, V>> get entries => throw AssertionError();
 
   Iterable<K> get keys => _getFlushed.keys;
 
@@ -259,10 +263,11 @@ abstract class M<K, V> {
 
   M<K, V> addAll(IMap<K, V> imap) => MAddAll<K, V>.unsafe(this, imap._m);
 
-  M<K, V> addMap(Map<K, V> map) => MAddAll<K, V>.unsafe(this, MFlat.unsafe(Map.of(map)));
+  M<K, V> addMap(Map<K, V> map) =>
+      MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.of(map)));
 
   M<K, V> addEntries(Iterable<MapEntry<K, V>> items) =>
-      MAddAll<K, V>.unsafe(this, MFlat.unsafe(Map.fromEntries(items)));
+      MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.fromEntries(items)));
 
   /// TODO: FALTA FAZER!!!
   M<K, V> remove(K key) {
@@ -295,6 +300,7 @@ abstract class M<K, V> {
 //
 // bool every(bool Function(K key, V value) test) =>
 //     _getFlushed.entries.every((entry) => test(entry.key, entry.value));
+
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

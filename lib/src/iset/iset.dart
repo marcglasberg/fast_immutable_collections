@@ -77,7 +77,7 @@ class ISet<T> // ignore: must_be_immutable
   bool equals(ISet<T> other) =>
       runtimeType == other.runtimeType &&
       isDeepEquals == other.isDeepEquals &&
-      (flush._s as SFlat<T>).setEquals(other.flush._s);
+      (flush._s as SFlat<T>).setEquals(other.flush._s as SFlat<T>);
 
   @override
   int get hashCode {
@@ -138,7 +138,7 @@ class ISet<T> // ignore: must_be_immutable
   bool any(bool Function(T) test) => _s.any(test);
 
   @override
-  ISet<R> cast<R>() => _s.cast<R>();
+  ISet<R> cast<R>() => ISet._(_s.cast<R>(), isDeepEquals: isDeepEquals);
 
   @override
   bool contains(Object element) => _s.contains(element);
@@ -165,7 +165,7 @@ class ISet<T> // ignore: must_be_immutable
   T get single => _s.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) => _s.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {T Function() orElse}) => _s.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -222,6 +222,9 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   Set<T> toSet() => _s.toSet();
+
+  @override
+  String toString() => "{${_s.join(", ")}}";
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,7 +249,10 @@ abstract class S<T> implements Iterable<T> {
 
   S<T> add(T item) => SAdd<T>(this, item);
 
-  S<T> addAll(Iterable<T> items) => SAddAll<T>.unsafe(this, items);
+  S<T> addAll(Iterable<T> items) => SAddAll<T>(
+        this,
+        (items is ISet<T>) ? items._s : items,
+      );
 
   /// TODO: FALTA FAZER!!!
   S<T> remove(T element) =>
@@ -289,7 +295,7 @@ abstract class S<T> implements Iterable<T> {
   T get single => _getFlushed.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) =>
+  T firstWhere(bool Function(T) test, {T Function() orElse}) =>
       _getFlushed.firstWhere(test, orElse: orElse);
 
   @override

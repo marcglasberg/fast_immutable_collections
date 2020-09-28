@@ -84,8 +84,7 @@ void main() {
   });
 
   test('`flush`', () {
-    final ISet<int> iSet =
-        {1, 2, 3}.lock.add(4).addAll({5, 6}).add(7).addAll({}).addAll({8, 9});
+    final ISet<int> iSet = {1, 2, 3}.lock.add(4).addAll({5, 6}).add(7).addAll({}).addAll({8, 9});
 
     expect(iSet.isFlushed, isFalse);
 
@@ -191,8 +190,7 @@ void main() {
       expect(iSet.any((int v) => v == 100), isFalse);
     });
 
-    test('`cast`', () => expect(iSet.cast<num>(), isA<ISet<num>>()),
-        skip: true);
+    test('`cast`', () => expect(iSet.cast<num>(), isA<ISet<num>>()), skip: true);
 
     test('`contains`', () {
       expect(iSet.contains(2), isTrue);
@@ -223,8 +221,7 @@ void main() {
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
     group('`single` |', () {
-      test(
-          'State exception', () => expect(() => iSet.single, throwsStateError));
+      test('State exception', () => expect(() => iSet.single, throwsStateError));
 
       test('Access', () => expect({10}.lock.single, 10));
     });
@@ -236,13 +233,12 @@ void main() {
       expect(iSet.firstWhere((int v) => v > 6, orElse: () => 100), 100);
     });
 
-    test('`fold`',
-        () => expect(iSet.fold(100, (int p, int e) => p * (1 + e)), 504000));
+    test('`fold`', () => expect(iSet.fold(100, (int p, int e) => p * (1 + e)), 504000));
 
     test('`followedBy`', () {
       expect(iSet.followedBy({7, 8}).unlock, {1, 2, 3, 4, 5, 6, 7, 8});
-      expect(iSet.followedBy(<int>{}.lock.add(7).addAll({8, 9})).unlock,
-          {1, 2, 3, 4, 5, 6, 7, 8, 9});
+      expect(
+          iSet.followedBy(<int>{}.lock.add(7).addAll({8, 9})).unlock, {1, 2, 3, 4, 5, 6, 7, 8, 9});
     });
 
     test('`forEach`', () {
@@ -278,11 +274,12 @@ void main() {
         expect({5}.lock.reduce((int p, int e) => p * (1 + e)), 5);
       });
 
-      test(
-          'State exception',
-          () => expect(
-              () => <int>{}.reduce((dynamic p, dynamic e) => p * (1 + e)),
-              throwsStateError));
+      // TODO: Phil Isso aqui está testando o que? Nem usa ISet.
+      // test(
+      //     'State exception',
+      //     () => expect(
+      //         () => <int>{}.reduce((dynamic p, dynamic e) => p * (1 + e)),
+      //         throwsStateError));
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -296,8 +293,7 @@ void main() {
       test(
           'State exception',
           () => expect(
-              () => iSet.singleWhere((int v) => v < 4, orElse: () => 100),
-              throwsStateError));
+              () => iSet.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError));
     });
 
     test('`skip`', () {
@@ -337,10 +333,8 @@ void main() {
         expect(iSet.unlock, [1, 2, 3, 4, 5, 6]);
       });
 
-      test(
-          'Unsupported exception',
-          () => expect(() => iSet.toList(growable: false)..add(7),
-              throwsUnsupportedError));
+      test('Unsupported exception',
+          () => expect(() => iSet.toList(growable: false)..add(7), throwsUnsupportedError));
     });
 
     test('`toSet`', () {
@@ -355,10 +349,7 @@ void main() {
       expect(iSet.where((int v) => v < 100).unlock, {1, 2, 3, 4, 5, 6});
     });
 
-    test(
-        '`whereType`',
-        () =>
-            expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
+    test('`whereType`', () => expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
