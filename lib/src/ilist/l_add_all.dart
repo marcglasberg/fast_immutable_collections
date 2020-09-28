@@ -5,8 +5,8 @@ import 'ilist.dart';
 class LAddAll<T> extends L<T> {
   final L<T> _l;
 
-  // Will always store this as `List` or [L].
-  final Iterable<T> _items;
+  // Will always store this as List or L.
+  final Iterable<T> _listOrL;
 
   /// Safe.
   /// Note: If you need to pass an [IList], pass its [L] instead.
@@ -14,13 +14,13 @@ class LAddAll<T> extends L<T> {
       : assert(_l != null),
         assert(items != null),
         assert(items is! IList),
-        _items = (items is L) ? items : List.of(items, growable: false);
+        _listOrL = (items is L) ? items : List.of(items, growable: false);
 
   @override
-  bool get isEmpty => _l.isEmpty && _items.isEmpty;
+  bool get isEmpty => _l.isEmpty && _listOrL.isEmpty;
 
   @override
-  Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _items);
+  Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _listOrL);
 
   /// TODO: FALTA FAZER DE FORMA EFICIENTE:
   @override
@@ -29,7 +29,7 @@ class LAddAll<T> extends L<T> {
       : super[index];
 
   @override
-  int get length => _l.length + _items.length;
+  int get length => _l.length + _listOrL.length;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'package:meta/meta.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/imap/imap.dart';
 
 /// An immutable unordered map of sets.
 @immutable
@@ -109,4 +108,7 @@ class IMapOfSets<K, V> {
   /// Return true if the key:set entry exists, and the set
   /// contains the given value.
   bool contains(K key, V value) => get(key).contains(value);
+
+  @override
+  String toString() => _mapOfSets.toString();
 }

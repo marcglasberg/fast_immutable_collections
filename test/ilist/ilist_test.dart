@@ -304,8 +304,9 @@ void main() {
         expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
       });
 
-      test('State exception',
-          () => expect(() => [].reduce((dynamic p, dynamic e) => p * (1 + e)), throwsStateError));
+      // TODO: Phil Isso aqui está testando o que? Nem usa IList.
+      // test('State exception',
+      //     () => expect(() => [].reduce((dynamic p, dynamic e) => p * (1 + e)), throwsStateError));
     });
 
     group('`singleWhere` |', () {

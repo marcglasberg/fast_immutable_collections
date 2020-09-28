@@ -1,5 +1,7 @@
 import 'package:fast_immutable_collections/src/imap/imap.dart';
 
+import 'imap.dart';
+
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MAddAll<K, V> extends M<K, V> {

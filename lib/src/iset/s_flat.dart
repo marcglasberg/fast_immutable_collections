@@ -7,7 +7,7 @@ import 'iset.dart';
 class SFlat<T> extends S<T> {
   final Set<T> _set;
 
-  static S<T> empty<T>() => SFlat.unsafe(const {});
+  static S<T> empty<T>() => SFlat.unsafe(<T>{});
 
   SFlat(Iterable<T> iterable)
       : assert(iterable != null),
@@ -51,7 +51,8 @@ class SFlat<T> extends S<T> {
   T get single => _set.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) => _set.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {T Function() orElse}) =>
+      _set.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>

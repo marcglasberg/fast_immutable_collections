@@ -4,24 +4,33 @@ import 'iset.dart';
 
 class SAddAll<T> extends S<T> {
   final S<T> _s;
-  final Set<T> _items;
 
-  SAddAll.unsafe(this._s, this._items)
+  // Will always store this as Set or S.
+  final Iterable<T> _setOrS;
+
+  /// Safe.
+  /// Note: If you need to pass an ISet, pass its [S] instead.
+  SAddAll(this._s, Iterable<T> items)
       : assert(_s != null),
-        assert(_items != null);
+        assert(items != null),
+        assert(items is! ISet),
+        _setOrS = (items is S) ? items : Set.of(items);
 
   @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorSAddAll(_s.iterator, _items);
+  Iterator<T> get iterator => IteratorSAddAll(_s.iterator, _setOrS);
 
   @override
-  // Check the real set first (it's faster).
-  bool contains(Object element) => _items.contains(element) ? true : _s.contains(element);
+  bool contains(Object element) {
+    // Check the real set first (it's faster).
+    if (_setOrS.contains(element)) return true;
+    return _s.contains(element);
+  }
 
   @override
-  int get length => _s.length + _items.length;
+  int get length => _s.length + _setOrS.length;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

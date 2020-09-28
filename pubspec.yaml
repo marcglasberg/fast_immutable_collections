@@ -1,8 +1,6 @@
 name: fast_immutable_collections
-description: >-
-  Immutable lists and other collections, 
-  which are as fast as their native Dart/Flutter mutable counterparts.
-version: 0.0.1-alpha.1
+description: Immutable lists and other collections, which are as fast as their native Dart/Flutter mutable counterparts.
+version: 0.0.1
 author: Marcelo Glasberg
 homepage: glasberg.dev
 

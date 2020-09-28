@@ -6,13 +6,13 @@ import 'package:collection/collection.dart';
 
 class MFlat<K, V> extends M<K, V> {
   //
-  static M<K, V> empty<K, V>() => MFlat.unsafe(const {});
+  static M<K, V> empty<K, V>() => MFlat<K, V>.unsafe(<K, V>{});
 
   final Map<K, V> _map;
 
   MFlat(Map<K, V> _map)
       : assert(_map != null),
-        _map = Map.of(_map);
+        _map = Map<K, V>.of(_map);
 
   MFlat.unsafe(this._map) : assert(_map != null);
 

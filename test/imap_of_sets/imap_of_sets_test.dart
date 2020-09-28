@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/imap_of_sets/imap_of_sets.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -38,10 +37,10 @@ void main() {
       mapOfSets = mapOfSets.remove('b', 3);
       expect(mapOfSets.isEmpty, isFalse);
       expect(mapOfSets.isNotEmpty, isTrue);
-      expect(mapOfSets['a'], ISet<int>([1, 2]));
-      expect(mapOfSets['b'].isEmpty, true);
+      expect(mapOfSets['a'], ISet<int>([2]));
+      expect(mapOfSets['b'], isNull);
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 }

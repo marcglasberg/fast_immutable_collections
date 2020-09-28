@@ -7,7 +7,7 @@ import 'ilist.dart';
 class LFlat<T> extends L<T> {
   final List<T> _list;
 
-  static L<T> empty<T>() => LFlat.unsafe(const []);
+  static L<T> empty<T>() => LFlat.unsafe(<T>[]);
 
   LFlat(Iterable<T> iterable)
       : assert(iterable != null),
@@ -58,7 +58,7 @@ class LFlat<T> extends L<T> {
   T get single => _list.single;
 
   @override
-  T firstWhere(bool Function(T) test, {Function() orElse}) =>
+  T firstWhere(bool Function(T) test, {T Function() orElse}) =>
       _list.firstWhere(test, orElse: orElse);
 
   @override
