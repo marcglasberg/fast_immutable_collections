@@ -1,25 +1,25 @@
+import 'package:meta/meta.dart';
+
 import '../immutable_collection.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
-import 'package:meta/meta.dart';
 
 extension IListExtension<T> on List<T> {
   //
 
-  /// Locks the list, returning an immutable list (IList).
-  /// The equals operator compares by identity (it's only
-  /// equal when the list instance is the same).
+  /// Locks the list, returning an *immutable* list ([IList]).
+  /// The equals operator compares by identity (it's only equal when the list instance is the same).
   IList<T> get lock => IList<T>(this);
 
-  /// Locks the list, returning an immutable list (IList).
+  /// Locks the list, returning an *immutable* list ([IList]).
   /// The equals operator compares all items, ordered.
   IList<T> get deep => IList<T>(this).deepEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// An immutable list.
+/// An *immutable* list.
 @immutable
 class IList<T> // ignore: must_be_immutable
     extends ImmutableCollection<IList<T>> implements Iterable<T> {
@@ -27,8 +27,8 @@ class IList<T> // ignore: must_be_immutable
 
   L<T> _l;
 
-  /// If false (the default), the equals operator compares by identity.
-  /// If true, the equals operator compares all items, ordered.
+  /// If `false` (the default), the equals operator (`==`) compares by identity.
+  /// If `true`, the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
   static IList<T> empty<T>() => IList.__(LFlat.empty<T>(), isDeepEquals: false);
@@ -50,10 +50,10 @@ class IList<T> // ignore: must_be_immutable
   /// Unsafe.
   IList.__(this._l, {@required this.isDeepEquals});
 
-  /// Convert this list to identityEquals (compares by identity).
+  /// Converts `this` list to `identityEquals` (compares by `identity`).
   IList<T> get identityEquals => isDeepEquals ? IList.__(_l, isDeepEquals: false) : this;
 
-  /// Convert this list to deepEquals (compares all list items).
+  /// Convert `this` list to `deepEquals` (compares all list items).
   IList<T> get deepEquals => isDeepEquals ? this : IList.__(_l, isDeepEquals: true);
 
   List<T> get unlock => List.of(_l);
@@ -136,7 +136,7 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   int get length {
-    int length = _l.length;
+    final int length = _l.length;
     if (length == 0 && _l is! LFlat) _l = LFlat.empty<T>();
     return length;
   }
@@ -220,7 +220,7 @@ class IList<T> // ignore: must_be_immutable
 abstract class L<T> implements Iterable<T> {
   //
 
-  /// The [L] class provides the default fallback methods of Iterable, but
+  /// The [L] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed list, but
   /// because that's immutable, we cache it.
