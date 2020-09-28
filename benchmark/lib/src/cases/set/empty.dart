@@ -26,15 +26,12 @@ class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
 }
 
 class MutableSetEmptyBenchmark extends SetBenchmarkBase {
-  MutableSetEmptyBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  MutableSetEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'Set (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableSetEmptyBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableSetEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableSetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableSetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   Set<int> _set;
 
@@ -51,8 +48,7 @@ class ISetEmptyBenchmark extends SetBenchmarkBase {
 
   @override
   ISetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      ISetEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+      ISetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   ISet<int> _iSet;
 
@@ -68,10 +64,8 @@ class KtSetEmptyBenchmark extends SetBenchmarkBase {
       : super(name: 'KtSet', config: config, emitter: emitter);
 
   @override
-  KtSetEmptyBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      KtSetEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtSetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      KtSetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtSet<int> _ktSet;
 
@@ -83,15 +77,12 @@ class KtSetEmptyBenchmark extends SetBenchmarkBase {
 }
 
 class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
-  BuiltSetEmptyBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  BuiltSetEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltSet', config: config, emitter: emitter);
 
   @override
-  BuiltSetEmptyBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltSetEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltSetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltSetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltSet<int> _builtSet;
 

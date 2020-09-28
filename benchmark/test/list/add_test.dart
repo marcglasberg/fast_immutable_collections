@@ -6,13 +6,11 @@ import 'package:fast_immutable_collections_benchmarks/'
 void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
-  final List<int> expectedList =
-      ListBenchmarkBase.getDummyGeneratedList(size: size) +
-          List<int>.generate(ListAddBenchmark.innerRuns, (int index) => index);
+  final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList(size: size) +
+      List<int>.generate(ListAddBenchmark.innerRuns, (int index) => index);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_add');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_add');
 
     test('`List` (Mutable)', () {
       final MutableListAddBenchmark listAddBenchmark =
@@ -43,8 +41,7 @@ void main() {
 
     test('`BuiltList` with `rebuild`', () {
       final BuiltListAddWithRebuildBenchmark builtListAddWithRebuildBenchmark =
-          BuiltListAddWithRebuildBenchmark(
-              config: config, emitter: tableScoreEmitter);
+          BuiltListAddWithRebuildBenchmark(config: config, emitter: tableScoreEmitter);
 
       builtListAddWithRebuildBenchmark.report();
 
@@ -52,10 +49,8 @@ void main() {
     });
 
     test('`BuiltList` with `ListBuilder`', () {
-      final BuiltListAddWithListBuilderBenchmark
-          builtListAddWithListBuilderBenchmark =
-          BuiltListAddWithListBuilderBenchmark(
-              config: config, emitter: tableScoreEmitter);
+      final BuiltListAddWithListBuilderBenchmark builtListAddWithListBuilderBenchmark =
+          BuiltListAddWithListBuilderBenchmark(config: config, emitter: tableScoreEmitter);
 
       builtListAddWithListBuilderBenchmark.report();
 
@@ -65,13 +60,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ListAddBenchmark addBenchmark =
-          ListAddBenchmark(configs: [config, config]);
+      final ListAddBenchmark addBenchmark = ListAddBenchmark(configs: [config, config]);
 
       addBenchmark.report();
 
-      addBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedList));
+      addBenchmark.benchmarks
+          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
     });
   });
 }

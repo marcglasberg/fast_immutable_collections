@@ -17,8 +17,7 @@ class SAdd<T> extends S<T> {
   Iterator<T> get iterator => IteratorSAdd(_s.iterator, _item);
 
   @override
-  bool contains(Object element) =>
-      _item == element ? true : _s.contains(element);
+  bool contains(Object element) => _item == element ? true : _s.contains(element);
 
   @override
   int get length => _s.length + 1;

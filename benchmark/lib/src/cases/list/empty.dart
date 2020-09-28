@@ -26,15 +26,12 @@ class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
 }
 
 class MutableListEmptyBenchmark extends ListBenchmarkBase {
-  MutableListEmptyBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  MutableListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableListEmptyBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableListEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableListEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableListEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
 
@@ -50,10 +47,8 @@ class IListEmptyBenchmark extends ListBenchmarkBase {
       : super(name: 'IList', config: config, emitter: emitter);
 
   @override
-  IListEmptyBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      IListEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  IListEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      IListEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   IList<int> _iList;
 
@@ -65,15 +60,12 @@ class IListEmptyBenchmark extends ListBenchmarkBase {
 }
 
 class KtListEmptyBenchmark extends ListBenchmarkBase {
-  KtListEmptyBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  KtListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtList', config: config, emitter: emitter);
 
   @override
-  KtListEmptyBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      KtListEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtListEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      KtListEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtList<int> _ktList;
 
@@ -85,15 +77,12 @@ class KtListEmptyBenchmark extends ListBenchmarkBase {
 }
 
 class BuiltListEmptyBenchmark extends ListBenchmarkBase {
-  BuiltListEmptyBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  BuiltListEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltList', config: config, emitter: emitter);
 
   @override
-  BuiltListEmptyBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltListEmptyBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltListEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltListEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltList<int> _builtList;
 

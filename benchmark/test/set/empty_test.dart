@@ -9,8 +9,7 @@ void main() {
   final Set<int> expectedSet = {};
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'set_empty');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_empty');
 
     test('`Set` (Mutable)', () {
       final MutableSetEmptyBenchmark setEmptyBenchmark =
@@ -51,13 +50,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final SetEmptyBenchmark emptyBenchmark =
-          SetEmptyBenchmark(configs: [config, config]);
+      final SetEmptyBenchmark emptyBenchmark = SetEmptyBenchmark(configs: [config, config]);
 
       emptyBenchmark.report();
 
-      emptyBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedSet));
+      emptyBenchmark.benchmarks
+          .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
     });
   });
 }

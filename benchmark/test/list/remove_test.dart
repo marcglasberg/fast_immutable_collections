@@ -7,17 +7,14 @@ void main() {
   const int size = 100;
   const Config config = Config(runs: 100, size: size);
 
-  final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList()
-    ..remove(1);
+  final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList()..remove(1);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_remove');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_remove');
 
     test('`List` (Mutable)', () {
       final MutableListRemoveBenchmark listRemoveBenchmark =
-          MutableListRemoveBenchmark(
-              config: config, emitter: tableScoreEmitter);
+          MutableListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
       listRemoveBenchmark.report();
 
@@ -54,13 +51,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ListRemoveBenchmark removeBenchmark =
-          ListRemoveBenchmark(configs: [config, config]);
+      final ListRemoveBenchmark removeBenchmark = ListRemoveBenchmark(configs: [config, config]);
 
       removeBenchmark.report();
 
-      removeBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedList));
+      removeBenchmark.benchmarks
+          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
     });
   });
 }

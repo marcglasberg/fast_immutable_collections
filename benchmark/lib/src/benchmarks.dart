@@ -4,6 +4,10 @@ import 'utils/collection_full_reporter.dart';
 /// &mdash;: `dart benchmark/lib/src/benchmarks.dart`
 /// The complete benchmark run should take around 7-10 min on a good computer.
 void main() {
-  ListFullReporter()..report()..save();
-  SetFullReporter()..report()..save();
+  ListFullReporter()
+    ..report()
+    ..save();
+  SetFullReporter()
+    ..report()
+    ..save();
 }

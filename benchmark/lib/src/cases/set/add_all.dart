@@ -28,15 +28,12 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
 }
 
 class MutableSetAddAllBenchmark extends SetBenchmarkBase {
-  MutableSetAddAllBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  MutableSetAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'Set (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableSetAddAllBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableSetAddAllBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableSetAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableSetAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   Set<int> _set;
   Set<int> _fixedSet;
@@ -59,10 +56,8 @@ class ISetAddAllBenchmark extends SetBenchmarkBase {
       : super(name: 'ISet', config: config, emitter: emitter);
 
   @override
-  ISetAddAllBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      ISetAddAllBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  ISetAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      ISetAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   ISet<int> _iSet;
   ISet<int> _fixedISet;
@@ -78,15 +73,12 @@ class ISetAddAllBenchmark extends SetBenchmarkBase {
 }
 
 class KtSetAddAllBenchmark extends SetBenchmarkBase {
-  KtSetAddAllBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  KtSetAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtSet', config: config, emitter: emitter);
 
   @override
-  KtSetAddAllBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      KtSetAddAllBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtSetAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      KtSetAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtSet<int> _ktSet;
   KtSet<int> _fixedISet;
@@ -98,20 +90,16 @@ class KtSetAddAllBenchmark extends SetBenchmarkBase {
   void setup() => _fixedISet = KtSet.from(SetAddAllBenchmark.baseSet);
 
   @override
-  void run() => _ktSet =
-      _fixedISet.plus(SetAddAllBenchmark.setToAdd.toImmutableSet()).toSet();
+  void run() => _ktSet = _fixedISet.plus(SetAddAllBenchmark.setToAdd.toImmutableSet()).toSet();
 }
 
 class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
-  BuiltSetAddAllBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  BuiltSetAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltSet', config: config, emitter: emitter);
 
   @override
-  BuiltSetAddAllBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltSetAddAllBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltSetAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltSetAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltSet<int> _builtSet;
   BuiltSet<int> _fixedISet;
@@ -123,6 +111,6 @@ class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
   void setup() => _fixedISet = BuiltSet.of(SetAddAllBenchmark.baseSet);
 
   @override
-  void run() => _builtSet = _fixedISet.rebuild((SetBuilder<int> setBuilder) =>
-      setBuilder.addAll(SetAddAllBenchmark.setToAdd));
+  void run() => _builtSet = _fixedISet
+      .rebuild((SetBuilder<int> setBuilder) => setBuilder.addAll(SetAddAllBenchmark.setToAdd));
 }

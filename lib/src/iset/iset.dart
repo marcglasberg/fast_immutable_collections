@@ -48,7 +48,9 @@ class ISet<T> // ignore: must_be_immutable
   ISet._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _s = iterable is ISet<T>
             ? iterable._s
-            : (iterable == null) ? SFlat.empty<T>() : SFlat<T>(iterable);
+            : (iterable == null)
+                ? SFlat.empty<T>()
+                : SFlat<T>(iterable);
 
   ISet.__(this._s, {@required this.isDeepEquals});
 

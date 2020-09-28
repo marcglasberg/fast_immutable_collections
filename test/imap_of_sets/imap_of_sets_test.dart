@@ -40,7 +40,6 @@ void main() {
       expect(mapOfSets.isNotEmpty, isTrue);
       expect(mapOfSets['a'], ISet<int>([1, 2]));
       expect(mapOfSets['b'].isEmpty, true);
-
     });
   });
 

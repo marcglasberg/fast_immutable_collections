@@ -6,17 +6,14 @@ import 'package:fast_immutable_collections_benchmarks/'
 void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
-  final List<int> expectedList =
-      ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
+  final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_add_all');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_add_all');
 
     test('`List` (Mutable)', () {
       final MutableListAddAllBenchmark listAddAllBenchmark =
-          MutableListAddAllBenchmark(
-              config: config, emitter: tableScoreEmitter);
+          MutableListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
       listAddAllBenchmark.report();
 
@@ -53,13 +50,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ListAddAllBenchmark addAllBenchmark =
-          ListAddAllBenchmark(configs: [config, config]);
+      final ListAddAllBenchmark addAllBenchmark = ListAddAllBenchmark(configs: [config, config]);
 
       addAllBenchmark.report();
 
-      addAllBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedList));
+      addAllBenchmark.benchmarks
+          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
     });
   });
 }

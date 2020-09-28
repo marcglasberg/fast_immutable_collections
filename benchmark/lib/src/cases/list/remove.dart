@@ -22,20 +22,16 @@ class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
     BuiltListRemoveBenchmark(config: null, emitter: null),
   ];
 
-  ListRemoveBenchmark(
-      {this.prefixName = 'list_remove', @required this.configs});
+  ListRemoveBenchmark({this.prefixName = 'list_remove', @required this.configs});
 }
 
 class MutableListRemoveBenchmark extends ListBenchmarkBase {
-  MutableListRemoveBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  MutableListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'List (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableListRemoveBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableListRemoveBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableListRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   List<int> _list;
 
@@ -50,15 +46,12 @@ class MutableListRemoveBenchmark extends ListBenchmarkBase {
 }
 
 class IListRemoveBenchmark extends ListBenchmarkBase {
-  IListRemoveBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  IListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'IList', config: config, emitter: emitter);
 
   @override
-  IListRemoveBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      IListRemoveBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  IListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      IListRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   IList<int> _iList;
 
@@ -66,23 +59,19 @@ class IListRemoveBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => _iList.unlock;
 
   @override
-  void setup() =>
-      _iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() => _iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
   void run() => _iList = _iList.remove(1);
 }
 
 class KtListRemoveBenchmark extends ListBenchmarkBase {
-  KtListRemoveBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  KtListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtList', config: config, emitter: emitter);
 
   @override
-  KtListRemoveBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      KtListRemoveBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      KtListRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtList<int> _ktList;
 
@@ -90,23 +79,19 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => _ktList.asList();
 
   @override
-  void setup() =>
-      _ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
   void run() => _ktList = _ktList.minusElement(1);
 }
 
 class BuiltListRemoveBenchmark extends ListBenchmarkBase {
-  BuiltListRemoveBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  BuiltListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltList', config: config, emitter: emitter);
 
   @override
-  BuiltListRemoveBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltListRemoveBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltListRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltList<int> _builtList;
 
@@ -114,10 +99,9 @@ class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => _builtList.asList();
 
   @override
-  void setup() =>
-      _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() => _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
-  void run() => _builtList = _builtList
-      .rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(1));
+  void run() =>
+      _builtList = _builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(1));
 }

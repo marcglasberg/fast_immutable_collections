@@ -6,17 +6,14 @@ import 'package:fast_immutable_collections_benchmarks/'
 void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
-  final List<int> expectedList =
-      ListBenchmarkBase.getDummyGeneratedList(size: size);
+  final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList(size: size);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_contains');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_contains');
 
     test('`List` (Mutable)', () {
       final MutableListContainsBenchmark listContainsBenchmark =
-          MutableListContainsBenchmark(
-              config: config, emitter: tableScoreEmitter);
+          MutableListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
       listContainsBenchmark.report();
 
@@ -43,8 +40,7 @@ void main() {
 
     test('`BuiltList`', () {
       final BuiltListContainsBenchmark builtListContainsBenchmark =
-          BuiltListContainsBenchmark(
-              config: config, emitter: tableScoreEmitter);
+          BuiltListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
       builtListContainsBenchmark.report();
 
@@ -59,8 +55,8 @@ void main() {
 
       containsBenchmark.report();
 
-      containsBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedList));
+      containsBenchmark.benchmarks
+          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
     });
   });
 }

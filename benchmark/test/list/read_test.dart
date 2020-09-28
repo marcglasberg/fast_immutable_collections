@@ -6,12 +6,11 @@ import 'package:fast_immutable_collections_benchmarks/'
 void main() {
   const int size = 100;
   const Config config = Config(runs: 100, size: size);
-  final int numberToRead = ListBenchmarkBase.getDummyGeneratedList(
-      size: config.size)[ListReadBenchmark.indexToRead];
+  final int numberToRead =
+      ListBenchmarkBase.getDummyGeneratedList(size: config.size)[ListReadBenchmark.indexToRead];
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_read');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_read');
 
     test('`List` (Mutable)', () {
       final MutableListReadBenchmark listReadBenchmark =
@@ -52,13 +51,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ListReadBenchmark readBenchmark =
-          ListReadBenchmark(configs: [config, config]);
+      final ListReadBenchmark readBenchmark = ListReadBenchmark(configs: [config, config]);
 
       readBenchmark.report();
 
-      readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) => expect(
-          benchmark.toMutable()[ListReadBenchmark.indexToRead], numberToRead));
+      readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
+          expect(benchmark.toMutable()[ListReadBenchmark.indexToRead], numberToRead));
     });
   });
 }

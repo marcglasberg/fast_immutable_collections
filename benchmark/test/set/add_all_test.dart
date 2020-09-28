@@ -11,8 +11,7 @@ void main() {
     ..addAll(SetAddAllBenchmark.setToAdd);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'set_add_all');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_add_all');
 
     test('`Set` (Mutable)', () {
       final MutableSetAddAllBenchmark mutableSetAddAllBenchmark =
@@ -53,13 +52,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final SetAddAllBenchmark setAddAllBenchmark =
-          SetAddAllBenchmark(configs: [config, config]);
+      final SetAddAllBenchmark setAddAllBenchmark = SetAddAllBenchmark(configs: [config, config]);
 
       setAddAllBenchmark.report();
 
-      setAddAllBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedSet));
+      setAddAllBenchmark.benchmarks
+          .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
     });
   });
 }

@@ -7,17 +7,14 @@ void main() {
   const int size = 100;
   const Config config = Config(runs: 100, size: size);
   const bool expectedContains = false;
-  final Set<int> expectedSet =
-      SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+  final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'set_read');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_read');
 
     test('`Set` (Mutable)', () {
       final MutableSetContainsBenchmark mutableSetContainsBenchmark =
-          MutableSetContainsBenchmark(
-              config: config, emitter: tableScoreEmitter);
+          MutableSetContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
       mutableSetContainsBenchmark.report();
 
@@ -63,8 +60,8 @@ void main() {
 
       setContainsBenchmark.report();
 
-      setContainsBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedSet));
+      setContainsBenchmark.benchmarks
+          .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
     });
   });
 }

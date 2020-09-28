@@ -50,8 +50,7 @@ class TableScoreEmitter implements ScoreEmitter {
   }
 
   void _createReportsFolderIfNonExistent() {
-    final Directory reportsDir =
-        Directory(p.join(p.current, 'benchmark', 'reports'));
+    final Directory reportsDir = Directory(p.join(p.current, 'benchmark', 'reports'));
     if (!reportsDir.existsSync()) reportsDir.createSync();
   }
 
@@ -60,20 +59,18 @@ class TableScoreEmitter implements ScoreEmitter {
     final double maxScore = _scores.values.toList().reduce(max);
 
     _scores.forEach((String testName, double score) =>
-        normalizedColumn[testName] =
-            double.parse((score / maxScore).toStringAsFixed(2)));
+        normalizedColumn[testName] = double.parse((score / maxScore).toStringAsFixed(2)));
 
     return normalizedColumn;
   }
 
   Map<String, double> _normalizedColumnAgainstList() {
     final Map<String, double> normalizedAgainstListColumn = {};
-    final double listScore = _scores[_scores.keys
-        .firstWhere((String key) => key.toLowerCase().contains('mutable'))];
+    final double listScore =
+        _scores[_scores.keys.firstWhere((String key) => key.toLowerCase().contains('mutable'))];
 
-    _scores.forEach((String testName, double score) =>
-        normalizedAgainstListColumn[testName] =
-            double.parse((score / listScore).toStringAsFixed(2)));
+    _scores.forEach((String testName, double score) => normalizedAgainstListColumn[testName] =
+        double.parse((score / listScore).toStringAsFixed(2)));
 
     return normalizedAgainstListColumn;
   }

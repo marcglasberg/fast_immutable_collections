@@ -8,8 +8,7 @@ void main() {
   const List<int> emptyList = [];
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'list_empty');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_empty');
 
     test('`List` (Mutable)', () {
       final MutableListEmptyBenchmark listResult =
@@ -50,13 +49,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final ListEmptyBenchmark emptyBenchmark =
-          ListEmptyBenchmark(configs: [config, config]);
+      final ListEmptyBenchmark emptyBenchmark = ListEmptyBenchmark(configs: [config, config]);
 
       emptyBenchmark.report();
 
-      emptyBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), emptyList));
+      emptyBenchmark.benchmarks
+          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), emptyList));
     });
   });
 }

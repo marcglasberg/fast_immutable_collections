@@ -19,17 +19,15 @@ abstract class CollectionFullReporter<M extends MultiBenchmarkReporter,
     B extends CollectionBenchmarkBase> {
   List<MultiBenchmarkReporter<B>> benchmarks;
 
-  void report() =>
-      benchmarks.forEach((MultiBenchmarkReporter<B> benchmarkReporter) =>
-          benchmarkReporter.report());
+  void report() => benchmarks
+      .forEach((MultiBenchmarkReporter<B> benchmarkReporter) => benchmarkReporter.report());
 
   void save() =>
-      benchmarks.forEach((MultiBenchmarkReporter<B> benchmarkReporter) =>
-          benchmarkReporter.save());
+      benchmarks.forEach((MultiBenchmarkReporter<B> benchmarkReporter) => benchmarkReporter.save());
 }
 
-class ListFullReporter extends CollectionFullReporter<
-    MultiBenchmarkReporter<ListBenchmarkBase>, ListBenchmarkBase> {
+class ListFullReporter
+    extends CollectionFullReporter<MultiBenchmarkReporter<ListBenchmarkBase>, ListBenchmarkBase> {
   @override
   final List<MultiBenchmarkReporter<ListBenchmarkBase>> benchmarks = [
     ListAddAllBenchmark(configs: const <Config>[
@@ -55,8 +53,8 @@ class ListFullReporter extends CollectionFullReporter<
   ];
 }
 
-class SetFullReporter extends CollectionFullReporter<
-    MultiBenchmarkReporter<SetBenchmarkBase>, SetBenchmarkBase> {
+class SetFullReporter
+    extends CollectionFullReporter<MultiBenchmarkReporter<SetBenchmarkBase>, SetBenchmarkBase> {
   @override
   final List<MultiBenchmarkReporter<SetBenchmarkBase>> benchmarks = [
     SetAddAllBenchmark(configs: const <Config>[

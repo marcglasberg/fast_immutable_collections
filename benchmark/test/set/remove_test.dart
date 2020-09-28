@@ -7,12 +7,10 @@ import 'package:fast_immutable_collections_benchmarks/'
 void main() {
   const int size = 100;
   const Config config = Config(runs: 1, size: size);
-  final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: size)
-    ..remove(1);
+  final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: size)..remove(1);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'set_remove');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_remove');
 
     test('`List` (Mutable)', () {
       final MutableSetRemoveBenchmark mutableSetRemoveBenchmark =
@@ -53,13 +51,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final SetRemoveBenchmark setRemoveBenchmark =
-          SetRemoveBenchmark(configs: [config, config]);
+      final SetRemoveBenchmark setRemoveBenchmark = SetRemoveBenchmark(configs: [config, config]);
 
       setRemoveBenchmark.report();
 
-      setRemoveBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedSet));
+      setRemoveBenchmark.benchmarks
+          .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
     });
   });
 }

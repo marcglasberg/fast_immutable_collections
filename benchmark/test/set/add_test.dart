@@ -11,8 +11,7 @@ void main() {
           List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'set_add');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_add');
 
     test('`Set` (Mutable)', () {
       final MutableSetAddBenchmark mutableSetAddBenchmark =
@@ -43,8 +42,7 @@ void main() {
 
     test('`BuiltSet` with `.rebuild()`', () {
       final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark =
-          BuiltSetAddWithRebuildBenchmark(
-              config: config, emitter: tableScoreEmitter);
+          BuiltSetAddWithRebuildBenchmark(config: config, emitter: tableScoreEmitter);
 
       builtSetAddWithRebuildBenchmark.report();
 
@@ -52,10 +50,8 @@ void main() {
     });
 
     test('`BuiltSet` with `ListBuilder', () {
-      final BuiltSetAddWithSetBuilderBenchmark
-          builtSetAddWithListBuilderBenchmark =
-          BuiltSetAddWithSetBuilderBenchmark(
-              config: config, emitter: tableScoreEmitter);
+      final BuiltSetAddWithSetBuilderBenchmark builtSetAddWithListBuilderBenchmark =
+          BuiltSetAddWithSetBuilderBenchmark(config: config, emitter: tableScoreEmitter);
 
       builtSetAddWithListBuilderBenchmark.report();
 
@@ -65,13 +61,12 @@ void main() {
 
   group('Multiple Benchmarks |', () {
     test('Simple run', () {
-      final SetAddBenchmark setAddBenchmark =
-          SetAddBenchmark(configs: [config, config]);
+      final SetAddBenchmark setAddBenchmark = SetAddBenchmark(configs: [config, config]);
 
       setAddBenchmark.report();
 
-      setAddBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), expectedSet));
+      setAddBenchmark.benchmarks
+          .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
     });
   });
 }

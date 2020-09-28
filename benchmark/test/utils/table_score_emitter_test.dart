@@ -4,14 +4,12 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  final TableScoreEmitter tableScoreEmitter =
-      TableScoreEmitter(reportName: 'report');
+  final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'report');
 
   tableScoreEmitter.emit('Test1', 1);
   tableScoreEmitter.emit('List (Mutable)', 10);
 
-  test('`emit` adds values to the `scores`',
-      () => expect(tableScoreEmitter.scores['Test1'], 1));
+  test('`emit` adds values to the `scores`', () => expect(tableScoreEmitter.scores['Test1'], 1));
 
   test('Normalized column', () {
     expect(tableScoreEmitter.completeTable['normalized']['Test1'], 0.1);
@@ -21,19 +19,15 @@ void main() {
   test('Normalized column against the mutable list', () {
     tableScoreEmitter.emit('Test2', 100);
 
-    expect(
-        tableScoreEmitter.completeTable['normalizedAgainstList']['Test2'], 10);
+    expect(tableScoreEmitter.completeTable['normalizedAgainstList']['Test2'], 10);
   });
 
   group('Other stuff |', () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(reportName: 'report');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'report');
 
     tableScoreEmitter.emit('Test1', 1);
 
-    test(
-        'Printing',
-        () => expect(
-            tableScoreEmitter.toString(), 'Table Score Emitter: {Test1: 1.0}'));
+    test('Printing',
+        () => expect(tableScoreEmitter.toString(), 'Table Score Emitter: {Test1: 1.0}'));
   });
 }

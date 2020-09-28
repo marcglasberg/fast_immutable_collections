@@ -22,20 +22,16 @@ class SetContainsBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
     BuiltSetContainsBenchmark(config: null, emitter: null),
   ];
 
-  SetContainsBenchmark(
-      {this.prefixName = 'set_contains', @required this.configs});
+  SetContainsBenchmark({this.prefixName = 'set_contains', @required this.configs});
 }
 
 class MutableSetContainsBenchmark extends SetBenchmarkBase {
-  MutableSetContainsBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  MutableSetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'Set (Mutable)', config: config, emitter: emitter);
 
   @override
-  MutableSetContainsBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableSetContainsBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableSetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      MutableSetContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   Set<int> _set;
   bool _contains;
@@ -46,8 +42,7 @@ class MutableSetContainsBenchmark extends SetBenchmarkBase {
   Set<int> toMutable() => _set;
 
   @override
-  void setup() =>
-      _set = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+  void setup() => _set = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
 
   @override
   void run() {
@@ -56,15 +51,12 @@ class MutableSetContainsBenchmark extends SetBenchmarkBase {
 }
 
 class ISetContainsBenchmark extends SetBenchmarkBase {
-  ISetContainsBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  ISetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'ISet', config: config, emitter: emitter);
 
   @override
-  ISetContainsBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      ISetContainsBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  ISetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      ISetContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   ISet<int> _iSet;
   bool _contains;
@@ -75,8 +67,7 @@ class ISetContainsBenchmark extends SetBenchmarkBase {
   Set<int> toMutable() => _iSet.unlock;
 
   @override
-  void setup() => _iSet =
-      ISet<int>(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => _iSet = ISet<int>(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
@@ -85,15 +76,12 @@ class ISetContainsBenchmark extends SetBenchmarkBase {
 }
 
 class KtSetContainsBenchmark extends SetBenchmarkBase {
-  KtSetContainsBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  KtSetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'KtSet', config: config, emitter: emitter);
 
   @override
-  KtSetContainsBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      KtSetContainsBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtSetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      KtSetContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   KtSet<int> _ktSet;
   bool _contains;
@@ -104,8 +92,8 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
   Set<int> toMutable() => _ktSet.asSet();
 
   @override
-  void setup() => _ktSet =
-      KtSet<int>.from(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() =>
+      _ktSet = KtSet<int>.from(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
@@ -114,15 +102,12 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
 }
 
 class BuiltSetContainsBenchmark extends SetBenchmarkBase {
-  BuiltSetContainsBenchmark(
-      {@required Config config, @required ScoreEmitter emitter})
+  BuiltSetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
       : super(name: 'BuiltSet', config: config, emitter: emitter);
 
   @override
-  BuiltSetContainsBenchmark reconfigure(
-          {Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltSetContainsBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltSetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
+      BuiltSetContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
 
   BuiltSet<int> _builtSet;
   bool _contains;
@@ -133,12 +118,11 @@ class BuiltSetContainsBenchmark extends SetBenchmarkBase {
   Set<int> toMutable() => _builtSet.asSet();
 
   @override
-  void setup() => _builtSet = BuiltSet<int>.of(
-      SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() =>
+      _builtSet = BuiltSet<int>.of(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
-    for (int i = 0; i < _builtSet.length + 1; i++)
-      _contains = _builtSet.contains(i);
+    for (int i = 0; i < _builtSet.length + 1; i++) _contains = _builtSet.contains(i);
   }
 }
