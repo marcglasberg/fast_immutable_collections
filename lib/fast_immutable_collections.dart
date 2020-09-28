@@ -4,4 +4,5 @@ library fast_immutable_collections;
 
 export 'src/immutable_collection.dart';
 export 'src/ilist/ilist.dart';
+export 'src/imap/imap.dart';
 export 'src/iset/iset.dart';
