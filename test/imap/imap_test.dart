@@ -237,10 +237,16 @@ void main() {
       expect(result, 504000);
     });
 
-    // test('`map`', () {
-    //   expect({'a': 1, 'b': 2, 'c': 3}.lock.map((int v) => v + 1).unlock, [2, 3, 4]);
-    //   expect(iMap.map((int v) => v + 1).unlock, [2, 3, 4, 5, 6, 7]);
-    // });
+    test('`map`', () {
+      expect(
+          {'a': 1, 'b': 2, 'c': 3}
+              .lock
+              .map<String, int>((String k, int v) => MapEntry(k, v + 1))
+              .unlock,
+          <String, int>{'a': 2, 'b': 3, 'c': 4});
+      expect(iMap.map<String, int>((String k, int v) => MapEntry(k, v + 1)).unlock,
+          {'a': 2, 'b': 3, 'c': 4, 'd': 5, 'e': 6, 'f': 7});
+    });
 
     test('`toMap`', () {
       expect(

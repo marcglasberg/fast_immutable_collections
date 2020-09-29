@@ -228,13 +228,17 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool every(bool Function(K key, V value) test) => _m.every(test);
 
-  void forEach(void Function (K key, V value) f) => _m.forEach(f);
+  void forEach(void Function(K key, V value) f) => _m.forEach(f);
 
   IList<E> whereKeyType<E>() => IList<E>(_m.whereKeyType());
 
   IList<E> whereValueType<E>() => IList<E>(_m.whereValueType());
 
-  IMap<K, V> where(bool Function(K key, V value) test) => IMap<K, V>._map(_m.where(test), isDeepEquals: isDeepEquals);
+  IMap<K, V> where(bool Function(K key, V value) test) =>
+      IMap<K, V>._map(_m.where(test), isDeepEquals: isDeepEquals);
+
+  IMap<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
+      IMap<RK, RV>._map(_m.map(mapper), isDeepEquals: isDeepEquals);
 
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
@@ -299,6 +303,7 @@ abstract class M<K, V> {
 
   V operator [](K key) => _getFlushed[key];
 
+  /// TODO: Is `_value == _value` correct?
   bool contains(K key, V value) {
     var _value = _getFlushed[key];
     return (_value == null) ? false : (_value == _value);
@@ -315,8 +320,8 @@ abstract class M<K, V> {
 
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.any(test);
 
-// bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
-//
+  // bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
+
   bool every(bool Function(K key, V value) test) =>
       _getFlushed.entries.every((MapEntry<K, V> entry) => test(entry.key, entry.value));
 
@@ -328,13 +333,17 @@ abstract class M<K, V> {
 
   Iterable<E> whereValueType<E>() => _getFlushed.values.whereType<E>();
 
+  /// TODO: Is this optimal?
   Map<K, V> where(bool Function(K key, V value) test) {
     final Map<K, V> matches = {};
-    _getFlushed.forEach((K key, V value) { 
+    _getFlushed.forEach((K key, V value) {
       if (test(key, value)) matches[key] = value;
     });
     return matches;
   }
+
+  Map<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
+      _getFlushed.map(mapper);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
