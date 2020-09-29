@@ -210,7 +210,7 @@ void main() {
       expect(iList.any((int v) => v == 100), isFalse);
     });
 
-    test('`cast`', () => expect(iList.cast<num>(), isA<IList<num>>()), skip: true);
+    test('`cast`', () => expect(iList.cast<num>(), isA<IList<num>>()));
 
     test('`contains`', () {
       expect(iList.contains(2), isTrue);
@@ -304,9 +304,10 @@ void main() {
         expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
       });
 
-      // TODO: Phil Isso aqui está testando o que? Nem usa IList.
-      // test('State exception',
-      //     () => expect(() => [].reduce((dynamic p, dynamic e) => p * (1 + e)), throwsStateError));
+      test(
+          'State exception',
+          () => expect(() => IList().reduce((dynamic p, dynamic e) => p * (1 + (e as num))),
+              throwsStateError));
     });
 
     group('`singleWhere` |', () {

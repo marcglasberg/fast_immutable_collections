@@ -190,7 +190,7 @@ void main() {
       expect(iSet.any((int v) => v == 100), isFalse);
     });
 
-    test('`cast`', () => expect(iSet.cast<num>(), isA<ISet<num>>()), skip: true);
+    test('`cast`', () => expect(iSet.cast<num>(), isA<ISet<num>>()));
 
     test('`contains`', () {
       expect(iSet.contains(2), isTrue);
@@ -274,12 +274,10 @@ void main() {
         expect({5}.lock.reduce((int p, int e) => p * (1 + e)), 5);
       });
 
-      // TODO: Phil Isso aqui está testando o que? Nem usa ISet.
-      // test(
-      //     'State exception',
-      //     () => expect(
-      //         () => <int>{}.reduce((dynamic p, dynamic e) => p * (1 + e)),
-      //         throwsStateError));
+      test(
+          'State exception',
+          () => expect(() => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))),
+              throwsStateError));
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
