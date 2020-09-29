@@ -193,6 +193,9 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool any(bool Function(K key, V value) test) => _m.any(test);
 
+  /// TODO: Falta verificar. O `cast` do `M` está retornando um `Map`, é isso mesmo que queremos?
+  IMap<RK, RV> cast<RK, RV>() => IMap._map(_m.cast<RK, RV>(), isDeepEquals: isDeepEquals);
+
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _m.anyEntry(test);
 
   bool contains(K key, V value) => _m.contains(key, value);
@@ -272,6 +275,11 @@ abstract class M<K, V> {
   M<K, V> remove(K key) {
     return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(_getFlushed)..remove(key));
   }
+
+  /// TODO: Falta verificar!!!
+  // @override
+  // M<RK, RV> cast<RK, RV>() => throw UnsupportedError('cast');
+  Map<RK, RV> cast<RK, RV>() => _getFlushed.cast<RK, RV>();
 
   bool get isEmpty => _getFlushed.isEmpty;
 
