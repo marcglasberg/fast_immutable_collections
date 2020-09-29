@@ -25,4 +25,4 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `whereValueType`
     - `map`
 
-> **I thought I was supposed to implement and test the above, but it turns out I was only supposed to test for desired behavior, even if it ends up in a lot of broken tests...**
+> **I thought I was supposed to implement and test the above, but it turns out I was only supposed to test for desired behavior, even if it ends up in a lot of broken tests...** 🤦‍♂️

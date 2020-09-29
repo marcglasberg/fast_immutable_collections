@@ -255,15 +255,23 @@ void main() {
     });
 
     test('`toSet`', () {
-      expect(iMap.toSet()..add(MapEntry('z', 7)), <MapEntry<String, int>>{
-        MapEntry('a', 1),
-        MapEntry('b', 2),
-        MapEntry('c', 3),
-        MapEntry('d', 4),
-        MapEntry('e', 5),
-        MapEntry('f', 6),
-        MapEntry('z', 7),
-      });
+      final List<MapEntry<String, int>> listFromIMap =
+              (iMap.toSet()..add(MapEntry('z', 7))).toList(),
+          correctList = <MapEntry<String, int>>{
+            MapEntry('a', 1),
+            MapEntry('b', 2),
+            MapEntry('c', 3),
+            MapEntry('d', 4),
+            MapEntry('e', 5),
+            MapEntry('f', 6),
+            MapEntry('z', 7),
+          }.toList();
+
+      for (int i = 0; i < listFromIMap.length; i++) {
+        expect(listFromIMap[i].key, correctList[i].key);
+        expect(listFromIMap[i].value, correctList[i].value);
+      }
+
       expect(iMap.unlock, <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
     });
 
