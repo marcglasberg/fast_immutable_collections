@@ -230,6 +230,12 @@ class IMap<K, V> // ignore: must_be_immutable
 
   void forEach(void Function (K key, V value) f) => _m.forEach(f);
 
+  IList<E> whereKeyType<E>() => IList<E>(_m.whereKeyType());
+
+  IList<E> whereValueType<E>() => IList<E>(_m.whereValueType());
+
+  IMap<K, V> where(bool Function(K key, V value) test) => IMap<K, V>._map(_m.where(test), isDeepEquals: isDeepEquals);
+
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
 }
@@ -317,6 +323,18 @@ abstract class M<K, V> {
   void forEach(void Function(K key, V value) f) => _getFlushed.forEach(f);
 
   Map<K, V> toMap() => Map<K, V>.of(_getFlushed);
+
+  Iterable<E> whereKeyType<E>() => _getFlushed.keys.whereType<E>();
+
+  Iterable<E> whereValueType<E>() => _getFlushed.values.whereType<E>();
+
+  Map<K, V> where(bool Function(K key, V value) test) {
+    final Map<K, V> matches = {};
+    _getFlushed.forEach((K key, V value) { 
+      if (test(key, value)) matches[key] = value;
+    });
+    return matches;
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

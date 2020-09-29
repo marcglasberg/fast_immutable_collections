@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:fast_immutable_collections/src/imap/imap.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,18 +248,39 @@ void main() {
       expect(iMap.unlock, {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
     });
 
-    //   test('`toSet`', () {
-    //     expect(iMap.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
-    //     expect(iMap.unlock, [1, 2, 3, 4, 5, 6]);
-    //   });
-    //
-    //   test('`where`', () {
-    //     expect(iMap.where((int v) => v < 0).unlock, []);
-    //     expect(iMap.where((int v) => v < 3).unlock, {'a':1, 'b':2});
-    //     expect(iMap.where((int v) => v < 5).unlock, [1, 2, 3, 4]);
-    //     expect(iMap.where((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
-    //   });
-    //
-    //   test('`whereType`', () => expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]));
+    test('`toSet`', () {
+      expect(iMap.toSet()..add(MapEntry('z', 7)), <MapEntry<String, int>>{
+        MapEntry('a', 1),
+        MapEntry('b', 2),
+        MapEntry('c', 3),
+        MapEntry('d', 4),
+        MapEntry('e', 5),
+        MapEntry('f', 6),
+        MapEntry('z', 7),
+      });
+      expect(iMap.unlock, <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
+    });
+
+    test('`where`', () {
+      expect(iMap.where((String k, int v) => v < 0).unlock, <String, int>{});
+      expect(iMap.where((String k, int v) => k == 'a' || k == 'b').unlock,
+          <String, int>{'a': 1, 'b': 2});
+      expect(iMap.where((String k, int v) => v < 5).unlock,
+          <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4});
+      expect(iMap.where((String k, int v) => v < 100).unlock,
+          <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
+    });
+
+    group('`whereType` |', () {
+      test(
+          '`whereKeyType`',
+          () => expect(
+              (<Object, num>{'a': 1, 1.2: 2, 'c': 1.5}.lock.whereKeyType<double>()).unlock, [1.2]));
+      test(
+          '`whereValueType`',
+          () => expect(
+              (<String, num>{'a': 1, 'b': 2, 'c': 1.5}.lock.whereValueType<double>()).unlock,
+              [1.5]));
+    });
   });
 }

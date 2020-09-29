@@ -37,14 +37,11 @@ class ISet<T> // ignore: must_be_immutable
 
   static ISet<T> empty<T>() => ISet.__(SFlat.empty<T>(), isDeepEquals: false);
 
-  factory ISet([
-    Iterable<T> iterable,
-  ]) =>
-      iterable is ISet<T>
-          ? iterable
-          : iterable == null || iterable.isEmpty
-              ? ISet.empty<T>()
-              : ISet<T>.__(SFlat<T>(iterable), isDeepEquals: false);
+  factory ISet([Iterable<T> iterable]) => iterable is ISet<T>
+      ? iterable
+      : iterable == null || iterable.isEmpty
+          ? ISet.empty<T>()
+          : ISet<T>.__(SFlat<T>(iterable), isDeepEquals: false);
 
   ISet._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _s = iterable is ISet<T>
