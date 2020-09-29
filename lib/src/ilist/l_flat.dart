@@ -112,10 +112,10 @@ class LFlat<T> extends L<T> {
   @override
   Iterable<E> whereType<E>() => _list.whereType<E>();
 
-  bool listEquals(LFlat<T> other) =>
+  bool deepListEquals(LFlat<T> other) =>
       (other == null) ? false : const ListEquality().equals(_list, other._list);
 
-  int listHashcode() => const ListEquality().hash(_list);
+  int deepListHashcode() => const ListEquality().hash(_list);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

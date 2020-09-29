@@ -46,9 +46,7 @@ class IList<T> // ignore: must_be_immutable
   IList._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _l = iterable is IList<T>
             ? iterable._l
-            : iterable == null
-                ? LFlat.empty<T>()
-                : LFlat<T>(iterable);
+            : iterable == null ? LFlat.empty<T>() : LFlat<T>(iterable);
 
   /// Unsafe.
   IList.__(this._l, {@required this.isDeepEquals});
@@ -78,15 +76,12 @@ class IList<T> // ignore: must_be_immutable
   bool equals(IList<T> other) =>
       runtimeType == other.runtimeType &&
       isDeepEquals == other.isDeepEquals &&
-      (flush._l as LFlat<T>).listEquals(other.flush._l as LFlat<T>);
+      (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
 
   @override
-  int get hashCode {
-    if (!isDeepEquals)
-      return _l.hashCode ^ isDeepEquals.hashCode;
-    else
-      return (flush._l as LFlat<T>).listHashcode();
-  }
+  int get hashCode => !isDeepEquals
+      ? identityHashCode(_l) ^ isDeepEquals.hashCode
+      : (flush._l as LFlat<T>).deepListHashcode();
 
   // --- IList methods: ---------------
 
@@ -259,9 +254,7 @@ abstract class L<T> implements Iterable<T> {
   /// only `maxLength` elements.
   L<T> maxLength(int maxLength) => maxLength < 0
       ? throw ArgumentError(maxLength)
-      : length <= maxLength
-          ? this
-          : LFlat<T>.unsafe(List.of(this)..length = maxLength);
+      : length <= maxLength ? this : LFlat<T>.unsafe(List.of(this)..length = maxLength);
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;

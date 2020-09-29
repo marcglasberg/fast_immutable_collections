@@ -49,10 +49,10 @@ class MFlat<K, V> extends M<K, V> {
   @override
   int get length => _map.length;
 
-  bool mapEquals(MFlat<K, V> other) =>
+  bool deepMapEquals(MFlat<K, V> other) =>
       (other == null) ? false : const MapEquality().equals(_map, other._map);
 
-  int mapHashcode() => const MapEquality().hash(_map);
+  int deepMapHashcode() => const MapEquality().hash(_map);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

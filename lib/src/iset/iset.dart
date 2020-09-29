@@ -49,9 +49,7 @@ class ISet<T> // ignore: must_be_immutable
   ISet._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _s = iterable is ISet<T>
             ? iterable._s
-            : iterable == null
-                ? SFlat.empty<T>()
-                : SFlat<T>(iterable);
+            : iterable == null ? SFlat.empty<T>() : SFlat<T>(iterable);
 
   ISet.__(this._s, {@required this.isDeepEquals});
 
@@ -80,11 +78,12 @@ class ISet<T> // ignore: must_be_immutable
   bool equals(ISet<T> other) =>
       runtimeType == other.runtimeType &&
       isDeepEquals == other.isDeepEquals &&
-      (flush._s as SFlat<T>).setEquals(other.flush._s as SFlat<T>);
+      (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
 
   @override
-  int get hashCode =>
-      !isDeepEquals ? _s.hashCode ^ isDeepEquals.hashCode : (flush._s as SFlat).setHashcode();
+  int get hashCode => !isDeepEquals
+      ? identityHashCode(_s) ^ isDeepEquals.hashCode
+      : (flush._s as SFlat).deepSetHashcode();
 
   // --- ISet methods: ---------------
 

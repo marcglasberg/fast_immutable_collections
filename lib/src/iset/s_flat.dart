@@ -105,10 +105,10 @@ class SFlat<T> extends S<T> {
   @override
   Iterable<E> whereType<E>() => ISet(_set.whereType<E>());
 
-  bool setEquals(SFlat<T> other) =>
+  bool deepSetEquals(SFlat<T> other) =>
       other == null ? false : const SetEquality().equals(_set, other._set);
 
-  int setHashcode() => const SetEquality().hash(_set);
+  int deepSetHashcode() => const SetEquality().hash(_set);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -134,15 +134,12 @@ class IMap<K, V> // ignore: must_be_immutable
   bool equals(IMap<K, V> other) =>
       runtimeType == other.runtimeType &&
       isDeepEquals == other.isDeepEquals &&
-      (flush._m as MFlat<K, V>).mapEquals(other.flush._m as MFlat<K, V>);
+      (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
 
   @override
-  int get hashCode {
-    if (!isDeepEquals)
-      return _m.hashCode ^ isDeepEquals.hashCode;
-    else
-      return (flush._m as MFlat).mapHashcode();
-  }
+  int get hashCode => !isDeepEquals
+      ? identityHashCode(_m) ^ isDeepEquals.hashCode
+      : (flush._m as MFlat).deepMapHashcode();
 
   // --- IMap methods: ---------------
 
