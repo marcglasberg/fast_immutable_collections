@@ -121,6 +121,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
 
+  Map<K, V> toMap() => _m.toMap();
+
   bool get isEmpty => _m.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
@@ -224,6 +226,10 @@ class IMap<K, V> // ignore: must_be_immutable
 
   int get length => _m.length;
 
+  bool every(bool Function(K key, V value) test) => _m.every(test);
+
+  void forEach(void Function (K key, V value) f) => _m.forEach(f);
+
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
 }
@@ -305,9 +311,12 @@ abstract class M<K, V> {
 
 // bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
 //
-// bool every(bool Function(K key, V value) test) =>
-//     _getFlushed.entries.every((entry) => test(entry.key, entry.value));
+  bool every(bool Function(K key, V value) test) =>
+      _getFlushed.entries.every((MapEntry<K, V> entry) => test(entry.key, entry.value));
 
+  void forEach(void Function(K key, V value) f) => _getFlushed.forEach(f);
+
+  Map<K, V> toMap() => Map<K, V>.of(_getFlushed);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -213,154 +213,41 @@ void main() {
     });
 
     test('`cast`', () => expect(iMap.cast<String, num>(), isA<IMap<String, num>>()));
-    
-    // test('`contains`', () {
-    //   expect(iMap.contains(2), isTrue);
-    //   expect(iMap.contains(4), isTrue);
-    //   expect(iMap.contains(5), isTrue);
-    //   expect(iMap.contains(100), isFalse);
+
+    test('`contains`', () {
+      expect(iMap.contains('a', 1), isTrue);
+      expect(iMap.contains('b', 2), isTrue);
+      expect(iMap.contains('c', 3), isTrue);
+      expect(iMap.contains('z', 100), isFalse);
+    });
+
+    test('`every`', () {
+      expect(iMap.every((String k, int v) => v > 0), isTrue);
+      expect(iMap.every((String k, int v) => k == 'a'), isFalse);
+      expect(iMap.every((String k, int v) => v < 0), isFalse);
+      expect(iMap.every((String k, int v) => k == 'z'), isFalse);
+      expect(iMap.every((String k, int v) => v != 4), isFalse);
+    });
+
+    test('`length`', () => expect(iMap.length, 6));
+
+    test('`forEach`', () {
+      int result = 100;
+      iMap.forEach((String k, int v) => result *= 1 + v);
+      expect(result, 504000);
+    });
+
+    // test('`map`', () {
+    //   expect({'a': 1, 'b': 2, 'c': 3}.lock.map((int v) => v + 1).unlock, [2, 3, 4]);
+    //   expect(iMap.map((int v) => v + 1).unlock, [2, 3, 4, 5, 6, 7]);
     // });
 
-    //   group('`elementAt` |', () {
-    //     test('Regular element access', () {
-    //       expect(iMap.elementAt(0), 1);
-    //       expect(iMap.elementAt(1), 2);
-    //       expect(iMap.elementAt(2), 3);
-    //       expect(iMap.elementAt(3), 4);
-    //       expect(iMap.elementAt(4), 5);
-    //       expect(iMap.elementAt(5), 6);
-    //     });
-    //
-    //     test('Range exceptions', () {
-    //       expect(() => iMap.elementAt(6), throwsRangeError);
-    //       expect(() => iMap.elementAt(-1), throwsRangeError);
-    //     });
-    //   });
-    //
-    //   test('`every`', () {
-    //     expect(iMap.every((int v) => v > 0), isTrue);
-    //     expect(iMap.every((int v) => v < 0), isFalse);
-    //     expect(iMap.every((int v) => v != 4), isFalse);
-    //   });
-    //
-    //   test('`expand`', () {
-    //     expect(iMap.expand((int v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
-    //     expect(iMap.expand((int v) => []), []);
-    //   });
-    //
-    //   test('`length`', () => expect(iMap.length, 6));
-    //
-    //   test('`first`', () => expect(iMap.first, 1));
-    //
-    //   test('`last`', () => expect(iMap.last, 6));
-    //
-    //   group('`single` |', () {
-    //     test('State exception', () => expect(() => iMap.single, throwsStateError));
-    //
-    //     test('Access', () => expect([10].lock.single, 10));
-    //   });
-    //
-    //   test('`firstWhere`', () {
-    //     expect(iMap.firstWhere((int v) => v > 1, orElse: () => 100), 2);
-    //     expect(iMap.firstWhere((int v) => v > 4, orElse: () => 100), 5);
-    //     expect(iMap.firstWhere((int v) => v > 5, orElse: () => 100), 6);
-    //     expect(iMap.firstWhere((int v) => v > 6, orElse: () => 100), 100);
-    //   });
-    //
-    //   test('`fold`', () => expect(iMap.fold(100, (int p, int e) => p * (1 + e)), 504000));
-    //
-    //   test('`followedBy`', () {
-    //     expect(iMap.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    //     expect(
-    //         iMap.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    //   });
-    //
-    //   test('`forEach`', () {
-    //     int result = 100;
-    //     iMap.forEach((int v) => result *= 1 + v);
-    //     expect(result, 504000);
-    //   });
-    //
-    //   test('`join`', () {
-    //     expect(iMap.join(','), '1,2,3,4,5,6');
-    //     expect([].lock.join(','), '');
-    //   });
-    //
-    //   test('`lastWhere`', () {
-    //     expect(iMap.lastWhere((int v) => v < 2, orElse: () => 100), 1);
-    //     expect(iMap.lastWhere((int v) => v < 5, orElse: () => 100), 4);
-    //     expect(iMap.lastWhere((int v) => v < 6, orElse: () => 100), 5);
-    //     expect(iMap.lastWhere((int v) => v < 7, orElse: () => 100), 6);
-    //     expect(iMap.lastWhere((int v) => v < 50, orElse: () => 100), 6);
-    //     expect(iMap.lastWhere((int v) => v < 1, orElse: () => 100), 100);
-    //   });
-    //
-    //   test('`map`', () {
-    //     expect({'a':1, 'b':2, 'c':3}.lock.map((int v) => v + 1).unlock, [2, 3, 4]);
-    //     expect(iMap.map((int v) => v + 1).unlock, [2, 3, 4, 5, 6, 7]);
-    //   });
-    //
-    //   group('`reduce` |', () {
-    //     test('Regular usage', () {
-    //       expect(iMap.reduce((int p, int e) => p * (1 + e)), 2520);
-    //       expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
-    //     });
-    //
-    //     test('State exception',
-    //         () => expect(() => [].reduce((dynamic p, dynamic e) => p * (1 + e)), throwsStateError));
-    //   });
-    //
-    //   group('`singleWhere` |', () {
-    //     test('Regular usage', () {
-    //       expect(iMap.singleWhere((int v) => v == 4, orElse: () => 100), 4);
-    //       expect(iMap.singleWhere((int v) => v == 50, orElse: () => 100), 100);
-    //     });
-    //
-    //     test(
-    //         'State exception',
-    //         () => expect(
-    //             () => iMap.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError));
-    //   });
-    //
-    //   test('`skip`', () {
-    //     expect(iMap.skip(1).unlock, [2, 3, 4, 5, 6]);
-    //     expect(iMap.skip(3).unlock, [4, 5, 6]);
-    //     expect(iMap.skip(5).unlock, [6]);
-    //     expect(iMap.skip(10).unlock, []);
-    //   });
-    //
-    //   test('`skipWhile`', () {
-    //     expect(iMap.skipWhile((int v) => v < 3).unlock, [3, 4, 5, 6]);
-    //     expect(iMap.skipWhile((int v) => v < 5).unlock, [5, 6]);
-    //     expect(iMap.skipWhile((int v) => v < 6).unlock, [6]);
-    //     expect(iMap.skipWhile((int v) => v < 100).unlock, []);
-    //   });
-    //
-    //   test('`take`', () {
-    //     expect(iMap.take(0).unlock, []);
-    //     expect(iMap.take(1).unlock, [1]);
-    //     expect(iMap.take(3).unlock, {'a':1, 'b':2, 'c':3});
-    //     expect(iMap.take(5).unlock, [1, 2, 3, 4, 5]);
-    //     expect(iMap.take(10).unlock, [1, 2, 3, 4, 5, 6]);
-    //   });
-    //
-    //   test('`takeWhile`', () {
-    //     expect(iMap.takeWhile((int v) => v < 3).unlock, {'a':1, 'b':2});
-    //     expect(iMap.takeWhile((int v) => v < 5).unlock, [1, 2, 3, 4]);
-    //     expect(iMap.takeWhile((int v) => v < 6).unlock, [1, 2, 3, 4, 5]);
-    //     expect(iMap.takeWhile((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
-    //   });
-    //
-    //   group('`toMap` |', () {
-    //     test('Regular usage', () {
-    //       expect(iMap.toMap()..add(7), [1, 2, 3, 4, 5, 6, 7]);
-    //       expect(iMap.unlock, [1, 2, 3, 4, 5, 6]);
-    //     });
-    //
-    //     test('Unsupported exception',
-    //         () => expect(() => iMap.toMap(growable: false)..add(7), throwsUnsupportedError));
-    //   });
-    //
+    test('`toMap`', () {
+      expect(
+          iMap.toMap()..addAll({'w': 7}), {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'w': 7});
+      expect(iMap.unlock, {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
+    });
+
     //   test('`toSet`', () {
     //     expect(iMap.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
     //     expect(iMap.unlock, [1, 2, 3, 4, 5, 6]);
