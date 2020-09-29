@@ -12,7 +12,7 @@ class MAdd<K, V> extends M<K, V> {
 
   @override
   Iterable<MapEntry<K, V>> get entries {
-    Iterable<MapEntry<K, V>> nextEntry = [MapEntry<K, V>(_key, _value)];
+    final Iterable<MapEntry<K, V>> nextEntry = [MapEntry<K, V>(_key, _value)];
     return _m.entries.followedBy(nextEntry);
   }
 

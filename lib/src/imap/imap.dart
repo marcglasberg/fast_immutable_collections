@@ -1,5 +1,7 @@
 import 'dart:collection';
+
 import 'package:meta/meta.dart';
+
 import '../../fast_immutable_collections.dart';
 import 'm_add.dart';
 import 'm_add_all.dart';
@@ -10,19 +12,19 @@ import 'm_flat.dart';
 extension IMapExtension<K, V> on Map<K, V> {
   //
 
-  /// Locks the map, returning an immutable map (IMap).
-  /// The equals operator compares by identity (it's only
-  /// equal when the map instance is the same).
+  /// Locks the map, returning an *immutable* map ([IMap]).
+  /// The equals operator (`==`) compares by identity (it's only equal when the map instance is the
+  /// same).
   IMap<K, V> get lock => IMap<K, V>(this);
 
-  /// Locks the map, returning an immutable map (IMap).
-  /// The equals operator compares all items, unordered.
+  /// Locks the map, returning an *immutable* map ([IMap]).
+  /// The equals operator (`==`) compares all items, unordered.
   IMap<K, V> get deep => IMap<K, V>(this).deepEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// An immutable unordered map.
+/// An *immutable* unordered map.
 @immutable
 class IMap<K, V> // ignore: must_be_immutable
     extends ImmutableCollection<IMap<K, V>> {
@@ -30,18 +32,15 @@ class IMap<K, V> // ignore: must_be_immutable
 
   M<K, V> _m;
 
-  /// If false (the default), the equals operator compares by identity.
-  /// If true, the equals operator compares all items, unordered.
+  /// If `false` (the default), the equals operator (`==`) compares by identity.
+  /// If `true`, the equals operator (`==`) compares all items, unordered.
   final bool isDeepEquals;
 
   static IMap<K, V> empty<K, V>() => IMap.__(MFlat.empty<K, V>(), isDeepEquals: false);
 
-  factory IMap([
-    Map<K, V> map,
-  ]) =>
-      (map == null || map.isEmpty)
-          ? IMap.empty<K, V>()
-          : IMap<K, V>.__(MFlat<K, V>(map), isDeepEquals: false);
+  factory IMap([Map<K, V> map]) => (map == null || map.isEmpty)
+      ? IMap.empty<K, V>()
+      : IMap<K, V>.__(MFlat<K, V>(map), isDeepEquals: false);
 
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries) {
     if (entries is IMap<K, V>)
@@ -122,6 +121,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
 
+  Map<K, V> toMap() => _m.toMap();
+
   bool get isEmpty => _m.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
@@ -191,6 +192,9 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool any(bool Function(K key, V value) test) => _m.any(test);
 
+  /// TODO: Falta verificar. O `cast` do `M` está retornando um `Map`, é isso mesmo que queremos?
+  IMap<RK, RV> cast<RK, RV>() => IMap._map(_m.cast<RK, RV>(), isDeepEquals: isDeepEquals);
+
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _m.anyEntry(test);
 
   bool contains(K key, V value) => _m.contains(key, value);
@@ -218,6 +222,20 @@ class IMap<K, V> // ignore: must_be_immutable
   ISet<V> toValueISet() => ISet(values);
 
   int get length => _m.length;
+
+  bool every(bool Function(K key, V value) test) => _m.every(test);
+
+  void forEach(void Function(K key, V value) f) => _m.forEach(f);
+
+  IList<E> whereKeyType<E>() => IList<E>(_m.whereKeyType());
+
+  IList<E> whereValueType<E>() => IList<E>(_m.whereValueType());
+
+  IMap<K, V> where(bool Function(K key, V value) test) =>
+      IMap<K, V>._map(_m.where(test), isDeepEquals: isDeepEquals);
+
+  IMap<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
+      IMap<RK, RV>._map(_m.map(mapper), isDeepEquals: isDeepEquals);
 
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
@@ -271,12 +289,18 @@ abstract class M<K, V> {
     return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(_getFlushed)..remove(key));
   }
 
+  /// TODO: Falta verificar!!!
+  // @override
+  // M<RK, RV> cast<RK, RV>() => throw UnsupportedError('cast');
+  Map<RK, RV> cast<RK, RV>() => _getFlushed.cast<RK, RV>();
+
   bool get isEmpty => _getFlushed.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
 
   V operator [](K key) => _getFlushed[key];
 
+  /// TODO: Is `_value == _value` correct?
   bool contains(K key, V value) {
     var _value = _getFlushed[key];
     return (_value == null) ? false : (_value == _value);
@@ -293,11 +317,30 @@ abstract class M<K, V> {
 
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.any(test);
 
-// bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
-//
-// bool every(bool Function(K key, V value) test) =>
-//     _getFlushed.entries.every((entry) => test(entry.key, entry.value));
+  // bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
 
+  bool every(bool Function(K key, V value) test) =>
+      _getFlushed.entries.every((MapEntry<K, V> entry) => test(entry.key, entry.value));
+
+  void forEach(void Function(K key, V value) f) => _getFlushed.forEach(f);
+
+  Map<K, V> toMap() => Map<K, V>.of(_getFlushed);
+
+  Iterable<E> whereKeyType<E>() => _getFlushed.keys.whereType<E>();
+
+  Iterable<E> whereValueType<E>() => _getFlushed.values.whereType<E>();
+
+  /// TODO: Is this optimal?
+  Map<K, V> where(bool Function(K key, V value) test) {
+    final Map<K, V> matches = {};
+    _getFlushed.forEach((K key, V value) {
+      if (test(key, value)) matches[key] = value;
+    });
+    return matches;
+  }
+
+  Map<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
+      _getFlushed.map(mapper);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

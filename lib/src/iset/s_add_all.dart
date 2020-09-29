@@ -5,7 +5,7 @@ import 'iset.dart';
 class SAddAll<T> extends S<T> {
   final S<T> _s;
 
-  // Will always store this as Set or S.
+  // Will always store this as `Set` or [S].
   final Iterable<T> _setOrS;
 
   /// Safe.
