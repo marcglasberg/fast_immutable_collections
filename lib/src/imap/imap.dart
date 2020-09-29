@@ -1,5 +1,7 @@
 import 'dart:collection';
+
 import 'package:meta/meta.dart';
+
 import '../../fast_immutable_collections.dart';
 import 'm_add.dart';
 import 'm_add_all.dart';
@@ -10,19 +12,19 @@ import 'm_flat.dart';
 extension IMapExtension<K, V> on Map<K, V> {
   //
 
-  /// Locks the map, returning an immutable map (IMap).
-  /// The equals operator compares by identity (it's only
-  /// equal when the map instance is the same).
+  /// Locks the map, returning an *immutable* map ([IMap]).
+  /// The equals operator (`==`) compares by identity (it's only equal when the map instance is the
+  /// same).
   IMap<K, V> get lock => IMap<K, V>(this);
 
-  /// Locks the map, returning an immutable map (IMap).
-  /// The equals operator compares all items, unordered.
+  /// Locks the map, returning an *immutable* map ([IMap]).
+  /// The equals operator (`==`) compares all items, unordered.
   IMap<K, V> get deep => IMap<K, V>(this).deepEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// An immutable unordered map.
+/// An *immutable* unordered map.
 @immutable
 class IMap<K, V> // ignore: must_be_immutable
     extends ImmutableCollection<IMap<K, V>> {
@@ -30,18 +32,15 @@ class IMap<K, V> // ignore: must_be_immutable
 
   M<K, V> _m;
 
-  /// If false (the default), the equals operator compares by identity.
-  /// If true, the equals operator compares all items, unordered.
+  /// If `false` (the default), the equals operator (`==`) compares by identity.
+  /// If `true`, the equals operator (`==`) compares all items, unordered.
   final bool isDeepEquals;
 
   static IMap<K, V> empty<K, V>() => IMap.__(MFlat.empty<K, V>(), isDeepEquals: false);
 
-  factory IMap([
-    Map<K, V> map,
-  ]) =>
-      (map == null || map.isEmpty)
-          ? IMap.empty<K, V>()
-          : IMap<K, V>.__(MFlat<K, V>(map), isDeepEquals: false);
+  factory IMap([Map<K, V> map]) => (map == null || map.isEmpty)
+      ? IMap.empty<K, V>()
+      : IMap<K, V>.__(MFlat<K, V>(map), isDeepEquals: false);
 
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries) {
     if (entries is IMap<K, V>)

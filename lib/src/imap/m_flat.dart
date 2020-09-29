@@ -1,6 +1,7 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'imap.dart';
 import 'package:collection/collection.dart';
+
+import '../ilist/ilist.dart';
+import 'imap.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +34,7 @@ class MFlat<K, V> extends M<K, V> {
 
   @override
   bool contains(K key, V value) {
-    var _value = _map[key];
+    final V _value = _map[key];
     return (_value == null) ? false : (_value == _value);
   }
 
