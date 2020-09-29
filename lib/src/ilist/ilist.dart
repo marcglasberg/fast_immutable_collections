@@ -272,11 +272,9 @@ abstract class L<T> implements Iterable<T> {
   @override
   bool any(bool Function(T) test) => _getFlushed.any(test);
 
+  // TODO: FALTA FAZER!!! Isso é o ideal realmente?
   @override
-  Iterable<R> cast<R>() => throw UnsupportedError('cast');
-
-  // TODO: FALTA FAZER!!!
-  // IList<R> cast<R>() => _getFlushed.cast<R>();
+  Iterable<R> cast<R>() => _getFlushed.cast<R>();
 
   @override
   bool contains(Object element) => _getFlushed.contains(element);
