@@ -25,6 +25,12 @@ void main() {
 
   test('Range Errors', () => expect(() => lFlat[-1], throwsA(isA<RangeError>())));
 
+  test('`cast`', () {
+    final lFlatAsNum = lFlat.cast<num>();
+
+    expect(lFlatAsNum, isA<LFlat<num>>());
+  });
+
   group('`Iterator` |', () {
     test('Iterating on the underlying iterator', () {
       final Iterator<int> iter = lFlat.iterator;
