@@ -231,12 +231,10 @@ void main() {
 
     group('`map` |', () {
       test('Simple Example', () {
-        final IMap<String, int> example = {'a': 1, 'b': 2, 'c': 3}
-            .lock
-            .map<String, int>((String k, int v) => MapEntry(k, v + 1))
-              ..unlock;
+        final IMap<String, int> example =
+            {'a': 1, 'b': 2, 'c': 3}.lock.map<String, int>((String k, int v) => MapEntry(k, v + 1));
 
-        expect(example, <String, int>{'a': 2, 'b': 3, 'c': 4});
+        expect(example.unlock, <String, int>{'a': 2, 'b': 3, 'c': 4});
       });
 
       test('Directly from the IMap above', () {

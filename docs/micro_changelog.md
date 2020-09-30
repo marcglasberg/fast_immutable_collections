@@ -15,7 +15,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
         - `where`
         - `map`
     - The remaining methods mentioned above now feature `TODO`s on top of them, so we know we have to come back to their implementations in the future.
-1. Added a `TODO` to the commented out `everyEntry` of `IMap`.
+1. Added a `TODO` to the commented out `everyEntry` method of `IMap`.
 
 ## 29/09/2020
 
