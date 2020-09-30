@@ -1,4 +1,4 @@
-import 'package:fast_immutable_collections/src/ilist/ilist.dart';
+import 'ilist.dart';
 
 /// This [Iterable] mixin implements all [Iterable] members.
 /// It is meant to help you wrap an [IList] into another class (composition).

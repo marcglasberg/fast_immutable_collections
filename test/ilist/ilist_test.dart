@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:fast_immutable_collections/src/ilist/ilist.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////

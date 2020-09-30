@@ -201,7 +201,7 @@ void main() {
 
   // //////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  group('`IMap` methods from `Iterable` |', () {
+  group('`IMap` methods from `Map` |', () {
     final IMap<String, int> iMap =
         {'a': 1, 'b': 2, 'c': 3}.lock.add('d', 4).addAll(IMap({'e': 5, 'f': 6}));
 
