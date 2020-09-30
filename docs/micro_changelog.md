@@ -10,6 +10,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 ### 1. Philippe Fanaro
 
 1. Cleaning up the unnecessary methods and implementations.
+    - If you want to go back to them, this is the commit: `e4a3e63f28c0e1de93fd31759e0bf939772fdfae`
     - I'll leave only the methods which appear on the `Map`'s interface, that is:
         - `forEach`
         - `where`
@@ -17,6 +18,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - The remaining methods mentioned above now feature `TODO`s on top of them, so we know we have to come back to their implementations in the future.
 1. Added a `TODO` to the commented out `everyEntry` method of `IMap`.
 1. Created a group of tests inside for `IList` to check if it really is immutable.
+1. Created the *essential* tests for `LFlat`.
 
 ## 29/09/2020
 
