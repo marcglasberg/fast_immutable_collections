@@ -15,22 +15,6 @@ void main() {
 
   test('Length', () => expect(lAdd.length, 4));
 
-  test('Iterating on the underlying iterator', () {
-    final Iterator<int> iter = lAdd.iterator;
-
-    expect(iter.current, null);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 1);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 2);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 3);
-    expect(iter.moveNext(), true);
-    expect(iter.current, 4);
-    expect(iter.moveNext(), false);
-    expect(iter.current, null);
-  });
-
   test('`LAdd[index]`', () {
     expect(lAdd[0], 1);
     expect(lAdd[1], 2);
@@ -41,5 +25,30 @@ void main() {
   test('Range Errors', () {
     expect(() => lAdd[4], throwsA(isA<RangeError>()));
     expect(() => lAdd[-1], throwsA(isA<RangeError>()));
+  });
+
+  group('`IteratorLAdd` |', () {
+    test('Iterating on the underlying iterator', () {
+      final Iterator<int> iter = lAdd.iterator;
+
+      expect(iter.current, isNull);
+      expect(iter.moveNext(), isTrue);
+      expect(iter.current, 1);
+      expect(iter.moveNext(), isTrue);
+      expect(iter.current, 2);
+      expect(iter.moveNext(), isTrue);
+      expect(iter.current, 3);
+      expect(iter.moveNext(), isTrue);
+      expect(iter.current, 4);
+      expect(iter.moveNext(), isFalse);
+      expect(iter.current, isNull);
+    });
+  });
+
+  // TODO: completar
+  group('Ensuring Immutability |', () {
+    test('', () {
+      
+    });
   });
 }

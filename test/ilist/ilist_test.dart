@@ -35,6 +35,35 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  // TODO: completar/reorganizar. (Falta assegurar `remove` e `addAll` por exemplo.)
+  group('Ensuring Immutability |', () {
+    test('Changing the passed mutable list doesn\'t change the `IList`', () {
+      final List<int> original = [1, 2];
+      final IList<int> iList = original.lock;
+
+      expect(iList.unlock, original);
+
+      original.add(3);
+
+      expect(original, <int>[1, 2, 3]);
+      expect(iList.unlock, <int>[1, 2]);
+    });
+
+    test('Changing the `IList` also doesn\'t change the original list', () {
+      final List<int> original = [1, 2];
+      IList<int> iList = original.lock;
+
+      expect(iList.unlock, original);
+
+      iList = iList.add(3);
+
+      expect(original, <int>[1, 2]);
+      expect(iList, <int>[1, 2, 3]);
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group('Equals |', () {
     //

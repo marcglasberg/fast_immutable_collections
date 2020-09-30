@@ -16,6 +16,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
         - `map`
     - The remaining methods mentioned above now feature `TODO`s on top of them, so we know we have to come back to their implementations in the future.
 1. Added a `TODO` to the commented out `everyEntry` method of `IMap`.
+1. Created a group of tests inside for `IList` to check if it really is immutable.
 
 ## 29/09/2020
 
@@ -28,6 +29,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - The `TODO`s still remain, as I'm not 100% sure it's the intended behavior.
 1. Changes to `cast`ing for `L`, `S` and `M`.
     - Shouldn't `M` extend `Map`?
+        - Marcelo: we can't because the `Map` abstract class has mutation methods. At any rate we will leave it as is for now.
 1. For `IMap`, I've implemented and tested &mdash; some of those methods will have siblings inside `M` &mdash; the missing:
     - `every`
     - `forEach`
