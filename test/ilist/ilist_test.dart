@@ -392,6 +392,7 @@ void main() {
 
     test('`toSet`', () {
       expect(iList.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
+      expect(iList..add(6)..toSet(), {1, 2, 3, 4, 5, 6});
       expect(iList.unlock, [1, 2, 3, 4, 5, 6]);
     });
 
