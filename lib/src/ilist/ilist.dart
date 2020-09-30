@@ -46,7 +46,9 @@ class IList<T> // ignore: must_be_immutable
   IList._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _l = iterable is IList<T>
             ? iterable._l
-            : iterable == null ? LFlat.empty<T>() : LFlat<T>(iterable);
+            : iterable == null
+                ? LFlat.empty<T>()
+                : LFlat<T>(iterable);
 
   /// Unsafe.
   IList.__(this._l, {@required this.isDeepEquals});
@@ -254,7 +256,9 @@ abstract class L<T> implements Iterable<T> {
   /// only `maxLength` elements.
   L<T> maxLength(int maxLength) => maxLength < 0
       ? throw ArgumentError(maxLength)
-      : length <= maxLength ? this : LFlat<T>.unsafe(List.of(this)..length = maxLength);
+      : length <= maxLength
+          ? this
+          : LFlat<T>.unsafe(List.of(this)..length = maxLength);
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;

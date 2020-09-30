@@ -40,9 +40,7 @@ void main() {
 
   group('Combining various `SAddAll`s and `SAdd`s', () {
     final sAddAll = SAddAll(
-        SAddAll(
-            SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}),
-        {8});
+        SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
 
     test('Runtime Type', () => expect(sAddAll, isA<SAddAll<int>>()));
 
