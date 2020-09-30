@@ -121,8 +121,6 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
 
-  Map<K, V> toMap() => _m.toMap();
-
   bool get isEmpty => _m.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
@@ -192,7 +190,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool any(bool Function(K key, V value) test) => _m.any(test);
 
-  /// TODO: Falta verificar. O `cast` do `M` está retornando um `Map`, é isso mesmo que queremos?
+  // TODO: Falta verificar. O `cast` do `M` está retornando um `Map`, é isso mesmo que queremos?
   IMap<RK, RV> cast<RK, RV>() => IMap._map(_m.cast<RK, RV>(), isDeepEquals: isDeepEquals);
 
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _m.anyEntry(test);
@@ -209,8 +207,6 @@ class IMap<K, V> // ignore: must_be_immutable
 
   IList<MapEntry<K, V>> toIList() => entries;
 
-  Set<MapEntry<K, V>> toSet() => entries.toSet();
-
   Set<K> toKeySet() => keys.toSet();
 
   Set<V> toValueSet() => values.toSet();
@@ -223,17 +219,14 @@ class IMap<K, V> // ignore: must_be_immutable
 
   int get length => _m.length;
 
-  bool every(bool Function(K key, V value) test) => _m.every(test);
-
+  // TODO: Marcelo, por favor, verifique a implementação.
   void forEach(void Function(K key, V value) f) => _m.forEach(f);
 
-  IList<E> whereKeyType<E>() => IList<E>(_m.whereKeyType());
-
-  IList<E> whereValueType<E>() => IList<E>(_m.whereValueType());
-
+  // TODO: Marcelo, por favor, verifique a implementação.
   IMap<K, V> where(bool Function(K key, V value) test) =>
       IMap<K, V>._map(_m.where(test), isDeepEquals: isDeepEquals);
 
+  // TODO: Marcelo, por favor, verifique a implementação.
   IMap<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
       IMap<RK, RV>._map(_m.map(mapper), isDeepEquals: isDeepEquals);
 
@@ -254,7 +247,7 @@ abstract class M<K, V> {
 
   Iterator<MapEntry<K, V>> get iterator => _getFlushed.entries.iterator;
 
-  /// The [M] class provides the default fallback methods of Iterable, but
+  /// The [M] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed list, but
   /// because that's immutable, we cache it.
@@ -289,7 +282,7 @@ abstract class M<K, V> {
     return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(_getFlushed)..remove(key));
   }
 
-  /// TODO: Falta verificar!!!
+  // TODO: Marcelo, por favor, verifique a implementação.
   // @override
   // M<RK, RV> cast<RK, RV>() => throw UnsupportedError('cast');
   Map<RK, RV> cast<RK, RV>() => _getFlushed.cast<RK, RV>();
@@ -319,18 +312,10 @@ abstract class M<K, V> {
 
   // bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
 
-  bool every(bool Function(K key, V value) test) =>
-      _getFlushed.entries.every((MapEntry<K, V> entry) => test(entry.key, entry.value));
-
+  // TODO: Marcelo, por favor, verifique a implementação.
   void forEach(void Function(K key, V value) f) => _getFlushed.forEach(f);
 
-  Map<K, V> toMap() => Map<K, V>.of(_getFlushed);
-
-  Iterable<E> whereKeyType<E>() => _getFlushed.keys.whereType<E>();
-
-  Iterable<E> whereValueType<E>() => _getFlushed.values.whereType<E>();
-
-  /// TODO: Is this optimal?
+  // TODO: Is this optimal?
   Map<K, V> where(bool Function(K key, V value) test) {
     final Map<K, V> matches = {};
     _getFlushed.forEach((K key, V value) {
@@ -339,6 +324,7 @@ abstract class M<K, V> {
     return matches;
   }
 
+  // TODO: Marcelo, por favor, verifique a implementação.
   Map<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
       _getFlushed.map(mapper);
 }

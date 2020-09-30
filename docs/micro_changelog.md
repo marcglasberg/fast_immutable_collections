@@ -5,6 +5,17 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 30/09/2020
+
+### 1. Philippe Fanaro
+
+1. Cleaning up the unnecessary methods and implementations.
+    - I'll leave only the methods which appear on the `Map`'s interface, that is:
+        - `forEach`
+        - `where`
+        - `map`
+    - The remaining methods mentioned above now feature `TODO`s on top of them, so we know we have to come back to their implementations in the future.
+
 ## 29/09/2020
 
 ### 1. Philippe Fanaro
@@ -16,10 +27,11 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - The `TODO`s still remain, as I'm not 100% sure it's the intended behavior.
 1. Changes to `cast`ing for `L`, `S` and `M`.
     - Shouldn't `M` extend `Map`?
-1. For `iMap`, I've implemented and tested &mdash; some of those methods will have siblings inside `M` &mdash; the missing:
+1. For `IMap`, I've implemented and tested &mdash; some of those methods will have siblings inside `M` &mdash; the missing:
     - `every`
     - `forEach`
     - `toMap`
+    - `toSet`
     - `where`
     - `whereKeyType`
     - `whereValueType`

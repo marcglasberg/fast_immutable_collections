@@ -221,14 +221,6 @@ void main() {
       expect(iMap.contains('z', 100), isFalse);
     });
 
-    test('`every`', () {
-      expect(iMap.every((String k, int v) => v > 0), isTrue);
-      expect(iMap.every((String k, int v) => k == 'a'), isFalse);
-      expect(iMap.every((String k, int v) => v < 0), isFalse);
-      expect(iMap.every((String k, int v) => k == 'z'), isFalse);
-      expect(iMap.every((String k, int v) => v != 4), isFalse);
-    });
-
     test('`length`', () => expect(iMap.length, 6));
 
     test('`forEach`', () {
@@ -237,42 +229,20 @@ void main() {
       expect(result, 504000);
     });
 
-    test('`map`', () {
-      expect(
-          {'a': 1, 'b': 2, 'c': 3}
-              .lock
-              .map<String, int>((String k, int v) => MapEntry(k, v + 1))
-              .unlock,
-          <String, int>{'a': 2, 'b': 3, 'c': 4});
-      expect(iMap.map<String, int>((String k, int v) => MapEntry(k, v + 1)).unlock,
-          {'a': 2, 'b': 3, 'c': 4, 'd': 5, 'e': 6, 'f': 7});
-    });
+    group('`map` |', () {
+      test('Simple Example', () {
+        final IMap<String, int> example = {'a': 1, 'b': 2, 'c': 3}
+            .lock
+            .map<String, int>((String k, int v) => MapEntry(k, v + 1))
+              ..unlock;
 
-    test('`toMap`', () {
-      expect(
-          iMap.toMap()..addAll({'w': 7}), {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'w': 7});
-      expect(iMap.unlock, {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
-    });
+        expect(example, <String, int>{'a': 2, 'b': 3, 'c': 4});
+      });
 
-    test('`toSet`', () {
-      final List<MapEntry<String, int>> listFromIMap =
-              (iMap.toSet()..add(MapEntry('z', 7))).toList(),
-          correctList = <MapEntry<String, int>>{
-            MapEntry('a', 1),
-            MapEntry('b', 2),
-            MapEntry('c', 3),
-            MapEntry('d', 4),
-            MapEntry('e', 5),
-            MapEntry('f', 6),
-            MapEntry('z', 7),
-          }.toList();
-
-      for (int i = 0; i < listFromIMap.length; i++) {
-        expect(listFromIMap[i].key, correctList[i].key);
-        expect(listFromIMap[i].value, correctList[i].value);
-      }
-
-      expect(iMap.unlock, <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
+      test('Directly from the IMap above', () {
+        expect(iMap.map<String, int>((String k, int v) => MapEntry(k, v + 1)).unlock,
+            {'a': 2, 'b': 3, 'c': 4, 'd': 5, 'e': 6, 'f': 7});
+      });
     });
 
     test('`where`', () {
@@ -283,18 +253,6 @@ void main() {
           <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4});
       expect(iMap.where((String k, int v) => v < 100).unlock,
           <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6});
-    });
-
-    group('`whereType` |', () {
-      test(
-          '`whereKeyType`',
-          () => expect(
-              (<Object, num>{'a': 1, 1.2: 2, 'c': 1.5}.lock.whereKeyType<double>()).unlock, [1.2]));
-      test(
-          '`whereValueType`',
-          () => expect(
-              (<String, num>{'a': 1, 'b': 2, 'c': 1.5}.lock.whereValueType<double>()).unlock,
-              [1.5]));
     });
   });
 }
