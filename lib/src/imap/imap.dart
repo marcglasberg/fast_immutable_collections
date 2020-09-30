@@ -310,6 +310,7 @@ abstract class M<K, V> {
 
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.any(test);
 
+  // TODO: Especificar teste e implementar.
   // bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
 
   // TODO: Marcelo, por favor, verifique a implementação.
