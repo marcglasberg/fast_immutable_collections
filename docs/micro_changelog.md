@@ -16,6 +16,8 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Hopefully completed tests for `LAdd`.
 1. Reorganized tests for `LAddAll`.
 1. Immutability Tests for `LAddAll`.
+1. `IMapOfSets` tests that are a little bit easier to follow.
+1. Updated the docs on the `IMapOfSets`.
 
 ## 30/09/2020
 

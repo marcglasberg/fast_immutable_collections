@@ -76,6 +76,7 @@ void main() {
     });
   });
 
+  // TODO: Rever mais tarde para talvez completar com algo próximo ao que há no `LAdd`.
   group('Ensuring Immutability |', () {
     // This code is not as DRY as one would like, but, in these immutability tests, I prefer to
     // repeat everything so all the variables are `final` within their context.
