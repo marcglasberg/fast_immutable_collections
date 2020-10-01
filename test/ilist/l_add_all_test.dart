@@ -133,7 +133,6 @@ void main() {
     });
   });
 
-  // TODO: completar
   group('Ensuring Immutability |', () {
     group('`add` |', () {
       test('Changing the passed mutable list doesn\'t change the `LAddAll`', () {

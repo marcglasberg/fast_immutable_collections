@@ -15,6 +15,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. More tests to ensure immutability to `LAdd`.
 1. Hopefully completed tests for `LAdd`.
 1. Reorganized tests for `LAddAll`.
+1. Immutability Tests for `LAddAll`.
 
 ## 30/09/2020
 
