@@ -173,17 +173,23 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('`add` and `addAll`', () {
+  group('Adding |', () {
     final IList<int> ilist1 = [1, 2, 3].lock;
     final IList<int> ilist2 = ilist1.add(4);
     final IList<int> ilist3 = ilist2.addAll([5, 6]);
 
-    expect(ilist1.unlock, [1, 2, 3]);
-    expect(ilist2.unlock, [1, 2, 3, 4]);
-    expect(ilist3.unlock, [1, 2, 3, 4, 5, 6]);
+    test('`add`', () {
+      expect(ilist1.unlock, [1, 2, 3]);
+      expect(ilist2.unlock, [1, 2, 3, 4]);
+    });
 
-    // Methods are chainable.
-    expect(ilist1.add(10).addAll([20, 30]).unlock, [1, 2, 3, 10, 20, 30]);
+    test('`addAll`', () {
+      expect(ilist1.unlock, [1, 2, 3]);
+      expect(ilist3.unlock, [1, 2, 3, 4, 5, 6]);
+    });
+
+    test('`add` and `addAll` at the same time',
+        () => expect(ilist1.add(10).addAll([20, 30]).unlock, [1, 2, 3, 10, 20, 30]));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
