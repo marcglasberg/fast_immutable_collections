@@ -10,6 +10,11 @@ void main() {
 
   test('Runtime Type', () => expect(lFlat, isA<LFlat<int>>()));
 
+  test('`unlock`', () {
+    expect(lFlat.unlock, <int>[1, 2, 3]);
+    expect(lFlat.unlock, isA<List<int>>());
+  });
+
   test('Emptiness Properties', () {
     expect(lFlat.isEmpty, isFalse);
     expect(lFlat.isNotEmpty, isTrue);
