@@ -10,6 +10,7 @@ void main() {
     final iList3 = IList<String>([]);
     final iList4 = IList([1]);
     final iList5 = IList.empty<int>();
+    final iList6 = [].lock;
 
     test('Runtime Type', () {
       expect(iList1, isA<IList>());
@@ -17,6 +18,7 @@ void main() {
       expect(iList3, isA<IList<String>>());
       expect(iList4, isA<IList<int>>());
       expect(iList5, isA<IList<int>>());
+      expect(iList6, isA<IList>());
     });
 
     test('Emptiness Properties', () {
@@ -25,17 +27,19 @@ void main() {
       expect(iList3.isEmpty, isTrue);
       expect(iList4.isEmpty, isFalse);
       expect(iList5.isEmpty, isTrue);
+      expect(iList6.isEmpty, isTrue);
 
       expect(iList1.isNotEmpty, isFalse);
       expect(iList2.isNotEmpty, isFalse);
       expect(iList3.isNotEmpty, isFalse);
       expect(iList4.isNotEmpty, isTrue);
       expect(iList5.isNotEmpty, isFalse);
+      expect(iList6.isNotEmpty, isFalse);
     });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
   // TODO: completar/reorganizar. (Falta assegurar `remove` e `addAll` por exemplo.)
   group('Ensuring Immutability |', () {
     test('Changing the passed mutable list doesn\'t change the `IList`', () {
@@ -66,8 +70,6 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group('Equals |', () {
-    //
-
     test(
         'IList with identity-equals compares the list instance, '
         'not the items.', () {
@@ -227,6 +229,51 @@ void main() {
     });
 
     test('Invalid argument', () => expect(() => ilist1.maxLength(-1), throwsArgumentError));
+  });
+
+  group('`toggle`', () {
+    IList<int> iList = [1, 2, 3, 4, 5].lock;
+
+    test('Toggling an existing element', () {
+      expect(iList.contains(4), isTrue);
+
+      iList = iList.toggle(4);
+
+      expect(iList.contains(4), isFalse);
+
+      iList = iList.toggle(4);
+
+      expect(iList.contains(4), isTrue);
+    });
+
+    test('Toggling an inexistent element', () {
+      expect(iList.contains(6), isFalse);
+
+      iList = iList.toggle(6);
+
+      expect(iList.contains(6), isTrue);
+
+      iList = iList.toggle(6);
+
+      expect(iList.contains(6), isFalse);
+    });
+  });
+
+  group('Index Access |', () {
+    final IList<int> iList = [1, 2, 3, 4, 5].lock;
+
+    test('`iList[index]`', () {
+      expect(iList[0], 1);
+      expect(iList[1], 2);
+      expect(iList[2], 3);
+      expect(iList[3], 4);
+      expect(iList[4], 5);
+    });
+
+    test('Range Errors', () {
+      expect(() => iList[5], throwsA(isA<RangeError>()));
+      expect(() => iList[-1], throwsA(isA<RangeError>()));
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -392,7 +439,11 @@ void main() {
 
     test('`toSet`', () {
       expect(iList.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
-      expect(iList..add(6)..toSet(), {1, 2, 3, 4, 5, 6});
+      expect(
+          iList
+            ..add(6)
+            ..toSet(),
+          {1, 2, 3, 4, 5, 6});
       expect(iList.unlock, [1, 2, 3, 4, 5, 6]);
     });
 

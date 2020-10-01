@@ -17,7 +17,10 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Reorganized tests for `LAddAll`.
 1. Immutability Tests for `LAddAll`.
 1. `IMapOfSets` tests that are a little bit easier to follow.
-1. Updated the docs on the `IMapOfSets`.
+1. Upgraded the highlighting of the docs on the `IMapOfSets`.
+1. Added the missing, not tested methods of `IList`:
+    - `toggle`
+    - `[]`
 
 ## 30/09/2020
 
