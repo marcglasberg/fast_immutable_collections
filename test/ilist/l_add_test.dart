@@ -58,7 +58,6 @@ void main() {
     });
   });
 
-  // TODO: completar: `add`, `addAll` e `remove`.
   group('Ensuring Immutability |', () {
     group('`add` |', () {
       test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
