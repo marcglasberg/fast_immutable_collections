@@ -69,7 +69,6 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // TODO: Completar com as novas funcionalidades (`deepEquals`, etc.)
   group('Equals |', () {
     test(
         'IList with identity-equals compares the list instance, '
