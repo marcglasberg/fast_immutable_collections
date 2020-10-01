@@ -2,8 +2,17 @@
 
 A summary of detailed changes, aimed at developers. This constrasts with the [`CHANGELOG.md`][changelog] file, which is log for changes over versions, and thus even more summarized.
 
+> The dates below follow the format *DD/MM/YYYY*.
+
 
 [changelog]: ../CHANGELOG.md
+
+## 01/10/2020
+
+### 1. Philippe Fanaro
+
+1. Added a section to the `README.md` about the idea behind the implemantion.
+1. More tests to ensure immutability to `LAdd`.
 
 ## 30/09/2020
 

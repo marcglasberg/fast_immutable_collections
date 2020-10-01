@@ -26,3 +26,11 @@ The [`docs`][docs] folder features information which might be useful for you eit
 [plant_uml]: https://plantuml.com/
 [resources]: docs/resources.md
 [uml]: docs/uml.puml
+
+## 2. The Implementation's Idea
+
+Basically, behind the scenes, this is what happens when you pass a `List` to an `IList` &mdash; the other collection objects follow the same idea &mdash;:
+
+1. A *new* copy of the object is made with `List.of`, so the original object won't be modified at all.
+    1. When you add an element to the `IList`, it will be registered as an *immutable* property behind the scenes, and not `add`ed to the original `List`.
+    1. When you add a collection of elements (`Iterable`) to the `IList`, it will also be registered as an *immutable* property, as a new copy of the `Iterable` if necessary to ensure the original won't be changed.
