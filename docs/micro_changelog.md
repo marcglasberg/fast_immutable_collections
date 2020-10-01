@@ -20,6 +20,8 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Created a group of tests inside for `IList` to check if it really is immutable.
 1. Created the *essential* tests for `LFlat`.
 1. Tested the remaining methods for `LFlat`.
+1. Added tests on ensuring immutability to `LAdd`.
+1. Added tests for `unlock` on `LFlat` and `Ladd`.
 
 ## 29/09/2020
 
