@@ -73,10 +73,9 @@ void main() {
 
         expect(original, <int>[1, 2, 3, 4]);
         expect(lAdd.unlock, <int>[1, 2, 3]);
-        expect(lAdd.unlock, <int>[1, 2, 3]);
       });
 
-      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
+      test('Adding to the original `LAdd` doesn\'t change it', () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd<int>(lFlat, 3);
@@ -90,7 +89,7 @@ void main() {
         expect(l.unlock, <int>[1, 2, 3, 4]);
       });
 
-      test('If the item being passed is a variable, it shouldn\'t have a pointer to the variable',
+      test('If the item being passed is a variable, a pointer to it shouldn\'t exist inside `LAdd`',
           () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
@@ -156,6 +155,35 @@ void main() {
         expect(lAdd1, <int>[1, 2, 3]);
         expect(lAdd2, <int>[1, 2, 4]);
         expect(l.unlock, <int>[1, 2, 3, 1, 2, 4]);
+      });
+    });
+
+    group('`remove` |', () {
+      test('Changing the passed mutable list doesn\' change the `LAdd`', () {
+        final List<int> original = [1, 2];
+        final LFlat<int> lFlat = LFlat(original);
+        final LAdd<int> lAdd = LAdd(lFlat, 3);
+
+        expect(lAdd.unlock, <int>[1, 2, 3]);
+
+        original.remove(2);
+
+        expect(original, <int>[1]);
+        expect(lAdd.unlock, <int>[1, 2, 3]);
+      });
+
+      test('Removing from the original `LAdd` doesn\'t change it', () {
+        final List<int> original = [1, 2];
+        final LFlat<int> lFlat = LFlat(original);
+        final LAdd<int> lAdd = LAdd(lFlat, 3);
+
+        expect(lAdd.unlock, <int>[1, 2, 3]);
+
+        final L<int> l = lAdd.remove(1);
+
+        expect(original, <int>[1, 2]);
+        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(l.unlock, <int>[2, 3]);
       });
     });
   });

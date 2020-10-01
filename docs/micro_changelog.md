@@ -13,6 +13,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Added a section to the `README.md` about the idea behind the implemantion.
 1. More tests to ensure immutability to `LAdd`.
+1. Hopefully completed tests for `LAdd`.
 
 ## 30/09/2020
 
