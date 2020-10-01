@@ -5,7 +5,7 @@ import 'ilist.dart';
 class LAddAll<T> extends L<T> {
   final L<T> _l;
 
-  // Will always store this as List or L.
+  // Will always store this as `List` or [L].
   final Iterable<T> _listOrL;
 
   /// Safe.
