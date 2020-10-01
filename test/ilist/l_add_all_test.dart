@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fast_immutable_collections/src/ilist/l_add.dart';
 import 'package:fast_immutable_collections/src/ilist/l_add_all.dart';
 import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
@@ -134,6 +135,123 @@ void main() {
 
   // TODO: completar
   group('Ensuring Immutability |', () {
-    group('`add` |', () {});
+    group('`add` |', () {
+      test('Changing the passed mutable list doesn\'t change the `LAddAll`', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
+
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+
+        original.add(6);
+
+        expect(original, <int>[3, 4, 5, 6]);
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+      });
+
+      test('Adding to the original `LAddAll` doesn\'t change it', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
+
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+
+        final L<int> l = lAddAll.add(6);
+
+        expect(original, <int>[3, 4, 5]);
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+        expect(l, <int>[1, 2, 3, 4, 5, 6]);
+      });
+
+      test(
+          'If the item being passed is a variable, '
+          'a pointer to it shouldn\'t exist inside `LAddAll`', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
+
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+
+        int willChange = 6;
+        final L<int> l = lAddAll.add(willChange);
+
+        willChange = 7;
+
+        expect(original, <int>[3, 4, 5]);
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+        expect(willChange, 7);
+        expect(l, <int>[1, 2, 3, 4, 5, 6]);
+      });
+    });
+
+    group('`addAll` |', () {
+      test('Changing the passed mutable list doesn\'t change the `LAddAll`', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
+
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+
+        original.addAll(<int>[6, 7]);
+
+        expect(original, <int>[3, 4, 5, 6, 7]);
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+      });
+
+      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
+
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+
+        final L<int> l = lAddAll.addAll([6, 7]);
+
+        expect(original, <int>[3, 4, 5]);
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+        expect(l, <int>[1, 2, 3, 4, 5, 6, 7]);
+      });
+
+      test(
+          'If the items being passed are from a variable, '
+          'it shouldn\'t have a pointer to the variable', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll1 = LAddAll(LFlat<int>([1, 2]), original);
+        final LAddAll<int> lAddAll2 = LAddAll(LFlat<int>([8, 9]), original);
+
+        expect(lAddAll1, <int>[1, 2, 3, 4, 5]);
+        expect(lAddAll2, <int>[8, 9, 3, 4, 5]);
+
+        final L<int> l = lAddAll1.addAll(lAddAll2);
+        original.add(6);
+
+        expect(original, <int>[3, 4, 5, 6]);
+        expect(lAddAll1, <int>[1, 2, 3, 4, 5]);
+        expect(lAddAll2, <int>[8, 9, 3, 4, 5]);
+        expect(l, <int>[1, 2, 3, 4, 5, 8, 9, 3, 4, 5]);
+      });
+    });
+
+    group('`remove` |', () {
+      test('Changing the passed mutable list doesn\'t change the `LAddAll`', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
+
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+
+        original.remove(3);
+
+        expect(original, <int>[4, 5]);
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+      });
+
+      test('Removing from the original `LAddAll` doesn\'t change it', () {
+        final List<int> original = [3, 4, 5];
+        final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
+
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+
+        final L<int> l = lAddAll.remove(1);
+
+        expect(original, <int>[3, 4, 5]);
+        expect(lAddAll, <int>[1, 2, 3, 4, 5]);
+        expect(l, <int>[2, 3, 4, 5]);
+      });
+    });
   });
 }

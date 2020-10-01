@@ -65,13 +65,13 @@ void main() {
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
 
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
 
         original.add(3);
         original.add(4);
 
         expect(original, <int>[1, 2, 3, 4]);
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
       });
 
       test('Adding to the original `LAdd` doesn\'t change it', () {
@@ -79,13 +79,13 @@ void main() {
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd<int>(lFlat, 3);
 
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
 
         final L<int> l = lAdd.add(4);
 
         expect(original, <int>[1, 2]);
-        expect(lAdd.unlock, <int>[1, 2, 3]);
-        expect(l.unlock, <int>[1, 2, 3, 4]);
+        expect(lAdd, <int>[1, 2, 3]);
+        expect(l, <int>[1, 2, 3, 4]);
       });
 
       test('If the item being passed is a variable, a pointer to it shouldn\'t exist inside `LAdd`',
@@ -94,7 +94,7 @@ void main() {
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
 
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
 
         int willChange = 4;
         final L<int> l = lAdd.add(willChange);
@@ -102,9 +102,9 @@ void main() {
         willChange = 5;
 
         expect(original, <int>[1, 2]);
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
         expect(willChange, 5);
-        expect(l.unlock, <int>[1, 2, 3, 4]);
+        expect(l, <int>[1, 2, 3, 4]);
       });
     });
 
@@ -114,12 +114,12 @@ void main() {
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
 
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
 
         original.addAll(<int>[3, 4]);
 
         expect(original, <int>[1, 2, 3, 4]);
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
       });
 
       test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
@@ -127,13 +127,13 @@ void main() {
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd<int>(lFlat, 3);
 
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
 
         final L<int> l = lAdd.addAll([4, 5]);
 
         expect(original, <int>[1, 2]);
         expect(lAdd, <int>[1, 2, 3]);
-        expect(l.unlock, <int>[1, 2, 3, 4, 5]);
+        expect(l, <int>[1, 2, 3, 4, 5]);
       });
 
       test(
@@ -144,8 +144,8 @@ void main() {
         final LAdd<int> lAdd1 = LAdd<int>(lFlat, 3);
         final LAdd<int> lAdd2 = LAdd<int>(lFlat, 4);
 
-        expect(lAdd1.unlock, <int>[1, 2, 3]);
-        expect(lAdd2.unlock, <int>[1, 2, 4]);
+        expect(lAdd1, <int>[1, 2, 3]);
+        expect(lAdd2, <int>[1, 2, 4]);
 
         final L<int> l = lAdd1.addAll(lAdd2);
         original.add(5);
@@ -153,22 +153,22 @@ void main() {
         expect(original, <int>[1, 2, 5]);
         expect(lAdd1, <int>[1, 2, 3]);
         expect(lAdd2, <int>[1, 2, 4]);
-        expect(l.unlock, <int>[1, 2, 3, 1, 2, 4]);
+        expect(l, <int>[1, 2, 3, 1, 2, 4]);
       });
     });
 
     group('`remove` |', () {
-      test('Changing the passed mutable list doesn\' change the `LAdd`', () {
+      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
 
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
 
         original.remove(2);
 
         expect(original, <int>[1]);
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
       });
 
       test('Removing from the original `LAdd` doesn\'t change it', () {
@@ -176,13 +176,13 @@ void main() {
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
 
-        expect(lAdd.unlock, <int>[1, 2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
 
         final L<int> l = lAdd.remove(1);
 
         expect(original, <int>[1, 2]);
-        expect(lAdd.unlock, <int>[1, 2, 3]);
-        expect(l.unlock, <int>[2, 3]);
+        expect(lAdd, <int>[1, 2, 3]);
+        expect(l, <int>[2, 3]);
       });
     });
   });
