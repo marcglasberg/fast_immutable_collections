@@ -21,6 +21,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Added the missing, not tested methods of `IList`:
     - `toggle`
     - `[]`
+1. Added more tests to ensure the immutability of `IList`s.
 
 ## 30/09/2020
 

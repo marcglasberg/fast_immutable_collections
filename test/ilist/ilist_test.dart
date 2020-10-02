@@ -42,28 +42,123 @@ void main() {
 
   // TODO: completar/reorganizar. (Falta assegurar `remove` e `addAll` por exemplo.)
   group('Ensuring Immutability |', () {
-    test('Changing the passed mutable list doesn\'t change the `IList`', () {
+    group('`add` |', () {
+      test('Changing the passed mutable list doesn\'t change the `IList`', () {
+        final List<int> original = [1, 2];
+        final IList<int> iList = original.lock;
+
+        expect(iList, original);
+
+        original.add(3);
+        original.add(4);
+
+        expect(original, <int>[1, 2, 3, 4]);
+        expect(iList.unlock, <int>[1, 2]);
+      });
+
+      test('Changing the `IList` also doesn\'t change the original list', () {
+        final List<int> original = [1, 2];
+        final IList<int> iList = original.lock;
+
+        expect(iList, original);
+
+        final IList<int> iListNew = iList.add(3);
+
+        expect(original, <int>[1, 2]);
+        expect(iList, <int>[1, 2]);
+        expect(iListNew, <int>[1, 2, 3]);
+      });
+
+      test('If the item being passed is a variable, a pointer to it shouldn\'t exist inside `IList`',
+          () {
+        final List<int> original = [1, 2];
+        final IList<int> iList = original.lock;
+
+        expect(iList, original);
+
+        int willChange = 4;
+        final IList<int> iListNew = iList.add(willChange);
+
+        willChange = 5;
+
+        expect(original, <int>[1, 2]);
+        expect(iList, <int>[1, 2]);
+        expect(willChange, 5);
+        expect(iListNew, <int>[1, 2, 4]);
+      });
+    });
+
+    group('`addAll` |', () {
+      test('Changing the passed mutable list doesn\'t change the `IList`', () {
+        final List<int> original = [1, 2];
+        final IList<int> iList = original.lock;
+
+        expect(iList, <int>[1, 2]);
+
+        original.addAll(<int>[3, 4]);
+
+        expect(original, <int>[1, 2, 3, 4]);
+        expect(iList, <int>[1, 2]);
+      });
+
+      test('Changing the passed mutable list doesn\'t change the `IList`', () {
+        final List<int> original = [1, 2];
+        final IList<int> iList = original.lock;
+
+        expect(iList, <int>[1, 2]);
+
+        final IList<int> iListNew = iList.addAll(<int>[3, 4]);
+
+        expect(original, <int>[1, 2]);
+        expect(iList, <int>[1, 2]);
+        expect(iListNew, <int>[1, 2, 3, 4]);
+      });
+
+      test('If the items being passed are from a variable, '
+          'it shouldn\'t have a pointer to the variable', () {
+        final List<int> original = [1, 2];
+        final IList<int> iList1 = original.lock;
+        final IList<int> iList2 = original.lock;
+
+        expect(iList1, original);
+        expect(iList2, original);
+
+        final IList<int> iListNew = iList1.addAll(iList2);
+        original.add(3);
+
+        expect(original, <int>[1, 2, 3]);
+        expect(iList1, <int>[1, 2]);
+        expect(iList2, <int>[1, 2]);
+        expect(iListNew, <int>[1, 2, 1, 2]);
+      });
+    });
+
+    group('`remove` |', () {
+      test('Changing the passed mutable list doesn\'t change the `IList`', () {
+        
       final List<int> original = [1, 2];
       final IList<int> iList = original.lock;
 
-      expect(iList.unlock, original);
+      expect(iList, [1, 2]);
 
-      original.add(3);
+      original.remove(2);
 
-      expect(original, <int>[1, 2, 3]);
-      expect(iList.unlock, <int>[1, 2]);
-    });
+      expect(original, <int>[1]);
+      expect(iList, <int>[1, 2]);
+      });
 
-    test('Changing the `IList` also doesn\'t change the original list', () {
-      final List<int> original = [1, 2];
-      IList<int> iList = original.lock;
+      test('Removing from the original `IList` doesn\'t change it', () {
+        final List<int> original = [1, 2];
+        final IList<int> iList = original.lock;
 
-      expect(iList.unlock, original);
+        expect(iList, <int>[1, 2]);
 
-      iList = iList.add(3);
+        final IList<int> iListNew = iList.remove(1);
 
-      expect(original, <int>[1, 2]);
-      expect(iList, <int>[1, 2, 3]);
+        expect(original, <int>[1, 2]);
+        expect(iList, <int>[1, 2]);
+        expect(iListNew, <int>[2]);
+      });
     });
   });
 
