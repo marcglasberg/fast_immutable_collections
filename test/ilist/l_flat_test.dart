@@ -76,12 +76,11 @@ void main() {
     });
   });
 
-  // TODO: Rever mais tarde para talvez completar com algo próximo ao que há no `LAdd`.
   group('Ensuring Immutability |', () {
     // This code is not as DRY as one would like, but, in these immutability tests, I prefer to
     // repeat everything so all the variables are `final` within their context.
     group('`add` |', () {
-      test('Adding to the original list', () {
+      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat<int>(original);
 
@@ -93,16 +92,17 @@ void main() {
         expect(lFlat, [1, 2, 3]);
       });
 
-      test('Adding multiple elements at once', () {
+      test('Adding to the original `LFlat` doesn\'t change it', () {
         final List<int> original = [1, 2, 3];
-        final LFlat<int> lFlat = LFlat<int>(original);
+        final LFlat<int> lFlat = LFlat(original);
 
-        expect(lFlat.unlock, original);
+        expect(lFlat, <int>[1, 2, 3]);
 
-        original.addAll([4, 5]);
+        final L<int> l = lFlat.add(4);
 
-        expect(original, [1, 2, 3, 4, 5]);
-        expect(lFlat, [1, 2, 3]);
+        expect(original, <int>[1, 2, 3]);
+        expect(lFlat, <int>[1, 2, 3]);
+        expect(l, <int>[1, 2, 3, 4]);
       });
 
       test(
@@ -125,28 +125,90 @@ void main() {
       });
     });
 
-    test('Removing an element', () {
-      final List<int> original = [1, 2, 3];
-      final LFlat<int> lFlat = LFlat<int>(original);
+    group('`addAll` |', () {
+      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
+        final List<int> original = [1, 2, 3];
+        final LFlat<int> lFlat = LFlat<int>(original);
 
-      expect(lFlat, original);
+        expect(lFlat, original);
 
-      original.remove(3);
+        original.addAll([4, 5]);
 
-      expect(original, [1, 2]);
-      expect(lFlat, [1, 2, 3]);
+        expect(original, [1, 2, 3, 4, 5]);
+        expect(lFlat, [1, 2, 3]);
+      });
+
+      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
+        final List<int> original = [1, 2, 3];
+        final LFlat<int> lFlat = LFlat(original);
+
+        expect(lFlat, <int>[1, 2, 3]);
+
+        final L<int> l = lFlat.addAll([4, 5]);
+
+        expect(original, <int>[1, 2, 3]);
+        expect(lFlat, <int>[1, 2, 3]);
+        expect(l, <int>[1, 2, 3, 4, 5]);
+      });
+
+      test(
+          'If the items being passed are from a variable, '
+          'it shouldn\'t have a pointer to the variable', () {
+        final List<int> original = [1, 2];
+        final LFlat<int> lFlat1 = LFlat(original), lFlat2 = LFlat(original);
+
+        expect(lFlat1, <int>[1, 2]);
+        expect(lFlat2, <int>[1, 2]);
+
+        final L<int> l = lFlat1.addAll(lFlat2);
+        original.add(5);
+
+        expect(original, <int>[1, 2, 5]);
+        expect(lFlat1, <int>[1, 2]);
+        expect(lFlat2, <int>[1, 2]);
+        expect(l, <int>[1, 2, 1, 2]);
+      });
     });
 
-    test('Initialization through the `unsafe` constructor', () {
-      final List<int> original = [1, 2, 3];
-      final LFlat<int> lFlat = LFlat.unsafe(original);
+    group('`remove` |', () {
+      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
+        final List<int> original = [1, 2, 3];
+        final LFlat<int> lFlat = LFlat<int>(original);
 
-      expect(lFlat, original);
+        expect(lFlat, original);
 
-      original.add(4);
+        original.remove(3);
 
-      expect(original, [1, 2, 3, 4]);
-      expect(lFlat, [1, 2, 3, 4]);
+        expect(original, [1, 2]);
+        expect(lFlat, [1, 2, 3]);
+      });
+
+      test('Removing from the original `LFlat` doesn\'t change it', () {
+        final List<int> original = [1, 2];
+        final LFlat<int> lFlat = LFlat(original);
+
+        expect(lFlat, <int>[1, 2]);
+
+        final L<int> l = lFlat.remove(1);
+
+        expect(original, <int>[1, 2]);
+        expect(lFlat, <int>[1, 2]);
+        expect(l, <int>[2]);
+      });
+    });
+
+    group('Others |', () {
+      test('Initialization through the `unsafe` constructor', () {
+        final List<int> original = [1, 2, 3];
+        final LFlat<int> lFlat = LFlat.unsafe(original);
+
+        expect(lFlat, original);
+
+        original.add(4);
+
+        expect(original, [1, 2, 3, 4]);
+        expect(lFlat, [1, 2, 3, 4]);
+      });
     });
   });
 

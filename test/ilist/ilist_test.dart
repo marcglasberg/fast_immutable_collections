@@ -40,7 +40,6 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // TODO: completar/reorganizar. (Falta assegurar `remove` e `addAll` por exemplo.)
   group('Ensuring Immutability |', () {
     group('`add` |', () {
       test('Changing the passed mutable list doesn\'t change the `IList`', () {

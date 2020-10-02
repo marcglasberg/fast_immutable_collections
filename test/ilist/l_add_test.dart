@@ -141,8 +141,7 @@ void main() {
           'it shouldn\'t have a pointer to the variable', () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
-        final LAdd<int> lAdd1 = LAdd<int>(lFlat, 3);
-        final LAdd<int> lAdd2 = LAdd<int>(lFlat, 4);
+        final LAdd<int> lAdd1 = LAdd<int>(lFlat, 3), lAdd2 = LAdd<int>(lFlat, 4);
 
         expect(lAdd1, <int>[1, 2, 3]);
         expect(lAdd2, <int>[1, 2, 4]);
