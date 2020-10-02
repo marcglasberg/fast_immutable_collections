@@ -89,6 +89,11 @@ void main() {
     iMapOfSets = iMapOfSets.add('a', 2);
     iMapOfSets = iMapOfSets.add('b', 3);
 
+    test('`[]`', () {
+      expect(iMapOfSets['a'], ISet({1, 2}));
+      expect(iMapOfSets['b'], ISet({3}));
+    });
+
     test('`entries`', () {
       final IList<MapEntry<String, ISet<int>>> entries = iMapOfSets.entries;
 
@@ -111,8 +116,75 @@ void main() {
 
     test('`values`', () => expect(iMapOfSets.values, ISet<int>({1, 2, 3})));
 
-    test('`addSet`', () {
-      
+    test('`add`', () {
+      final IMapOfSets<String, int> newSet = iMapOfSets.add('a', 5);
+      expect(newSet['a'], ISet({1, 2, 5}));
     });
+
+    test('`remove`', () {
+      final IMapOfSets<String, int> newSet = iMapOfSets.add('a', 2);
+      expect(newSet['a'], ISet({1}));
+    });
+
+    test('`addSet`', () {
+      final IMapOfSets<String, int> newSet = iMapOfSets.addSet('b', ISet({2, 3, 4}));
+      expect(newSet['b'], ISet({2, 3, 4}));
+    });
+
+    test('`removeSet`', () {
+      final IMapOfSets<String, int> newSet = iMapOfSets.removeSet('a');
+      expect(newSet.keys.length, 1);
+    });
+
+    // TODO: Marcelo, o nome da função é `getOrNull` mas ela nunca retorna `null`? Pelo menos é isso
+    // que está escrito na documentação...
+    test('`getOrNull`', () {
+      expect(iMapOfSets.getOrNull('a'), ISet<int>({1, 2}));
+      expect(iMapOfSets.getOrNull('b'), ISet<int>({3}));
+      expect(iMapOfSets.getOrNull('c'), null);
+    });
+
+    test('`get`', () {
+      expect(iMapOfSets.get('a'), ISet<int>({1, 2}));
+      expect(iMapOfSets.get('b'), ISet<int>({3}));
+      expect(iMapOfSets.get('c'), ISet<int>());
+    });
+
+    test('`containsKey`', () {
+      expect(iMapOfSets.containsKey('a'), isTrue);
+      expect(iMapOfSets.containsKey('b'), isTrue);
+      expect(iMapOfSets.containsKey('c'), isFalse);
+    });
+
+    test('`containsValue`', () {
+      expect(iMapOfSets.containsValue(1), isTrue);
+      expect(iMapOfSets.containsValue(2), isTrue);
+      expect(iMapOfSets.containsValue(3), isTrue);
+      expect(iMapOfSets.containsValue(4), isFalse);
+    });
+
+    test('`contains`', () {
+      expect(iMapOfSets.contains('a', 1), isTrue);
+      expect(iMapOfSets.contains('a', 2), isTrue);
+      expect(iMapOfSets.contains('b', 3), isTrue);
+      expect(iMapOfSets.contains('b', 4), isFalse);
+      expect(iMapOfSets.contains('c', 1), isFalse);
+    });
+
+    test('`any`', () {
+      expect(iMapOfSets.any(1), MapEntry('a', ISet<int>({1, 2})));
+      expect(iMapOfSets.any(2), MapEntry('a', ISet<int>({1, 2})));
+      expect(iMapOfSets.any(3), MapEntry('b', ISet<int>({3})));
+      expect(iMapOfSets.any(4), isNull);
+    });
+
+    test('`anyKey`', () {
+      expect(iMapOfSets.anyKey(1), 'a');
+      expect(iMapOfSets.anyKey(2), 'a');
+      expect(iMapOfSets.anyKey(3), 'b');
+      expect(iMapOfSets.anyKey(4), isNull);
+    });
+
+    test('`toString`', () => expect(iMapOfSets.toString(), '{a: {1, 2}, b: {3}}'));
   });
 }

@@ -12,6 +12,9 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 ### 1. Philippe Fanaro
 
 1. Completed the immutability tests for `LFlat`.
+1. Completed the tests for `IMapOfSets`.
+    - Apparently, when adding elements to the key, the `IMapOfSets` is still adding the repeated key, which is causing errors.
+    - In the `anyKey` method, if `any` returns `null`, we will have an error when we try to calculate `.key` &mdash; just replace it for `?.key`?
 
 ## 01/10/2020
 
