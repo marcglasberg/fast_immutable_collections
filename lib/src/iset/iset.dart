@@ -12,13 +12,15 @@ extension ISetExtension<T> on Set<T> {
   //
 
   /// Locks the set, returning an *immutable* set ([ISet]).
-  /// The equals operator (`==`) compares by identity (it's only equal when the set instance is the
-  /// same).
   ISet<T> get lock => ISet<T>(this);
 
   /// Locks the set, returning an *immutable* set ([ISet]).
   /// The equals operator (`==`) compares all items, unordered.
-  ISet<T> get deep => ISet<T>(this).deepEquals;
+  ISet<T> get lockDeep => ISet<T>(this).deepEquals;
+
+  /// Locks the set, returning an *immutable* set ([ISet]).
+  /// The equals operator (`==`) compares by identity.
+  ISet<T> get lockIdentity => ISet<T>(this).identityEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,13 +37,15 @@ class ISet<T> // ignore: must_be_immutable
   /// If `true`, the equals operator (`==`) compares all items, unordered.
   final bool isDeepEquals;
 
-  static ISet<T> empty<T>() => ISet.__(SFlat.empty<T>(), isDeepEquals: false);
+  bool get isIdentityEquals => !isDeepEquals;
+
+  static ISet<T> empty<T>() => ISet.__(SFlat.empty<T>(), isDeepEquals: defaultIsDeepEquals);
 
   factory ISet([Iterable<T> iterable]) => iterable is ISet<T>
       ? iterable
       : iterable == null || iterable.isEmpty
           ? ISet.empty<T>()
-          : ISet<T>.__(SFlat<T>(iterable), isDeepEquals: false);
+          : ISet<T>.__(SFlat<T>(iterable), isDeepEquals: defaultIsDeepEquals);
 
   ISet._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _s = iterable is ISet<T>
@@ -70,8 +74,16 @@ class ISet<T> // ignore: must_be_immutable
   bool get isNotEmpty => !isEmpty;
 
   @override
-  bool operator ==(Object other) =>
-      !isDeepEquals ? identical(this, other) : (other is ISet<T> && equals(other));
+  bool operator ==(Object other) {
+    print('isDeepEquals = ${isDeepEquals}');
+    print('other.isDeepEquals = ${(other as ISet).isDeepEquals}');
+    print('(other is ISet<T> && equals(other)) = ${(other is ISet<T> && equals(other))}');
+    print('equals(other) = ${equals(other as ISet<T>)}');
+    print('this = ${this}');
+    print('other = ${other}');
+
+    return !isDeepEquals ? identical(this, other) : (other is ISet<T> && equals(other));
+  }
 
   @override
   bool equals(ISet<T> other) =>
@@ -95,23 +107,10 @@ class ISet<T> // ignore: must_be_immutable
   bool get isFlushed => _s is SFlat;
 
   /// Returns a new set containing the current set plus the given item.
-  /// However, if the given item already exists in the set,
-  /// it will return the current set (same instance).
-  ISet<T> add(T item) =>
-      contains(item) ? this : ISet<T>.__(_s.add(item), isDeepEquals: isDeepEquals);
+  ISet<T> add(T item) => ISet<T>.__(_s.add(item), isDeepEquals: isDeepEquals);
 
   /// Returns a new set containing the current set plus all the given items.
-  /// However, if all given items already exists in the set,
-  /// it will return the current set (same instance).
-  ISet<T> addAll(Iterable<T> items) {
-    final Set<T> setToBeAdded = {};
-    for (T item in items) {
-      if (!_s.contains(item)) setToBeAdded.add(item);
-    }
-    return (setToBeAdded.isEmpty)
-        ? this
-        : ISet<T>.__(_s.addAll(setToBeAdded), isDeepEquals: isDeepEquals);
-  }
+  ISet<T> addAll(Iterable<T> items) => ISet<T>.__(_s.addAll(items), isDeepEquals: isDeepEquals);
 
   /// Returns a new set containing the current set minus the given item.
   /// However, if the given item didn't exist in the current set,
@@ -223,6 +222,7 @@ class ISet<T> // ignore: must_be_immutable
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+@visibleForOverriding
 abstract class S<T> implements Iterable<T> {
   /// The [S] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
@@ -241,12 +241,26 @@ abstract class S<T> implements Iterable<T> {
   @override
   Iterator<T> get iterator;
 
-  S<T> add(T item) => SAdd<T>(this, item);
+  /// Returns a new set containing the current set plus the given item.
+  /// However, if the given item already exists in the set,
+  /// it will return the current set (same instance).
+  S<T> add(T item) => contains(item) ? this : SAdd(this, item);
 
-  S<T> addAll(Iterable<T> items) => SAddAll<T>(
-        this,
-        (items is ISet<T>) ? items._s : items,
-      );
+  /// Returns a new set containing the current set plus all the given items.
+  /// However, if all given items already exists in the set,
+  /// it will return the current set (same instance).
+  S<T> addAll(Iterable<T> items) {
+    final Set<T> setToBeAdded = {};
+    for (T item in items) {
+      if (!contains(item)) setToBeAdded.add(item);
+    }
+    return setToBeAdded.isEmpty ? this : SAddAll(this, setToBeAdded);
+  }
+
+  // => SAddAll<T>(
+  //       this,
+  //       (items is ISet<T>) ? items._s : items,
+  //     );
 
   /// TODO: FALTA FAZER!!!
   S<T> remove(T element) =>
@@ -266,7 +280,7 @@ abstract class S<T> implements Iterable<T> {
   Iterable<R> cast<R>() => _getFlushed.cast<R>();
 
   @override
-  bool contains(Object element) => _getFlushed.contains(element);
+  bool contains(Object element);
 
   @override
   bool every(bool Function(T) test) => _getFlushed.every(test);

@@ -11,21 +11,34 @@ import '../iset/iset.dart';
 class IMapOfSets<K, V> {
   final IMap<K, ISet<V>> _mapOfSets;
 
-  IMapOfSets([IMap<K, ISet<V>> mapOfSets]) : _mapOfSets = mapOfSets ?? IMap.empty<K, ISet<V>>();
+  IMapOfSets([IMap<K, ISet<V>> mapOfSets])
+      : _mapOfSets = mapOfSets ?? IMap.empty<K, ISet<V>>().deepEquals {
+    if (mapOfSets != null && mapOfSets.values.any((set) => set.isIdentityEquals))
+      throw ArgumentError("All sets in a MapOfSets must be deepEquals.");
+  }
 
   static IMapOfSets<K, V> empty<K, V>() => IMapOfSets<K, V>();
 
-  IList<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
+  Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
+
+  ISet<MapEntry<K, ISet<V>>> get entrySet => ISet(entries).deepEquals;
+
+  Iterable<K> get keys => _mapOfSets.keys;
+
+  Iterable<ISet<V>> get sets => _mapOfSets.values;
+
+  /// Order is undefined.
+  IList<K> get keyList => IList(keys).deepEquals;
+
+  ISet<K> get keySet => ISet(keys).deepEquals;
+
+  IList<ISet<V>> get setList => IList(sets).deepEquals;
+
+  ISet<ISet<V>> get setSet => ISet(sets).deepEquals;
 
   bool get isEmpty => _mapOfSets.isEmpty;
 
   bool get isNotEmpty => _mapOfSets.isNotEmpty;
-
-  /// Return a list of the keys.
-  IList<K> get keys => _mapOfSets.keys;
-
-  /// Return a list of the sets.
-  IList<ISet<V>> get sets => _mapOfSets.values;
 
   /// Return all values of all sets.
   ISet<V> get values {
@@ -34,7 +47,7 @@ class IMapOfSets<K, V> {
       var set = entry.value;
       result.addAll(set);
     }
-    return ISet<V>(result);
+    return ISet<V>(result).deepEquals;
   }
 
   /// Add the `key:set` entry.
@@ -92,9 +105,9 @@ class IMapOfSets<K, V> {
   /// Return `true` if the key exists (with a non-empty set).
   bool containsKey(K key) => _mapOfSets.containsKey(key);
 
-  /// Return any `key:set` entry where the value exists in the set.
-  /// If it doesn't find the value, return `null`.
-  MapEntry<K, ISet<V>> any(V value) {
+  /// Return a `key:set` entry where the value exists in the set.
+  /// If the entry doesn't exist, return `null`.
+  MapEntry<K, ISet<V>> entryWithValue(V value) {
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       var set = entry.value;
       if (set.contains(value)) return entry;
@@ -104,10 +117,10 @@ class IMapOfSets<K, V> {
 
   /// Return any key entry where the value exists in its set.
   /// If it doesn't find the value, return `null`.
-  K anyKey(V value) => any(value).key;
+  K keyWithValue(V value) => entryWithValue(value)?.key;
 
   /// Return true if the value exists in any of the sets.
-  bool containsValue(V value) => any(value) == null;
+  bool containsValue(V value) => entryWithValue(value) != null;
 
   /// Return `true` if the `key:set` entry exists, and the set contains the given value.
   bool contains(K key, V value) => get(key).contains(value);

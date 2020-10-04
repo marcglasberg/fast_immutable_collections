@@ -16,6 +16,9 @@ class SFlat<T> extends S<T> {
   SFlat.unsafe(this._set) : assert(_set != null);
 
   @override
+  bool contains(Object element) => _set.contains(element);
+
+  @override
   Iterator<T> get iterator => _set.iterator;
 
   @override
@@ -25,12 +28,8 @@ class SFlat<T> extends S<T> {
   bool any(bool Function(T) test) => _set.any(test);
 
   @override
+  // TODO: Iterable<R> cast<R>() => _set.cast<R>();
   Iterable<R> cast<R>() => throw UnsupportedError('cast');
-
-  // Iterable<R> cast<R>() => _set.cast<R>();
-
-  @override
-  bool contains(Object element) => _set.contains(element);
 
   @override
   bool every(bool Function(T) test) => _set.every(test);
@@ -106,9 +105,34 @@ class SFlat<T> extends S<T> {
   Iterable<E> whereType<E>() => ISet(_set.whereType<E>());
 
   bool deepSetEquals(SFlat<T> other) =>
-      other == null ? false : const SetEquality().equals(_set, other._set);
+      other == null ? false : const SetEquality(MapEntryEquality()).equals(_set, other._set);
 
-  int deepSetHashcode() => const SetEquality().hash(_set);
+  int deepSetHashcode() => const SetEquality(MapEntryEquality()).hash(_set);
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// Equals of MapEntry gets special treatment.
+/// We consider two map-entries equal when their respective
+/// key and values are equal.
+///
+class MapEntryEquality<E> implements Equality<E> {
+  const MapEntryEquality();
+
+  @override
+  bool equals(Object e1, Object e2) => //
+      (e1 is MapEntry && e2 is MapEntry) //
+          ? e1.key == e2.key && e1.value == e2.value
+          : e1 == e2;
+
+  @override
+  int hash(Object e) => //
+      (e is MapEntry) //
+          ? (e.key as Object).hashCode ^ (e.value as Object).hashCode
+          : e.hashCode;
+
+  @override
+  bool isValidKey(Object o) => true;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

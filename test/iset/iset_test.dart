@@ -351,4 +351,15 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group('ISet of MapEntry gets special treatment.', () {
+    test('Equals', () {
+      var iSet1 = ISet<MapEntry<String, int>>([MapEntry('a', 1)]).deepEquals;
+      var iSet2 = ISet<MapEntry<String, int>>([MapEntry('a', 1)]).deepEquals;
+
+      expect(iSet1, iSet2);
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

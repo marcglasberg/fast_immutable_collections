@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:collection/collection.dart';
 
 import '../ilist/ilist.dart';
@@ -13,12 +15,13 @@ class MFlat<K, V> extends M<K, V> {
 
   MFlat(Map<K, V> _map)
       : assert(_map != null),
-        _map = Map<K, V>.of(_map);
+        _map = HashMap<K, V>.of(_map);
 
   MFlat.unsafe(this._map) : assert(_map != null);
 
   @override
-  Iterable<MapEntry<K, V>> get entries => _map.entries;
+  Iterable<MapEntry<K, V>> get entries =>
+      _map.entries.map((entry) => MapEntry(entry.key, entry.value));
 
   @override
   Iterable<K> get keys => IList(_map.keys);
@@ -33,10 +36,9 @@ class MFlat<K, V> extends M<K, V> {
   bool any(bool Function(K, V) test) => _map.entries.any((entry) => test(entry.key, entry.value));
 
   @override
-  bool contains(K key, V value) {
-    final V _value = _map[key];
-    return (_value == null) ? false : (_value == _value);
-  }
+  bool contains(K key, V value) => (value != null) //
+      ? (_map[key] == value)
+      : (_map.containsKey(key) && (_map[key] == null));
 
   @override
   bool containsKey(K key) => _map.containsKey(key);

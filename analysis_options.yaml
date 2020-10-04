@@ -9,3 +9,4 @@ linter:
     curly_braces_in_flow_control_structures: false
     equal_elements_in_set: false
     omit_local_variable_types: false
+    prefer_single_quotes: false

@@ -1,7 +1,6 @@
 import 'dart:collection';
-
+import 'package:fast_immutable_collections/src/imap/m_replace.dart';
 import 'package:meta/meta.dart';
-
 import '../../fast_immutable_collections.dart';
 import 'm_add.dart';
 import 'm_add_all.dart';
@@ -9,17 +8,54 @@ import 'm_flat.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+extension MapEntryExtension<K, V> on MapEntry<K, V> {
+  //
+  Entry<K, V> get entry => Entry.from<K, V>(this);
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// Similar to a [MapEntry], but correctly implements
+/// equals comparing key and value.
+class Entry<K, V> {
+  final K key;
+
+  final V value;
+
+  const Entry(this.key, this.value);
+
+  static Entry<K, V> from<K, V>(MapEntry<K, V> entry) => Entry(entry.key, entry.value);
+
+  @override
+  String toString() => "Entry(${key.toString()}: ${value.toString()})";
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Entry &&
+          runtimeType == other.runtimeType &&
+          key == other.key &&
+          value == other.value;
+
+  @override
+  int get hashCode => key.hashCode ^ value.hashCode;
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
 extension IMapExtension<K, V> on Map<K, V> {
   //
 
   /// Locks the map, returning an *immutable* map ([IMap]).
-  /// The equals operator (`==`) compares by identity (it's only equal when the map instance is the
-  /// same).
   IMap<K, V> get lock => IMap<K, V>(this);
 
   /// Locks the map, returning an *immutable* map ([IMap]).
   /// The equals operator (`==`) compares all items, unordered.
-  IMap<K, V> get deep => IMap<K, V>(this).deepEquals;
+  IMap<K, V> get lockDeep => IMap<K, V>(this).deepEquals;
+
+  /// Locks the map, returning an *immutable* map ([IMap]).
+  /// The equals operator (`==`) compares by identity.
+  IMap<K, V> get lockIdentity => IMap<K, V>(this).identityEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,19 +72,22 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If `true`, the equals operator (`==`) compares all items, unordered.
   final bool isDeepEquals;
 
-  static IMap<K, V> empty<K, V>() => IMap.__(MFlat.empty<K, V>(), isDeepEquals: false);
+  bool get isIdentityEquals => !isDeepEquals;
+
+  static IMap<K, V> empty<K, V>() =>
+      IMap.__(MFlat.empty<K, V>(), isDeepEquals: defaultIsDeepEquals);
 
   factory IMap([Map<K, V> map]) => (map == null || map.isEmpty)
       ? IMap.empty<K, V>()
-      : IMap<K, V>.__(MFlat<K, V>(map), isDeepEquals: false);
+      : IMap<K, V>.__(MFlat<K, V>(map), isDeepEquals: defaultIsDeepEquals);
 
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries) {
     if (entries is IMap<K, V>)
-      return IMap.__((entries as IMap<K, V>)._m, isDeepEquals: false);
+      return IMap.__((entries as IMap<K, V>)._m, isDeepEquals: defaultIsDeepEquals);
     else {
       var map = HashMap<K, V>();
       map.addEntries(entries);
-      return IMap.__(MFlat.unsafe(map), isDeepEquals: false);
+      return IMap.__(MFlat.unsafe(map), isDeepEquals: defaultIsDeepEquals);
     }
   }
 
@@ -65,7 +104,7 @@ class IMap<K, V> // ignore: must_be_immutable
       map[key] = valueMapper(key);
     }
 
-    return IMap._map(map, isDeepEquals: false);
+    return IMap._map(map, isDeepEquals: defaultIsDeepEquals);
   }
 
   factory IMap.fromValues({
@@ -81,7 +120,7 @@ class IMap<K, V> // ignore: must_be_immutable
       map[keyMapper(value)] = value;
     }
 
-    return IMap._map(map, isDeepEquals: false);
+    return IMap._map(map, isDeepEquals: defaultIsDeepEquals);
   }
 
   factory IMap.fromIterable(
@@ -90,12 +129,12 @@ class IMap<K, V> // ignore: must_be_immutable
     V Function(dynamic) valueMapper,
   }) {
     Map<K, V> map = Map.fromIterable(iterable, key: keyMapper, value: valueMapper);
-    return IMap._map(map, isDeepEquals: false);
+    return IMap._map(map, isDeepEquals: defaultIsDeepEquals);
   }
 
   factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values) {
     Map<K, V> map = Map.fromIterables(keys, values);
-    return IMap._map(map, isDeepEquals: false);
+    return IMap._map(map, isDeepEquals: defaultIsDeepEquals);
   }
 
   /// Unsafe.
@@ -104,11 +143,24 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Unsafe.
   IMap.__(this._m, {@required this.isDeepEquals});
 
-  IList<MapEntry<K, V>> get entries => IList(_m.entries);
+  Iterable<MapEntry<K, V>> get entries => _m.entries;
 
-  IList<K> get keys => IList(_m.keys);
+  Iterable<K> get keys => _m.keys;
 
-  IList<V> get values => IList(_m.values);
+  Iterable<V> get values => _m.values;
+
+  /// Order is undefined.
+  IList<MapEntry<K, V>> get entryList => IList(entries);
+
+  ISet<MapEntry<K, V>> get entrySet => ISet(entries);
+
+  /// Order is undefined.
+  IList<K> get keyList => IList(keys);
+
+  ISet<K> get keySet => ISet(keys);
+
+  /// Order is undefined.
+  IList<V> get valueList => IList(values);
 
   Iterator<MapEntry<K, V>> get iterator => _m.iterator;
 
@@ -203,18 +255,21 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool containsEntry(MapEntry<K, V> entry) => _m.contains(entry.key, entry.value);
 
+  /// Order is undefined.
   List<MapEntry<K, V>> toList() => List.of(entries);
 
-  IList<MapEntry<K, V>> toIList() => entries;
+  /// Order is undefined.
+  IList<MapEntry<K, V>> toIList() => IList(entries);
+
+  ISet<MapEntry<K, V>> toISet() => ISet(entries);
 
   Set<K> toKeySet() => keys.toSet();
 
   Set<V> toValueSet() => values.toSet();
 
-  ISet<MapEntry<K, V>> toISet() => ISet(entries);
-
   ISet<K> toKeyISet() => ISet(keys);
 
+  /// Will remove duplicate values.
   ISet<V> toValueISet() => ISet(values);
 
   int get length => _m.length;
@@ -236,6 +291,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+@visibleForOverriding
 abstract class M<K, V> {
   //
   // Implemented by subclasses.
@@ -267,7 +323,22 @@ abstract class M<K, V> {
 
   int get length => _getFlushed.length;
 
-  M<K, V> add({@required K key, @required V value}) => MAdd<K, V>(this, key, value);
+  /// Returns a new map containing the current map plus the given key:value.
+  /// However, if the given key already exists in the set,
+  /// it will remove the old one and add the new one.
+  M<K, V> add({@required K key, @required V value}) {
+    bool contains = containsKey(key);
+    if (!contains)
+      return MAdd<K, V>(this, key, value);
+    else {
+      var oldValue = this[key];
+      return (oldValue == value) //
+          ? this
+          : MReplace<K, V>(this, key, value);
+    }
+  }
+
+  // M<K,V> add(T item) => contains(item) ? this : SAdd(this, item);
 
   M<K, V> addAll(IMap<K, V> imap) => MAddAll<K, V>.unsafe(this, imap._m);
 
@@ -291,7 +362,7 @@ abstract class M<K, V> {
 
   bool get isNotEmpty => !isEmpty;
 
-  V operator [](K key) => _getFlushed[key];
+  V operator [](K key);
 
   /// TODO: Is `_value == _value` correct?
   bool contains(K key, V value) {

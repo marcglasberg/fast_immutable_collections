@@ -3,6 +3,8 @@ import 'package:test/test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   group('Empty Initialization |', () {
     final IMapOfSets<String, int> iMapOfSets = IMapOfSets(),
         iMapOfSetsFromEmpty = IMapOfSets.empty();
@@ -21,6 +23,8 @@ void main() {
     });
   });
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   group('Initialization from an `IMap` |', () {
     final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2, 3});
     final IMap<String, ISet<int>> iMap = IMap({
@@ -34,6 +38,8 @@ void main() {
       expect(iMapOfSets['b'], ISet({1, 2, 3}));
     });
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group('Basic Operations and Workflow |', () {
     IMapOfSets<String, int> mapOfSets = IMapOfSets();
@@ -83,7 +89,9 @@ void main() {
     });
   });
 
-  group('Testing the remaining individual methods |', () {
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group('Testing the remaining methods.', () {
     IMapOfSets<String, int> iMapOfSets = IMapOfSets.empty();
     iMapOfSets = iMapOfSets.add('a', 1);
     iMapOfSets = iMapOfSets.add('a', 2);
@@ -94,20 +102,25 @@ void main() {
       expect(iMapOfSets['b'], ISet({3}));
     });
 
-    test('`entries`', () {
-      final IList<MapEntry<String, ISet<int>>> entries = iMapOfSets.entries;
+    test("entries", () {
+      final ISet<MapEntry<String, ISet<int>>> entries = iMapOfSets.entrySet;
 
-      expect(entries[0], MapEntry('a', ISet({1, 2})));
-      expect(entries[1], MapEntry('b', ISet({3})));
+      print('iMapOfSets = ${iMapOfSets}');
+      expect(
+          entries,
+          ISet([
+            MapEntry('a', ISet({1, 2})),
+            MapEntry('b', ISet({3})),
+          ]).deepEquals);
     });
 
     test('`keys`', () {
-      expect(iMapOfSets, isA<IList<int>>());
+      expect(iMapOfSets.keys, isA<Iterable<String>>());
       expect(iMapOfSets.keys, ['a', 'b']);
     });
 
     test('`sets`', () {
-      expect(iMapOfSets, isA<IList<ISet<int>>>());
+      expect(iMapOfSets.sets, isA<Iterable<ISet<int>>>());
       expect(iMapOfSets.sets, [
         ISet<int>({1, 2}),
         ISet<int>({3}),
@@ -123,7 +136,7 @@ void main() {
 
     test('`remove`', () {
       final IMapOfSets<String, int> newSet = iMapOfSets.add('a', 2);
-      expect(newSet['a'], ISet({1}));
+      expect(newSet['a'], ISet({1, 2}));
     });
 
     test('`addSet`', () {
@@ -171,18 +184,18 @@ void main() {
       expect(iMapOfSets.contains('c', 1), isFalse);
     });
 
-    test('`any`', () {
-      expect(iMapOfSets.any(1), MapEntry('a', ISet<int>({1, 2})));
-      expect(iMapOfSets.any(2), MapEntry('a', ISet<int>({1, 2})));
-      expect(iMapOfSets.any(3), MapEntry('b', ISet<int>({3})));
-      expect(iMapOfSets.any(4), isNull);
+    test('`entryWithValue`', () {
+      expect(iMapOfSets.entryWithValue(1).entry, Entry('a', ISet<int>({1, 2})));
+      expect(iMapOfSets.entryWithValue(2).entry, Entry('a', ISet<int>({1, 2})));
+      expect(iMapOfSets.entryWithValue(3).entry, Entry('b', ISet<int>({3})));
+      expect(iMapOfSets.entryWithValue(4), isNull);
     });
 
-    test('`anyKey`', () {
-      expect(iMapOfSets.anyKey(1), 'a');
-      expect(iMapOfSets.anyKey(2), 'a');
-      expect(iMapOfSets.anyKey(3), 'b');
-      expect(iMapOfSets.anyKey(4), isNull);
+    test('`keyWithValue`', () {
+      expect(iMapOfSets.keyWithValue(1), 'a');
+      expect(iMapOfSets.keyWithValue(2), 'a');
+      expect(iMapOfSets.keyWithValue(3), 'b');
+      expect(iMapOfSets.keyWithValue(4), isNull);
     });
 
     test('`toString`', () => expect(iMapOfSets.toString(), '{a: {1, 2}, b: {3}}'));

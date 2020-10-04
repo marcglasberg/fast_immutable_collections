@@ -9,13 +9,15 @@ extension IListExtension<T> on List<T> {
   //
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  /// The equals operator (`==`) compares by identity (it's only equal when the list instance is the
-  /// same).
   IList<T> get lock => IList<T>(this);
 
   /// Locks the list, returning an *immutable* list ([IList]).
   /// The equals operator (`==`) compares all items, ordered.
-  IList<T> get deep => IList<T>(this).deepEquals;
+  IList<T> get lockDeep => IList<T>(this).deepEquals;
+
+  /// Locks the list, returning an *immutable* list ([IList]).
+  /// The equals operator (`==`) compares by identity.
+  IList<T> get lockIdentity => IList<T>(this).identityEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,9 @@ class IList<T> // ignore: must_be_immutable
   /// If `true`, the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
-  static IList<T> empty<T>() => IList.__(LFlat.empty<T>(), isDeepEquals: false);
+  bool get isIdentityEquals => !isDeepEquals;
+
+  static IList<T> empty<T>() => IList.__(LFlat.empty<T>(), isDeepEquals: defaultIsDeepEquals);
 
   factory IList([
     Iterable<T> iterable,
@@ -41,7 +45,7 @@ class IList<T> // ignore: must_be_immutable
           ? iterable
           : iterable == null || iterable.isEmpty
               ? IList.empty<T>()
-              : IList<T>.__(LFlat<T>(iterable), isDeepEquals: false);
+              : IList<T>.__(LFlat<T>(iterable), isDeepEquals: defaultIsDeepEquals);
 
   IList._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _l = iterable is IList<T>
@@ -217,6 +221,7 @@ class IList<T> // ignore: must_be_immutable
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+@visibleForOverriding
 abstract class L<T> implements Iterable<T> {
   //
 

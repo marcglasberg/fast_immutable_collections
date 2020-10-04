@@ -134,7 +134,7 @@ void main() {
 
     group('`remove` |', () {
       test('Changing the passed mutable list doesn\'t change the `IList`', () {
-        
+
       final List<int> original = [1, 2];
       final IList<int> iList = original.lock;
 
@@ -167,11 +167,11 @@ void main() {
     test(
         'IList with identity-equals compares the list instance, '
         'not the items.', () {
-      var myList = IList([1, 2]);
+      var myList = IList([1, 2]).identityEquals;
       expect(myList == myList, isTrue);
-      expect(myList == IList([1, 2]), isFalse);
+      expect(myList == IList([1, 2]).identityEquals, isFalse);
       expect(myList == [1, 2].lock, isFalse);
-      expect(myList == IList([1, 2, 3]), isFalse);
+      expect(myList == IList([1, 2, 3]).identityEquals, isFalse);
 
       myList = IList([1, 2]).identityEquals;
       expect(myList == myList, isTrue);
@@ -182,11 +182,11 @@ void main() {
     test(
         'IList with deep-equals compares the items, '
         'not the list instance.', () {
-      var myList = IList([1, 2]).deepEquals;
+      var myList = IList([1, 2]);
       expect(myList == myList, isTrue);
-      expect(myList == IList([1, 2]).deepEquals, isTrue);
-      expect(myList == [1, 2].deep, isTrue);
-      expect(myList == IList([1, 2, 3]).deepEquals, isFalse);
+      expect(myList == IList([1, 2]), isTrue);
+      expect(myList == [1, 2].lockDeep, isTrue);
+      expect(myList == IList([1, 2, 3]), isFalse);
     });
 
     test(
@@ -194,8 +194,8 @@ void main() {
         'from iList with identity-equals.', () {
       expect(IList([1, 2]).deepEquals == IList([1, 2]).identityEquals, isFalse);
       expect(IList([1, 2]).identityEquals == IList([1, 2]).deepEquals, isFalse);
-      expect(IList([1, 2]).deepEquals == IList([1, 2]), isFalse);
-      expect(IList([1, 2]) == IList([1, 2]).deepEquals, isFalse);
+      expect(IList([1, 2]).deepEquals == IList([1, 2]), isTrue);
+      expect(IList([1, 2]) == IList([1, 2]).deepEquals, isTrue);
     });
   });
 

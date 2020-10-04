@@ -11,13 +11,13 @@ class SAdd<T> extends S<T> {
         assert(_item != null);
 
   @override
+  bool contains(Object element) => _item == element ? true : _s.contains(element);
+
+  @override
   bool get isEmpty => false;
 
   @override
   Iterator<T> get iterator => IteratorSAdd(_s.iterator, _item);
-
-  @override
-  bool contains(Object element) => _item == element ? true : _s.contains(element);
 
   @override
   int get length => _s.length + 1;
