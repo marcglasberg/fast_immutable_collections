@@ -6,25 +6,25 @@ import 'package:fast_immutable_collections/src/ilist/l_add_all.dart';
 import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
 
 void main() {
-  group('Basic Usage Tests and Checks |', () {
+  group("Basic Usage Tests and Checks |", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
 
-    test('Runtime Type', () => expect(lAddAll, isA<LAddAll<int>>()));
+    test("Runtime Type", () => expect(lAddAll, isA<LAddAll<int>>()));
 
-    test('`unlock`', () {
+    test("LAddAll.unlock method", () {
       expect(lAddAll.unlock, <int>[1, 2, 3, 4, 5]);
       expect(lAddAll.unlock, isA<List<int>>());
     });
 
-    test('Emptiness Properties', () {
+    test("Emptiness Properties", () {
       expect(lAddAll.isEmpty, isFalse);
       expect(lAddAll.isNotEmpty, isTrue);
     });
 
-    test('Length', () => expect(lAddAll.length, 5));
+    test("LAddAll.length method", () => expect(lAddAll.length, 5));
 
-    group('Index Access |', () {
-      test('`LAddAll[index]`', () {
+    group("Index Access |", () {
+      test("LAddAll[index] method", () {
         expect(lAddAll[0], 1);
         expect(lAddAll[1], 2);
         expect(lAddAll[2], 3);
@@ -32,19 +32,19 @@ void main() {
         expect(lAddAll[4], 5);
       });
 
-      test('Range Errors', () {
+      test("Range Errors", () {
         expect(() => lAddAll[5], throwsA(isA<RangeError>()));
         expect(() => lAddAll[-1], throwsA(isA<RangeError>()));
       });
     });
 
-    test('`contains`', () {
+    test("LAddAll.contains method", () {
       expect(lAddAll.contains(1), isTrue);
       expect(lAddAll.contains(6), isFalse);
     });
 
-    group('IteratorLAddAll |', () {
-      test('Iterating on the underlying iterator', () {
+    group("IteratorLAddAll Class |", () {
+      test("Iterating on the underlying iterator", () {
         final Iterator<int> iter = lAddAll.iterator;
 
         expect(iter.current, isNull);
@@ -64,28 +64,28 @@ void main() {
     });
   });
 
-  group('Combining various `LAddAll`s, `LAdd`s, `LFlat`s and `List`s |', () {
+  group("Combining various LAddAlls, LAdds, LFlats and Lists |", () {
     final lAddAll =
         LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
 
-    test('Runtime Type', () => expect(lAddAll, isA<LAddAll<int>>()));
+    test("Runtime Type", () => expect(lAddAll, isA<LAddAll<int>>()));
 
-    test('`unlock`', () {
+    test("LAddAll.unlock method", () {
       expect(lAddAll.unlock, <int>[1, 2, 3, 4, 5, 6, 7, 8]);
       expect(lAddAll.unlock, isA<List<int>>());
     });
 
-    test('Emptiness Properties', () {
+    test("Emptiness Properties", () {
       expect(lAddAll.isEmpty, isFalse);
       expect(lAddAll.isNotEmpty, isTrue);
     });
 
-    test('Length', () => expect(lAddAll.length, 8));
+    test("LAddAll.length method", () => expect(lAddAll.length, 8));
 
-    group('Index Access |', () {
+    group("Index Access |", () {
       final LAddAll<int> lAddAll = LAddAll(LFlat([1, 2, 3]), [4, 5, 6, 7]);
 
-      test('`LAdd[index]`', () {
+      test("LAdd[index] method", () {
         expect(lAddAll[0], 1);
         expect(lAddAll[1], 2);
         expect(lAddAll[2], 3);
@@ -95,19 +95,19 @@ void main() {
         expect(lAddAll[6], 7);
       });
 
-      test('Range Errors', () {
+      test("Range Errors", () {
         expect(() => lAddAll[7], throwsA(isA<RangeError>()));
         expect(() => lAddAll[-1], throwsA(isA<RangeError>()));
       });
     });
 
-    test('`contains`', () {
+    test("LAddAll.contains method", () {
       expect(lAddAll.contains(1), isTrue);
       expect(lAddAll.contains(8), isTrue);
     });
 
-    group('`IteratorLAddAll` |', () {
-      test('Iterating on the underlying iterator', () {
+    group("IteratorLAddAll Class |", () {
+      test("Iterating on the underlying iterator", () {
         final Iterator<int> iter = lAddAll.iterator;
 
         expect(iter.current, isNull);
@@ -133,9 +133,9 @@ void main() {
     });
   });
 
-  group('Ensuring Immutability |', () {
-    group('`add` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LAddAll`', () {
+  group("Ensuring Immutability |", () {
+    group("LAddAll.add method |", () {
+      test("Changing the passed mutable list doesn't change the LAddAll", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 
@@ -147,7 +147,7 @@ void main() {
         expect(lAddAll, <int>[1, 2, 3, 4, 5]);
       });
 
-      test('Adding to the original `LAddAll` doesn\'t change it', () {
+      test("Adding to the original LAddAll doesn't change it", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 
@@ -161,8 +161,8 @@ void main() {
       });
 
       test(
-          'If the item being passed is a variable, '
-          'a pointer to it shouldn\'t exist inside `LAddAll`', () {
+          "If the item being passed is a variable, "
+          "a pointer to it shouldn't exist inside LAddAll", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 
@@ -180,8 +180,8 @@ void main() {
       });
     });
 
-    group('`addAll` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LAddAll`', () {
+    group("LAddAll.addAll method |", () {
+      test("Changing the passed mutable list doesn't change the LAddAll", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 
@@ -193,7 +193,7 @@ void main() {
         expect(lAddAll, <int>[1, 2, 3, 4, 5]);
       });
 
-      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
+      test("Changing the passed mutable list doesn't change the LAddAll", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 
@@ -207,8 +207,8 @@ void main() {
       });
 
       test(
-          'If the items being passed are from a variable, '
-          'it shouldn\'t have a pointer to the variable', () {
+          "If the items being passed are from a variable, "
+          "it shouldn't have a pointer to the variable", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll1 = LAddAll(LFlat<int>([1, 2]), original);
         final LAddAll<int> lAddAll2 = LAddAll(LFlat<int>([8, 9]), original);
@@ -226,8 +226,8 @@ void main() {
       });
     });
 
-    group('`remove` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LAddAll`', () {
+    group("LAddAll.remove method |", () {
+      test("Changing the passed mutable list doesn't change the LAddAll", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 
@@ -239,7 +239,7 @@ void main() {
         expect(lAddAll, <int>[1, 2, 3, 4, 5]);
       });
 
-      test('Removing from the original `LAddAll` doesn\'t change it', () {
+      test("Removing from the original LAddAll doesn't change it", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 

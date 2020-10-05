@@ -13,6 +13,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Completed tests and ensured immutability for:
     - `SFlat`
+    - `SAdd`
 
 ## 02/10/2020
 
