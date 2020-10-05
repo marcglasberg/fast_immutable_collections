@@ -2,6 +2,8 @@ import 'iset.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+/// Note that adding repeated members won't work as the expected behavior for regular sets, because
+/// that behavior is implemented elsewhere.
 class SAdd<T> extends S<T> {
   final S<T> _s;
   final T _item;

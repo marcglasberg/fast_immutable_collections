@@ -11,7 +11,8 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ### 1. Philippe Fanaro
 
-1. 
+1. Completed tests and ensured immutability for:
+    - `SFlat`
 
 ## 02/10/2020
 
