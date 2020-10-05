@@ -8,40 +8,39 @@ void main() {
   final List<int> original = [1, 2, 3];
   final LFlat<int> lFlat = LFlat<int>(original);
 
-  test('Runtime Type', () => expect(lFlat, isA<LFlat<int>>()));
+  test("Runtime Type", () => expect(lFlat, isA<LFlat<int>>()));
 
-  test('`unlock`', () {
+  test("LFlat.unlock method", () {
     expect(lFlat.unlock, <int>[1, 2, 3]);
     expect(lFlat.unlock, isA<List<int>>());
   });
 
-  test('Emptiness Properties', () {
+  test("Emptiness Properties", () {
     expect(lFlat.isEmpty, isFalse);
     expect(lFlat.isNotEmpty, isTrue);
   });
 
-  test('Length', () => expect(lFlat.length, 3));
+  test("LFlat.length property", () => expect(lFlat.length, 3));
 
-  test('Index', () {
+  test("Index", () {
     expect(lFlat[0], 1);
     expect(lFlat[1], 2);
     expect(lFlat[2], 3);
   });
 
-  test('Range Errors', () {
+  test("Range Errors", () {
     expect(() => lFlat[-1], throwsA(isA<RangeError>()));
     expect(() => lFlat[4], throwsA(isA<RangeError>()));
   });
 
-  test('`cast`', () {
+  test("LFlat.cast method", () {
     // When casting a `List`, we get back another `List`. Should our `IList` really give back an
     // `Iterable`?
     final lFlatAsNum = lFlat.cast<num>();
-
     expect(lFlatAsNum, isA<LFlat<num>>());
   });
 
-  group('`Iterator` |', () {
+  group("Iterator |", () {
     test('Iterating on the underlying iterator', () {
       final Iterator<int> iter = lFlat.iterator;
 
@@ -57,18 +56,18 @@ void main() {
     });
   });
 
-  test('`empty`', () {
+  test("LFlat.empty method", () {
     final L<int> empty = LFlat.empty();
 
     expect(empty.unlock, <int>[]);
     expect(empty.isEmpty, isTrue);
   });
 
-  group('Hash Code and Equals |', () {
-    test('`deepListHashCode`',
+  group("Hash Code and Equals |", () {
+    test("LFlat.deepListHashCode method",
         () => expect(lFlat.deepListHashcode(), ListEquality().hash(original)));
 
-    test('`deepListEquals`', () {
+    test("LFlat.deepListEquals method", () {
       expect(lFlat.deepListEquals(null), isFalse);
       expect(lFlat.deepListEquals(LFlat<int>([])), isFalse);
       expect(lFlat.deepListEquals(LFlat<int>(original)), isTrue);
@@ -76,11 +75,11 @@ void main() {
     });
   });
 
-  group('Ensuring Immutability |', () {
+  group("Ensuring Immutability |", () {
     // This code is not as DRY as one would like, but, in these immutability tests, I prefer to
     // repeat everything so all the variables are `final` within their context.
-    group('`add` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
+    group("LFlat.add method |", () {
+      test("Changing the passed mutable list doesn't change the LFlat", () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat<int>(original);
 
@@ -92,7 +91,7 @@ void main() {
         expect(lFlat, [1, 2, 3]);
       });
 
-      test('Adding to the original `LFlat` doesn\'t change it', () {
+      test("Adding to the original LFlat doesn't change it", () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat(original);
 
@@ -106,7 +105,7 @@ void main() {
       });
 
       test(
-          'If the item being passed is a variable, a pointer to it shouldn\'t exist inside `LFlat`',
+          "If the item being passed is a variable, a pointer to it shouldn't exist inside LFlat",
           () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat<int>(original);
@@ -125,8 +124,8 @@ void main() {
       });
     });
 
-    group('`addAll` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
+    group("LFlat.addAll method |", () {
+      test("Changing the passed mutable list doesn't change the LFlat", () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat<int>(original);
 
@@ -138,7 +137,7 @@ void main() {
         expect(lFlat, [1, 2, 3]);
       });
 
-      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
+      test("Changing the immutable list doesn't change the LFlat", () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat(original);
 
@@ -152,8 +151,8 @@ void main() {
       });
 
       test(
-          'If the items being passed are from a variable, '
-          'it shouldn\'t have a pointer to the variable', () {
+          "If the items being passed are from a variable, "
+          "it shouldn't have a pointer to the variable", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat1 = LFlat(original), lFlat2 = LFlat(original);
 
@@ -170,8 +169,8 @@ void main() {
       });
     });
 
-    group('`remove` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LFlat`', () {
+    group("LFlat.remove method |", () {
+      test("Changing the passed mutable list doesn't change the LFlat", () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat<int>(original);
 
@@ -183,7 +182,7 @@ void main() {
         expect(lFlat, [1, 2, 3]);
       });
 
-      test('Removing from the original `LFlat` doesn\'t change it', () {
+      test("Removing from the original LFlat doesn't change it", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
 
@@ -197,8 +196,8 @@ void main() {
       });
     });
 
-    group('Others |', () {
-      test('Initialization through the `unsafe` constructor', () {
+    group("Others |", () {
+      test("Initialization through the unsafe constructor", () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat.unsafe(original);
 
@@ -212,23 +211,23 @@ void main() {
     });
   });
 
-  group('Other overrides belonging to `L` but also coming from `Iterable` |', () {
+  group("Other overrides belonging to L but also coming from Iterable |", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
 
-    test('`any`', () {
+    test("LFlat.any method", () {
       expect(lFlat.any((int v) => v == 4), isTrue);
       expect(lFlat.any((int v) => v == 100), isFalse);
     });
 
-    test('`contains`', () {
+    test("LFlat.contains method", () {
       expect(lFlat.contains(2), isTrue);
       expect(lFlat.contains(4), isTrue);
       expect(lFlat.contains(5), isTrue);
       expect(lFlat.contains(100), isFalse);
     });
 
-    group('`elementAt |', () {
-      test('Regular element access', () {
+    group("LFlat.elementAt method |", () {
+      test("Regular element access", () {
         expect(lFlat.elementAt(0), 1);
         expect(lFlat.elementAt(1), 2);
         expect(lFlat.elementAt(2), 3);
@@ -237,28 +236,28 @@ void main() {
         expect(lFlat.elementAt(5), 6);
       });
 
-      test('Range exceptions', () {
+      test("Range exceptions", () {
         expect(() => lFlat.elementAt(6), throwsRangeError);
         expect(() => lFlat.elementAt(-1), throwsRangeError);
       });
     });
 
-    test('`every`', () {
+    test("LFlat.every method", () {
       expect(lFlat.every((int v) => v > 0), isTrue);
       expect(lFlat.every((int v) => v < 0), isFalse);
       expect(lFlat.every((int v) => v != 4), isFalse);
     });
 
-    test('`expand`', () {
+    test("LFlat.expand method", () {
       expect(lFlat.expand((int v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
       expect(lFlat.expand((int v) => []), []);
     });
 
-    test('`first`', () => expect(lFlat.first, 1));
+    test("LFlat.first method", () => expect(lFlat.first, 1));
 
-    test('`last`', () => expect(lFlat.last, 6));
+    test("LFlat.last method", () => expect(lFlat.last, 6));
 
-    group('`single` |', () {
+    group("LFlat.single method |", () {
       test('State exception', () => expect(() => lFlat.single, throwsStateError));
 
       test('Access', () => expect([10].lock.single, 10));
