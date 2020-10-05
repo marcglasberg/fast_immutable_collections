@@ -104,8 +104,7 @@ void main() {
         expect(l, <int>[1, 2, 3, 4]);
       });
 
-      test(
-          "If the item being passed is a variable, a pointer to it shouldn't exist inside LFlat",
+      test("If the item being passed is a variable, a pointer to it shouldn't exist inside LFlat",
           () {
         final List<int> original = [1, 2, 3];
         final LFlat<int> lFlat = LFlat<int>(original);
@@ -258,38 +257,38 @@ void main() {
     test("LFlat.last method", () => expect(lFlat.last, 6));
 
     group("LFlat.single method |", () {
-      test('State exception', () => expect(() => lFlat.single, throwsStateError));
+      test("State exception", () => expect(() => lFlat.single, throwsStateError));
 
-      test('Access', () => expect([10].lock.single, 10));
+      test("Access", () => expect([10].lock.single, 10));
     });
 
-    test('`firstWhere`', () {
+    test("LFlat.firstWhere method", () {
       expect(lFlat.firstWhere((int v) => v > 1, orElse: () => 100), 2);
       expect(lFlat.firstWhere((int v) => v > 4, orElse: () => 100), 5);
       expect(lFlat.firstWhere((int v) => v > 5, orElse: () => 100), 6);
       expect(lFlat.firstWhere((int v) => v > 6, orElse: () => 100), 100);
     });
 
-    test('`fold`', () => expect(lFlat.fold(100, (int p, int e) => p * (1 + e)), 504000));
+    test("LFlat.fold method", () => expect(lFlat.fold(100, (int p, int e) => p * (1 + e)), 504000));
 
-    test('`followedBy`', () {
+    test("LFlat.followedBy method", () {
       expect(lFlat.followedBy([7, 8]), [1, 2, 3, 4, 5, 6, 7, 8]);
       expect(lFlat.followedBy([7, 8, 9]), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
-    test('`forEach`', () {
+    test("LFlat.forEach method", () {
       int result = 100;
       lFlat.forEach((int v) => result *= 1 + v);
       expect(result, 504000);
     });
 
-    test('`join`', () {
+    test("LFlat.join method", () {
       expect(lFlat.join(','), '1,2,3,4,5,6');
       expect(LFlat(<int>[]).join(','), '');
       expect(LFlat.empty().join(','), '');
     });
 
-    test('`lastWhere`', () {
+    test("LFlat.lastWhere method", () {
       expect(lFlat.lastWhere((int v) => v < 2, orElse: () => 100), 1);
       expect(lFlat.lastWhere((int v) => v < 5, orElse: () => 100), 4);
       expect(lFlat.lastWhere((int v) => v < 6, orElse: () => 100), 5);
@@ -298,50 +297,50 @@ void main() {
       expect(lFlat.lastWhere((int v) => v < 1, orElse: () => 100), 100);
     });
 
-    test('`map`', () {
+    test("LFlat.map method", () {
       expect(LFlat([1, 2, 3]).map((int v) => v + 1), [2, 3, 4]);
       expect(lFlat.map((int v) => v + 1), [2, 3, 4, 5, 6, 7]);
     });
 
-    group('`reduce` |', () {
-      test('Regular usage', () {
+    group("LFlat.reduce method |", () {
+      test("Regular usage", () {
         expect(lFlat.reduce((int p, int e) => p * (1 + e)), 2520);
         expect(LFlat([5]).reduce((int p, int e) => p * (1 + e)), 5);
       });
 
       test(
-          'State exception',
+          "State exception",
           () => expect(() => IList().reduce((dynamic p, dynamic e) => p * (1 + (e as num))),
               throwsStateError));
     });
 
-    group('`singleWhere` |', () {
-      test('Regular usage', () {
+    group("LFlat.singleWhere method |", () {
+      test("Regular usage", () {
         expect(lFlat.singleWhere((int v) => v == 4, orElse: () => 100), 4);
         expect(lFlat.singleWhere((int v) => v == 50, orElse: () => 100), 100);
       });
 
       test(
-          'State exception',
+          "State exception",
           () => expect(
               () => lFlat.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError));
     });
 
-    test('`skip`', () {
+    test("LFlat.skip method", () {
       expect(lFlat.skip(1), [2, 3, 4, 5, 6]);
       expect(lFlat.skip(3), [4, 5, 6]);
       expect(lFlat.skip(5), [6]);
       expect(lFlat.skip(10), []);
     });
 
-    test('`skipWhile`', () {
+    test("LFlat.skipWhile method", () {
       expect(lFlat.skipWhile((int v) => v < 3), [3, 4, 5, 6]);
       expect(lFlat.skipWhile((int v) => v < 5), [5, 6]);
       expect(lFlat.skipWhile((int v) => v < 6), [6]);
       expect(lFlat.skipWhile((int v) => v < 100), []);
     });
 
-    test('`take`', () {
+    test("LFlat.take method", () {
       expect(lFlat.take(0), []);
       expect(lFlat.take(1), [1]);
       expect(lFlat.take(3), [1, 2, 3]);
@@ -349,24 +348,24 @@ void main() {
       expect(lFlat.take(10), [1, 2, 3, 4, 5, 6]);
     });
 
-    test('`takeWhile`', () {
+    test("LFlat.takeWhile method", () {
       expect(lFlat.takeWhile((int v) => v < 3), [1, 2]);
       expect(lFlat.takeWhile((int v) => v < 5), [1, 2, 3, 4]);
       expect(lFlat.takeWhile((int v) => v < 6), [1, 2, 3, 4, 5]);
       expect(lFlat.takeWhile((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
     });
 
-    group('`toList` |', () {
-      test('Regular usage', () {
+    group("LFlat.toList method |", () {
+      test("Regular usage", () {
         expect(lFlat.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
         expect(lFlat.unlock, [1, 2, 3, 4, 5, 6]);
       });
 
-      test('Unsupported exception',
+      test("Unsupported exception",
           () => expect(() => lFlat.toList(growable: false)..add(7), throwsUnsupportedError));
     });
 
-    test('`toSet`', () {
+    test("LFlat.toSet method", () {
       expect(lFlat.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
       expect(
           lFlat
@@ -376,13 +375,14 @@ void main() {
       expect(lFlat.unlock, [1, 2, 3, 4, 5, 6]);
     });
 
-    test('`where`', () {
+    test("LFlat.where method", () {
       expect(lFlat.where((int v) => v < 0), []);
       expect(lFlat.where((int v) => v < 3), [1, 2]);
       expect(lFlat.where((int v) => v < 5), [1, 2, 3, 4]);
       expect(lFlat.where((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
     });
 
-    test('`whereType`', () => expect((LFlat(<num>[1, 2, 1.5]).whereType<double>()), [1.5]));
+    test("LFlat.whereType method",
+        () => expect((LFlat(<num>[1, 2, 1.5]).whereType<double>()), [1.5]));
   });
 }

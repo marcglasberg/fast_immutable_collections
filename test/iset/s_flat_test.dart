@@ -92,8 +92,7 @@ void main() {
         expect(s, <int>{1, 2, 3, 4});
       });
 
-      test(
-          "If the item being passed is a variable, a pointer to it shouldn't exist inside SFlat",
+      test("If the item being passed is a variable, a pointer to it shouldn't exist inside SFlat",
           () {
         final Set<int> original = {1, 2, 3};
         final SFlat<int> sFlat = SFlat(original);
@@ -197,6 +196,171 @@ void main() {
         expect(sFlat, {1, 2, 3, 4});
       });
     });
+  });
+
+  group("Other overrides belonging to S but also coming from Iterable |", () {
+    final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
+
+    test("SFlat.any method", () {
+      expect(sFlat.any((int v) => v == 4), isTrue);
+      expect(sFlat.any((int v) => v == 100), isFalse);
+    });
+
+    test("SFlat.contains method", () {
+      expect(sFlat.contains(2), isTrue);
+      expect(sFlat.contains(4), isTrue);
+      expect(sFlat.contains(5), isTrue);
+      expect(sFlat.contains(100), isFalse);
+    });
+
+    test("SFlat.every method", () {
+      expect(sFlat.every((int v) => v > 0), isTrue);
+      expect(sFlat.every((int v) => v < 0), isFalse);
+      expect(sFlat.every((int v) => v != 4), isFalse);
+    });
+
+    test("SFlat.expand method", () {
+      expect(sFlat.expand((int v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
+      expect(sFlat.expand((int v) => []), []);
+    });
+
+    test("SFlat.first method", () => expect(sFlat.first, 1));
+
+    test("SFlat.last method", () => expect(sFlat.last, 6));
+
+    group("SFlat.single method |", () {
+      test("State exception", () => expect(() => sFlat.single, throwsStateError));
+
+      test("Access", () => expect([10].lock.single, 10));
+    });
+
+    test("SFlat.firstWhere method", () {
+      expect(sFlat.firstWhere((int v) => v > 1, orElse: () => 100), 2);
+      expect(sFlat.firstWhere((int v) => v > 4, orElse: () => 100), 5);
+      expect(sFlat.firstWhere((int v) => v > 5, orElse: () => 100), 6);
+      expect(sFlat.firstWhere((int v) => v > 6, orElse: () => 100), 100);
+    });
+
+    test("SFlat.fold method", () => expect(sFlat.fold(100, (int p, int e) => p * (1 + e)), 504000));
+
+    test("SFlat.followedBy method", () {
+      expect(sFlat.followedBy([7, 8]), [1, 2, 3, 4, 5, 6, 7, 8]);
+      expect(sFlat.followedBy([7, 8, 9]), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    });
+
+    test("SFlat.followedBy method", () {
+      expect(sFlat.followedBy([7, 8]), [1, 2, 3, 4, 5, 6, 7, 8]);
+      expect(sFlat.followedBy([7, 8, 9]), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    });
+
+    test("SFlat.forEach method", () {
+      int result = 100;
+      sFlat.forEach((int v) => result *= 1 + v);
+      expect(result, 504000);
+    });
+
+    test("SFlat.join method", () {
+      expect(sFlat.join(','), '1,2,3,4,5,6');
+      expect(SFlat(<int>[]).join(','), '');
+      expect(SFlat.empty().join(','), '');
+    });
+
+    test("SFlat.lastWhere method", () {
+      expect(sFlat.lastWhere((int v) => v < 2, orElse: () => 100), 1);
+      expect(sFlat.lastWhere((int v) => v < 5, orElse: () => 100), 4);
+      expect(sFlat.lastWhere((int v) => v < 6, orElse: () => 100), 5);
+      expect(sFlat.lastWhere((int v) => v < 7, orElse: () => 100), 6);
+      expect(sFlat.lastWhere((int v) => v < 50, orElse: () => 100), 6);
+      expect(sFlat.lastWhere((int v) => v < 1, orElse: () => 100), 100);
+    });
+
+    test("SFlat.map method", () {
+      expect(SFlat([1, 2, 3]).map((int v) => v + 1), [2, 3, 4]);
+      expect(sFlat.map((int v) => v + 1), [2, 3, 4, 5, 6, 7]);
+    });
+
+    group("SFlat.reduce method |", () {
+      test("Regular usage", () {
+        expect(sFlat.reduce((int p, int e) => p * (1 + e)), 2520);
+        expect(SFlat([5]).reduce((int p, int e) => p * (1 + e)), 5);
+      });
+
+      test(
+          "State exception",
+          () => expect(() => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))),
+              throwsStateError));
+    });
+
+    group("SFlat.singleWhere method |", () {
+      test("Regular usage", () {
+        expect(sFlat.singleWhere((int v) => v == 4, orElse: () => 100), 4);
+        expect(sFlat.singleWhere((int v) => v == 50, orElse: () => 100), 100);
+      });
+
+      test(
+          "State exception",
+          () => expect(
+              () => sFlat.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError));
+    });
+
+    test("SFlat.skip method", () {
+      expect(sFlat.skip(1), [2, 3, 4, 5, 6]);
+      expect(sFlat.skip(3), [4, 5, 6]);
+      expect(sFlat.skip(5), [6]);
+      expect(sFlat.skip(10), []);
+    });
+
+    test("SFlat.skipWhile method", () {
+      expect(sFlat.skipWhile((int v) => v < 3), [3, 4, 5, 6]);
+      expect(sFlat.skipWhile((int v) => v < 5), [5, 6]);
+      expect(sFlat.skipWhile((int v) => v < 6), [6]);
+      expect(sFlat.skipWhile((int v) => v < 100), []);
+    });
+
+    test("SFlat.take method", () {
+      expect(sFlat.take(0), []);
+      expect(sFlat.take(1), [1]);
+      expect(sFlat.take(3), [1, 2, 3]);
+      expect(sFlat.take(5), [1, 2, 3, 4, 5]);
+      expect(sFlat.take(10), [1, 2, 3, 4, 5, 6]);
+    });
+
+    test("SFlat.takeWhile method", () {
+      expect(sFlat.takeWhile((int v) => v < 3), [1, 2]);
+      expect(sFlat.takeWhile((int v) => v < 5), [1, 2, 3, 4]);
+      expect(sFlat.takeWhile((int v) => v < 6), [1, 2, 3, 4, 5]);
+      expect(sFlat.takeWhile((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
+    });
+
+    group("SFlat.toList method |", () {
+      test("Regular usage", () {
+        expect(sFlat.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
+        expect(sFlat.unlock, [1, 2, 3, 4, 5, 6]);
+      });
+
+      test("Unsupported exception",
+          () => expect(() => sFlat.toList(growable: false)..add(7), throwsUnsupportedError));
+    });
+
+    test("SFlat.toSet method", () {
+      expect(sFlat.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
+      expect(
+          sFlat
+            ..add(6)
+            ..toSet(),
+          {1, 2, 3, 4, 5, 6});
+      expect(sFlat.unlock, [1, 2, 3, 4, 5, 6]);
+    });
+
+    test("SFlat.where method", () {
+      expect(sFlat.where((int v) => v < 0), []);
+      expect(sFlat.where((int v) => v < 3), [1, 2]);
+      expect(sFlat.where((int v) => v < 5), [1, 2, 3, 4]);
+      expect(sFlat.where((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
+    });
+
+    test("SFlat.whereType method",
+        () => expect((SFlat(<num>[1, 2, 1.5]).whereType<double>()), [1.5]));
   });
 
   group("MapEntryEquality Class |", () {
