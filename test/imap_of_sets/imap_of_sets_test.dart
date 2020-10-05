@@ -211,4 +211,50 @@ void main() {
 
     test('`toString`', () => expect(iMapOfSets.toString(), '{a: {1, 2}, b: {3}}'));
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('Toggle', () {
+    //
+    IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+      'a': {1, 2},
+      'b': {1, 2, 3},
+    });
+    expect(iMapOfSets.contains('a', 2), isTrue);
+
+    iMapOfSets = iMapOfSets.toggle('a', 2);
+    expect(iMapOfSets.contains('a', 2), isFalse);
+
+    iMapOfSets = iMapOfSets.toggle('a', 2);
+    expect(iMapOfSets.contains('a', 2), isTrue);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('Length', () {
+    //
+    IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+      'a': {1, 2},
+      'b': {1, 2, 3},
+    });
+    expect(iMapOfSets.lengthOfKeys, 2);
+    expect(iMapOfSets.lengthOfValues, 5);
+    expect(iMapOfSets.lengthOfNonRepeatingValues, 3);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('Unlock', () {
+    //
+    IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+      'a': {1, 2},
+      'b': {1, 2, 3},
+    });
+    expect(iMapOfSets.unlock, {
+      'a': {1, 2},
+      'b': {1, 2, 3},
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

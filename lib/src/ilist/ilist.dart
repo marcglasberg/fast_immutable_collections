@@ -48,6 +48,14 @@ class IList<T> // ignore: must_be_immutable
   /// Unsafe.
   IList.__(this._l, {@required this.isDeepEquals});
 
+  IList<T> config({
+    bool isDeepEquals,
+  }) =>
+      IList.__(
+        _l,
+        isDeepEquals: isDeepEquals ?? this.isDeepEquals,
+      );
+
   /// Converts `this` list to `identityEquals` (compares by `identity`).
   IList<T> get identityEquals => isDeepEquals ? IList.__(_l, isDeepEquals: false) : this;
 
@@ -69,7 +77,7 @@ class IList<T> // ignore: must_be_immutable
   bool operator ==(Object other) => (other is IList<T>)
       ? isDeepEquals
           ? equals(other)
-          : identical(_l, other._l)
+          : same(other)
       : false;
 
   @override
@@ -79,6 +87,9 @@ class IList<T> // ignore: must_be_immutable
           runtimeType == other.runtimeType &&
           isDeepEquals == other.isDeepEquals &&
           (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
+
+  @override
+  bool same(IList<T> other) => identical(_l, other._l) && (isDeepEquals == other.isDeepEquals);
 
   @override
   int get hashCode => isDeepEquals //

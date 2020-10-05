@@ -78,7 +78,7 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> get identityEquals => isDeepEquals
       ? ISet.__(
           _s,
-          compare: null,
+          compare: compare,
           isDeepEquals: false,
         )
       : this;
@@ -88,7 +88,7 @@ class ISet<T> // ignore: must_be_immutable
       ? this
       : ISet.__(
           _s,
-          compare: null,
+          compare: compare,
           isDeepEquals: true,
         );
 
@@ -107,7 +107,7 @@ class ISet<T> // ignore: must_be_immutable
   bool operator ==(Object other) => (other is ISet<T>)
       ? isDeepEquals
           ? equals(other)
-          : identical(_s, other._s)
+          : same(other)
       : false;
 
   @override
@@ -117,6 +117,10 @@ class ISet<T> // ignore: must_be_immutable
           runtimeType == other.runtimeType &&
           isDeepEquals == other.isDeepEquals &&
           (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
+
+  @override
+  bool same(ISet<T> other) =>
+      identical(_s, other._s) && (isDeepEquals == other.isDeepEquals) && (compare == other.compare);
 
   @override
   int get hashCode => isDeepEquals //
@@ -134,14 +138,14 @@ class ISet<T> // ignore: must_be_immutable
   /// Returns a new set containing the current set plus the given item.
   ISet<T> add(T item) => ISet<T>.__(
         _s.add(item),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
   /// Returns a new set containing the current set plus all the given items.
   ISet<T> addAll(Iterable<T> items) => ISet<T>.__(
         _s.addAll(items),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
@@ -154,7 +158,7 @@ class ISet<T> // ignore: must_be_immutable
         ? this
         : ISet<T>.__(
             result,
-            compare: null,
+            compare: compare,
             isDeepEquals: isDeepEquals,
           );
   }
@@ -163,7 +167,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Otherwise, adds it to the set.
   ISet<T> toggle(T item) => ISet<T>.__(
         contains(item) ? _s.remove(item) : _s.add(item),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
@@ -213,7 +217,7 @@ class ISet<T> // ignore: must_be_immutable
   @override
   ISet<T> followedBy(Iterable<T> other) => ISet._(
         _s.followedBy(other),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
@@ -244,35 +248,35 @@ class ISet<T> // ignore: must_be_immutable
   @override
   ISet<T> skip(int count) => ISet._(
         _s.skip(count),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
   @override
   ISet<T> skipWhile(bool Function(T value) test) => ISet._(
         _s.skipWhile(test),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
   @override
   ISet<T> take(int count) => ISet._(
         _s.take(count),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
   @override
   ISet<T> takeWhile(bool Function(T value) test) => ISet._(
         _s.takeWhile(test),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
   @override
   ISet<T> where(bool Function(T element) test) => ISet._(
         _s.where(test),
-        compare: null,
+        compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
