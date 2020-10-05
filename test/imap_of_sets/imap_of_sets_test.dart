@@ -25,26 +25,39 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test('Initialization from Map and IMap', () {
+  test(
+      'Initialization from:'
+      '1) Map-of-Sets'
+      '2) Map-of-Lists'
+      '3) IMap-of-ISets', () {
     //
 
-    // From Map.
-    final Map<String, Set<int>> map = {
+    // 1) From Map-of-sets.
+    final Map<String, Set<int>> mapOfSets = {
       'a': {1, 2},
       'b': {1, 2, 3},
     };
-    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets(map);
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets(mapOfSets);
     expect(iMapOfSets1['a'], ISet({1, 2}));
     expect(iMapOfSets1['b'], ISet({1, 2, 3}));
 
-    // From IMap.
+    // 2) From Map-of-lists.
+    final Map<String, List<int>> mapOfLists = {
+      'a': [1, 2],
+      'b': [1, 2, 3],
+    };
+    final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets(mapOfLists);
+    expect(iMapOfSets2['a'], ISet({1, 2}));
+    expect(iMapOfSets2['b'], ISet({1, 2, 3}));
+
+    // 3) From IMap.
     final IMap<String, ISet<int>> iMap = IMap({
       'a': ISet({1, 2}),
       'b': ISet({1, 2, 3}),
     });
-    final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.from(iMap);
-    expect(iMapOfSets2['a'], ISet({1, 2}));
-    expect(iMapOfSets2['b'], ISet({1, 2, 3}));
+    final IMapOfSets<String, int> iMapOfSets3 = IMapOfSets.from(iMap);
+    expect(iMapOfSets3['a'], ISet({1, 2}));
+    expect(iMapOfSets3['b'], ISet({1, 2, 3}));
 
     // Comparing both.
     expect(iMapOfSets1, iMapOfSets2);

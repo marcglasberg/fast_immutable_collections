@@ -20,7 +20,7 @@ class IMapOfSets<K, V> {
   static IMapOfSets<K, V> empty<K, V>() => IMapOfSets<K, V>.from(null);
 
   factory IMapOfSets([
-    Map<K, Set<V>> mapOfSets,
+    Map<K, Iterable<V>> mapOfSets,
   ]) =>
       IMapOfSets._unsafe(
         IMap.fromIterables(
