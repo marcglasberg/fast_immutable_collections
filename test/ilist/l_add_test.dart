@@ -7,41 +7,41 @@ import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
 void main() {
   final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
 
-  test('Runtime Type', () => expect(lAdd, isA<LAdd<int>>()));
+  test("Runtime Type", () => expect(lAdd, isA<LAdd<int>>()));
 
-  test('`unlock`', () {
+  test("LAdd.unlock method", () {
     expect(lAdd.unlock, <int>[1, 2, 3, 4]);
     expect(lAdd.unlock, isA<List<int>>());
   });
 
-  test('Emptiness Properties', () {
+  test("Emptiness Properties", () {
     expect(lAdd.isEmpty, isFalse);
     expect(lAdd.isNotEmpty, isTrue);
   });
 
-  test('Length', () => expect(lAdd.length, 4));
+  test("LAdd.length method", () => expect(lAdd.length, 4));
 
-  group('Index Access |', () {
-    test('`LAdd[index]`', () {
+  group("Index Access |", () {
+    test("LAdd[index] method", () {
       expect(lAdd[0], 1);
       expect(lAdd[1], 2);
       expect(lAdd[2], 3);
       expect(lAdd[3], 4);
     });
 
-    test('Range Errors', () {
+    test("Range Errors", () {
       expect(() => lAdd[4], throwsA(isA<RangeError>()));
       expect(() => lAdd[-1], throwsA(isA<RangeError>()));
     });
   });
 
-  test('`contains`', () {
+  test("LAdd.contains method", () {
     expect(lAdd.contains(1), isTrue);
     expect(lAdd.contains(5), isFalse);
   });
 
-  group('`IteratorLAdd` |', () {
-    test('Iterating on the underlying iterator', () {
+  group("IteratorLAdd Class |", () {
+    test("Iterating on the underlying iterator", () {
       final Iterator<int> iter = lAdd.iterator;
 
       expect(iter.current, isNull);
@@ -58,9 +58,9 @@ void main() {
     });
   });
 
-  group('Ensuring Immutability |', () {
-    group('`add` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
+  group("Ensuring Immutability |", () {
+    group("LAdd.add method |", () {
+      test("Changing the passed mutable list doesn't change the LAdd", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
@@ -74,7 +74,7 @@ void main() {
         expect(lAdd, <int>[1, 2, 3]);
       });
 
-      test('Adding to the original `LAdd` doesn\'t change it', () {
+      test("Adding to the original LAdd doesn't change it", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd<int>(lFlat, 3);
@@ -88,7 +88,7 @@ void main() {
         expect(l, <int>[1, 2, 3, 4]);
       });
 
-      test('If the item being passed is a variable, a pointer to it shouldn\'t exist inside `LAdd`',
+      test("If the item being passed is a variable, a pointer to it shouldn't exist inside LAdd",
           () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
@@ -108,8 +108,8 @@ void main() {
       });
     });
 
-    group('`addAll |', () {
-      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
+    group("LAdd.addAll method |", () {
+      test("Changing the passed mutable list doesn't change the LAdd", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
@@ -122,7 +122,7 @@ void main() {
         expect(lAdd, <int>[1, 2, 3]);
       });
 
-      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
+      test("Changing the passed mutable list doesn't change the LAdd", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd<int>(lFlat, 3);
@@ -137,8 +137,8 @@ void main() {
       });
 
       test(
-          'If the items being passed are from a variable, '
-          'it shouldn\'t have a pointer to the variable', () {
+          "If the items being passed are from a variable, "
+          "it shouldn't have a pointer to the variable", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd1 = LAdd<int>(lFlat, 3), lAdd2 = LAdd<int>(lFlat, 4);
@@ -156,8 +156,8 @@ void main() {
       });
     });
 
-    group('`remove` |', () {
-      test('Changing the passed mutable list doesn\'t change the `LAdd`', () {
+    group("LAdd.remove method |", () {
+      test("Changing the passed mutable list doesn't change the LAdd", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
@@ -170,7 +170,7 @@ void main() {
         expect(lAdd, <int>[1, 2, 3]);
       });
 
-      test('Removing from the original `LAdd` doesn\'t change it', () {
+      test("Removing from the original LAdd doesn't change it", () {
         final List<int> original = [1, 2];
         final LFlat<int> lFlat = LFlat(original);
         final LAdd<int> lAdd = LAdd(lFlat, 3);
