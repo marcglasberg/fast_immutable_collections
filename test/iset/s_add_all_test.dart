@@ -99,7 +99,6 @@ void main() {
     });
   });
 
-  // TODO: Review the fact that `.add` does check for repeated elements, while the constructor doesn't.
   group("Ensuring Immutability |", () {
     group("SAddAll.add method |", () {
       test("Changing the passed mutable set doesn't change the SAddAll", () {
@@ -108,6 +107,7 @@ void main() {
 
         expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
+        original.add(5);
         original.add(6);
 
         expect(original, <int>{3, 4, 5, 6});
@@ -120,11 +120,13 @@ void main() {
 
         expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
-        final S<int> s = sAddAll.add(6);
+        final S<int> s1 = sAddAll.add(6);
+        final S<int> s2 = sAddAll.add(5);
 
         expect(original, <int>{3, 4, 5});
         expect(sAddAll, <int>{1, 2, 3, 4, 5});
-        expect(s, <int>{1, 2, 3, 4, 5, 6});
+        expect(s1, <int>{1, 2, 3, 4, 5, 6});
+        expect(s2, <int>{1, 2, 3, 4, 5});
       });
 
       test(
