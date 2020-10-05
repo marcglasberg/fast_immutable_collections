@@ -7,17 +7,19 @@ import 'package:fast_immutable_collections/src/iset/s_flat.dart';
 void main() {
   final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
 
-  group('Basic Usage Tests and Checks |', () {
-    test('Runtime Type', () => expect(sAddAll, isA<SAddAll<int>>()));
+  group("Basic Usage Tests and Checks |", () {
+    test("Runtime Type", () => expect(sAddAll, isA<SAddAll<int>>()));
 
-    test('Emptiness Properties', () {
+    test("Emptiness Properties", () {
       expect(sAddAll.isEmpty, isFalse);
       expect(sAddAll.isNotEmpty, isTrue);
     });
 
-    test('Length', () => expect(sAddAll.length, 5));
+    test("SAddAll.length", () => expect(sAddAll.length, 5));
 
-    test('Iterating on the underlying iterator', () {
+    test("SAddAll.unlock method", () => expect(sAddAll.unlock, [1, 2, 3, 4, 5]));
+
+    test("Iterating on the underlying iterator", () {
       final Iterator<int> iter = sAddAll.iterator;
 
       expect(iter.current, isNull);
@@ -34,24 +36,24 @@ void main() {
       expect(iter.moveNext(), isFalse);
       expect(iter.current, isNull);
     });
-
-    test('Unlocking', () => expect(sAddAll.unlock, [1, 2, 3, 4, 5]));
   });
 
-  group('Combining various `SAddAll`s and `SAdd`s', () {
+  group("Combining various SAddAlls and SAdds", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
 
-    test('Runtime Type', () => expect(sAddAll, isA<SAddAll<int>>()));
+    test("Runtime Type", () => expect(sAddAll, isA<SAddAll<int>>()));
 
-    test('Emptiness Properties', () {
+    test("Emptiness Properties", () {
       expect(sAddAll.isEmpty, isFalse);
       expect(sAddAll.isNotEmpty, isTrue);
     });
 
-    test('Length', () => expect(sAddAll.length, 8));
+    test("SAddAll.length", () => expect(sAddAll.length, 8));
 
-    test('Iterating on the underlying iterator', () {
+    test("SAddAll.unlock", () => expect(sAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]));
+
+    test("Iterating on the underlying iterator", () {
       final Iterator<int> iter = sAddAll.iterator;
 
       expect(iter.current, isNull);
@@ -74,7 +76,5 @@ void main() {
       expect(iter.moveNext(), isFalse);
       expect(iter.current, isNull);
     });
-
-    test('Unlocking', () => expect(sAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]));
   });
 }
