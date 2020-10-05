@@ -185,7 +185,7 @@ void main() {
       var myList = IList([1, 2]);
       expect(myList == myList, isTrue);
       expect(myList == IList([1, 2]), isTrue);
-      expect(myList == [1, 2].lockDeep, isTrue);
+      expect(myList == [1, 2].lock.deepEquals, isTrue);
       expect(myList == IList([1, 2, 3]), isFalse);
     });
 

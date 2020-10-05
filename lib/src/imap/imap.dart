@@ -45,17 +45,8 @@ class Entry<K, V> {
 
 extension IMapExtension<K, V> on Map<K, V> {
   //
-
   /// Locks the map, returning an *immutable* map ([IMap]).
   IMap<K, V> get lock => IMap<K, V>(this);
-
-  /// Locks the map, returning an *immutable* map ([IMap]).
-  /// The equals operator (`==`) compares all items, unordered.
-  IMap<K, V> get lockDeep => IMap<K, V>(this).deepEquals;
-
-  /// Locks the map, returning an *immutable* map ([IMap]).
-  /// The equals operator (`==`) compares by identity.
-  IMap<K, V> get lockIdentity => IMap<K, V>(this).identityEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,21 +169,24 @@ class IMap<K, V> // ignore: must_be_immutable
   bool get isNotEmpty => !isEmpty;
 
   @override
-  bool operator ==(Object other) =>
-      !isDeepEquals ? identical(this, other) : (other is IMap<K, V> && equals(other));
+  bool operator ==(Object other) => (other is IMap<K, V>)
+      ? isDeepEquals
+          ? equals(other)
+          : identical(_m, other._m)
+      : false;
 
   @override
   bool equals(IMap<K, V> other) =>
-      runtimeType == other.runtimeType &&
-      isDeepEquals == other.isDeepEquals &&
-      (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
+      identical(this, other) ||
+      other is IMap<K, V> &&
+          runtimeType == other.runtimeType &&
+          isDeepEquals == other.isDeepEquals &&
+          (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
 
   @override
-  int get hashCode => !isDeepEquals
-      ? identityHashCode(_m) ^ isDeepEquals.hashCode
-      : (flush._m as MFlat).deepMapHashcode();
-
-  // --- IMap methods: ---------------
+  int get hashCode => isDeepEquals //
+      ? (flush._m as MFlat<K, V>).deepMapHashcode()
+      : identityHashCode(_m);
 
   /// Compacts the list.
   IMap<K, V> get flush {

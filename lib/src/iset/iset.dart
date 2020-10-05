@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-
 import '../immutable_collection.dart';
 import '../ilist/ilist.dart';
 import 's_flat.dart';
@@ -10,17 +9,8 @@ import 's_add_all.dart';
 
 extension ISetExtension<T> on Set<T> {
   //
-
   /// Locks the set, returning an *immutable* set ([ISet]).
   ISet<T> get lock => ISet<T>(this);
-
-  /// Locks the set, returning an *immutable* set ([ISet]).
-  /// The equals operator (`==`) compares all items, unordered.
-  ISet<T> get lockDeep => ISet<T>(this).deepEquals;
-
-  /// Locks the set, returning an *immutable* set ([ISet]).
-  /// The equals operator (`==`) compares by identity.
-  ISet<T> get lockIdentity => ISet<T>(this).identityEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,34 +23,74 @@ class ISet<T> // ignore: must_be_immutable
 
   S<T> _s;
 
+  /// If given, will be used to sort list of values.
+  final int Function(T, T) compare;
+
   /// If `false` (the default), the equals operator (`==`)  compares by identity.
   /// If `true`, the equals operator (`==`) compares all items, unordered.
   final bool isDeepEquals;
 
   bool get isIdentityEquals => !isDeepEquals;
 
-  static ISet<T> empty<T>() => ISet.__(SFlat.empty<T>(), isDeepEquals: defaultIsDeepEquals);
+  static ISet<T> empty<T>() => ISet.__(
+        SFlat.empty<T>(),
+        compare: null,
+        isDeepEquals: defaultIsDeepEquals,
+      );
 
   factory ISet([Iterable<T> iterable]) => iterable is ISet<T>
       ? iterable
       : iterable == null || iterable.isEmpty
           ? ISet.empty<T>()
-          : ISet<T>.__(SFlat<T>(iterable), isDeepEquals: defaultIsDeepEquals);
+          : ISet<T>.__(
+              SFlat<T>(iterable),
+              compare: null,
+              isDeepEquals: defaultIsDeepEquals,
+            );
 
-  ISet._(Iterable<T> iterable, {@required this.isDeepEquals})
-      : _s = iterable is ISet<T>
+  ISet._(
+    Iterable<T> iterable, {
+    @required this.compare,
+    @required this.isDeepEquals,
+  }) : _s = iterable is ISet<T>
             ? iterable._s
             : iterable == null
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable);
 
-  ISet.__(this._s, {@required this.isDeepEquals});
+  ISet.__(
+    this._s, {
+    @required this.compare,
+    @required this.isDeepEquals,
+  });
+
+  ISet<T> config({
+    int Function(T, T) compare,
+    bool isDeepEquals,
+  }) =>
+      ISet.__(
+        _s,
+        compare: compare ?? this.compare,
+        isDeepEquals: isDeepEquals ?? this.isDeepEquals,
+      );
 
   /// Convert this set to identityEquals (compares by identity).
-  ISet<T> get identityEquals => isDeepEquals ? ISet.__(_s, isDeepEquals: false) : this;
+  ISet<T> get identityEquals => isDeepEquals
+      ? ISet.__(
+          _s,
+          compare: null,
+          isDeepEquals: false,
+        )
+      : this;
 
   /// Convert this set to deepEquals (compares all set items).
-  ISet<T> get deepEquals => isDeepEquals ? this : ISet.__(_s, isDeepEquals: true);
+  ISet<T> get deepEquals => isDeepEquals
+      ? this
+      : ISet.__(
+          _s,
+          compare: null,
+          isDeepEquals: true,
+        );
 
   Set<T> get unlock => Set<T>.of(_s);
 
@@ -74,29 +104,24 @@ class ISet<T> // ignore: must_be_immutable
   bool get isNotEmpty => !isEmpty;
 
   @override
-  bool operator ==(Object other) {
-    print('isDeepEquals = ${isDeepEquals}');
-    print('other.isDeepEquals = ${(other as ISet).isDeepEquals}');
-    print('(other is ISet<T> && equals(other)) = ${(other is ISet<T> && equals(other))}');
-    print('equals(other) = ${equals(other as ISet<T>)}');
-    print('this = ${this}');
-    print('other = ${other}');
-
-    return !isDeepEquals ? identical(this, other) : (other is ISet<T> && equals(other));
-  }
+  bool operator ==(Object other) => (other is ISet<T>)
+      ? isDeepEquals
+          ? equals(other)
+          : identical(_s, other._s)
+      : false;
 
   @override
   bool equals(ISet<T> other) =>
-      runtimeType == other.runtimeType &&
-      isDeepEquals == other.isDeepEquals &&
-      (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
+      identical(this, other) ||
+      other is ISet<T> &&
+          runtimeType == other.runtimeType &&
+          isDeepEquals == other.isDeepEquals &&
+          (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
 
   @override
-  int get hashCode => !isDeepEquals
-      ? identityHashCode(_s) ^ isDeepEquals.hashCode
-      : (flush._s as SFlat).deepSetHashcode();
-
-  // --- ISet methods: ---------------
+  int get hashCode => isDeepEquals //
+      ? (flush._s as SFlat<T>).deepSetHashcode()
+      : identityHashCode(_s);
 
   /// Compacts the set *and* returns it.
   ISet<T> get flush {
@@ -107,23 +132,40 @@ class ISet<T> // ignore: must_be_immutable
   bool get isFlushed => _s is SFlat;
 
   /// Returns a new set containing the current set plus the given item.
-  ISet<T> add(T item) => ISet<T>.__(_s.add(item), isDeepEquals: isDeepEquals);
+  ISet<T> add(T item) => ISet<T>.__(
+        _s.add(item),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   /// Returns a new set containing the current set plus all the given items.
-  ISet<T> addAll(Iterable<T> items) => ISet<T>.__(_s.addAll(items), isDeepEquals: isDeepEquals);
+  ISet<T> addAll(Iterable<T> items) => ISet<T>.__(
+        _s.addAll(items),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   /// Returns a new set containing the current set minus the given item.
   /// However, if the given item didn't exist in the current set,
   /// it will return the current set (same instance).
   ISet<T> remove(T item) {
     final S<T> result = _s.remove(item);
-    return identical(result, _s) ? this : ISet<T>.__(result, isDeepEquals: isDeepEquals);
+    return identical(result, _s)
+        ? this
+        : ISet<T>.__(
+            result,
+            compare: null,
+            isDeepEquals: isDeepEquals,
+          );
   }
 
   /// Removes the element, if it exists in the set.
   /// Otherwise, adds it to the set.
-  ISet<T> toggle(T item) =>
-      ISet<T>.__(contains(item) ? _s.remove(item) : _s.add(item), isDeepEquals: isDeepEquals);
+  ISet<T> toggle(T item) => ISet<T>.__(
+        contains(item) ? _s.remove(item) : _s.add(item),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   // --- Iterable methods: ---------------
 
@@ -131,7 +173,11 @@ class ISet<T> // ignore: must_be_immutable
   bool any(bool Function(T) test) => _s.any(test);
 
   @override
-  ISet<R> cast<R>() => ISet._(_s.cast<R>(), isDeepEquals: isDeepEquals);
+  ISet<R> cast<R>() => ISet._(
+        _s.cast<R>(),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
   bool contains(Object element) => _s.contains(element);
@@ -165,7 +211,11 @@ class ISet<T> // ignore: must_be_immutable
       _s.fold(initialValue, combine);
 
   @override
-  ISet<T> followedBy(Iterable<T> other) => ISet._(_s.followedBy(other), isDeepEquals: isDeepEquals);
+  ISet<T> followedBy(Iterable<T> other) => ISet._(
+        _s.followedBy(other),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
   void forEach(void Function(T element) f) => _s.forEach(f);
@@ -178,7 +228,11 @@ class ISet<T> // ignore: must_be_immutable
       _s.lastWhere(test, orElse: orElse);
 
   @override
-  ISet<E> map<E>(E Function(T e) f) => ISet._(_s.map(f), isDeepEquals: isDeepEquals);
+  ISet<E> map<E>(E Function(T e) f) => ISet._(
+        _s.map(f),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
   T reduce(T Function(T value, T element) combine) => _s.reduce(combine);
@@ -188,25 +242,46 @@ class ISet<T> // ignore: must_be_immutable
       _s.singleWhere(test, orElse: orElse);
 
   @override
-  ISet<T> skip(int count) => ISet._(_s.skip(count), isDeepEquals: isDeepEquals);
+  ISet<T> skip(int count) => ISet._(
+        _s.skip(count),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
-  ISet<T> skipWhile(bool Function(T value) test) =>
-      ISet._(_s.skipWhile(test), isDeepEquals: isDeepEquals);
+  ISet<T> skipWhile(bool Function(T value) test) => ISet._(
+        _s.skipWhile(test),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
-  ISet<T> take(int count) => ISet._(_s.take(count), isDeepEquals: isDeepEquals);
+  ISet<T> take(int count) => ISet._(
+        _s.take(count),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
-  ISet<T> takeWhile(bool Function(T value) test) =>
-      ISet._(_s.takeWhile(test), isDeepEquals: isDeepEquals);
+  ISet<T> takeWhile(bool Function(T value) test) => ISet._(
+        _s.takeWhile(test),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
-  ISet<T> where(bool Function(T element) test) =>
-      ISet._(_s.where(test), isDeepEquals: isDeepEquals);
+  ISet<T> where(bool Function(T element) test) => ISet._(
+        _s.where(test),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
-  ISet<E> whereType<E>() => ISet._(_s.whereType<E>(), isDeepEquals: isDeepEquals);
+  ISet<E> whereType<E>() => ISet._(
+        _s.whereType<E>(),
+        compare: null,
+        isDeepEquals: isDeepEquals,
+      );
 
   @override
   List<T> toList({bool growable = true}) => _s.toList(growable: growable);
@@ -256,11 +331,6 @@ abstract class S<T> implements Iterable<T> {
     }
     return setToBeAdded.isEmpty ? this : SAddAll(this, setToBeAdded);
   }
-
-  // => SAddAll<T>(
-  //       this,
-  //       (items is ISet<T>) ? items._s : items,
-  //     );
 
   /// TODO: FALTA FAZER!!!
   S<T> remove(T element) =>

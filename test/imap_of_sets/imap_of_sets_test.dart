@@ -6,7 +6,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group('Empty Initialization |', () {
-    final IMapOfSets<String, int> iMapOfSets = IMapOfSets(),
+    final IMapOfSets<String, int> iMapOfSets = IMapOfSets.empty(),
         iMapOfSetsFromEmpty = IMapOfSets.empty();
 
     test('Runtime Type', () {
@@ -25,24 +25,35 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group('Initialization from an `IMap` |', () {
-    final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2, 3});
-    final IMap<String, ISet<int>> iMap = IMap({
-      'a': iSet1,
-      'b': iSet2,
-    });
-    final IMapOfSets<String, int> iMapOfSets = IMapOfSets(iMap);
+  test('Initialization from Map and IMap', () {
+    //
 
-    test('Checking the values', () {
-      expect(iMapOfSets['a'], ISet({1, 2}));
-      expect(iMapOfSets['b'], ISet({1, 2, 3}));
+    // From Map.
+    final Map<String, Set<int>> map = {
+      'a': {1, 2},
+      'b': {1, 2, 3},
+    };
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets(map);
+    expect(iMapOfSets1['a'], ISet({1, 2}));
+    expect(iMapOfSets1['b'], ISet({1, 2, 3}));
+
+    // From IMap.
+    final IMap<String, ISet<int>> iMap = IMap({
+      'a': ISet({1, 2}),
+      'b': ISet({1, 2, 3}),
     });
+    final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.from(iMap);
+    expect(iMapOfSets2['a'], ISet({1, 2}));
+    expect(iMapOfSets2['b'], ISet({1, 2, 3}));
+
+    // Comparing both.
+    expect(iMapOfSets1, iMapOfSets2);
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
   group('Basic Operations and Workflow |', () {
-    IMapOfSets<String, int> mapOfSets = IMapOfSets();
+    IMapOfSets<String, int> mapOfSets = IMapOfSets.empty();
 
     test('Runtime Type', () => expect(mapOfSets, isA<IMapOfSets<String, int>>()));
 
@@ -89,7 +100,7 @@ void main() {
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
   group('Testing the remaining methods.', () {
     IMapOfSets<String, int> iMapOfSets = IMapOfSets.empty();
@@ -103,7 +114,7 @@ void main() {
     });
 
     test("entries", () {
-      final ISet<MapEntry<String, ISet<int>>> entries = iMapOfSets.entrySet;
+      final ISet<MapEntry<String, ISet<int>>> entries = iMapOfSets.entriesAsSet;
 
       print('iMapOfSets = ${iMapOfSets}');
       expect(
@@ -149,8 +160,8 @@ void main() {
       expect(newSet.keys.length, 1);
     });
 
-    // TODO: Marcelo, o nome da função é `getOrNull` mas ela nunca retorna `null`? Pelo menos é isso
-    // que está escrito na documentação...
+// TODO: Marcelo, o nome da função é `getOrNull` mas ela nunca retorna `null`? Pelo menos é isso
+// que está escrito na documentação...
     test('`getOrNull`', () {
       expect(iMapOfSets.getOrNull('a'), ISet<int>({1, 2}));
       expect(iMapOfSets.getOrNull('b'), ISet<int>({3}));

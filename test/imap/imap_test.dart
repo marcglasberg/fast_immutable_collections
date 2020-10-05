@@ -53,7 +53,7 @@ void main() {
       var myMap = IMap({'a': 1, 'b': 2}).deepEquals;
       expect(myMap == myMap, isTrue);
       expect(myMap == IMap({'a': 1, 'b': 2}).deepEquals, isTrue);
-      expect(myMap == {'a': 1, 'b': 2}.lockDeep, isTrue);
+      expect(myMap == {'a': 1, 'b': 2}.lock.deepEquals, isTrue);
       expect(myMap == IMap({'a': 1, 'b': 2, 'c': 3}).deepEquals, isFalse);
 
       myMap = IMap({'a': 1, 'b': 2});

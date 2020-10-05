@@ -7,17 +7,8 @@ import 'l_flat.dart';
 
 extension IListExtension<T> on List<T> {
   //
-
   /// Locks the list, returning an *immutable* list ([IList]).
   IList<T> get lock => IList<T>(this);
-
-  /// Locks the list, returning an *immutable* list ([IList]).
-  /// The equals operator (`==`) compares all items, ordered.
-  IList<T> get lockDeep => IList<T>(this).deepEquals;
-
-  /// Locks the list, returning an *immutable* list ([IList]).
-  /// The equals operator (`==`) compares by identity.
-  IList<T> get lockIdentity => IList<T>(this).identityEquals;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,21 +66,24 @@ class IList<T> // ignore: must_be_immutable
   bool get isNotEmpty => !isEmpty;
 
   @override
-  bool operator ==(Object other) =>
-      !isDeepEquals ? identical(this, other) : (other is IList<T> && equals(other));
+  bool operator ==(Object other) => (other is IList<T>)
+      ? isDeepEquals
+          ? equals(other)
+          : identical(_l, other._l)
+      : false;
 
   @override
   bool equals(IList<T> other) =>
-      runtimeType == other.runtimeType &&
-      isDeepEquals == other.isDeepEquals &&
-      (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
+      identical(this, other) ||
+      other is IList<T> &&
+          runtimeType == other.runtimeType &&
+          isDeepEquals == other.isDeepEquals &&
+          (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
 
   @override
-  int get hashCode => !isDeepEquals
-      ? identityHashCode(_l) ^ isDeepEquals.hashCode
-      : (flush._l as LFlat<T>).deepListHashcode();
-
-  // --- IList methods: ---------------
+  int get hashCode => isDeepEquals //
+      ? (flush._l as LFlat<T>).deepListHashcode()
+      : identityHashCode(_l);
 
   /// Compacts the list. Chainable method.
   IList get flush {
