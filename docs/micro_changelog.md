@@ -7,6 +7,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 05/10/2020
+
+### 1. Philippe Fanaro
+
+1. 
+
 ## 02/10/2020
 
 ### 1. Philippe Fanaro

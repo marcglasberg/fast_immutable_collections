@@ -21,8 +21,8 @@ class IList<T> // ignore: must_be_immutable
 
   L<T> _l;
 
-  /// If `false` (the default), the equals operator (`==`) compares by identity.
-  /// If `true`, the equals operator (`==`) compares all items, ordered.
+  /// If `false`, the equals operator (`==`) compares by identity.
+  /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
   bool get isIdentityEquals => !isDeepEquals;
