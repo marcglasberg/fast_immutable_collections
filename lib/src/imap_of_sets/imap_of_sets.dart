@@ -17,8 +17,10 @@ class IMapOfSets<K, V> {
   /// If given, will be used to sort list of values.
   final int Function(V, V) compareValue;
 
+  static IMapOfSets<K, V> empty<K, V>() => IMapOfSets<K, V>.from(null);
+
   factory IMapOfSets([
-    Map<K, Set<V>> mapOfSets,
+    Map<K, Iterable<V>> mapOfSets,
   ]) =>
       IMapOfSets._unsafe(
         IMap.fromIterables(
@@ -28,7 +30,6 @@ class IMapOfSets<K, V> {
         null,
         null,
       );
-
 
   IMapOfSets.from(
     IMap<K, ISet<V>> mapOfSets, {
@@ -46,12 +47,27 @@ class IMapOfSets<K, V> {
   );
 
   IMapOfSets<K, V> config({
-    int Function(K, K) keyCompare,
-    int Function(V, V) valueCompare,
+    int Function(K, K) compareKey,
+    int Function(V, V) compareValue,
   }) =>
-      IMapOfSets._unsafe(_mapOfSets, keyCompare, valueCompare);
+      IMapOfSets._unsafe(_mapOfSets, compareKey, compareValue);
 
-  static IMapOfSets<K, V> empty<K, V>() => IMapOfSets<K, V>.from(null);
+  Map<K, Set<V>> get unlock {
+    Map<K, Set<V>> result = {};
+    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      result[entry.key] = entry.value.unlock;
+    }
+    return result;
+  }
+
+  /// The number of keys.
+  int get lengthOfKeys => _mapOfSets.length;
+
+  /// The sum of the number of values of all sets.
+  int get lengthOfValues => values.length;
+
+  /// The sum of the number of unique values of all sets.
+  int get lengthOfNonRepeatingValues => valuesAsSet.length;
 
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
@@ -119,6 +135,11 @@ class IMapOfSets<K, V> {
     else
       return addSet(key, newSet);
   }
+
+  /// Removes the [value] from the [set] of the corresponding [key],
+  /// if it exists in the [set]. Otherwise, adds it to the [set].
+  IMapOfSets<K, V> toggle(K key, V value) =>
+      contains(key, value) ? remove(key, value) : add(key, value);
 
   /// If the given [set] is not empty, add the [key]/[set] entry.
   /// If the [key] already exists, replace it with the new [set] entirely.
@@ -212,7 +233,16 @@ class IMapOfSets<K, V> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IMapOfSets && runtimeType == other.runtimeType && _mapOfSets == other._mapOfSets;
+      other is IMapOfSets &&
+          runtimeType == other.runtimeType &&
+          compareKey == other.compareKey &&
+          compareValue == other.compareValue &&
+          _mapOfSets == other._mapOfSets;
+
+  bool same(IMapOfSets<K, V> other) =>
+      _mapOfSets.same(other._mapOfSets) &&
+      (compareKey == other.compareKey) &&
+      (compareValue == other.compareValue);
 
   @override
   int get hashCode => _mapOfSets.hashCode;
