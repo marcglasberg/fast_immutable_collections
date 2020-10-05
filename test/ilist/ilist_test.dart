@@ -167,22 +167,22 @@ void main() {
     test(
         'IList with identity-equals compares the list instance, '
         'not the items.', () {
-      var myList = IList([1, 2]).identityEquals;
-      expect(myList == myList, isTrue);
-      expect(myList == IList([1, 2]).identityEquals, isFalse);
-      expect(myList == [1, 2].lock, isFalse);
-      expect(myList == IList([1, 2, 3]).identityEquals, isFalse);
+      final IList<int> myList1 = IList([1, 2]).identityEquals;
+      expect(myList1 == myList1, isTrue);
+      expect(myList1 == IList([1, 2]).identityEquals, isFalse);
+      expect(myList1 == [1, 2].lock, isFalse);
+      expect(myList1 == IList([1, 2, 3]).identityEquals, isFalse);
 
-      myList = IList([1, 2]).identityEquals;
-      expect(myList == myList, isTrue);
-      expect(myList == IList([1, 2]).identityEquals, isFalse);
-      expect(myList == IList([1, 2, 3]).identityEquals, isFalse);
+      final IList<int> myList2 = IList([1, 2]).identityEquals;
+      expect(myList2 == myList2, isTrue);
+      expect(myList2 == IList([1, 2]).identityEquals, isFalse);
+      expect(myList2 == IList([1, 2, 3]).identityEquals, isFalse);
     });
 
     test(
         'IList with deep-equals compares the items, '
         'not the list instance.', () {
-      var myList = IList([1, 2]);
+      final IList<int> myList = IList([1, 2]);
       expect(myList == myList, isTrue);
       expect(myList == IList([1, 2]), isTrue);
       expect(myList == [1, 2].lock.deepEquals, isTrue);
