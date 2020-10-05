@@ -194,8 +194,29 @@ void main() {
     });
 
     group("SAddAll.remove method |", () {
-      test("", () {
-        
+      test("Changing the passed mutable set doesn't change SAddAll", () {
+        final Set<int> original = {3, 4, 5};
+        final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+
+        expect(sAddAll, <int>{1, 2, 3, 4, 5});
+
+        original.remove(3);
+
+        expect(original, <int>{4, 5});
+        expect(sAddAll, <int>{1, 2, 3, 4, 5});
+      });
+
+      test("Removing from the original SAddAll doesn't change it", () {
+        final Set<int> original = {3, 4, 5};
+        final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+
+        expect(sAddAll, <int>{1, 2, 3, 4, 5});
+
+        final S<int> s = sAddAll.remove(1);
+
+        expect(original, <int>{3, 4, 5});
+        expect(sAddAll, <int>{1, 2, 3, 4, 5});
+        expect(s, <int>{2, 3, 4, 5});
       });
     });
   });
