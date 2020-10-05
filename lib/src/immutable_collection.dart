@@ -13,7 +13,7 @@ abstract class ImmutableCollection<C> {
 /// Note `same` is practically as fast as `identical`, but will give less false negatives.
 /// So it is almost always recommended to use `same` instead of `identical`.
 ///
-bool same<C extends ImmutableCollection>(C c1, C c2) {
+bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
   if (c1 == null && c2 == null) return true;
   if (c1 == null || c2 == null) return false;
   return c1.same(c2);
