@@ -112,7 +112,7 @@ class SFlat<T> extends S<T> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// Equals of MapEntry gets special treatment.
+/// Equals of `MapEntry` gets special treatment.
 /// We consider two map-entries equal when their respective
 /// key and values are equal.
 ///
@@ -125,6 +125,7 @@ class MapEntryEquality<E> implements Equality<E> {
           ? e1.key == e2.key && e1.value == e2.value
           : e1 == e2;
 
+  // TODO: Isn't it safer to use the quiver package's hash functions instead of XORing?
   @override
   int hash(Object e) => //
       (e is MapEntry) //
