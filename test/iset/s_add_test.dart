@@ -44,6 +44,7 @@ void main() {
     });
   });
 
+  // TODO: Review the fact that `.add` does check for repeated elements, while the constructor doesn't.
   group("Ensuring Immutability |", () {
     group('SAdd.add method |', () {
       test("Changing the passed mutable set doesn't change the LAdd", () {
@@ -108,7 +109,7 @@ void main() {
         expect(sAdd, <int>{1, 2, 3});
       });
 
-      test("Changing the passed mutable list doesn't change the SAdd", () {
+      test("Changing the passed immutable set doesn't change the original SAdd", () {
         final Set<int> original = {1, 2};
         final SFlat<int> sFlat = SFlat(original);
         final SAdd<int> sAdd = SAdd(sFlat, 3);

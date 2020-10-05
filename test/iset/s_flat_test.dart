@@ -65,6 +65,7 @@ void main() {
     });
   });
 
+  // TODO: Review the fact that `.add` does check for repeated elements, while the constructor doesn't.
   group("Ensuring Immutability |", () {
     group("SFlat.add method |", () {
       test("Changing the passed mutable set doesn't change the SFlat", () {

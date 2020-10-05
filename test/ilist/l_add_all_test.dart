@@ -193,7 +193,7 @@ void main() {
         expect(lAddAll, <int>[1, 2, 3, 4, 5]);
       });
 
-      test("Changing the passed mutable list doesn't change the LAddAll", () {
+      test("Changing the passed immutable list doesn't change the original LAddAll", () {
         final List<int> original = [3, 4, 5];
         final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
 
