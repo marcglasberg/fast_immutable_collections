@@ -16,6 +16,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `ISet`
 1. Completed tests for: 
     - `MFlat`
+    - `MReplace`
 
 ## 05/10/2020
 
