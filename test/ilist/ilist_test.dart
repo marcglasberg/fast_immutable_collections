@@ -7,10 +7,10 @@ void main() {
 
   group("Creating immutable lists |", () {
     final IList iList1 = IList(), iList2 = IList([]);
-    final iList3 = IList<String>([]);
-    final iList4 = IList([1]);
-    final iList5 = IList.empty<int>();
-    final iList6 = [].lock;
+    final iList3 = IList<String>([]),
+        iList4 = IList([1]),
+        iList5 = IList.empty<int>(),
+        iList6 = [].lock;
 
     test("Runtime Type", () {
       expect(iList1, isA<IList>());
@@ -100,7 +100,7 @@ void main() {
         expect(iList, <int>[1, 2]);
       });
 
-      test("Changing the passed mutable list doesn't change the IList", () {
+      test("Changing the passed immutable list doesn't change the IList", () {
         final List<int> original = [1, 2];
         final IList<int> iList = original.lock;
 

@@ -7,14 +7,18 @@ void main() {
 
   group("Creating immutable sets |", () {
     final ISet iSet1 = ISet(), iSet2 = ISet({});
-    final iSet3 = ISet<String>({});
-    final iSet4 = ISet([1]);
+    final iSet3 = ISet<String>({}),
+        iSet4 = ISet([1]),
+        iSet5 = ISet.empty<int>(),
+        iSet6 = <int>{}.lock;
 
     test("Runtime Type", () {
       expect(iSet1, isA<ISet>());
       expect(iSet2, isA<ISet>());
       expect(iSet3, isA<ISet<String>>());
       expect(iSet4, isA<ISet<int>>());
+      expect(iSet5, isA<ISet<int>>());
+      expect(iSet6, isA<ISet>());
     });
 
     test("Emptiness Properties", () {
@@ -22,11 +26,136 @@ void main() {
       expect(iSet2.isEmpty, isTrue);
       expect(iSet3.isEmpty, isTrue);
       expect(iSet4.isEmpty, isFalse);
+      expect(iSet5.isEmpty, isTrue);
+      expect(iSet6.isEmpty, isTrue);
 
       expect(iSet1.isNotEmpty, isFalse);
       expect(iSet2.isNotEmpty, isFalse);
       expect(iSet3.isNotEmpty, isFalse);
       expect(iSet4.isNotEmpty, isTrue);
+      expect(iSet5.isNotEmpty, isFalse);
+      expect(iSet6.isNotEmpty, isFalse);
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group("Ensuring Immutability |", () {
+    group("ISet.add method |", () {
+      test("Changing the passed mutable list doesn't change the IList", () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet = original.lock;
+
+        expect(iSet, original);
+
+        original.add(3);
+        original.add(4);
+
+        expect(original, <int>{1, 2, 3, 4});
+        expect(iSet, <int>{1, 2});
+      });
+
+      test("Changing the ISet also doesn't change the original set", () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet = original.lock;
+
+        expect(iSet, original);
+
+        final ISet<int> iSetNew = iSet.add(3);
+
+        expect(original, <int>{1, 2});
+        expect(iSet, <int>{1, 2});
+        expect(iSetNew, <int>{1, 2, 3});
+      });
+
+      test("If the item being passed is a variable, a pointer to it shouldn't exist inside ISet",
+          () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet = original.lock;
+
+        expect(iSet, original);
+
+        int willChange = 4;
+        final ISet<int> iSetNew = iSet.add(willChange);
+
+        willChange = 5;
+
+        expect(original, <int>{1, 2});
+        expect(iSet, <int>{1, 2});
+        expect(willChange, 5);
+        expect(iSetNew, <int>{1, 2, 4});
+      });
+    });
+
+    group("ISet.addAll method", () {
+      test("Changing the passed mutable list doesn't change the ISet", () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet = original.lock;
+
+        expect(iSet, <int>{1, 2});
+
+        original.addAll(<int>{2, 3, 4});
+
+        expect(original, <int>{1, 2, 3, 4});
+      });
+
+      test("Changing the passed immutable set doesn't change the ISet", () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet = original.lock;
+
+        expect(iSet, <int>{1, 2});
+
+        final ISet<int> iSetNew = iSet.addAll(<int>{2, 3, 4});
+
+        expect(original, <int>{1, 2});
+        expect(iSet, <int>{1, 2});
+        expect(iSetNew, <int>{1, 2, 3, 4});
+      });
+
+      test("If the items being passed are from a variable, "
+          "it shouldn't have a pointer to the variable", () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet1 = original.lock;
+        final ISet<int> iSet2 = original.lock;
+
+        expect(iSet1, original);
+        expect(iSet2, original);
+
+        final ISet<int> iSetNew = iSet1.addAll(iSet2.addAll({3, 4}));
+        original.add(3);
+
+        expect(original, <int>{1, 2, 3});
+        expect(iSet1, <int>{1, 2});
+        expect(iSet2, <int>{1, 2});
+        expect(iSetNew, <int>{1, 2, 3, 4});
+      });
+    });
+
+    group("ISet.remove method |", () {
+      test("Changing the passed mutable set doesn't change the ISet", () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet = original.lock;
+
+        expect(iSet, {1, 2});
+
+        original.remove(2);
+
+        expect(original, <int>{1});
+        expect(iSet, <int>{1, 2});
+      });
+
+      test("Removing from the original ISet doesn't change it", () {
+        final Set<int> original = {1, 2};
+        final ISet<int> iSet = original.lock;
+
+        expect(iSet, <int>{1, 2});
+
+        final ISet<int> iSetNew = iSet.remove(1);
+
+        expect(original, <int>{1, 2});
+        expect(iSet, <int>{1, 2});
+        expect(iSetNew, <int>{2});
+      });
     });
   });
 
