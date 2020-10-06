@@ -74,7 +74,7 @@ class ISet<T> // ignore: must_be_immutable
         isDeepEquals: isDeepEquals ?? this.isDeepEquals,
       );
 
-  /// Convert this set to identityEquals (compares by identity).
+  /// Convert this set to `identityEquals` (compares by identity).
   ISet<T> get identityEquals => isDeepEquals
       ? ISet.__(
           _s,
@@ -83,7 +83,7 @@ class ISet<T> // ignore: must_be_immutable
         )
       : this;
 
-  /// Convert this set to deepEquals (compares all set items).
+  /// Convert this set to `deepEquals` (compares all set items).
   ISet<T> get deepEquals => isDeepEquals
       ? this
       : ISet.__(

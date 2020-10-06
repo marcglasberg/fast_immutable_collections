@@ -7,6 +7,14 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 06/10/2020
+
+### 1. Philippe Fanaro
+
+1. Improved and completed tests, and ensured immutability for:
+    - `IList`
+    - `ISet`
+
 ## 05/10/2020
 
 ### 1. Philippe Fanaro
@@ -14,6 +22,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Completed tests and ensured immutability for:
     - `SFlat`
     - `SAdd`
+    - `SAddAll`
 
 ## 02/10/2020
 
