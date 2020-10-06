@@ -23,16 +23,19 @@ bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
 
 /// Global configuration that specifies if, by default, the immutable
 /// collections use equality or identity for their [operator ==].
-/// It should be defined only once during program instantiation.
 /// By default [isDeepEquals]==true (collections are compared by equality).
-///
 set setDefaultIsDeepEquals(bool isDeepEquals) {
-  if (_defaultIsDeepEquals) throw StateError("Can't change defaultIsDeepEquals more than once.");
-  _defaultIsDeepEquals = isDeepEquals;
+  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
+  _defaultIsDeepEquals = isDeepEquals ?? true;
 }
 
-bool _defaultIsDeepEquals;
+bool get defaultIsDeepEquals => _defaultIsDeepEquals;
 
-bool get defaultIsDeepEquals => _defaultIsDeepEquals ?? true;
+bool _defaultIsDeepEquals = true;
+
+bool _isConfigLocked = false;
+
+/// In your app initialization you may want to lock the configuration.
+void lockConfig() => _isConfigLocked = true;
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
