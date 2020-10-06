@@ -65,14 +65,10 @@ void main() {
   group("Other Methods and Getters |", () {
     final MFlat<String, int> mFlat = MFlat({'a': 1, 'b': 2, 'c': 3, 'd': 4});
 
-    test("MFlat.entries getter", () {
-      expect(mFlat.entries, [
-        MapEntry<String, int>('a', 1),
-        MapEntry<String, int>('b', 2),
-        MapEntry<String, int>('c', 3),
-        MapEntry<String, int>('d', 4),
-      ]);
-    });
+    test(
+        "MFlat.entries getter",
+        () => mFlat.entries
+            .forEach((MapEntry<String, int> entry) => expect(mFlat[entry.key], entry.value)));
 
     test(
         "MFlat.keys getter", () => expect(mFlat.keys.toSet(), IList(['a', 'b', 'c', 'd']).toSet()));
