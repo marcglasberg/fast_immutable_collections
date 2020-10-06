@@ -22,14 +22,16 @@ class IMapOfSets<K, V> {
   factory IMapOfSets([
     Map<K, Iterable<V>> mapOfSets,
   ]) =>
-      IMapOfSets._unsafe(
-        IMap.fromIterables(
-          mapOfSets.keys,
-          mapOfSets.values.map((value) => ISet(value).deepEquals),
-        ),
-        null,
-        null,
-      );
+      (mapOfSets == null)
+          ? empty<K, V>()
+          : IMapOfSets._unsafe(
+              IMap.fromIterables(
+                mapOfSets.keys,
+                mapOfSets.values.map((value) => ISet(value).deepEquals),
+              ),
+              null,
+              null,
+            );
 
   IMapOfSets.from(
     IMap<K, ISet<V>> mapOfSets, {
