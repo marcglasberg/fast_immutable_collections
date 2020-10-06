@@ -14,6 +14,8 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Improved and completed tests, and ensured immutability for:
     - `IList`
     - `ISet`
+1. Completed tests for: 
+    - `MFlat`
 
 ## 05/10/2020
 

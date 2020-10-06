@@ -50,7 +50,61 @@ void main() {
     });
   });
 
-  group("Ensuring Immutability", () {
-    
+  test("Initialization through the unsafe constructor", () {
+    final Map<String, int> original = {'a': 1, 'b': 2, 'c': 3};
+    final MFlat<String, int> mFlat = MFlat.unsafe(original);
+
+    expect(mFlat.unlock, original);
+
+    original.addAll({'d': 4});
+
+    expect(original, {'a': 1, 'b': 2, 'c': 3, 'd': 4});
+    expect(mFlat.unlock, {'a': 1, 'b': 2, 'c': 3, 'd': 4});
+  });
+
+  group("Other Methods and Getters |", () {
+    final MFlat<String, int> mFlat = MFlat({'a': 1, 'b': 2, 'c': 3, 'd': 4});
+
+    test("MFlat.entries getter", () {
+      expect(mFlat.entries, [
+        MapEntry<String, int>('a', 1),
+        MapEntry<String, int>('b', 2),
+        MapEntry<String, int>('c', 3),
+        MapEntry<String, int>('d', 4),
+      ]);
+    });
+
+    test(
+        "MFlat.keys getter", () => expect(mFlat.keys.toSet(), IList(['a', 'b', 'c', 'd']).toSet()));
+
+    test("MFlat.values getter", () => expect(mFlat.values.toSet(), IList([1, 2, 3, 4]).toSet()));
+
+    test("MFlat.any method", () {
+      expect(mFlat.any((String key, int value) => key == 'a'), isTrue);
+      expect(mFlat.any((String key, int value) => key == 'z'), isFalse);
+      expect(mFlat.any((String key, int value) => value == 4), isTrue);
+      expect(mFlat.any((String key, int value) => value == 100), isFalse);
+    });
+
+    test("MFlat.contains method", () {
+      expect(mFlat.contains('a', 1), isTrue);
+      expect(mFlat.contains('a', 2), isFalse);
+      expect(mFlat.contains('b', 1), isFalse);
+    });
+
+    test("MFlat.containsKey method", () {
+      expect(mFlat.containsKey('a'), isTrue);
+      expect(mFlat.containsKey('z'), isFalse);
+    });
+
+    test("MFlat.containsValue method", () {
+      expect(mFlat.containsValue(1), isTrue);
+      expect(mFlat.containsValue(100), isFalse);
+    });
+
+    test("MFlat.[] operator", () {
+      expect(mFlat['a'], 1);
+      expect(mFlat['z'], isNull);
+    });
   });
 }
