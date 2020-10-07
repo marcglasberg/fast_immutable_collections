@@ -12,9 +12,9 @@ void main() {
   test("Runtime Type", () => expect(sFlat, isA<SFlat<int>>()));
 
   test("SFlat.unlock getter", () {
+    expect(sFlat.unlock, isA<Set<int>>());
     expect(sFlat.unlock, <int>{1, 2, 3});
     expect(sFlat.unlock, originalSet);
-    expect(sFlat.unlock, isA<Set<int>>());
   });
 
   test("Emptiness Properties", () {
@@ -45,11 +45,12 @@ void main() {
     });
   });
 
-  test("empty", () {
+  test("Static SFlat.empty method", () {
     final S<int> empty = SFlat.empty();
 
     expect(empty.unlock, <int>{});
     expect(empty.isEmpty, isTrue);
+    expect(empty.isNotEmpty, isFalse);
   });
 
   group("Hash Code and Equals |", () {

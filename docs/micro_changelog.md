@@ -7,6 +7,15 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 07/10/2020
+
+### 1. Philippe Fanaro
+
+1. Completed basic tests for:
+    - `MAdd`
+    - `MAddAll`
+    - `Entry`
+
 ## 06/10/2020
 
 ### 1. Philippe Fanaro
@@ -14,6 +23,9 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Improved and completed tests, and ensured immutability for:
     - `IList`
     - `ISet`
+1. Completed basic tests for: 
+    - `MFlat`
+    - `MReplace`
 
 ## 05/10/2020
 
