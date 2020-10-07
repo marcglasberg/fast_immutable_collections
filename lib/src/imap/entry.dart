@@ -6,10 +6,9 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// Similar to a [MapEntry], but correctly implements
-/// equals comparing key and value.
+/// [equals] ([==]) comparing [key] and [value].
 class Entry<K, V> {
   final K key;
-
   final V value;
 
   const Entry(this.key, this.value);
