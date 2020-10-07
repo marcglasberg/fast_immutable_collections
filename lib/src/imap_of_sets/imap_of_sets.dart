@@ -86,6 +86,17 @@ class IMapOfSets<K, V> {
     }
   }
 
+  /// Return a "flatted" iterable of each value (including eventual duplicates),
+  /// as <K, V> entries. For example, if the map is {1: {a, b}, 2: {x, y}}, it
+  /// will return [(1:a), (1:b), (2:x), (2:y)].
+  Iterable<MapEntry<K, V>> flatten() sync* {
+    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      for (V value in entry.value) {
+        yield MapEntry<K, V>(entry.key, value);
+      }
+    }
+  }
+
   ISet<MapEntry<K, ISet<V>>> get entriesAsSet => ISet(entries).deepEquals;
 
   ISet<K> get keysAsSet => ISet(keys).deepEquals;
