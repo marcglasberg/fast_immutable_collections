@@ -14,6 +14,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Completed basic tests for:
     - `MAdd`
     - `MAddAll`
+    - `Entry`
 
 ## 06/10/2020
 
