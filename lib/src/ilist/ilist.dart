@@ -27,7 +27,7 @@ class IList<T> // ignore: must_be_immutable
 
   bool get isIdentityEquals => !isDeepEquals;
 
-  static IList<T> empty<T>() => IList.__(LFlat.empty<T>(), isDeepEquals: defaultIsDeepEquals);
+  static IList<T> empty<T>() => IList._unsafe(LFlat.empty<T>(), isDeepEquals: defaultIsDeepEquals);
 
   factory IList([
     Iterable<T> iterable,
@@ -36,7 +36,7 @@ class IList<T> // ignore: must_be_immutable
           ? iterable
           : iterable == null || iterable.isEmpty
               ? IList.empty<T>()
-              : IList<T>.__(LFlat<T>(iterable), isDeepEquals: defaultIsDeepEquals);
+              : IList<T>._unsafe(LFlat<T>(iterable), isDeepEquals: defaultIsDeepEquals);
 
   IList._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _l = iterable is IList<T>
@@ -46,21 +46,21 @@ class IList<T> // ignore: must_be_immutable
                 : LFlat<T>(iterable);
 
   /// Unsafe.
-  IList.__(this._l, {@required this.isDeepEquals});
+  IList._unsafe(this._l, {@required this.isDeepEquals});
 
   IList<T> config({
     bool isDeepEquals,
   }) =>
-      IList.__(
+      IList._unsafe(
         _l,
         isDeepEquals: isDeepEquals ?? this.isDeepEquals,
       );
 
   /// Converts `this` list to `identityEquals` (compares by `identity`).
-  IList<T> get identityEquals => isDeepEquals ? IList.__(_l, isDeepEquals: false) : this;
+  IList<T> get identityEquals => isDeepEquals ? IList._unsafe(_l, isDeepEquals: false) : this;
 
   /// Convert `this` list to `deepEquals` (compares all list items).
-  IList<T> get deepEquals => isDeepEquals ? this : IList.__(_l, isDeepEquals: true);
+  IList<T> get deepEquals => isDeepEquals ? this : IList._unsafe(_l, isDeepEquals: true);
 
   List<T> get unlock => List.of(_l);
 
@@ -104,13 +104,14 @@ class IList<T> // ignore: must_be_immutable
 
   bool get isFlushed => _l is LFlat;
 
-  IList<T> add(T item) => IList<T>.__(_l.add(item), isDeepEquals: isDeepEquals);
+  IList<T> add(T item) => IList<T>._unsafe(_l.add(item), isDeepEquals: isDeepEquals);
 
-  IList<T> addAll(Iterable<T> items) => IList<T>.__(_l.addAll(items), isDeepEquals: isDeepEquals);
+  IList<T> addAll(Iterable<T> items) =>
+      IList<T>._unsafe(_l.addAll(items), isDeepEquals: isDeepEquals);
 
   IList<T> remove(T item) {
     final L<T> result = _l.remove(item);
-    return identical(result, _l) ? this : IList<T>.__(result, isDeepEquals: isDeepEquals);
+    return identical(result, _l) ? this : IList<T>._unsafe(result, isDeepEquals: isDeepEquals);
   }
 
   /// Removes the element, if it exists in the list.
@@ -212,7 +213,10 @@ class IList<T> // ignore: must_be_immutable
   /// `maxLength`. Otherwise, it removes the last elements so it remains with
   /// only `maxLength` elements.
   IList<T> maxLength(int maxLength) =>
-      IList.__(_l.maxLength(maxLength), isDeepEquals: isDeepEquals);
+      IList._unsafe(_l.maxLength(maxLength), isDeepEquals: isDeepEquals);
+
+  IList<T> sort([int Function(T a, T b) compare]) =>
+      IList._unsafe(_l.sort(compare), isDeepEquals: isDeepEquals);
 
   @override
   List<T> toList({bool growable = true}) => _l.toList(growable: growable);
@@ -257,8 +261,7 @@ abstract class L<T> implements Iterable<T> {
       );
 
   /// TODO: FALTA FAZER!!!
-  L<T> remove(T element) =>
-      !contains(element) ? this : LFlat<T>.unsafe(List.of(this)..remove(element));
+  L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
   /// TODO: FALTA FAZER!!!
   /// If the list has more than `maxLength` elements, it gets cut on
@@ -268,7 +271,9 @@ abstract class L<T> implements Iterable<T> {
       ? throw ArgumentError(maxLength)
       : length <= maxLength
           ? this
-          : LFlat<T>.unsafe(List.of(this)..length = maxLength);
+          : LFlat<T>.unsafe(unlock..length = maxLength);
+
+  L<T> sort([int Function(T a, T b) compare]) => LFlat<T>.unsafe(unlock..sort(compare));
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;
