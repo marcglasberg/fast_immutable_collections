@@ -44,9 +44,7 @@ void main() {
     test("MReplace [] Operator",
         () => mReplace.forEach((String key, int value) => expect(value, finalMap[key])));
 
-    test("MReplace.length getter", () {
-      expect(mReplace.length, 3);
-    });
+    test("MReplace.length getter", () => expect(mReplace.length, 3));
   });
 
   group("Iterator |", () {
@@ -55,14 +53,14 @@ void main() {
 
       expect(iterator.current, isNull);
       expect(iterator.moveNext(), isTrue);
-      expect(iterator.current.key, 'c');
-      expect(iterator.current.value, 3);
-      expect(iterator.moveNext(), isTrue);
       expect(iterator.current.key, 'a');
       expect(iterator.current.value, 2);
       expect(iterator.moveNext(), isTrue);
       expect(iterator.current.key, 'b');
       expect(iterator.current.value, 2);
+      expect(iterator.moveNext(), isTrue);
+      expect(iterator.current.key, 'c');
+      expect(iterator.current.value, 3);
       expect(iterator.moveNext(), isFalse);
       expect(iterator.current, isNull);
     });
