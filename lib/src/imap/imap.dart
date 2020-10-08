@@ -301,15 +301,31 @@ class IMap<K, V> // ignore: must_be_immutable
   /// it will return the current map (same instance).
   IMap<K, V> remove(K key) {
     M<K, V> result = _m.remove(key);
-    if (identical(result, _m))
-      return this;
-    else
-      return IMap<K, V>.__(
-        result,
-        isDeepEquals: isDeepEquals,
-        compareKey: compareKey,
-        compareValue: compareValue,
-      );
+
+    return identical(result, _m)
+        ? this
+        : IMap<K, V>.__(
+            result,
+            isDeepEquals: isDeepEquals,
+            compareKey: compareKey,
+            compareValue: compareValue,
+          );
+  }
+
+  /// Returns a new map containing the current map minus the
+  /// entries that satisfy the given [predicate].
+  /// However, if nothing is removed, it will return the current map (same instance).
+  IMap<K, V> removeWhere(bool Function(K key, V value) predicate) {
+    M<K, V> result = _m.removeWhere(predicate);
+
+    return identical(result, _m)
+        ? this
+        : IMap<K, V>.__(
+            result,
+            isDeepEquals: isDeepEquals,
+            compareKey: compareKey,
+            compareValue: compareValue,
+          );
   }
 
   V operator [](K k) => _m[k];
@@ -410,7 +426,7 @@ abstract class M<K, V> {
     return map;
   }
 
-  int get length => _getFlushed.length;
+  int get length;
 
   /// Returns a new map containing the current map plus the given key:value.
   /// However, if the given key already exists in the set,
@@ -440,6 +456,13 @@ abstract class M<K, V> {
   /// TODO: FALTA FAZER!!!
   M<K, V> remove(K key) {
     return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(_getFlushed)..remove(key));
+  }
+
+  M<K, V> removeWhere(bool Function(K key, V value) predicate) {
+    Map<K, V> oldMap = unlock;
+    int oldLength = oldMap.length;
+    Map<K, V> newMap = oldMap..removeWhere(predicate);
+    return (newMap.length == oldLength) ? this : MFlat<K, V>.unsafe(newMap);
   }
 
   // TODO: Marcelo, por favor, verifique a implementação.
