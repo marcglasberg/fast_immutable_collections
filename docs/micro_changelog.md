@@ -13,6 +13,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Completed tests for:
     - `IMap`
+    - `IMapOfSets`
 1. Added tests to ensure that `IMap` won't add repeated keys.
 
 > **I haven't yet added immutability checks for `MAdd`, `MAddAll`, `MReplace`, `IMap` or `IMapOfSets`.**
