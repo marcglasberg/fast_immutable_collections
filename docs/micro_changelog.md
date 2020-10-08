@@ -7,6 +7,13 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 08/10/2020
+
+### 1. Philippe Fanaro
+
+1. Completed tests for:
+    - `IMap`
+
 ## 07/10/2020
 
 ### 1. Philippe Fanaro
