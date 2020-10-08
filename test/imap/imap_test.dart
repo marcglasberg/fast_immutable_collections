@@ -258,7 +258,53 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group("IMap add, addAll and remove methods |", () {
-    test("IMap.add and IMap.addAll methods", () {
+    // TODO: Marcelo, até aqui, somente comparações entre `iMap.unlock` e `map` são válidas, devido
+    // à ordem dos elementos. Você gostaria que comparações entre `iMap` e `map` também fossem
+    // válidas?
+    test("IMap.add method", () {
+      final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
+      final IMap<String, int> newIMap = iMap.add('c', 3);
+
+      expect(newIMap.unlock, {'a': 1, 'b': 2, 'c': 3});
+    });
+
+    test("IMap.addEntry method", () {
+      final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
+      final IMap<String, int> newIMap = iMap.addEntry(MapEntry<String, int>('c', 3));
+
+      expect(newIMap.unlock, {'a': 1, 'b': 2, 'c': 3});
+    });
+
+    test("IMap.addAll method", () {
+      final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
+      final IMap<String, int> newIMap = iMap.addAll({'c': 3, 'd': 4}.lock);
+
+      expect(newIMap.unlock, {'a': 1, 'b': 2, 'c': 3, 'd': 4});
+    });
+
+    test("IMap.addMap method", () {
+      final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
+      final IMap<String, int> newIMap = iMap.addMap({'c': 3, 'd': 4});
+
+      expect(newIMap.unlock, {'a': 1, 'b': 2, 'c': 3, 'd': 4});
+    });
+
+    test("IMap.addEntries method", () {
+      final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
+      final IMap<String, int> newIMap =
+          iMap.addEntries([MapEntry<String, int>('c', 3), MapEntry<String, int>('d', 4)]);
+
+      expect(newIMap.unlock, {'a': 1, 'b': 2, 'c': 3, 'd': 4});
+    });
+
+    test("IMap.remove method", () {
+      final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
+      final IMap<String, int> newIMap = iMap.remove('b');
+
+      expect(newIMap.unlock, {'a': 1});
+    });
+
+    test("Chaining IMap.add and IMap.addAll methods", () {
       final IMap<String, int> imap1 = {"a": 1, "b": 2, "c": 3}.lock;
       final IMap<String, int> imap2 = imap1.add("d", 4);
       final IMap<String, int> imap3 = imap2.addMap({"e": 5, "f": 6});
@@ -276,7 +322,7 @@ void main() {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    test("IMap.remove method", () {
+    test("Multiple IMap.removes", () {
       final IMap<String, int> imap1 = {"a": 1, "b": 2, "c": 3}.lock;
 
       final IMap<String, int> imap2 = imap1.remove("b");
@@ -303,21 +349,58 @@ void main() {
     group("Making sure adding repeated elements doesn't repeat keys |", () {
       final IMap<String, int> iMap = IMap.empty<String, int>().deepEquals;
 
-      test("Empty equals", () {
-        expect(iMap, IMap.empty<String, int>().deepEquals);
-      });
+      test("Empty equals", () => expect(iMap, IMap.empty<String, int>().deepEquals));
 
-      test("Adding the same key overwrites it.", () {
+      test("IMap.add the same key overwrites it", () {
         IMap<String, int> newMap = iMap.add("a", 1);
         newMap = newMap.add("b", 2);
         newMap = newMap.add("a", 3);
         newMap = newMap.add("a", 4);
         expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap.unlock, {"a": 4, "b": 2});
+      });
+
+      test("IMap.addEntry the same entry overwrites it", () {
+        IMap<String, int> newMap = iMap.addEntry(MapEntry<String, int>("a", 1));
+        newMap = newMap.addEntry(MapEntry<String, int>("b", 2));
+        newMap = newMap.addEntry(MapEntry<String, int>("a", 3));
+        newMap = newMap.addEntry(MapEntry<String, int>("a", 4));
+        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap.unlock, {"a": 4, "b": 2});
+      });
+
+      test("IMap.add the same key overwrites it", () {
+        IMap<String, int> newMap = iMap.addAll({"a": 1}.lock);
+        newMap = newMap.addAll({"b": 2}.lock);
+        newMap = newMap.addAll({"a": 3}.lock);
+        newMap = newMap.addAll({"a": 4}.lock);
+        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap.unlock, {"a": 4, "b": 2});
+      });
+
+      test("IMap.add the same key overwrites it", () {
+        IMap<String, int> newMap = iMap.addMap({"a": 1});
+        newMap = newMap.addMap({"b": 2});
+        newMap = newMap.addMap({"a": 3});
+        newMap = newMap.addMap({"a": 4});
+        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap.unlock, {"a": 4, "b": 2});
+      });
+
+      test("IMap.add the same key overwrites it", () {
+        IMap<String, int> newMap = iMap.addEntries([MapEntry<String, int>("a", 1)]);
+        newMap = newMap.addEntries([MapEntry<String, int>("b", 2)]);
+        newMap = newMap.addEntries([MapEntry<String, int>("a", 3)]);
+        newMap = newMap.addEntries([MapEntry<String, int>("a", 4)]);
+        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap.unlock, {"a": 4, "b": 2});
       });
     });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // TODO: add tests ensuring immutability.
 
   // //////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -415,6 +498,11 @@ void main() {
     test("IMap [] operator", () {
       expect(iMap['a'], 1);
       expect(iMap['z'], isNull);
+    });
+
+    test("IMap.get method", () {
+      expect(iMap.get('a'), 1);
+      expect(iMap.get('z'), isNull);
     });
 
     group("IMap Contains Family |", () {
