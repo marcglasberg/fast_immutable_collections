@@ -23,6 +23,34 @@ void main() {
     });
   });
 
+  // TODO: Marcelo, por favor, revise.
+  group("Equals and Other Comparisons |", () {
+    final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+          "a": {1, 2},
+          "b": {1, 2, 3},
+        }),
+        iMapOfSets2 = IMapOfSets({
+          "a": {1, 2},
+          "b": {1, 2, 3},
+        }),
+        iMapOfSets3 = IMapOfSets({
+          "a": {1, 2},
+          "b": {1, 2},
+        });
+
+    test("hashCode", () => expect(iMapOfSets.hashCode, 1700946626));
+
+    test('IMapOfSets == Operator', () {
+      expect(iMapOfSets == iMapOfSets2, isTrue);
+      expect(iMapOfSets == iMapOfSets3, isFalse);
+    });
+
+    test("IMapOfSets.same method", () {
+      expect(iMapOfSets.same(iMapOfSets2), isFalse);
+      expect(iMapOfSets.same(iMapOfSets3), isFalse);
+    });
+  });
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group("Initializations |", () {
@@ -223,18 +251,35 @@ void main() {
       expect(iMapOfSets.contains("c", 1), isFalse);
     });
 
-    test("IMapOfSets.entryWithValue method", () {
-      expect(iMapOfSets.entryWithValue(1).entry, Entry("a", ISet<int>({1, 2})));
-      expect(iMapOfSets.entryWithValue(2).entry, Entry("a", ISet<int>({1, 2})));
-      expect(iMapOfSets.entryWithValue(3).entry, Entry("b", ISet<int>({3})));
-      expect(iMapOfSets.entryWithValue(4), isNull);
-    });
-
     test("IMapOfSets.keyWithValue method", () {
       expect(iMapOfSets.keyWithValue(1), "a");
       expect(iMapOfSets.keyWithValue(2), "a");
       expect(iMapOfSets.keyWithValue(3), "b");
       expect(iMapOfSets.keyWithValue(4), isNull);
+    });
+
+    group("IMapOfSets.withValue family |", () {
+      final IMapOfSets<String, int> newIMapOfSets = iMapOfSets.add('d', 1);
+
+      test("IMapOfSets.entryWithValue method", () {
+        expect(newIMapOfSets.entryWithValue(1).entry, Entry("a", ISet<int>({1, 2})));
+        expect(newIMapOfSets.entryWithValue(2).entry, Entry("a", ISet<int>({1, 2})));
+        expect(newIMapOfSets.entryWithValue(3).entry, Entry("b", ISet<int>({3})));
+        expect(newIMapOfSets.entryWithValue(4), isNull);
+      });
+
+      test("IMapOfSets.allEntriesWithValue method", () {
+        expect(newIMapOfSets.allEntriesWithValue(1).toString(),
+            '{MapEntry(a: {1, 2}), MapEntry(d: {1})}');
+        expect(newIMapOfSets.allEntriesWithValue(2).toString(), '{MapEntry(a: {1, 2})}');
+        expect(newIMapOfSets.allEntriesWithValue(3).toString(), '{MapEntry(b: {3})}');
+      });
+
+      test("IMapOfSets.allKeysWithValue method", () {
+        expect(newIMapOfSets.allKeysWithValue(1), {'a', 'd'});
+        expect(newIMapOfSets.allKeysWithValue(2), {'a'});
+        expect(newIMapOfSets.allKeysWithValue(3), {'b'});
+      });
     });
 
     test("IMapOfSets.toString method", () => expect(iMapOfSets.toString(), "{a: {1, 2}, b: {3}}"));
