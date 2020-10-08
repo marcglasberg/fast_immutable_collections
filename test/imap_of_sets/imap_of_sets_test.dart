@@ -188,7 +188,7 @@ void main() {
       expect(newSet.keys.length, 1);
     });
 
-    // TODO: Marcelo, o nome da função é getOrNull mas ela nunca retorna null? 
+    // TODO: Marcelo, o nome da função é getOrNull mas ela nunca retorna null?
     //Pelo menos é isso que está escrito na documentação...
     test("IMapOfSets.getOrNull method", () {
       expect(iMapOfSets.getOrNull("a"), ISet<int>({1, 2}));
@@ -240,6 +240,79 @@ void main() {
     test("IMapOfSets.toString method", () => expect(iMapOfSets.toString(), "{a: {1, 2}, b: {3}}"));
   });
 
+  test("IMapOfSets.flatten method", () {
+    final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    });
+
+    final List<MapEntry<String, int>> flattenedIMap = iMapOfSets.flatten().toList();
+    final List<MapEntry<String, int>> correctFlattenedMap = [
+      MapEntry<String, int>('a', 1),
+      MapEntry<String, int>('a', 2),
+      MapEntry<String, int>('b', 1),
+      MapEntry<String, int>('b', 2),
+      MapEntry<String, int>('b', 3),
+    ];
+
+    for (int i = 0; i < correctFlattenedMap.length; i++) {
+      expect(flattenedIMap[i].entry.key, correctFlattenedMap[i].entry.key);
+      expect(flattenedIMap[i].entry.value, correctFlattenedMap[i].entry.value);
+    }
+  });
+
+  group(".as family of methods |", () {
+    final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
+      "c": {1, 2},
+    });
+
+    test("IMapOfSets.entriesAsSet getter method", () {
+      expect(iMapOfSets.entriesAsSet.isDeepEquals, isTrue);
+      expect(iMapOfSets.entriesAsSet, isA<ISet<MapEntry<String, ISet<int>>>>());
+      expect(iMapOfSets.entriesAsSet.toString(),
+          '{MapEntry(a: {1, 2}), MapEntry(b: {1, 2, 3}), MapEntry(c: {1, 2})}');
+    });
+
+    test("IMapOfSets.keyAsSet method", () {
+      expect(iMapOfSets.keysAsSet.isDeepEquals, isTrue);
+      expect(iMapOfSets.keysAsSet, isA<ISet<String>>());
+      expect(iMapOfSets.keysAsSet, <String>{'a', 'b', 'c'});
+    });
+
+    test("IMapOfSets.keyAsSet method", () {
+      expect(iMapOfSets.setsAsSet.isDeepEquals, isTrue);
+      expect(iMapOfSets.setsAsSet, isA<ISet<ISet<int>>>());
+      expect(iMapOfSets.setsAsSet, <Set<int>>{
+        {1, 2},
+        {1, 2, 3},
+      });
+    });
+
+    test("IMapOfSets.valuesAsSet method", () {
+      expect(iMapOfSets.valuesAsSet.isDeepEquals, isTrue);
+      expect(iMapOfSets.valuesAsSet, isA<ISet<int>>());
+      expect(iMapOfSets.valuesAsSet, <int>{1, 2, 3});
+    });
+
+    test("IMapOfSets.keysAsList method", () {
+      expect(iMapOfSets.keysAsList.isDeepEquals, isTrue);
+      expect(iMapOfSets.keysAsList, isA<IList<String>>());
+      expect(iMapOfSets.keysAsList, <String>['a', 'b', 'c']);
+    });
+
+    test("IMapOfSets.setsAsList method", () {
+      expect(iMapOfSets.setsAsList.isDeepEquals, isTrue);
+      expect(iMapOfSets.setsAsList, isA<IList<ISet<int>>>());
+      expect(iMapOfSets.setsAsList, <Set<int>>[
+        {1, 2},
+        {1, 2, 3},
+        {1, 2},
+      ]);
+    });
+  });
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("IMapOfSets.toggle method", () {
@@ -260,7 +333,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group("Length |", () {
-    IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+    final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
       "a": {1, 2},
       "b": {1, 2, 3},
     });
