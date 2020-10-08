@@ -62,6 +62,26 @@ void main() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  test("Config", () {
+    final IMap<String, ISet<int>> iMap = IMap({
+      "a": ISet({1, 2}),
+      "b": ISet({1, 2, 3}),
+    });
+
+    expect(iMap.compareKey, isNull);
+    expect(iMap.compareValue, isNull);
+
+    final IMap<String, ISet<int>> newIMap = iMap.config(
+      compareKey: (String key1, String key2) => null,
+      // compareValue: (int value1, int value2) => null,
+    );
+
+    expect(newIMap.compareKey, isNotNull);
+    expect(newIMap.compareValue, isNotNull);
+  });
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
   group("Basic Operations and Workflow |", () {
     IMapOfSets<String, int> mapOfSets = IMapOfSets.empty();
 
