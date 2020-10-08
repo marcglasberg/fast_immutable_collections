@@ -91,8 +91,6 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group("Equals |", () {
-    //
-
     test(
         "IMap with identity-equals compares the map instance, "
         "not the items.", () {

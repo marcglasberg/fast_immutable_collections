@@ -25,42 +25,39 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "Initialization from:"
-      "1) Map-of-Sets"
-      "2) Map-of-Lists"
-      "3) IMap-of-ISets", () {
-    //
-
-    // 1) From Map-of-sets.
+  group("Initializations |", () {
     final Map<String, Set<int>> mapOfSets = {
       "a": {1, 2},
       "b": {1, 2, 3},
     };
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets(mapOfSets);
-    expect(iMapOfSets1["a"], ISet({1, 2}));
-    expect(iMapOfSets1["b"], ISet({1, 2, 3}));
 
-    // 2) From Map-of-lists.
-    final Map<String, List<int>> mapOfLists = {
-      "a": [1, 2],
-      "b": [1, 2, 3],
-    };
-    final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets(mapOfLists);
-    expect(iMapOfSets2["a"], ISet({1, 2}));
-    expect(iMapOfSets2["b"], ISet({1, 2, 3}));
-
-    // 3) From IMap.
-    final IMap<String, ISet<int>> iMap = IMap({
-      "a": ISet({1, 2}),
-      "b": ISet({1, 2, 3}),
+    test("From a map of sets", () {
+      expect(iMapOfSets1["a"], ISet({1, 2}));
+      expect(iMapOfSets1["b"], ISet({1, 2, 3}));
     });
-    final IMapOfSets<String, int> iMapOfSets3 = IMapOfSets.from(iMap);
-    expect(iMapOfSets3["a"], ISet({1, 2}));
-    expect(iMapOfSets3["b"], ISet({1, 2, 3}));
 
-    // Comparing both.
-    expect(iMapOfSets1, iMapOfSets2);
+    test("From a map of lists", () {
+      final Map<String, List<int>> mapOfLists = {
+        "a": [1, 2],
+        "b": [1, 2, 3],
+      };
+      final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets(mapOfLists);
+      expect(iMapOfSets2["a"], ISet({1, 2}));
+      expect(iMapOfSets2["b"], ISet({1, 2, 3}));
+      expect(iMapOfSets2, iMapOfSets1);
+    });
+
+    test("From an IMap", () {
+      final IMap<String, ISet<int>> iMap = IMap({
+        "a": ISet({1, 2}),
+        "b": ISet({1, 2, 3}),
+      });
+      final IMapOfSets<String, int> iMapOfSets3 = IMapOfSets.from(iMap);
+      expect(iMapOfSets3["a"], ISet({1, 2}));
+      expect(iMapOfSets3["b"], ISet({1, 2, 3}));
+      expect(iMapOfSets3, iMapOfSets1);
+    });
   });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,8 +125,6 @@ void main() {
 
     test("IMapOfSets.entries getter", () {
       final ISet<MapEntry<String, ISet<int>>> entries = iMapOfSets.entriesAsSet;
-
-      print("iMapOfSets = ${iMapOfSets}");
       expect(
           entries,
           ISet([

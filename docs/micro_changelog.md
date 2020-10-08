@@ -13,6 +13,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Completed tests for:
     - `IMap`
+1. Added tests to ensure that `IMap` won't add repeated keys.
 
 ## 07/10/2020
 
