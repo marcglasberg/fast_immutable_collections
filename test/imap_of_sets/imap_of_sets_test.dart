@@ -132,7 +132,7 @@ void main() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Testing the remaining methods.", () {
+  group("Testing the remaining methods |", () {
     IMapOfSets<String, int> iMapOfSets = IMapOfSets.empty();
     iMapOfSets = iMapOfSets.add("a", 1);
     iMapOfSets = iMapOfSets.add("a", 2);
@@ -188,8 +188,8 @@ void main() {
       expect(newSet.keys.length, 1);
     });
 
-// TODO: Marcelo, o nome da função é getOrNull mas ela nunca retorna null? Pelo menos é isso
-// que está escrito na documentação...
+    // TODO: Marcelo, o nome da função é getOrNull mas ela nunca retorna null? 
+    //Pelo menos é isso que está escrito na documentação...
     test("IMapOfSets.getOrNull method", () {
       expect(iMapOfSets.getOrNull("a"), ISet<int>({1, 2}));
       expect(iMapOfSets.getOrNull("b"), ISet<int>({3}));
@@ -259,15 +259,18 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("IMapOfSets.length getter", () {
-    //
+  group("Length |", () {
     IMapOfSets<String, int> iMapOfSets = IMapOfSets({
       "a": {1, 2},
       "b": {1, 2, 3},
     });
-    expect(iMapOfSets.lengthOfKeys, 2);
-    expect(iMapOfSets.lengthOfValues, 5);
-    expect(iMapOfSets.lengthOfNonRepeatingValues, 3);
+
+    test("IMapofSets.length getter", () => expect(iMapOfSets.lengthOfKeys, 2));
+
+    test("IMapofSets.lengthOfValues getter", () => expect(iMapOfSets.lengthOfValues, 5));
+
+    test("IMapofSets.lengthOfNonRepeatingValues getter",
+        () => expect(iMapOfSets.lengthOfNonRepeatingValues, 3));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
