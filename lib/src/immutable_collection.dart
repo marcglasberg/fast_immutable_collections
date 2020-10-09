@@ -1,9 +1,28 @@
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-abstract class ImmutableCollection<C> {
+abstract class ImmutableCollection<C> implements CanBeEmpty {
   bool equals(C other);
 
   bool same(C other);
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// Your own classes can implement this so they may use [CanBeEmptyExtension].
+abstract class CanBeEmpty {
+  bool get isEmpty;
+
+  bool get isNotEmpty;
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+extension CanBeEmptyExtension on CanBeEmpty {
+  bool get isNullOrEmpty => (this == null) || isEmpty;
+
+  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
+
+  bool get isEmptyButNotNull => (this != null) && isEmpty;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

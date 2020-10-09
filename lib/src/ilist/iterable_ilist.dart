@@ -1,10 +1,12 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 import 'ilist.dart';
 
 /// This [Iterable] mixin implements all [Iterable] members.
 /// It is meant to help you wrap an [IList] into another class (composition).
 /// You must override the [iList] getter to return the inner [IList].
 /// All other methods are efficiently implemented in terms of the [iList].
-mixin IterableIListMixin<T> implements Iterable<T> {
+mixin IterableIListMixin<T> implements Iterable<T>, CanBeEmpty {
   IList<T> get iList;
 
   @override
