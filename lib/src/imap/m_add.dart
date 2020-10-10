@@ -40,5 +40,34 @@ class MAdd<K, V> extends M<K, V> {
   int get length => _m.length + 1;
 
   @override
-  Iterator<MapEntry<K, V>> get iterator => _m.entries.iterator;
+  Iterator<MapEntry<K, V>> get iterator => IteratorMAdd(_m.iterator, MapEntry(_key, _value));
 }
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+class IteratorMAdd<K, V> implements Iterator<MapEntry<K, V>> {
+  Iterator<MapEntry<K, V>> iterator;
+  MapEntry<K, V> item, _current;
+  int extraMove;
+
+  IteratorMAdd(this.iterator, this.item)
+      : _current = iterator.current,
+        extraMove = 0;
+
+  @override
+  MapEntry<K, V> get current => _current;
+
+  @override
+  bool moveNext() {
+    final bool isMoving = iterator.moveNext();
+    if (isMoving) {
+      _current = iterator.current;
+    } else {
+      extraMove++;
+      _current = extraMove == 1 ? item : null;
+    }
+    return extraMove <= 1;
+  }
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////

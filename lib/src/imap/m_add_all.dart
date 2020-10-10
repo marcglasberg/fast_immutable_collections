@@ -54,14 +54,14 @@ class MAddAll<K, V> extends M<K, V> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class IteratorMAddAll<T> implements Iterator<T> {
-  Iterator<T> iterator1, iterator2;
-  T _current;
+class IteratorMAddAll<K, V> implements Iterator<MapEntry<K, V>> {
+  Iterator<MapEntry<K, V>> iterator1, iterator2;
+  MapEntry<K, V> _current;
 
   IteratorMAddAll(this.iterator1, this.iterator2) : _current = iterator1.current;
 
   @override
-  T get current => _current;
+  MapEntry<K, V> get current => _current;
 
   @override
   bool moveNext() {
