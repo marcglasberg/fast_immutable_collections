@@ -1,7 +1,5 @@
 import 'dart:collection';
-
 import 'package:meta/meta.dart';
-
 import '../ilist/ilist.dart';
 import '../imap/imap.dart';
 import '../iset/iset.dart';

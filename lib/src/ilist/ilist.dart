@@ -1,9 +1,11 @@
+import 'package:fast_immutable_collections/src/ilist/unmodifiable_list_view.dart';
 import 'package:meta/meta.dart';
 
 import '../immutable_collection.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
+import 'modifiable_list_view.dart';
 
 extension IListExtension<T> on List<T> {
   //
@@ -38,6 +40,15 @@ class IList<T> // ignore: must_be_immutable
               ? IList.empty<T>()
               : IList<T>._unsafe(LFlat<T>(iterable), isDeepEquals: defaultIsDeepEquals);
 
+  /// Unsafe constructor. Use this at your own peril.
+  /// This constructor is fast, since it makes no defensive copies of the list.
+  /// However, you should only use this with a new list you've created yourself,
+  /// when you are sure no external copies exist. If the original list is modified,
+  /// it will break the IList and any other derived lists.
+  IList.unsafe(List<T> list, {@required this.isDeepEquals})
+      : _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
+
+  /// Fast if the iterable is an IList.
   IList._(Iterable<T> iterable, {@required this.isDeepEquals})
       : _l = iterable is IList<T>
             ? iterable._l
@@ -63,6 +74,10 @@ class IList<T> // ignore: must_be_immutable
   IList<T> get deepEquals => isDeepEquals ? this : IList._unsafe(_l, isDeepEquals: true);
 
   List<T> get unlock => List.of(_l);
+
+  List<T> get unlockView => UnmodifiableListView(this);
+
+  List<T> get unlockLazy => ModifiableListView(this);
 
   @override
   Iterator<T> get iterator => _l.iterator;
@@ -126,7 +141,12 @@ class IList<T> // ignore: must_be_immutable
   bool any(bool Function(T) test) => _l.any(test);
 
   @override
-  IList<R> cast<R>() => IList._(_l.cast<R>(), isDeepEquals: isDeepEquals);
+  IList<R> cast<R>() {
+    var casted = _l.cast<R>();
+    return (casted is L<R>)
+        ? IList._unsafe(casted, isDeepEquals: isDeepEquals)
+        : IList._(casted, isDeepEquals: isDeepEquals);
+  }
 
   @override
   bool contains(Object element) => _l.contains(element);
@@ -284,7 +304,6 @@ abstract class L<T> implements Iterable<T> {
   @override
   bool any(bool Function(T) test) => _getFlushed.any(test);
 
-  // TODO: FALTA FAZER!!! Isso é o ideal realmente?
   @override
   Iterable<R> cast<R>() => _getFlushed.cast<R>();
 

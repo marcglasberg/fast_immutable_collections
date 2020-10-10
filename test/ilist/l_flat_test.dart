@@ -37,7 +37,7 @@ void main() {
     // When casting a `List`, we get back another `List`. Should our `IList` really give back an
     // `Iterable`?
     final lFlatAsNum = lFlat.cast<num>();
-    expect(lFlatAsNum, isA<LFlat<num>>());
+    expect(lFlatAsNum, isA<Iterable<num>>());
   });
 
   group("Iterator |", () {

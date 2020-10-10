@@ -22,13 +22,12 @@ class LFlat<T> extends L<T> {
   bool get isEmpty => _list.isEmpty;
 
   @override
-  bool any(bool Function(T) test) => _list.any(test);
+  bool any(bool Function(T) test) {
+    return _list.any(test);
+  }
 
   @override
-  Iterable<R> cast<R>() => throw UnsupportedError('cast');
-
-  // TODO: FALTA FAZER!!!
-  // Iterable<R> cast<R>() => _list.cast<R>();
+  Iterable<R> cast<R>() => _list.cast<R>();
 
   @override
   bool contains(Object element) => _list.contains(element);
