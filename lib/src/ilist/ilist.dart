@@ -73,10 +73,26 @@ class IList<T> // ignore: must_be_immutable
   /// Convert `this` list to `deepEquals` (compares all list items).
   IList<T> get deepEquals => isDeepEquals ? this : IList._unsafe(_l, isDeepEquals: true);
 
+  /// Unlocks the list, returning a regular (mutable) [List].
+  /// This list is "safe", in the sense that is independent from the original [IList].
   List<T> get unlock => List.of(_l);
 
+  /// Unlocks the list, returning a safe, unmodifiable (immutable) [List] view.
+  /// The word "view" means the list is backed by the original [IList].
+  /// Using this is very fast, since it makes no copies of the [IList] items.
+  /// However, if you try to use methods that modify the list, like [add],
+  /// it will throw an [UnsupportedError].
+  /// It is also very fast to lock this list back into an [IList].
   List<T> get unlockView => UnmodifiableListView(this);
 
+  /// Unlocks the list, returning a safe, modifiable (mutable) [List].
+  /// Using this is very fast, since it makes no copies of the [IList] items.
+  /// However, if you use a method that mutates the list, like [add], it will
+  /// first unlock (internally make a copy of all IList items). This is
+  /// transparent to you, and will happen at most only once. In other words,
+  /// it will unlock the IList, lazily, only if necessary.
+  /// If you never mutate the list, it will be very fast to lock this list
+  /// back into an [IList].
   List<T> get unlockLazy => ModifiableListView(this);
 
   @override

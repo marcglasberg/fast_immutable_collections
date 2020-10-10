@@ -10,10 +10,10 @@ import 'ilist.dart';
 ///
 /// If you use a method that mutates the list, like [add], it will first
 /// unlock (make a copy of all IList items). This is transparent to you,
-/// and will happen only once. In other words, it will unlock the IList,
-/// lazily, only if necessary.
+/// and will happen at most only once. In other words, it will unlock the
+/// IList, lazily, only if necessary.
 ///
-/// If you never mutated the list, it will be very fast to lock this list
+/// If you never mutate the list, it will be very fast to lock this list
 /// back into an [IList].
 ///
 class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
