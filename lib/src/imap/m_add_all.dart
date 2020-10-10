@@ -49,7 +49,35 @@ class MAddAll<K, V> extends M<K, V> {
   int get length => _m.length + _items.length;
 
   @override
-  Iterator<MapEntry<K, V>> get iterator => _m.entries.iterator;
+  Iterator<MapEntry<K, V>> get iterator => IteratorMAddAll(_m.iterator, _items.iterator);
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+class IteratorMAddAll<T> implements Iterator<T> {
+  Iterator<T> iterator1, iterator2;
+  T _current;
+
+  IteratorMAddAll(this.iterator1, this.iterator2) : _current = iterator1.current;
+
+  @override
+  T get current => _current;
+
+  @override
+  bool moveNext() {
+    bool isMoving = iterator1.moveNext();
+    if (isMoving) {
+      _current = iterator1.current;
+    } else {
+      isMoving = iterator2.moveNext();
+      if (isMoving) {
+        _current = iterator2.current;
+      } else {
+        _current = null;
+      }
+    }
+    return isMoving;
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

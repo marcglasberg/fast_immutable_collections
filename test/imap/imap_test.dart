@@ -40,7 +40,7 @@ void main() {
       expect(identical(iMap.unlock, map), isFalse);
     });
 
-    test("IMap.fromEntries factory contructor", () {
+    test("IMap.fromEntries factory constructor", () {
       const List<MapEntry<String, int>> entries = [
         MapEntry<String, int>('a', 1),
         MapEntry<String, int>('b', 2),
@@ -322,26 +322,24 @@ void main() {
 
     test("Multiple IMap.removes", () {
       final IMap<String, int> imap1 = {"a": 1, "b": 2, "c": 3}.lock;
-
       final IMap<String, int> imap2 = imap1.remove("b");
-      expect(imap2.unlock, {"a": 1, "c": 3});
-      expect(identical(imap1, imap2), isFalse);
-
       final IMap<String, int> imap3 = imap2.remove("x");
-      expect(imap3.unlock, {"a": 1, "c": 3});
-      expect(identical(imap2, imap3), isTrue);
-
       final IMap<String, int> imap4 = imap3.remove("a");
-      expect(imap4.unlock, {"c": 3});
-      expect(identical(imap3, imap4), isTrue);
-
       final IMap<String, int> imap5 = imap4.remove("c");
-      expect(imap5.unlock, {});
-      expect(identical(imap4, imap5), isTrue);
-
       final IMap<String, int> imap6 = imap5.remove("y");
+
+      expect(imap1.unlock, {"a": 1, "b": 2, "c": 3});
+      expect(imap2.unlock, {"a": 1, "c": 3});
+      expect(imap3.unlock, {"a": 1, "c": 3});
+      expect(imap4.unlock, {"c": 3});
+      expect(imap5.unlock, {});
       expect(imap6.unlock, {});
-      expect(identical(imap5, imap6), isTrue);
+
+      expect(imap1.same(imap2), isFalse);
+      expect(imap2.same(imap3), isTrue);
+      expect(imap3.same(imap4), isFalse);
+      expect(imap4.same(imap5), isFalse);
+      expect(imap5.same(imap6), isTrue);
     });
 
     group("Making sure adding repeated elements doesn't repeat keys |", () {
