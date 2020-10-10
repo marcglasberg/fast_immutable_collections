@@ -86,9 +86,9 @@ class IList<T> // ignore: must_be_immutable
   List<T> get unlockView => UnmodifiableListView(this);
 
   /// Unlocks the list, returning a safe, modifiable (mutable) [List].
-  /// Using this is very fast, since it makes no copies of the [IList] items.
-  /// However, if you use a method that mutates the list, like [add], it will
-  /// first unlock (internally make a copy of all IList items). This is
+  /// Using this is very fast at first, since it makes no copies of the [IList]
+  /// items. However, if and only if you use a method that mutates the list,
+  /// like [add], it will unlock internally (make a copy of all IList items). This is
   /// transparent to you, and will happen at most only once. In other words,
   /// it will unlock the IList, lazily, only if necessary.
   /// If you never mutate the list, it will be very fast to lock this list
@@ -104,6 +104,19 @@ class IList<T> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => !isEmpty;
 
+  /// If [isDeepEquals] configuration is true:
+  /// Will return true only if the list items are equal (and in the same order),
+  /// and the list configurations are the same instance. This may be slow for very
+  /// large lists, since it compares each item, one by one.
+  ///
+  /// If [isDeepEquals] configuration is false:
+  /// Will return true only if the lists internals are the same instances
+  /// (comparing by identity). This will be fast even for very large lists,
+  /// since it doesn't compare each item.
+  /// Note: This is not the same as `identical(list1, list2)` since it doesn't
+  /// compare the lists themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return true more often.
+  ///
   @override
   bool operator ==(Object other) => (other is IList<T>)
       ? isDeepEquals
@@ -111,6 +124,9 @@ class IList<T> // ignore: must_be_immutable
           : same(other)
       : false;
 
+  /// Will return true only if the list items are equal (and in the same order),
+  /// and the list configurations are the same instance. This may be slow for very
+  /// large lists, since it compares each item, one by one.
   @override
   bool equals(IList<T> other) =>
       identical(this, other) ||
@@ -119,6 +135,12 @@ class IList<T> // ignore: must_be_immutable
           isDeepEquals == other.isDeepEquals &&
           (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
 
+  /// Will return true only if the lists internals are the same instances
+  /// (comparing by identity). This will be fast even for very large lists,
+  /// since it doesn't compare each item.
+  /// Note: This is not the same as `identical(list1, list2)` since it doesn't
+  /// compare the lists themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return true more often.
   @override
   bool same(IList<T> other) => identical(_l, other._l) && (isDeepEquals == other.isDeepEquals);
 
@@ -158,10 +180,10 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   IList<R> cast<R>() {
-    var casted = _l.cast<R>();
-    return (casted is L<R>)
-        ? IList._unsafe(casted, isDeepEquals: isDeepEquals)
-        : IList._(casted, isDeepEquals: isDeepEquals);
+    var result = _l.cast<R>();
+    return (result is L<R>)
+        ? IList._unsafe(result, isDeepEquals: isDeepEquals)
+        : IList._(result, isDeepEquals: isDeepEquals);
   }
 
   @override

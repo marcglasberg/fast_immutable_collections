@@ -210,10 +210,25 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
 
+  @override
   bool get isEmpty => _m.isEmpty;
 
+  @override
   bool get isNotEmpty => !isEmpty;
 
+  /// If [isDeepEquals] configuration is true:
+  /// Will return true only if the map entries are equal (and in the same order),
+  /// and the map configurations are the same instance. This may be slow for very
+  /// large maps, since it compares each entry, one by one.
+  ///
+  /// If [isDeepEquals] configuration is false:
+  /// Will return true only if the maps internals are the same instances
+  /// (comparing by identity). This will be fast even for very large maps,
+  /// since it doesn't compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// compare the maps themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return true more often.
+  ///
   @override
   bool operator ==(Object other) => (other is IMap<K, V>)
       ? isDeepEquals
@@ -221,6 +236,9 @@ class IMap<K, V> // ignore: must_be_immutable
           : same(other)
       : false;
 
+  /// Will return true only if the map entries are equal (and in the same order),
+  /// and the map configurations are the same instance. This may be slow for very
+  /// large maps, since it compares each entry, one by one.
   @override
   bool equals(IMap<K, V> other) =>
       identical(this, other) ||
@@ -231,6 +249,12 @@ class IMap<K, V> // ignore: must_be_immutable
           compareValue == other.compareValue &&
           (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
 
+  /// Will return true only if the maps internals are the same instances
+  /// (comparing by identity). This will be fast even for very large maps,
+  /// since it doesn't compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// compare the maps themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return true more often.
   @override
   bool same(IMap<K, V> other) =>
       identical(_m, other._m) &&
@@ -243,7 +267,7 @@ class IMap<K, V> // ignore: must_be_immutable
       ? (flush._m as MFlat<K, V>).deepMapHashcode()
       : identityHashCode(_m);
 
-  /// Compacts the list.
+  /// Compacts the map.
   IMap<K, V> get flush {
     if (!isFlushed) _m = MFlat<K, V>.unsafe(unlock);
     return this;
@@ -410,7 +434,7 @@ abstract class M<K, V> {
 
   /// The [M] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
-  /// Note these fallback methods need to calculate the flushed list, but
+  /// Note these fallback methods need to calculate the flushed map, but
   /// because that's immutable, we cache it.
   Map<K, V> _flushed;
 
@@ -443,15 +467,13 @@ abstract class M<K, V> {
     }
   }
 
-  // M<K,V> add(T item) => contains(item) ? this : SAdd(this, item);
-
   M<K, V> addAll(IMap<K, V> imap) => MAddAll<K, V>.unsafe(this, imap._m);
 
   M<K, V> addMap(Map<K, V> map) =>
       MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.of(map)));
 
-  M<K, V> addEntries(Iterable<MapEntry<K, V>> items) =>
-      MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.fromEntries(items)));
+  M<K, V> addEntries(Iterable<MapEntry<K, V>> entries) =>
+      MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.fromEntries(entries)));
 
   /// TODO: FALTA FAZER!!!
   M<K, V> remove(K key) {

@@ -103,6 +103,19 @@ class ISet<T> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => !isEmpty;
 
+  /// If [isDeepEquals] configuration is true:
+  /// Will return true only if the set items are equal (and in the same order),
+  /// and the set configurations are the same instance. This may be slow for very
+  /// large sets, since it compares each item, one by one.
+  ///
+  /// If [isDeepEquals] configuration is false:
+  /// Will return true only if the sets internals are the same instances
+  /// (comparing by identity). This will be fast even for very large sets,
+  /// since it doesn't compare each item.
+  /// Note: This is not the same as `identical(set1, set2)` since it doesn't
+  /// compare the sets themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return true more often.
+  ///
   @override
   bool operator ==(Object other) => (other is ISet<T>)
       ? isDeepEquals
@@ -110,6 +123,9 @@ class ISet<T> // ignore: must_be_immutable
           : same(other)
       : false;
 
+  /// Will return true only if the set items are equal (and in the same order),
+  /// and the set configurations are the same instance. This may be slow for very
+  /// large sets, since it compares each item, one by one.
   @override
   bool equals(ISet<T> other) =>
       identical(this, other) ||
@@ -118,6 +134,12 @@ class ISet<T> // ignore: must_be_immutable
           isDeepEquals == other.isDeepEquals &&
           (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
 
+  /// Will return true only if the sets internals are the same instances
+  /// (comparing by identity). This will be fast even for very large sets,
+  /// since it doesn't compare each item.
+  /// Note: This is not the same as `identical(set1, set2)` since it doesn't
+  /// compare the sets themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return true more often.
   @override
   bool same(ISet<T> other) =>
       identical(_s, other._s) && (isDeepEquals == other.isDeepEquals) && (compare == other.compare);
