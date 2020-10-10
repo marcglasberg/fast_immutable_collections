@@ -33,6 +33,9 @@ class MFlat<K, V> extends M<K, V> {
   bool get isEmpty => _map.isEmpty;
 
   @override
+  Map<RK, RV> cast<RK, RV>() => _map.cast<RK, RV>();
+
+  @override
   bool any(bool Function(K, V) test) => _map.entries.any((entry) => test(entry.key, entry.value));
 
   @override

@@ -445,34 +445,22 @@ void main() {
       });
 
       test("IMap.valueSet getter", () {
-        fail("Apparently, not implemented yet.");
+        expect(iMap.valueSet, isA<ISet<int>>());
+        iMap.valueSet.forEach((int value) => expect(values.contains(value), isTrue));
       });
     });
 
     test("IMap.iterator getter", () {
       final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
 
-      expect(iterator.current, isNull);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current.key, 'a');
-      expect(iterator.current.value, 1);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current.key, 'b');
-      expect(iterator.current.value, 2);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current.key, 'c');
-      expect(iterator.current.value, 3);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current.key, 'd');
-      expect(iterator.current.value, 4);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current.key, 'e');
-      expect(iterator.current.value, 5);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current.key, 'f');
-      expect(iterator.current.value, 6);
-      expect(iterator.moveNext(), isFalse);
-      expect(iterator.current, isNull);
+      int count = 0;
+      Map<String, int> result = {};
+      while (iterator.moveNext()) {
+        count++;
+        result[iterator.current.key] = iterator.current.value;
+      }
+      expect(count, finalMap.length);
+      expect(result, finalMap);
     });
 
     test("IMap.any method", () {
@@ -603,7 +591,7 @@ void main() {
     });
 
     test("toString", () {
-      expect(iMap.toString(), "a: 1, b: 2, c: 3, d: 4, e: 5, f: 6");
+      expect(iMap.toString(), "{c: 3, a: 1, b: 2, d: 4, e: 5, f: 6}");
     });
   });
 

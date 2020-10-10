@@ -32,7 +32,7 @@ class ISet<T> // ignore: must_be_immutable
 
   bool get isIdentityEquals => !isDeepEquals;
 
-  static ISet<T> empty<T>() => ISet.__(
+  static ISet<T> empty<T>() => ISet._unsafe(
         SFlat.empty<T>(),
         compare: null,
         isDeepEquals: defaultIsDeepEquals,
@@ -42,11 +42,19 @@ class ISet<T> // ignore: must_be_immutable
       ? iterable
       : iterable == null || iterable.isEmpty
           ? ISet.empty<T>()
-          : ISet<T>.__(
+          : ISet<T>._unsafe(
               SFlat<T>(iterable),
               compare: null,
               isDeepEquals: defaultIsDeepEquals,
             );
+
+  /// Unsafe constructor. Use this at your own peril.
+  /// This constructor is fast, since it makes no defensive copies of the set.
+  /// However, you should only use this with a new set you've created yourself,
+  /// when you are sure no external copies exist. If the original set is modified,
+  /// it will break the IList and any other derived lists.
+  ISet.unsafe(Set<T> set, {@required this.compare, @required this.isDeepEquals})
+      : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
   ISet._(
     Iterable<T> iterable, {
@@ -58,7 +66,7 @@ class ISet<T> // ignore: must_be_immutable
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable);
 
-  ISet.__(
+  ISet._unsafe(
     this._s, {
     @required this.compare,
     @required this.isDeepEquals,
@@ -68,7 +76,7 @@ class ISet<T> // ignore: must_be_immutable
     int Function(T, T) compare,
     bool isDeepEquals,
   }) =>
-      ISet.__(
+      ISet._unsafe(
         _s,
         compare: compare ?? this.compare,
         isDeepEquals: isDeepEquals ?? this.isDeepEquals,
@@ -76,7 +84,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Convert this set to `identityEquals` (compares by identity).
   ISet<T> get identityEquals => isDeepEquals
-      ? ISet.__(
+      ? ISet._unsafe(
           _s,
           compare: compare,
           isDeepEquals: false,
@@ -86,7 +94,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Convert this set to `deepEquals` (compares all set items).
   ISet<T> get deepEquals => isDeepEquals
       ? this
-      : ISet.__(
+      : ISet._unsafe(
           _s,
           compare: compare,
           isDeepEquals: true,
@@ -158,14 +166,14 @@ class ISet<T> // ignore: must_be_immutable
   bool get isFlushed => _s is SFlat;
 
   /// Returns a new set containing the current set plus the given item.
-  ISet<T> add(T item) => ISet<T>.__(
+  ISet<T> add(T item) => ISet<T>._unsafe(
         _s.add(item),
         compare: compare,
         isDeepEquals: isDeepEquals,
       );
 
   /// Returns a new set containing the current set plus all the given items.
-  ISet<T> addAll(Iterable<T> items) => ISet<T>.__(
+  ISet<T> addAll(Iterable<T> items) => ISet<T>._unsafe(
         _s.addAll(items),
         compare: compare,
         isDeepEquals: isDeepEquals,
@@ -178,7 +186,7 @@ class ISet<T> // ignore: must_be_immutable
     final S<T> result = _s.remove(item);
     return identical(result, _s)
         ? this
-        : ISet<T>.__(
+        : ISet<T>._unsafe(
             result,
             compare: compare,
             isDeepEquals: isDeepEquals,
@@ -187,7 +195,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Removes the element, if it exists in the set.
   /// Otherwise, adds it to the set.
-  ISet<T> toggle(T item) => ISet<T>.__(
+  ISet<T> toggle(T item) => ISet<T>._unsafe(
         contains(item) ? _s.remove(item) : _s.add(item),
         compare: compare,
         isDeepEquals: isDeepEquals,
@@ -199,11 +207,12 @@ class ISet<T> // ignore: must_be_immutable
   bool any(bool Function(T) test) => _s.any(test);
 
   @override
-  ISet<R> cast<R>() => ISet._(
-        _s.cast<R>(),
-        compare: null,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<R> cast<R>() {
+    var result = _s.cast<R>();
+    return (result is S<R>)
+        ? ISet._unsafe(result, compare: null, isDeepEquals: isDeepEquals)
+        : ISet._(result, compare: null, isDeepEquals: isDeepEquals);
+  }
 
   @override
   bool contains(Object element) => _s.contains(element);

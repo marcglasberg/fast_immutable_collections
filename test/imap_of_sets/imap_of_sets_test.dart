@@ -91,17 +91,17 @@ void main() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("Config", () {
-    final IMap<String, ISet<int>> iMap = IMap({
-      "a": ISet({1, 2}),
-      "b": ISet({1, 2, 3}),
+    final IMapOfSets<String, int> iMap = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
     });
 
     expect(iMap.compareKey, isNull);
     expect(iMap.compareValue, isNull);
 
-    final IMap<String, ISet<int>> newIMap = iMap.config(
-      compareKey: (String key1, String key2) => null,
-      // compareValue: (int value1, int value2) => null,
+    final IMapOfSets<String, int> newIMap = iMap.config(
+      compareKey: (String key1, String key2) => key1.compareTo(key2),
+      compareValue: (int value1, int value2) => value1.compareTo(value2),
     );
 
     expect(newIMap.compareKey, isNotNull);

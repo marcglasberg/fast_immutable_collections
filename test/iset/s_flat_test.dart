@@ -26,7 +26,7 @@ void main() {
 
   test("SFlat.cast method", () {
     final sFlatAsNum = sFlat.cast<num>();
-    expect(sFlatAsNum, isA<SFlat<num>>());
+    expect(sFlatAsNum, isA<Iterable<num>>());
   });
 
   group("Iterator |", () {

@@ -28,8 +28,7 @@ class SFlat<T> extends S<T> {
   bool any(bool Function(T) test) => _set.any(test);
 
   @override
-  // TODO: Iterable<R> cast<R>() => _set.cast<R>();
-  Iterable<R> cast<R>() => throw UnsupportedError('cast');
+  Iterable<R> cast<R>() => _set.cast<R>();
 
   @override
   bool every(bool Function(T) test) => _set.every(test);

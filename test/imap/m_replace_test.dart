@@ -50,18 +50,14 @@ void main() {
       test("Iterator", () {
         final Iterator<MapEntry<String, int>> iterator = mReplace.iterator;
 
-        expect(iterator.current, isNull);
-        expect(iterator.moveNext(), isTrue);
-        expect(iterator.current.key, 'a');
-        expect(iterator.current.value, 2);
-        expect(iterator.moveNext(), isTrue);
-        expect(iterator.current.key, 'b');
-        expect(iterator.current.value, 2);
-        expect(iterator.moveNext(), isTrue);
-        expect(iterator.current.key, 'c');
-        expect(iterator.current.value, 3);
-        expect(iterator.moveNext(), isFalse);
-        expect(iterator.current, isNull);
+        int count = 0;
+        Map<String, int> result = {};
+        while (iterator.moveNext()) {
+          count++;
+          result[iterator.current.key] = iterator.current.value;
+        }
+        expect(count, 3);
+        expect(result, finalMap);
       });
     });
   });
