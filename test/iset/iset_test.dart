@@ -166,32 +166,32 @@ void main() {
   group("Equals and Other Comparisons |", () {
     group("Equals Operator |", () {
       test("ISet with identity-equals compares the set instance, not the items.", () {
-        final ISet<int> mySet = ISet({1, 2}).identityEquals;
+        final ISet<int> mySet = ISet({1, 2}).withIdentityEquals;
         expect(mySet == mySet, isTrue);
-        expect(mySet == ISet({1, 2}).identityEquals, isFalse);
+        expect(mySet == ISet({1, 2}).withIdentityEquals, isFalse);
         expect(mySet == {1, 2}.lock, isFalse);
-        expect(mySet == ISet({1, 2, 3}).identityEquals, isFalse);
+        expect(mySet == ISet({1, 2, 3}).withIdentityEquals, isFalse);
       });
 
       test("ISet with deep-equals compares the items, not necessarily the list instance", () {
         final ISet<int> mySet = ISet({1, 2});
         expect(mySet == mySet, isTrue);
         expect(mySet == ISet({1, 2}), isTrue);
-        expect(mySet == {1, 2}.lock.deepEquals, isTrue);
+        expect(mySet == {1, 2}.lock.withDeepEquals, isTrue);
         expect(mySet == ISet({1, 2, 3}), isFalse);
       });
 
       test("ISet with deep-equals is always different from iSet with identity-equals", () {
-        expect(ISet({1, 2}).deepEquals == ISet({1, 2}).identityEquals, isFalse);
-        expect(ISet({1, 2}).identityEquals == ISet({1, 2}).deepEquals, isFalse);
-        expect(ISet({1, 2}).deepEquals == ISet({1, 2}), isTrue);
-        expect(ISet({1, 2}) == ISet({1, 2}).deepEquals, isTrue);
+        expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}).withIdentityEquals, isFalse);
+        expect(ISet({1, 2}).withIdentityEquals == ISet({1, 2}).withDeepEquals, isFalse);
+        expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}), isTrue);
+        expect(ISet({1, 2}) == ISet({1, 2}).withDeepEquals, isTrue);
       });
     });
 
     group("Other Comparisons |", () {
       test("ISet.isIdentityEquals and ISet.isDeepEquals properties", () {
-        final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2}).identityEquals;
+        final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2}).withIdentityEquals;
         expect(iSet1.isIdentityEquals, isFalse);
         expect(iSet1.isDeepEquals, isTrue);
         expect(iSet2.isIdentityEquals, isTrue);
@@ -203,7 +203,7 @@ void main() {
         final ISet<int> iSet1 = ISet({1, 2}),
             iSet2 = ISet({1, 2}),
             iSet3 = ISet({1}),
-            iSet4 = ISet({1, 2}).identityEquals;
+            iSet4 = ISet({1, 2}).withIdentityEquals;
         expect(iSet1.same(iSet1), isTrue);
         expect(iSet1.same(iSet2), isFalse);
         expect(iSet1.same(iSet3), isFalse);
@@ -214,7 +214,7 @@ void main() {
         final ISet<int> iSet1 = ISet({1, 2}),
             iSet2 = ISet({1, 2}),
             iSet3 = ISet({1}),
-            iSet4 = ISet({1, 2}).identityEquals;
+            iSet4 = ISet({1, 2}).withIdentityEquals;
         expect(iSet1.equals(iSet1), isTrue);
         expect(iSet1.equals(iSet2), isTrue);
         expect(iSet1.equals(iSet3), isFalse);
@@ -230,12 +230,16 @@ void main() {
     test("ISet.config method", () {
       final ISet<int> iSet = ISet({1, 2});
 
-      expect(iSet.compare, isNull);
+      expect(iSet.config.compare, isNotNull);
       expect(iSet.isDeepEquals, isTrue);
 
-      final ISet<int> iSetWithCompare = iSet.config(compare: (int element1, int element2) => null);
-      
-      expect(iSetWithCompare.compare, isNotNull);
+      final ISet<int> iSetWithCompare = iSet.withConfig(
+        iSet.config.copyWith(
+          compare: (item1, item2) => (item1 as Comparable).compareTo(item2),
+        ),
+      );
+
+      expect(iSetWithCompare.config.compare, isNotNull);
       expect(iSetWithCompare.isDeepEquals, isTrue);
     });
   });
@@ -569,8 +573,8 @@ void main() {
 
   group("ISet of MapEntry gets special treatment |", () {
     test("Equals", () {
-      final ISet<MapEntry<String, int>> iSet1 = ISet([MapEntry("a", 1)]).deepEquals,
-          iSet2 = ISet([MapEntry("a", 1)]).deepEquals;
+      final ISet<MapEntry<String, int>> iSet1 = ISet([MapEntry("a", 1)]).withDeepEquals,
+          iSet2 = ISet([MapEntry("a", 1)]).withDeepEquals;
 
       expect(iSet1, iSet2);
     });

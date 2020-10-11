@@ -1,11 +1,12 @@
 import 'package:fast_immutable_collections/src/ilist/unmodifiable_list_view.dart';
 import 'package:meta/meta.dart';
-
 import '../immutable_collection.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
 import 'modifiable_list_view.dart';
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
 
 extension IListExtension<T> on List<T> {
   //
@@ -20,16 +21,12 @@ extension IListExtension<T> on List<T> {
 class IList<T> // ignore: must_be_immutable
     extends ImmutableCollection<IList<T>> implements Iterable<T> {
   //
-
   L<T> _l;
 
-  /// If `false`, the equals operator (`==`) compares by identity.
-  /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
-  final bool isDeepEquals;
+  /// The list configuration.
+  final ConfigList config;
 
-  bool get isIdentityEquals => !isDeepEquals;
-
-  static IList<T> empty<T>() => IList._unsafe(LFlat.empty<T>(), isDeepEquals: defaultIsDeepEquals);
+  static IList<T> empty<T>() => IList._unsafe(LFlat.empty<T>(), config: defaultConfigList);
 
   factory IList([
     Iterable<T> iterable,
@@ -38,18 +35,18 @@ class IList<T> // ignore: must_be_immutable
           ? iterable
           : iterable == null || iterable.isEmpty
               ? IList.empty<T>()
-              : IList<T>._unsafe(LFlat<T>(iterable), isDeepEquals: defaultIsDeepEquals);
+              : IList<T>._unsafe(LFlat<T>(iterable), config: defaultConfigList);
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the list.
   /// However, you should only use this with a new list you've created yourself,
   /// when you are sure no external copies exist. If the original list is modified,
   /// it will break the IList and any other derived lists.
-  IList.unsafe(List<T> list, {@required this.isDeepEquals})
+  IList.unsafe(List<T> list, {@required this.config})
       : _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
 
   /// Fast if the iterable is an IList.
-  IList._(Iterable<T> iterable, {@required this.isDeepEquals})
+  IList._(Iterable<T> iterable, {@required this.config})
       : _l = iterable is IList<T>
             ? iterable._l
             : iterable == null
@@ -57,21 +54,33 @@ class IList<T> // ignore: must_be_immutable
                 : LFlat<T>(iterable);
 
   /// Unsafe.
-  IList._unsafe(this._l, {@required this.isDeepEquals});
+  IList._unsafe(this._l, {@required this.config});
 
-  IList<T> config({
-    bool isDeepEquals,
-  }) =>
-      IList._unsafe(
-        _l,
-        isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      );
+  /// Creates a new list with the given [config].
+  ///
+  /// To copy the config from another [IList]:
+  ///    `list = list.withConfig(other.config)`.
+  ///
+  /// To change the current config:
+  ///    `list = list.withConfig(list.config.copyWith(isDeepEquals: isDeepEquals))`.
+  ///
+  /// See also: [withIdentityEquals] and [withDeepEquals].
+  ///
+  IList<T> withConfig(ConfigList config) => IList._unsafe(_l, config: config);
 
-  /// Converts `this` list to `identityEquals` (compares by `identity`).
-  IList<T> get identityEquals => isDeepEquals ? IList._unsafe(_l, isDeepEquals: false) : this;
+  /// Creates a list with `identityEquals` (compares the internals by `identity`).
+  IList<T> get withIdentityEquals =>
+      config.isDeepEquals ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false)) : this;
 
-  /// Convert `this` list to `deepEquals` (compares all list items).
-  IList<T> get deepEquals => isDeepEquals ? this : IList._unsafe(_l, isDeepEquals: true);
+  /// Creates a list with `deepEquals` (compares all list items by equality).
+  IList<T> get withDeepEquals =>
+      config.isDeepEquals ? this : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
+
+  IList<T> withConfigFrom(IList<T> other) => withConfig(other.config);
+
+  bool get isDeepEquals => config.isDeepEquals;
+
+  bool get isIdentityEquals => !config.isDeepEquals;
 
   /// Unlocks the list, returning a regular (mutable) [List].
   /// This list is "safe", in the sense that is independent from the original [IList].
@@ -132,7 +141,7 @@ class IList<T> // ignore: must_be_immutable
       identical(this, other) ||
       other is IList<T> &&
           runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals &&
+          config == other.config &&
           (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
 
   /// Will return true only if the lists internals are the same instances
@@ -142,12 +151,12 @@ class IList<T> // ignore: must_be_immutable
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   @override
-  bool same(IList<T> other) => identical(_l, other._l) && (isDeepEquals == other.isDeepEquals);
+  bool same(IList<T> other) => identical(_l, other._l) && (config == other.config);
 
   @override
   int get hashCode => isDeepEquals //
-      ? (flush._l as LFlat<T>).deepListHashcode()
-      : identityHashCode(_l);
+      ? (flush._l as LFlat<T>).deepListHashcode() ^ config.hashCode
+      : identityHashCode(_l) ^ config.hashCode;
 
   /// Compacts the list. Chainable method.
   IList get flush {
@@ -157,14 +166,13 @@ class IList<T> // ignore: must_be_immutable
 
   bool get isFlushed => _l is LFlat;
 
-  IList<T> add(T item) => IList<T>._unsafe(_l.add(item), isDeepEquals: isDeepEquals);
+  IList<T> add(T item) => IList<T>._unsafe(_l.add(item), config: config);
 
-  IList<T> addAll(Iterable<T> items) =>
-      IList<T>._unsafe(_l.addAll(items), isDeepEquals: isDeepEquals);
+  IList<T> addAll(Iterable<T> items) => IList<T>._unsafe(_l.addAll(items), config: config);
 
   IList<T> remove(T item) {
     final L<T> result = _l.remove(item);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, isDeepEquals: isDeepEquals);
+    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes the element, if it exists in the list.
@@ -182,8 +190,8 @@ class IList<T> // ignore: must_be_immutable
   IList<R> cast<R>() {
     var result = _l.cast<R>();
     return (result is L<R>)
-        ? IList._unsafe(result, isDeepEquals: isDeepEquals)
-        : IList._(result, isDeepEquals: isDeepEquals);
+        ? IList._unsafe(result, config: ConfigList(isDeepEquals: config.isDeepEquals))
+        : IList._(result, config: ConfigList(isDeepEquals: config.isDeepEquals));
   }
 
   @override
@@ -196,8 +204,8 @@ class IList<T> // ignore: must_be_immutable
   bool every(bool Function(T) test) => _l.every(test);
 
   @override
-  IList<E> expand<E>(Iterable<E> Function(T) f) =>
-      IList._(_l.expand(f), isDeepEquals: isDeepEquals);
+  IList<E> expand<E>(Iterable<E> Function(T) f, {ConfigList config}) =>
+      IList._(_l.expand(f), config: config ?? (T == E ? this.config : defaultConfigList));
 
   @override
   int get length {
@@ -223,8 +231,7 @@ class IList<T> // ignore: must_be_immutable
       _l.fold(initialValue, combine);
 
   @override
-  IList<T> followedBy(Iterable<T> other) =>
-      IList._(_l.followedBy(other), isDeepEquals: isDeepEquals);
+  IList<T> followedBy(Iterable<T> other) => IList._(_l.followedBy(other), config: config);
 
   @override
   void forEach(void Function(T element) f) => _l.forEach(f);
@@ -237,7 +244,8 @@ class IList<T> // ignore: must_be_immutable
       _l.lastWhere(test, orElse: orElse);
 
   @override
-  IList<E> map<E>(E Function(T e) f) => IList._(_l.map(f), isDeepEquals: isDeepEquals);
+  IList<E> map<E>(E Function(T e) f, {ConfigList config}) =>
+      IList._(_l.map(f), config: config ?? (T == E ? this.config : defaultConfigList));
 
   @override
   T reduce(T Function(T value, T element) combine) => _l.reduce(combine);
@@ -247,34 +255,30 @@ class IList<T> // ignore: must_be_immutable
       _l.singleWhere(test, orElse: orElse);
 
   @override
-  IList<T> skip(int count) => IList._(_l.skip(count), isDeepEquals: isDeepEquals);
+  IList<T> skip(int count) => IList._(_l.skip(count), config: config);
 
   @override
-  IList<T> skipWhile(bool Function(T value) test) =>
-      IList._(_l.skipWhile(test), isDeepEquals: isDeepEquals);
+  IList<T> skipWhile(bool Function(T value) test) => IList._(_l.skipWhile(test), config: config);
 
   @override
-  IList<T> take(int count) => IList._(_l.take(count), isDeepEquals: isDeepEquals);
+  IList<T> take(int count) => IList._(_l.take(count), config: config);
 
   @override
-  IList<T> takeWhile(bool Function(T value) test) =>
-      IList._(_l.takeWhile(test), isDeepEquals: isDeepEquals);
+  IList<T> takeWhile(bool Function(T value) test) => IList._(_l.takeWhile(test), config: config);
 
   @override
-  IList<T> where(bool Function(T element) test) =>
-      IList._(_l.where(test), isDeepEquals: isDeepEquals);
+  IList<T> where(bool Function(T element) test) => IList._(_l.where(test), config: config);
 
   @override
-  IList<E> whereType<E>() => IList._(_l.whereType<E>(), isDeepEquals: isDeepEquals);
+  IList<E> whereType<E>() => IList._(_l.whereType<E>(), config: config);
 
   /// If the list has more than `maxLength` elements, it gets cut on
   /// `maxLength`. Otherwise, it removes the last elements so it remains with
   /// only `maxLength` elements.
-  IList<T> maxLength(int maxLength) =>
-      IList._unsafe(_l.maxLength(maxLength), isDeepEquals: isDeepEquals);
+  IList<T> maxLength(int maxLength) => IList._unsafe(_l.maxLength(maxLength), config: config);
 
   IList<T> sort([int Function(T a, T b) compare]) =>
-      IList._unsafe(_l.sort(compare), isDeepEquals: isDeepEquals);
+      IList._unsafe(_l.sort(compare), config: config);
 
   @override
   List<T> toList({bool growable = true}) => _l.toList(growable: growable);

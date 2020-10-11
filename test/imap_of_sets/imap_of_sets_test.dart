@@ -38,7 +38,7 @@ void main() {
           "b": {1, 2},
         });
 
-    test("hashCode", () => expect(iMapOfSets.hashCode, 1700946626));
+    test("hashCode", () => expect(iMapOfSets.hashCode, 1428598672));
 
     test('IMapOfSets == Operator', () {
       expect(iMapOfSets == iMapOfSets2, isTrue);
@@ -178,7 +178,7 @@ void main() {
           ISet([
             MapEntry("a", ISet({1, 2})),
             MapEntry("b", ISet({3})),
-          ]).deepEquals);
+          ]).withDeepEquals);
     });
 
     test("IMapOfSets.keys getter", () {

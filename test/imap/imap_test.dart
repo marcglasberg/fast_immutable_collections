@@ -94,19 +94,19 @@ void main() {
     test(
         "IMap with identity-equals compares the map instance, "
         "not the items.", () {
-      var myMap = IMap({"a": 1, "b": 2}).identityEquals;
+      var myMap = IMap({"a": 1, "b": 2}).withIdentityEquals;
       expect(myMap == myMap, isTrue);
-      expect(myMap == IMap({"a": 1, "b": 2}).identityEquals, isFalse);
-      expect(myMap == {"a": 1, "b": 2}.lock.identityEquals, isFalse);
-      expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).identityEquals, isFalse);
+      expect(myMap == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
+      expect(myMap == {"a": 1, "b": 2}.lock.withIdentityEquals, isFalse);
+      expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).withIdentityEquals, isFalse);
     });
 
     test("IMap with deep-equals compares the items, not the map instance.", () {
-      var myMap = IMap({"a": 1, "b": 2}).deepEquals;
+      var myMap = IMap({"a": 1, "b": 2}).withDeepEquals;
       expect(myMap == myMap, isTrue);
-      expect(myMap == IMap({"a": 1, "b": 2}).deepEquals, isTrue);
-      expect(myMap == {"a": 1, "b": 2}.lock.deepEquals, isTrue);
-      expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).deepEquals, isFalse);
+      expect(myMap == IMap({"a": 1, "b": 2}).withDeepEquals, isTrue);
+      expect(myMap == {"a": 1, "b": 2}.lock.withDeepEquals, isTrue);
+      expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).withDeepEquals, isFalse);
 
       myMap = IMap({"a": 1, "b": 2});
       expect(myMap == myMap, isTrue);
@@ -117,36 +117,37 @@ void main() {
     test(
         "IMap with deep-equals is always different "
         "from iMap with identity-equals.", () {
-      expect(IMap({"a": 1, "b": 2}).deepEquals == IMap({"a": 1, "b": 2}).identityEquals, isFalse);
-      expect(IMap({"a": 1, "b": 2}).identityEquals == IMap({"a": 1, "b": 2}).deepEquals, isFalse);
-      expect(IMap({"a": 1, "b": 2}).identityEquals == IMap({"a": 1, "b": 2}), isFalse);
-      expect(IMap({"a": 1, "b": 2}) == IMap({"a": 1, "b": 2}).identityEquals, isFalse);
+      expect(IMap({"a": 1, "b": 2}).withDeepEquals == IMap({"a": 1, "b": 2}).withIdentityEquals,
+          isFalse);
+      expect(IMap({"a": 1, "b": 2}).withIdentityEquals == IMap({"a": 1, "b": 2}).withDeepEquals,
+          isFalse);
+      expect(IMap({"a": 1, "b": 2}).withIdentityEquals == IMap({"a": 1, "b": 2}), isFalse);
+      expect(IMap({"a": 1, "b": 2}) == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
     });
 
     test("IMap.hashCode getter", () {
       final IMap<String, int> iMap = IMap({'a': 1, 'b': 2});
+      final expectedResult = 562038169;
+      expect(iMap.hashCode, 562038169);
 
-      expect(iMap.hashCode, 815238405);
-
-      final IMap<String, int> iMapWithIdentityEquals = iMap.identityEquals;
-
-      expect(iMapWithIdentityEquals.hashCode, isNot(815238405));
+      final IMap<String, int> iMapWithIdentityEquals = iMap.withIdentityEquals;
+      expect(iMapWithIdentityEquals.hashCode, isNot(expectedResult));
     });
 
     test("IMap.config method", () {
       final IMap<String, int> iMap = IMap({'a': 1, 'b': 2});
 
-      expect(iMap.compareKey, isNull);
-      expect(iMap.compareValue, isNull);
+      expect(iMap.config.compareKey, isNotNull);
+      expect(iMap.config.compareValue, isNotNull);
       expect(iMap.isDeepEquals, isTrue);
 
-      final IMap<String, int> iMapWithCompare = iMap.config(
-        compareKey: (String key1, String key2) => null,
-        compareValue: (int value1, int value2) => null,
-      );
+      final IMap<String, int> iMapWithCompare = iMap.withConfig(iMap.config.copyWith(
+        compareKey: (key1, key2) => (key1 as Comparable).compareTo(key2),
+        compareValue: (value1, value2) => (value1 as Comparable).compareTo(value2),
+      ));
 
-      expect(iMapWithCompare.compareKey, isNotNull);
-      expect(iMapWithCompare.compareValue, isNotNull);
+      expect(iMapWithCompare.config.compareKey, isNotNull);
+      expect(iMapWithCompare.config.compareValue, isNotNull);
       expect(iMapWithCompare.isDeepEquals, isTrue);
     });
 
@@ -155,7 +156,7 @@ void main() {
       final IMap<String, int> iMap1 = IMap({'a': 1, 'b': 2}),
           iMap2 = IMap({'a': 1, 'b': 2}),
           iMap3 = IMap({'a': 1}),
-          iMap4 = IMap({'a': 1, 'b': 2}).identityEquals;
+          iMap4 = IMap({'a': 1, 'b': 2}).withIdentityEquals;
       expect(iMap1.same(iMap1), isTrue);
       expect(iMap1.same(iMap2), isFalse);
       expect(iMap1.same(iMap3), isFalse);
@@ -166,7 +167,7 @@ void main() {
       final IMap<String, int> iMap1 = IMap({'a': 1, 'b': 2}),
           iMap2 = IMap({'a': 1, 'b': 2}),
           iMap3 = IMap({'a': 1}),
-          iMap4 = IMap({'a': 1, 'b': 2}).identityEquals;
+          iMap4 = IMap({'a': 1, 'b': 2}).withIdentityEquals;
       expect(iMap1.same(iMap1), isTrue);
       expect(iMap1.same(iMap2), isTrue);
       expect(iMap1.same(iMap3), isFalse);
@@ -343,16 +344,16 @@ void main() {
     });
 
     group("Making sure adding repeated elements doesn't repeat keys |", () {
-      final IMap<String, int> iMap = IMap.empty<String, int>().deepEquals;
+      final IMap<String, int> iMap = IMap.empty<String, int>().withDeepEquals;
 
-      test("Empty equals", () => expect(iMap, IMap.empty<String, int>().deepEquals));
+      test("Empty equals", () => expect(iMap, IMap.empty<String, int>().withDeepEquals));
 
       test("IMap.add the same key overwrites it", () {
         IMap<String, int> newMap = iMap.add("a", 1);
         newMap = newMap.add("b", 2);
         newMap = newMap.add("a", 3);
         newMap = newMap.add("a", 4);
-        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
         expect(newMap.unlock, {"a": 4, "b": 2});
       });
 
@@ -361,7 +362,7 @@ void main() {
         newMap = newMap.addEntry(MapEntry<String, int>("b", 2));
         newMap = newMap.addEntry(MapEntry<String, int>("a", 3));
         newMap = newMap.addEntry(MapEntry<String, int>("a", 4));
-        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
         expect(newMap.unlock, {"a": 4, "b": 2});
       });
 
@@ -370,7 +371,7 @@ void main() {
         newMap = newMap.addAll({"b": 2}.lock);
         newMap = newMap.addAll({"a": 3}.lock);
         newMap = newMap.addAll({"a": 4}.lock);
-        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
         expect(newMap.unlock, {"a": 4, "b": 2});
       });
 
@@ -379,7 +380,7 @@ void main() {
         newMap = newMap.addMap({"b": 2});
         newMap = newMap.addMap({"a": 3});
         newMap = newMap.addMap({"a": 4});
-        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
         expect(newMap.unlock, {"a": 4, "b": 2});
       });
 
@@ -388,7 +389,7 @@ void main() {
         newMap = newMap.addEntries([MapEntry<String, int>("b", 2)]);
         newMap = newMap.addEntries([MapEntry<String, int>("a", 3)]);
         newMap = newMap.addEntries([MapEntry<String, int>("a", 4)]);
-        expect(newMap, {"a": 4, "b": 2}.lock.deepEquals);
+        expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
         expect(newMap.unlock, {"a": 4, "b": 2});
       });
     });

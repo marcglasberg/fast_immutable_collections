@@ -5,7 +5,6 @@ import 'package:fast_immutable_collections_benchmarks/'
     'fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  const int size = 10;
   const Config config = Config(runs: 1, size: 10);
   final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
     ..addAll(SetAddAllBenchmark.setToAdd);

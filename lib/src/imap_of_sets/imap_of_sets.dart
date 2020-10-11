@@ -25,7 +25,7 @@ class IMapOfSets<K, V> {
           : IMapOfSets._unsafe(
               IMap.fromIterables(
                 mapOfSets.keys,
-                mapOfSets.values.map((value) => ISet(value).deepEquals),
+                mapOfSets.values.map((value) => ISet(value).withDeepEquals),
               ),
               null,
               null,
@@ -35,7 +35,7 @@ class IMapOfSets<K, V> {
     IMap<K, ISet<V>> mapOfSets, {
     this.compareKey,
     this.compareValue,
-  }) : _mapOfSets = mapOfSets ?? IMap.empty<K, ISet<V>>().deepEquals {
+  }) : _mapOfSets = mapOfSets ?? IMap.empty<K, ISet<V>>().withDeepEquals {
     if (mapOfSets != null && mapOfSets.values.any((set) => set.isIdentityEquals))
       throw ArgumentError("All sets in a MapOfSets must be deepEquals.");
   }
@@ -96,11 +96,11 @@ class IMapOfSets<K, V> {
   }
 
   // TODO: shouldn't the names for these be like `entriesAsISet`, `keysAsISet`, etc?
-  ISet<MapEntry<K, ISet<V>>> get entriesAsSet => ISet(entries).deepEquals;
+  ISet<MapEntry<K, ISet<V>>> get entriesAsSet => ISet(entries).withDeepEquals;
 
-  ISet<K> get keysAsSet => ISet(keys).deepEquals;
+  ISet<K> get keysAsSet => ISet(keys).withDeepEquals;
 
-  ISet<ISet<V>> get setsAsSet => ISet(sets).deepEquals;
+  ISet<ISet<V>> get setsAsSet => ISet(sets).withDeepEquals;
 
   /// Return all values of all sets, removing duplicates.
   ISet<V> get valuesAsSet {
@@ -109,13 +109,13 @@ class IMapOfSets<K, V> {
       var set = entry.value;
       result.addAll(set);
     }
-    return ISet<V>(result).deepEquals;
+    return ISet<V>(result).withDeepEquals;
   }
 
   /// Order is undefined.
-  IList<K> get keysAsList => IList(keys).deepEquals;
+  IList<K> get keysAsList => IList(keys).withDeepEquals;
 
-  IList<ISet<V>> get setsAsList => IList(sets).deepEquals;
+  IList<ISet<V>> get setsAsList => IList(sets).withDeepEquals;
 
   bool get isEmpty => _mapOfSets.isEmpty;
 

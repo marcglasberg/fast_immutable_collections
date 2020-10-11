@@ -24,51 +24,22 @@ class IMap<K, V> // ignore: must_be_immutable
 
   M<K, V> _m;
 
-  /// If given, will be used to sort list of keys or lists of entries.
-  final int Function(K, K) compareKey;
+  /// The map configuration.
+  final ConfigMap config;
 
-  /// If given, will be used to sort list of values.
-  final int Function(V, V) compareValue;
-
-  /// If `false` (the default), the equals operator (`==`) compares by identity.
-  /// If `true`, the equals operator (`==`) compares all items, unordered.
-  final bool isDeepEquals;
-
-  bool get isIdentityEquals => !isDeepEquals;
-
-  static IMap<K, V> empty<K, V>() => IMap._unsafe(
-        MFlat.empty<K, V>(),
-        isDeepEquals: defaultIsDeepEquals,
-        compareKey: null,
-        compareValue: null,
-      );
+  static IMap<K, V> empty<K, V>() => IMap._unsafe(MFlat.empty<K, V>(), config: defaultConfigMap);
 
   factory IMap([Map<K, V> map]) => (map == null || map.isEmpty)
       ? IMap.empty<K, V>()
-      : IMap<K, V>._unsafe(
-          MFlat<K, V>(map),
-          isDeepEquals: defaultIsDeepEquals,
-          compareKey: null,
-          compareValue: null,
-        );
+      : IMap<K, V>._unsafe(MFlat<K, V>(map), config: defaultConfigMap);
 
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries) {
     if (entries is IMap<K, V>)
-      return IMap._unsafe(
-        (entries as IMap<K, V>)._m,
-        isDeepEquals: defaultIsDeepEquals,
-        compareKey: null,
-        compareValue: null,
-      );
+      return IMap._unsafe((entries as IMap<K, V>)._m, config: defaultConfigMap);
     else {
       var map = HashMap<K, V>();
       map.addEntries(entries);
-      return IMap._unsafe(
-        MFlat.unsafe(map),
-        isDeepEquals: defaultIsDeepEquals,
-        compareKey: null,
-        compareValue: null,
-      );
+      return IMap._unsafe(MFlat.unsafe(map), config: defaultConfigMap);
     }
   }
 
@@ -85,12 +56,7 @@ class IMap<K, V> // ignore: must_be_immutable
       map[key] = valueMapper(key);
     }
 
-    return IMap._(
-      map,
-      isDeepEquals: defaultIsDeepEquals,
-      compareKey: null,
-      compareValue: null,
-    );
+    return IMap._(map, config: defaultConfigMap);
   }
 
   factory IMap.fromValues({
@@ -106,12 +72,7 @@ class IMap<K, V> // ignore: must_be_immutable
       map[keyMapper(value)] = value;
     }
 
-    return IMap._(
-      map,
-      isDeepEquals: defaultIsDeepEquals,
-      compareKey: null,
-      compareValue: null,
-    );
+    return IMap._(map, config: defaultConfigMap);
   }
 
   factory IMap.fromIterable(
@@ -120,51 +81,43 @@ class IMap<K, V> // ignore: must_be_immutable
     V Function(dynamic) valueMapper,
   }) {
     Map<K, V> map = Map.fromIterable(iterable, key: keyMapper, value: valueMapper);
-    return IMap._(
-      map,
-      isDeepEquals: defaultIsDeepEquals,
-      compareKey: null,
-      compareValue: null,
-    );
+    return IMap._(map, config: defaultConfigMap);
   }
 
   factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values) {
     Map<K, V> map = Map.fromIterables(keys, values);
-    return IMap._(
-      map,
-      isDeepEquals: defaultIsDeepEquals,
-      compareKey: null,
-      compareValue: null,
-    );
+    return IMap._(map, config: defaultConfigMap);
   }
 
   /// Unsafe.
-  IMap._(
-    Map<K, V> map, {
-    @required this.isDeepEquals,
-    @required this.compareKey,
-    @required this.compareValue,
-  }) : _m = MFlat<K, V>.unsafe(map);
+  IMap._(Map<K, V> map, {@required this.config}) : _m = MFlat<K, V>.unsafe(map);
 
   /// Unsafe.
-  IMap._unsafe(
-    this._m, {
-    @required this.isDeepEquals,
-    @required this.compareKey,
-    @required this.compareValue,
-  });
+  IMap._unsafe(this._m, {@required this.config});
 
-  IMap<K, V> config({
-    int Function(K, K) compareKey,
-    int Function(V, V) compareValue,
-    bool isDeepEquals,
-  }) =>
-      IMap._unsafe(
-        _m,
-        compareKey: compareKey ?? this.compareKey,
-        compareValue: compareValue ?? this.compareValue,
-        isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      );
+  bool get isDeepEquals => config.isDeepEquals;
+
+  bool get isIdentityEquals => !config.isDeepEquals;
+
+  /// Creates a new map with the given [config].
+  ///
+  /// To copy the config from another [IMap]:
+  ///    `map = map.withConfig(other.config)`.
+  ///
+  /// To change the current config:
+  ///    `map = map.withConfig(map.config.copyWith(isDeepEquals: isDeepEquals))`.
+  ///
+  /// See also: [withIdentityEquals] and [withDeepEquals].
+  ///
+  IMap<K, V> withConfig(ConfigMap config) => IMap._unsafe(_m, config: config);
+
+  /// Creates a map with `identityEquals` (compares the internals by `identity`).
+  IMap<K, V> get withIdentityEquals =>
+      config.isDeepEquals ? IMap._unsafe(_m, config: config.copyWith(isDeepEquals: false)) : this;
+
+  /// Creates a map with `deepEquals` (compares all map entries by equality).
+  IMap<K, V> get withDeepEquals =>
+      config.isDeepEquals ? this : IMap._unsafe(_m, config: config.copyWith(isDeepEquals: true));
 
   Iterable<MapEntry<K, V>> get entries => _m.entries;
 
@@ -188,26 +141,6 @@ class IMap<K, V> // ignore: must_be_immutable
   ISet<V> get valueSet => ISet(values);
 
   Iterator<MapEntry<K, V>> get iterator => _m.iterator;
-
-  /// Convert this map to identityEquals (compares by identity).
-  IMap<K, V> get identityEquals => isDeepEquals
-      ? IMap._unsafe(
-          _m,
-          isDeepEquals: false,
-          compareKey: compareKey,
-          compareValue: compareValue,
-        )
-      : this;
-
-  /// Convert this map to deepEquals (compares all map entries).
-  IMap<K, V> get deepEquals => isDeepEquals
-      ? this
-      : IMap._unsafe(
-          _m,
-          isDeepEquals: true,
-          compareKey: compareKey,
-          compareValue: compareValue,
-        );
 
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
@@ -246,9 +179,7 @@ class IMap<K, V> // ignore: must_be_immutable
       identical(this, other) ||
       other is IMap<K, V> &&
           runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals &&
-          compareKey == other.compareKey &&
-          compareValue == other.compareValue &&
+          config == other.config &&
           (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
 
   /// Will return true only if the maps internals are the same instances
@@ -258,16 +189,12 @@ class IMap<K, V> // ignore: must_be_immutable
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   @override
-  bool same(IMap<K, V> other) =>
-      identical(_m, other._m) &&
-      isDeepEquals == other.isDeepEquals &&
-      compareKey == other.compareKey &&
-      compareValue == other.compareValue;
+  bool same(IMap<K, V> other) => identical(_m, other._m) && config == other.config;
 
   @override
   int get hashCode => isDeepEquals //
-      ? (flush._m as MFlat<K, V>).deepMapHashcode()
-      : identityHashCode(_m);
+      ? (flush._m as MFlat<K, V>).deepMapHashcode() ^ config.hashCode
+      : identityHashCode(_m) ^ config.hashCode;
 
   /// Compacts the map.
   IMap<K, V> get flush {
@@ -279,63 +206,33 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a new map containing the current map plus the given key:value.
   /// (if necessary, the given will override the current).
-  IMap<K, V> add(K key, V value) => IMap<K, V>._unsafe(
-        _m.add(key: key, value: value),
-        isDeepEquals: isDeepEquals,
-        compareKey: compareKey,
-        compareValue: compareValue,
-      );
+  IMap<K, V> add(K key, V value) =>
+      IMap<K, V>._unsafe(_m.add(key: key, value: value), config: config);
 
   /// Returns a new map containing the current map plus the given key:value.
   /// (if necessary, the given will override the current).
-  IMap<K, V> addEntry(MapEntry<K, V> entry) => IMap<K, V>._unsafe(
-        _m.add(key: entry.key, value: entry.value),
-        isDeepEquals: isDeepEquals,
-        compareKey: compareKey,
-        compareValue: compareValue,
-      );
+  IMap<K, V> addEntry(MapEntry<K, V> entry) =>
+      IMap<K, V>._unsafe(_m.add(key: entry.key, value: entry.value), config: config);
 
   /// Returns a new map containing the current map plus the given map.
   /// (if necessary, the given will override the current).
-  IMap<K, V> addAll(IMap<K, V> iMap) => IMap<K, V>._unsafe(
-        _m.addAll(iMap),
-        isDeepEquals: isDeepEquals,
-        compareKey: compareKey,
-        compareValue: compareValue,
-      );
+  IMap<K, V> addAll(IMap<K, V> iMap) => IMap<K, V>._unsafe(_m.addAll(iMap), config: config);
 
   /// Returns a new map containing the current map plus the given map.
   /// (if necessary, the given will override the current).
-  IMap<K, V> addMap(Map<K, V> map) => IMap<K, V>._unsafe(
-        _m.addMap(map),
-        isDeepEquals: isDeepEquals,
-        compareKey: compareKey,
-        compareValue: compareValue,
-      );
+  IMap<K, V> addMap(Map<K, V> map) => IMap<K, V>._unsafe(_m.addMap(map), config: config);
 
   /// Returns a new map containing the current map plus the given map entries.
   /// (if necessary, the given will override the current).
-  IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) => IMap<K, V>._unsafe(
-        _m.addEntries(entries),
-        isDeepEquals: isDeepEquals,
-        compareKey: compareKey,
-        compareValue: compareValue,
-      );
+  IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) =>
+      IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
 
   /// Returns a new map containing the current map minus the given key and its value.
   /// However, if the current map doesn't contain the key,
   /// it will return the current map (same instance).
   IMap<K, V> remove(K key) {
     M<K, V> result = _m.remove(key);
-
-    return identical(result, _m)
-        ? this
-        : IMap<K, V>._unsafe(
-            result,
-            isDeepEquals: isDeepEquals,
-            compareKey: compareKey,
-            compareValue: compareValue,
-          );
+    return identical(result, _m) ? this : IMap<K, V>._unsafe(result, config: config);
   }
 
   /// Returns a new map containing the current map minus the
@@ -343,15 +240,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// However, if nothing is removed, it will return the current map (same instance).
   IMap<K, V> removeWhere(bool Function(K key, V value) predicate) {
     M<K, V> result = _m.removeWhere(predicate);
-
-    return identical(result, _m)
-        ? this
-        : IMap<K, V>._unsafe(
-            result,
-            isDeepEquals: isDeepEquals,
-            compareKey: compareKey,
-            compareValue: compareValue,
-          );
+    return identical(result, _m) ? this : IMap<K, V>._unsafe(result, config: config);
   }
 
   V operator [](K k) => _m[k];
@@ -362,14 +251,12 @@ class IMap<K, V> // ignore: must_be_immutable
 
   IMap<RK, RV> cast<RK, RV>() {
     Object result = _m.cast<RK, RV>();
-
     if (result is M<RK, RV>)
-      return IMap._unsafe(result, compareKey: null, compareValue: null, isDeepEquals: isDeepEquals);
-
-    if (result is Map<RK, RV>)
-      return IMap._(result, compareKey: null, compareValue: null, isDeepEquals: isDeepEquals);
-
-    throw AssertionError(result.runtimeType);
+      return IMap._unsafe(result, config: config);
+    else if (result is Map<RK, RV>)
+      return IMap._(result, config: config);
+    else
+      throw AssertionError(result.runtimeType);
   }
 
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _m.anyEntry(test);
@@ -401,24 +288,14 @@ class IMap<K, V> // ignore: must_be_immutable
 
   int get length => _m.length;
 
-  // TODO: Marcelo, por favor, verifique a implementação.
   void forEach(void Function(K key, V value) f) => _m.forEach(f);
 
-  // TODO: Marcelo, por favor, verifique a implementação.
-  IMap<K, V> where(bool Function(K key, V value) test) => IMap<K, V>._(
-        _m.where(test),
-        isDeepEquals: isDeepEquals,
-        compareKey: compareKey,
-        compareValue: compareValue,
-      );
+  IMap<K, V> where(bool Function(K key, V value) test) =>
+      IMap<K, V>._(_m.where(test), config: config);
 
-  // TODO: Marcelo, por favor, verifique a implementação.
-  IMap<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) => IMap<RK, RV>._(
-        _m.map(mapper),
-        isDeepEquals: isDeepEquals,
-        compareKey: null,
-        compareValue: null,
-      );
+  IMap<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper, {ConfigMap config}) =>
+      IMap<RK, RV>._(_m.map(mapper),
+          config: config ?? ((RK == K && RV == V) ? this.config : defaultConfigMap));
 
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
@@ -429,8 +306,7 @@ class IMap<K, V> // ignore: must_be_immutable
 @visibleForOverriding
 abstract class M<K, V> {
   //
-  // Implemented by subclasses.
-  Iterable<MapEntry<K, V>> get entries => throw AssertionError();
+  Iterable<MapEntry<K, V>> get entries;
 
   Iterable<K> get keys => _getFlushed.keys;
 

@@ -20,22 +20,14 @@ extension ISetExtension<T> on Set<T> {
 class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
   //
-
   S<T> _s;
 
-  /// If given, will be used to sort list of values.
-  final int Function(T, T) compare;
-
-  /// If `false` (the default), the equals operator (`==`)  compares by identity.
-  /// If `true`, the equals operator (`==`) compares all items, unordered.
-  final bool isDeepEquals;
-
-  bool get isIdentityEquals => !isDeepEquals;
+  /// The set configuration.
+  final ConfigSet config;
 
   static ISet<T> empty<T>() => ISet._unsafe(
         SFlat.empty<T>(),
-        compare: null,
-        isDeepEquals: defaultIsDeepEquals,
+        config: defaultConfigSet,
       );
 
   factory ISet([Iterable<T> iterable]) => iterable is ISet<T>
@@ -44,8 +36,7 @@ class ISet<T> // ignore: must_be_immutable
           ? ISet.empty<T>()
           : ISet<T>._unsafe(
               SFlat<T>(iterable),
-              compare: null,
-              isDeepEquals: defaultIsDeepEquals,
+              config: defaultConfigSet,
             );
 
   /// Unsafe constructor. Use this at your own peril.
@@ -53,13 +44,12 @@ class ISet<T> // ignore: must_be_immutable
   /// However, you should only use this with a new set you've created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
   /// it will break the IList and any other derived lists.
-  ISet.unsafe(Set<T> set, {@required this.compare, @required this.isDeepEquals})
+  ISet.unsafe(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
   ISet._(
     Iterable<T> iterable, {
-    @required this.compare,
-    @required this.isDeepEquals,
+    @required this.config,
   }) : _s = iterable is ISet<T>
             ? iterable._s
             : iterable == null
@@ -68,37 +58,32 @@ class ISet<T> // ignore: must_be_immutable
 
   ISet._unsafe(
     this._s, {
-    @required this.compare,
-    @required this.isDeepEquals,
+    @required this.config,
   });
 
-  ISet<T> config({
-    int Function(T, T) compare,
-    bool isDeepEquals,
-  }) =>
-      ISet._unsafe(
-        _s,
-        compare: compare ?? this.compare,
-        isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      );
+  bool get isDeepEquals => config.isDeepEquals;
 
-  /// Convert this set to `identityEquals` (compares by identity).
-  ISet<T> get identityEquals => isDeepEquals
-      ? ISet._unsafe(
-          _s,
-          compare: compare,
-          isDeepEquals: false,
-        )
-      : this;
+  bool get isIdentityEquals => !config.isDeepEquals;
 
-  /// Convert this set to `deepEquals` (compares all set items).
-  ISet<T> get deepEquals => isDeepEquals
-      ? this
-      : ISet._unsafe(
-          _s,
-          compare: compare,
-          isDeepEquals: true,
-        );
+  /// Creates a new set with the given [config].
+  ///
+  /// To copy the config from another [ISet]:
+  ///    `set = set.withConfig(other.config)`.
+  ///
+  /// To change the current config:
+  ///    `set = set.withConfig(set.config.copyWith(isDeepEquals: isDeepEquals))`.
+  ///
+  /// See also: [withIdentityEquals] and [withDeepEquals].
+  ///
+  ISet<T> withConfig(ConfigSet config) => ISet._unsafe(_s, config: config);
+
+  /// Creates a set with `identityEquals` (compares the internals by `identity`).
+  ISet<T> get withIdentityEquals =>
+      config.isDeepEquals ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false)) : this;
+
+  /// Creates a set with `deepEquals` (compares all set items by equality).
+  ISet<T> get withDeepEquals =>
+      config.isDeepEquals ? this : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
 
   Set<T> get unlock => Set<T>.of(_s);
 
@@ -139,7 +124,7 @@ class ISet<T> // ignore: must_be_immutable
       identical(this, other) ||
       other is ISet<T> &&
           runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals &&
+          config == other.config &&
           (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
 
   /// Will return true only if the sets internals are the same instances
@@ -149,13 +134,12 @@ class ISet<T> // ignore: must_be_immutable
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   @override
-  bool same(ISet<T> other) =>
-      identical(_s, other._s) && (isDeepEquals == other.isDeepEquals) && (compare == other.compare);
+  bool same(ISet<T> other) => identical(_s, other._s) && (config == other.config);
 
   @override
   int get hashCode => isDeepEquals //
-      ? (flush._s as SFlat<T>).deepSetHashcode()
-      : identityHashCode(_s);
+      ? (flush._s as SFlat<T>).deepSetHashcode() ^ config.hashCode
+      : identityHashCode(_s) ^ config.hashCode;
 
   /// Compacts the set *and* returns it.
   ISet<T> get flush {
@@ -168,15 +152,13 @@ class ISet<T> // ignore: must_be_immutable
   /// Returns a new set containing the current set plus the given item.
   ISet<T> add(T item) => ISet<T>._unsafe(
         _s.add(item),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
+        config: config,
       );
 
   /// Returns a new set containing the current set plus all the given items.
   ISet<T> addAll(Iterable<T> items) => ISet<T>._unsafe(
         _s.addAll(items),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
+        config: config,
       );
 
   /// Returns a new set containing the current set minus the given item.
@@ -188,8 +170,7 @@ class ISet<T> // ignore: must_be_immutable
         ? this
         : ISet<T>._unsafe(
             result,
-            compare: compare,
-            isDeepEquals: isDeepEquals,
+            config: config,
           );
   }
 
@@ -197,8 +178,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Otherwise, adds it to the set.
   ISet<T> toggle(T item) => ISet<T>._unsafe(
         contains(item) ? _s.remove(item) : _s.add(item),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
+        config: config,
       );
 
   // --- Iterable methods: ---------------
@@ -209,9 +189,7 @@ class ISet<T> // ignore: must_be_immutable
   @override
   ISet<R> cast<R>() {
     var result = _s.cast<R>();
-    return (result is S<R>)
-        ? ISet._unsafe(result, compare: null, isDeepEquals: isDeepEquals)
-        : ISet._(result, compare: null, isDeepEquals: isDeepEquals);
+    return (result is S<R>) ? ISet._unsafe(result, config: config) : ISet._(result, config: config);
   }
 
   @override
@@ -224,7 +202,8 @@ class ISet<T> // ignore: must_be_immutable
   bool every(bool Function(T) test) => _s.every(test);
 
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f) => _s.expand(f);
+  ISet<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet config}) =>
+      ISet._(_s.expand(f), config: config ?? (T == E ? this.config : defaultConfigSet));
 
   @override
   int get length => _s.length;
@@ -246,11 +225,7 @@ class ISet<T> // ignore: must_be_immutable
       _s.fold(initialValue, combine);
 
   @override
-  ISet<T> followedBy(Iterable<T> other) => ISet._(
-        _s.followedBy(other),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<T> followedBy(Iterable<T> other) => ISet._(_s.followedBy(other), config: config);
 
   @override
   void forEach(void Function(T element) f) => _s.forEach(f);
@@ -263,11 +238,8 @@ class ISet<T> // ignore: must_be_immutable
       _s.lastWhere(test, orElse: orElse);
 
   @override
-  ISet<E> map<E>(E Function(T e) f) => ISet._(
-        _s.map(f),
-        compare: null,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<E> map<E>(E Function(T e) f, {ConfigSet config}) =>
+      ISet._(_s.map(f), config: config ?? (T == E ? this.config : defaultConfigSet));
 
   @override
   T reduce(T Function(T value, T element) combine) => _s.reduce(combine);
@@ -277,46 +249,22 @@ class ISet<T> // ignore: must_be_immutable
       _s.singleWhere(test, orElse: orElse);
 
   @override
-  ISet<T> skip(int count) => ISet._(
-        _s.skip(count),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<T> skip(int count) => ISet._(_s.skip(count), config: config);
 
   @override
-  ISet<T> skipWhile(bool Function(T value) test) => ISet._(
-        _s.skipWhile(test),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<T> skipWhile(bool Function(T value) test) => ISet._(_s.skipWhile(test), config: config);
 
   @override
-  ISet<T> take(int count) => ISet._(
-        _s.take(count),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<T> take(int count) => ISet._(_s.take(count), config: config);
 
   @override
-  ISet<T> takeWhile(bool Function(T value) test) => ISet._(
-        _s.takeWhile(test),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<T> takeWhile(bool Function(T value) test) => ISet._(_s.takeWhile(test), config: config);
 
   @override
-  ISet<T> where(bool Function(T element) test) => ISet._(
-        _s.where(test),
-        compare: compare,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<T> where(bool Function(T element) test) => ISet._(_s.where(test), config: config);
 
   @override
-  ISet<E> whereType<E>() => ISet._(
-        _s.whereType<E>(),
-        compare: null,
-        isDeepEquals: isDeepEquals,
-      );
+  ISet<E> whereType<E>() => ISet._(_s.whereType<E>(), config: config);
 
   @override
   List<T> toList({bool growable = true}) => _s.toList(growable: growable);
