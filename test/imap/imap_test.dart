@@ -397,7 +397,127 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // TODO: add tests ensuring immutability.
+  group("Ensuring Immutability |", () {
+    group("IMap.add method |", () {
+      test("Changing the passed mutable map doesn't change the IMap", () {
+        final Map<String, int> original = {'a': 1, 'b': 2};
+        final IMap<String, int> iMap = original.lock;
+
+        expect(iMap.unlock, original);
+
+        original.addEntries([MapEntry<String, int>('c', 3)]);
+        original.addEntries([MapEntry<String, int>('d', 4)]);
+
+        expect(original, <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4});
+        expect(iMap.unlock, <String, int>{'a': 1, 'b': 2});
+      });
+
+      test("Changing the IMap also doesn't change the original map", () {
+        final Map<String, int> original = {'a': 1, 'b': 2};
+        final IMap<String, int> iMap = original.lock;
+
+        expect(iMap.unlock, original);
+
+        final IMap<String, int> iMapNew = iMap.add('c', 3);
+
+        expect(original, <String, int>{'a': 1, 'b': 2});
+        expect(iMap.unlock, <String, int>{'a': 1, 'b': 2});
+        expect(iMapNew.unlock, <String, int>{'a': 1, 'b': 2, 'c': 3});
+      });
+
+      test(
+          "If the item being passed is a variable, a pointer to it shouldn't exist inside the IMap",
+          () {
+        final Map<String, int> original = {'a': 1, 'b': 2};
+        final IMap<String, int> iMap = original.lock;
+
+        expect(iMap.unlock, original);
+
+        int willChange = 4;
+        final IMap<String, int> iMapNew = iMap.add('c', willChange);
+
+        willChange = 5;
+
+        expect(original, <String, int>{'a': 1, 'b': 2});
+        expect(iMap.unlock, <String, int>{'a': 1, 'b': 2});
+        expect(willChange, 5);
+        expect(iMapNew.unlock, <String, int>{'a': 1, 'b': 2, 'c': 4});
+      });
+    });
+
+    group("IMap.addAll method |", () {
+      test("Changing the passed mutable map doesn't change the IMap", () {
+        final Map<String, int> original = {'a': 1, 'b': 2};
+        final IMap<String, int> iMap = original.lock;
+
+        expect(iMap.unlock, original);
+
+        original.addAll(<String, int>{'c': 3, 'd': 4});
+
+        expect(original, <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4});
+        expect(iMap.unlock, <String, int>{'a': 1, 'b': 2});
+      });
+
+      test("Changing the passed immutable map doesn't change the IMap", () {
+        final Map<String, int> original = {'a': 1, 'b': 2};
+        final IMap<String, int> iMap = original.lock;
+
+        expect(iMap.unlock, original);
+
+        final IMap<String, int> iMapNew = iMap.addAll(IMap({'c': 3, 'd': 4}));
+
+        expect(original, <String, int>{'a': 1, 'b': 2});
+        expect(iMap.unlock, <String, int>{'a': 1, 'b': 2});
+        expect(iMapNew.unlock, <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4});
+      });
+
+      test(
+          "If the items being passed are from a variable, "
+          "it shouldn't have a pointer to the variable", () {
+        final Map<String, int> original = {'a': 1, 'b': 2};
+        final IMap<String, int> iMap1 = original.lock;
+        final IMap<String, int> iMap2 = original.lock;
+
+        expect(iMap1.unlock, original);
+        expect(iMap2.unlock, original);
+
+        final IMap<String, int> iMapNew = iMap1.addAll(iMap2);
+        original.addAll(<String, int>{'c': 3, 'd': 4});
+
+        expect(original, <String, int>{'a': 1, 'b': 2, 'c': 3, 'd': 4});
+        expect(iMap1.unlock, <String, int>{'a': 1, 'b': 2});
+        expect(iMap2.unlock, <String, int>{'a': 1, 'b': 2});
+        expect(iMapNew.unlock, <String, int>{'a': 1, 'b': 2});
+      });
+
+      group("IMap.remove method |", () {
+        test("Changing the passed mutable map doesn't change the IMap", () {
+          final Map<String, int> original = {'a': 1, 'b': 2};
+          final IMap<String, int> iMap = original.lock;
+
+          expect(iMap.unlock, original);
+
+          original.remove('a');
+
+          expect(original, <String, int>{'b': 2});
+          expect(iMap.unlock, <String, int>{'a': 1, 'b': 2});
+        });
+
+        test("Removing from the original IMap doesn't change it", () {
+          final Map<String, int> original = {'a': 1, 'b': 2};
+          final IMap<String, int> iMap = original.lock;
+
+          expect(iMap.unlock, original);
+
+          final IMap<String, int> iMapNew = iMap.remove('a');
+
+          expect(original, <String, int>{'a': 1, 'b': 2});
+          expect(iMap.unlock, <String, int>{'a': 1, 'b': 2});
+          expect(iMapNew.unlock, <String, int>{'b': 2});
+        });
+      });
+    });
+  });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////////
   //

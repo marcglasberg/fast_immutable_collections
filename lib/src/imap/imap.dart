@@ -151,18 +151,18 @@ class IMap<K, V> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => !isEmpty;
 
-  /// If [isDeepEquals] configuration is true:
-  /// Will return true only if the map entries are equal (and in the same order),
+  /// If [isDeepEquals] configuration is `true`:
+  /// Will return `true` only if the map entries are equal (and in the same order),
   /// and the map configurations are the same instance. This may be slow for very
   /// large maps, since it compares each entry, one by one.
   ///
-  /// If [isDeepEquals] configuration is false:
-  /// Will return true only if the maps internals are the same instances
+  /// If [isDeepEquals] configuration is `false`:
+  /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
   /// since it doesn't compare each entry.
   /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the
-  /// internal state is better, because it will return true more often.
+  /// internal state is better, because it will return `true` more often.
   ///
   @override
   bool operator ==(Object other) => (other is IMap<K, V>)
@@ -171,7 +171,7 @@ class IMap<K, V> // ignore: must_be_immutable
           : same(other)
       : false;
 
-  /// Will return true only if the map entries are equal (and in the same order),
+  /// Will return `true` only if the map entries are equal (and in the same order),
   /// and the map configurations are the same instance. This may be slow for very
   /// large maps, since it compares each entry, one by one.
   @override
@@ -182,12 +182,12 @@ class IMap<K, V> // ignore: must_be_immutable
           config == other.config &&
           (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
 
-  /// Will return true only if the maps internals are the same instances
+  /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
   /// since it doesn't compare each entry.
   /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the
-  /// internal state is better, because it will return true more often.
+  /// internal state is better, because it will return `true` more often.
   @override
   bool same(IMap<K, V> other) => identical(_m, other._m) && config == other.config;
 

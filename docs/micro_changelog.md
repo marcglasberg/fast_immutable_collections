@@ -13,9 +13,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Improvements to the structure of the top-level [`README`][readme].
 1. Included the views and the configuration classes in the [`CHANGELOG`][changelog].
+1. Tests to ensure immutability of:
+    - `IMap`
 1. Current TODOs:
-    1. Immutability Tests for `IMap`, `ISet`, `IMapOfSet`.
+    1. Immutability Tests for `IMapOfSet`.
     1. `.iterator` tests for all collections.
+    1. Review `equals`/`same` tests.
     1. Coverage on the CI/CD.
     1. Tests for the views.
     1. Reorganized the configuration classes.
