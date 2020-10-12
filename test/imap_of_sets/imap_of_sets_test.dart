@@ -53,6 +53,20 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  group("Ensuring Immutability |", () {
+    group("IMapOfSets.add method |", () {
+      test("Changing the passed mutable map of sets doesn't change the IMapOfSets", () {
+        
+      });
+    });
+
+    group("IMapOfSets.addAll method |", () {});
+
+    group("IMapOfSets.remove method |", () {});
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   group("Initializations |", () {
     final Map<String, Set<int>> mapOfSets = {
       "a": {1, 2},

@@ -14,6 +14,22 @@ Immutable lists and other collections, which are as fast as their native Flutter
 
 <!-- TODO: Add motivation for this project and its use. -->
 
+### 1.1. Benchmarks Summary
+
+<!-- TODO: Add summarized tables that, hopefully, quickly justify this package's existence.-->
+
+### 1.2. The Motivation for the Different Equalities
+
+Comparing for identity isn't always what you want. If the internals of two different objects are the same, they might be considered the same in the end. That's one of the reasons this package adds the `deepEquals` option, which lets you compare the internal setup of the collection.
+
+Beware, thought, that, due to implementation details, comparing big collections will likely be slower for this package than other packages' implementations.
+
+<!-- TODO: Complete. -->
+
+### 1.3. The Motivation for the `IMapOfSets` Collection Class
+
+<!-- TODO: Complete. -->
+
 ## 2. How?
 
 ### 2.1. The Implementation's Idea
@@ -24,7 +40,7 @@ Basically, behind the scenes, this is what happens when you pass a `List` to an 
     1. When you add an element to the `IList`, it will be registered as an *immutable* property behind the scenes, and not `add`ed to the original `List`.
     1. When you add a collection of elements (`Iterable`) to the `IList`, it will also be registered as an *immutable* property, as a new copy of the `Iterable` if necessary to ensure the original won't be changed.
 
-## 3. Resources & Documentation
+## 3. Other Resources & Documentation
 
 The [`docs`][docs] folder features information which might be useful for you either as an end user or a developer:
 
@@ -40,3 +56,19 @@ The [`docs`][docs] folder features information which might be useful for you eit
 [plant_uml]: https://plantuml.com/
 [resources]: docs/resources.md
 [uml]: docs/uml.puml
+
+## 4. For the Developer or Contributor
+
+### 4.1. Formatting 
+
+This project uses 100-character lines instead of the typical 80. If you're on VS Code, simply add this line to your `settings.json`:
+
+```json
+"dart.lineLength": 100,
+```
+
+If you're going to use the `dartfmt` CLI, you can add the `-l` option when formatting, e.g.:
+
+```sh
+dartfmt -l 100 -w . 
+```
