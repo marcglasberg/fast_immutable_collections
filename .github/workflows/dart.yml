@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Run tests
-        run: flutter run test --coverage --coverage-path=lcov.info
+        run: flutter test --coverage --coverage-path=lcov.info
       - name: Upload Results to Codecov.io
         run: bash <(curl -s https://codecov.io/bash)
       - name: Formattting
