@@ -7,6 +7,16 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 12/10/2020
+
+### 1. Philippe Fanaro
+
+1. Improvements to the structure of the top-level [`README`][readme].
+1. Included the views and the configuration classes in the [`CHANGELOG`][changelog].
+
+
+[readme]: ../README.md
+
 ## 08/10/2020
 
 ### 1. Philippe Fanaro
