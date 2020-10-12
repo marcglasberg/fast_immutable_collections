@@ -45,9 +45,6 @@ void lockConfig() => _isConfigLocked = true;
 
 bool _isConfigLocked = false;
 
-int _compare<T>(T item1, T item2) =>
-    (item1 is Comparable) && (item2 is Comparable) ? item1.compareTo(item2) : 0;
-
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// - If [isDeepEquals] is `false`, the [IList] equals operator (`==`) compares by identity.
@@ -59,7 +56,7 @@ class ConfigList {
   /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
-  ConfigList({this.isDeepEquals = true});
+  const ConfigList({this.isDeepEquals = true});
 
   ConfigList copyWith({bool isDeepEquals}) {
     var config = ConfigList(
@@ -85,14 +82,12 @@ class ConfigList {
 /// By default [isDeepEquals]==true (collections are compared by equality).
 set defaultConfigList(ConfigList config) {
   if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _defaultConfigList = config ?? ConfigList(isDeepEquals: true);
+  _defaultConfigList = config ?? const ConfigList(isDeepEquals: true);
 }
 
 ConfigList get defaultConfigList => _defaultConfigList;
 
-ConfigList _defaultConfigList = ConfigList(
-  isDeepEquals: true,
-);
+ConfigList _defaultConfigList = const ConfigList(isDeepEquals: true);
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -107,18 +102,21 @@ class ConfigSet {
   /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
-  /// If given, will be used to sort list of values.
-  final int Function(Object, Object) compare;
+  /// If true, will sort the list output of items.
+  final bool autoSort;
 
-  ConfigSet({this.isDeepEquals = true, this.compare});
+  const ConfigSet({
+    this.isDeepEquals = true,
+    this.autoSort = true,
+  });
 
   ConfigSet copyWith({
     bool isDeepEquals,
-    int Function(Object, Object) compare,
+    bool autoSort,
   }) {
     var config = ConfigSet(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      compare: compare ?? this.compare,
+      autoSort: autoSort ?? this.autoSort,
     );
     return (config == this) ? this : config;
   }
@@ -129,15 +127,15 @@ class ConfigSet {
       other is ConfigSet &&
           runtimeType == other.runtimeType &&
           isDeepEquals == other.isDeepEquals &&
-          compare == other.compare;
+          autoSort == other.autoSort;
 
   @override
-  int get hashCode => isDeepEquals.hashCode ^ compare.hashCode;
+  int get hashCode => isDeepEquals.hashCode ^ autoSort.hashCode;
 
   @override
   String toString() => 'ConfigSet{'
       'isDeepEquals: $isDeepEquals, '
-      'compare: $compare}';
+      'autoSort: $autoSort}';
 }
 
 /// Global configuration that specifies if, by default, the immutable
@@ -146,22 +144,19 @@ class ConfigSet {
 ///
 set defaultConfigSet(ConfigSet config) {
   if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _defaultConfigSet = config ?? ConfigSet(isDeepEquals: true);
+  _defaultConfigSet = config ?? const ConfigSet(isDeepEquals: true, autoSort: true);
 }
 
 ConfigSet get defaultConfigSet => _defaultConfigSet;
 
-ConfigSet _defaultConfigSet = ConfigSet(
-  isDeepEquals: true,
-  compare: _compare,
-);
+ConfigSet _defaultConfigSet = const ConfigSet(isDeepEquals: true, autoSort: true);
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
-/// - If the [compareKey] function is defined, sorted key outputs will use it as a comparator.
-/// - If the [compareValue] function is defined, sorted value outputs will use it as a comparator.
+/// - If [autoSortKeys] is `true` (the default), will sort the list output of keys.
+/// - If [autoSortValues] is `true` (the default), will sort the list output of values.
 @immutable
 class ConfigMap {
   //
@@ -169,23 +164,27 @@ class ConfigMap {
   /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
-  /// If given, will be used to sort list of keys or lists of entries.
-  final int Function(Object, Object) compareKey;
+  /// If `true` (the default), will sort the list output of keys.
+  final bool autoSortKeys;
 
-  /// If given, will be used to sort list of values.
-  final int Function(Object, Object) compareValue;
+  /// If `true` (the default), will sort the list output of values.
+  final bool autoSortValues;
 
-  ConfigMap({this.isDeepEquals = true, this.compareKey, this.compareValue});
+  const ConfigMap({
+    this.isDeepEquals = true,
+    this.autoSortKeys,
+    this.autoSortValues,
+  });
 
   ConfigMap copyWith({
     bool isDeepEquals,
-    int Function(Object, Object) compareKey,
-    int Function(Object, Object) compareValue,
+    bool autoSortKeys,
+    bool autoSortValues,
   }) {
     var config = ConfigMap(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      compareKey: compareKey ?? this.compareKey,
-      compareValue: compareValue ?? this.compareValue,
+      autoSortKeys: autoSortKeys ?? this.autoSortKeys,
+      autoSortValues: autoSortValues ?? this.autoSortValues,
     );
     return (config == this) ? this : config;
   }
@@ -196,17 +195,17 @@ class ConfigMap {
       other is ConfigMap &&
           runtimeType == other.runtimeType &&
           isDeepEquals == other.isDeepEquals &&
-          compareKey == other.compareKey &&
-          compareValue == other.compareValue;
+          autoSortKeys == other.autoSortKeys &&
+          autoSortValues == other.autoSortValues;
 
   @override
-  int get hashCode => isDeepEquals.hashCode ^ compareKey.hashCode ^ compareValue.hashCode;
+  int get hashCode => isDeepEquals.hashCode ^ autoSortKeys.hashCode ^ autoSortValues.hashCode;
 
   @override
   String toString() => 'ConfigMap{'
       'isDeepEquals: $isDeepEquals, '
-      'compareKey: $compareKey, '
-      'compareValue: $compareValue}';
+      'autoSortKeys: $autoSortKeys, '
+      'autoSortValues: $autoSortValues}';
 }
 
 /// Global configuration that specifies if, by default, the immutable
@@ -215,15 +214,13 @@ class ConfigMap {
 ///
 set defaultConfigMap(ConfigMap config) {
   if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _defaultConfigMap = config ?? ConfigMap(isDeepEquals: true);
+  _defaultConfigMap =
+      config ?? const ConfigMap(isDeepEquals: true, autoSortKeys: true, autoSortValues: true);
 }
 
 ConfigMap get defaultConfigMap => _defaultConfigMap;
 
-ConfigMap _defaultConfigMap = ConfigMap(
-  isDeepEquals: true,
-  compareKey: _compare,
-  compareValue: _compare,
-);
+ConfigMap _defaultConfigMap =
+    const ConfigMap(isDeepEquals: true, autoSortKeys: true, autoSortValues: true);
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -109,7 +109,10 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
-  IMap<K, V> withConfig(ConfigMap config) => IMap._unsafe(_m, config: config);
+  IMap<K, V> withConfig(ConfigMap config) {
+    assert(config != null);
+    return IMap._unsafe(_m, config: config);
+  }
 
   /// Creates a map with `identityEquals` (compares the internals by `identity`).
   IMap<K, V> get withIdentityEquals =>
