@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Adding Flutter as a Dev Dependency
-        run: echo '\n  flutter_test:\n    sdk:\  flutter' >> pubspec.yaml
+        run: echo '\n  flutter_test:\n    sdk:  flutter' >> pubspec.yaml
       - name: Install dependencies
         run: flutter pub get
       - name: Run tests
