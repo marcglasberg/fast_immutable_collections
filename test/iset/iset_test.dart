@@ -97,6 +97,7 @@ void main() {
         original.addAll(<int>{2, 3, 4});
 
         expect(original, <int>{1, 2, 3, 4});
+        expect(iSet, <int>{1, 2});
       });
 
       test("Changing the passed immutable set doesn't change the ISet", () {

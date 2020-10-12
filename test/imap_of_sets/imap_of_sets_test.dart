@@ -56,13 +56,227 @@ void main() {
   group("Ensuring Immutability |", () {
     group("IMapOfSets.add method |", () {
       test("Changing the passed mutable map of sets doesn't change the IMapOfSets", () {
-        
+        final Map<String, Set<int>> original = {
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        };
+        final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
+
+        expect(iMapOfSets.unlock, original);
+
+        original.addAll({
+          'a': {1}
+        });
+        original.addAll({
+          'c': {4, 5}
+        });
+
+        expect(original, <String, Set<int>>{
+          'a': {1},
+          'b': {1, 2, 3},
+          'c': {4, 5},
+        });
+        expect(iMapOfSets.unlock, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+      });
+
+      test("Changing the IMapOfSets also doesn't change the original map of sets", () {
+        final Map<String, Set<int>> original = {
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        };
+        final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
+
+        expect(iMapOfSets.unlock, original);
+
+        IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.add('a', 1);
+        iMapOfSetsNew = iMapOfSetsNew.add('c', 4);
+
+        expect(original, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+        expect(iMapOfSets.unlock, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+        expect(iMapOfSetsNew.unlock, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+          'c': {4},
+        });
+      });
+
+      test("If the item being passed is a variable, a pointer to it shouldn't exist inside ISet",
+          () {
+        final Map<String, Set<int>> original = {
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        };
+        final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
+
+        expect(iMapOfSets.unlock, original);
+
+        int willChange = 4;
+        final IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.add('c', willChange);
+
+        willChange = 5;
+
+        expect(original, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+        expect(iMapOfSets.unlock, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+        expect(willChange, 5);
+        expect(iMapOfSetsNew.unlock, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+          'c': {4},
+        });
+      });
+
+      group("IMapOfSets.addSet method |", () {
+        test("Changing the passed mutable map of sets doesn't change the immutable map of sets",
+            () {
+          final Map<String, Set<int>> original = {
+            'a': {1, 2},
+            'b': {1, 2, 3},
+          };
+          final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
+
+          expect(iMapOfSets.unlock, original);
+
+          original.addAll({
+            'a': {1},
+            'c': {4, 5}
+          });
+
+          expect(original, <String, Set<int>>{
+            'a': {1},
+            'b': {1, 2, 3},
+            'c': {4, 5},
+          });
+          expect(iMapOfSets.unlock, <String, Set<int>>{
+            'a': {1, 2},
+            'b': {1, 2, 3},
+          });
+        });
+
+        test("Changing the passed immutable map of sets doesn't change the IMapOfSets", () {
+          final Map<String, Set<int>> original = {
+            'a': {1, 2},
+            'b': {1, 2, 3},
+          };
+          final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
+
+          expect(iMapOfSets.unlock, original);
+
+          IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.addSet('a', <int>{1}.lock);
+          iMapOfSetsNew = iMapOfSetsNew.addSet('c', <int>{4, 5}.lock);
+
+          expect(original, <String, Set<int>>{
+            'a': {1, 2},
+            'b': {1, 2, 3},
+          });
+          expect(iMapOfSets.unlock, <String, Set<int>>{
+            'a': {1, 2},
+            'b': {1, 2, 3},
+          });
+          expect(iMapOfSetsNew.unlock, <String, Set<int>>{
+            'a': {1},
+            'b': {1, 2, 3},
+            'c': {4, 5}
+          });
+        });
+
+        test(
+            "If the items being passed are from a variable, "
+            "it shouldn't have a pointer to the variable", () {
+          final Map<String, Set<int>> original = {
+            'a': {1, 2},
+            'b': {1, 2, 3},
+          };
+          final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
+          ISet<int> sety = {10, 11}.lock;
+
+          expect(iMapOfSets.unlock, original);
+
+          final IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.addSet('z', sety);
+          original.addAll({
+            'c': {99}
+          });
+
+          sety = sety.add(12);
+
+          expect(original, <String, Set<int>>{
+            'a': {1, 2},
+            'b': {1, 2, 3},
+            'c': {99}
+          });
+          expect(iMapOfSets.unlock, <String, Set<int>>{
+            'a': {1, 2},
+            'b': {1, 2, 3},
+          });
+          expect(sety, {10, 11, 12});
+          expect(iMapOfSetsNew.unlock, <String, Set<int>>{
+            'a': {1, 2},
+            'b': {1, 2, 3},
+            'z': {10, 11},
+          });
+        });
       });
     });
 
-    group("IMapOfSets.addAll method |", () {});
+    group("IMapOfSets.remove method |", () {
+      test("Changing the passed mutable map of sets doesn't change the IMapOfSets", () {
+        final Map<String, Set<int>> original = {
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        };
+        final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
 
-    group("IMapOfSets.remove method |", () {});
+        expect(iMapOfSets.unlock, original);
+
+        original.remove('a');
+
+        expect(original, <String, Set<int>>{
+          'b': {1, 2, 3},
+        });
+        expect(iMapOfSets.unlock, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+      });
+
+      test("Removing from the original IMapOfSets doesn't change it", () {
+        final Map<String, Set<int>> original = {
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        };
+        final IMapOfSets<String, int> iMapOfSets = IMapOfSets(original);
+
+        expect(iMapOfSets.unlock, original);
+
+        final IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.removeSet('a');
+
+        expect(original, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+        expect(iMapOfSets.unlock, <String, Set<int>>{
+          'a': {1, 2},
+          'b': {1, 2, 3},
+        });
+        expect(iMapOfSetsNew.unlock, <String, Set<int>>{
+          'b': {1, 2, 3},
+        });
+      });
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,9 +434,16 @@ void main() {
       expect(newSet["a"], ISet({1, 2}));
     });
 
-    test("IMapOfSets.addSet method", () {
-      final IMapOfSets<String, int> newSet = iMapOfSets.addSet("b", ISet({2, 3, 4}));
-      expect(newSet["b"], ISet({2, 3, 4}));
+    group("IMapOfSets.addSet method |", () {
+      test("Adding a new set on a new key", () {
+        final IMapOfSets<String, int> newSet = iMapOfSets.addSet("z", ISet({2, 3, 4}));
+        expect(newSet["z"], ISet({2, 3, 4}));
+      });
+
+      test("Adding a new set on an existing key", () {
+        final IMapOfSets<String, int> newSet = iMapOfSets.addSet("a", ISet({100}));
+        expect(newSet["a"], ISet({100}));
+      });
     });
 
     test("IMapOfSets.removeSet method", () {

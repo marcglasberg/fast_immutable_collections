@@ -32,7 +32,25 @@ Beware, thought, that, due to implementation details, comparing big collections 
 
 ## 2. How?
 
-### 2.1. The Implementation's Idea
+### 2.1. How do I use it?
+
+#### 2.1.1. `IList`
+
+<!-- TODO: Complete. -->
+
+#### 2.1.2. `ISet`
+
+<!-- TODO: Complete. -->
+
+#### 2.1.3. `IMap`
+
+<!-- TODO: Complete. -->
+
+#### 2.1.4. `IMapOfSets`
+
+<!-- TODO: Complete. -->
+
+### 2.2. The Implementation's Idea
 
 Basically, behind the scenes, this is what happens when you pass a `List` to an `IList` &mdash; the other collection objects follow the same idea &mdash;:
 
