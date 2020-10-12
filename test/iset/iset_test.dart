@@ -566,6 +566,19 @@ void main() {
         () => expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
 
     test("ISet.toString method", () => expect(iSet.toString(), "{1, 2, 3, 4, 5, 6}"));
+
+    test("ISet.iterator getter", () {
+      final Iterator<int> iterator = iSet.iterator;
+
+      int count = 0;
+      final Set<int> result = {};
+      while (iterator.moveNext()) {
+        count++;
+        result.add(iterator.current); 
+      }
+      expect(count, iSet.length);
+      expect(result, iSet);
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

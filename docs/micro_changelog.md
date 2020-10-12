@@ -16,10 +16,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Tests to ensure immutability of:
     - `IMap`
     - `IMapOfSets`
+1. Added iterator tests for:
+    - `IList`
+    - `ISet`
 1. Current TODOs:
-    1. `.iterator` tests for all collections.
-    1. Review `equals`/`same` tests.
     1. Coverage on the CI/CD.
+    1. Review `equals`/`same` tests.
     1. Tests for the views.
     1. Reorganize the configuration classes.
     1. Tests for the configuration classes.

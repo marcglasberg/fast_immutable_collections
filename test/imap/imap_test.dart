@@ -575,7 +575,7 @@ void main() {
       final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
 
       int count = 0;
-      Map<String, int> result = {};
+      final Map<String, int> result = {};
       while (iterator.moveNext()) {
         count++;
         result[iterator.current.key] = iterator.current.value;

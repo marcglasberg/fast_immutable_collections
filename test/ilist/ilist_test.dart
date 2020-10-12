@@ -613,5 +613,25 @@ void main() {
 
     test("IList.whereType method",
         () => expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]));
+
+    test("IList.iterator getter", () {
+      final Iterator<int> iterator = iList.iterator;
+
+      expect(iterator.current, isNull);
+      expect(iterator.moveNext(), isTrue);
+      expect(iterator.current, 1);
+      expect(iterator.moveNext(), isTrue);
+      expect(iterator.current, 2);
+      expect(iterator.moveNext(), isTrue);
+      expect(iterator.current, 3);
+      expect(iterator.moveNext(), isTrue);
+      expect(iterator.current, 4);
+      expect(iterator.moveNext(), isTrue);
+      expect(iterator.current, 5);
+      expect(iterator.moveNext(), isTrue);
+      expect(iterator.current, 6);
+      expect(iterator.moveNext(), isFalse);
+      expect(iterator.current, isNull);
+    });
   });
 }
