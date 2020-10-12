@@ -75,7 +75,10 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
-  ISet<T> withConfig(ConfigSet config) => ISet._unsafe(_s, config: config);
+  ISet<T> withConfig(ConfigSet config) {
+    assert(config != null);
+    return ISet._unsafe(_s, config: config);
+  }
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
   ISet<T> get withIdentityEquals =>
@@ -267,9 +270,18 @@ class ISet<T> // ignore: must_be_immutable
   ISet<E> whereType<E>() => ISet._(_s.whereType<E>(), config: config);
 
   @override
-  List<T> toList({bool growable = true}) => _s.toList(growable: growable);
+  List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
+    var result = _s.toList(growable: growable);
+    if (compare != null)
+      result.sort(compare);
+    else if (config.autoSort) result.sort();
+    return result;
+  }
 
-  IList<T> toIList() => IList(_s);
+  IList<T> toIList({int Function(T a, T b) compare, ConfigList configList}) {
+    List<T> list = toList(growable: false, compare: compare);
+    return IList.unsafe(list, config: configList ?? defaultConfigList);
+  }
 
   @override
   Set<T> toSet() => _s.toSet();

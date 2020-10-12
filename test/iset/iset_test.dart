@@ -231,17 +231,15 @@ void main() {
     test("ISet.config method", () {
       final ISet<int> iSet = ISet({1, 2});
 
-      expect(iSet.config.compare, isNotNull);
       expect(iSet.isDeepEquals, isTrue);
+      expect(iSet.config.autoSort, isTrue);
 
       final ISet<int> iSetWithCompare = iSet.withConfig(
-        iSet.config.copyWith(
-          compare: (item1, item2) => (item1 as Comparable).compareTo(item2),
-        ),
+        iSet.config.copyWith(autoSort: false),
       );
 
-      expect(iSetWithCompare.config.compare, isNotNull);
       expect(iSetWithCompare.isDeepEquals, isTrue);
+      expect(iSetWithCompare.config.autoSort, isFalse);
     });
   });
 

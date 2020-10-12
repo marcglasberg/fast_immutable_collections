@@ -43,18 +43,20 @@ class IList<T> // ignore: must_be_immutable
   /// when you are sure no external copies exist. If the original list is modified,
   /// it will break the IList and any other derived lists.
   IList.unsafe(List<T> list, {@required this.config})
-      : _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
+      : assert(config != null),
+        _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
 
   /// Fast if the iterable is an IList.
   IList._(Iterable<T> iterable, {@required this.config})
-      : _l = iterable is IList<T>
+      : assert(config != null),
+        _l = iterable is IList<T>
             ? iterable._l
             : iterable == null
                 ? LFlat.empty<T>()
                 : LFlat<T>(iterable);
 
   /// Unsafe.
-  IList._unsafe(this._l, {@required this.config});
+  IList._unsafe(this._l, {@required this.config}) : assert(config != null);
 
   /// Creates a new list with the given [config].
   ///
@@ -66,7 +68,10 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
-  IList<T> withConfig(ConfigList config) => IList._unsafe(_l, config: config);
+  IList<T> withConfig(ConfigList config) {
+    assert(config != null);
+    return IList._unsafe(_l, config: config);
+  }
 
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
   IList<T> get withIdentityEquals =>
