@@ -13,14 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: google/dart:latest
+      image: cirrusci/flutter
 
     steps:
       - uses: actions/checkout@v2
+      - name: Adding Flutter as a Dev Dependency
+        run: echo '\n  flutter_test:\n    sdk:flutter' >> pubspec.yaml
       - name: Install dependencies
-        run: pub get
+        run: flutter pub get
       - name: Run tests
-        run: pub run test
+        run: flutter run test --coverage --coverage-path=lcov.info
+      - name: Upload Results to Codecov.io
+        run: bash <(curl -s https://codecov.io/bash)
       - name: Formattting
         run: dartfmt -l 100 -n --set-exit-if-changed .
       - name: Static Analysis
