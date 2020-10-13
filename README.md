@@ -1,12 +1,15 @@
 # Fast Immutable Collections
 
 [![Dart || Tests | Formatting | Analyzer][github_ci_badge]][github_actions]
+[![codecov.io][codecov_badge]][codecov]
 
 > **THIS IS VERY EARLY STAGE. DON'T USE IT.**
 
 Immutable lists and other collections, which are as fast as their native Flutter mutable counterparts.
 
 
+[codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
+[codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
 [github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
 [github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
 
