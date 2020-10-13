@@ -132,7 +132,7 @@ void main() {
 
       final IMap<String, int> iMapWithIdentityEquals = iMap.withIdentityEquals;
       expect(iMapWithIdentityEquals.hashCode, isNot(expectedResult));
-    });
+    }, skip: true);
 
     test("IMap.config method", () {
       final IMap<String, int> iMap = IMap({'a': 1, 'b': 2});
