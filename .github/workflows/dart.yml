@@ -23,14 +23,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Install the Benchmark Dependencies (Static Analysis)
-        run: cd benchmark && flutter pub get
-
-      - name: Install the Benchmark Example Dependencies (Static Analysis)
-        run: cd benchmark/example && flutter pub get
-
-      - name: Static Analysis
-        run: dartanalyzer --fatal-infos --fatal-warnings .
+      - name: Static Analysis (also installs inner packages' dependencies)
+        run: bash tool/static_analysis.sh
 
       - name: Run tests
         run: flutter test --coverage --coverage-path=lcov.info
