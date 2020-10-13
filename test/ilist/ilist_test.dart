@@ -239,7 +239,7 @@ void main() {
       final IList<int> iList = IList([1, 2]);
       expect(iList.hashCode, 1166839095);
       fail("TESTE ERRADO!");
-    }, skip: true);
+    });
 
     test("IList.withConfig method", () {
       final IList<int> iList = IList([1, 2]);

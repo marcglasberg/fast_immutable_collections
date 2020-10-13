@@ -40,8 +40,8 @@ void main() {
 
       test("Entry.hashCode method", () {
         const Entry<String, int> entry = Entry('a', 1);
-
         expect(entry.hashCode, 170824771);
+        fail('This is not the way to test hashCode.');
       });
     });
 

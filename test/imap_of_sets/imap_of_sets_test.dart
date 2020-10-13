@@ -38,7 +38,10 @@ void main() {
           "b": {1, 2},
         });
 
-    test("hashCode", () => expect(iMapOfSets.hashCode, 1428598672), skip: true);
+    test("hashCode", () {
+      expect(iMapOfSets.hashCode, 1428598672);
+      fail('This is not the way to test hashCode.');
+    });
 
     test('IMapOfSets == Operator', () {
       expect(iMapOfSets == iMapOfSets2, isTrue);

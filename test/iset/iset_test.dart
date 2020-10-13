@@ -226,6 +226,7 @@ void main() {
     test("ISet.hashCode method", () {
       final ISet<int> iSet = ISet({1, 2});
       expect(iSet.hashCode, 884763);
+      fail('This is not the way to test hashCode.');
     });
 
     test("ISet.config method", () {

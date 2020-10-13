@@ -58,7 +58,7 @@ void main() {
 
       expect(fromKeys['a'], 'a'.hashCode);
       expect(fromKeys['b'], 'b'.hashCode);
-    }, skip: true);
+    });
 
     test("IMap.fromValues factory constructor", () {
       const List<int> values = [1, 2];
@@ -129,10 +129,10 @@ void main() {
       final IMap<String, int> iMap = IMap({'a': 1, 'b': 2});
       final expectedResult = 562038169;
       expect(iMap.hashCode, 562038169);
-
       final IMap<String, int> iMapWithIdentityEquals = iMap.withIdentityEquals;
       expect(iMapWithIdentityEquals.hashCode, isNot(expectedResult));
-    }, skip: true);
+      fail('This is not the way to test hashCode.');
+    });
 
     test("IMap.config method", () {
       final IMap<String, int> iMap = IMap({'a': 1, 'b': 2});
@@ -172,7 +172,7 @@ void main() {
       expect(iMap1.same(iMap2), isTrue);
       expect(iMap1.same(iMap3), isFalse);
       expect(iMap1.same(iMap4), isFalse);
-    }, skip: true);
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
