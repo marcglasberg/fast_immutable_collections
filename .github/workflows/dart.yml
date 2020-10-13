@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci:
-    name: CI/CD
+    name: CI
 
     runs-on: ubuntu-latest
 
