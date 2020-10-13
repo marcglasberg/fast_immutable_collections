@@ -19,15 +19,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Install dependencies
         run: flutter pub get
-      - name: Install the Benchmark dependencies (Static Analysis)
+
+      - name: Install the Benchmark Dependencies (Static Analysis)
         run: cd benchmark && flutter pub get
+
+      - name: Install the Benchmark Example Dependencies (Static Analysis)
+        run: cd benchmark/example && flutter pub get
+
       - name: Static Analysis
         run: dartanalyzer --fatal-infos --fatal-warnings .
+
       - name: Run tests
         run: flutter test --coverage --coverage-path=lcov.info
+
       - name: Upload Results to Codecov.io
         run: bash tool/codecov.sh
+
       - name: Formattting
         run: dartfmt -l 100 -n --set-exit-if-changed .
