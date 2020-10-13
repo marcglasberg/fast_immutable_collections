@@ -574,7 +574,7 @@ void main() {
       final Set<int> result = {};
       while (iterator.moveNext()) {
         count++;
-        result.add(iterator.current); 
+        result.add(iterator.current);
       }
       expect(count, iSet.length);
       expect(result, iSet);
