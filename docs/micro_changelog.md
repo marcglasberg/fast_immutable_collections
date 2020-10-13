@@ -7,6 +7,14 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 13/10/2020
+
+1. Current TODOs:
+    1. Review `equals`/`same`/`hashCode` tests.
+    1. Tests for the views.
+    1. Reorganize the configuration classes.
+    1. Tests for the configuration classes.
+
 ## 12/10/2020
 
 ### 1. Philippe Fanaro
@@ -19,12 +27,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Added iterator tests for:
     - `IList`
     - `ISet`
-1. Current TODOs:
-    1. Coverage on the CI/CD.
-    1. Review `equals`/`same` tests.
-    1. Tests for the views.
-    1. Reorganize the configuration classes.
-    1. Tests for the configuration classes.
+1. Coverage on the CI/CD.
 
 
 [readme]: ../README.md
