@@ -169,6 +169,7 @@ void main() {
         final ISet<int> mySet = ISet({1, 2}).withIdentityEquals;
         expect(mySet == mySet, isTrue);
         expect(mySet == ISet({1, 2}).withIdentityEquals, isFalse);
+        expect(mySet == ISet({2, 1}).withIdentityEquals, isFalse);
         expect(mySet == {1, 2}.lock, isFalse);
         expect(mySet == ISet({1, 2, 3}).withIdentityEquals, isFalse);
       });
@@ -177,6 +178,7 @@ void main() {
         final ISet<int> mySet = ISet({1, 2});
         expect(mySet == mySet, isTrue);
         expect(mySet == ISet({1, 2}), isTrue);
+        expect(mySet == ISet({2, 1}), isTrue);
         expect(mySet == {1, 2}.lock.withDeepEquals, isTrue);
         expect(mySet == ISet({1, 2, 3}), isFalse);
       });

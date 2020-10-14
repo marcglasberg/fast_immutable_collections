@@ -171,6 +171,7 @@ void main() {
         final IList<int> myList1 = IList([1, 2]).withIdentityEquals;
         expect(myList1 == myList1, isTrue);
         expect(myList1 == IList([1, 2]).withIdentityEquals, isFalse);
+        expect(myList1 == IList([2, 1]).withIdentityEquals, isFalse);
         expect(myList1 == [1, 2].lock, isFalse);
         expect(myList1 == IList([1, 2, 3]).withIdentityEquals, isFalse);
       });
@@ -179,6 +180,7 @@ void main() {
         final IList<int> myList = IList([1, 2]);
         expect(myList == myList, isTrue);
         expect(myList == IList([1, 2]), isTrue);
+        expect(myList == IList([2, 1]), isFalse);
         expect(myList == [1, 2].lock.withDeepEquals, isTrue);
         expect(myList == IList([1, 2, 3]), isFalse);
       });
