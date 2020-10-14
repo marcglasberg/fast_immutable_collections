@@ -226,7 +226,7 @@ void main() {
           expect(iSet1.equalItemsAndConfig(iSet1.remove(3)), isTrue);
         });
 
-        test("IList.== operator", () {
+        test("ISet.== operator", () {
           expect(iSet1 == iSet1, isTrue);
           expect(iSet1 == iSet2, isTrue);
           expect(iSet1 == iSet3, isFalse);

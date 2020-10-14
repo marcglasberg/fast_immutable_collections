@@ -174,8 +174,42 @@ void main() {
     });
 
     group("IMap.hashCode method", () {
-      test("", () {
-        
+      final IMap<String, int> iMap1 = IMap({'a': 1, 'b': 2}),
+        iMap2 = IMap({'a': 1, 'b': 2}),
+        iMap3 = IMap({'a': 1, 'b': 2, 'c': 3}),
+        iMap4 = IMap({'b': 2}).add('a', 1);
+      final IMap<String, int> iMap1WithIdentity = iMap1.withIdentityEquals,
+      iMap2WithIdentity = iMap2.withIdentityEquals,
+      iMap3WithIdentity = iMap3.withIdentityEquals,
+      iMap4WithIdentity = iMap4.withIdentityEquals;
+
+      test("deepEquals vs deepEquals", () {
+        expect(iMap1 == iMap2, isTrue);
+        expect(iMap1 == iMap3, isFalse);
+        expect(iMap1 == iMap4, isTrue);
+        expect(iMap1.hashCode, iMap2.hashCode);
+        expect(iMap1.hashCode, isNot(iMap3.hashCode));
+        expect(iMap1.hashCode, isNot(iMap4.hashCode));
+      });
+
+      test("identityEquals vs identityEquals", () {
+        expect(iMap1WithIdentity == iMap2WithIdentity, isFalse);
+        expect(iMap1WithIdentity == iMap3WithIdentity, isFalse);
+        expect(iMap1WithIdentity == iMap4WithIdentity, isFalse);
+        expect(iMap1WithIdentity.hashCode, isNot(iMap2WithIdentity.hashCode));
+        expect(iMap1WithIdentity.hashCode, isNot(iMap3WithIdentity.hashCode));
+        expect(iMap1WithIdentity.hashCode, isNot(iMap4WithIdentity.hashCode));
+      });
+
+      test("deepEquals vs identityEquals", () {
+        expect(iMap1 == iMap1WithIdentity, isFalse);
+        expect(iMap2 == iMap2WithIdentity, isFalse);
+        expect(iMap3 == iMap3WithIdentity, isFalse);
+        expect(iMap4 == iMap4WithIdentity, isFalse);
+        expect(iMap1.hashCode, isNot(iMap1WithIdentity.hashCode));
+        expect(iMap2.hashCode, isNot(iMap2WithIdentity.hashCode));
+        expect(iMap3.hashCode, isNot(iMap3WithIdentity.hashCode));
+        expect(iMap4.hashCode, isNot(iMap4WithIdentity.hashCode));
       });
     });
 
