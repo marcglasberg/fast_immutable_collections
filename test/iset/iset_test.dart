@@ -163,7 +163,6 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // TODO: Equals
   group("Equals and Other Comparisons |", () {
     group("Equals Operator |", () {
       test("ISet with identity-equals compares the set instance, not the items.", () {
@@ -232,10 +231,10 @@ void main() {
           expect(iSet1 == iSet4, isTrue);
           expect(iSet1 == iSet5, isFalse);
         });
-      });
 
-      group("ISet.equalItems method |", () {
-        test("Not yet done", () => fail('Not implemented yet.'));
+        group("ISet.equalItems method |", () {
+          test("Not yet done", () => fail('Not implemented yet.'));
+        });
       });
     });
 

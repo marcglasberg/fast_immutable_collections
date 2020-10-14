@@ -11,6 +11,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Completed tests for `equals`/`same`/`hashCode` on:
     - `IList`
+    - `ISet`
 1. Current TODOs:
     1. Review `equals`/`same`/`hashCode` tests.
     1. Tests for the views.
