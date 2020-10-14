@@ -142,13 +142,15 @@ void main() {
         final IMap<String, int> iMap1 = IMap({'a': 1, 'b': 2}),
             iMap2 = IMap({'a': 1, 'b': 2}),
             iMap3 = IMap({'a': 1}),
-            iMap4 = IMap({'a': 1, 'b': 2}).withIdentityEquals;
+            iMap4 = IMap({'b': 2, 'a': 1}),
+            iMap5 = IMap({'a': 1, 'b': 2}).withIdentityEquals;
 
         test("IMap.same method", () {
           expect(iMap1.same(iMap1), isTrue);
           expect(iMap1.same(iMap2), isFalse);
           expect(iMap1.same(iMap3), isFalse);
           expect(iMap1.same(iMap4), isFalse);
+          expect(iMap1.same(iMap5), isFalse);
         });
 
         test("IMap.equalItemsAndConfig method", () {
@@ -156,6 +158,7 @@ void main() {
           expect(iMap1.equalItemsAndConfig(iMap2), isTrue);
           expect(iMap1.equalItemsAndConfig(iMap3), isFalse);
           expect(iMap1.equalItemsAndConfig(iMap4), isFalse);
+          expect(iMap1.equalItemsAndConfig(iMap5), isFalse);
         });
 
         group("IMap.equalItems method |", () {
