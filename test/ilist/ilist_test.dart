@@ -192,53 +192,70 @@ void main() {
     group("Other Comparisons |", () {
       test("IList.isIdentityEquals and IList.isDeepEquals properties", () {
         final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]).withIdentityEquals;
+
         expect(iList1.isIdentityEquals, isFalse);
         expect(iList1.isDeepEquals, isTrue);
         expect(iList2.isIdentityEquals, isTrue);
         expect(iList2.isDeepEquals, isFalse);
       });
 
-      test("IList.same method", () {
+      group("Same, Equals and the == Operator |", () {
         final IList<int> iList1 = IList([1, 2]),
             iList2 = IList([1, 2]),
             iList3 = IList([1]),
             iList4 = IList([1, 2]).withIdentityEquals;
-        expect(iList1.same(iList1), isTrue);
-        expect(iList1.same(iList2), isFalse);
-        expect(iList1.same(iList3), isFalse);
-        expect(iList1.same(iList4), isFalse);
-      });
 
-      test("IList.equals method", () {
-        final IList<int> iList1 = IList([1, 2]),
-            iList2 = IList([1, 2]),
-            iList3 = IList([1]),
-            iList4 = IList([1, 2]).withIdentityEquals;
-        expect(iList1.equals(iList1), isTrue);
-        expect(iList1.equals(iList2), isTrue);
-        expect(iList1.equals(iList3), isFalse);
-        expect(iList1.equals(iList4), isFalse);
+        test("IList.same method", () {
+          expect(iList1.same(iList1), isTrue);
+          expect(iList1.same(iList2), isFalse);
+          expect(iList1.same(iList3), isFalse);
+          expect(iList1.same(iList4), isFalse);
+        });
+
+        test("IList.equals method", () {
+          expect(iList1.equals(iList1), isTrue);
+          expect(iList1.equals(iList2), isTrue);
+          expect(iList1.equals(iList3), isFalse);
+          expect(iList1.equals(iList4), isFalse);
+        });
+
+        test("IList.== operator", () {
+          expect(iList1 == iList1, isTrue);
+          expect(iList1 == iList2, isTrue);
+          expect(iList1 == iList3, isFalse);
+          expect(iList1 == iList4, isFalse);
+        });
       });
     });
 
-    /// TODO: Phil, testar hascode não é assim.
-    /// TODO: Tem que garantir o contrato do hashcode. Dá uma lida no contrato.
-    /// TODO: E daí vc tb precisa ler o capítulo 3 do livro "Effective Java" do Joshua Bloch.
-    /// TODO: Sugiro algo como o seguinte:
-    /// TODO: final IList<int> iList1 = IList([1, 2]);
-    /// TODO: final IList<int> iList2 = IList([1, 2]);
-    /// TODO: final IList<int> iList3 = IList([1, 2, 3]);
-    /// TODO: expect(iList1, iList2);
-    /// TODO: expect(iList1, isNot(iList3));
-    /// TODO: expect(iList1.hashCode, iList2.hashCode);
-    /// TODO: expect(iList1.hashCode, isNot(iList3.hashCode));
-    /// TODO: Além disso, tem que testar separadamente o hascode pra isDeepEquals true
-    /// TODO: e false. Eles tem que ser diferentes.
-    ///
-    test("IList.hashCode method", () {
-      final IList<int> iList = IList([1, 2]);
-      expect(iList.hashCode, 1166839095);
-      fail("TESTE ERRADO!");
+    group("IList.hashCode method |", () {
+      final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]), iList3 = IList([1, 2, 3]);
+      final IList<int> iList1WithIdentity = iList1.withIdentityEquals,
+          iList2WithIdentity = iList2.withIdentityEquals,
+          iList3WithIdentity = iList3.withIdentityEquals;
+
+      test("With deepEquals", () {
+        expect(iList1 == iList2, isTrue);
+        expect(iList1 == iList3, isFalse);
+        expect(iList1.hashCode == iList2.hashCode, isTrue);
+        expect(iList1.hashCode == iList3.hashCode, isFalse);
+      });
+
+      test("With identityEquals", () {
+        expect(iList1WithIdentity == iList2WithIdentity, isFalse);
+        expect(iList1WithIdentity == iList3WithIdentity, isFalse);
+        expect(iList1WithIdentity.hashCode != iList2WithIdentity.hashCode, isTrue);
+        expect(iList1WithIdentity.hashCode != iList3WithIdentity.hashCode, isTrue);
+      });
+
+      test("deepEquals vs identityEquals", () {
+        expect(iList1 == iList1WithIdentity, isFalse);
+        expect(iList2 == iList2WithIdentity, isFalse);
+        expect(iList3 == iList3WithIdentity, isFalse);
+        expect(iList1.hashCode != iList1WithIdentity.hashCode, isTrue);
+        expect(iList2.hashCode != iList2WithIdentity.hashCode, isTrue);
+        expect(iList3.hashCode != iList3WithIdentity.hashCode, isTrue);
+      });
     });
 
     test("IList.withConfig method", () {

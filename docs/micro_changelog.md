@@ -7,8 +7,10 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
-## 13/10/2020
+## 14/10/2020
 
+1. Completed tests for `equals`/`same`/`hashCode` on:
+    - `IList`
 1. Current TODOs:
     1. Review `equals`/`same`/`hashCode` tests.
     1. Tests for the views.
