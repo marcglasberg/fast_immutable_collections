@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:test/test.dart';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -203,13 +205,15 @@ void main() {
         final IList<int> iList1 = IList([1, 2]),
             iList2 = IList([1, 2]),
             iList3 = IList([1]),
-            iList4 = IList([1, 2]).withIdentityEquals;
+            iList4 = IList(([2, 1])),
+            iList5 = IList([1, 2]).withIdentityEquals;
 
         test("IList.same method", () {
           expect(iList1.same(iList1), isTrue);
           expect(iList1.same(iList2), isFalse);
           expect(iList1.same(iList3), isFalse);
           expect(iList1.same(iList4), isFalse);
+          expect(iList1.same(iList5), isFalse);
         });
 
         test("IList.equalItemsAndConfig method", () {
@@ -217,6 +221,7 @@ void main() {
           expect(iList1.equalItemsAndConfig(iList2), isTrue);
           expect(iList1.equalItemsAndConfig(iList3), isFalse);
           expect(iList1.equalItemsAndConfig(iList4), isFalse);
+          expect(iList1.equalItemsAndConfig(iList5), isFalse);
         });
 
         test("IList.== operator", () {
@@ -224,37 +229,74 @@ void main() {
           expect(iList1 == iList2, isTrue);
           expect(iList1 == iList3, isFalse);
           expect(iList1 == iList4, isFalse);
+          expect(iList1 == iList5, isFalse);
+        });
+
+        group("IList.equalItems method |", () {
+          final IList<int> iList1 = IList([1, 2]), iList2 = IList([1]), iList3 = IList([2, 1]), iList4 = IList([1, 2]);
+
+          test("Identity", () => expect(iList1.equalItems(iList1), isTrue));
+
+          test("Passing a set", () {
+            expect(() => iList1.equalItems(ISet([1, 2])), throwsStateError);
+            expect(() => iList1.equalItems(HashSet()..add(1)..add(2)), throwsStateError);
+          });
+
+          test("If IList, will only be equal if in order and the same items", () {
+            expect(iList1.equalItems(iList2), isFalse);
+            expect(iList1.equalItems(iList3), isFalse);
+            expect(iList1.equalItems(iList4), isTrue);
+          });
+
+          test("If List, will only be equal if in order and the same items", () {
+            expect(iList1.equalItems(iList2.toList()), isFalse);
+            expect(iList1.equalItems(iList3.toList()), isFalse);
+            expect(iList1.equalItems(iList4.toList()), isTrue);
+          });
+
+          test("If Iterable, will only be equal if in order and the same items", () {
+            expect(iList1.equalItems({'a': 1}.values), isFalse);
+            expect(iList1.equalItems({'a': 2, 'b': 1}.values), isFalse);
+            expect(iList1.equalItems({'a': 1, 'b': 2}.values), isTrue);
+          });
         });
       });
     });
 
     group("IList.hashCode method |", () {
-      final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]), iList3 = IList([1, 2, 3]);
+      final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]), iList3 = IList([1, 2, 3]), iList4 = IList([2, 1]);
       final IList<int> iList1WithIdentity = iList1.withIdentityEquals,
           iList2WithIdentity = iList2.withIdentityEquals,
-          iList3WithIdentity = iList3.withIdentityEquals;
+          iList3WithIdentity = iList3.withIdentityEquals,
+          iList4WithIdentity = iList4.withIdentityEquals;
 
-      test("With deepEquals", () {
+      test("deepEquals vs deepEquals", () {
         expect(iList1 == iList2, isTrue);
         expect(iList1 == iList3, isFalse);
+        expect(iList1 == iList4, isFalse);
         expect(iList1.hashCode == iList2.hashCode, isTrue);
         expect(iList1.hashCode == iList3.hashCode, isFalse);
+        expect(iList1.hashCode == iList4.hashCode, isFalse);
       });
 
-      test("With identityEquals", () {
+      test("identityEquals vs identityEquals", () {
         expect(iList1WithIdentity == iList2WithIdentity, isFalse);
         expect(iList1WithIdentity == iList3WithIdentity, isFalse);
+        expect(iList1WithIdentity == iList4WithIdentity, isFalse);
         expect(iList1WithIdentity.hashCode != iList2WithIdentity.hashCode, isTrue);
         expect(iList1WithIdentity.hashCode != iList3WithIdentity.hashCode, isTrue);
+        expect(iList1WithIdentity.hashCode != iList4WithIdentity.hashCode, isTrue);
       });
 
       test("deepEquals vs identityEquals", () {
         expect(iList1 == iList1WithIdentity, isFalse);
         expect(iList2 == iList2WithIdentity, isFalse);
         expect(iList3 == iList3WithIdentity, isFalse);
+        expect(iList4 == iList4WithIdentity, isFalse);
         expect(iList1.hashCode != iList1WithIdentity.hashCode, isTrue);
         expect(iList2.hashCode != iList2WithIdentity.hashCode, isTrue);
         expect(iList3.hashCode != iList3WithIdentity.hashCode, isTrue);
+        expect(iList4.hashCode != iList4WithIdentity.hashCode, isTrue);
       });
     });
 
