@@ -216,10 +216,10 @@ void main() {
             iSet2 = ISet({1, 2}),
             iSet3 = ISet({1}),
             iSet4 = ISet({1, 2}).withIdentityEquals;
-        expect(iSet1.equals(iSet1), isTrue);
-        expect(iSet1.equals(iSet2), isTrue);
-        expect(iSet1.equals(iSet3), isFalse);
-        expect(iSet1.equals(iSet4), isFalse);
+        expect(iSet1.equalItemsAndConfig(iSet1), isTrue);
+        expect(iSet1.equalItemsAndConfig(iSet2), isTrue);
+        expect(iSet1.equalItemsAndConfig(iSet3), isFalse);
+        expect(iSet1.equalItemsAndConfig(iSet4), isFalse);
       });
     });
 

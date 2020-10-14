@@ -214,14 +214,14 @@ void main() {
             iList2 = IList([1, 2]),
             iList3 = IList([1]),
             iList4 = IList([1, 2]).withIdentityEquals;
-        expect(iList1.equals(iList1), isTrue);
-        expect(iList1.equals(iList2), isTrue);
-        expect(iList1.equals(iList3), isFalse);
-        expect(iList1.equals(iList4), isFalse);
+        expect(iList1.equalItemsAndConfig(iList1), isTrue);
+        expect(iList1.equalItemsAndConfig(iList2), isTrue);
+        expect(iList1.equalItemsAndConfig(iList3), isFalse);
+        expect(iList1.equalItemsAndConfig(iList4), isFalse);
       });
     });
 
-    /// TODO: Phil, testar hascode não é assim.
+    /// TODO: Phil, testar hashcode não é assim.
     /// TODO: Tem que garantir o contrato do hashcode. Dá uma lida no contrato.
     /// TODO: E daí vc tb precisa ler o capítulo 3 do livro "Effective Java" do Joshua Bloch.
     /// TODO: Sugiro algo como o seguinte:

@@ -3,8 +3,24 @@ import 'package:meta/meta.dart';
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
-  bool equals(C other);
+  /// Will return true only if the collection items are equal to the iterable items.
+  /// If the collection is ordered, it will also check if the items are in the same order.
+  /// This may be slow for very large collection, since it compares each item, one by one.
+  /// If you can compare ordered and unordered collections, it will throw a `StateError`.
+  bool equalItems(Iterable other);
 
+  /// Will return true only if the collections items are equal, and the collection
+  /// configurations are the same instance. If the collection is ordered, it will also check
+  /// if the items are in the same order. This may be slow for very large collections, since
+  /// it compares each item, one by one.
+  bool equalItemsAndConfig(C other);
+
+  /// Will return true only if the collections internals are the same instances
+  /// (comparing by identity). This will be fast even for very large collections,
+  /// since it doesn't compare each item.
+  /// Note: This is not the same as `identical(col1, col2)` since it doesn't
+  /// compare the collection instances themselves, but their internal state.
+  /// Comparing the internal state is better, because it will return true more often.
   bool same(C other);
 }
 

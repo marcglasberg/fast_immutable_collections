@@ -1,10 +1,14 @@
+import 'dart:collection';
+
 import 'package:fast_immutable_collections/src/ilist/unmodifiable_list_view.dart';
 import 'package:meta/meta.dart';
+import '../../fast_immutable_collections.dart';
 import '../immutable_collection.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
 import 'modifiable_list_view.dart';
+import 'package:collection/collection.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,15 +138,28 @@ class IList<T> // ignore: must_be_immutable
   @override
   bool operator ==(Object other) => (other is IList<T>)
       ? isDeepEquals
-          ? equals(other)
+          ? equalItemsAndConfig(other)
           : same(other)
       : false;
 
-  /// Will return true only if the list items are equal (and in the same order),
+  /// Will return true only if the IList items are equal to the iterable items,
+  /// and in the same order. This may be slow for very large lists, since it compares each item,
+  /// one by one. You can compare the list with ordered sets, but unordered sets will throw a
+  /// `StateError`.
+  @override
+  bool equalItems(Iterable other) {
+    if (identical(this, other)) return true;
+    if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
+    if (other is IList<T>) return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
+    if (other is List) return const ListEquality().equals(UnmodifiableListView(this), other);
+    return const IterableEquality().equals(_l, other);
+  }
+
+  /// Will return true only if the list items are equal and in the same order,
   /// and the list configurations are the same instance. This may be slow for very
   /// large lists, since it compares each item, one by one.
   @override
-  bool equals(IList<T> other) =>
+  bool equalItemsAndConfig(IList<T> other) =>
       identical(this, other) ||
       other is IList<T> &&
           runtimeType == other.runtimeType &&

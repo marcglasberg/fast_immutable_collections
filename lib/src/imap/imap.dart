@@ -170,15 +170,15 @@ class IMap<K, V> // ignore: must_be_immutable
   @override
   bool operator ==(Object other) => (other is IMap<K, V>)
       ? isDeepEquals
-          ? equals(other)
+          ? equalItemsAndConfig(other)
           : same(other)
       : false;
 
-  /// Will return `true` only if the map entries are equal (and in the same order),
-  /// and the map configurations are the same instance. This may be slow for very
-  /// large maps, since it compares each entry, one by one.
   @override
-  bool equals(IMap<K, V> other) =>
+  bool equalItems(Iterable other) => throw UnsupportedError("Work in progress!");
+
+  @override
+  bool equalItemsAndConfig(IMap<K, V> other) =>
       identical(this, other) ||
       other is IMap<K, V> &&
           runtimeType == other.runtimeType &&
