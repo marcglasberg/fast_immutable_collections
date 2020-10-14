@@ -214,6 +214,7 @@ void main() {
           expect(iList1.same(iList3), isFalse);
           expect(iList1.same(iList4), isFalse);
           expect(iList1.same(iList5), isFalse);
+          expect(iList1.same(iList1.remove(3)), isTrue);
         });
 
         test("IList.equalItemsAndConfig method", () {
@@ -222,6 +223,7 @@ void main() {
           expect(iList1.equalItemsAndConfig(iList3), isFalse);
           expect(iList1.equalItemsAndConfig(iList4), isFalse);
           expect(iList1.equalItemsAndConfig(iList5), isFalse);
+          expect(iList1.equalItemsAndConfig(iList1.remove(3)), isTrue);
         });
 
         test("IList.== operator", () {
@@ -233,7 +235,10 @@ void main() {
         });
 
         group("IList.equalItems method |", () {
-          final IList<int> iList1 = IList([1, 2]), iList2 = IList([1]), iList3 = IList([2, 1]), iList4 = IList([1, 2]);
+          final IList<int> iList1 = IList([1, 2]),
+              iList2 = IList([1]),
+              iList3 = IList([2, 1]),
+              iList4 = IList([1, 2]);
 
           test("Identity", () => expect(iList1.equalItems(iList1), isTrue));
 
@@ -264,7 +269,10 @@ void main() {
     });
 
     group("IList.hashCode method |", () {
-      final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]), iList3 = IList([1, 2, 3]), iList4 = IList([2, 1]);
+      final IList<int> iList1 = IList([1, 2]),
+          iList2 = IList([1, 2]),
+          iList3 = IList([1, 2, 3]),
+          iList4 = IList([2, 1]);
       final IList<int> iList1WithIdentity = iList1.withIdentityEquals,
           iList2WithIdentity = iList2.withIdentityEquals,
           iList3WithIdentity = iList3.withIdentityEquals,
