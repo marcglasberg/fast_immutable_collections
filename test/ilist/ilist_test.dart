@@ -212,11 +212,11 @@ void main() {
           expect(iList1.same(iList4), isFalse);
         });
 
-        test("IList.equals method", () {
-          expect(iList1.equals(iList1), isTrue);
-          expect(iList1.equals(iList2), isTrue);
-          expect(iList1.equals(iList3), isFalse);
-          expect(iList1.equals(iList4), isFalse);
+        test("IList.equalItemsAndConfig method", () {
+          expect(iList1.equalItemsAndConfig(iList1), isTrue);
+          expect(iList1.equalItemsAndConfig(iList2), isTrue);
+          expect(iList1.equalItemsAndConfig(iList3), isFalse);
+          expect(iList1.equalItemsAndConfig(iList4), isFalse);
         });
 
         test("IList.== operator", () {

@@ -115,15 +115,15 @@ class ISet<T> // ignore: must_be_immutable
   @override
   bool operator ==(Object other) => (other is ISet<T>)
       ? isDeepEquals
-          ? equals(other)
+          ? equalItemsAndConfig(other)
           : same(other)
       : false;
 
-  /// Will return true only if the set items are equal (and in the same order),
-  /// and the set configurations are the same instance. This may be slow for very
-  /// large sets, since it compares each item, one by one.
   @override
-  bool equals(ISet<T> other) =>
+  bool equalItems(Iterable other) => throw UnsupportedError("Work in progress!");
+
+  @override
+  bool equalItemsAndConfig(ISet<T> other) =>
       identical(this, other) ||
       other is ISet<T> &&
           runtimeType == other.runtimeType &&

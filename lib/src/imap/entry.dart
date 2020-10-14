@@ -6,7 +6,7 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// Similar to a [MapEntry], but correctly implements
-/// [equals] ([==]) comparing [key] and [value].
+/// [equalItemsAndConfig] ([==]) comparing [key] and [value].
 class Entry<K, V> {
   final K key;
   final V value;
