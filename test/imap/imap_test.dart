@@ -105,8 +105,7 @@ void main() {
       test("IMap with deep-equals compares the items, not the map instance.", () {
         var myMap = IMap({"a": 1, "b": 2}).withDeepEquals;
         expect(myMap == myMap, isTrue);
-        // TODO: Marcelo, tem mesmo que ser na exata mesma ordem?
-        expect(myMap == IMap({"b": 2}).add("a", 1).withDeepEquals, isFalse);
+        expect(myMap == IMap({"b": 2}).add("a", 1).withDeepEquals, isTrue);
         expect(myMap == IMap({"a": 1, "b": 2}).withDeepEquals, isTrue);
         expect(myMap == {"a": 1, "b": 2}.lock.withDeepEquals, isTrue);
         expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).withDeepEquals, isFalse);
@@ -160,11 +159,9 @@ void main() {
           expect(iMap1.equalItemsAndConfig(iMap1), isTrue);
           expect(iMap1.equalItemsAndConfig(iMap2), isTrue);
           expect(iMap1.equalItemsAndConfig(iMap3), isFalse);
-          // TODO: Marcelo, `MapEquality` não leva em consideração ordem, mas a documentação
-          // parece querer levar.
-          expect(iMap1.equalItemsAndConfig(iMap4), isFalse);
+          expect(iMap1.equalItemsAndConfig(iMap4), isTrue);
           expect(iMap1.equalItemsAndConfig(iMap5), isFalse);
-          expect(iMap1.equalItemsAndConfig(iMap1.remove('c')), isFalse);
+          expect(iMap1.equalItemsAndConfig(iMap1.remove('c')), isTrue);
         });
 
         group("IMap.equalItems method |", () {
@@ -189,7 +186,7 @@ void main() {
         expect(iMap1 == iMap4, isTrue);
         expect(iMap1.hashCode, iMap2.hashCode);
         expect(iMap1.hashCode, isNot(iMap3.hashCode));
-        expect(iMap1.hashCode, isNot(iMap4.hashCode));
+        expect(iMap1.hashCode, iMap4.hashCode);
       });
 
       test("identityEquals vs identityEquals", () {
