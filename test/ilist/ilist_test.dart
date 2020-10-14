@@ -274,18 +274,18 @@ void main() {
         expect(iList1 == iList2, isTrue);
         expect(iList1 == iList3, isFalse);
         expect(iList1 == iList4, isFalse);
-        expect(iList1.hashCode == iList2.hashCode, isTrue);
-        expect(iList1.hashCode == iList3.hashCode, isFalse);
-        expect(iList1.hashCode == iList4.hashCode, isFalse);
+        expect(iList1.hashCode, iList2.hashCode);
+        expect(iList1.hashCode, isNot(iList3.hashCode));
+        expect(iList1.hashCode, isNot(iList4.hashCode));
       });
 
       test("identityEquals vs identityEquals", () {
         expect(iList1WithIdentity == iList2WithIdentity, isFalse);
         expect(iList1WithIdentity == iList3WithIdentity, isFalse);
         expect(iList1WithIdentity == iList4WithIdentity, isFalse);
-        expect(iList1WithIdentity.hashCode != iList2WithIdentity.hashCode, isTrue);
-        expect(iList1WithIdentity.hashCode != iList3WithIdentity.hashCode, isTrue);
-        expect(iList1WithIdentity.hashCode != iList4WithIdentity.hashCode, isTrue);
+        expect(iList1WithIdentity.hashCode, isNot(iList2WithIdentity.hashCode));
+        expect(iList1WithIdentity.hashCode, isNot(iList3WithIdentity.hashCode));
+        expect(iList1WithIdentity.hashCode, isNot(iList4WithIdentity.hashCode));
       });
 
       test("deepEquals vs identityEquals", () {
@@ -293,10 +293,10 @@ void main() {
         expect(iList2 == iList2WithIdentity, isFalse);
         expect(iList3 == iList3WithIdentity, isFalse);
         expect(iList4 == iList4WithIdentity, isFalse);
-        expect(iList1.hashCode != iList1WithIdentity.hashCode, isTrue);
-        expect(iList2.hashCode != iList2WithIdentity.hashCode, isTrue);
-        expect(iList3.hashCode != iList3WithIdentity.hashCode, isTrue);
-        expect(iList4.hashCode != iList4WithIdentity.hashCode, isTrue);
+        expect(iList1.hashCode, isNot(iList1WithIdentity.hashCode));
+        expect(iList2.hashCode, isNot(iList2WithIdentity.hashCode));
+        expect(iList3.hashCode, isNot(iList3WithIdentity.hashCode));
+        expect(iList4.hashCode, isNot(iList4WithIdentity.hashCode));
       });
     });
 
