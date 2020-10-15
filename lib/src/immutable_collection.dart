@@ -2,6 +2,34 @@ import 'package:meta/meta.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+/// In your app initialization you may want to lock the configuration.
+void lockConfig() => _isConfigLocked = true;
+
+bool _isConfigLocked = false;
+
+/// While `identical(collection1, collection2)` will compare the identity of the collection
+/// itself, `same(collection1, collection2)` will compare its internal state by identity.
+/// Note `same` is practically as fast as `identical`, but will give less false negatives.
+/// So it is almost always recommended to use `same` instead of `identical`.
+///
+bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
+  if (c1 == null && c2 == null) return true;
+  if (c1 == null || c2 == null) return false;
+  return c1.same(c2);
+}
+
+/// Global configuration that specifies if unsafe constructors can be used or not.
+set disallowUnsafeConstructors(bool value) {
+  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
+  _disallowUnsafeConstructors = value ?? false;
+}
+
+bool get disallowUnsafeConstructors => _disallowUnsafeConstructors;
+
+bool _disallowUnsafeConstructors = false;
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// Will return true only if the collection items are equal to the iterable items.
   /// If the collection is ordered, it will also check if the items are in the same order.
@@ -42,24 +70,6 @@ extension CanBeEmptyExtension on CanBeEmpty {
 
   bool get isEmptyButNotNull => (this != null) && isEmpty;
 }
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-/// While `identical(collection1, collection2)` will compare the identity of the collection
-/// itself, `same(collection1, collection2)` will compare its internal state by identity.
-/// Note `same` is practically as fast as `identical`, but will give less false negatives.
-/// So it is almost always recommended to use `same` instead of `identical`.
-///
-bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
-  if (c1 == null && c2 == null) return true;
-  if (c1 == null || c2 == null) return false;
-  return c1.same(c2);
-}
-
-/// In your app initialization you may want to lock the configuration.
-void lockConfig() => _isConfigLocked = true;
-
-bool _isConfigLocked = false;
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 

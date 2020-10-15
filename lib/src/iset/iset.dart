@@ -30,22 +30,29 @@ class ISet<T> // ignore: must_be_immutable
         config: defaultConfigSet,
       );
 
-  factory ISet([Iterable<T> iterable]) => iterable is ISet<T>
-      ? iterable
-      : iterable == null || iterable.isEmpty
-          ? ISet.empty<T>()
-          : ISet<T>._unsafe(
-              SFlat<T>(iterable),
-              config: defaultConfigSet,
-            );
+  /// Create an [ISet] from any [Iterable].
+  /// Fast, if the Iterable is another [ISet].
+  factory ISet([
+    Iterable<T> iterable,
+  ]) =>
+      iterable is ISet<T>
+          ? iterable
+          : iterable == null || iterable.isEmpty
+              ? ISet.empty<T>()
+              : ISet<T>._unsafe(
+                  SFlat<T>(iterable),
+                  config: defaultConfigSet,
+                );
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the set.
   /// However, you should only use this with a new set you've created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
-  /// it will break the IList and any other derived lists.
+  /// it will break the IList and any other derived lists in unpredictable ways.
   ISet.unsafe(Set<T> set, {@required this.config})
-      : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
+      : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
+    if (disallowUnsafeConstructors) throw UnsupportedError("ISet.unsafe is disallowed.");
+  }
 
   ISet._(
     Iterable<T> iterable, {
@@ -278,10 +285,8 @@ class ISet<T> // ignore: must_be_immutable
     return result;
   }
 
-  IList<T> toIList({int Function(T a, T b) compare, ConfigList configList}) {
-    List<T> list = toList(growable: false, compare: compare);
-    return IList.unsafe(list, config: configList ?? defaultConfigList);
-  }
+  IList<T> toIList({int Function(T a, T b) compare, ConfigList config}) =>
+      IList.fromISet(this, compare: compare, config: config);
 
   @override
   Set<T> toSet() => _s.toSet();

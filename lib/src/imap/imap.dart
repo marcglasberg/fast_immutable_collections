@@ -33,6 +33,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   static IMap<K, V> empty<K, V>() => IMap._unsafe(MFlat.empty<K, V>(), config: defaultConfigMap);
 
+  /// Create an [IMap] from a [Map].
   factory IMap([Map<K, V> map]) => (map == null || map.isEmpty)
       ? IMap.empty<K, V>()
       : IMap<K, V>._unsafe(MFlat<K, V>(map), config: defaultConfigMap);
@@ -95,6 +96,17 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Unsafe.
   IMap._(Map<K, V> map, {@required this.config}) : _m = MFlat<K, V>.unsafe(map);
+
+  /// Unsafe constructor. Use this at your own peril.
+  /// This constructor is fast, since it makes no defensive copies of the map.
+  /// However, you should only use this with a new map you've created yourself,
+  /// when you are sure no external copies exist. If the original map is modified,
+  /// it will break the IMap and any other derived maps in unpredictable ways.
+  IMap.unsafe(Map<K, V> map, {@required this.config})
+      : assert(config != null),
+        _m = (map == null) ? MFlat.empty<K, V>() : MFlat<K, V>.unsafe(map) {
+    if (disallowUnsafeConstructors) throw UnsupportedError("IMap.unsafe is disallowed.");
+  }
 
   /// Unsafe.
   IMap._unsafe(this._m, {@required this.config});

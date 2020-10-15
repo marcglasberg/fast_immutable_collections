@@ -22,7 +22,7 @@ import 'ilist.dart';
 /// you create it from a regular [List] and then modify that original [List], you will also
 /// be modifying the view. Also note, if you create an [UnmodifiableListView] from a [IList],
 /// then it's totally safe because the original [IList] can't be modified (unless of course,
-/// again, you created it from a [IList.unsafe] constructor.
+/// again, you've created it from a [IList.unsafe] constructor.
 ///
 @immutable
 class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {

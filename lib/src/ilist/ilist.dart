@@ -33,6 +33,8 @@ class IList<T> // ignore: must_be_immutable
 
   static IList<T> empty<T>() => IList._unsafe(LFlat.empty<T>(), config: defaultConfigList);
 
+  /// Create an [IList] from any [Iterable].
+  /// Fast, if the Iterable is another [IList].
   factory IList([
     Iterable<T> iterable,
   ]) =>
@@ -46,10 +48,12 @@ class IList<T> // ignore: must_be_immutable
   /// This constructor is fast, since it makes no defensive copies of the list.
   /// However, you should only use this with a new list you've created yourself,
   /// when you are sure no external copies exist. If the original list is modified,
-  /// it will break the IList and any other derived lists.
+  /// it will break the IList and any other derived lists in unpredictable ways.
   IList.unsafe(List<T> list, {@required this.config})
       : assert(config != null),
-        _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
+        _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list) {
+    if (disallowUnsafeConstructors) throw UnsupportedError("IList.unsafe is disallowed.");
+  }
 
   /// Fast if the iterable is an IList.
   IList._(Iterable<T> iterable, {@required this.config})
@@ -62,6 +66,17 @@ class IList<T> // ignore: must_be_immutable
 
   /// Unsafe.
   IList._unsafe(this._l, {@required this.config}) : assert(config != null);
+
+  /// Special IList constructor from ISet.
+  factory IList.fromISet(
+    ISet<T> set, {
+    int Function(T a, T b) compare,
+    @required ConfigList config,
+  }) {
+    List<T> list = set.toList(growable: false, compare: compare);
+    var l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
+    return IList._unsafe(l, config: config ?? defaultConfigList);
+  }
 
   /// Creates a new list with the given [config].
   ///

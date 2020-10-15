@@ -600,7 +600,7 @@ void main() {
           () => expect(() => iSet.toList(growable: false)..add(7), throwsUnsupportedError));
     });
 
-    test("Iset.toIList method", () => expect(iSet.toIList(), IList([1, 2, 3, 4, 5, 6])));
+    test("ISet.toIList method", () => expect(iSet.toIList(), IList([1, 2, 3, 4, 5, 6])));
 
     test("ISet.toSet method", () {
       expect(iSet.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
