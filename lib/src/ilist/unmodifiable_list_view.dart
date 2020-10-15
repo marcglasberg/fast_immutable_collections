@@ -37,5 +37,5 @@ class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   }
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => IList<T>(iList);
+  IList<T> get lock => iList;
 }
