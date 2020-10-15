@@ -37,5 +37,7 @@ class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   Set<T> toSet() => throw UnimplementedError('Not implemented yet.');
 
   @override
-  int get length => throw UnimplementedError('Not implemented yet.');
+  int get length => _iSet?.length ?? _set.length;
+
+  ISet<T> get lock => _iSet ?? _set.lock;
 }

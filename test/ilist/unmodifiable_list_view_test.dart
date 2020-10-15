@@ -17,7 +17,7 @@ void main() {
 
     test("UnmodifiableListView.lock getter", () {
       expect(unmodifiableListView.lock, isA<IList<int>>());
-      expect(unmodifiableListView.lock, iList);
+      expect(unmodifiableListView.lock, [1, 2, 3]);
     });
 
     test("Emptiness properties", () {
