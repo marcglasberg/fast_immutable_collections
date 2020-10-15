@@ -17,7 +17,11 @@ void main() {
   test("UnmodifiableListView.lock getter", () {
     expect(unmodifiableListView.lock, isA<IList<int>>());
     expect(unmodifiableListView.lock, iList);
-    
+  });
+
+  test("Emptiness properties", () {
+    expect(unmodifiableListView.isEmpty, isFalse);
+    expect(unmodifiableListView.isNotEmpty, isTrue);
   });
 
   group("Mutations are not allowed |", () {
@@ -34,6 +38,6 @@ void main() {
         () => expect(() => unmodifiableListView.addAll([4, 5]), throwsUnsupportedError));
 
     test("UnmodifiableListView.remove method",
-        () => expect(() => unmodifiableListView.remove([3]), isFalse));
+        () => expect(() => unmodifiableListView.remove(3), throwsUnsupportedError));
   });
 }
