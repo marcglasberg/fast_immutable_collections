@@ -24,6 +24,13 @@ void main() {
     expect(unmodifiableListView.isNotEmpty, isTrue);
   });
 
+  test("UnmodifiableListView.from constructor", () {
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView.from([1, 2, 3]);
+
+    expect(unmodifiableListView.lock, [1, 2, 3]);
+    expect(unmodifiableListView.length, 3);
+  });
+
   group("Mutations are not allowed |", () {
     test("UnmodifiableListView.[]= operator",
         () => expect(() => unmodifiableListView[0] = 10, throwsUnsupportedError));
