@@ -1,7 +1,5 @@
 import 'dart:collection';
-
 import 'package:meta/meta.dart';
-
 import '../immutable_collection.dart';
 import 'ilist.dart';
 
@@ -18,7 +16,7 @@ import 'ilist.dart';
 class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   final IList<T> _iList;
 
-  UnmodifiableListView(this._iList);
+  UnmodifiableListView(IList<T> iList) : _iList = (iList != null) ? iList : IList.empty<T>();
 
   @override
   T operator [](int index) => _iList[index];

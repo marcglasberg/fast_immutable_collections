@@ -1,7 +1,5 @@
 import 'dart:collection';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
 import 'ilist.dart';
 
 /// The [ModifiableListView] is a safe, modifiable [List] that is built from an [IList].
@@ -17,17 +15,22 @@ import 'ilist.dart';
 /// back into an [IList].
 ///
 class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
-  final IList<T> _iList;
+  IList<T> _iList;
   List<T> _list;
 
-  ModifiableListView(this._iList);
+  ModifiableListView(IList<T> iList)
+      : _iList = iList,
+        _list = (iList == null) ? [] : null;
 
   @override
   T operator [](int index) => (_list != null) ? _list[index] : _iList[index];
 
   @override
   void operator []=(int index, T value) {
-    _list ??= _iList.unlock;
+    if (_list == null) {
+      _list = _iList.unlock;
+      _iList = null; // To allow for garbage-collect.
+    }
     _list[index] == value;
   }
 
@@ -36,7 +39,10 @@ class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
 
   @override
   set length(int newLength) {
-    _list ??= _iList.unlock;
+    if (_list == null) {
+      _list = _iList.unlock;
+      _iList = null; // To allow for garbage-collect.
+    }
     _list.length == newLength;
   }
 
