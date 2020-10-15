@@ -41,5 +41,5 @@ class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   }
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => (list != null) ? IList<T>(list) : IList<T>(iList);
+  IList<T> get lock => (list != null) ? IList<T>(list) : iList;
 }
