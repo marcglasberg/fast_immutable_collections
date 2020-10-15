@@ -6,29 +6,31 @@ void main() {
   final IList<int> iList = [1, 2, 3].lock;
   final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList);
 
-  test("UnmodifiableListView.[] operator", () {
-    expect(unmodifiableListView[0], 1);
-    expect(unmodifiableListView[1], 2);
-    expect(unmodifiableListView[2], 3);
-  });
+  group("Basic Operations |", () {
+    test("UnmodifiableListView.[] operator", () {
+      expect(unmodifiableListView[0], 1);
+      expect(unmodifiableListView[1], 2);
+      expect(unmodifiableListView[2], 3);
+    });
 
-  test("UnmodifiableListView.length getter", () => expect(unmodifiableListView.length, 3));
+    test("UnmodifiableListView.length getter", () => expect(unmodifiableListView.length, 3));
 
-  test("UnmodifiableListView.lock getter", () {
-    expect(unmodifiableListView.lock, isA<IList<int>>());
-    expect(unmodifiableListView.lock, iList);
-  });
+    test("UnmodifiableListView.lock getter", () {
+      expect(unmodifiableListView.lock, isA<IList<int>>());
+      expect(unmodifiableListView.lock, iList);
+    });
 
-  test("Emptiness properties", () {
-    expect(unmodifiableListView.isEmpty, isFalse);
-    expect(unmodifiableListView.isNotEmpty, isTrue);
-  });
+    test("Emptiness properties", () {
+      expect(unmodifiableListView.isEmpty, isFalse);
+      expect(unmodifiableListView.isNotEmpty, isTrue);
+    });
 
-  test("UnmodifiableListView.from constructor", () {
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView.from([1, 2, 3]);
+    test("UnmodifiableListView.from constructor", () {
+      final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView.from([1, 2, 3]);
 
-    expect(unmodifiableListView.lock, [1, 2, 3]);
-    expect(unmodifiableListView.length, 3);
+      expect(unmodifiableListView.lock, [1, 2, 3]);
+      expect(unmodifiableListView.length, 3);
+    });
   });
 
   group("Mutations are not allowed |", () {
