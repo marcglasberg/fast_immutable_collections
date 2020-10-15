@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-import 'ilist.dart';
 import 'package:meta/meta.dart';
+
+import '../immutable_collection.dart';
+import 'ilist.dart';
 
 /// The [UnmodifiableListView] is a safe, unmodifiable [List] that is built from an [IList].
 /// The construction of the list is fast, since it makes no copies of the
@@ -24,17 +24,13 @@ class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   T operator [](int index) => iList[index];
 
   @override
-  void operator []=(int index, T value) {
-    throw UnsupportedError("List in unmodifiable.");
-  }
+  void operator []=(int index, T value) => throw UnsupportedError("List in unmodifiable.");
 
   @override
   int get length => iList.length;
 
   @override
-  set length(int newLength) {
-    throw UnsupportedError("List in unmodifiable.");
-  }
+  set length(int newLength) => throw UnsupportedError("List in unmodifiable.");
 
   /// Locks the list, returning an *immutable* list ([IList]).
   IList<T> get lock => IList<T>(iList);
