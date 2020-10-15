@@ -379,6 +379,17 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  group("Other Constructors |", () {
+    test("IList.fromISet constructor", () {
+      final ISet<int> iSet = {1, 2, 3}.lock;
+      final IList<int> iList = IList.fromISet(iSet, config: null);
+
+      expect(iList, [1, 2, 3]);
+    });
+  });
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("IList.flush method", () {
     final IList<int> ilist = [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);

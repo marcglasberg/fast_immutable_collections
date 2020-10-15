@@ -69,11 +69,11 @@ class IList<T> // ignore: must_be_immutable
 
   /// Special IList constructor from ISet.
   factory IList.fromISet(
-    ISet<T> set, {
+    ISet<T> iSet, {
     int Function(T a, T b) compare,
     @required ConfigList config,
   }) {
-    List<T> list = set.toList(growable: false, compare: compare);
+    List<T> list = iSet.toList(growable: false, compare: compare);
     var l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
     return IList._unsafe(l, config: config ?? defaultConfigList);
   }
