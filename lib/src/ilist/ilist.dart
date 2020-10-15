@@ -1,14 +1,15 @@
 import 'dart:collection';
 
-import 'package:fast_immutable_collections/src/ilist/unmodifiable_list_view.dart';
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import '../../fast_immutable_collections.dart';
+
 import '../immutable_collection.dart';
+import '../iset/iset.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
 import 'modifiable_list_view.dart';
-import 'package:collection/collection.dart';
+import 'unmodifiable_list_view.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -166,17 +167,17 @@ class IList<T> // ignore: must_be_immutable
           config == other.config &&
           (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
 
-  /// Will return true only if the lists internals are the same instances
+  /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
   /// since it doesn't compare each item.
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
-  /// internal state is better, because it will return true more often.
+  /// internal state is better, because it will return `true` more often.
   @override
   bool same(IList<T> other) => identical(_l, other._l) && (config == other.config);
 
   @override
-  int get hashCode => isDeepEquals //
+  int get hashCode => isDeepEquals
       ? (flush._l as LFlat<T>).deepListHashcode() ^ config.hashCode
       : identityHashCode(_l) ^ config.hashCode;
 

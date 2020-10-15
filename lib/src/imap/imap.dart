@@ -1,10 +1,14 @@
 import 'dart:collection';
-import 'package:fast_immutable_collections/src/imap/m_replace.dart';
+
 import 'package:meta/meta.dart';
-import '../../fast_immutable_collections.dart';
+
+import '../ilist/ilist.dart';
+import '../immutable_collection.dart';
+import '../iset/iset.dart';
 import 'm_add.dart';
 import 'm_add_all.dart';
 import 'm_flat.dart';
+import 'm_replace.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -155,7 +159,7 @@ class IMap<K, V> // ignore: must_be_immutable
   bool get isNotEmpty => !isEmpty;
 
   /// If [isDeepEquals] configuration is `true`:
-  /// Will return `true` only if the map entries are equal (and in the same order),
+  /// Will return `true` only if the map entries are equal (not necessarily in the same order),
   /// and the map configurations are the same instance. This may be slow for very
   /// large maps, since it compares each entry, one by one.
   ///

@@ -163,13 +163,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // TODO: Equals
   group("Equals and Other Comparisons |", () {
     group("Equals Operator |", () {
       test("ISet with identity-equals compares the set instance, not the items.", () {
         final ISet<int> mySet = ISet({1, 2}).withIdentityEquals;
         expect(mySet == mySet, isTrue);
         expect(mySet == ISet({1, 2}).withIdentityEquals, isFalse);
+        expect(mySet == ISet({2, 1}).withIdentityEquals, isFalse);
         expect(mySet == {1, 2}.lock, isFalse);
         expect(mySet == ISet({1, 2, 3}).withIdentityEquals, isFalse);
       });
@@ -178,6 +178,7 @@ void main() {
         final ISet<int> mySet = ISet({1, 2});
         expect(mySet == mySet, isTrue);
         expect(mySet == ISet({1, 2}), isTrue);
+        expect(mySet == ISet({2, 1}), isTrue);
         expect(mySet == {1, 2}.lock.withDeepEquals, isTrue);
         expect(mySet == ISet({1, 2, 3}), isFalse);
       });
@@ -193,39 +194,90 @@ void main() {
     group("Other Comparisons |", () {
       test("ISet.isIdentityEquals and ISet.isDeepEquals properties", () {
         final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2}).withIdentityEquals;
+
         expect(iSet1.isIdentityEquals, isFalse);
         expect(iSet1.isDeepEquals, isTrue);
         expect(iSet2.isIdentityEquals, isTrue);
         expect(iSet2.isDeepEquals, isFalse);
       });
 
-      // TODO: Marcelo, por favor, revise.
-      test("ISet.same method", () {
+      group("Same, Equals and the == Operator |", () {
         final ISet<int> iSet1 = ISet({1, 2}),
             iSet2 = ISet({1, 2}),
             iSet3 = ISet({1}),
-            iSet4 = ISet({1, 2}).withIdentityEquals;
-        expect(iSet1.same(iSet1), isTrue);
-        expect(iSet1.same(iSet2), isFalse);
-        expect(iSet1.same(iSet3), isFalse);
-        expect(iSet1.same(iSet4), isFalse);
-      });
+            iSet4 = ISet({2, 1}),
+            iSet5 = ISet({1, 2}).withIdentityEquals;
 
-      test("ISet.equals method", () {
-        final ISet<int> iSet1 = ISet({1, 2}),
-            iSet2 = ISet({1, 2}),
-            iSet3 = ISet({1}),
-            iSet4 = ISet({1, 2}).withIdentityEquals;
-        expect(iSet1.equalItemsAndConfig(iSet1), isTrue);
-        expect(iSet1.equalItemsAndConfig(iSet2), isTrue);
-        expect(iSet1.equalItemsAndConfig(iSet3), isFalse);
-        expect(iSet1.equalItemsAndConfig(iSet4), isFalse);
+        test("ISet.same method", () {
+          expect(iSet1.same(iSet1), isTrue);
+          expect(iSet1.same(iSet2), isFalse);
+          expect(iSet1.same(iSet3), isFalse);
+          expect(iSet1.same(iSet4), isFalse);
+          expect(iSet1.same(iSet5), isFalse);
+          expect(iSet1.same(iSet1.add(2)), isTrue);
+        });
+
+        test("ISet.equalItemsAndConfig method", () {
+          expect(iSet1.equalItemsAndConfig(iSet1), isTrue);
+          expect(iSet1.equalItemsAndConfig(iSet2), isTrue);
+          expect(iSet1.equalItemsAndConfig(iSet3), isFalse);
+          expect(iSet1.equalItemsAndConfig(iSet4), isTrue);
+          expect(iSet1.equalItemsAndConfig(iSet5), isFalse);
+          expect(iSet1.equalItemsAndConfig(iSet1.remove(3)), isTrue);
+        });
+
+        test("ISet.== operator", () {
+          expect(iSet1 == iSet1, isTrue);
+          expect(iSet1 == iSet2, isTrue);
+          expect(iSet1 == iSet3, isFalse);
+          expect(iSet1 == iSet4, isTrue);
+          expect(iSet1 == iSet5, isFalse);
+        });
+
+        group("ISet.equalItems method |", () {
+          test("Not yet done", () => fail('Not implemented yet.'));
+        });
       });
     });
 
-    test("ISet.hashCode method", () {
-      final ISet<int> iSet = ISet({1, 2});
-      expect(iSet.hashCode, 884763);
+    group("ISet.hashCode method |", () {
+      final ISet<int> iSet1 = ISet({1, 2}),
+          iSet2 = ISet({1, 2}),
+          iSet3 = ISet({1, 2, 3}),
+          iSet4 = ISet({2, 1});
+      final ISet<int> iSet1WithIdentity = iSet1.withIdentityEquals,
+          iSet2WithIdentity = iSet2.withIdentityEquals,
+          iSet3WithIdentity = iSet3.withIdentityEquals,
+          iSet4WithIdentity = iSet4.withIdentityEquals;
+
+      test("deepEquals vs deepEquals", () {
+        expect(iSet1 == iSet2, isTrue);
+        expect(iSet1 == iSet3, isFalse);
+        expect(iSet1 == iSet4, isTrue);
+        expect(iSet1.hashCode, iSet2.hashCode);
+        expect(iSet1.hashCode, isNot(iSet3.hashCode));
+        expect(iSet1.hashCode, iSet4.hashCode);
+      });
+
+      test("identityEquals vs identityEquals", () {
+        expect(iSet1WithIdentity == iSet2WithIdentity, isFalse);
+        expect(iSet1WithIdentity == iSet3WithIdentity, isFalse);
+        expect(iSet1WithIdentity == iSet4WithIdentity, isFalse);
+        expect(iSet1WithIdentity.hashCode, isNot(iSet2WithIdentity.hashCode));
+        expect(iSet1WithIdentity.hashCode, isNot(iSet3WithIdentity.hashCode));
+        expect(iSet1WithIdentity.hashCode, isNot(iSet4WithIdentity.hashCode));
+      });
+
+      test("deepEquals vs identityEquals", () {
+        expect(iSet1 == iSet1WithIdentity, isFalse);
+        expect(iSet2 == iSet2WithIdentity, isFalse);
+        expect(iSet3 == iSet3WithIdentity, isFalse);
+        expect(iSet4 == iSet4WithIdentity, isFalse);
+        expect(iSet1.hashCode, isNot(iSet1WithIdentity.hashCode));
+        expect(iSet2.hashCode, isNot(iSet2WithIdentity.hashCode));
+        expect(iSet3.hashCode, isNot(iSet3WithIdentity.hashCode));
+        expect(iSet4.hashCode, isNot(iSet4WithIdentity.hashCode));
+      });
     });
 
     test("ISet.config method", () {

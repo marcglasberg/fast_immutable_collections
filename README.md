@@ -93,3 +93,12 @@ If you're going to use the `dartfmt` CLI, you can add the `-l` option when forma
 ```sh
 dartfmt -l 100 -w . 
 ```
+
+### 4.2. Micro Changelog
+
+Since this package is quite big and even has inner packages, I think it would be easier on everyone if changes were summarized in some way. The [`CHANGELOG.md`][changelog] is usually used for this type annotations, however it contains a much more summarized view of the changes than what day to day routine looks like.
+
+So that's why the [micro changelog][microchangelog] file was created. There you will find summarized comments on what changes were added on a daily basis, which will hopefully ease development.
+
+
+[microchangelog]: docs/microchangelog.md
