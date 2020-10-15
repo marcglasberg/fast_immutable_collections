@@ -19,7 +19,7 @@ class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
         _set = set;
 
   @override
-  bool add(T value) => throw UnimplementedError('Not implemented yet.');
+  bool add(T value) => throw UnsupportedError('Set is unmodifiable.');
 
   @override
   bool contains(Object element) => throw UnimplementedError('Not implemented yet.');
@@ -28,13 +28,13 @@ class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   T lookup(Object element) => throw UnimplementedError('Not implemented yet.');
 
   @override
-  bool remove(Object value) => throw UnimplementedError('Not implemented yet.');
+  bool remove(Object value) => throw UnsupportedError('Set is unmodifiable.');
 
   @override
   Iterator<T> get iterator => throw UnimplementedError('Not implemented yet.');
 
   @override
-  Set<T> toSet() => throw UnimplementedError('Not implemented yet.');
+  Set<T> toSet() => _set ?? _iSet.toSet();
 
   @override
   int get length => _iSet?.length ?? _set.length;

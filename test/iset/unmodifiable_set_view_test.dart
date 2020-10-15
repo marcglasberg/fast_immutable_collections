@@ -18,12 +18,17 @@ void main() {
       expect(unmodifiableSetView.lock, isA<ISet<int>>());
       expect(unmodifiableSetViewFromSet.lock, isA<ISet<int>>());
       expect(unmodifiableSetView.lock, {1, 2, 3});
-      expect(unmodifiableSetView.lock, {1, 2, 3});
+      expect(unmodifiableSetViewFromSet.lock, {1, 2, 3});
     });
 
     test("Emptiness properties", () {
       expect(unmodifiableSetViewFromSet.isEmpty, isFalse);
       expect(unmodifiableSetViewFromSet.isNotEmpty, isTrue);
+    });
+
+    test("UnmodifiableSetView.toSet method", () {
+      expect(unmodifiableSetView.toSet(), {1, 2, 3});
+      expect(unmodifiableSetViewFromSet.toSet(), {1, 2, 3});
     });
   });
 
