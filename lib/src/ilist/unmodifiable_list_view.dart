@@ -16,22 +16,22 @@ import 'ilist.dart';
 ///
 @immutable
 class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
-  final IList<T> iList;
+  final IList<T> _iList;
 
-  UnmodifiableListView(this.iList);
+  UnmodifiableListView(this._iList);
 
   @override
-  T operator [](int index) => iList[index];
+  T operator [](int index) => _iList[index];
 
   @override
   void operator []=(int index, T value) => throw UnsupportedError("List in unmodifiable.");
 
   @override
-  int get length => iList.length;
+  int get length => _iList.length;
 
   @override
   set length(int newLength) => throw UnsupportedError("List in unmodifiable.");
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => iList;
+  IList<T> get lock => _iList;
 }

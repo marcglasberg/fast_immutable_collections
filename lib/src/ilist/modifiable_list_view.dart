@@ -17,29 +17,29 @@ import 'ilist.dart';
 /// back into an [IList].
 ///
 class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
-  final IList<T> iList;
-  List<T> list;
+  final IList<T> _iList;
+  List<T> _list;
 
-  ModifiableListView(this.iList);
+  ModifiableListView(this._iList);
 
   @override
-  T operator [](int index) => (list != null) ? list[index] : iList[index];
+  T operator [](int index) => (_list != null) ? _list[index] : _iList[index];
 
   @override
   void operator []=(int index, T value) {
-    list ??= iList.unlock;
-    list[index] == value;
+    _list ??= _iList.unlock;
+    _list[index] == value;
   }
 
   @override
-  int get length => (list != null) ? list.length : iList.length;
+  int get length => (_list != null) ? _list.length : _iList.length;
 
   @override
   set length(int newLength) {
-    list ??= iList.unlock;
-    list.length == newLength;
+    _list ??= _iList.unlock;
+    _list.length == newLength;
   }
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => (list != null) ? IList<T>(list) : iList;
+  IList<T> get lock => (_list != null) ? IList<T>(_list) : _iList;
 }
