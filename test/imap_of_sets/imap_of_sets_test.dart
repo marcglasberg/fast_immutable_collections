@@ -23,9 +23,8 @@ void main() {
     });
   });
 
-  // TODO: Marcelo, por favor, revise.
   group("Equals and Other Comparisons |", () {
-    final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
           "a": {1, 2},
           "b": {1, 2, 3},
         }),
@@ -36,21 +35,41 @@ void main() {
         iMapOfSets3 = IMapOfSets({
           "a": {1, 2},
           "b": {1, 2},
-        });
+        }),
+        iMapOfSets4 = IMapOfSets({
+          "b": {1, 2, 3},
+        }).add("a", 1).add("a", 2);
+    final IMapOfSets<String, int> iMapOfSets1WithCompareKey = iMapOfSets1.config(
+      compareKey: (String key1, String key2) => key1.compareTo(key2),
+      compareValue: (int value1, int value2) => value1.compareTo(value2),
+    );
 
-    test("hashCode", () {
-      expect(iMapOfSets.hashCode, 1428598672);
-      fail('This is not the way to test hashCode.');
-    });
-
-    test('IMapOfSets == Operator', () {
-      expect(iMapOfSets == iMapOfSets2, isTrue);
-      expect(iMapOfSets == iMapOfSets3, isFalse);
+    test('IMapOfSets.== Operator', () {
+      expect(iMapOfSets1 == iMapOfSets2, isTrue);
+      expect(iMapOfSets1 == iMapOfSets3, isFalse);
+      expect(iMapOfSets1 == iMapOfSets4, isTrue);
+      expect(iMapOfSets1 == iMapOfSets2.remove('a', 3), isTrue);
+      expect(iMapOfSets1WithCompareKey == iMapOfSets1, isFalse);
+      // TODO: Apparently, having it the compare keys as null is messing up Dart's type inference?
+      expect(iMapOfSets1 == iMapOfSets1WithCompareKey, isFalse);
     });
 
     test("IMapOfSets.same method", () {
-      expect(iMapOfSets.same(iMapOfSets2), isFalse);
-      expect(iMapOfSets.same(iMapOfSets3), isFalse);
+      expect(iMapOfSets1.same(iMapOfSets2), isFalse);
+      expect(iMapOfSets1.same(iMapOfSets3), isFalse);
+      expect(iMapOfSets1.same(iMapOfSets4), isFalse);
+      expect(iMapOfSets1.same(iMapOfSets1.remove('a', 3)), isTrue);
+      expect(iMapOfSets1WithCompareKey.same(iMapOfSets1), isFalse);
+      expect(iMapOfSets1.same(iMapOfSets1WithCompareKey), isFalse);
+    });
+
+    test("IMapOfSets.hashCode method", () {
+      expect(iMapOfSets1 == iMapOfSets2, isTrue);
+      expect(iMapOfSets1 == iMapOfSets3, isFalse);
+      expect(iMapOfSets1 == iMapOfSets4, isTrue);
+      expect(iMapOfSets1.hashCode, iMapOfSets2.hashCode);
+      expect(iMapOfSets1.hashCode, isNot(iMapOfSets3.hashCode));
+      expect(iMapOfSets1.hashCode, iMapOfSets4.hashCode);
     });
   });
 
