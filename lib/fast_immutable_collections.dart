@@ -14,4 +14,5 @@ export 'src/imap/entry.dart';
 export 'src/imap_of_sets/imap_of_sets.dart';
 
 export 'src/iset/iset.dart';
+export 'src/iset/modifiable_set_view.dart';
 export 'src/iset/unmodifiable_set_view.dart';
