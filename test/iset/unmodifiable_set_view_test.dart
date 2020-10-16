@@ -68,11 +68,11 @@ void main() {
     test(
         "UnmodifiableSetView.add method",
         () => views.forEach((UnmodifiableSetView<int> view) =>
-            expect(() => unmodifiableSetView.add(4), throwsUnsupportedError)));
+            expect(() => view.add(4), throwsUnsupportedError)));
 
     test(
         "UnmodifiableSetView.remove method",
         () => views.forEach((UnmodifiableSetView<int> view) =>
-            expect(() => unmodifiableSetView.remove(2), throwsUnsupportedError)));
+            expect(() => view.remove(2), throwsUnsupportedError)));
   });
 }
