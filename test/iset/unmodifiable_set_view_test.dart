@@ -3,89 +3,81 @@ import 'package:test/test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
-  const Set<int> sety = {1, 2, 3};
-  final ISet<int> iSet = sety.lock;
+  const Set<int> baseSet = {1, 2, 3};
+  final ISet<int> iSet = baseSet.lock;
   final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(iSet),
-      unmodifiableSetViewFromSet = UnmodifiableSetView.from(sety);
+      unmodifiableSetViewFromSet = UnmodifiableSetView.from(baseSet);
+  final List<UnmodifiableSetView<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
 
   group("Basic Operations |", () {
-    test("UnmodifiableSetView.length getter", () {
-      expect(unmodifiableSetView.length, 3);
-      expect(unmodifiableSetViewFromSet.length, 3);
-    });
+    test("UnmodifiableSetView.length getter",
+        () => views.forEach((UnmodifiableSetView<int> view) => expect(view.length, 3)));
 
-    test("UnmodifiableSetView.lock operator", () {
-      expect(unmodifiableSetView.lock, isA<ISet<int>>());
-      expect(unmodifiableSetViewFromSet.lock, isA<ISet<int>>());
-      expect(unmodifiableSetView.lock, {1, 2, 3});
-      expect(unmodifiableSetViewFromSet.lock, {1, 2, 3});
-    });
+    test(
+        "UnmodifiableSetView.lock operator",
+        () => views.forEach((UnmodifiableSetView<int> view) =>
+            expect(view.lock, allOf(isA<ISet<int>>(), baseSet))));
 
-    test("Emptiness properties", () {
-      expect(unmodifiableSetViewFromSet.isEmpty, isFalse);
-      expect(unmodifiableSetViewFromSet.isNotEmpty, isTrue);
-    });
+    test(
+        "Emptiness properties",
+        () => views.forEach((UnmodifiableSetView<int> view) {
+              expect(view.isEmpty, isFalse);
+              expect(view.isNotEmpty, isTrue);
+            }));
 
-    test("UnmodifiableSetView.toSet method", () {
-      expect(unmodifiableSetView.toSet(), {1, 2, 3});
-      expect(unmodifiableSetViewFromSet.toSet(), {1, 2, 3});
-    });
+    test("UnmodifiableSetView.toSet method",
+        () => views.forEach((UnmodifiableSetView<int> view) => expect(view.toSet(), baseSet)));
 
     test("UnmodifiableSetView.contains method", () {
-      expect(unmodifiableSetView.contains(1), isTrue);
-      expect(unmodifiableSetView.contains(2), isTrue);
-      expect(unmodifiableSetView.contains(3), isTrue);
-      expect(unmodifiableSetView.contains(4), isFalse);
-      expect(unmodifiableSetViewFromSet.contains(1), isTrue);
-      expect(unmodifiableSetViewFromSet.contains(2), isTrue);
-      expect(unmodifiableSetViewFromSet.contains(3), isTrue);
-      expect(unmodifiableSetViewFromSet.contains(4), isFalse);
+      views.forEach((UnmodifiableSetView<int> view) {
+        expect(view.contains(1), isTrue);
+        expect(view.contains(2), isTrue);
+        expect(view.contains(3), isTrue);
+        expect(view.contains(4), isFalse);
+      });
     });
 
     test("UnmodifiableSetView.lookup method", () {
-      expect(unmodifiableSetView.lookup(1), 1);
-      expect(unmodifiableSetView.lookup(2), 2);
-      expect(unmodifiableSetView.lookup(3), 3);
-      expect(unmodifiableSetView.lookup(4), null);
-      expect(unmodifiableSetViewFromSet.lookup(1), 1);
-      expect(unmodifiableSetViewFromSet.lookup(2), 2);
-      expect(unmodifiableSetViewFromSet.lookup(3), 3);
-      expect(unmodifiableSetViewFromSet.lookup(4), null);
+      views.forEach((UnmodifiableSetView<int> view) {
+        expect(view.lookup(1), 1);
+        expect(view.lookup(2), 2);
+        expect(view.lookup(3), 3);
+        expect(view.lookup(4), null);
+      });
     });
 
     test("UnmodifiableSetView.iterator getter", () {
       final Iterator<int> iterator = unmodifiableSetView.iterator,
           iteratorFromSet = unmodifiableSetViewFromSet.iterator;
+      final List<Iterator<int>> iterators = [iterator, iteratorFromSet];
 
-      expect(iterator.current, isNull);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current, 1);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current, 2);
-      expect(iterator.moveNext(), isTrue);
-      expect(iterator.current, 3);
-      expect(iterator.moveNext(), isFalse);
-      expect(iterator.current, isNull);
-      expect(iteratorFromSet.current, isNull);
-      expect(iteratorFromSet.moveNext(), isTrue);
-      expect(iteratorFromSet.current, 1);
-      expect(iteratorFromSet.moveNext(), isTrue);
-      expect(iteratorFromSet.current, 2);
-      expect(iteratorFromSet.moveNext(), isTrue);
-      expect(iteratorFromSet.current, 3);
-      expect(iteratorFromSet.moveNext(), isFalse);
-      expect(iteratorFromSet.current, isNull);
+      iterators.forEach((Iterator<int> iterator) {
+        int count = 0;
+        final Set<int> result = {};
+        while (iterator.moveNext()) {
+          count++;
+          result.add(iterator.current);
+        }
+        expect(count, baseSet.length);
+        expect(result, baseSet);
+      });
     });
   });
 
   group("Mutations are not allowed |", () {
-    test("UnmodifiableSetView.add method",
-        () => expect(() => unmodifiableSetView.add(4), throwsUnsupportedError));
+    test(
+        "UnmodifiableSetView.add method",
+        () => views.forEach((UnmodifiableSetView<int> view) =>
+            expect(() => unmodifiableSetView.add(4), throwsUnsupportedError)));
 
-    test("UnmodifiableSetView.addAll method",
-        () => expect(() => unmodifiableSetView.addAll({4, 5}), throwsUnsupportedError));
+    test(
+        "UnmodifiableSetView.addAll method",
+        () => views.forEach((UnmodifiableSetView<int> view) =>
+            expect(() => unmodifiableSetView.addAll({4, 5}), throwsUnsupportedError)));
 
-    test("UnmodifiableSetView.remove method",
-        () => expect(() => unmodifiableSetView.remove(2), throwsUnsupportedError));
+    test(
+        "UnmodifiableSetView.remove method",
+        () => views.forEach((UnmodifiableSetView<int> view) =>
+            expect(() => unmodifiableSetView.remove(2), throwsUnsupportedError)));
   });
 }

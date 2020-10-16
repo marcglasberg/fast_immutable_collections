@@ -11,10 +11,8 @@ void main() {
 
     test("ModifiableSetView.length getter", () => expect(modifiableSetView.length, baseSet.length));
 
-    test("ModifiableSetView.lock getter", () {
-      expect(modifiableSetView.lock, isA<ISet<int>>());
-      expect(modifiableSetView.lock, baseSet);
-    });
+    test("ModifiableSetView.lock getter",
+        () => expect(modifiableSetView.lock, allOf(isA<ISet<int>>(), baseSet)));
 
     test("Emptiness Properties", () {
       expect(modifiableSetView.isEmpty, isFalse);
