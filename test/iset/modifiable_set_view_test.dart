@@ -6,7 +6,7 @@ void main() {
   const Set<int> baseSet = {1, 2, 3};
   final ISet<int> iSet = baseSet.lock;
 
-  group("Non mutable operations |", () {
+  group("Non-mutable operations |", () {
     final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iSet);
 
     test("ModifiableSetView.length getter", () => expect(modifiableSetView.length, baseSet.length));

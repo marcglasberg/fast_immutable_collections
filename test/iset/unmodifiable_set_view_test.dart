@@ -6,10 +6,10 @@ void main() {
   const Set<int> baseSet = {1, 2, 3};
   final ISet<int> iSet = baseSet.lock;
   final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(iSet),
-      unmodifiableSetViewFromSet = UnmodifiableSetView.from(baseSet);
+      unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
   final List<UnmodifiableSetView<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
 
-  group("Non mutable operations |", () {
+  group("Non-mutable operations |", () {
     test("UnmodifiableSetView.length getter",
         () => views.forEach((UnmodifiableSetView<int> view) => expect(view.length, 3)));
 

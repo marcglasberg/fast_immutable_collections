@@ -10,6 +10,7 @@ export 'src/ilist/unmodifiable_list_view.dart';
 
 export 'src/imap/imap.dart';
 export 'src/imap/entry.dart';
+export 'src/imap/unmodifiable_map_view.dart';
 
 export 'src/imap_of_sets/imap_of_sets.dart';
 

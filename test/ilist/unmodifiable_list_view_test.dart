@@ -6,13 +6,13 @@ void main() {
   const List<int> baseList = [1, 2, 3];
   final IList<int> iList = baseList.lock;
   final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
-      unmodifiableListViewFromList = UnmodifiableListView.from(baseList);
+      unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
   final List<UnmodifiableListView<int>> views = [
     unmodifiableListView,
     unmodifiableListViewFromList,
   ];
 
-  group("Non mutable operations |", () {
+  group("Non-mutable operations |", () {
     test(
         "UnmodifiableListView.[] operator",
         () => views.forEach((UnmodifiableListView<int> view) {
