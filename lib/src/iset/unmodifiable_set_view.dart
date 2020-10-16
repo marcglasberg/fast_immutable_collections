@@ -22,16 +22,19 @@ class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   bool add(T value) => throw UnsupportedError('Set is unmodifiable.');
 
   @override
-  bool contains(Object element) => throw UnimplementedError('Not implemented yet.');
+  bool contains(Object element) => _iSet?.contains(element) ?? _set.contains(element);
 
   @override
-  T lookup(Object element) => throw UnimplementedError('Not implemented yet.');
+  T lookup(Object element) =>
+      _iSet != null && _iSet.contains(element) || _set != null && _set.contains(element)
+          ? element as T
+          : null;
 
   @override
   bool remove(Object value) => throw UnsupportedError('Set is unmodifiable.');
 
   @override
-  Iterator<T> get iterator => throw UnimplementedError('Not implemented yet.');
+  Iterator<T> get iterator => _set?.iterator ?? _iSet.iterator;
 
   @override
   Set<T> toSet() => _set ?? _iSet.toSet();
