@@ -12,7 +12,7 @@ void main() {
     unmodifiableListViewFromList,
   ];
 
-  group("Basic Operations |", () {
+  group("Non mutable operations |", () {
     test(
         "UnmodifiableListView.[] operator",
         () => views.forEach((UnmodifiableListView<int> view) {

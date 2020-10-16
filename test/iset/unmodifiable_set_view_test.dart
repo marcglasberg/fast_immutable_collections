@@ -9,7 +9,7 @@ void main() {
       unmodifiableSetViewFromSet = UnmodifiableSetView.from(baseSet);
   final List<UnmodifiableSetView<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
 
-  group("Basic Operations |", () {
+  group("Non mutable operations |", () {
     test("UnmodifiableSetView.length getter",
         () => views.forEach((UnmodifiableSetView<int> view) => expect(view.length, 3)));
 

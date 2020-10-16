@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
-  group("Basic Operations |", () {
+  group("Non mutable operations |", () {
     final IList<int> iList = [1, 2, 3].lock;
     final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
 
