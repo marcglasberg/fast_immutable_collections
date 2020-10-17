@@ -14,7 +14,7 @@ void main() {
         () => views.forEach((UnmodifiableSetView<int> view) => expect(view.length, 3)));
 
     test(
-        "UnmodifiableSetView.lock operator",
+        "UnmodifiableSetView.lock getter",
         () => views.forEach((UnmodifiableSetView<int> view) =>
             expect(view.lock, allOf(isA<ISet<int>>(), baseSet))));
 
