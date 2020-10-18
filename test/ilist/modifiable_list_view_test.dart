@@ -40,6 +40,9 @@ void main() {
     });
 
     test("ModifiableListView.length setter", () {
+      modifiableListView.length = 2;
+      expect(modifiableListView.length, 2);
+
       modifiableListView.length = 4;
       expect(modifiableListView.length, 4);
     });
@@ -64,8 +67,8 @@ void main() {
     test("ModifiableListView.remove method", () {
       modifiableListView.remove(2);
       expect(modifiableListView.length, 2);
-      expect(modifiableListView[0], 1);      
-      expect(modifiableListView[1], 3);      
+      expect(modifiableListView[0], 1);
+      expect(modifiableListView[1], 3);
     });
   });
 }

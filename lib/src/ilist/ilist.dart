@@ -21,7 +21,7 @@ extension IListExtension<T> on List<T> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// An *immutable* list.
+/// An **immutable** list.
 @immutable
 class IList<T> // ignore: must_be_immutable
     extends ImmutableCollection<IList<T>> implements Iterable<T> {
@@ -31,18 +31,25 @@ class IList<T> // ignore: must_be_immutable
   /// The list configuration.
   final ConfigList config;
 
-  static IList<T> empty<T>() => IList._unsafe(LFlat.empty<T>(), config: defaultConfigList);
+  static IList<T> empty<T>([ConfigList config]) =>
+      IList._unsafe(LFlat.empty<T>(), config: config ?? defaultConfigList);
 
   /// Create an [IList] from any [Iterable].
   /// Fast, if the Iterable is another [IList].
-  factory IList([
+  factory IList([Iterable<T> iterable]) => //
+      IList.withConfig(iterable, defaultConfigList);
+
+  /// Create an [IList] from any [Iterable] and a [ConfigList].
+  /// Fast, if the Iterable is another [IList].
+  factory IList.withConfig(
     Iterable<T> iterable,
-  ]) =>
+    ConfigList config,
+  ) =>
       iterable is IList<T>
           ? iterable
           : iterable == null || iterable.isEmpty
-              ? IList.empty<T>()
-              : IList<T>._unsafe(LFlat<T>(iterable), config: defaultConfigList);
+              ? IList.empty<T>(config)
+              : IList<T>._unsafe(LFlat<T>(iterable), config: config);
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the list.
@@ -53,6 +60,17 @@ class IList<T> // ignore: must_be_immutable
       : assert(config != null),
         _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list) {
     if (disallowUnsafeConstructors) throw UnsupportedError("IList.unsafe is disallowed.");
+  }
+
+  /// Special IList constructor from ISet.
+  factory IList.fromISet(
+    ISet<T> iSet, {
+    int Function(T a, T b) compare,
+    @required ConfigList config,
+  }) {
+    List<T> list = iSet.toList(growable: false, compare: compare);
+    var l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
+    return IList._unsafe(l, config: config ?? defaultConfigList);
   }
 
   /// Fast if the iterable is an IList.
@@ -67,17 +85,6 @@ class IList<T> // ignore: must_be_immutable
   /// Unsafe.
   IList._unsafe(this._l, {@required this.config}) : assert(config != null);
 
-  /// Special IList constructor from ISet.
-  factory IList.fromISet(
-    ISet<T> iSet, {
-    int Function(T a, T b) compare,
-    @required ConfigList config,
-  }) {
-    List<T> list = iSet.toList(growable: false, compare: compare);
-    var l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
-    return IList._unsafe(l, config: config ?? defaultConfigList);
-  }
-
   /// Creates a new list with the given [config].
   ///
   /// To copy the config from another [IList]:
@@ -90,7 +97,7 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> withConfig(ConfigList config) {
     assert(config != null);
-    return IList._unsafe(_l, config: config);
+    return (config == this.config) ? this : IList._unsafe(_l, config: config);
   }
 
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
@@ -140,7 +147,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// If [isDeepEquals] configuration is true:
   /// Will return true only if the list items are equal (and in the same order),
-  /// and the list configurations are the same instance. This may be slow for very
+  /// and the list configurations are equal. This may be slow for very
   /// large lists, since it compares each item, one by one.
   ///
   /// If [isDeepEquals] configuration is false:
@@ -161,18 +168,27 @@ class IList<T> // ignore: must_be_immutable
   /// Will return true only if the IList items are equal to the iterable items,
   /// and in the same order. This may be slow for very large lists, since it compares each item,
   /// one by one. You can compare the list with ordered sets, but unordered sets will throw a
-  /// `StateError`.
+  /// `StateError`. To compare the IList with unordered sets, try method [unorderedEqualItems].
   @override
-  bool equalItems(Iterable other) {
+  bool equalItems(covariant Iterable<T> other) {
     if (identical(this, other)) return true;
-    if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
     if (other is IList<T>) return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
-    if (other is List) return const ListEquality().equals(UnmodifiableListView(this), other);
+    if (other is List<T>) return const ListEquality().equals(UnmodifiableListView(this), other);
+    if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
     return const IterableEquality().equals(_l, other);
   }
 
+  /// Will return true only if the IList and the iterable items have the same number of elements,
+  /// and the elements of the IList can be paired with the elements of the iterable, so that each
+  /// pair is equal. This may be slow for very large lists, since it compares each item,
+  /// one by one.
+  bool unorderedEqualItems(covariant Iterable<T> other) {
+    if (identical(this, other) || (other is IList<T> && same(other))) return true;
+    return const UnorderedIterableEquality().equals(_l, other);
+  }
+
   /// Will return true only if the list items are equal and in the same order,
-  /// and the list configurations are the same instance. This may be slow for very
+  /// and the list configurations are equal. This may be slow for very
   /// large lists, since it compares each item, one by one.
   @override
   bool equalItemsAndConfig(IList<T> other) =>

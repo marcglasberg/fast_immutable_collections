@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 
+import 'hash.dart';
+
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// In your app initialization you may want to lock the configuration.
@@ -34,6 +36,8 @@ bool _disallowUnsafeConstructors = false;
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
+  //
+
   /// Will return true only if the collection items are equal to the iterable items.
   /// If the collection is ordered, it will also check if the items are in the same order.
   /// This may be slow for very large collection, since it compares each item, one by one.
@@ -41,7 +45,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   bool equalItems(Iterable other);
 
   /// Will return true only if the collections items are equal, and the collection
-  /// configurations are the same instance. If the collection is ordered, it will also check
+  /// configurations are equal. If the collection is ordered, it will also check
   /// if the items are in the same order. This may be slow for very large collections, since
   /// it compares each item, one by one.
   bool equalItemsAndConfig(C other);
@@ -159,7 +163,7 @@ class ConfigSet {
           autoSort == other.autoSort;
 
   @override
-  int get hashCode => isDeepEquals.hashCode ^ autoSort.hashCode;
+  int get hashCode => hash2(isDeepEquals, autoSort);
 
   @override
   String toString() => 'ConfigSet{'
@@ -228,7 +232,7 @@ class ConfigMap {
           autoSortValues == other.autoSortValues;
 
   @override
-  int get hashCode => isDeepEquals.hashCode ^ autoSortKeys.hashCode ^ autoSortValues.hashCode;
+  int get hashCode => hash3(isDeepEquals, autoSortKeys, autoSortValues);
 
   @override
   String toString() => 'ConfigMap{'
@@ -251,5 +255,82 @@ ConfigMap get defaultConfigMap => _defaultConfigMap;
 
 ConfigMap _defaultConfigMap =
     const ConfigMap(isDeepEquals: true, autoSortKeys: true, autoSortValues: true);
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
+/// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
+/// - If [autoSortKeys] is `true` (the default), will sort the list output of keys.
+/// - If [autoSortValues] is `true` (the default), will sort the list output of values.
+@immutable
+class ConfigMapOfSets {
+  //
+  /// If `false`, the equals operator (`==`) compares by identity.
+  /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
+  final bool isDeepEquals;
+
+  /// If `true` (the default), will sort the list output of keys.
+  final bool autoSortKeys;
+
+  /// If `true` (the default), will sort the list output of values.
+  final bool autoSortValues;
+
+  const ConfigMapOfSets({
+    this.isDeepEquals = true,
+    this.autoSortKeys,
+    this.autoSortValues,
+  });
+
+  ConfigMap get asConfigMap => ConfigMap(
+      isDeepEquals: isDeepEquals, autoSortKeys: autoSortValues, autoSortValues: autoSortValues);
+
+  ConfigSet get asConfigSet => ConfigSet(isDeepEquals: isDeepEquals, autoSort: autoSortValues);
+
+  ConfigMapOfSets copyWith({
+    bool isDeepEquals,
+    bool autoSortKeys,
+    bool autoSortValues,
+  }) {
+    var config = ConfigMapOfSets(
+      isDeepEquals: isDeepEquals ?? this.isDeepEquals,
+      autoSortKeys: autoSortKeys ?? this.autoSortKeys,
+      autoSortValues: autoSortValues ?? this.autoSortValues,
+    );
+    return (config == this) ? this : config;
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ConfigMapOfSets &&
+          runtimeType == other.runtimeType &&
+          isDeepEquals == other.isDeepEquals &&
+          autoSortKeys == other.autoSortKeys &&
+          autoSortValues == other.autoSortValues;
+
+  @override
+  int get hashCode => hash3(isDeepEquals, autoSortKeys, autoSortValues);
+
+  @override
+  String toString() => 'ConfigMapOfSets{'
+      'isDeepEquals: $isDeepEquals, '
+      'autoSortKeys: $autoSortKeys, '
+      'autoSortValues: $autoSortValues}';
+}
+
+/// Global configuration that specifies if, by default, the immutable
+/// collections use equality or identity for their [operator ==].
+/// By default [isDeepEquals]==true (collections are compared by equality).
+///
+set defaultConfigMapOfSets(ConfigMapOfSets config) {
+  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
+  _defaultConfigMapOfSets =
+      config ?? const ConfigMapOfSets(isDeepEquals: true, autoSortKeys: true, autoSortValues: true);
+}
+
+ConfigMapOfSets get defaultConfigMapOfSets => _defaultConfigMapOfSets;
+
+ConfigMapOfSets _defaultConfigMapOfSets =
+    const ConfigMapOfSets(isDeepEquals: true, autoSortKeys: true, autoSortValues: true);
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

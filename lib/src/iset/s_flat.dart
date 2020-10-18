@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+import '../hash.dart';
 import 'iset.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,33 +104,36 @@ class SFlat<T> extends S<T> {
   @override
   Iterable<E> whereType<E>() => ISet(_set.whereType<E>());
 
+  bool deepSetEquals_toIterable(Iterable<T> other) {
+    if (other == null) return false;
+    Set<T> set = (other is Set<T>) ? other : Set<T>.of(other);
+    return const SetEquality(MapEntryEquality()).equals(_set, set);
+  }
+
   bool deepSetEquals(SFlat<T> other) =>
-      other == null ? false : const SetEquality(MapEntryEquality()).equals(_set, other._set);
+      (other == null) ? false : const SetEquality(MapEntryEquality()).equals(_set, other._set);
 
   int deepSetHashcode() => const SetEquality(MapEntryEquality()).hash(_set);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// Equals of `MapEntry` gets special treatment.
-/// We consider two map-entries equal when their respective
-/// key and values are equal.
-///
+/// This works for any object, not only map entries, but `MapEntry` gets special treatment.
+/// We consider two map-entries equal when their respective key and values are equal.
 class MapEntryEquality<E> implements Equality<E> {
   const MapEntryEquality();
 
   @override
-  bool equals(Object e1, Object e2) => //
-      (e1 is MapEntry && e2 is MapEntry) //
-          ? e1.key == e2.key && e1.value == e2.value
-          : e1 == e2;
+  bool equals(Object obj1, Object obj2) => //
+      (obj1 is MapEntry && obj2 is MapEntry) //
+          ? obj1.key == obj2.key && obj1.value == obj2.value
+          : obj1 == obj2;
 
-  // TODO: Isn't it safer to use the quiver package's hash functions instead of XORing?
   @override
-  int hash(Object e) => //
-      (e is MapEntry) //
-          ? (e.key as Object).hashCode ^ (e.value as Object).hashCode
-          : e.hashCode;
+  int hash(Object obj) => //
+      (obj is MapEntry) //
+          ? hash2(obj.key, obj.value)
+          : obj.hashCode;
 
   @override
   bool isValidKey(Object o) => true;

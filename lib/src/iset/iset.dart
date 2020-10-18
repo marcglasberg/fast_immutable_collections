@@ -15,7 +15,7 @@ extension ISetExtension<T> on Set<T> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// An immutable unordered set.
+/// An **immutable**, unordered set.
 @immutable
 class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
@@ -25,30 +25,36 @@ class ISet<T> // ignore: must_be_immutable
   /// The set configuration.
   final ConfigSet config;
 
-  static ISet<T> empty<T>() => ISet._unsafe(
+  static ISet<T> empty<T>([ConfigSet config]) => ISet._unsafe(
         SFlat.empty<T>(),
-        config: defaultConfigSet,
+        config: config ?? defaultConfigSet,
       );
 
   /// Create an [ISet] from any [Iterable].
   /// Fast, if the Iterable is another [ISet].
-  factory ISet([
+  factory ISet([Iterable<T> iterable]) => //
+      ISet.withConfig(iterable, defaultConfigSet);
+
+  /// Create an [ISet] from any [Iterable] and a [ConfigSet].
+  /// Fast, if the Iterable is another [ISet].
+  factory ISet.withConfig(
     Iterable<T> iterable,
-  ]) =>
+    ConfigSet config,
+  ) =>
       iterable is ISet<T>
           ? iterable
           : iterable == null || iterable.isEmpty
-              ? ISet.empty<T>()
+              ? ISet.empty<T>(config)
               : ISet<T>._unsafe(
                   SFlat<T>(iterable),
-                  config: defaultConfigSet,
+                  config: config ?? defaultConfigSet,
                 );
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the set.
   /// However, you should only use this with a new set you've created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
-  /// it will break the IList and any other derived lists in unpredictable ways.
+  /// it will break the [ISet] and any other derived sets in unpredictable ways.
   ISet.unsafe(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
     if (disallowUnsafeConstructors) throw UnsupportedError("ISet.unsafe is disallowed.");
@@ -63,10 +69,7 @@ class ISet<T> // ignore: must_be_immutable
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable);
 
-  ISet._unsafe(
-    this._s, {
-    @required this.config,
-  });
+  ISet._unsafe(this._s, {@required this.config});
 
   bool get isDeepEquals => config.isDeepEquals;
 
@@ -84,7 +87,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   ISet<T> withConfig(ConfigSet config) {
     assert(config != null);
-    return ISet._unsafe(_s, config: config);
+    return (config == this.config) ? this : ISet._unsafe(_s, config: config);
   }
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
@@ -108,7 +111,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// If [isDeepEquals] configuration is true:
   /// Will return true only if the set items are equal (and in the same order),
-  /// and the set configurations are the same instance. This may be slow for very
+  /// and the set configurations are equal. This may be slow for very
   /// large sets, since it compares each item, one by one.
   ///
   /// If [isDeepEquals] configuration is false:
@@ -127,7 +130,8 @@ class ISet<T> // ignore: must_be_immutable
       : false;
 
   @override
-  bool equalItems(Iterable other) => throw UnsupportedError("Work in progress!");
+  bool equalItems(covariant Iterable<T> other) =>
+      (other == null) ? false : (flush._s as SFlat<T>).deepSetEquals_toIterable(other);
 
   @override
   bool equalItemsAndConfig(ISet<T> other) =>
