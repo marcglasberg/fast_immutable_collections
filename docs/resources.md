@@ -18,22 +18,32 @@ The sub, unordered lists are my highlights, it's probably simpler if you go thro
     - They've implemented *operators* for the objects, something which converges to the assumption that immutable objects should be treated just like values.
     - Is very old apparently. It depends on Dart `>=0.8.10+6 <2.0.0`.
         - It's so old that *typing* is very weak throughout the package. So a major refactor would be necessary in order to use it with more recent versions of Dart, which will likely not happen.
-2. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
+1. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
     - Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
-3. [kt.dart][kt_dart]
+1. [kt.dart][kt_dart]
     - Features interesting annotations from Kotlin, though some will become useless after non-nullable integration to Dart.
     - Doesn't seem to use a recursive data structure in the background to ease copying, just simple iterators, but I would have to study it more to be sure.
     - Not that many worries about speed.
-4. [built_collection][built_collection]
+1. [built_collection][built_collection]
     - Each of the core SDK collections is split in two: a mutable builder class and an immutable "built" class. Builders are for computation, "built" classes are for safely sharing with no need to copy defensively.
     - Uses the [Builder Pattern][builder_pattern], which simplifies the creation of objects, and even allows for lazy optimizations.
     - Uses (deep) hash codes.
     - (...) do not make a copy, but return a copy-on-write wrapper.
+1. [Make it easy/efficient to create immutable collections via literals][dart_lang_117]
+    - Nice overview of the different types of "immutable" definitions.
+    - Good idea to simplify the use of unmodifiable data types.
+1. [Dart should provide a way of combining hashes][dart_lang_11617]
+    - Nice discussion on the &mdash; absurd &mdash; absence of basic good hashing methods inside Dart's basic packages.
+1. [Dart's Immutable Collections' Feature Specification][dart_immutable_feature_spec]
+    - Dart apparently already has plans of incorporating immutable objects. The question is how long they will take for this to happen?
 
 
 [benchmark_harness]: https://pub.dev/packages/benchmark_harness
 [builder_pattern]: https://en.wikipedia.org/wiki/Builder_pattern
 [built_collection]: https://github.com/google/built_collection.dart
+[dart_immutable_feature_spec]: https://github.com/dart-lang/language/blob/master/working/0125-static-immutability/feature-specification.md
+[dart_lang_117]: https://github.com/dart-lang/language/issues/117
+[dart_lang_11617]: https://github.com/dart-lang/sdk/issues/11617
 [kt_dart]: https://github.com/passsy/kt.dart
 [persistent_dart]: https://github.com/vacuumlabs/persistent
 [remi_performance_testing_dart]: https://gist.github.com/rrousselGit/5a047bd4ec36515a4cfcc6bd275f05f5
