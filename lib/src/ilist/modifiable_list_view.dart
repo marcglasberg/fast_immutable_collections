@@ -44,7 +44,7 @@ class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
       _list = _iList.unlock;
       _iList = null; // To allow for garbage-collection.
     }
-    _list.length == newLength;
+    _list.length = newLength;
   }
 
   /// Locks the list, returning an *immutable* list ([IList]).

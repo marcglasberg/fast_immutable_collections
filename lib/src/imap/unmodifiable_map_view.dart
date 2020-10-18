@@ -19,18 +19,16 @@ class UnmodifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeE
         _map = map;
 
   @override
-  void operator []=(K key, V value) => throw UnimplementedError('Not implemented yet.');
+  void operator []=(K key, V value) => UnsupportedError('Map is unmodifiable.');
 
-  // TODO: Marcelo, talvez seja melhor mudar o tipo da chave dentro do `IMap` para `Object`?
-  // Assim ficaria igual ao `Map`...
   @override
   V operator [](Object key) => _iMap != null ? _iMap[key as K] : _map[key];
 
   @override
-  void clear() => throw UnimplementedError('Not implemented yet.');
+  void clear() => throw UnsupportedError('Map is unmodifiable.');
 
   @override
-  V remove(Object key) => throw UnimplementedError('Not implemented yet.');
+  V remove(Object key) => throw UnsupportedError('Map is unmodifiable.');
 
   @override
   Iterable<K> get keys => _iMap?.keys ?? _map.keys;

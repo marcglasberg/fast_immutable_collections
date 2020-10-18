@@ -1,12 +1,13 @@
 import 'package:test/test.dart';
-
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fast_immutable_collections/src/imap/m_add_all.dart';
 import 'package:fast_immutable_collections/src/imap/m_flat.dart';
 
 void main() {
   group("Basic Methods |", () {
     final Map<String, int> originalMap = {'a': 1};
-    final MFlat<String, int> mFlat = MFlat(originalMap), mFlatToAdd = MFlat({'b': 2, 'c': 3});
+    final MFlat<String, int> mFlat = MFlat(originalMap);
+    final MFlat<String, int> mFlatToAdd = MFlat({'b': 2, 'c': 3});
     final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
 
     test("Emptiness Properties", () {
@@ -68,14 +69,7 @@ void main() {
     group("Iterator |", () {
       test("Iterator", () {
         final Iterator<MapEntry<String, int>> iterator = mAddAll.iterator;
-
-        int count = 0;
-        Map<String, int> result = {};
-        while (iterator.moveNext()) {
-          count++;
-          result[iterator.current.key] = iterator.current.value;
-        }
-        expect(count, 3);
+        Map<String, int> result = iterator.toMap();
         expect(result, {'a': 1, 'b': 2, 'c': 3});
       });
     });

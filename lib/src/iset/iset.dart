@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:meta/meta.dart';
 import '../immutable_collection.dart';
 import '../ilist/ilist.dart';
@@ -15,7 +17,7 @@ extension ISetExtension<T> on Set<T> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// An immutable unordered set.
+/// An **immutable**, unordered set.
 @immutable
 class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
@@ -25,30 +27,36 @@ class ISet<T> // ignore: must_be_immutable
   /// The set configuration.
   final ConfigSet config;
 
-  static ISet<T> empty<T>() => ISet._unsafe(
+  static ISet<T> empty<T>([ConfigSet config]) => ISet._unsafe(
         SFlat.empty<T>(),
-        config: defaultConfigSet,
+        config: config ?? defaultConfigSet,
       );
 
   /// Create an [ISet] from any [Iterable].
   /// Fast, if the Iterable is another [ISet].
-  factory ISet([
+  factory ISet([Iterable<T> iterable]) => //
+      ISet.withConfig(iterable, defaultConfigSet);
+
+  /// Create an [ISet] from any [Iterable] and a [ConfigSet].
+  /// Fast, if the Iterable is another [ISet].
+  factory ISet.withConfig(
     Iterable<T> iterable,
-  ]) =>
+    ConfigSet config,
+  ) =>
       iterable is ISet<T>
           ? iterable
-          : iterable == null || iterable.isEmpty
-              ? ISet.empty<T>()
+          : (iterable == null) || iterable.isEmpty
+              ? ISet.empty<T>(config)
               : ISet<T>._unsafe(
                   SFlat<T>(iterable),
-                  config: defaultConfigSet,
+                  config: config ?? defaultConfigSet,
                 );
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the set.
   /// However, you should only use this with a new set you've created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
-  /// it will break the IList and any other derived lists in unpredictable ways.
+  /// it will break the [ISet] and any other derived sets in unpredictable ways.
   ISet.unsafe(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
     if (disallowUnsafeConstructors) throw UnsupportedError("ISet.unsafe is disallowed.");
@@ -63,10 +71,7 @@ class ISet<T> // ignore: must_be_immutable
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable);
 
-  ISet._unsafe(
-    this._s, {
-    @required this.config,
-  });
+  ISet._unsafe(this._s, {@required this.config});
 
   bool get isDeepEquals => config.isDeepEquals;
 
@@ -84,7 +89,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   ISet<T> withConfig(ConfigSet config) {
     assert(config != null);
-    return ISet._unsafe(_s, config: config);
+    return (config == this.config) ? this : ISet._unsafe(_s, config: config);
   }
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
@@ -95,10 +100,26 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> get withDeepEquals =>
       config.isDeepEquals ? this : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
 
-  Set<T> get unlock => Set<T>.of(_s);
+  Set<T> get unlock => _s.unlock;
 
+  /// 1) If the set's [config] has [ConfigSet.autoSort] `true` (the default),
+  /// it will iterate in the natural order of items. In other words, if the items
+  /// are [Comparable], they will be sorted by `a.compareTo(b)`.
+  /// 2) If the set's [config] has [ConfigSet.autoSort] `false`, or if the items
+  /// are not [Comparable], the iterator order is undefined.
+  ///
   @override
-  Iterator<T> get iterator => _s.iterator;
+  Iterator<T> get iterator {
+    if (config.autoSort) {
+      var sortedList = _s.toList(growable: false)..sort(ImmutableCollection.compare);
+      return sortedList.iterator;
+    } else
+      return _s.iterator;
+  }
+
+  /// This iterator is very fast to create, but won't iterate in any particular order,
+  /// no matter what the set configuration is.
+  Iterator<T> get fastIterator => _s.iterator;
 
   @override
   bool get isEmpty => _s.isEmpty;
@@ -108,7 +129,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// If [isDeepEquals] configuration is true:
   /// Will return true only if the set items are equal (and in the same order),
-  /// and the set configurations are the same instance. This may be slow for very
+  /// and the set configurations are equal. This may be slow for very
   /// large sets, since it compares each item, one by one.
   ///
   /// If [isDeepEquals] configuration is false:
@@ -127,7 +148,8 @@ class ISet<T> // ignore: must_be_immutable
       : false;
 
   @override
-  bool equalItems(Iterable other) => throw UnsupportedError("Work in progress!");
+  bool equalItems(covariant Iterable<T> other) =>
+      (other == null) ? false : (flush._s as SFlat<T>).deepSetEquals_toIterable(other);
 
   @override
   bool equalItemsAndConfig(ISet<T> other) =>
@@ -153,7 +175,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Compacts the set *and* returns it.
   ISet<T> get flush {
-    if (!isFlushed) _s = SFlat<T>.unsafe(Set<T>.of(_s));
+    if (!isFlushed) _s = SFlat<T>.unsafe(_s.unlock);
     return this;
   }
 
@@ -276,20 +298,77 @@ class ISet<T> // ignore: must_be_immutable
   @override
   ISet<E> whereType<E>() => ISet._(_s.whereType<E>(), config: config);
 
+  /// Returns a [List] with all items from the set.
+  ///
+  /// 1) If you provide a [compare] function, the list will be sorted with it.
+  ///
+  /// 2) If no [compare] function is provided, the list will be sorted according to the
+  /// set's [config] field:
+  /// - If [ConfigSet.autoSort] is `true` (the default), the list will be sorted with
+  /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
+  /// items implement [Comparable]. Otherwise, the list order is undefined.
+  /// - If [ConfigSet.autoSort] is `false`, the list order is undefined.
+  ///
   @override
   List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
     var result = _s.toList(growable: growable);
-    if (compare != null)
+
+    if (compare != null) {
       result.sort(compare);
-    else if (config.autoSort) result.sort();
+    } else {
+      if (config.autoSort) result.sort(ImmutableCollection.compare);
+    }
+
     return result;
   }
 
+  /// Returns a [IList] with all items from the set.
+  ///
+  /// 1) If you provide a [compare] function, the list will be sorted with it.
+  ///
+  /// 2) If no [compare] function is provided, the list will be sorted according to the
+  /// set's [ISet.config] field:
+  /// - If [ConfigSet.autoSort] is `true` (the default), the list will be sorted with
+  /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
+  /// items implement [Comparable]. Otherwise, the list order is undefined.
+  /// - If [ConfigSet.autoSort] is `false`, the list order is undefined.
+  ///
+  /// You can also provide a [config] for the [IList].
+  ///
   IList<T> toIList({int Function(T a, T b) compare, ConfigList config}) =>
       IList.fromISet(this, compare: compare, config: config);
 
+  /// Returns a [Set] with all items from the [ISet].
+  ///
+  /// 1) If you provide a [compare] function, the resulting set will be sorted with it,
+  /// and it will be a [LinkedHashSet], which is ORDERED, meaning further iteration of
+  /// its items will maintain insertion order.
+  ///
+  /// 2) If no [compare] function is provided, the list will be sorted according to the
+  /// set's [ISet.config] field:
+  /// - If [ConfigSet.autoSort] is `true` (the default), the set will be sorted with
+  /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
+  /// items implement [Comparable]. Otherwise, the set order is undefined.
+  /// The set will be a [LinkedHashSet], which is ORDERED, meaning further iteration of
+  /// its items will maintain insertion order.
+  /// - If [ConfigSet.autoSort] is `false`, the set order is undefined. The set will
+  /// be a [HashSet], which is NOT ordered. Note this is the same as unlocking the
+  /// set with [ISet.unlock].
+  ///
   @override
-  Set<T> toSet() => _s.toSet();
+  Set<T> toSet({int Function(T a, T b) compare}) {
+    if (compare != null) {
+      var orderedList = toList(growable: false, compare: compare);
+      return LinkedHashSet.of(orderedList);
+    } else {
+      if (config.autoSort) {
+        var orderedList = toList(growable: false);
+        return LinkedHashSet.of(orderedList);
+      } else {
+        return HashSet.of(_s);
+      }
+    }
+  }
 
   @override
   String toString() => "{${_s.join(", ")}}";
@@ -310,8 +389,8 @@ abstract class S<T> implements Iterable<T> {
     return _flushed;
   }
 
-  /// Returns a regular Dart (mutable) Set.
-  Set<T> get unlock => Set<T>.of(this);
+  /// Returns a Dart Set (mutable, unordered, of type [HashSet]).
+  Set<T> get unlock => HashSet.of(this);
 
   @override
   Iterator<T> get iterator;
@@ -333,8 +412,7 @@ abstract class S<T> implements Iterable<T> {
   }
 
   /// TODO: FALTA FAZER!!!
-  S<T> remove(T element) =>
-      !contains(element) ? this : SFlat<T>.unsafe(Set<T>.of(this)..remove(element));
+  S<T> remove(T element) => !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;
@@ -423,7 +501,7 @@ abstract class S<T> implements Iterable<T> {
   List<T> toList({bool growable = true}) => List.of(this, growable: growable);
 
   @override
-  Set<T> toSet() => Set.of(this);
+  Set<T> toSet() => HashSet.of(this);
 
   @override
   T elementAt(int index) => throw UnsupportedError('elementAt in ISet is not allowed');

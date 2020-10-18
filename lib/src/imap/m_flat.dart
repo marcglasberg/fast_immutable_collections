@@ -55,6 +55,12 @@ class MFlat<K, V> extends M<K, V> {
   @override
   int get length => _map.length;
 
+  bool deepMapEquals_toIterable(Iterable<MapEntry<K, V>> entries) {
+    if (entries == null) return false;
+    Map<K, V> map = Map<K, V>.fromEntries(entries);
+    return const MapEquality().equals(_map, map);
+  }
+
   bool deepMapEquals(MFlat<K, V> other) =>
       (other == null) ? false : const MapEquality().equals(_map, other._map);
 

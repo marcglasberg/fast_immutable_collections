@@ -39,10 +39,13 @@ void main() {
         iMapOfSets4 = IMapOfSets({
           "b": {1, 2, 3},
         }).add("a", 1).add("a", 2);
-    final IMapOfSets<String, int> iMapOfSets1WithCompareKey = iMapOfSets1.config(
-      compareKey: (String key1, String key2) => key1.compareTo(key2),
-      compareValue: (int value1, int value2) => value1.compareTo(value2),
-    );
+
+// final IMapOfSets<String, int> iMapOfSets1WithCompareKey = iMapOfSets1.config(
+//   compareKey: (String key1, String key2) => key1.compareTo(key2),
+//   compareValue: (int value1, int value2) => value1.compareTo(value2),
+// );
+    fail("Phil, isso aqui mudou!");
+    final IMapOfSets<String, int> iMapOfSets1WithCompareKey = null;
 
     test('IMapOfSets.== Operator', () {
       expect(iMapOfSets1 == iMapOfSets2, isTrue);
@@ -346,16 +349,17 @@ void main() {
       "b": {1, 2, 3},
     });
 
-    expect(iMap.compareKey, isNull);
-    expect(iMap.compareValue, isNull);
-
-    final IMapOfSets<String, int> newIMap = iMap.config(
-      compareKey: (String key1, String key2) => key1.compareTo(key2),
-      compareValue: (int value1, int value2) => value1.compareTo(value2),
-    );
-
-    expect(newIMap.compareKey, isNotNull);
-    expect(newIMap.compareValue, isNotNull);
+    fail("Phil, isso aqui mudou!");
+    // expect(iMap.compareKey, isNull);
+    // expect(iMap.compareValue, isNull);
+    //
+    // final IMapOfSets<String, int> newIMap = iMap.config(
+    //   compareKey: (String key1, String key2) => key1.compareTo(key2),
+    //   compareValue: (int value1, int value2) => value1.compareTo(value2),
+    // );
+    //
+    // expect(newIMap.compareKey, isNotNull);
+    // expect(newIMap.compareValue, isNotNull);
   });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

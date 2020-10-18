@@ -1,10 +1,7 @@
 import 'dart:collection';
-
+import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:meta/meta.dart';
-
-import '../ilist/ilist.dart';
-import '../immutable_collection.dart';
-import '../iset/iset.dart';
 import 'm_add.dart';
 import 'm_add_all.dart';
 import 'm_flat.dart';
@@ -20,7 +17,7 @@ extension IMapExtension<K, V> on Map<K, V> {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// An *immutable* unordered map.
+/// An **immutable**, unordered map.
 @immutable
 class IMap<K, V> // ignore: must_be_immutable
     extends ImmutableCollection<IMap<K, V>> {
@@ -31,26 +28,33 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The map configuration.
   final ConfigMap config;
 
-  static IMap<K, V> empty<K, V>() => IMap._unsafe(MFlat.empty<K, V>(), config: defaultConfigMap);
+  static IMap<K, V> empty<K, V>([ConfigMap config]) =>
+      IMap._unsafe(MFlat.empty<K, V>(), config: config ?? defaultConfigMap);
 
   /// Create an [IMap] from a [Map].
-  factory IMap([Map<K, V> map]) => (map == null || map.isEmpty)
-      ? IMap.empty<K, V>()
-      : IMap<K, V>._unsafe(MFlat<K, V>(map), config: defaultConfigMap);
+  factory IMap([Map<K, V> map]) => //
+      IMap.withConfig(map, defaultConfigMap);
 
-  factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries) {
+  /// Create an [IMap] from a [Map] and a [ConfigMap].
+  factory IMap.withConfig(Map<K, V> map, ConfigMap config) => (map == null || map.isEmpty)
+      ? IMap.empty<K, V>()
+      : IMap<K, V>._unsafe(MFlat<K, V>(map), config: config ?? defaultConfigMap);
+
+  /// Create an [IMap] from an [Iterable] of [MapEntry].
+  factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap config}) {
     if (entries is IMap<K, V>)
-      return IMap._unsafe((entries as IMap<K, V>)._m, config: defaultConfigMap);
+      return IMap._unsafe((entries as IMap<K, V>)._m, config: config ?? defaultConfigMap);
     else {
       var map = HashMap<K, V>();
       map.addEntries(entries);
-      return IMap._unsafe(MFlat.unsafe(map), config: defaultConfigMap);
+      return IMap._unsafe(MFlat.unsafe(map), config: config ?? defaultConfigMap);
     }
   }
 
   factory IMap.fromKeys({
     @required Iterable<K> keys,
     @required V Function(K) valueMapper,
+    ConfigMap config,
   }) {
     assert(keys != null);
     assert(valueMapper != null);
@@ -61,12 +65,13 @@ class IMap<K, V> // ignore: must_be_immutable
       map[key] = valueMapper(key);
     }
 
-    return IMap._(map, config: defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfigMap);
   }
 
   factory IMap.fromValues({
     @required K Function(V) keyMapper,
     @required Iterable<V> values,
+    ConfigMap config,
   }) {
     assert(keyMapper != null);
     assert(values != null);
@@ -77,21 +82,22 @@ class IMap<K, V> // ignore: must_be_immutable
       map[keyMapper(value)] = value;
     }
 
-    return IMap._(map, config: defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfigMap);
   }
 
   factory IMap.fromIterable(
     Iterable iterable, {
     K Function(dynamic) keyMapper,
     V Function(dynamic) valueMapper,
+    ConfigMap config,
   }) {
     Map<K, V> map = Map.fromIterable(iterable, key: keyMapper, value: valueMapper);
-    return IMap._(map, config: defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfigMap);
   }
 
-  factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values) {
+  factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values, {ConfigMap config}) {
     Map<K, V> map = Map.fromIterables(keys, values);
-    return IMap._(map, config: defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfigMap);
   }
 
   /// Unsafe.
@@ -127,7 +133,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   IMap<K, V> withConfig(ConfigMap config) {
     assert(config != null);
-    return IMap._unsafe(_m, config: config);
+    return (config == this.config) ? this : IMap._unsafe(_m, config: config);
   }
 
   /// Creates a map with `identityEquals` (compares the internals by `identity`).
@@ -172,7 +178,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// If [isDeepEquals] configuration is `true`:
   /// Will return `true` only if the map entries are equal (not necessarily in the same order),
-  /// and the map configurations are the same instance. This may be slow for very
+  /// and the map configurations are equal. This may be slow for very
   /// large maps, since it compares each entry, one by one.
   ///
   /// If [isDeepEquals] configuration is `false`:
@@ -190,8 +196,22 @@ class IMap<K, V> // ignore: must_be_immutable
           : same(other)
       : false;
 
+  /// Will return true only if the [IMap] entries are equal to the entries in the [Iterable].
+  /// Order is irrelevant. This may be slow for very large maps, since it compares each entry,
+  /// one by one. To compare with a map, use method [equalItemsToMap] or [equalItemsToIMap].
   @override
-  bool equalItems(Iterable other) => throw UnsupportedError("Work in progress!");
+  bool equalItems(covariant Iterable<MapEntry<K, V>> other) =>
+      (other == null) ? false : (flush._m as MFlat<K, V>).deepMapEquals_toIterable(other);
+
+  /// Will return true only if the two maps have the same number of entries,
+  /// and if the entries of the two maps are pairwise equal on both key and value.
+  bool equalItemsToMap(Map<K, V> other) =>
+      const MapEquality().equals(UnmodifiableMapView(this), other);
+
+  /// Will return true only if the two maps have the same number of entries,
+  /// and if the entries of the two maps are pairwise equal on both key and value.
+  bool equalItemsToIMap(IMap<K, V> other) =>
+      (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
 
   @override
   bool equalItemsAndConfig(IMap<K, V> other) =>
@@ -208,7 +228,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
-  bool same(IMap<K, V> other) => identical(_m, other._m) && config == other.config;
+  bool same(IMap<K, V> other) => identical(_m, other._m) && (config == other.config);
 
   @override
   int get hashCode => isDeepEquals //

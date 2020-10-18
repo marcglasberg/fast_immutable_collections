@@ -1,5 +1,4 @@
 import 'package:test/test.dart';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 void main() {
@@ -165,20 +164,20 @@ void main() {
         });
 
         group("IMap.equalItems method |", () {
-          test("Not yet done", () => fail('Not implemented yet.'));
+          test("Not yet done", () => fail("Phil: FALTA TESTAR!!!"));
         });
       });
     });
 
     group("IMap.hashCode method", () {
       final IMap<String, int> iMap1 = IMap({'a': 1, 'b': 2}),
-        iMap2 = IMap({'a': 1, 'b': 2}),
-        iMap3 = IMap({'a': 1, 'b': 2, 'c': 3}),
-        iMap4 = IMap({'b': 2}).add('a', 1);
+          iMap2 = IMap({'a': 1, 'b': 2}),
+          iMap3 = IMap({'a': 1, 'b': 2, 'c': 3}),
+          iMap4 = IMap({'b': 2}).add('a', 1);
       final IMap<String, int> iMap1WithIdentity = iMap1.withIdentityEquals,
-      iMap2WithIdentity = iMap2.withIdentityEquals,
-      iMap3WithIdentity = iMap3.withIdentityEquals,
-      iMap4WithIdentity = iMap4.withIdentityEquals;
+          iMap2WithIdentity = iMap2.withIdentityEquals,
+          iMap3WithIdentity = iMap3.withIdentityEquals,
+          iMap4WithIdentity = iMap4.withIdentityEquals;
 
       test("deepEquals vs deepEquals", () {
         expect(iMap1 == iMap2, isTrue);
@@ -626,14 +625,7 @@ void main() {
 
     test("IMap.iterator getter", () {
       final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
-
-      int count = 0;
-      final Map<String, int> result = {};
-      while (iterator.moveNext()) {
-        count++;
-        result[iterator.current.key] = iterator.current.value;
-      }
-      expect(count, finalMap.length);
+      Map<String, int> result = iterator.toMap();
       expect(result, finalMap);
     });
 

@@ -1,3 +1,7 @@
+import '../hash.dart';
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
 extension MapEntryExtension<K, V> on MapEntry<K, V> {
   //
   Entry<K, V> get entry => Entry.from<K, V>(this);
@@ -6,7 +10,7 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// Similar to a [MapEntry], but correctly implements
-/// [equalItemsAndConfig] ([==]) comparing [key] and [value].
+/// equals ([==] comparing [key] and [value]) and hashcode.
 class Entry<K, V> {
   final K key;
   final V value;
@@ -27,5 +31,7 @@ class Entry<K, V> {
           value == other.value;
 
   @override
-  int get hashCode => key.hashCode ^ value.hashCode;
+  int get hashCode => hash2(key, value);
 }
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -391,8 +391,7 @@ void main() {
     });
 
     test('MapEntryEquality.isValidKey method', () {
-      fail('It is not clear what this method is supposed to do yet.'
-          'It is always returning `true`');
+      expect(MapEntryEquality().isValidKey(1), true);
     });
   });
 }

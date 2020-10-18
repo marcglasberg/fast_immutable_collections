@@ -1,56 +1,75 @@
 import 'dart:collection';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fast_immutable_collections/src/hash.dart';
 import 'package:meta/meta.dart';
 import '../ilist/ilist.dart';
 import '../imap/imap.dart';
 import '../iset/iset.dart';
 
-/// An immutable unordered map of sets.
+/// An **immutable**, unordered, map of sets.
 @immutable
-class IMapOfSets<K, V> {
+class IMapOfSets<K, V> //
+    extends ImmutableCollection<IMapOfSets<K, V>> {
+  //
+
   final IMap<K, ISet<V>> _mapOfSets;
 
-  /// If given, will be used to sort list of keys or lists of entries.
-  final int Function(K, K) compareKey;
-
-  /// If given, will be used to sort list of values.
-  final int Function(V, V) compareValue;
+  /// The map-of-sets configuration.
+  final ConfigMapOfSets config;
 
   static IMapOfSets<K, V> empty<K, V>() => IMapOfSets<K, V>.from(null);
 
-  factory IMapOfSets([
-    Map<K, Iterable<V>> mapOfSets,
-  ]) =>
-      (mapOfSets == null)
-          ? empty<K, V>()
-          : IMapOfSets._unsafe(
-              IMap.fromIterables(
-                mapOfSets.keys,
-                mapOfSets.values.map((value) => ISet(value).withDeepEquals),
-              ),
-              null,
-              null,
-            );
+  factory IMapOfSets([Map<K, Iterable<V>> mapOfSets]) => //
+      IMapOfSets.withConfig(mapOfSets, defaultConfigMapOfSets);
 
-  IMapOfSets.from(
-    IMap<K, ISet<V>> mapOfSets, {
-    this.compareKey,
-    this.compareValue,
-  }) : _mapOfSets = mapOfSets ?? IMap.empty<K, ISet<V>>().withDeepEquals {
-    if (mapOfSets != null && mapOfSets.values.any((set) => set.isIdentityEquals))
-      throw ArgumentError("All sets in a MapOfSets must be deepEquals.");
+  factory IMapOfSets.withConfig(
+    Map<K, Iterable<V>> mapOfSets,
+    ConfigMapOfSets config,
+  ) {
+    ConfigSet configSet = config?.asConfigSet ?? defaultConfigSet;
+    ConfigMap configMap = config?.asConfigMap ?? defaultConfigMap;
+
+    return (mapOfSets == null)
+        ? empty<K, V>()
+        : IMapOfSets._unsafe(
+            IMap.fromIterables(
+              mapOfSets.keys,
+              mapOfSets.values.map((value) => ISet.withConfig(value, configSet)),
+              config: configMap,
+            ),
+            config: config ?? defaultConfigMapOfSets,
+          );
   }
 
-  IMapOfSets._unsafe(
-    this._mapOfSets,
-    this.compareKey,
-    this.compareValue,
-  );
+  /// If you provide [config], the map and all sets will use it.
+  IMapOfSets.from(IMap<K, ISet<V>> mapOfSets, {ConfigMapOfSets config})
+      : config = config ?? defaultConfigMapOfSets,
+        _mapOfSets = (config == null)
+            ? mapOfSets ?? IMap.empty<K, ISet<V>>()
+            : mapOfSets.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
+                    config: config.asConfigMap) ??
+                IMap.empty<K, ISet<V>>(config.asConfigMap);
 
-  IMapOfSets<K, V> config({
-    int Function(K, K) compareKey,
-    int Function(V, V) compareValue,
-  }) =>
-      IMapOfSets._unsafe(_mapOfSets, compareKey, compareValue);
+  IMapOfSets._unsafe(this._mapOfSets, {@required this.config});
+
+  bool get isDeepEquals => config.isDeepEquals;
+
+  bool get isIdentityEquals => !config.isDeepEquals;
+
+  /// Creates a new map-of-sets with the given [config].
+  ///
+  /// To copy the config from another [IMapOfSets]:
+  ///    `mapOfSets = mapOfSets.withConfig(other.config)`.
+  ///
+  /// To change the current config:
+  ///    `mapOfSets = mapOfSets.withConfig(mapOfSets.config.copyWith(isDeepEquals: isDeepEquals))`.
+  ///
+  /// See also: [withIdentityEquals] and [withDeepEquals].
+  ///
+  IMapOfSets<K, V> withConfig(ConfigMapOfSets config) {
+    assert(config != null);
+    return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
+  }
 
   Map<K, Set<V>> get unlock {
     Map<K, Set<V>> result = {};
@@ -117,8 +136,10 @@ class IMapOfSets<K, V> {
 
   IList<ISet<V>> get setsAsList => IList(sets).withDeepEquals;
 
+  @override
   bool get isEmpty => _mapOfSets.isEmpty;
 
+  @override
   bool get isNotEmpty => _mapOfSets.isNotEmpty;
 
   /// Find the [key]/[set] entry, and add the [value] to the [set].
@@ -165,8 +186,7 @@ class IMapOfSets<K, V> {
         ? removeSet(key)
         : IMapOfSets<K, V>.from(
             _mapOfSets.add(key, set),
-            compareKey: compareKey,
-            compareValue: compareValue,
+            config: config,
           );
   }
 
@@ -179,14 +199,13 @@ class IMapOfSets<K, V> {
         ? this
         : IMapOfSets<K, V>.from(
             newMapOfSets,
-            compareKey: compareKey,
-            compareValue: compareValue,
+            config: config,
           );
   }
 
   /// Return the [set] for the given [key].
   /// If the [key] doesn't exist, return an empty set (never return `null`).
-  ISet<V> get(K key) => _mapOfSets[key] ?? ISet.empty<V>();
+  ISet<V> get(K key) => _mapOfSets[key] ?? ISet.empty<V>(config.asConfigSet);
 
   /// Return the [set] for the given [key].
   /// If the [key] doesn't exist, return an empty set (never return `null`).
@@ -242,20 +261,49 @@ class IMapOfSets<K, V> {
   @override
   String toString() => _mapOfSets.toString();
 
+  /// If [isDeepEquals] configuration is `true`:
+  /// Will return `true` only if the map entries are equal (not necessarily in the same order),
+  /// and the map configurations are equal. This may be slow for very
+  /// large maps, since it compares each entry, one by one.
+  ///
+  /// If [isDeepEquals] configuration is `false`:
+  /// Will return `true` only if the maps internals are the same instances
+  /// (comparing by identity). This will be fast even for very large maps,
+  /// since it doesn't compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// compare the maps themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return `true` more often.
+  ///
   @override
-  bool operator ==(Object other) =>
+  bool operator ==(Object other) => (other is IMapOfSets<K, V>)
+      ? isDeepEquals
+          ? equalItemsAndConfig(other)
+          : same(other)
+      : false;
+
+  @override
+  bool equalItems(Iterable other) => throw UnsupportedError("Work in progress!");
+
+  @override
+  bool equalItemsAndConfig(IMapOfSets<K, V> other) =>
       identical(this, other) ||
-      other is IMapOfSets &&
+      other is IMapOfSets<K, V> &&
           runtimeType == other.runtimeType &&
-          compareKey == other.compareKey &&
-          compareValue == other.compareValue &&
+          config == other.config &&
           _mapOfSets == other._mapOfSets;
 
+  /// Will return `true` only if the maps internals are the same instances
+  /// (comparing by identity). This will be fast even for very large maps,
+  /// since it doesn't compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// compare the maps themselves, but their internal state. Comparing the
+  /// internal state is better, because it will return `true` more often.
+  @override
   bool same(IMapOfSets<K, V> other) =>
-      _mapOfSets.same(other._mapOfSets) &&
-      (compareKey == other.compareKey) &&
-      (compareValue == other.compareValue);
+      identical(_mapOfSets, other._mapOfSets) && (config == other.config);
 
   @override
-  int get hashCode => _mapOfSets.hashCode;
+  int get hashCode => isDeepEquals //
+      ? hash2(_mapOfSets, config)
+      : identityHashCode(_mapOfSets) ^ config.hashCode;
 }
