@@ -7,16 +7,33 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 18/10/2020
+
+### 1. Philippe Fanaro
+
+1. Started tests for the config objects.
+
+## 17/10/2020
+
+### 1. Philippe Fanaro
+
+1. Completed the views.
+
+## 16/10/2020
+
+### 1. Philippe Fanaro
+
+1. Added tests for the `IList` views.
+1. Started the other views.
+
 ## 15/10/2020
 
 ### 1. Philippe Fanaro
 
 1. Completed tests for `equals`/`same`/`hashCode` on:
     - `IMapOfSets`
-1. Current TODOs:
-    1. Tests for the views.
-    1. Reorganize the configuration classes.
-    1. Tests for the configuration classes.
+    - `IMap`
+    - `ISet`
 
 ## 14/10/2020
 
