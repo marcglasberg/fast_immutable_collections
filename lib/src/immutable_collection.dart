@@ -37,6 +37,7 @@ bool _disallowUnsafeConstructors = false;
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   //
+  static int compare(Object a, Object b) => a is Comparable && b is Comparable ? a.compareTo(b) : 0;
 
   /// Will return true only if the collection items are equal to the iterable items.
   /// If the collection is ordered, it will also check if the items are in the same order.
@@ -332,5 +333,29 @@ ConfigMapOfSets get defaultConfigMapOfSets => _defaultConfigMapOfSets;
 
 ConfigMapOfSets _defaultConfigMapOfSets =
     const ConfigMapOfSets(isDeepEquals: true, autoSortKeys: true, autoSortValues: true);
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+extension IteratorExtension<T> on Iterator<T> {
+  //
+  Iterable<T> toIterable() sync* {
+    while (moveNext()) yield current;
+  }
+
+  List<T> toList({bool growable = true}) => List.of(toIterable(), growable: growable);
+
+  Set<T> toSet() => Set.of(toIterable());
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+extension MapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
+  //
+  Iterable<MapEntry<K, V>> toIterable() sync* {
+    while (moveNext()) yield current;
+  }
+
+  Map<K, V> toMap() => Map.fromEntries(toIterable());
+}
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

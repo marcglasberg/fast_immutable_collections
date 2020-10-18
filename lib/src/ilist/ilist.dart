@@ -47,7 +47,7 @@ class IList<T> // ignore: must_be_immutable
   ) =>
       iterable is IList<T>
           ? iterable
-          : iterable == null || iterable.isEmpty
+          : (iterable == null) || iterable.isEmpty
               ? IList.empty<T>(config)
               : IList<T>._unsafe(LFlat<T>(iterable), config: config);
 

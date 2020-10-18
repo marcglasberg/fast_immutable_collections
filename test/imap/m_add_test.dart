@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/src/imap/m_add.dart';
 import 'package:test/test.dart';
-
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fast_immutable_collections/src/imap/m_flat.dart';
 
 void main() {
@@ -62,15 +62,7 @@ void main() {
     group("Iterator |", () {
       test("Iterator", () {
         final Iterator<MapEntry<String, int>> iterator = mAdd.iterator;
-
-        int count = 0;
-        Map<String, int> result = {};
-        while (iterator.moveNext()) {
-          count++;
-          result[iterator.current.key] = iterator.current.value;
-        }
-
-        expect(count, 2);
+        Map<String, int> result = iterator.toMap();
         expect(result, {'a': 1, 'd': 4});
       });
     });

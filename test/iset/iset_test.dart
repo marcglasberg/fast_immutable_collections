@@ -618,18 +618,35 @@ void main() {
         () => expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
 
     test("ISet.toString method", () => expect(iSet.toString(), "{1, 2, 3, 4, 5, 6}"));
+  });
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group("ISet.iterator |", () {
     test("ISet.iterator getter", () {
-      final Iterator<int> iterator = iSet.iterator;
+      ISet<int> iSet = {2, 5, 3, 7, 9, 6, 1}.lock;
+      expect(iSet.config.autoSort, isTrue);
 
-      int count = 0;
-      final Set<int> result = {};
-      while (iterator.moveNext()) {
-        count++;
-        result.add(iterator.current);
-      }
-      expect(count, iSet.length);
-      expect(result, iSet);
+      // The regular iterator is SORTED.
+      expect(iSet.iterator.toList(), [1, 2, 3, 5, 6, 7, 9]);
+
+      // The for loop uses the SORTED iterator.
+      var result = [];
+      for (int value in iSet) result.add(value);
+      expect(iSet.iterator.toList(), [1, 2, 3, 5, 6, 7, 9]);
+
+      // You can also use a fast iterator which will NOT sort the result.
+      expect(iSet.fastIterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
+
+      // ---
+
+      // But you can configure the set NOT to sort the iterator.
+      iSet = iSet.withConfig(const ConfigSet(autoSort: false));
+      expect(iSet.config.autoSort, isFalse);
+      expect(iSet.iterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
+      result = [];
+      for (int value in iSet) result.add(value);
+      expect(iSet.iterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
     });
   });
 
