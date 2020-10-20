@@ -164,9 +164,25 @@ void main() {
         });
 
         group("IMap.equalItems method |", () {
-          test("", () {
-            
-          });
+          final Iterable<MapEntry<String, int>> iterable1 = [
+                MapEntry<String, int>('a', 1),
+                MapEntry<String, int>('b', 2),
+              ],
+              iterable3 = [
+                MapEntry<String, int>('a', 1),
+              ],
+              iterable4 = [
+                MapEntry<String, int>('b', 2),
+                MapEntry<String, int>('a', 1),
+              ];
+
+          test("Null", () => expect(iMap1.equalItems(null), isFalse));
+
+          test("Identity", () => expect(iMap1.equalItems(iterable1), isTrue));
+
+          test("The order doesn't matter", () => expect(iMap1.equalItems(iterable4), isTrue));
+
+          test("Different items yield false", () => expect(iMap1.equalItems(iterable3), isFalse));
         });
       });
     });

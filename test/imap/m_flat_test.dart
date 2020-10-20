@@ -50,13 +50,13 @@ void main() {
 
     test("MFlat.deepMapEquals_toIterable method", () {
       final Iterable<MapEntry<String, int>> entries1 = [
-            MapEntry('b', 2),
-            MapEntry('a', 1),
-            MapEntry('c', 3),
+            MapEntry<String, int>('b', 2),
+            MapEntry<String, int>('a', 1),
+            MapEntry<String, int>('c', 3),
           ],
           entries2 = [
-            MapEntry('a', 1),
-            MapEntry('b', 2),
+            MapEntry<String, int>('a', 1),
+            MapEntry<String, int>('b', 2),
           ];
 
       expect(mFlat.deepMapEquals_toIterable(null), isFalse);
