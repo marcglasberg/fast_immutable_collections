@@ -26,12 +26,12 @@ void main() {
     });
 
     group("Equals and Hash Code |", () {
-      test("Entry == operator", () {
-        final Entry<String, int> entry1 = Entry('a', 1);
-        final Entry<String, int> entry2 = Entry('a', 1);
-        final Entry<String, int> entry3 = Entry('b', 1);
-        final Entry<String, int> entry4 = Entry('a', 2);
+      final Entry<String, int> entry1 = Entry('a', 1),
+          entry2 = Entry('a', 1),
+          entry3 = Entry('b', 1),
+          entry4 = Entry('a', 2);
 
+      test("Entry == operator", () {
         expect(entry1, entry1);
         expect(entry1, entry2);
         expect(entry1 == entry3, isFalse);
@@ -39,9 +39,10 @@ void main() {
       });
 
       test("Entry.hashCode method", () {
-        const Entry<String, int> entry = Entry('a', 1);
-        expect(entry.hashCode, 170824771);
-        fail('This is not the way to test hashCode.');
+        expect(entry1 == entry2, isTrue);
+        expect(entry1 == entry3, isFalse);
+        expect(entry1.hashCode, entry2.hashCode);
+        expect(entry1.hashCode, isNot(entry3.hashCode));
       });
     });
 
