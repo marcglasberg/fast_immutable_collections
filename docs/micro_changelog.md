@@ -17,6 +17,9 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `ConfigMapOfSets`
     - `IteratorExtension`
     - `MapIteratorExtension`
+    - `hash2`
+    - `hash3`
+    - `hash4`
 
 ## 18/10/2020
 
