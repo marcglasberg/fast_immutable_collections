@@ -20,6 +20,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `hash2`
     - `hash3`
     - `hash4`
+    - `Entry.hashCode`
 
 ## 18/10/2020
 

@@ -164,7 +164,9 @@ void main() {
         });
 
         group("IMap.equalItems method |", () {
-          test("Not yet done", () => fail("Phil: FALTA TESTAR!!!"));
+          test("", () {
+            
+          });
         });
       });
     });

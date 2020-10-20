@@ -47,6 +47,22 @@ void main() {
       expect(mFlat.deepMapEquals(MFlat<String, int>({'a': 1, 'b': 2, 'c': 3})), isTrue);
       expect(mFlat.deepMapEquals(MFlat<String, int>({'a': 1, 'b': 2, 'c': 4})), isFalse);
     });
+
+    test("MFlat.deepMapEquals_toIterable method", () {
+      final Iterable<MapEntry<String, int>> entries1 = [
+            MapEntry('b', 2),
+            MapEntry('a', 1),
+            MapEntry('c', 3),
+          ],
+          entries2 = [
+            MapEntry('a', 1),
+            MapEntry('b', 2),
+          ];
+
+      expect(mFlat.deepMapEquals_toIterable(null), isFalse);
+      expect(mFlat.deepMapEquals_toIterable(entries1), isTrue);
+      expect(mFlat.deepMapEquals_toIterable(entries2), isFalse);
+    });
   });
 
   test("Initialization through the unsafe constructor", () {

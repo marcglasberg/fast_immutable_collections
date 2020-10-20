@@ -196,7 +196,7 @@ class IMap<K, V> // ignore: must_be_immutable
           : same(other)
       : false;
 
-  /// Will return true only if the [IMap] entries are equal to the entries in the [Iterable].
+  /// Will return `true` only if the [IMap] entries are equal to the entries in the [Iterable].
   /// Order is irrelevant. This may be slow for very large maps, since it compares each entry,
   /// one by one. To compare with a map, use method [equalItemsToMap] or [equalItemsToIMap].
   @override
