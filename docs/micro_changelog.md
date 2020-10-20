@@ -13,9 +13,9 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Tests for:
     - `ConfigSet`
+    - `ConfigMap`
 1. Current TODOs:
     - Test config classes:
-        - `ConfigMap`
         - `ConfigMapOfSets`
 
 ## 18/10/2020
