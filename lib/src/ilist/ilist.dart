@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
-import '../immutable_collection.dart';
+import '../utils/immutable_collection.dart';
 import '../iset/iset.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';

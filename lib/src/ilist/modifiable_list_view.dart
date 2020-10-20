@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import '../immutable_collection.dart';
+import '../utils/immutable_collection.dart';
 import 'ilist.dart';
 
 /// The [ModifiableListView] is a safe, modifiable [List] that is built from an [IList].

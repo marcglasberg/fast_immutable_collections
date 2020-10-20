@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:meta/meta.dart';
-import '../immutable_collection.dart';
+import '../utils/immutable_collection.dart';
 import 'ilist.dart';
 
 /// The [UnmodifiableListView] is a relatively safe, unmodifiable [List] that is built from an

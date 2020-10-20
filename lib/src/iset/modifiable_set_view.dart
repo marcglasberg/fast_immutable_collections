@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import '../immutable_collection.dart';
+import '../utils/immutable_collection.dart';
 import '../iset/iset.dart';
 
 class ModifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {

@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:meta/meta.dart';
-import '../immutable_collection.dart';
+import '../utils/immutable_collection.dart';
 import '../ilist/ilist.dart';
 import 's_flat.dart';
 import 's_add.dart';

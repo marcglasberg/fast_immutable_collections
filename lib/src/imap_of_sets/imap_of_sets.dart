@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/hash.dart';
+import 'package:fast_immutable_collections/src/utils/hash.dart';
 import 'package:meta/meta.dart';
 import '../ilist/ilist.dart';
 import '../imap/imap.dart';
