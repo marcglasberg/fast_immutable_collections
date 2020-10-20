@@ -21,6 +21,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `hash3`
     - `hash4`
     - `Entry.hashCode`
+    - `IMap.equalItems`
 
 ## 18/10/2020
 
