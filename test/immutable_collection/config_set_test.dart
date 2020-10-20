@@ -82,10 +82,21 @@ void main() {
       expect(configSet3.toString(), 'ConfigSet{isDeepEquals: true, autoSort: false}');
     });
 
-    // TODO: completar
     group("defaultConfigList |", () {
-      test("", () {
-        
+      test("Is initially a ConfigSet with isDeepEquals = true and autoSort = true", () {
+        expect(defaultConfigSet, const ConfigSet());
+        expect(defaultConfigSet.isDeepEquals, isTrue);
+        expect(defaultConfigSet.autoSort, isTrue);
+      });
+
+      test("Can modify the default", () {
+        defaultConfigSet = ConfigSet(isDeepEquals: false, autoSort: false);
+        expect(defaultConfigSet, const ConfigSet(isDeepEquals: false, autoSort: false));
+      });
+
+      test("Changing the default ConfigSet will throw an exception if lockConfig", () {
+        lockConfig();
+        expect(() => defaultConfigSet = ConfigSet(isDeepEquals: false), throwsStateError);
       });
     });
   });
