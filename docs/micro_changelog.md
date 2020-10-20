@@ -15,6 +15,8 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `ConfigSet`
     - `ConfigMap`
     - `ConfigMapOfSets`
+    - `IteratorExtension`
+    - `MapIteratorExtension`
 
 ## 18/10/2020
 
