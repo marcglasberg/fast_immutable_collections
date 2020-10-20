@@ -278,8 +278,8 @@ class ConfigMapOfSets {
 
   const ConfigMapOfSets({
     this.isDeepEquals = true,
-    this.autoSortKeys,
-    this.autoSortValues,
+    this.autoSortKeys = true,
+    this.autoSortValues = true,
   });
 
   ConfigMap get asConfigMap => ConfigMap(
