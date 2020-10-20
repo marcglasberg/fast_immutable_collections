@@ -206,8 +206,8 @@ class ConfigMap {
 
   const ConfigMap({
     this.isDeepEquals = true,
-    this.autoSortKeys,
-    this.autoSortValues,
+    this.autoSortKeys = true,
+    this.autoSortValues = true,
   });
 
   ConfigMap copyWith({

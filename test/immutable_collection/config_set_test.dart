@@ -82,7 +82,7 @@ void main() {
       expect(configSet3.toString(), 'ConfigSet{isDeepEquals: true, autoSort: false}');
     });
 
-    group("defaultConfigList |", () {
+    group("defaultConfigSet |", () {
       test("Is initially a ConfigSet with isDeepEquals = true and autoSort = true", () {
         expect(defaultConfigSet, const ConfigSet());
         expect(defaultConfigSet.isDeepEquals, isTrue);

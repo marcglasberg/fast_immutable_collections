@@ -11,10 +11,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ### 1. Philippe Fanaro
 
+1. Tests for:
+    - `ConfigSet`
 1. Current TODOs:
     - Test config classes:
-        - `ConfigSet`
         - `ConfigMap`
+        - `ConfigMapOfSets`
 
 ## 18/10/2020
 
