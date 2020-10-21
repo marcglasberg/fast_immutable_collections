@@ -19,7 +19,7 @@ class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
         _set = set;
 
   @override
-  bool add(T value) => throw UnsupportedError('Set is unmodifiable.');
+  bool add(T value) => throw UnsupportedError("Set is unmodifiable.");
 
   @override
   bool contains(Object element) => _iSet?.contains(element) ?? _set.contains(element);
@@ -31,7 +31,7 @@ class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
           : null;
 
   @override
-  bool remove(Object value) => throw UnsupportedError('Set is unmodifiable.');
+  bool remove(Object value) => throw UnsupportedError("Set is unmodifiable.");
 
   @override
   Iterator<T> get iterator => _set?.iterator ?? _iSet.iterator;
