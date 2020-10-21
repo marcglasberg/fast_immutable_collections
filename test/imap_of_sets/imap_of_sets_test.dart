@@ -40,21 +40,11 @@ void main() {
           "b": {1, 2, 3},
         }).add("a", 1).add("a", 2);
 
-// final IMapOfSets<String, int> iMapOfSets1WithCompareKey = iMapOfSets1.config(
-//   compareKey: (String key1, String key2) => key1.compareTo(key2),
-//   compareValue: (int value1, int value2) => value1.compareTo(value2),
-// );
-    fail("Phil, isso aqui mudou!");
-    final IMapOfSets<String, int> iMapOfSets1WithCompareKey = null;
-
     test('IMapOfSets.== Operator', () {
       expect(iMapOfSets1 == iMapOfSets2, isTrue);
       expect(iMapOfSets1 == iMapOfSets3, isFalse);
       expect(iMapOfSets1 == iMapOfSets4, isTrue);
       expect(iMapOfSets1 == iMapOfSets2.remove('a', 3), isTrue);
-      expect(iMapOfSets1WithCompareKey == iMapOfSets1, isFalse);
-      // TODO: Apparently, having it the compare keys as null is messing up Dart's type inference?
-      expect(iMapOfSets1 == iMapOfSets1WithCompareKey, isFalse);
     });
 
     test("IMapOfSets.same method", () {
@@ -62,8 +52,6 @@ void main() {
       expect(iMapOfSets1.same(iMapOfSets3), isFalse);
       expect(iMapOfSets1.same(iMapOfSets4), isFalse);
       expect(iMapOfSets1.same(iMapOfSets1.remove('a', 3)), isTrue);
-      expect(iMapOfSets1WithCompareKey.same(iMapOfSets1), isFalse);
-      expect(iMapOfSets1.same(iMapOfSets1WithCompareKey), isFalse);
     });
 
     test("IMapOfSets.hashCode method", () {
@@ -343,23 +331,34 @@ void main() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("Config", () {
-    final IMapOfSets<String, int> iMap = IMapOfSets({
+  group("Config |", () {
+    final Map<String, Set<int>> mapOfSets = {
       "a": {1, 2},
       "b": {1, 2, 3},
+    };
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets(mapOfSets);
+    final ConfigMapOfSets configMapOfSets =
+        ConfigMapOfSets(isDeepEquals: false, autoSortKeys: false, autoSortValues: false);
+
+    test("IMapOfSets.withConfig factory constructor", () {
+      final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
+
+      expect(iMapOfSets2.config.isDeepEquals, isFalse);
+      expect(iMapOfSets2.config.autoSortKeys, isFalse);
+      expect(iMapOfSets2.config.autoSortValues, isFalse);
     });
 
-    fail("Phil, isso aqui mudou!");
-    // expect(iMap.compareKey, isNull);
-    // expect(iMap.compareValue, isNull);
-    //
-    // final IMapOfSets<String, int> newIMap = iMap.config(
-    //   compareKey: (String key1, String key2) => key1.compareTo(key2),
-    //   compareValue: (int value1, int value2) => value1.compareTo(value2),
-    // );
-    //
-    // expect(newIMap.compareKey, isNotNull);
-    // expect(newIMap.compareValue, isNotNull);
+    test("IMapOfSets.withConfig method", () {
+      expect(iMapOfSets1.config.isDeepEquals, isTrue);
+      expect(iMapOfSets1.config.autoSortKeys, isTrue);
+      expect(iMapOfSets1.config.autoSortValues, isTrue);
+
+      final IMapOfSets<String, int> iMapOfSets2 = iMapOfSets1.withConfig(configMapOfSets);
+
+      expect(iMapOfSets2.config.isDeepEquals, isFalse);
+      expect(iMapOfSets2.config.autoSortKeys, isFalse);
+      expect(iMapOfSets2.config.autoSortValues, isFalse);
+    });
   });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

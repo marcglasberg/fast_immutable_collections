@@ -64,6 +64,14 @@ void main() {
       expect(sFlat.deepSetEquals(SFlat<int>([1, 2, 3, 3])), isTrue);
       expect(sFlat.deepSetEquals(SFlat<int>([1, 2, 3, 4])), isFalse);
     });
+
+    test("SFlat.deepSetEquals_toIterable method", () {
+      final Iterable<int> iterable1 = [3, 2, 1], iterable2 = [1, 2];
+
+      expect(sFlat.deepSetEquals_toIterable(null), isFalse);
+      expect(sFlat.deepSetEquals_toIterable(iterable1), isTrue);
+      expect(sFlat.deepSetEquals_toIterable(iterable2), isFalse);
+    });
   });
 
   group("Ensuring Immutability |", () {
@@ -385,12 +393,12 @@ void main() {
       expect(mapEntry1.hashCode, mapEntry3.hashCode);
     });
 
-    test('MapEntryEquality.hash method of a different type of object', () {
+    test("MapEntryEquality.hash method of a different type of object", () {
       expect(MapEntryEquality().hash(1), 1.hashCode);
       expect(MapEntryEquality().hash('a'), 'a'.hashCode);
     });
 
-    test('MapEntryEquality.isValidKey method', () {
+    test("MapEntryEquality.isValidKey method", () {
       expect(MapEntryEquality().isValidKey(1), isTrue);
     });
   });

@@ -56,13 +56,19 @@ class IMapOfSets<K, V> //
 
   bool get isIdentityEquals => !config.isDeepEquals;
 
-  /// Creates a new map-of-sets with the given [config].
+  /// Creates a new map-of-sets with the given [config] ([ConfigMapOfSets]).
   ///
   /// To copy the config from another [IMapOfSets]:
-  ///    `mapOfSets = mapOfSets.withConfig(other.config)`.
+  /// 
+  /// ```dart
+  /// mapOfSets = mapOfSets.withConfig(other.config);
+  /// ```
   ///
   /// To change the current config:
-  ///    `mapOfSets = mapOfSets.withConfig(mapOfSets.config.copyWith(isDeepEquals: isDeepEquals))`.
+  /// 
+  /// ```dart
+  /// mapOfSets = mapOfSets.withConfig(mapOfSets.config.copyWith(isDeepEquals: isDeepEquals));
+  /// ```
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///

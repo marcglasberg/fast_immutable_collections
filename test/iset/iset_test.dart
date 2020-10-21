@@ -235,7 +235,15 @@ void main() {
         });
 
         group("ISet.equalItems method |", () {
-          test("Not yet done", () => fail("Phil: FALTA TESTAR!!!"));
+          final Iterable<int> iterable1 = [1, 2], iterable3 = [1], iterable4 = [2, 1];
+
+          test("Null", () => expect(iSet1.equalItems(null), isFalse));
+
+          test("Identity", () => expect(iSet1.equalItems(iterable1), isTrue));
+
+          test("The order doesn't matter", () => expect(iSet1.equalItems(iterable4), isTrue));
+
+          test("Different items yield false", () => expect(iSet1.equalItems(iterable3), isFalse));
         });
       });
     });
