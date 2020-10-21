@@ -379,10 +379,10 @@ void main() {
     });
 
     test("MapEntryEquality.hash method", () {
-      expect(MapEntryEquality().hash(mapEntry1), 170824771);
-      expect(MapEntryEquality().hash(mapEntry2), 170824768);
-      expect(MapEntryEquality().hash(mapEntry3), 170824771);
-      fail('This is not the way to test hashCode.');
+      expect(mapEntry1 == mapEntry2, isFalse);
+      expect(mapEntry1 == mapEntry3, isTrue);
+      expect(mapEntry1.hashCode, isNot(mapEntry2.hashCode));
+      expect(mapEntry1.hashCode, mapEntry3.hashCode);
     });
 
     test('MapEntryEquality.hash method of a different type of object', () {
@@ -391,7 +391,7 @@ void main() {
     });
 
     test('MapEntryEquality.isValidKey method', () {
-      expect(MapEntryEquality().isValidKey(1), true);
+      expect(MapEntryEquality().isValidKey(1), isTrue);
     });
   });
 }
