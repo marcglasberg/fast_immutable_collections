@@ -16,6 +16,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `MFlat`
     - `MAdd`
     - `MAddAll`
+    - `MReplace`
 
 ## 20/10/2020
 
