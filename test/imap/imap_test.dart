@@ -676,8 +676,11 @@ void main() {
     group("IMap Contains Family |", () {
       test("IMap.contains method", () {
         expect(iMap.contains("a", 1), isTrue);
+        expect(iMap.contains("a", 2), isFalse);
         expect(iMap.contains("b", 2), isTrue);
+        expect(iMap.contains("b", 3), isFalse);
         expect(iMap.contains("c", 3), isTrue);
+        expect(iMap.contains("c", 4), isFalse);
         expect(iMap.contains("z", 100), isFalse);
       });
 

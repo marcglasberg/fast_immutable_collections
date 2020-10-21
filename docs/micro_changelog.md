@@ -12,6 +12,8 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 ### 1. Philippe Fanaro
 
 1. Fixed some broken tests.
+1. Added tests ensuring the immutability of:
+    - `MAdd`
 
 ## 20/10/2020
 

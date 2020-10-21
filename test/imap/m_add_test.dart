@@ -69,4 +69,128 @@ void main() {
   });
 
   // TODO: tests for ensuring immutability.
+  group("Ensuring Immutability |", () {
+    group("MAdd.add method |", () {
+      test("Changing the passed mutable map doesn't change the MAdd", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+
+        original.addAll({"c": 3, "d": 4, "e": 5});
+
+        expect(original, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4, "e": 5});
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+      });
+
+      test("Adding to the original MAdd doesn't change it", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+
+        final M<String, int> m = mAdd.add(key: "d", value: 4);
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+        expect(m.unlock, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
+      });
+
+      test("If the item being passed is a variable, a pointer to it shouldn't exist inside LAdd", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+
+        int willChange = 4;
+        final M<String, int> m = mAdd.add(key: "d", value: willChange);
+
+        willChange = 5;
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+        expect(willChange, 5);
+        expect(m.unlock, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
+      });
+    });
+
+    group("MAdd.addAll method |", () {
+      test("Changing the passed mutable map doesn't change the MAdd", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+        
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+
+        original.addAll(<String, int>{"c": 3, "d": 4});
+
+        expect(original, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+      });
+
+      test("Changing the passed immutable map doesn't change the original MAdd", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+        
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+
+        final M<String, int> m = mAdd.addAll(<String, int>{"c": 3, "d": 4}.lock);
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+        expect(m.unlock, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
+      });
+
+      test("If the items being passed are from a variable, "
+          "it shouldn't have a pointer to the variable", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd1 = MAdd(mFlat, "c", 3), mAdd2 = MAdd(mFlat, "d", 4);
+        
+        expect(mAdd1.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+        expect(mAdd2.unlock, <String, int>{"a": 1, "b": 2, "d": 4});
+
+        final M<String, int> m = mAdd1.addAll(IMap(mAdd2.unlock));
+        original.addAll({"z": 5});
+
+        expect(original, <String, int>{"a": 1, "b": 2, "z": 5});
+        expect(mAdd1.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+        expect(mAdd2.unlock, <String, int>{"a": 1, "b": 2, "d": 4});
+        expect(m.unlock, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
+      });
+    });
+
+    group("MAdd.remove method |", () {
+      test("Changing the passed mutable map doesn't change the MAdd", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+
+        original.remove("b");
+
+        expect(original, <String, int>{"a": 1});
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+      });
+
+      test("Removing from the original MAdd doesn't change it", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+        final MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+
+        final M<String, int> m = mAdd.remove("c");
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+        expect(m.unlock, <String, int>{"a": 1, "b": 2});
+      });
+    });
+  });
 }

@@ -1,5 +1,6 @@
 import 'imap.dart';
 
+// TODO: Marcelo, não seria interessante adicionar `@immutable` a esses objetos de backend?
 class MAdd<K, V> extends M<K, V> {
   final M<K, V> _m;
   final K _key;
