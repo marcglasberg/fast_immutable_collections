@@ -13,7 +13,9 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 1. Fixed some broken tests.
 1. Added tests ensuring the immutability of:
+    - `MFlat`
     - `MAdd`
+    - `MAddAll`
 
 ## 20/10/2020
 
