@@ -118,4 +118,111 @@ void main() {
       expect(mFlat['z'], isNull);
     });
   });
+
+  group("Ensuring Immutability |", () {
+    group("MFlat.add method |", () {
+      test("Changing the passed mutable map doesn't change the MAdd", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+
+        original.addAll({"c": 3, "d": 4, "e": 5});
+
+        expect(original, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4, "e": 5});
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+      });
+
+      test("Adding to the original MFlat doesn't change it", () {
+        const Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+
+        final M<String, int> m = mFlat.add(key: "c", value: 3);
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+        expect(m.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
+      });
+
+      test("If the item being passed is a variable, a pointer to it shouldn't exist inside MAdd",
+          () {
+        const Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+
+        int willChange = 4;
+        final M<String, int> m = mFlat.add(key: "c", value: willChange);
+
+        willChange = 5;
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+        expect(willChange, 5);
+        const Map<String, int> finalMap = <String, int>{"a": 1, "b": 2, "c": 4};
+        m.unlock.forEach((String key, int value) => expect(m[key], finalMap[key]));
+      });
+    });
+
+    group("MFlat.addAll method |", () {
+      test("Changing the passed immutable map doesn't change the original MFlat", () {
+        const Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+
+        final M<String, int> m = mFlat.addAll(<String, int>{"c": 3, "d": 4}.lock);
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+        expect(m.unlock, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
+      });
+
+      test("If the items being passed are from a variable, "
+          "it shouldn't have a pointer to the variable", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat1 = MFlat(original), mFlat2 = MFlat(original);
+        
+        expect(mFlat1.unlock, <String, int>{"a": 1, "b": 2});
+        expect(mFlat2.unlock, <String, int>{"a": 1, "b": 2});
+
+        final M<String, int> m = mFlat1.addAll(IMap(mFlat2.unlock));
+        original.addAll({"z": 5});
+
+        expect(original, <String, int>{"a": 1, "b": 2, "z": 5});
+        expect(mFlat1.unlock, <String, int>{"a": 1, "b": 2});
+        expect(mFlat2.unlock, <String, int>{"a": 1, "b": 2});
+        expect(m.unlock, <String, int>{"a": 1, "b": 2});
+      });
+    });
+
+    group("MFlat.remove method |", () {
+      test("Changing the passed mutable map doesn't change the MFlat", () {
+        final Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+
+        original.remove("b");
+
+        expect(original, <String, int>{"a": 1});
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+      });
+
+      test("Removing from the original MFlat doesn't change it", () {
+        const Map<String, int> original = {"a": 1, "b": 2};
+        final MFlat<String, int> mFlat = MFlat(original);
+
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+
+        final M<String, int> m = mFlat.remove("b");
+
+        expect(original, <String, int>{"a": 1, "b": 2});
+        expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
+        expect(m.unlock, <String, int>{"a": 1});
+      });
+    });
+  });
 }
