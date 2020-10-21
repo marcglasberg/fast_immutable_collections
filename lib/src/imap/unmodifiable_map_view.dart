@@ -19,7 +19,7 @@ class UnmodifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeE
         _map = map;
 
   @override
-  void operator []=(K key, V value) => UnsupportedError("Map is unmodifiable.");
+  void operator []=(K key, V value) => throw UnsupportedError("Map is unmodifiable.");
 
   @override
   V operator [](Object key) => _iMap != null ? _iMap[key as K] : _map[key];
