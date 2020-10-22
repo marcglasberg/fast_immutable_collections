@@ -9,6 +9,7 @@ class LFlat<T> extends L<T> {
 
   static L<T> empty<T>() => LFlat.unsafe(<T>[]);
 
+  /// Safe.
   LFlat(Iterable<T> iterable)
       : assert(iterable != null),
         _list = List.of(iterable, growable: false);

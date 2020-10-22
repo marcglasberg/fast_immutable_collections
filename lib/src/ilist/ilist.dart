@@ -1,8 +1,8 @@
 import 'dart:collection';
-
+import 'dart:math';
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:meta/meta.dart';
-
 import '../utils/immutable_collection.dart';
 import '../iset/iset.dart';
 import 'l_add.dart';
@@ -51,17 +51,6 @@ class IList<T> // ignore: must_be_immutable
               ? IList.empty<T>(config)
               : IList<T>._unsafe(LFlat<T>(iterable), config: config);
 
-  /// Unsafe constructor. Use this at your own peril.
-  /// This constructor is fast, since it makes no defensive copies of the list.
-  /// However, you should only use this with a new list you've created yourself,
-  /// when you are sure no external copies exist. If the original list is modified,
-  /// it will break the IList and any other derived lists in unpredictable ways.
-  IList.unsafe(List<T> list, {@required this.config})
-      : assert(config != null),
-        _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list) {
-    if (disallowUnsafeConstructors) throw UnsupportedError("IList.unsafe is disallowed.");
-  }
-
   /// Special IList constructor from ISet.
   factory IList.fromISet(
     ISet<T> iSet, {
@@ -73,7 +62,7 @@ class IList<T> // ignore: must_be_immutable
     return IList._unsafe(l, config: config ?? defaultConfigList);
   }
 
-  /// Fast if the iterable is an IList.
+  /// Safe. Fast if the iterable is an IList.
   IList._(Iterable<T> iterable, {@required this.config})
       : assert(config != null),
         _l = iterable is IList<T>
@@ -82,8 +71,24 @@ class IList<T> // ignore: must_be_immutable
                 ? LFlat.empty<T>()
                 : LFlat<T>(iterable);
 
+  /// Unsafe constructor. Use this at your own peril.
+  /// This constructor is fast, since it makes no defensive copies of the list.
+  /// However, you should only use this with a new list you've created yourself,
+  /// when you are sure no external copies exist. If the original list is modified,
+  /// it will break the IList and any other derived lists in unpredictable ways.
+  IList.unsafe(List<T> list, {@required this.config})
+      : assert(config != null),
+        _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list) {
+    if (disallowUnsafeConstructors) throw UnsupportedError("IList.unsafe is disallowed.");
+  }
+
   /// Unsafe.
   IList._unsafe(this._l, {@required this.config}) : assert(config != null);
+
+  /// Unsafe.
+  IList._unsafeFromList(List<T> list, {@required this.config})
+      : assert(config != null),
+        _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
 
   /// Creates a new list with the given [config].
   ///
@@ -114,9 +119,9 @@ class IList<T> // ignore: must_be_immutable
 
   bool get isIdentityEquals => !config.isDeepEquals;
 
-  /// Unlocks the list, returning a regular (mutable) [List].
+  /// Unlocks the list, returning a regular (mutable, growable) [List].
   /// This list is "safe", in the sense that is independent from the original [IList].
-  List<T> get unlock => List.of(_l);
+  List<T> get unlock => List.of(_l, growable: true);
 
   /// Unlocks the list, returning a safe, unmodifiable (immutable) [List] view.
   /// The word "view" means the list is backed by the original [IList].
@@ -213,7 +218,7 @@ class IList<T> // ignore: must_be_immutable
       : identityHashCode(_l) ^ config.hashCode;
 
   /// Compacts the list. Chainable method.
-  IList get flush {
+  IList<T> get flush {
     if (!isFlushed) _l = LFlat<T>(_l);
     return this;
   }
@@ -222,6 +227,7 @@ class IList<T> // ignore: must_be_immutable
 
   IList<T> add(T item) => IList<T>._unsafe(_l.add(item), config: config);
 
+  /// Returns the concatenation of this list and [items].
   IList<T> addAll(Iterable<T> items) => IList<T>._unsafe(_l.addAll(items), config: config);
 
   IList<T> remove(T item) {
@@ -342,6 +348,440 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   String toString() => "[${_l.join(", ")}]";
+
+  /// Returns the concatenation of this list and [other].
+  /// Returns a new list containing the elements of this list followed by
+  /// the elements of [other].
+  IList<T> operator +(IList<T> other) => addAll(other);
+
+  /// Returns an [IMap] view of this list.
+  /// The map uses the indices of this list as keys and the corresponding objects
+  /// as values. The `Map.keys` [Iterable] iterates the indices of this list
+  /// in numerical order.
+  ///
+  ///     IList<String> words = ['hel', 'lo', 'there'].lock;
+  ///     IMap<int, String> map = words.asMap();
+  ///     print(map[0] + map[1]); // Prints 'hello';
+  ///     map.keys.toList(); // [0, 1, 2, 3]
+  IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListView(this).asMap());
+
+  /// Returns an empty list with the same configuration.
+  void clear() => empty<T>(config);
+
+  /// Returns the index of the first [element] in the list.
+  ///
+  /// Searches the list from index [start] to the end of the list.
+  /// The first time an object [:o:] is encountered so that [:o == element:],
+  /// the index of [:o:] is returned.
+  ///
+  /// If [start] is not provided, this method searches from the start of the list.
+  ///
+  ///     IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  ///     notes.indexOf('re');    // 1
+  ///     notes.indexOf('re', 2); // 3
+  ///
+  /// Returns -1 if [element] is not found.
+  ///
+  ///     notes.indexOf('fa');    // -1
+  ///
+  int indexOf(T element, [int start = 0]) {
+    start ??= 0;
+    var _length = length;
+    if (start < 0 || start >= _length)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = start; i <= _length; i++) if (this[i] == element) return i;
+    return -1;
+  }
+
+  /// This is the equivalent to `void operator []=(int index, T value);`
+  /// Sets the value at the given [index] in the list to [value]
+  /// or throws a [RangeError] if [index] is out of bounds.
+  ///
+  IList<T> put(int index, T value) {
+    // TODO: Still need to implement efficiently.
+    var list = toList(growable: false);
+    list[index] = value;
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Finds the first occurrence of [from], and replace it with [to].
+  IList<T> replaceFirst({@required T from, @required T to}) {
+    var index = indexOf(from);
+    return (index == -1) ? this : put(index, to);
+  }
+
+  /// Finds all occurrences of [from], and replace them with [to].
+  IList<T> replaceAll({@required T from, @required T to}) =>
+      map((element) => (element == from) ? to : element);
+
+  /// Finds the first item that satisfies the provided [test],
+  /// and replace it with [to].
+  IList<T> replaceFirstWhere(bool Function(T item) test, T to) {
+    var index = indexWhere(test);
+    return (index == -1) ? this : put(index, to);
+  }
+
+  /// Finds all items that satisfy the provided [test],
+  /// and replace it with [to].
+  IList<T> replaceAllWhere(bool Function(T element) test, T to) =>
+      map((element) => test(element) ? to : element);
+
+  /// Iterates through each item. If the item satisfies the provided [test],
+  /// replace it with applying [apply]. Otherwise, keep the item unchanged.
+  /// If [test] is not provided, it will apply [apply] to all items.
+  IList<T> process({
+    bool Function(IList<T> list, int index, T item) test,
+    @required Iterable<T> Function(IList<T> list, int index, T item) apply,
+  }) {
+    assert(apply != null);
+    // ---
+
+    List<T> result = [];
+    int _length = length;
+    for (int index = 0; index < _length; index++) {
+      T item = this[index];
+      var satisfiesTest = test == null ? true : test(this, index, item);
+      if (satisfiesTest)
+        result.add(item);
+      else
+        result.addAll(apply(this, index, item));
+    }
+    return IList._unsafeFromList(result, config: config);
+  }
+
+  /// Returns the first index in the list that satisfies the provided [test].
+  ///
+  /// Searches the list from index [start] to the end of the list.
+  /// The first time an object `o` is encountered so that `test(o)` is true,
+  /// the index of `o` is returned.
+  ///
+  /// ```
+  /// List<String> notes = ['do', 're', 'mi', 're'];
+  /// notes.indexWhere((note) => note.startsWith('r'));       // 1
+  /// notes.indexWhere((note) => note.startsWith('r'), 2);    // 3
+  /// ```
+  ///
+  /// Returns -1 if [element] is not found.
+  /// ```
+  /// notes.indexWhere((note) => note.startsWith('k'));    // -1
+  /// ```
+  int indexWhere(bool Function(T element) test, [int start = 0]) {
+    start ??= 0;
+    var _length = length;
+    if (start < 0 || start >= _length)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = start; i <= _length; i++) if (test(this[i])) return i;
+    return -1;
+  }
+
+  /// Returns the last index of [element] in this list.
+  ///
+  /// Searches the list backwards from index [start] to 0.
+  ///
+  /// The first time an object [:o:] is encountered so that [:o == element:],
+  /// the index of [:o:] is returned.
+  ///
+  ///     IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  ///     notes.lastIndexOf('re', 2); // 1
+  ///
+  /// If [start] is not provided, this method searches from the end of the list.
+  ///
+  ///     notes.lastIndexOf('re');  // 3
+  ///
+  /// Returns -1 if [element] is not found.
+  ///
+  ///     notes.lastIndexOf('fa');  // -1
+  ///
+  int lastIndexOf(T element, [int start]) {
+    var _length = length;
+    start ??= _length;
+    if (start < 0 || start >= _length)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = _length - 1; i >= start; i--) if (this[i] == element) return i;
+    return -1;
+  }
+
+  /// Returns the last index in the list that satisfies the provided [test].
+  ///
+  /// Searches the list from index [start] to 0.
+  /// The first time an object `o` is encountered so that `test(o)` is true,
+  /// the index of `o` is returned.
+  /// If [start] is omitted, it defaults to the [length] of the list.
+  ///
+  /// ```
+  /// IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// notes.lastIndexWhere((note) => note.startsWith('r'));       // 3
+  /// notes.lastIndexWhere((note) => note.startsWith('r'), 2);    // 1
+  /// ```
+  ///
+  /// Returns -1 if [element] is not found.
+  /// ```
+  /// notes.lastIndexWhere((note) => note.startsWith('k'));    // -1
+  /// ```
+  ///
+  int lastIndexWhere(bool Function(T element) test, [int start]) {
+    var _length = length;
+    start ??= _length;
+    if (start < 0 || start >= _length)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = _length - 1; i >= start; i--) if (test(this[i])) return i;
+    return -1;
+  }
+
+  /// Removes the objects in the range [start] inclusive to [end] exclusive
+  /// and inserts the contents of [replacement] in its place.
+  ///
+  ///     List<int> list = [1, 2, 3, 4, 5];
+  ///     list.replaceRange(1, 4, [6, 7]);
+  ///     list.join(', '); // '1, 6, 7, 5'
+  ///
+  /// The provided range, given by [start] and [end], must be valid.
+  /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
+  /// `len` is this list's `length`. The range starts at `start` and has length
+  /// `end - start`. An empty range (with `end == start`) is valid.
+  ///
+  /// This method does not work on fixed-length lists, even when [replacement]
+  /// has the same number of elements as the replaced range. In that case use
+  /// [setRange] instead.
+  ///
+  IList<T> replaceRange(int start, int end, Iterable<T> replacement) {
+    // TODO: Still need to implement efficiently.
+    return IList._unsafeFromList(toList(growable: true)..replaceRange(start, end, replacement),
+        config: config);
+  }
+
+  /// Sets the objects in the range [start] inclusive to [end] exclusive
+  /// to the given [fillValue].
+  ///
+  /// The provided range, given by [start] and [end], must be valid.
+  /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
+  /// `len` is this list's `length`. The range starts at `start` and has length
+  /// `end - start`. An empty range (with `end == start`) is valid.
+  ///
+  /// Example:
+  /// ```dart
+  ///  List<int> list = new List(3);
+  ///     list.fillRange(0, 2, 1);
+  ///     print(list); //  [1, 1, null]
+  /// ```
+  ///
+  /// If the element type is not nullable, omitting [fillValue] or passing `null`
+  /// as [fillValue] will make the `fillRange` fail.
+  ///
+  IList<T> fillRange(int start, int end, [T fillValue]) {
+    // TODO: Still need to implement efficiently.
+    return IList._unsafeFromList(toList(growable: false)..fillRange(start, end, fillValue),
+        config: config);
+  }
+
+  /// Returns an [Iterable] that iterates over the objects in the range
+  /// [start] inclusive to [end] exclusive.
+  ///
+  /// The provided range, given by [start] and [end], must be valid at the time
+  /// of the call.
+  ///
+  /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
+  /// `len` is this list's `length`. The range starts at `start` and has length
+  /// `end - start`. An empty range (with `end == start`) is valid.
+  ///
+  /// The returned [Iterable] behaves like `skip(start).take(end - start)`.
+  /// That is, it does *not* throw if this list changes size.
+  ///
+  ///     List<String> colors = ['red', 'green', 'blue', 'orange', 'pink'];
+  ///     Iterable<String> range = colors.getRange(1, 4);
+  ///     range.join(', ');  // 'green, blue, orange'
+  ///     colors.length = 3;
+  ///     range.join(', ');  // 'green, blue'
+  Iterable<T> getRange(int start, int end) {
+    // TODO: Still need to implement efficiently.
+    return toList(growable: false).getRange(start, end);
+  }
+
+  /// Returns a new list containing the elements between [start] and [end].
+  ///
+  /// The new list is a `List<E>` containing the elements of this list at
+  /// positions greater than or equal to [start] and less than [end] in the same
+  /// order as they occur in this list.
+  ///
+  /// ```dart
+  /// var colors = ["red", "green", "blue", "orange", "pink"];
+  /// print(colors.sublist(1, 3)); // [green, blue]
+  /// ```
+  ///
+  /// If [end] is omitted, it defaults to the [length] of this list.
+  ///
+  /// ```dart
+  /// print(colors.sublist(1)); // [green, blue, orange, pink]
+  /// ```
+  ///
+  /// The `start` and `end` positions must satisfy the relations
+  /// 0 ≤ `start` ≤ `end` ≤ `this.length`
+  /// If `end` is equal to `start`, then the returned list is empty.
+  List<T> sublist(int start, [int end]) {
+    // TODO: Still need to implement efficiently.
+    return toList(growable: false).sublist(start, end);
+  }
+
+  /// Inserts the object at position [index] in this list.
+  ///
+  /// This increases the length of the list by one and shifts all objects
+  /// at or after the index towards the end of the list.
+  ///
+  /// The list must be growable.
+  /// The [index] value must be non-negative and no greater than [length].
+  IList<T> insert(int index, T element) {
+    // TODO: Still need to implement efficiently.
+    return IList._unsafeFromList(toList(growable: true)..insert(index, element), config: config);
+  }
+
+  /// Inserts all objects of [iterable] at position [index] in this list.
+  ///
+  /// This increases the length of the list by the length of [iterable] and
+  /// shifts all later objects towards the end of the list.
+  ///
+  /// The list must be growable.
+  /// The [index] value must be non-negative and no greater than [length].
+  IList<T> insertAll(int index, Iterable<T> iterable) {
+    // TODO: Still need to implement efficiently.
+    return IList._unsafeFromList(toList(growable: true)..insertAll(index, iterable),
+        config: config);
+  }
+
+  /// Removes the object at position [index] from this list.
+  ///
+  /// This method reduces the length of `this` by one and moves all later objects
+  /// down by one position.
+  ///
+  /// Returns the removed object.
+  ///
+  /// The [index] must be in the range `0 ≤ index < length`.
+  ///
+  /// If you want to recover the removed item, you can pass a mutable [removedItem].
+  IList<T> removeAt(int index, [Item<T> removedItem]) {
+    // TODO: Still need to implement efficiently.
+    var list = toList(growable: true);
+    var value = list.removeAt(index);
+    removedItem?.set(value);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Pops and returns the last object in this list.
+  ///
+  /// The list must not be empty.
+  ///
+  IList<T> removeLast([Item<T> removedItem]) {
+    return removeAt(length - 1, removedItem);
+  }
+
+  /// Removes the objects in the range [start] inclusive to [end] exclusive.
+  ///
+  /// The provided range, given by [start] and [end], must be valid.
+  /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
+  /// `len` is this list's `length`. The range starts at `start` and has length
+  /// `end - start`. An empty range (with `end == start`) is valid.
+  ///
+  IList<T> removeRange(int start, int end) {
+    // TODO: Still need to implement efficiently.
+    var list = toList(growable: true);
+    list.removeRange(start, end);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Removes all objects from this list that satisfy [test].
+  ///
+  /// An object [:o:] satisfies [test] if [:test(o):] is true.
+  ///
+  ///     List<String> numbers = ['one', 'two', 'three', 'four'];
+  ///     numbers.removeWhere((item) => item.length == 3);
+  ///     numbers.join(', '); // 'three, four'
+  ///
+  IList<T> removeWhere(bool Function(T element) test) {
+    // TODO: Still need to implement efficiently.
+    var list = toList(growable: true);
+    list.removeWhere(test);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Removes all objects from this list that fail to satisfy [test].
+  ///
+  /// An object [:o:] satisfies [test] if [:test(o):] is true.
+  ///
+  ///     List<String> numbers = ['one', 'two', 'three', 'four'];
+  ///     numbers.retainWhere((item) => item.length == 3);
+  ///     numbers.join(', '); // 'one, two'
+  ///
+  IList<T> retainWhere(bool Function(T element) test) {
+    // TODO: Still need to implement efficiently.
+    var list = toList(growable: true);
+    list.retainWhere(test);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Returns an [Iterable] of the objects in this list in reverse order.
+  IList<T> get reversed {
+    // TODO: Still need to implement efficiently.
+    var list = UnmodifiableListView(this).reversed;
+    return IList.withConfig(list, config);
+  }
+
+  /// Overwrites objects of `this` with the objects of [iterable], starting
+  /// at position [index] in this list.
+  ///
+  ///     List<String> list = ['a', 'b', 'c'];
+  ///     list.setAll(1, ['bee', 'sea']);
+  ///     list.join(', '); // 'a, bee, sea'
+  ///
+  /// This operation does not increase the length of `this`.
+  ///
+  /// The [index] must be non-negative and no greater than [length].
+  ///
+  /// The [iterable] must not have more elements than what can fit from [index]
+  /// to [length].
+  ///
+  /// If `iterable` is based on this list, its values may change /during/ the
+  /// `setAll` operation.
+  IList<T> setAll(int index, Iterable<T> iterable) {
+    // TODO: Still need to implement efficiently.
+    var list = toList(growable: true);
+    list.setAll(index, iterable);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Copies the objects of [iterable], skipping [skipCount] objects first,
+  /// into the range [start], inclusive, to [end], exclusive, of the list.
+  ///
+  ///     List<int> list1 = [1, 2, 3, 4];
+  ///     List<int> list2 = [5, 6, 7, 8, 9];
+  ///     // Copies the 4th and 5th items in list2 as the 2nd and 3rd items
+  ///     // of list1.
+  ///     list1.setRange(1, 3, list2, 3);
+  ///     list1.join(', '); // '1, 8, 9, 4'
+  ///
+  /// The provided range, given by [start] and [end], must be valid.
+  /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
+  /// `len` is this list's `length`. The range starts at `start` and has length
+  /// `end - start`. An empty range (with `end == start`) is valid.
+  ///
+  /// The [iterable] must have enough objects to fill the range from `start`
+  /// to `end` after skipping [skipCount] objects.
+  ///
+  /// If `iterable` is this list, the operation copies the elements
+  /// originally in the range from `skipCount` to `skipCount + (end - start)` to
+  /// the range `start` to `end`, even if the two ranges overlap.
+  ///
+  /// If `iterable` depends on this list in some other way, no guarantees are
+  /// made.
+  ///
+  IList<T> setRange(int start, int end, Iterable<T> iterable, [int skipCount = 0]) {
+    // TODO: Still need to implement efficiently.
+    var list = toList(growable: true);
+    list.setRange(start, end, iterable, skipCount);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Shuffles the elements of this list randomly.
+  IList<T> shuffle([Random random]) =>
+      IList._unsafeFromList(toList()..shuffle(random), config: config);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -361,8 +801,8 @@ abstract class L<T> implements Iterable<T> {
     return _flushed;
   }
 
-  /// Returns a regular Dart (mutable) List.
-  List<T> get unlock => List<T>.of(this);
+  /// Returns a regular Dart (mutable, growable) List.
+  List<T> get unlock => List<T>.of(this, growable: true);
 
   @override
   Iterator<T> get iterator;
@@ -376,10 +816,10 @@ abstract class L<T> implements Iterable<T> {
         (items is IList<T>) ? items._l : items,
       );
 
-  /// TODO: FALTA FAZER!!!
+  // TODO: Still need to implement efficiently.
   L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
-  /// TODO: FALTA FAZER!!!
+  // TODO: Still need to implement efficiently.
   /// If the list has more than `maxLength` elements, it gets cut on
   /// `maxLength`. Otherwise, it removes the last elements so it remains with
   /// only `maxLength` elements.

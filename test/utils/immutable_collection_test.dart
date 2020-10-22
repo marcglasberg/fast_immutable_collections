@@ -40,23 +40,16 @@ void main() {
 
   group("IteratorExtension |", () {
     const List<int> list = [1, 2, 3];
-    final Iterator<int> iterator = list.iterator;
 
     test("IteratorExtension.toIterable method/generator", () {
-      final Iterable<int> iterable = iterator.toIterable();
-
-      expect(iterable.contains(1), isTrue);
-      expect(iterable.contains(2), isTrue);
-      expect(iterable.contains(3), isTrue);
-      expect(iterable.contains(4), isFalse);
+      final Iterable<int> iterable = list.iterator.toIterable();
+      expect(iterable, [1, 2, 3]);
     });
 
     test("IteratorExtension.toList method", () {
-      final List<int> mutableList = iterator.toList(),
-          unmodifiableList = iterator.toList(growable: false);
+      final List<int> mutableList = list.iterator.toList();
+      final List<int> unmodifiableList = list.iterator.toList(growable: false);
 
-      // TODO: Marcelo, aparentemente, o gerador do `toIterable` não está gerando todos os valores
-      // na transição para a lista.
       mutableList.add(4);
       expect(mutableList, [1, 2, 3, 4]);
 
@@ -65,7 +58,7 @@ void main() {
     });
 
     test("IteratorExtension.toSet method", () {
-      final Set<int> mutableSet = iterator.toSet();
+      final Set<int> mutableSet = list.iterator.toSet();
 
       expect(mutableSet, {1, 2, 3});
     });
@@ -77,9 +70,9 @@ void main() {
       MapEntry('b', 2),
       MapEntry('c', 3),
     ];
-    final Iterator<MapEntry<String, int>> iterator = entryList.iterator;
 
     test("MapIteratorExtension.toIterable method", () {
+      final Iterator<MapEntry<String, int>> iterator = entryList.iterator;
       final Iterable<MapEntry<String, int>> iterable = iterator.toIterable();
 
       expect(iterable.contains(const MapEntry('a', 1)), isTrue);
@@ -89,8 +82,8 @@ void main() {
     });
 
     test("MapIteratorExtension.toMap method", () {
+      final Iterator<MapEntry<String, int>> iterator = entryList.iterator;
       final Map<String, int> map = iterator.toMap();
-
       expect(map, {"a": 1, "b": 2, "c": 3});
     });
   });

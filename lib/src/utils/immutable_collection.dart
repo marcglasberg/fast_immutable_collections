@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/src/ilist/ilist.dart';
 import 'package:meta/meta.dart';
 
 import 'hash.dart';
@@ -77,6 +78,21 @@ extension CanBeEmptyExtension on CanBeEmpty {
   bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
 
   bool get isEmptyButNotNull => (this != null) && isEmpty;
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Item<T> {
+  T _value;
+
+  T get value => _value;
+
+  Item();
+
+  void set(T value) {
+    if (_value != null) throw StateError("Value can't be set.");
+    _value = value;
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
