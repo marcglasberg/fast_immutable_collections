@@ -274,14 +274,40 @@ class IList<T> // ignore: must_be_immutable
     return length;
   }
 
+  /// Returns the first element.
+  /// Throws a [StateError] if the list is empty.
   @override
   T get first => _l.first;
 
+  /// Returns the last element.
+  /// Throws a [StateError] if the list is empty.
   @override
   T get last => _l.last;
 
+  /// Checks that this iterable has only one element, and returns that element.
+  /// Throws a [StateError] if the list is empty or has more than one element.
   @override
   T get single => _l.single;
+
+  /// Returns the first element, or `null` if the list is empty.
+  T get firstOrNull => isEmpty ? null : _l.first;
+
+  /// Returns the last element, or `null` if the list is empty.
+  T get lastOrNull => isEmpty ? null : _l.last;
+
+  /// Checks that the list has only one element, and returns that element.
+  /// Return `null` if the list is empty or has more than one element.
+  T get singleOrNull => (length != 1) ? null : _l.last;
+
+  /// Returns the first element, or [orElse] if the list is empty.
+  T firstOr(T orElse) => isEmpty ? orElse : _l.first;
+
+  /// Returns the last element, or [orElse] if the list is empty.
+  T lastOr(T orElse) => isEmpty ? orElse : _l.last;
+
+  /// Checks if the list has only one element, and returns that element.
+  /// Return `null` if the list is empty or has more than one element.
+  T singleOr(T orElse) => (length != 1) ? orElse : _l.first;
 
   @override
   T firstWhere(bool Function(T) test, {T Function() orElse}) => _l.firstWhere(test, orElse: orElse);
