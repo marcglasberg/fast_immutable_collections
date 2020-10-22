@@ -338,6 +338,28 @@ class IMap<K, V> // ignore: must_be_immutable
 
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
+
+  void clear() {
+    // TODO: implement clear
+    throw UnimplementedError("MISSING");
+  }
+
+  V putIfAbsent(K key, V Function() ifAbsent) {
+    // TODO: implement putIfAbsent
+    throw UnimplementedError();
+    throw UnimplementedError("MISSING");
+  }
+
+  V update(K key, V Function(V value) update, {V Function() ifAbsent}) {
+    // TODO: implement update
+    throw UnimplementedError();
+    throw UnimplementedError("MISSING");
+  }
+
+  void updateAll(V Function(K key, V value) update) {
+    // TODO: implement updateAll
+    throw UnimplementedError("MISSING");
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

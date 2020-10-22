@@ -59,13 +59,13 @@ class IMapOfSets<K, V> //
   /// Creates a new map-of-sets with the given [config] ([ConfigMapOfSets]).
   ///
   /// To copy the config from another [IMapOfSets]:
-  /// 
+  ///
   /// ```dart
   /// mapOfSets = mapOfSets.withConfig(other.config);
   /// ```
   ///
   /// To change the current config:
-  /// 
+  ///
   /// ```dart
   /// mapOfSets = mapOfSets.withConfig(mapOfSets.config.copyWith(isDeepEquals: isDeepEquals));
   /// ```
@@ -312,4 +312,54 @@ class IMapOfSets<K, V> //
   int get hashCode => isDeepEquals //
       ? hash2(_mapOfSets, config)
       : identityHashCode(_mapOfSets) ^ config.hashCode;
+
+  void addAll(Map<K, Set<V>> other) {
+    // TODO: implement addAll
+    throw UnimplementedError("MISSING");
+  }
+
+  void addEntries(Iterable<MapEntry<K, Set<V>>> newEntries) {
+    // TODO: implement addEntries
+    throw UnimplementedError("MISSING");
+  }
+
+  Map<RK, RV> cast<RK, RV>() {
+    // TODO: implement cast
+    throw UnimplementedError("MISSING");
+  }
+
+  void clear() {
+    // TODO: implement clear
+    throw UnimplementedError("MISSING");
+  }
+
+  void forEach(void Function(K key, Set<V> value) f) {
+    // TODO: implement forEach
+    throw UnimplementedError("MISSING");
+  }
+
+  Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(K key, Set<V> value) f) {
+    // TODO: implement map
+    throw UnimplementedError("MISSING");
+  }
+
+  Set<V> putIfAbsent(K key, Set<V> Function() ifAbsent) {
+    // TODO: implement putIfAbsent
+    throw UnimplementedError();
+  }
+
+  void removeWhere(bool Function(K key, Set<V> value) predicate) {
+    // TODO: implement removeWhere
+    throw UnimplementedError("MISSING");
+  }
+
+  Set<V> update(K key, Set<V> Function(Set<V> value) update, {Set<V> Function() ifAbsent}) {
+    // TODO: implement update
+    throw UnimplementedError("MISSING");
+  }
+
+  void updateAll(Set<V> Function(K key, Set<V> value) update) {
+    // TODO: implement updateAll
+    throw UnimplementedError("MISSING");
+  }
 }

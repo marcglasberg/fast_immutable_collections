@@ -372,6 +372,56 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   String toString() => "{${_s.join(", ")}}";
+
+  ISet<T> clear() {
+    // TODO: implement clear
+    throw UnimplementedError("MISSING");
+  }
+
+  bool containsAll(Iterable<Object> other) {
+    // TODO: implement containsAll
+    throw UnimplementedError("MISSING");
+  }
+
+  ISet<T> difference(Set<Object> other) {
+    // TODO: implement difference
+    throw UnimplementedError("MISSING");
+  }
+
+  ISet<T> intersection(Set<Object> other) {
+    // TODO: implement intersection
+    throw UnimplementedError("MISSING");
+  }
+
+  ISet<T> union(Set<T> other) {
+    // TODO: implement union
+    throw UnimplementedError("MISSING");
+  }
+
+  T lookup(Object object) {
+    // TODO: implement lookup
+    throw UnimplementedError("MISSING");
+  }
+
+  ISet<T> removeAll(Iterable<Object> elements) {
+    // TODO: implement removeAll
+    throw UnimplementedError("MISSING");
+  }
+
+  ISet<T> removeWhere(bool Function(T element) test) {
+    // TODO: implement removeWhere
+    throw UnimplementedError("MISSING");
+  }
+
+  ISet<T> retainAll(Iterable<Object> elements) {
+    // TODO: implement retainAll
+    throw UnimplementedError("MISSING");
+  }
+
+  ISet<T> retainWhere(bool Function(T element) test) {
+    // TODO: implement retainWhere
+    throw UnimplementedError("MISSING");
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
