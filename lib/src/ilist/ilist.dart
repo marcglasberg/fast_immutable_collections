@@ -358,9 +358,9 @@ class IList<T> // ignore: must_be_immutable
   @override
   IList<E> whereType<E>() => IList._(_l.whereType<E>(), config: config);
 
-  /// If the list has more than `maxLength` elements, it gets cut on
-  /// `maxLength`. Otherwise, it removes the last elements so it remains with
-  /// only `maxLength` elements.
+  /// If the list has more than `maxLength` elements, removes the last elements so it remains
+  /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
+  /// change anything.
   IList<T> maxLength(int maxLength) => IList._unsafe(_l.maxLength(maxLength), config: config);
 
   IList<T> sort([int Function(T a, T b) compare]) =>
@@ -846,9 +846,9 @@ abstract class L<T> implements Iterable<T> {
   L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
   // TODO: Still need to implement efficiently.
-  /// If the list has more than `maxLength` elements, it gets cut on
-  /// `maxLength`. Otherwise, it removes the last elements so it remains with
-  /// only `maxLength` elements.
+  /// If the list has more than `maxLength` elements, removes the last elements so it remains
+  /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
+  /// change anything.
   L<T> maxLength(int maxLength) => maxLength < 0
       ? throw ArgumentError(maxLength)
       : length <= maxLength
