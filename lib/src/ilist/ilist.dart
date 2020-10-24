@@ -241,8 +241,6 @@ class IList<T> // ignore: must_be_immutable
 
   T operator [](int index) => _l[index];
 
-  // --- Iterable methods: ---------------
-
   @override
   bool any(bool Function(T) test) => _l.any(test);
 
@@ -822,6 +820,8 @@ abstract class L<T> implements Iterable<T> {
   /// because that's immutable, we cache it.
   List<T> _flushed;
 
+  /// Returns the flushed set (flushes it only once).
+  /// It is an error to use the flushed map outside of the [M] class.
   List<T> get _getFlushed {
     _flushed ??= unlock;
     return _flushed;

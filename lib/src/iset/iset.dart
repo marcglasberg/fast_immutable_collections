@@ -52,6 +52,16 @@ class ISet<T> // ignore: must_be_immutable
                   config: config ?? defaultConfigSet,
                 );
 
+  /// Safe. Fast if the iterable is an ISet.
+  ISet._(
+    Iterable<T> iterable, {
+    @required this.config,
+  }) : _s = iterable is ISet<T>
+            ? iterable._s
+            : iterable == null
+                ? SFlat.empty<T>()
+                : SFlat<T>(iterable);
+
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the set.
   /// However, you should only use this with a new set you've created yourself,
@@ -62,16 +72,12 @@ class ISet<T> // ignore: must_be_immutable
     if (disallowUnsafeConstructors) throw UnsupportedError("ISet.unsafe is disallowed.");
   }
 
-  ISet._(
-    Iterable<T> iterable, {
-    @required this.config,
-  }) : _s = iterable is ISet<T>
-            ? iterable._s
-            : iterable == null
-                ? SFlat.empty<T>()
-                : SFlat<T>(iterable);
-
+  /// Unsafe.
   ISet._unsafe(this._s, {@required this.config});
+
+  /// Unsafe.
+  ISet._unsafeFromSet(Set<T> set, {@required this.config})
+      : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
   bool get isDeepEquals => config.isDeepEquals;
 
@@ -100,6 +106,7 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> get withDeepEquals =>
       config.isDeepEquals ? this : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
 
+  /// Returns an unordered [Set].
   Set<T> get unlock => _s.unlock;
 
   /// 1) If the set's [config] has [ConfigSet.autoSort] `true` (the default),
@@ -218,6 +225,16 @@ class ISet<T> // ignore: must_be_immutable
   @override
   bool any(bool Function(T) test) => _s.any(test);
 
+  /// Provides a view of this set as a set of [R] instances.
+  ///
+  /// If this set contains only instances of [R], all read operations
+  /// will work correctly. If any operation tries to access an element
+  /// that is not an instance of [R], the access will throw instead.
+  ///
+  /// Elements added to the set (e.g., by using [add] or [addAll])
+  /// must be instance of [R] to be valid arguments to the adding function,
+  /// and they must be instances of [E] as well to be accepted by
+  /// this set as well.
   @override
   ISet<R> cast<R>() {
     var result = _s.cast<R>();
@@ -373,54 +390,52 @@ class ISet<T> // ignore: must_be_immutable
   @override
   String toString() => "{${_s.join(", ")}}";
 
-  ISet<T> clear() {
-    // TODO: implement clear
-    throw UnimplementedError("MISSING");
-  }
+  /// Returns an empty set with the same configuration.
+  ISet<T> clear() => empty<T>(config);
 
   bool containsAll(Iterable<Object> other) {
-    // TODO: implement containsAll
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return unlock.containsAll(other);
   }
 
   ISet<T> difference(Set<Object> other) {
-    // TODO: implement difference
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return ISet._unsafeFromSet(unlock.difference(other), config: config);
   }
 
   ISet<T> intersection(Set<Object> other) {
-    // TODO: implement intersection
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return ISet._unsafeFromSet(unlock.intersection(other), config: config);
   }
 
   ISet<T> union(Set<T> other) {
-    // TODO: implement union
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return ISet._unsafeFromSet(unlock.union(other), config: config);
   }
 
   T lookup(Object object) {
-    // TODO: implement lookup
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return unlock.lookup(object);
   }
 
   ISet<T> removeAll(Iterable<Object> elements) {
-    // TODO: implement removeAll
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return ISet._unsafeFromSet(unlock..removeAll(elements), config: config);
   }
 
   ISet<T> removeWhere(bool Function(T element) test) {
-    // TODO: implement removeWhere
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return ISet._unsafeFromSet(unlock..removeWhere(test), config: config);
   }
 
   ISet<T> retainAll(Iterable<Object> elements) {
-    // TODO: implement retainAll
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return ISet._unsafeFromSet(unlock..retainAll(elements), config: config);
   }
 
   ISet<T> retainWhere(bool Function(T element) test) {
-    // TODO: implement retainWhere
-    throw UnimplementedError("MISSING");
+    // TODO: Still need to implement efficiently.
+    return ISet._unsafeFromSet(unlock..retainWhere(test), config: config);
   }
 }
 
@@ -428,19 +443,23 @@ class ISet<T> // ignore: must_be_immutable
 
 @visibleForOverriding
 abstract class S<T> implements Iterable<T> {
+  //
+
   /// The [S] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed set, but
   /// because that's immutable, we **cache** it.
   Set<T> _flushed;
 
+  /// Returns the flushed set (flushes it only once).
+  /// It is an error to use the flushed map outside of the [M] class.
   Set<T> get _getFlushed {
     _flushed ??= unlock;
     return _flushed;
   }
 
-  /// Returns a Dart Set (mutable, unordered, of type [HashSet]).
-  Set<T> get unlock => HashSet.of(this);
+  /// Returns a Dart [Set] (mutable, unordered, of type [HashSet]).
+  HashSet<T> get unlock => HashSet.of(this);
 
   @override
   Iterator<T> get iterator;
@@ -473,7 +492,6 @@ abstract class S<T> implements Iterable<T> {
   @override
   bool any(bool Function(T) test) => _getFlushed.any(test);
 
-  // TODO: FALTA FAZER!!! Isso é o ideal realmente?
   @override
   Iterable<R> cast<R>() => _getFlushed.cast<R>();
 

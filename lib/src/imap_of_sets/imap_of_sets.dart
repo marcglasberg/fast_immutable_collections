@@ -17,7 +17,8 @@ class IMapOfSets<K, V> //
   /// The map-of-sets configuration.
   final ConfigMapOfSets config;
 
-  static IMapOfSets<K, V> empty<K, V>() => IMapOfSets<K, V>.from(null);
+  static IMapOfSets<K, V> empty<K, V>([ConfigMapOfSets config]) =>
+      IMapOfSets<K, V>.from(null, config: config);
 
   factory IMapOfSets([Map<K, Iterable<V>> mapOfSets]) => //
       IMapOfSets.withConfig(mapOfSets, defaultConfigMapOfSets);
@@ -51,6 +52,10 @@ class IMapOfSets<K, V> //
                 IMap.empty<K, ISet<V>>(config.asConfigMap);
 
   IMapOfSets._unsafe(this._mapOfSets, {@required this.config});
+
+  ConfigSet get configSet => config.asConfigSet;
+
+  ConfigMap get configMap => config.asConfigMap;
 
   bool get isDeepEquals => config.isDeepEquals;
 
@@ -94,6 +99,10 @@ class IMapOfSets<K, V> //
   /// The sum of the number of unique values of all sets.
   int get lengthOfNonRepeatingValues => valuesAsSet.length;
 
+  /// Return iterable of entries, where each entry is the key:set pair.
+  ///
+  /// For example, if the map is {1: {a, b}, 2: {x, y}},
+  /// it will return [(1:{a,b}), 2:{x, y}].
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
   Iterable<K> get keys => _mapOfSets.keys;
@@ -109,9 +118,10 @@ class IMapOfSets<K, V> //
     }
   }
 
-  /// Return a flattened iterable of each value (including eventual duplicates),
-  /// as <K, V> entries. For example, if the map is {1: {a, b}, 2: {x, y}}, it
-  /// will return [(1:a), (1:b), (2:x), (2:y)].
+  /// Return a flattened iterable of <K, V> entries (including eventual duplicates),
+  /// where each entry is a key:value pair.
+  /// For example, if the map is {1: {a, b}, 2: {x, y}},
+  /// it will return [(1:a), (1:b), (2:x), (2:y)].
   Iterable<MapEntry<K, V>> flatten() sync* {
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       for (V value in entry.value) {
@@ -120,7 +130,6 @@ class IMapOfSets<K, V> //
     }
   }
 
-  // TODO: shouldn't the names for these be like `entriesAsISet`, `keysAsISet`, etc?
   ISet<MapEntry<K, ISet<V>>> get entriesAsSet => ISet(entries).withDeepEquals;
 
   ISet<K> get keysAsSet => ISet(keys).withDeepEquals;
@@ -155,7 +164,17 @@ class IMapOfSets<K, V> //
   IMapOfSets<K, V> add(K key, V value) {
     ISet<V> set = _mapOfSets[key] ?? ISet<V>();
     ISet<V> newSet = set.add(value);
-    return identical(set, newSet) ? this : addSet(key, newSet);
+    return identical(set, newSet) ? this : replaceSet(key, newSet);
+  }
+
+  /// Find the [key]/[set] entry, and add all the [values] to the [set].
+  /// If the [key] doesn't exist, will first create it with an empty [set],
+  /// and then add the [values] to it.
+  ///
+  IMapOfSets<K, V> addValues(K key, Iterable<V> values) {
+    ISet<V> set = _mapOfSets[key] ?? ISet<V>();
+    ISet<V> newSet = set.addAll(values);
+    return identical(set, newSet) ? this : replaceSet(key, newSet);
   }
 
   /// Find the [key]/[set] entry, and remove the [value] from the [set].
@@ -172,7 +191,7 @@ class IMapOfSets<K, V> //
     else if (newSet.isEmpty)
       return removeSet(key);
     else
-      return addSet(key, newSet);
+      return replaceSet(key, newSet);
   }
 
   /// Removes the [value] from the [set] of the corresponding [key],
@@ -186,7 +205,7 @@ class IMapOfSets<K, V> //
   /// If the given [set] is empty, the [key]/[set] entry will be removed
   /// (same as calling [removeSet]).
   ///
-  IMapOfSets<K, V> addSet(K key, ISet<V> set) {
+  IMapOfSets<K, V> replaceSet(K key, ISet<V> set) {
     assert(set != null);
     return set.isEmpty
         ? removeSet(key)
@@ -313,53 +332,91 @@ class IMapOfSets<K, V> //
       ? hash2(_mapOfSets, config)
       : identityHashCode(_mapOfSets) ^ config.hashCode;
 
-  void addAll(Map<K, Set<V>> other) {
-    // TODO: implement addAll
-    throw UnimplementedError("MISSING");
+  /// Adds all set values to this map.
+  ///
+  /// For each key that is already in this map, its resulting set will contain
+  /// the values of the original map, plus the ones of the other [map].
+  ///
+  /// For example: if `map = {"a": {1,2}}`, then
+  /// `map.addAll({"a": {3}, "b": {4}})` will result in
+  /// `{"a": {1,2,3}, "b": {4}}`
+  ///
+  /// The operation is equivalent to doing [addValues] for each key:set in [map].
+  ///
+  IMapOfSets<K, V> addAll(Map<K, Set<V>> map) {
+    return addEntries(map.entries);
   }
 
-  void addEntries(Iterable<MapEntry<K, Set<V>>> newEntries) {
-    // TODO: implement addEntries
-    throw UnimplementedError("MISSING");
+  /// Adds all set values to this map.
+  ///
+  /// For each key that is already in this map, its resulting set will contain
+  /// the values of the original map, plus the ones of the other [entries].
+  ///
+  /// For example: if `map = {"a": {1,2}}`, then
+  /// `map.addAll({"a": {3}, "b": {4}})` will result in
+  /// `{"a": {1,2,3}, "b": {4}}`
+  ///
+  /// The operation is equivalent to doing [addValues] for each key:set in [entries].
+  ///
+  IMapOfSets<K, V> addEntries(Iterable<MapEntry<K, Set<V>>> entries) {
+    IMapOfSets<K, V> imap = this;
+    for (MapEntry<K, Set<V>> entry in entries) {
+      var key = entry.key;
+      var setOfValues = entry.value;
+      imap = imap.addValues(key, setOfValues);
+    }
+    return imap;
   }
 
-  Map<RK, RV> cast<RK, RV>() {
-    // TODO: implement cast
-    throw UnimplementedError("MISSING");
+  /// Provides a view of this map of sets as having [RK] keys and [RV] instances,
+  /// if necessary.
+  ///
+  /// If this map is already a `IMapOfSets<RK, RV>`, it is returned unchanged.
+  ///
+  /// If this map contains only keys of type [RK] and values of type [RV],
+  /// all read operations will work correctly.
+  /// If any operation exposes a non-[RK] key or non-[RV] value,
+  /// the operation will throw instead.
+  ///
+  /// Entries added to the map must be valid for both a `IMapOfSets<K, V>` and a
+  /// `IMapOfSets<RK, RV>`.
+  IMapOfSets<RK, RV> cast<RK, RV>() {
+    IMap<RK, ISet<RV>> result = _mapOfSets.cast<RK, ISet<RV>>();
+    return IMapOfSets.from(result, config: config);
   }
 
-  void clear() {
-    // TODO: implement clear
-    throw UnimplementedError("MISSING");
-  }
+  void clear() => empty<K, V>(config);
 
-  void forEach(void Function(K key, Set<V> value) f) {
-    // TODO: implement forEach
-    throw UnimplementedError("MISSING");
-  }
+  void forEach(void Function(K key, ISet<V> set) f) => _mapOfSets.forEach(f);
 
-  Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(K key, Set<V> value) f) {
-    // TODO: implement map
-    throw UnimplementedError("MISSING");
-  }
+  IMapOfSets<RK, RV> map<RK, RV>(
+    MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
+    ConfigMapOfSets config,
+  }) =>
+      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper), config: config ?? defaultConfigMapOfSets);
 
-  Set<V> putIfAbsent(K key, Set<V> Function() ifAbsent) {
-    // TODO: implement putIfAbsent
-    throw UnimplementedError();
-  }
+  /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
+  IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>
+      IMapOfSets<K, V>.from(_mapOfSets.removeWhere(predicate), config: config);
 
-  void removeWhere(bool Function(K key, Set<V> value) predicate) {
-    // TODO: implement removeWhere
-    throw UnimplementedError("MISSING");
-  }
+  /// Updates the [set] for the provided [key].
+  ///
+  /// If the key is present, invokes [update] with the current [set] and stores
+  /// the new set in the map.
+  ///
+  /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
+  /// and adds the key with the returned [set] to the map.
+  ///
+  /// It's an error if the key is not present and [ifAbsent] is not provided.
+  ///
+  IMapOfSets<K, V> update(K key, ISet<V> Function(ISet<V> set) update,
+          {ISet<V> Function() ifAbsent}) =>
+      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent), config: config);
 
-  Set<V> update(K key, Set<V> Function(Set<V> value) update, {Set<V> Function() ifAbsent}) {
-    // TODO: implement update
-    throw UnimplementedError("MISSING");
-  }
-
-  void updateAll(Set<V> Function(K key, Set<V> value) update) {
-    // TODO: implement updateAll
-    throw UnimplementedError("MISSING");
-  }
+  /// Updates all sets.
+  ///
+  /// Iterates over all key:set entries in the map and updates them with the result
+  /// of invoking [update].
+  IMapOfSets<K, V> updateAll(ISet<V> Function(K key, ISet<V> set) update) =>
+      IMapOfSets<K, V>.from(_mapOfSets.updateAll(update), config: config);
 }

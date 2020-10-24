@@ -15,6 +15,12 @@ extension IMapExtension<K, V> on Map<K, V> {
   IMap<K, V> get lock => IMap<K, V>(this);
 }
 
+extension IMapOfSetsExtension<K, V> on Map<K, Set<V>> {
+  //
+  /// Locks the map of sets, returning an *immutable* map ([IMapOfSets]).
+  IMapOfSets<K, V> get lock => IMapOfSets<K, V>(this);
+}
+
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable**, unordered map.
@@ -116,6 +122,11 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Unsafe.
   IMap._unsafe(this._m, {@required this.config});
+
+  /// Unsafe.
+  IMap._unsafeFromMap(Map<K, V> map, {@required this.config})
+      : assert(config != null),
+        _m = (map == null) ? MFlat.empty<K, V>() : MFlat<K, V>.unsafe(map);
 
   bool get isDeepEquals => config.isDeepEquals;
 
@@ -288,6 +299,18 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool any(bool Function(K key, V value) test) => _m.any(test);
 
+  /// Provides a view of this map as having [RK] keys and [RV] instances,
+  /// if necessary.
+  ///
+  /// If this map is already an `IMap<RK, RV>`, it is returned unchanged.
+  ///
+  /// If this map contains only keys of type [RK] and values of type [RV],
+  /// all read operations will work correctly.
+  /// If any operation exposes a non-[RK] key or non-[RV] value,
+  /// the operation will throw instead.
+  ///
+  /// Entries added to the map must be valid for both a `IMap<K, V>` and a
+  /// `IMap<RK, RV>`.
   IMap<RK, RV> cast<RK, RV>() {
     Object result = _m.cast<RK, RV>();
     if (result is M<RK, RV>)
@@ -339,26 +362,61 @@ class IMap<K, V> // ignore: must_be_immutable
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
 
-  void clear() {
-    // TODO: implement clear
-    throw UnimplementedError("MISSING");
+  /// Returns an empty map with the same configuration.
+  void clear() => empty<K, V>(config);
+
+  /// Look up the value of [key], or add a new value if it isn't there.
+  ///
+  /// Returns the modified map, and sets the [value] associated to [key],
+  /// if there is one. Otherwise calls [ifAbsent] to get a new value,
+  /// associates [key] to that value, and then sets the new [value].
+  ///
+  ///     IMap<String, int> scores = {'Bob': 36}.lock;
+  ///     Item<int> value = Item();
+  ///     for (var key in ['Bob', 'Rohan', 'Sophia']) {
+  ///       scores = scores.putIfAbsent(key, () => key.length, value: value);
+  ///       print(value); // 36, 5, 7
+  ///     }
+  ///     scores['Bob'];     // 36
+  ///     scores['Rohan'];   //  5
+  ///     scores['Sophia'];  //  7
+  ///
+  /// Calling [ifAbsent] must not add or remove keys from the map.
+  ///
+  IMap<K, V> putIfAbsent(K key, V Function() ifAbsent, {Item<V> value}) {
+    // TODO: Still need to implement efficiently.
+    Map<K, V> map = unlock;
+    var result = map.putIfAbsent(key, ifAbsent);
+    if (value != null) value.set(result);
+    return IMap._unsafeFromMap(map, config: config);
   }
 
-  V putIfAbsent(K key, V Function() ifAbsent) {
-    // TODO: implement putIfAbsent
-    throw UnimplementedError();
-    throw UnimplementedError("MISSING");
+  /// Updates the value for the provided [key].
+  ///
+  /// Returns the modified map and sets the new [value] of the key.
+  ///
+  /// If the key is present, invokes [update] with the current value and stores
+  /// the new value in the map.
+  ///
+  /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
+  /// and adds the key with the returned value to the map.
+  ///
+  /// It's an error if the key is not present and [ifAbsent] is not provided.
+  ///
+  IMap<K, V> update(K key, V Function(V value) update, {V Function() ifAbsent, Item<V> value}) {
+    // TODO: Still need to implement efficiently.
+    Map<K, V> map = unlock;
+    var result = map.update(key, update, ifAbsent: ifAbsent);
+    if (value != null) value.set(result);
+    return IMap._unsafeFromMap(map, config: config);
   }
 
-  V update(K key, V Function(V value) update, {V Function() ifAbsent}) {
-    // TODO: implement update
-    throw UnimplementedError();
-    throw UnimplementedError("MISSING");
-  }
-
-  void updateAll(V Function(K key, V value) update) {
-    // TODO: implement updateAll
-    throw UnimplementedError("MISSING");
+  /// Updates all values.
+  ///
+  /// Iterates over all entries in the map and updates them with the result
+  /// of invoking [update].
+  IMap<K, V> updateAll(V Function(K key, V value) update) {
+    return IMap._unsafeFromMap(unlock..updateAll(update), config: config);
   }
 }
 
@@ -367,13 +425,6 @@ class IMap<K, V> // ignore: must_be_immutable
 @visibleForOverriding
 abstract class M<K, V> {
   //
-  Iterable<MapEntry<K, V>> get entries;
-
-  Iterable<K> get keys => _getFlushed.keys;
-
-  Iterable<V> get values => _getFlushed.values;
-
-  Iterator<MapEntry<K, V>> get iterator => _getFlushed.entries.iterator;
 
   /// The [M] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
@@ -381,6 +432,8 @@ abstract class M<K, V> {
   /// because that's immutable, we cache it.
   Map<K, V> _flushed;
 
+  /// Returns the flushed map (flushes it only once).
+  /// It is an error to use the flushed map outside of the [M] class.
   Map<K, V> get _getFlushed {
     _flushed ??= unlock;
     return _flushed;
@@ -392,6 +445,14 @@ abstract class M<K, V> {
     map.addEntries(entries);
     return map;
   }
+
+  Iterable<MapEntry<K, V>> get entries;
+
+  Iterable<K> get keys => _getFlushed.keys;
+
+  Iterable<V> get values => _getFlushed.values;
+
+  Iterator<MapEntry<K, V>> get iterator => _getFlushed.entries.iterator;
 
   int get length;
 
@@ -410,6 +471,13 @@ abstract class M<K, V> {
     }
   }
 
+  /// Adds all key/value pairs of [imap] to this map.
+  ///
+  /// If a key of [imap] is already in this map, its value is overwritten
+  /// (the old value is discarded).
+  ///
+  /// The operation is equivalent to doing `this[key] = value` for each key
+  /// and associated value in imap.
   M<K, V> addAll(IMap<K, V> imap) => MAddAll<K, V>.unsafe(this, imap._m);
 
   M<K, V> addMap(Map<K, V> map) =>
@@ -423,6 +491,8 @@ abstract class M<K, V> {
     return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(_getFlushed)..remove(key));
   }
 
+  /// Removes all entries of this map that satisfy the given [predicate].
+  ///
   M<K, V> removeWhere(bool Function(K key, V value) predicate) {
     Map<K, V> oldMap = unlock;
     int oldLength = oldMap.length;
@@ -430,22 +500,34 @@ abstract class M<K, V> {
     return (newMap.length == oldLength) ? this : MFlat<K, V>.unsafe(newMap);
   }
 
-  dynamic cast<RK, RV>() => _getFlushed.cast<RK, RV>();
+  /// Provides a view of this map as having [RK] keys and [RV] instances.
+  /// May return M<RK, RV> or Map<RK, RV>.
+  Object cast<RK, RV>() => (RK == K && RV == V) ? this : _getFlushed.cast<RK, RV>();
 
+  /// Returns true if there is no key/value pair in the map.
   bool get isEmpty => _getFlushed.isEmpty;
 
+  /// Returns true if there is at least one key/value pair in the map.
   bool get isNotEmpty => !isEmpty;
 
   V operator [](K key);
 
-  /// TODO: Is `_value == _value` correct?
+  /// Returns true if this map contains the given [key] with the given [value].
   bool contains(K key, V value) {
     var _value = _getFlushed[key];
-    return (_value == null) ? false : (_value == _value);
+    return (_value == null) ? _flushed.containsKey(key) : (_value == value);
   }
 
+  /// Returns true if this map contains the given [key].
+  ///
+  /// Returns true if any of the keys in the map are equal to `key`
+  /// according to the equality used by the map.
   bool containsKey(K key) => _getFlushed.containsKey(key);
 
+  /// Returns true if this map contains the given [value].
+  ///
+  /// Returns true if any of the values in the map are equal to `value`
+  /// according to the `==` operator.
   bool containsValue(V value) => _getFlushed.containsKey(value);
 
   bool containsEntry(MapEntry<K, V> entry) => contains(entry.key, entry.value);
@@ -455,8 +537,7 @@ abstract class M<K, V> {
 
   bool anyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.any(test);
 
-  // TODO: Especificar teste e implementar.
-  // bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
+  bool everyEntry(bool Function(MapEntry<K, V>) test) => _getFlushed.entries.every(test);
 
   // TODO: Marcelo, por favor, verifique a implementação.
   void forEach(void Function(K key, V value) f) => _getFlushed.forEach(f);
@@ -470,7 +551,6 @@ abstract class M<K, V> {
     return matches;
   }
 
-  // TODO: Marcelo, por favor, verifique a implementação.
   Map<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
       _getFlushed.map(mapper);
 }

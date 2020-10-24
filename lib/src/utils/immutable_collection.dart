@@ -93,6 +93,17 @@ class Item<T> {
     if (_value != null) throw StateError("Value can't be set.");
     _value = value;
   }
+
+  @override
+  String toString() => _value.toString();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Item && runtimeType == other.runtimeType && _value == other._value;
+
+  @override
+  int get hashCode => _value.hashCode;
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

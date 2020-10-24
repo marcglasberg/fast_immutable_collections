@@ -189,8 +189,8 @@ void main() {
 
           expect(iMapOfSets.unlock, original);
 
-          IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.addSet('a', <int>{1}.lock);
-          iMapOfSetsNew = iMapOfSetsNew.addSet('c', <int>{4, 5}.lock);
+          IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.replaceSet('a', <int>{1}.lock);
+          iMapOfSetsNew = iMapOfSetsNew.replaceSet('c', <int>{4, 5}.lock);
 
           expect(original, <String, Set<int>>{
             'a': {1, 2},
@@ -219,7 +219,7 @@ void main() {
 
           expect(iMapOfSets.unlock, original);
 
-          final IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.addSet('z', sety);
+          final IMapOfSets<String, int> iMapOfSetsNew = iMapOfSets.replaceSet('z', sety);
           original.addAll({
             'c': {99}
           });
@@ -461,12 +461,12 @@ void main() {
 
     group("IMapOfSets.addSet method |", () {
       test("Adding a new set on a new key", () {
-        final IMapOfSets<String, int> newSet = iMapOfSets.addSet("z", ISet({2, 3, 4}));
+        final IMapOfSets<String, int> newSet = iMapOfSets.replaceSet("z", ISet({2, 3, 4}));
         expect(newSet["z"], ISet({2, 3, 4}));
       });
 
       test("Adding a new set on an existing key", () {
-        final IMapOfSets<String, int> newSet = iMapOfSets.addSet("a", ISet({100}));
+        final IMapOfSets<String, int> newSet = iMapOfSets.replaceSet("a", ISet({100}));
         expect(newSet["a"], ISet({100}));
       });
     });
