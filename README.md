@@ -114,11 +114,11 @@ it is an **error** to call some method and then discard the result:
 ```dart                                     
 var ilist = [1, 2].lock;
                                                   
-// Wrong.
+// Wrong
 ilist.add(3);              
 print(ilist); // 1, 2
 
-// Also wrong.
+// Also wrong
 ilist = ilist..add(3);              
 print(ilist); // 1, 2
 
@@ -142,7 +142,70 @@ IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl'].lock
    .sort(); // 3, 4, 5
    .toggle(4) // 3, 5
    .toggle(2) // 3, 5, 2
-```   
+```       
+
+IList constructors:
+`IList`,
+`withConfig`,
+`fromISet`,
+`unsafe`.
+
+IList methods and getters:
+`empty`,
+`withConfig`,
+`withIdentityEquals`,
+`withDeepEquals`,
+`withConfigFrom`,
+`isDeepEquals`,
+`isIdentityEquals`,
+`unlock`,
+`unlockView`,
+`unlockLazy`,
+`unorderedEqualItems`,
+`flush`,
+`isFlushed`,
+`add`,
+`addAll`,
+`remove`,
+`toggle`,
+`[]`,
+`+`,
+`firstOrNull`,
+`lastOrNull`,
+`singleOrNull`,
+`firstOr`,
+`lastOr`,
+`singleOr`,
+`maxLength`,
+`sort`,
+`asMap`,
+`clear`,
+`indexOf`,
+`put`,
+`replaceFirst`,
+`replaceAll`,
+`replaceFirstWhere`,
+`replaceAllWhere`,
+`process`,
+`indexWhere`,
+`lastIndexOf`,
+`lastIndexWhere`,
+`replaceRange`,
+`fillRange`,
+`getRange`,
+`sublist`,
+`insert`,
+`insertAll`,
+`removeAt`,
+`removeLast`,
+`removeRange`,
+`removeWhere`,
+`retainWhere`,
+`reversed`,
+`setAll`,
+`setRange`,
+`shuffle`.
+
                                                                         
 ### IList Equality 
    
@@ -168,7 +231,7 @@ print(list1 == list2); // False!
 print(list1.lock == list2.lock); // True!
 ```                                                                          
 
-This also means `ILists` can be used as **map keys**, 
+This also means `IList`s can be used as **map keys**, 
 which is a very useful property in itself, 
 but can also help when implementing some other interesting data structures.
 For example, to implement **caches**:      
@@ -211,7 +274,8 @@ There are 3 main ways to do achieve:
     print(ilist == ilist3); // True!
     ```
 
-2) You can also use the `withConfig` method to change the configuration:
+2) You can also use the `withConfig` method 
+and the `ConfigList` class to change the configuration:
  
     ```dart
     var list = [1, 2];
@@ -258,7 +322,75 @@ internal state is better, because it will return `true` more often.
   
 ### Global IList Configuration
 
+As explained above, the **default** configuration of the `IList` is that it compares by 
+deep equality: They are equal if they have the same items in the same order.
+
+You can globally change this default if you want, by using the `defaultConfigList` setter:
+
+```dart
+var list = [1, 2];
+
+// The default.
+var ilistA1 = IList(list);
+var ilistA2 = IList(list);
+print(ilistA1 == ilistA2); // True!
+
+// Change the default to identity equals, for lists created from now on.
+defaultConfigList = ConfigList(isDeepEquals: false);
+var ilistB1 = IList(list);
+var ilistB2 = IList(list);
+print(ilistB1 == ilistB2); // False!
+
+// Already created lists are not changed.
+print(ilistA1 == ilistA2); // True!
+```                                                                        
+
+**Important Note:** 
+
+The global configuration is meant to be decided during your app's initialization, and then not changed again.
+We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
+after you set your desired configuration.
+
+
 ### Usage in tests
+
+An `IList` is not a `List`, so this is false:
+
+```dart
+[1, 2] == [1, 2].lock // False!
+```
+
+However, when you are writing tests, 
+the `expect` method actually compares all `Iterables` by comparing their items.
+Since `List` and `IList` are iterables, you can write the following tests: 
+
+```dart                                 
+/// All these tests pass:
+
+expect([1, 2], [1, 2]); // List with List, same order.
+expect([1, 2].lock, [1, 2]); // IList with List, same order.
+expect([1, 2], [1, 2].lock); // List with IList, same order.
+expect([1, 2].lock, [1, 2].lock); // IList with IList, same order.
+
+expect([2, 1], isNot([1, 2])); // List with List, wrong order.
+expect([2, 1].lock, isNot([1, 2])); // IList with List, wrong order.
+expect([2, 1], isNot([1, 2].lock)); // List with IList, wrong order.
+expect([2, 1].lock, isNot([1, 2].lock)); // IList with IList, wrong order.
+```                   
+
+So, for comparing `List` with `IList` and vice-versa this is fine.
+
+However, `expect` treats `Set`s differently, resulting that 
+`expect(a, b)` may be different than `expect(b, a)`. For example:
+
+```dart
+expect([1, 2], {2, 1}); // This test passes.
+expect({2, 1}, [1, 2]); // This test does NOT pass.
+```                                               
+
+If you ask me, this is all very confusing. 
+A good rule of thumb to avoid all these `expect` complexities 
+is only comparing lists with lists, set with sets, etc.
 
 ### IList reuse by composition
 
