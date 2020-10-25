@@ -1,6 +1,5 @@
-import 'package:fast_immutable_collections/src/ilist/ilist.dart';
 import 'package:meta/meta.dart';
-
+import '../../fast_immutable_collections.dart';
 import 'hash.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,6 +359,17 @@ ConfigMapOfSets get defaultConfigMapOfSets => _defaultConfigMapOfSets;
 
 ConfigMapOfSets _defaultConfigMapOfSets =
     const ConfigMapOfSets(isDeepEquals: true, autoSortKeys: true, autoSortValues: true);
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+extension IterableToImmutableExtension<T> on Iterable<T> {
+  //
+  /// Locks the iterable, returning an *immutable* list ([IList]).
+  IList<T> get lockAsList => IList<T>(this);
+
+  /// Locks the iterable, returning an *immutable* set ([ISet]).
+  ISet<T> get lockAsSet => ISet<T>(this);
+}
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
