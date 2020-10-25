@@ -145,10 +145,10 @@ IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl'].lock
 ```       
 
 IList constructors:
-`IList`,
-`withConfig`,
-`fromISet`,
-`unsafe`.
+`IList()`,
+`IList.withConfig()`,
+`IList.fromISet()`,
+`IList.unsafe()`.
 
 IList methods and getters:
 `empty`,
@@ -381,7 +381,7 @@ expect([2, 1].lock, isNot([1, 2].lock)); // IList with IList, wrong order.
 So, for comparing `List` with `IList` and vice-versa this is fine.
 
 However, `expect` treats `Set`s differently, resulting that 
-`expect(a, b)` may be different than `expect(b, a)`. For example:
+`expect(a, b)` may be different from `expect(b, a)`. For example:
 
 ```dart
 expect([1, 2], {2, 1}); // This test passes.
@@ -393,6 +393,65 @@ A good rule of thumb to avoid all these `expect` complexities
 is only comparing lists with lists, set with sets, etc.
 
 ### IList reuse by composition
+
+You can use `IListMixin` and `IterableIListMixin` to easily 
+create your own immutable classes based on the `IList`.
+This helps you create a more strongly typed collection, 
+and add your own methods to it.
+
+For example, suppose you have some `Student` class:
+
+```dart
+class Student {
+   final String name;
+   final int age;
+   Student(this.name, this.age);  
+
+   String toString() => 'Student{name: $name, age: $age}';  
+
+   bool operator ==(Object other) =>
+      identical(this, other) || other is Student && runtimeType == other.runtimeType &&
+          name == other.name && age == other.age;
+  
+   int get hashCode => name.hashCode ^ age.hashCode;
+}
+```
+
+And suppose you want to create a `Students` class 
+which is an immutable collection of `Student`s. 
+
+You can easily implement it using the `IListMixin`:
+
+```dart  
+class Students with IListMixin<Student, Students> {
+
+   /// This is the boilerplate to create the collection:
+   final IList<Student> _students;
+   Students([Iterable<Student> students]) : _students = IList(students);
+   Students newInstance(IList<Student> iList) => Students(iList);
+   IList<Student> get iList => _students;   
+                                                        
+   /// And then you can add your own specific methods:
+   String greetings() => "Hello ${_students.map((s) => s.name).join(", ")}.";
+}
+```    
+
+And then use the class:
+
+```dart  
+var james = Student("James", 18);
+var sara = Student("Sara", 45);
+var lucy = Student("Lucy", 78);
+              
+// Most IList methods are available:
+var students = Students().add(james).addAll([sara, lucy]);
+
+expect(students, [james, sara, lucy]);
+                             
+// Prints: "Hello James, Sara, Lucy."
+print(students.greetings()); 
+```   
+
 
 ### Flushing the IList
 

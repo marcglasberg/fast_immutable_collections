@@ -398,7 +398,7 @@ class IList<T> // ignore: must_be_immutable
   IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListView(this).asMap());
 
   /// Returns an empty list with the same configuration.
-  void clear() => empty<T>(config);
+  IList<T> clear() => empty<T>(config);
 
   /// Returns the index of the first [element] in the list.
   ///
@@ -649,9 +649,9 @@ class IList<T> // ignore: must_be_immutable
   /// The `start` and `end` positions must satisfy the relations
   /// 0 ≤ `start` ≤ `end` ≤ `this.length`
   /// If `end` is equal to `start`, then the returned list is empty.
-  List<T> sublist(int start, [int end]) {
+  IList<T> sublist(int start, [int end]) {
     // TODO: Still need to implement efficiently.
-    return toList(growable: false).sublist(start, end);
+    return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
   }
 
   /// Inserts the object at position [index] in this list.

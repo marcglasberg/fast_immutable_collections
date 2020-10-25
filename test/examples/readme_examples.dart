@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:fast_immutable_collections/src/ilist/ilist_mixin.dart';
 import 'package:test/test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -207,4 +208,54 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  testAndPrint("Reusage by composition", () {
+    var james = Student("James", 18);
+    var sara = Student("Sara", 45);
+    var lucy = Student("Lucy", 78);
+
+    var students = Students().add(james).addAll([sara, lucy]);
+
+    expect(students, [james, sara, lucy]);
+    expect(students.greetings(), "Hello James, Sara, Lucy.");
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+class Student {
+  final String name;
+  final int age;
+
+  Student(this.name, this.age);
+
+  @override
+  String toString() => 'Student{name: $name, age: $age}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Student &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          age == other.age;
+
+  @override
+  int get hashCode => name.hashCode ^ age.hashCode;
+}
+
+class Students with IListMixin<Student, Students> {
+  final IList<Student> _students;
+
+  Students([Iterable<Student> students]) : _students = IList(students);
+
+  @override
+  Students newInstance(IList<Student> iList) => Students(iList);
+
+  @override
+  IList<Student> get iList => _students;
+
+  String greetings() => "Hello ${_students.map((s) => s.name).join(", ")}.";
 }
