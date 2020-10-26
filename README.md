@@ -9,6 +9,7 @@
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
 
+
 [codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
 [codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
 [github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
@@ -17,14 +18,14 @@
 # Introduction
 
 This package provides:
- * `IList` is an immutable list
- * `ISet` is an immutable set
- * `IMap` is an immutable map
- * `IMapOfSets` is an immutable map of sets
+
+- `IList` is an immutable list
+- `ISet` is an immutable set
+- `IMap` is an immutable map
+- `IMapOfSets` is an immutable map of sets
 
 **Fast Immutable Collections** is a competitor to the excellent
-<a href="https://pub.dev/packages/built_collection">built_collection</a> and 
-<a href="https://pub.dev/packages/kt_dart">kt_dart</a> packages, 
+[built_collection][built_collection] and [kt_dart][kt_dart] packages, 
 but it's much **easier** to use than the former, 
 and orders of magnitude **faster** than the latter.
 
@@ -39,7 +40,11 @@ which doesn't need to know about these implementation details.
 Later in this document, we provide benchmarks so that you can compare speeds
 (and you can also run the benchmarks yourself).
 
-<br>
+<br />
+
+
+[built_collection]: https://pub.dev/packages/built_collection
+[kt_dart]: https://pub.dev/packages/kt_dart
 
 ## IList
 
@@ -260,7 +265,7 @@ However, `IList`s are configurable, and you can actually create `IList`s which
 compare their internals by identity or deep equals, as desired.
 There are 3 main ways to do achieve:
  
-1) You can use getters `withIdentityEquals` and `withDeepEquals`:
+1. You can use getters `withIdentityEquals` and `withDeepEquals`:
 
     ```dart                    
     var ilist = [1, 2].lock;
@@ -274,9 +279,9 @@ There are 3 main ways to do achieve:
     print(ilist == ilist3); // True!
     ```
 
-2) You can also use the `withConfig` method 
+1. You can also use the `withConfig` method 
 and the `ConfigList` class to change the configuration:
- 
+
     ```dart
     var list = [1, 2];
     var ilist1 = list.lock.withConfig(ConfigList(isDeepEquals: true));
@@ -286,7 +291,7 @@ and the `ConfigList` class to change the configuration:
     print(list.lock == ilist2); // False!
     ```
 
-3) Or you can use the `withConfig` constructor to
+1. Or you can use the `withConfig` constructor to
 explicitly create the `IList` with your desired configuration:
 
     ```dart
@@ -301,19 +306,16 @@ explicitly create the `IList` with your desired configuration:
 The above described configurations affects how the `== operator` works, 
 but you can also choose how to compare lists by using the following `IList` methods:
 
-* `equalItems` will return true only if the IList items are equal to the iterable items,
+- `equalItems` will return true only if the IList items are equal to the iterable items,
   and in the same order. This may be slow for very large lists, since it compares each item,
   one by one. You can compare the list with ordered sets, but unordered sets will throw an error.
-
-* `unorderedEqualItems` will return true only if the IList and the iterable items have the same number of elements,
+- `unorderedEqualItems` will return true only if the IList and the iterable items have the same number of elements,
 and the elements of the IList can be paired with the elements of the iterable, so that each
 pair is equal. This may be slow for very large lists, since it compares each item,
 one by one.
-
-* `equalItemsAndConfig` will return true only if the list items are equal and in the same order,
+- `equalItemsAndConfig` will return true only if the list items are equal and in the same order,
 and the list configurations are equal. This may be slow for very large lists, since it compares each item, one by one.
-
-* `same` will return true only if the lists internals are the same instances
+- `same` will return true only if the lists internals are the same instances
 (comparing by identity). This will be fast even for very large lists,
 since it doesn't compare each item.
 Note: This is not the same as `identical(list1, list2)` since it doesn't
@@ -405,6 +407,7 @@ For example, suppose you have some `Student` class:
 class Student {
    final String name;
    final int age;
+   
    Student(this.name, this.age);  
 
    String toString() => 'Student{name: $name, age: $age}';  

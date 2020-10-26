@@ -898,6 +898,7 @@ void main() {
     });
 
     test("IList.process method", () {
+      // TODO: Marcelo, isso parece estar fazendo o oposto do que deveria.
       expect(
           notes.process(
             test: (IList<String> iList, int index, String item) => iList[index] == 're',
@@ -1021,6 +1022,7 @@ void main() {
     });
 
     test("IList.shuffle method", () {
+      // TODO: Marcelo, por favor, revise.
       final Random random = Random(0);
       final IList<int> iList = [1, 2, 3, 4, 5, 6, 7, 8, 9].lock;
 
