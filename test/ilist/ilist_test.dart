@@ -266,6 +266,18 @@ void main() {
             expect(iList1.equalItems({'a': 2, 'b': 1}.values), isFalse);
             expect(iList1.equalItems({'a': 1, 'b': 2}.values), isTrue);
           });
+
+          group("IList.unorderedEqualItems method |", () {
+            test("Identity", () => expect(iList1.unorderedEqualItems(iList1), isTrue));
+
+            test("If Iterable, then compares each item with no specific order", () {
+              expect(iList1.unorderedEqualItems(iList2), isFalse);
+              expect(iList1.unorderedEqualItems(iList3), isTrue);
+              expect(iList1.unorderedEqualItems(iList4), isTrue);
+              expect(iList1.unorderedEqualItems({1}), isFalse);
+              expect(iList1.unorderedEqualItems({1, 2}), isTrue);
+            });
+          });
         });
       });
     });
@@ -323,6 +335,20 @@ void main() {
       expect(iListNewConfig.isDeepEquals, isTrue);
       expect(iListNewConfigIdentity.isDeepEquals, isFalse);
     });
+
+    test("IList.withConfigFrom method", () {
+      final IList<int> iList = IList([1, 2]);
+
+      expect(iList.isDeepEquals, isTrue);
+
+      final IList<int> iListWithNoDeepEquals = iList.withConfig(ConfigList(isDeepEquals: false));
+
+      expect(iListWithNoDeepEquals.isDeepEquals, isFalse);
+
+      final IList<int> iListWithConfig = iList.withConfigFrom(iListWithNoDeepEquals);
+
+      expect(iListWithConfig.isDeepEquals, isFalse);
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,7 +405,7 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
   group("Other Constructors |", () {
     test("IList.fromISet constructor", () {
       final ISet<int> iSet = {1, 2, 3}.lock;
@@ -387,8 +413,21 @@ void main() {
 
       expect(iList, [1, 2, 3]);
     });
+
+    test("IList.unsafe constructor", () {
+      final List<int> list = [1, 2, 3];
+      final IList<int> iList = IList.unsafe(list, config: ConfigList());
+
+      expect(list, [1, 2, 3]);
+      expect(iList, [1, 2, 3]);
+
+      list.add(4);
+
+      expect(list, [1, 2, 3, 4]);
+      expect(iList, [1, 2, 3, 4]);
+    });
   });
-  
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("IList.flush method", () {
@@ -421,6 +460,8 @@ void main() {
 
     test("IList.add and IList.addAll methods at the same time",
         () => expect(ilist1.add(10).addAll([20, 30]).unlock, [1, 2, 3, 10, 20, 30]));
+
+    test("IList.+ operator", () => expect(ilist1 + [4, 5, 6].lock, [1, 2, 3, 4, 5, 6]));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -712,6 +753,145 @@ void main() {
       expect(iterator.current, 6);
       expect(iterator.moveNext(), isFalse);
       expect(iterator.current, isNull);
+    });
+
+    test("IList.toString method", () => expect(iList.toString(), "[1, 2, 3, 4, 5, 6]"));
+  });
+
+  group("Views |", () {
+    final IList<int> iList = [1, 2, 3].lock;
+
+    test("IList.unlockView getter", () {
+      final List<int> unmodifiableListView = iList.unlockView;
+
+      expect(unmodifiableListView, allOf(isA<List<int>>(), [1, 2, 3]));
+    });
+
+    test("IList.unlockLazy getter", () {
+      final List<int> modifiableListView = iList.unlockLazy;
+
+      expect(modifiableListView, allOf(isA<List<int>>(), [1, 2, 3]));
+    });
+  });
+
+  group("Or Getters and Methods |", () {
+    final IList<int> iList1 = <int>[].lock;
+    final IList<int> iList2 = <int>[1, 2].lock;
+    final IList<int> iList3 = <int>[1].lock;
+
+    group("Or Null Getters |", () {
+      test("IList.firstOrNull getter", () {
+        expect(iList1.firstOrNull, isNull);
+        expect(iList2.firstOrNull, 1);
+      });
+
+      test("IList.lastOrNull getter", () {
+        expect(iList1.lastOrNull, isNull);
+        expect(iList2.lastOrNull, 2);
+      });
+
+      test("IList.singleOrNull getter", () {
+        expect(iList1.singleOrNull, isNull);
+        expect(iList2.singleOrNull, isNull);
+        expect(iList3.singleOrNull, 1);
+      });
+    });
+
+    group("Or (else) Methods |", () {
+      test("IList.firstOr method", () {
+        expect(iList1.firstOr(10), 10);
+        expect(iList2.firstOr(10), 1);
+      });
+
+      test("IList.lastOr method", () {
+        expect(iList1.lastOr(10), 10);
+        expect(iList2.lastOr(10), 2);
+      });
+
+      test("IList.singleOr method", () {
+        expect(iList1.singleOr(10), 10);
+        expect(iList2.singleOr(10), 10);
+        expect(iList3.singleOr(10), 1);
+      });
+    });
+  });
+
+  test("IList.sort method", () {
+    final IList<int> iList = [10, 2, 4, 6, 5].lock;
+    final IList<int> sortedIList = iList.sort();
+    final IList<int> reverseIList = iList.sort((int a, int b) => -a.compareTo(b));
+
+    expect(sortedIList, [2, 4, 5, 6, 10]);
+    expect(reverseIList, [10, 6, 5, 4, 2]);
+  });
+
+  test("IList.asMap method", () {
+    final IList<String> iList = ['hel', 'lo', 'there'].lock;
+
+    expect(iList.asMap(), isA<IMap<int, String>>());
+    expect(iList.asMap().unlock, {0: 'hel', 1: 'lo', 2: 'there'});
+  });
+
+  test("IList.clear method", () {
+    final IList<int> iList = IList.withConfig([1, 2, 3], ConfigList(isDeepEquals: false));
+
+    final IList<int> iListCleared = iList.clear();
+
+    // TODO: Marcelo, eu fiz com que o clear retornasse um `IList` (estava com `void`).
+    expect(iListCleared, allOf(isA<IList<int>>(), []));
+    expect(iListCleared.config.isDeepEquals, isFalse);
+  });
+
+  group("Replacing and Related Methods |", () {
+    final IList<String> notes = ['do', 're', 'mi', 're'].lock;
+
+    test("IList.indexOf method", () {
+      expect(notes.indexOf('re'), 1);
+      expect(notes.indexOf('re', 2), 3);
+      // TODO: Marcelo, mudei o `for` para `<= _length - 1`.
+      expect(notes.indexOf('fa'), -1);
+    });
+
+    test("IList.indexWhere method", () {
+      expect(notes.indexWhere((String element) => element == 're'), 1);
+      expect(notes.indexWhere((String element) => element == 're', 2), 3);
+      // TODO: Marcelo, mudei o `for` para `<= _length - 1`.
+      expect(notes.indexWhere((String element) => element == 'fa'), -1);
+    });
+
+    test("IList.put method", () {
+      final IList<int> iList = [1, 2, 4, 5].lock;
+
+      final IList<int> completeIList = iList.put(2, 3);
+
+      expect(iList, [1, 2, 4, 5]);
+      expect(completeIList, [1, 2, 3, 5]);
+    });
+
+    test("IList.replaceFirst method", () {
+      expect(notes.replaceFirst(from: 're', to: 'fa'), ['do', 'fa', 'mi', 're']);
+      expect(notes.replaceFirst(from: 'fa', to: 'sol'), ['do', 're', 'mi', 're']);
+    });
+
+    test("IList.replaceAll method", () {
+      expect(notes.replaceAll(from: 're', to: 'fa'), ['do', 'fa', 'mi', 'fa']);
+      expect(notes.replaceAll(from: 'fa', to: 'sol'), ['do', 're', 'mi', 're']);
+    });
+
+    test("IList.replaceFirstWhere method", () {
+      expect(
+          notes.replaceFirstWhere((String item) => item == 're', 'fa'), ['do', 'fa', 'mi', 're']);
+      expect(
+          notes.replaceFirstWhere((String item) => item == 'fa', 'sol'), ['do', 're', 'mi', 're']);
+    });
+
+    test("IList.replaceAllWhere method", () {
+      expect(notes.replaceAllWhere((String item) => item == 're', 'fa'), ['do', 'fa', 'mi', 'fa']);
+      expect(notes.replaceAllWhere((String item) => item == 'fa', 'sol'), ['do', 're', 'mi', 're']);
+    });
+
+    test("IList.process method", () {
+      
     });
   });
 }

@@ -1,10 +1,10 @@
 import 'dart:collection';
 import 'dart:math';
 import 'package:collection/collection.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:meta/meta.dart';
-import '../utils/immutable_collection.dart';
+import '../imap/imap.dart';
 import '../iset/iset.dart';
+import '../utils/immutable_collection.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
@@ -383,14 +383,16 @@ class IList<T> // ignore: must_be_immutable
   /// as values. The `Map.keys` [Iterable] iterates the indices of this list
   /// in numerical order.
   ///
-  ///     IList<String> words = ['hel', 'lo', 'there'].lock;
-  ///     IMap<int, String> map = words.asMap();
-  ///     print(map[0] + map[1]); // Prints 'hello';
-  ///     map.keys.toList(); // [0, 1, 2, 3]
+  /// ```dart
+  /// IList<String> words = ['hel', 'lo', 'there'].lock;
+  /// IMap<int, String> map = words.asMap();
+  /// print(map[0] + map[1]); // Prints 'hello';
+  /// map.keys.toList(); // [0, 1, 2, 3]
+  /// ```
   IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListView(this).asMap());
 
   /// Returns an empty list with the same configuration.
-  void clear() => empty<T>(config);
+  IList<T> clear() => empty<T>(config);
 
   /// Returns the index of the first [element] in the list.
   ///
@@ -400,20 +402,23 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// If [start] is not provided, this method searches from the start of the list.
   ///
-  ///     IList<String> notes = ['do', 're', 'mi', 're'].lock;
-  ///     notes.indexOf('re');    // 1
-  ///     notes.indexOf('re', 2); // 3
+  /// ```dart
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// notes.indexOf('re');    // 1
+  /// notes.indexOf('re', 2); // 3
+  /// ```
   ///
   /// Returns -1 if [element] is not found.
   ///
-  ///     notes.indexOf('fa');    // -1
-  ///
+  /// ```dart
+  /// notes.indexOf('fa');    // -1
+  /// ```
   int indexOf(T element, [int start = 0]) {
     start ??= 0;
     var _length = length;
     if (start < 0 || start >= _length)
       throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = start; i <= _length; i++) if (this[i] == element) return i;
+    for (int i = start; i <= _length - 1; i++) if (this[i] == element) return i;
     return -1;
   }
 
@@ -479,22 +484,23 @@ class IList<T> // ignore: must_be_immutable
   /// The first time an object `o` is encountered so that `test(o)` is true,
   /// the index of `o` is returned.
   ///
-  /// ```
+  /// ```dart
   /// List<String> notes = ['do', 're', 'mi', 're'];
   /// notes.indexWhere((note) => note.startsWith('r'));       // 1
   /// notes.indexWhere((note) => note.startsWith('r'), 2);    // 3
   /// ```
   ///
   /// Returns -1 if [element] is not found.
-  /// ```
-  /// notes.indexWhere((note) => note.startsWith('k'));    // -1
+  /// 
+  /// ```dart
+  /// notes.indexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int indexWhere(bool Function(T element) test, [int start = 0]) {
     start ??= 0;
     var _length = length;
     if (start < 0 || start >= _length)
       throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = start; i <= _length; i++) if (test(this[i])) return i;
+    for (int i = start; i <= _length - 1; i++) if (test(this[i])) return i;
     return -1;
   }
 
