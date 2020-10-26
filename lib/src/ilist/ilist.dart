@@ -510,18 +510,23 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// The first time an object [:o:] is encountered so that [:o == element:],
   /// the index of [:o:] is returned.
-  ///
-  ///     IList<String> notes = ['do', 're', 'mi', 're'].lock;
-  ///     notes.lastIndexOf('re', 2); // 1
+  /// 
+  /// ```dart
+  /// IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// notes.lastIndexOf('re', 2); // 1
+  /// ```
   ///
   /// If [start] is not provided, this method searches from the end of the list.
   ///
-  ///     notes.lastIndexOf('re');  // 3
-  ///
+  /// ```dart
+  /// notes.lastIndexOf('re');  // 3
+  /// ```
+  /// 
   /// Returns -1 if [element] is not found.
   ///
-  ///     notes.lastIndexOf('fa');  // -1
-  ///
+  /// ```dart
+  /// notes.lastIndexOf('fa');  // -1
+  /// ```
   int lastIndexOf(T element, [int start]) {
     var _length = length;
     start ??= _length;
@@ -538,17 +543,17 @@ class IList<T> // ignore: must_be_immutable
   /// the index of `o` is returned.
   /// If [start] is omitted, it defaults to the [length] of the list.
   ///
-  /// ```
+  /// ```dart
   /// IList<String> notes = ['do', 're', 'mi', 're'].lock;
   /// notes.lastIndexWhere((note) => note.startsWith('r'));       // 3
   /// notes.lastIndexWhere((note) => note.startsWith('r'), 2);    // 1
   /// ```
   ///
   /// Returns -1 if [element] is not found.
-  /// ```
+  /// 
+  /// ```dart
   /// notes.lastIndexWhere((note) => note.startsWith('k'));    // -1
   /// ```
-  ///
   int lastIndexWhere(bool Function(T element) test, [int start]) {
     var _length = length;
     start ??= _length;
@@ -561,9 +566,11 @@ class IList<T> // ignore: must_be_immutable
   /// Removes the objects in the range [start] inclusive to [end] exclusive
   /// and inserts the contents of [replacement] in its place.
   ///
-  ///     List<int> list = [1, 2, 3, 4, 5];
-  ///     list.replaceRange(1, 4, [6, 7]);
-  ///     list.join(', '); // '1, 6, 7, 5'
+  /// ```dart
+  /// List<int> list = [1, 2, 3, 4, 5];
+  /// list.replaceRange(1, 4, [6, 7]);
+  /// list.join(', '); // '1, 6, 7, 5'
+  /// ```
   ///
   /// The provided range, given by [start] and [end], must be valid.
   /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
@@ -589,10 +596,11 @@ class IList<T> // ignore: must_be_immutable
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   /// Example:
+  /// 
   /// ```dart
-  ///  List<int> list = new List(3);
-  ///     list.fillRange(0, 2, 1);
-  ///     print(list); //  [1, 1, null]
+  /// List<int> list = new List(3);
+  /// list.fillRange(0, 2, 1);
+  /// print(list); //  [1, 1, null]
   /// ```
   ///
   /// If the element type is not nullable, omitting [fillValue] or passing `null`
@@ -617,11 +625,13 @@ class IList<T> // ignore: must_be_immutable
   /// The returned [Iterable] behaves like `skip(start).take(end - start)`.
   /// That is, it does *not* throw if this list changes size.
   ///
-  ///     List<String> colors = ['red', 'green', 'blue', 'orange', 'pink'];
-  ///     Iterable<String> range = colors.getRange(1, 4);
-  ///     range.join(', ');  // 'green, blue, orange'
-  ///     colors.length = 3;
-  ///     range.join(', ');  // 'green, blue'
+  /// ```dart
+  /// List<String> colors = ['red', 'green', 'blue', 'orange', 'pink'];
+  /// Iterable<String> range = colors.getRange(1, 4);
+  /// range.join(', ');  // 'green, blue, orange'
+  /// colors.length = 3;
+  /// range.join(', ');  // 'green, blue'
+  /// ```
   Iterable<T> getRange(int start, int end) {
     // TODO: Still need to implement efficiently.
     return toList(growable: false).getRange(start, end);
@@ -721,10 +731,11 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// An object [:o:] satisfies [test] if [:test(o):] is true.
   ///
-  ///     List<String> numbers = ['one', 'two', 'three', 'four'];
-  ///     numbers.removeWhere((item) => item.length == 3);
-  ///     numbers.join(', '); // 'three, four'
-  ///
+  /// ```dart
+  /// List<String> numbers = ['one', 'two', 'three', 'four'];
+  /// numbers.removeWhere((item) => item.length == 3);
+  /// numbers.join(', '); // 'three, four'
+  /// ```
   IList<T> removeWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
@@ -736,10 +747,11 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// An object [:o:] satisfies [test] if [:test(o):] is true.
   ///
-  ///     List<String> numbers = ['one', 'two', 'three', 'four'];
-  ///     numbers.retainWhere((item) => item.length == 3);
-  ///     numbers.join(', '); // 'one, two'
-  ///
+  /// ```dart
+  /// List<String> numbers = ['one', 'two', 'three', 'four'];
+  /// numbers.retainWhere((item) => item.length == 3);
+  /// numbers.join(', '); // 'one, two'
+  /// ```
   IList<T> retainWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
@@ -757,9 +769,11 @@ class IList<T> // ignore: must_be_immutable
   /// Overwrites objects of `this` with the objects of [iterable], starting
   /// at position [index] in this list.
   ///
-  ///     List<String> list = ['a', 'b', 'c'];
-  ///     list.setAll(1, ['bee', 'sea']);
-  ///     list.join(', '); // 'a, bee, sea'
+  /// ```dart
+  /// List<String> list = ['a', 'b', 'c'];
+  /// list.setAll(1, ['bee', 'sea']);
+  /// list.join(', '); // 'a, bee, sea'
+  /// ```
   ///
   /// This operation does not increase the length of `this`.
   ///
@@ -780,12 +794,14 @@ class IList<T> // ignore: must_be_immutable
   /// Copies the objects of [iterable], skipping [skipCount] objects first,
   /// into the range [start], inclusive, to [end], exclusive, of the list.
   ///
-  ///     List<int> list1 = [1, 2, 3, 4];
-  ///     List<int> list2 = [5, 6, 7, 8, 9];
-  ///     // Copies the 4th and 5th items in list2 as the 2nd and 3rd items
-  ///     // of list1.
-  ///     list1.setRange(1, 3, list2, 3);
-  ///     list1.join(', '); // '1, 8, 9, 4'
+  /// ```dart
+  /// List<int> list1 = [1, 2, 3, 4];
+  /// List<int> list2 = [5, 6, 7, 8, 9];
+  /// // Copies the 4th and 5th items in list2 as the 2nd and 3rd items
+  /// // of list1.
+  /// list1.setRange(1, 3, list2, 3);
+  /// list1.join(', '); // '1, 8, 9, 4'
+  /// ```
   ///
   /// The provided range, given by [start] and [end], must be valid.
   /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
