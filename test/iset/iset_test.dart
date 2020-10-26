@@ -740,51 +740,57 @@ void main() {
 
     tearDown(() => expect(iSet1, {1, 2, 3, 4}));
 
-    test("ISet.containsAll method", () {
-      // TODO: Marcelo, o argumento desses métodos não deveria ser `Iterable` ou `ISet`?
-      expect(iSet1.containsAll([2, 2, 3]), isTrue);
-      expect(iSet1.containsAll({1, 2, 3, 4}), isTrue);
-      expect(iSet1.containsAll({10, 20, 30, 40}), isFalse);
+    group("Set Math Operations |", () {
+      test("ISet.containsAll method", () {
+        // TODO: Marcelo, o argumento desses métodos não deveria ser `Iterable` ou `ISet`?
+        expect(iSet1.containsAll([2, 2, 3]), isTrue);
+        expect(iSet1.containsAll({1, 2, 3, 4}), isTrue);
+        expect(iSet1.containsAll({10, 20, 30, 40}), isFalse);
+      });
+
+      test("ISet.difference method", () {
+        expect(iSet1.difference({1, 2, 5}), {3, 4});
+        expect(iSet1.difference({1, 2, 3, 4}), <int>{});
+      });
+
+      test("ISet.intersection method", () {
+        expect(iSet1.intersection({1, 2, 5}), {1, 2});
+        expect(iSet1.intersection({10, 20, 50}), <int>{});
+      });
+
+      test("ISet.union method", () {
+        expect(iSet1.union({1}), {1, 2, 3, 4});
+        expect(iSet1.union({1, 2, 5}), {1, 2, 3, 4, 5});
+      });
+
+      test("ISet.lookup method", () {
+        expect(iSet1.lookup(1), 1);
+        expect(iSet1.lookup(10), isNull);
+      });
     });
 
-    test("ISet.difference method", () {
-      expect(iSet1.difference({1, 2, 5}), {3, 4});
-      expect(iSet1.difference({1, 2, 3, 4}), <int>{});
+    group("Remove |", () {
+      test("ISet.removeAll method", () {
+        expect(iSet1.removeAll({}), {1, 2, 3, 4});
+        expect(iSet1.removeAll({2, 3}), {1, 4});
+      });
+
+      test("ISet.removeWhere method", () {
+        expect(iSet1.removeWhere((int element) => element > 10), {1, 2, 3, 4});
+        expect(iSet1.removeWhere((int element) => element > 2), {1, 2});
+      });
     });
 
-    test("ISet.intersection method", () {
-      expect(iSet1.intersection({1, 2, 5}), {1, 2});
-      expect(iSet1.intersection({10, 20, 50}), <int>{});
-    });
+    group("Retain |", () {
+      test("ISet.retainAll method", () {
+        expect(iSet1.retainAll({}), <int>{});
+        expect(iSet1.retainAll({2, 3}), {2, 3});
+      });
 
-    test("ISet.union method", () {
-      expect(iSet1.union({1}), {1, 2, 3, 4});
-      expect(iSet1.union({1, 2, 5}), {1, 2, 3, 4, 5});
-    });
-
-    test("ISet.lookup method", () {
-      expect(iSet1.lookup(1), 1);
-      expect(iSet1.lookup(10), isNull);
-    });
-
-    test("ISet.removeAll method", () {
-      expect(iSet1.removeAll({}), {1, 2, 3, 4});
-      expect(iSet1.removeAll({2, 3}), {1, 4});
-    });
-
-    test("ISet.removeWhere method", () {
-      expect(iSet1.removeWhere((int element) => element > 10), {1, 2, 3, 4});
-      expect(iSet1.removeWhere((int element) => element > 2), {1, 2});
-    });
-
-    test("ISet.retainAll method", () {
-      expect(iSet1.retainAll({}), <int>{});
-      expect(iSet1.retainAll({2, 3}), {2, 3});
-    });
-
-    test("ISet.retainWhere method", () {
-      expect(iSet1.retainWhere((int element) => element > 10), <int>{});
-      expect(iSet1.retainWhere((int element) => element < 2), <int>{1});
+      test("ISet.retainWhere method", () {
+        expect(iSet1.retainWhere((int element) => element > 10), <int>{});
+        expect(iSet1.retainWhere((int element) => element < 2), <int>{1});
+      });
     });
   });
 }
