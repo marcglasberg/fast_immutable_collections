@@ -384,10 +384,10 @@ class IList<T> // ignore: must_be_immutable
   /// in numerical order.
   ///
   /// ```dart
-  /// IList<String> words = ['hel', 'lo', 'there'].lock;
-  /// IMap<int, String> map = words.asMap();
-  /// print(map[0] + map[1]); // Prints 'hello';
-  /// map.keys.toList(); // [0, 1, 2, 3]
+  /// final IList<String> words = ['hel', 'lo', 'there'].lock;
+  /// final IMap<int, String> iMap = words.asMap();
+  /// print(iMap[0] + iMap[1]); // Prints 'hello';
+  /// iMap.keys.toList(); // [0, 1, 2, 3]
   /// ```
   IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListView(this).asMap());
 
@@ -485,7 +485,7 @@ class IList<T> // ignore: must_be_immutable
   /// the index of `o` is returned.
   ///
   /// ```dart
-  /// List<String> notes = ['do', 're', 'mi', 're'];
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
   /// notes.indexWhere((note) => note.startsWith('r'));       // 1
   /// notes.indexWhere((note) => note.startsWith('r'), 2);    // 3
   /// ```
@@ -512,20 +512,20 @@ class IList<T> // ignore: must_be_immutable
   /// the index of [:o:] is returned.
   /// 
   /// ```dart
-  /// IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
   /// notes.lastIndexOf('re', 2); // 1
   /// ```
   ///
   /// If [start] is not provided, this method searches from the end of the list.
   ///
   /// ```dart
-  /// notes.lastIndexOf('re');  // 3
+  /// notes.lastIndexOf('re');    // 3
   /// ```
   /// 
   /// Returns -1 if [element] is not found.
   ///
   /// ```dart
-  /// notes.lastIndexOf('fa');  // -1
+  /// notes.lastIndexOf('fa');    // -1
   /// ```
   int lastIndexOf(T element, [int start]) {
     var _length = length;
@@ -544,7 +544,7 @@ class IList<T> // ignore: must_be_immutable
   /// If [start] is omitted, it defaults to the [length] of the list.
   ///
   /// ```dart
-  /// IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
   /// notes.lastIndexWhere((note) => note.startsWith('r'));       // 3
   /// notes.lastIndexWhere((note) => note.startsWith('r'), 2);    // 1
   /// ```
@@ -552,7 +552,7 @@ class IList<T> // ignore: must_be_immutable
   /// Returns -1 if [element] is not found.
   /// 
   /// ```dart
-  /// notes.lastIndexWhere((note) => note.startsWith('k'));    // -1
+  /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int lastIndexWhere(bool Function(T element) test, [int start]) {
     var _length = length;
@@ -567,9 +567,8 @@ class IList<T> // ignore: must_be_immutable
   /// and inserts the contents of [replacement] in its place.
   ///
   /// ```dart
-  /// List<int> list = [1, 2, 3, 4, 5];
-  /// list.replaceRange(1, 4, [6, 7]);
-  /// list.join(', '); // '1, 6, 7, 5'
+  /// final IList<int> iList = [1, 2, 3, 4, 5].lock;
+  /// iList.replaceRange(1, 4, [6, 7]).join(', '); // '1, 6, 7, 5'
   /// ```
   ///
   /// The provided range, given by [start] and [end], must be valid.
@@ -595,12 +594,20 @@ class IList<T> // ignore: must_be_immutable
   /// `len` is this list's `length`. The range starts at `start` and has length
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
-  /// Example:
+  /// Example with [List]:
   /// 
   /// ```dart
-  /// List<int> list = new List(3);
+  /// final List<int> list = List(3);
   /// list.fillRange(0, 2, 1);
-  /// print(list); //  [1, 1, null]
+  /// print(list);  // [1, 1, null]
+  /// ```
+  /// 
+  /// Example with [IList]:
+  /// 
+  /// ```dart
+  /// final IList<int> iList = IList();
+  /// iList.fillRange(0, 2, 1);
+  /// print(iList); // [1, 1, null] 
   /// ```
   ///
   /// If the element type is not nullable, omitting [fillValue] or passing `null`
@@ -626,8 +633,8 @@ class IList<T> // ignore: must_be_immutable
   /// That is, it does *not* throw if this list changes size.
   ///
   /// ```dart
-  /// List<String> colors = ['red', 'green', 'blue', 'orange', 'pink'];
-  /// Iterable<String> range = colors.getRange(1, 4);
+  /// final IList<String> colors = ['red', 'green', 'blue', 'orange', 'pink'].lock;
+  /// final Iterable<String> range = colors.getRange(1, 4);
   /// range.join(', ');  // 'green, blue, orange'
   /// colors.length = 3;
   /// range.join(', ');  // 'green, blue'
@@ -644,14 +651,14 @@ class IList<T> // ignore: must_be_immutable
   /// order as they occur in this list.
   ///
   /// ```dart
-  /// var colors = ["red", "green", "blue", "orange", "pink"];
+  /// final IList<String> colors = ["red", "green", "blue", "orange", "pink"].lock;
   /// print(colors.sublist(1, 3)); // [green, blue]
   /// ```
   ///
   /// If [end] is omitted, it defaults to the [length] of this list.
   ///
   /// ```dart
-  /// print(colors.sublist(1)); // [green, blue, orange, pink]
+  /// print(colors.sublist(1));    // [green, blue, orange, pink]
   /// ```
   ///
   /// The `start` and `end` positions must satisfy the relations
@@ -709,6 +716,7 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// The list must not be empty.
   ///
+  /// If you want to recover the removed item, you can pass a mutable [removedItem].
   IList<T> removeLast([Item<T> removedItem]) {
     return removeAt(length - 1, removedItem);
   }
@@ -732,9 +740,9 @@ class IList<T> // ignore: must_be_immutable
   /// An object [:o:] satisfies [test] if [:test(o):] is true.
   ///
   /// ```dart
-  /// List<String> numbers = ['one', 'two', 'three', 'four'];
-  /// numbers.removeWhere((item) => item.length == 3);
-  /// numbers.join(', '); // 'three, four'
+  /// final IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  /// final IList<String> newNumbers = numbers.removeWhere((item) => item.length == 3);
+  /// newNumbers.join(', '); // 'three, four'
   /// ```
   IList<T> removeWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
@@ -748,9 +756,9 @@ class IList<T> // ignore: must_be_immutable
   /// An object [:o:] satisfies [test] if [:test(o):] is true.
   ///
   /// ```dart
-  /// List<String> numbers = ['one', 'two', 'three', 'four'];
-  /// numbers.retainWhere((item) => item.length == 3);
-  /// numbers.join(', '); // 'one, two'
+  /// final IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  /// final IList<String> newNumbers = numbers.retainWhere((item) => item.length == 3);
+  /// newNumbers.join(', '); // 'one, two'
   /// ```
   IList<T> retainWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
@@ -770,9 +778,8 @@ class IList<T> // ignore: must_be_immutable
   /// at position [index] in this list.
   ///
   /// ```dart
-  /// List<String> list = ['a', 'b', 'c'];
-  /// list.setAll(1, ['bee', 'sea']);
-  /// list.join(', '); // 'a, bee, sea'
+  /// final IList<String> iList = ['a', 'b', 'c'].lock;
+  /// iList.setAll(1, ['bee', 'sea']).join(', '); // 'a, bee, sea'
   /// ```
   ///
   /// This operation does not increase the length of `this`.
@@ -795,12 +802,10 @@ class IList<T> // ignore: must_be_immutable
   /// into the range [start], inclusive, to [end], exclusive, of the list.
   ///
   /// ```dart
-  /// List<int> list1 = [1, 2, 3, 4];
-  /// List<int> list2 = [5, 6, 7, 8, 9];
-  /// // Copies the 4th and 5th items in list2 as the 2nd and 3rd items
-  /// // of list1.
-  /// list1.setRange(1, 3, list2, 3);
-  /// list1.join(', '); // '1, 8, 9, 4'
+  /// final IList<int> iList1 = [1, 2, 3, 4].lock;
+  /// final IList<int> iList2 = [5, 6, 7, 8, 9].lock;
+  /// // Copies the 4th and 5th items in iList2 as the 2nd and 3rd items of iList1.
+  /// iList1.setRange(1, 3, iList2, 3).join(', '); // '1, 8, 9, 4'
   /// ```
   ///
   /// The provided range, given by [start] and [end], must be valid.

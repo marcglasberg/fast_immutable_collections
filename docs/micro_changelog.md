@@ -17,6 +17,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
         - `ISet`
         - `IMap`
         - `IMapOfSets`
+        - `Item`
 
 ## 21/10/2020
 
