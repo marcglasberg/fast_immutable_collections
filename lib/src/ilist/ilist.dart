@@ -230,6 +230,14 @@ class IList<T> // ignore: must_be_immutable
   /// Returns the concatenation of this list and [items].
   IList<T> addAll(Iterable<T> items) => IList<T>._unsafe(_l.addAll(items), config: config);
 
+  /// Removes the first occurrence of [item] from this list.
+  ///
+  ///     IList<String> parts = ['head', 'shoulders', 'knees', 'toes'].lock;
+  ///     parts.remove('head');
+  ///     parts.join(', ');     // 'shoulders, knees, toes'
+  ///
+  /// The method has no effect if [item] was not in the list.
+  ///
   IList<T> remove(T item) {
     final L<T> result = _l.remove(item);
     return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
@@ -376,7 +384,7 @@ class IList<T> // ignore: must_be_immutable
   /// Returns the concatenation of this list and [other].
   /// Returns a new list containing the elements of this list followed by
   /// the elements of [other].
-  IList<T> operator +(IList<T> other) => addAll(other);
+  IList<T> operator +(Iterable<T> other) => addAll(other);
 
   /// Returns an [IMap] view of this list.
   /// The map uses the indices of this list as keys and the corresponding objects
@@ -664,9 +672,9 @@ class IList<T> // ignore: must_be_immutable
   /// The `start` and `end` positions must satisfy the relations
   /// 0 ≤ `start` ≤ `end` ≤ `this.length`
   /// If `end` is equal to `start`, then the returned list is empty.
-  List<T> sublist(int start, [int end]) {
+  IList<T> sublist(int start, [int end]) {
     // TODO: Still need to implement efficiently.
-    return toList(growable: false).sublist(start, end);
+    return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
   }
 
   /// Inserts the object at position [index] in this list.

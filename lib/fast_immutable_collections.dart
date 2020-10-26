@@ -5,6 +5,8 @@ library fast_immutable_collections;
 export 'src/utils/immutable_collection.dart';
 
 export 'src/ilist/ilist.dart';
+export 'src/ilist/ilist_mixin.dart';
+export 'src/ilist/iterable_ilist_mixin.dart';
 export 'src/ilist/modifiable_list_view.dart';
 export 'src/ilist/unmodifiable_list_view.dart';
 

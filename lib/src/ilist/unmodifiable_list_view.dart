@@ -51,6 +51,12 @@ class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   @override
   set length(int newLength) => throw UnsupportedError("List in unmodifiable.");
 
+  @override
+  void add(T value) => throw UnsupportedError("List in unmodifiable.");
+
+  @override
+  void addAll(Iterable<T> values) => throw UnsupportedError("List in unmodifiable.");
+
   /// Locks the list, returning an *immutable* list ([IList]).
   IList<T> get lock => (_iList != null) ? _iList : _list.lock;
 }

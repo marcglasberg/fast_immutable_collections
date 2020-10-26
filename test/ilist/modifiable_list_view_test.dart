@@ -48,10 +48,6 @@ void main() {
     });
 
     test("ModifiableListView.add method", () {
-      // TODO: Marcelo, o `add` do `ListMixin` acho que utiliza o operador []= para fazer a adição.
-      // Além disso, na documentação do `ListMixin, é mencionado que aumentar o tamanho da lista
-      // forçadamente é ineficiente e que seria uma primeira otimização para quem quisesse melhorar
-      // a performance do Mixin.
       modifiableListView.add(4);
       expect(modifiableListView.length, 4);
       expect(modifiableListView.last, 4);

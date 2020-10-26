@@ -2,10 +2,14 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'ilist.dart';
 
-/// This [Iterable] mixin implements all [Iterable] members.
-/// It is meant to help you wrap an [IList] into another class (composition).
+/// This mixin implements all [Iterable] members, plus `operator []`.
+/// It is meant to help you wrap an [IList] into another iterable class (composition).
 /// You must override the [iList] getter to return the inner [IList].
 /// All other methods are efficiently implemented in terms of the [iList].
+/// Note: Classes which use this mixin are not themselves ILists.
+///
+/// See also: [IListMixin].
+///
 mixin IterableIListMixin<T> implements Iterable<T>, CanBeEmpty {
   IList<T> get iList;
 
@@ -85,7 +89,7 @@ mixin IterableIListMixin<T> implements Iterable<T>, CanBeEmpty {
   Iterable<T> takeWhile(bool Function(T value) test) => iList.takeWhile(test);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => iList.where(test);
+  IList<T> where(bool Function(T element) test) => iList.where(test);
 
   @override
   Iterable<E> whereType<E>() => iList.whereType<E>();
