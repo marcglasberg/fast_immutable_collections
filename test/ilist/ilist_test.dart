@@ -855,12 +855,13 @@ void main() {
   group("Replacing and Related Methods |", () {
     final IList<String> notes = ['do', 're', 'mi', 're'].lock;
 
+    tearDown(() => expect(notes, ['do', 're', 'mi', 're']));
+
     test("IList.indexOf method", () {
       expect(notes.indexOf('re'), 1);
       expect(notes.indexOf('re', 2), 3);
       // TODO: Marcelo, mudei o `for` para `<= _length - 1`.
       expect(notes.indexOf('fa'), -1);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.indexWhere method", () {
@@ -868,7 +869,6 @@ void main() {
       expect(notes.indexWhere((String element) => element == 're', 2), 3);
       // TODO: Marcelo, mudei o `for` para `<= _length - 1`.
       expect(notes.indexWhere((String element) => element == 'fa'), -1);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.put method", () {
@@ -883,13 +883,11 @@ void main() {
     test("IList.replaceFirst method", () {
       expect(notes.replaceFirst(from: 're', to: 'fa'), ['do', 'fa', 'mi', 're']);
       expect(notes.replaceFirst(from: 'fa', to: 'sol'), ['do', 're', 'mi', 're']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.replaceAll method", () {
       expect(notes.replaceAll(from: 're', to: 'fa'), ['do', 'fa', 'mi', 'fa']);
       expect(notes.replaceAll(from: 'fa', to: 'sol'), ['do', 're', 'mi', 're']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.replaceFirstWhere method", () {
@@ -897,13 +895,11 @@ void main() {
           notes.replaceFirstWhere((String item) => item == 're', 'fa'), ['do', 'fa', 'mi', 're']);
       expect(
           notes.replaceFirstWhere((String item) => item == 'fa', 'sol'), ['do', 're', 'mi', 're']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.replaceAllWhere method", () {
       expect(notes.replaceAllWhere((String item) => item == 're', 'fa'), ['do', 'fa', 'mi', 'fa']);
       expect(notes.replaceAllWhere((String item) => item == 'fa', 'sol'), ['do', 're', 'mi', 're']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.process method", () {
@@ -925,27 +921,23 @@ void main() {
             apply: (IList<String> iList, int index, String item) => [item + item],
           ),
           ['dodo', 'rere', 'mimi', 'rere']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.lastIndexOf method", () {
       expect(notes.lastIndexOf('re', 2), 1);
       expect(notes.lastIndexOf('re'), 3);
       expect(notes.lastIndexOf('fa'), -1);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.lastIndexWhere method", () {
       expect(notes.lastIndexWhere((String note) => note.startsWith('r')), 3);
       expect(notes.lastIndexWhere((String note) => note.startsWith('r'), 2), 1);
       expect(notes.lastIndexWhere((String note) => note.startsWith('k')), -1);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.replaceRange method", () {
       final IList<int> iList = [1, 2, 3, 4, 5].lock;
       expect(iList.replaceRange(1, 4, [6, 7]), [1, 6, 7, 5]);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.fillRange method", () {
@@ -972,12 +964,10 @@ void main() {
 
     test("IList.insert method", () {
       expect(notes.insert(2, 'fa'), ['do', 're', 'fa', 'mi', 're']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.insertAll method", () {
       expect(notes.insertAll(3, ['fa', 'fo', 'fu']), ['do', 're', 'mi', 'fa', 'fo', 'fu', 're']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.removeAt method", () {
@@ -985,7 +975,6 @@ void main() {
       final Item<String> item = Item();
       expect(notes.removeAt(1, item), ['do', 'mi', 're']);
       expect(item.value, 're');
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.removeLast method", () {
@@ -993,12 +982,10 @@ void main() {
       final Item<String> item = Item();
       expect(notes.removeLast(item), ['do', 're', 'mi']);
       expect(item.value, 're');
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.removeRange method", () {
       expect(notes.removeRange(1, 3), ['do', 're']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.removeWhere method", () {
@@ -1015,7 +1002,6 @@ void main() {
 
     test("IList.reversed getter", () {
       expect(notes.reversed, ['re', 'mi', 're', 'do']);
-      expect(notes, ['do', 're', 'mi', 're']);
     });
 
     test("IList.setAll method", () {

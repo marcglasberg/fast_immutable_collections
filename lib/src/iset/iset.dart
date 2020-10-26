@@ -393,46 +393,80 @@ class ISet<T> // ignore: must_be_immutable
   /// Returns an empty set with the same configuration.
   ISet<T> clear() => empty<T>(config);
 
+  /// Returns whether this [ISet] contains all the elements of [other].
   bool containsAll(Iterable<Object> other) {
     // TODO: Still need to implement efficiently.
     return unlock.containsAll(other);
   }
 
+  /// Returns a new set with the elements of this that are not in [other].
+  ///
+  /// That is, the returned set contains all the elements of this [ISet] that
+  /// are not elements of [other] according to `other.contains`.
   ISet<T> difference(Set<Object> other) {
     // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock.difference(other), config: config);
   }
 
+  /// Returns a new set which is the intersection between this set and [other].
+  ///
+  /// That is, the returned set contains all the elements of this [ISet] that
+  /// are also elements of [other] according to `other.contains`.
   ISet<T> intersection(Set<Object> other) {
     // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock.intersection(other), config: config);
   }
 
+  /// Returns a new set which contains all the elements of this set and [other].
+  ///
+  /// That is, the returned set contains all the elements of this [ISet] and
+  /// all the elements of [other].
   ISet<T> union(Set<T> other) {
     // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock.union(other), config: config);
   }
 
+  /// If an object equal to [object] is in the set, return it.
+  ///
+  /// Checks whether [object] is in the set, like [contains], and if so,
+  /// returns the object in the set, otherwise returns `null`.
+  ///
+  /// If the equality relation used by the set is not identity,
+  /// then the returned object may not be *identical* to [object].
+  /// Some set implementations may not be able to implement this method.
+  /// If the [contains] method is computed,
+  /// rather than being based on an actual object instance,
+  /// then there may not be a specific object instance representing the
+  /// set element.
   T lookup(Object object) {
     // TODO: Still need to implement efficiently.
     return unlock.lookup(object);
   }
 
+  /// Removes each element of [elements] from this set.
   ISet<T> removeAll(Iterable<Object> elements) {
     // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..removeAll(elements), config: config);
   }
 
+  /// Removes all elements of this set that satisfy [test].
   ISet<T> removeWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..removeWhere(test), config: config);
   }
 
+  /// Removes all elements of this set that are not elements in [elements].
+  /// 
+  /// Checks for each element of [elements] whether there is an element in this
+  /// set that is equal to it (according to `this.contains`), and if so, the
+  /// equal element in this set is retained, and elements that are not equal
+  /// to any element in `elements` are removed.
   ISet<T> retainAll(Iterable<Object> elements) {
     // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..retainAll(elements), config: config);
   }
 
+  /// Removes all elements of this set that fail to satisfy [test].
   ISet<T> retainWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..retainWhere(test), config: config);

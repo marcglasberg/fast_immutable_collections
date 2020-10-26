@@ -692,4 +692,99 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group("ISet.toggle method |", () {
+    ISet<int> iSet = {1, 2, 3}.lock;
+
+    test("Toggling an existing element", () {
+      expect(iSet.contains(3), isTrue);
+
+      iSet = iSet.toggle(3);
+
+      expect(iSet.contains(3), isFalse);
+
+      iSet = iSet.toggle(3);
+
+      expect(iSet.contains(3), isTrue);
+    });
+
+    test("Toggling an inexistent element", () {
+      expect(iSet.contains(4), isFalse);
+
+      iSet = iSet.toggle(4);
+
+      expect(iSet.contains(4), isTrue);
+
+      iSet = iSet.toggle(4);
+
+      expect(iSet.contains(4), isFalse);
+    });
+  });
+
+  test("ISet.elementAt method", () {
+    final ISet<int> iSet = {1, 2, 3}.lock;
+    expect(() => iSet.elementAt(0), throwsUnsupportedError);
+  });
+
+  test("ISet.clear method", () {
+    final ISet<int> iSet = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
+
+    final ISet<int> iSetCleared = iSet.clear();
+
+    expect(iSetCleared, allOf(isA<ISet<int>>(), <int>{}));
+    expect(iSetCleared.config.isDeepEquals, isFalse);
+  });
+
+  group("Remove, Union and Other Related Methods |", () {
+    final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
+
+    tearDown(() => expect(iSet1, {1, 2, 3, 4}));
+
+    test("ISet.containsAll method", () {
+      // TODO: Marcelo, o argumento desses métodos não deveria ser `Iterable` ou `ISet`?
+      expect(iSet1.containsAll([2, 2, 3]), isTrue);
+      expect(iSet1.containsAll({1, 2, 3, 4}), isTrue);
+      expect(iSet1.containsAll({10, 20, 30, 40}), isFalse);
+    });
+
+    test("ISet.difference method", () {
+      expect(iSet1.difference({1, 2, 5}), {3, 4});
+      expect(iSet1.difference({1, 2, 3, 4}), <int>{});
+    });
+
+    test("ISet.intersection method", () {
+      expect(iSet1.intersection({1, 2, 5}), {1, 2});
+      expect(iSet1.intersection({10, 20, 50}), <int>{});
+    });
+
+    test("ISet.union method", () {
+      expect(iSet1.union({1}), {1, 2, 3, 4});
+      expect(iSet1.union({1, 2, 5}), {1, 2, 3, 4, 5});
+    });
+
+    test("ISet.lookup method", () {
+      expect(iSet1.lookup(1), 1);
+      expect(iSet1.lookup(10), isNull);
+    });
+
+    test("ISet.removeAll method", () {
+      expect(iSet1.removeAll({}), {1, 2, 3, 4});
+      expect(iSet1.removeAll({2, 3}), {1, 4});
+    });
+
+    test("ISet.removeWhere method", () {
+      expect(iSet1.removeWhere((int element) => element > 10), {1, 2, 3, 4});
+      expect(iSet1.removeWhere((int element) => element > 2), {1, 2});
+    });
+
+    test("ISet.retainAll method", () {
+      expect(iSet1.retainAll({}), <int>{});
+      expect(iSet1.retainAll({2, 3}), {2, 3});
+    });
+
+    test("ISet.retainWhere method", () {
+      expect(iSet1.retainWhere((int element) => element > 10), <int>{});
+      expect(iSet1.retainWhere((int element) => element < 2), <int>{1});
+    });
+  });
 }
