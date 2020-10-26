@@ -415,17 +415,26 @@ void main() {
       expect(iList, [1, 2, 3]);
     });
 
-    test("IList.unsafe constructor", () {
-      final List<int> list = [1, 2, 3];
-      final IList<int> iList = IList.unsafe(list, config: ConfigList());
+    group("IList.unsafe constructor |", () {
+      test("Normal usage", () {
+        final List<int> list = [1, 2, 3];
+        final IList<int> iList = IList.unsafe(list, config: ConfigList());
 
-      expect(list, [1, 2, 3]);
-      expect(iList, [1, 2, 3]);
+        expect(list, [1, 2, 3]);
+        expect(iList, [1, 2, 3]);
 
-      list.add(4);
+        list.add(4);
 
-      expect(list, [1, 2, 3, 4]);
-      expect(iList, [1, 2, 3, 4]);
+        expect(list, [1, 2, 3, 4]);
+        expect(iList, [1, 2, 3, 4]);
+      });
+
+      test("Disallowing it", () {
+        disallowUnsafeConstructors = true;
+        final List<int> list = [1, 2, 3];
+
+        expect(() => IList.unsafe(list, config: ConfigList()), throwsUnsupportedError);
+      });
     });
   });
 

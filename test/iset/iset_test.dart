@@ -348,6 +348,28 @@ void main() {
       expect(identical(iSet.unlock, exampleSet), isFalse);
     });
 
+    group("ISet.unsafe constructor |", () {
+      test("Normal usage", () {
+        final Set<int> set = {1, 2, 3};
+        final ISet<int> iSet = ISet.unsafe(set, config: ConfigSet());
+
+        expect(set, {1, 2, 3});
+        expect(iSet, {1, 2, 3});
+
+        set.add(4);
+
+        expect(set, {1, 2, 3, 4});
+        expect(iSet, {1, 2, 3, 4});
+      });
+
+      test("Disallowing it", () {
+        disallowUnsafeConstructors = true;
+        final Set<int> set = {1, 2, 3};
+
+        expect(() => ISet.unsafe(set, config: ConfigSet()), throwsUnsupportedError);
+      });
+    });
+
     test("From lock", () {
       final ISet<int> iSet = exampleSet.lock;
 
