@@ -812,6 +812,8 @@ void main() {
     group("IMapOfSets.update method |", () {
       test("Updating an existing key", () {
         // TODO: Marcelo, talvez não seria melhor renomear este método para `updateSet`?
+        // TODO: Este método nao possui o parâmetro `value` (`Item`), como no caso do IMap, é isso
+        // mesmo?
         final IMapOfSets<String, int> newIMapOfSets =
             iMapOfSets.update('1', (ISet<int> set) => {100}.lock);
 
@@ -837,6 +839,11 @@ void main() {
               '4': {1000},
             }));
       });
+
+      test(
+          "Updating an inexistent key without ifAbsent yields an error",
+          () => expect(
+              () => iMapOfSets.update('4', (ISet<int> set) => {100}.lock), throwsUnsupportedError));
     });
 
     test("IMapOfSets.updateAll method", () {
