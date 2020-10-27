@@ -14,11 +14,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Completed tests for new methods of:
     - `IList`
     - `ISet`
+    - `Item`
+    - `IterableToImmutableExtension`
 1. Current TODOs:
     - Complete tests for new methods of:
         - `IMap`
         - `IMapOfSets`
-        - `Item`
 
 ## 21/10/2020
 
