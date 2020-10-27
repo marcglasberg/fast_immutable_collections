@@ -180,11 +180,12 @@ void main() {
         expect(m.unlock, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
       });
 
-      test("If the items being passed are from a variable, "
+      test(
+          "If the items being passed are from a variable, "
           "it shouldn't have a pointer to the variable", () {
         final Map<String, int> original = {"a": 1, "b": 2};
         final MFlat<String, int> mFlat1 = MFlat(original), mFlat2 = MFlat(original);
-        
+
         expect(mFlat1.unlock, <String, int>{"a": 1, "b": 2});
         expect(mFlat2.unlock, <String, int>{"a": 1, "b": 2});
 

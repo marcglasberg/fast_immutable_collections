@@ -499,7 +499,7 @@ class IList<T> // ignore: must_be_immutable
   /// ```
   ///
   /// Returns -1 if [element] is not found.
-  /// 
+  ///
   /// ```dart
   /// notes.indexWhere((note) => note.startsWith('k'));       // -1
   /// ```
@@ -518,7 +518,7 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// The first time an object [:o:] is encountered so that [:o == element:],
   /// the index of [:o:] is returned.
-  /// 
+  ///
   /// ```dart
   /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
   /// notes.lastIndexOf('re', 2); // 1
@@ -529,7 +529,7 @@ class IList<T> // ignore: must_be_immutable
   /// ```dart
   /// notes.lastIndexOf('re');    // 3
   /// ```
-  /// 
+  ///
   /// Returns -1 if [element] is not found.
   ///
   /// ```dart
@@ -558,7 +558,7 @@ class IList<T> // ignore: must_be_immutable
   /// ```
   ///
   /// Returns -1 if [element] is not found.
-  /// 
+  ///
   /// ```dart
   /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
   /// ```
@@ -603,19 +603,19 @@ class IList<T> // ignore: must_be_immutable
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   /// Example with [List]:
-  /// 
+  ///
   /// ```dart
   /// final List<int> list = List(3);
   /// list.fillRange(0, 2, 1);
   /// print(list);  // [1, 1, null]
   /// ```
-  /// 
+  ///
   /// Example with [IList]:
-  /// 
+  ///
   /// ```dart
   /// final IList<int> iList = IList();
   /// iList.fillRange(0, 2, 1);
-  /// print(iList); // [1, 1, null] 
+  /// print(iList); // [1, 1, null]
   /// ```
   ///
   /// If the element type is not nullable, omitting [fillValue] or passing `null`

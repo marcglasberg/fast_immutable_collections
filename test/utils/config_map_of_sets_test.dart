@@ -35,7 +35,8 @@ void main() {
       expect(configMapOfSets1.asConfigMap, const ConfigMap());
       expect(configMapOfSets2.asConfigMap, const ConfigMap(isDeepEquals: false));
       expect(configMapOfSets3.asConfigMap, const ConfigMap());
-      expect(configMapOfSets4.asConfigMap, const ConfigMap(autoSortKeys: false, autoSortValues: false));
+      expect(configMapOfSets4.asConfigMap,
+          const ConfigMap(autoSortKeys: false, autoSortValues: false));
     });
 
     test("ConfigMapOfSets.== operator", () {

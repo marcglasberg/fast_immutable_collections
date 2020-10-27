@@ -40,7 +40,7 @@ void main() {
         "UnmodifiableMapView.[]= operator",
         () => views.forEach((UnmodifiableMapView<String, int> view) =>
             expect(() => view['a'] = 10, throwsUnsupportedError)));
-            
+
     test("UnmodifiableMapView.clear method", () {
       views.forEach((UnmodifiableMapView<String, int> view) =>
           expect(() => view.clear(), throwsUnsupportedError));

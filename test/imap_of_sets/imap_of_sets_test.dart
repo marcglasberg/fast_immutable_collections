@@ -63,9 +63,7 @@ void main() {
       expect(iMapOfSets1.hashCode, iMapOfSets4.hashCode);
     });
 
-    test("IMapOfSets.equalItems method", () {
-      fail('Not implemented yet');
-    });
+    test("IMapOfSets.equalItems method", () => fail('Not implemented yet'));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -722,4 +720,6 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  group("Other Methods |", () {});
 }

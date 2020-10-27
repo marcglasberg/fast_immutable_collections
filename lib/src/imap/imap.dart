@@ -377,14 +377,14 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// ```dart
   /// IMap<String, int> scores = {'Bob': 36}.lock;
-  /// 
+  ///
   /// Item<int> item = Item();
   /// for (String key in ['Bob', 'Rohan', 'Sophia']) {
   ///   item = Item();
   ///   scores = scores.putIfAbsent(key, () => key.length, value: item);
   ///   print(value);    // 36, 5, 6
   /// }
-  /// 
+  ///
   /// scores['Bob'];     // 36
   /// scores['Rohan'];   //  5
   /// scores['Sophia'];  //  6

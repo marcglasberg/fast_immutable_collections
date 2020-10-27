@@ -904,7 +904,8 @@ void main() {
 
     test("IMap.updateAll method", () {
       final IMap<String, int> scores = {'Bob': 36, 'Joe': 100}.lock;
-      final IMap<String, int> updatedScores = scores.updateAll((String key, int value) => value * 2);
+      final IMap<String, int> updatedScores =
+          scores.updateAll((String key, int value) => value * 2);
 
       expect(updatedScores.unlock, {'Bob': 72, 'Joe': 200});
     });
