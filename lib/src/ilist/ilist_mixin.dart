@@ -96,7 +96,7 @@ mixin IListMixin<T, I extends IListMixin<T, I>> implements Iterable<T>, CanBeEmp
       iList.lastWhere(test, orElse: orElse);
 
   @override
-  IList<E> map<E>(E Function(T e) f) => iList.map(f);
+  IList<E> map<E>(E Function(T element) f) => iList.map(f);
 
   @override
   T reduce(T Function(T value, T element) combine) => iList.reduce(combine);

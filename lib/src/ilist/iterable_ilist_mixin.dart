@@ -66,7 +66,7 @@ mixin IterableIListMixin<T> implements Iterable<T>, CanBeEmpty {
       iList.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T e) f) => iList.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => iList.map(f);
 
   @override
   T reduce(T Function(T value, T element) combine) => iList.reduce(combine);

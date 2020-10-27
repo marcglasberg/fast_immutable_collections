@@ -172,6 +172,11 @@ IList methods and getters:
 `add`,
 `addAll`,
 `remove`,
+`removeAll`,
+`removeMany`,
+`removeNulls`,
+`removeDuplicates`,
+`removeNullsAndDuplicates`,
 `toggle`,
 `[]`,
 `+`,
@@ -183,6 +188,7 @@ IList methods and getters:
 `singleOr`,
 `maxLength`,
 `sort`,
+`sortLike`,
 `asMap`,
 `clear`,
 `indexOf`,
@@ -455,11 +461,99 @@ expect(students, [james, sara, lucy]);
 print(students.greetings()); 
 ```   
 
-
 ### Flushing the IList
+
+As explained, `fast_immutable_collections` is fast because it creates a new collection 
+by internally "composing" the source collection with some other information, 
+saving only the difference between the source and destination collections, 
+instead of copying the whole collection each time.
+
+After a lot of modifications, 
+these composed collections may end up with lots of information to coordinate the composition, 
+and may become slower than a regular mutable collection.
+
+The loss of speed depends on the type of collection. 
+For example, the `IList` doesn't suffer much from deep compositions,
+while the `ISet` and the `IMap` will take more of a hit.  
+
+If you call `flush` in an immutable collection, 
+it will internally remove all the composition,
+making sure the is perfectly optimized again. For example:
+
+```dart
+var ilist = [1.2].lock.add([3, 4]).add(5);
+ilist.flush;
+```         
+
+Please note, `flush` is a getter which returns the exact same instance, 
+just so that you can chain other methods to it if you want. 
+But it does NOT create a new list. 
+It actually just optimizes the current list, internally.
+
+If you flush a list which is already flushed, nothing will happen,
+and it won't take any time to flush the list again.
+So you don't need to worry about flushing the list more than once.
+
+Also, note flush just optimizes the list **internally**, 
+and no external difference will be visible. 
+So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
+
+#### Auto-flush      
+  
+Depending on the global configuration, 
+the collections will flush automatically for you, 
+once per asynchronous gap, as soon as you use them again.   
+
+For example, suppose you take a collection and add and remove a lot of items, synchronously.
+No flushing will take place during these process.
+After the asynchronous gap, as soon as you try to get, add or remove an item from it,
+it will flush automatically.  
+
+The global configuration default is to have auto-flush on.
+
 
 ### Advanced usage
 
+There are a few ways to lock and unlock a list, 
+which will have different results in speed and safety.
+
+Suppose you have some `List`.
+These are your options to create an `IList` from it:
+
+* `.lock` will create an internal defensive copy of the original list, 
+which will be used to back the `IList`.
+This is the same doing: `IList(list)`.
+
+* `.lockUnsafe` is fast, since it makes no defensive copies of the list.
+However, you should only use this with a new list you've created yourself,
+when you are sure no external copies exist. If the original list is modified,
+it will break the `IList` and any other derived lists in unpredictable ways.
+Use this at your own peril. This is the same doing: `IList.unsafe(list)`.
+Note you can optionally disallow unsafe constructors in the global configuration 
+by doing: `disallowUnsafeConstructors = true` (and then optionally preventing 
+further configuration changes by calling `lockConfig()`).                  
+
+These are your options to obtain a regular `List` back from an `IList`:
+
+* `.unlock` unlocks the list, returning a regular (mutable, growable) `List`.
+This returned list is "safe", in the sense that is newly created, 
+independent of the original `IList` or any other lists.
+
+* `.unlockView` unlocks the list, returning a safe, unmodifiable (immutable) `List` view.
+The word "view" means the list is backed by the original `IList`.
+This is very fast, since it makes no copies of the `IList` items.
+However, if you try to use methods that modify the list, like `add`,
+it will throw an `UnsupportedError`.
+It is also very fast to lock this list back into an `IList`.
+
+* `unlockLazy` unlocks the list, returning a safe, modifiable (mutable) `List`.
+Using this is very fast at first, since it makes no copies of the `IList` items. 
+However, if (and only if) you use a method that mutates the list, like `add`, 
+it will unlock it internally (make a copy of all `IList` items). 
+This is transparent to you, and will happen at most only once. 
+In other words, it will unlock the `IList` lazily, only if necessary.
+If you never mutate the list, it will be very fast to lock this list
+back into an `IList`.
 
 ***************************************
 ***************************************

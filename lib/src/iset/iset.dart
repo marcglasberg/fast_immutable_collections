@@ -287,7 +287,7 @@ class ISet<T> // ignore: must_be_immutable
       _s.lastWhere(test, orElse: orElse);
 
   @override
-  ISet<E> map<E>(E Function(T e) f, {ConfigSet config}) =>
+  ISet<E> map<E>(E Function(T element) f, {ConfigSet config}) =>
       ISet._(_s.map(f), config: config ?? (T == E ? this.config : defaultConfigSet));
 
   @override
@@ -572,7 +572,7 @@ abstract class S<T> implements Iterable<T> {
       _getFlushed.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T e) f) => _getFlushed.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => _getFlushed.map(f);
 
   @override
   T reduce(T Function(T value, T element) combine) => _getFlushed.reduce(combine);

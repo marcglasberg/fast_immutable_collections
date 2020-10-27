@@ -79,7 +79,7 @@ class LFlat<T> extends L<T> {
       _list.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T e) f) => IList(_list.map(f));
+  Iterable<E> map<E>(E Function(T element) f) => IList(_list.map(f));
 
   @override
   T reduce(T Function(T value, T element) combine) => _list.reduce(combine);
