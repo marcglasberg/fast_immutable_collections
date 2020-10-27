@@ -856,6 +856,9 @@ void main() {
       Item<int> item;
       for (String key in ['Bob', 'Rohan', 'Sophia']) {
         item = Item();
+        // TODO: Marcelo, nomear o parametro de `value` mas com tipo `Item`, que contém um `value`
+        // como propriedade me parece um tanto confuso. E o método `update` ainda possui `value`
+        // como parâmetro da função de `update`.
         scores = scores.putIfAbsent(key, () => key.length, value: item);
         expect(item.value, scores[key]);
       }
@@ -865,8 +868,45 @@ void main() {
       expect(scores['Sophia'], 6);
     });
 
-    test("IMap.update method", () {
-      
+    group("IMap.update method |", () {
+      test("Updating an existing key", () {
+        final IMap<String, int> scores = {'Bob': 36}.lock;
+
+        final Item<int> item = Item();
+        final IMap<String, int> updatedScores =
+            scores.update('Bob', (int value) => value * 2, value: item);
+
+        expect(scores.unlock, {'Bob': 36});
+        expect(updatedScores.unlock, {'Bob': 72});
+        expect(item.value, 72);
+      });
+
+      test("Updating an inexistent key", () {
+        final IMap<String, int> scores = {'Bob': 36}.lock;
+
+        final Item<int> item = Item();
+        final IMap<String, int> updatedScores =
+            scores.update('Joe', (int value) => value * 2, value: item, ifAbsent: () => 1);
+
+        expect(scores.unlock, {'Bob': 36});
+        expect(updatedScores.unlock, {'Bob': 36, 'Joe': 1});
+        expect(item.value, 1);
+      });
+
+      test("Updating an inexistent key without the ifAbsent parameter yields an error", () {
+        final IMap<String, int> scores = {'Bob': 36}.lock;
+
+        final Item<int> item = Item();
+        expect(() => scores.update('Joe', (int value) => value * 2, value: item),
+            throwsUnsupportedError);
+      });
+    });
+
+    test("IMap.updateAll method", () {
+      final IMap<String, int> scores = {'Bob': 36, 'Joe': 100}.lock;
+      final IMap<String, int> updatedScores = scores.updateAll((String key, int value) => value * 2);
+
+      expect(updatedScores.unlock, {'Bob': 72, 'Joe': 200});
     });
   });
 
