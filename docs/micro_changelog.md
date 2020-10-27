@@ -15,9 +15,9 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `Item`
     - `IterableToImmutableExtension`
     - `IMapOfSetsExtension`
+    - `IMap`
 1. Current TODOs:
     - Complete tests for new methods of:
-        - `IMap`
         - `IMapOfSets`
 
 ## 26/10/2020
