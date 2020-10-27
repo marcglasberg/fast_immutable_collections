@@ -367,7 +367,7 @@ class IMap<K, V> // ignore: must_be_immutable
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
 
   /// Returns an empty map with the same configuration.
-  void clear() => empty<K, V>(config);
+  IMap<K, V> clear() => empty<K, V>(config);
 
   /// Look up the value of [key], or add a new value if it isn't there.
   ///
@@ -375,15 +375,20 @@ class IMap<K, V> // ignore: must_be_immutable
   /// if there is one. Otherwise calls [ifAbsent] to get a new value,
   /// associates [key] to that value, and then sets the new [value].
   ///
-  ///     IMap<String, int> scores = {'Bob': 36}.lock;
-  ///     Item<int> value = Item();
-  ///     for (var key in ['Bob', 'Rohan', 'Sophia']) {
-  ///       scores = scores.putIfAbsent(key, () => key.length, value: value);
-  ///       print(value); // 36, 5, 7
-  ///     }
-  ///     scores['Bob'];     // 36
-  ///     scores['Rohan'];   //  5
-  ///     scores['Sophia'];  //  7
+  /// ```dart
+  /// IMap<String, int> scores = {'Bob': 36}.lock;
+  /// 
+  /// Item<int> item = Item();
+  /// for (String key in ['Bob', 'Rohan', 'Sophia']) {
+  ///   item = Item();
+  ///   scores = scores.putIfAbsent(key, () => key.length, value: item);
+  ///   print(value);    // 36, 5, 6
+  /// }
+  /// 
+  /// scores['Bob'];     // 36
+  /// scores['Rohan'];   //  5
+  /// scores['Sophia'];  //  6
+  /// ```
   ///
   /// Calling [ifAbsent] must not add or remove keys from the map.
   ///

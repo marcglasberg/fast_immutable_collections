@@ -12,6 +12,7 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 ### 1. Philippe Fanaro
 
 1. Completed tests for new methods of:
+    - `Item`
     - `IterableToImmutableExtension`
     - `IMapOfSetsExtension`
 1. Current TODOs:
@@ -26,7 +27,6 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Completed tests for new methods of:
     - `IList`
     - `ISet`
-    - `Item`
 
 ## 21/10/2020
 

@@ -85,6 +85,28 @@ void main() {
       expect(fromIterables['a'], 1);
       expect(fromIterables['b'], 2);
     });
+
+    group("IMap.unsafe constructor", () {
+      test("Normal usage", () {
+        final Map<String, int> map = {'a': 1, 'b': 2};
+        final IMap<String, int> iMap = IMap.unsafe(map, config: ConfigMap());
+
+        expect(map, {'a': 1, 'b': 2});
+        expect(iMap.unlock, {'a': 1, 'b': 2});
+
+        map.addAll({'c': 3});
+
+        expect(map, {'a': 1, 'b': 2, 'c': 3});
+        expect(iMap.unlock, {'a': 1, 'b': 2, 'c': 3});
+      });
+
+      test("Disallowing it", () {
+        disallowUnsafeConstructors = true;
+        final Map<String, int> map = {'a': 1, 'b': 2};
+
+        expect(() => IMap.unsafe(map, config: ConfigMap()), throwsUnsupportedError);
+      });
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,6 +206,33 @@ void main() {
 
           test("Different items yield false", () => expect(iMap1.equalItems(iterable3), isFalse));
         });
+      });
+    });
+
+    group("Equal Items To... |", () {
+      final IMap<String, int> iMap = IMap({'a': 1, 'b': 2});
+      final Map<String, int> map1 = {'a': 1, 'b': 2};
+      final Map<String, int> map2 = {'a': 1, 'b': 3};
+      final Map<String, int> map3 = {'a': 1, 'c': 2};
+      final Map<String, int> map4 = {'a': 1, 'b': 2, 'c': 3};
+
+      test("IMap.equalItemsToMap", () {
+        expect(iMap.equalItemsToMap(map1), isTrue);
+        expect(iMap.equalItemsToMap(map2), isFalse);
+        expect(iMap.equalItemsToMap(map3), isFalse);
+        expect(iMap.equalItemsToMap(map4), isFalse);
+      });
+
+      test("IMap.equalItemsToIMap", () {
+        final IMap<String, int> iMap1 = map1.lock;
+        final IMap<String, int> iMap2 = map2.lock;
+        final IMap<String, int> iMap3 = map3.lock;
+        final IMap<String, int> iMap4 = map4.lock;
+
+        expect(iMap.equalItemsToIMap(iMap1), isTrue);
+        expect(iMap.equalItemsToIMap(iMap2), isFalse);
+        expect(iMap.equalItemsToIMap(iMap3), isFalse);
+        expect(iMap.equalItemsToIMap(iMap4), isFalse);
       });
     });
 
@@ -369,6 +418,13 @@ void main() {
     test("IMap.remove method", () {
       final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
       final IMap<String, int> newIMap = iMap.remove('b');
+
+      expect(newIMap.unlock, {'a': 1});
+    });
+
+    test("IMap.removeWhere method", () {
+      final IMap<String, int> iMap = {'a': 1, 'b': 2}.lock;
+      final IMap<String, int> newIMap = iMap.removeWhere((String key, int value) => key == 'b');
 
       expect(newIMap.unlock, {'a': 1});
     });
@@ -782,11 +838,46 @@ void main() {
     });
   });
 
+  group("Other Methods |", () {
+    test("IMap.clear method", () {
+      final IMap<String, int> iMap =
+          IMap.withConfig({'a': 1, 'b': 2}, ConfigMap(isDeepEquals: false));
+
+      final IMap<String, int> iMapCleared = iMap.clear();
+
+      // TODO: Marcelo, eu fiz com que o clear retornasse um `IMap` (estava com `void`).
+      expect(iMapCleared.unlock, allOf(isA<Map<String, int>>(), {}));
+      expect(iMapCleared.config.isDeepEquals, isFalse);
+    });
+
+    test("IMap.putIfAbsent", () {
+      IMap<String, int> scores = {'Bob': 36}.lock;
+
+      Item<int> item;
+      for (String key in ['Bob', 'Rohan', 'Sophia']) {
+        item = Item();
+        scores = scores.putIfAbsent(key, () => key.length, value: item);
+        expect(item.value, scores[key]);
+      }
+
+      expect(scores['Bob'], 36);
+      expect(scores['Rohan'], 5);
+      expect(scores['Sophia'], 6);
+    });
+
+    test("IMap.update method", () {
+      
+    });
+  });
+
   // //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group("IMapOfSetsExtension |", () {
     test("IMapOfSetsExtension.lock getter", () {
-      const Map<String, Set<int>> map = {'a': {1, 2}, 'b': {1, 2, 3}};
+      const Map<String, Set<int>> map = {
+        'a': {1, 2},
+        'b': {1, 2, 3}
+      };
       final IMapOfSets<String, int> iMapOfSets = map.lock;
 
       expect(iMapOfSets, isA<IMapOfSets<String, int>>());
