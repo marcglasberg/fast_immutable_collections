@@ -87,4 +87,68 @@ void main() {
       expect(map, {"a": 1, "b": 2, "c": 3});
     });
   });
+
+  group("Item |", () {
+    Item<int> item;
+
+    setUp(() => item = Item());
+
+    test("Item.value is initially null", () => expect(item.value, isNull));
+
+    test("Item.value won't change after it's set", () {
+      expect(item.value, isNull);
+
+      item.set(10);
+
+      expect(item.value, 10);
+      expect(() => item.set(1), throwsStateError);
+    });
+
+    test("Item.toString", () {
+      expect(item.toString(), 'null');
+      item.set(10);
+      expect(item.toString(), '10');
+    });
+
+    group("Equals and Hash |", () {
+      final Item<int> item1 = Item();
+      final Item<int> item2 = Item();
+      final Item<int> item3 = Item();
+      item1.set(10);
+      item2.set(10);
+      item3.set(1);
+
+      test("Item.== operator", () {
+        expect(item1 == item1, isTrue);
+        expect(item1 == item2, isTrue);
+        expect(item2 == item1, isTrue);
+        expect(item1 == item3, isFalse);
+      });
+
+      test(
+          "Item.hashCode getter",
+          () =>
+              expect(item1.hashCode, allOf(item1.hashCode, item2.hashCode, isNot(item3.hashCode))));
+    });
+  });
+
+  group("IterableToImmutableExtension |", () {
+    test("IterableToImmutableExtension.lockAsList", () {
+      const List<int> list = [1, 2, 3, 3];
+      final IList<int> iList = list.lockAsList;
+      final ISet<int> iSet = list.lockAsSet;
+
+      expect(iList, [1, 2, 3, 3]);
+      expect(iSet, {1, 2, 3});
+    });
+
+    test("IterableToImmutableExtension.lockAsSet", () {
+      final Set<int> set = {1, 2, 3};
+      final IList<int> iList = set.lockAsList;
+      final ISet<int> iSet = set.lockAsSet;
+
+      expect(iList, [1, 2, 3]);
+      expect(iSet, [1, 2, 3]);
+    });
+  });
 }

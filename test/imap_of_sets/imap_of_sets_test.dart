@@ -62,6 +62,10 @@ void main() {
       expect(iMapOfSets1.hashCode, isNot(iMapOfSets3.hashCode));
       expect(iMapOfSets1.hashCode, iMapOfSets4.hashCode);
     });
+
+    test("IMapOfSets.equalItems method", () {
+      fail('Not implemented yet');
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -359,6 +363,45 @@ void main() {
       expect(iMapOfSets2.config.autoSortKeys, isFalse);
       expect(iMapOfSets2.config.autoSortValues, isFalse);
     });
+
+    test("IMap.isIdentityEquals getter", () {
+      expect(iMapOfSets1.isIdentityEquals, isFalse);
+      final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
+      expect(iMapOfSets2.isIdentityEquals, isTrue);
+    });
+
+    group("Partial Configuration Checking |", () {
+      final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
+
+      test(
+          "IMapOfSets.config getter",
+          () => expect(
+              iMapOfSets2.config,
+              const ConfigMapOfSets(
+                isDeepEquals: false,
+                autoSortKeys: false,
+                autoSortValues: false,
+              )));
+
+      test("IMapOfSets.configSet getter", () {
+        expect(
+            iMapOfSets2.configSet,
+            const ConfigSet(
+              autoSort: false,
+              isDeepEquals: false,
+            ));
+      });
+
+      test(
+          "IMapOfSets.configMap getter",
+          () => expect(
+              iMapOfSets2.configMap,
+              const ConfigMap(
+                isDeepEquals: false,
+                autoSortKeys: false,
+                autoSortValues: false,
+              )));
+    });
   });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -452,6 +495,19 @@ void main() {
     test("IMapOfSets.add method", () {
       final IMapOfSets<String, int> newSet = iMapOfSets.add("a", 5);
       expect(newSet["a"], ISet({1, 2, 5}));
+    });
+
+    group("IMapOfSets.addValues method", () {
+      test("Adding to an existing key", () {
+        final IMapOfSets<String, int> newMapOfSets = iMapOfSets.addValues('a', [2, 3, 4]);
+        expect(newMapOfSets['a'], {1, 2, 3, 4});
+      });
+
+      test("Adding to an inexistent key", () {
+        expect(iMapOfSets['z'], isNull);
+        final IMapOfSets<String, int> newMapOfSets = iMapOfSets.addValues('z', [2, 3, 4]);
+        expect(newMapOfSets['z'], {2, 3, 4});
+      });
     });
 
     test("IMapOfSets.remove method", () {

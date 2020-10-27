@@ -24,6 +24,20 @@ void main() {
       expect(configMapOfSets4.autoSortValues, isFalse);
     });
 
+    test("ConfigMapOfSets.asConfigSet getter", () {
+      expect(configMapOfSets1.asConfigSet, const ConfigSet());
+      expect(configMapOfSets2.asConfigSet, const ConfigSet(isDeepEquals: false));
+      expect(configMapOfSets3.asConfigSet, const ConfigSet());
+      expect(configMapOfSets4.asConfigSet, const ConfigSet(autoSort: false));
+    });
+
+    test("ConfigMapOfSets.asConfigMap getter", () {
+      expect(configMapOfSets1.asConfigMap, const ConfigMap());
+      expect(configMapOfSets2.asConfigMap, const ConfigMap(isDeepEquals: false));
+      expect(configMapOfSets3.asConfigMap, const ConfigMap());
+      expect(configMapOfSets4.asConfigMap, const ConfigMap(autoSortKeys: false, autoSortValues: false));
+    });
+
     test("ConfigMapOfSets.== operator", () {
       final ConfigMapOfSets configMapOfSets5 = ConfigMapOfSets(),
           configMapOfSets6 = ConfigMapOfSets(isDeepEquals: false),

@@ -1,5 +1,4 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
+import '../utils/immutable_collection.dart';
 import 'ilist.dart';
 
 /// This mixin implements all [Iterable] members, plus `operator []`.
