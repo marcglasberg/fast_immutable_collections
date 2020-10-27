@@ -257,6 +257,47 @@ class IList<T> // ignore: must_be_immutable
     return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
   }
 
+  /// Removes all occurrences of all [items] from this list.
+  /// Same as calling [removeMany] for each item in [items].
+  ///
+  /// The method has no effect if [item] was not in the list.
+  ///
+  IList<T> removeAll(Iterable<T> items) {
+    final L<T> result = _l.removeAll(items);
+    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+  }
+
+  /// Removes all occurrences of [item] from this list.
+  ///
+  ///     IList<String> parts = ['head', 'shoulders', 'knees', 'head', 'toes'].lock;
+  ///     parts.remove('head');
+  ///     parts.join(', ');     // 'shoulders, knees, toes'
+  ///
+  /// The method has no effect if [item] was not in the list.
+  ///
+  IList<T> removeMany(T item) {
+    final L<T> result = _l.removeMany(item);
+    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+  }
+
+  /// Removes all nulls from this list.
+  IList<T> removeNulls() => removeAll(null);
+
+  /// Removes duplicates (but keeps items which appear only
+  /// once, plus the first time other items appear).
+  IList<T> removeDuplicates() {
+    LinkedHashSet<T> set = _l.toLinkedHashSet();
+    return IList<T>.withConfig(set, config);
+  }
+
+  /// Removes duplicates (but keeps items which appear only
+  /// once, plus the first time other items appear).
+  IList<T> removeNullsAndDuplicates() {
+    LinkedHashSet<T> set = _l.toLinkedHashSet();
+    set.remove(null);
+    return IList<T>.withConfig(set, config);
+  }
+
   /// Removes the element, if it exists in the list.
   /// Otherwise, adds it to the list.
   IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
@@ -894,6 +935,19 @@ abstract class L<T> implements Iterable<T> {
   // TODO: Still need to implement efficiently.
   L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
+  L<T> removeAll(Iterable<T> elements) {
+    var list = unlock;
+    var originalLength = list.length;
+    var set = HashSet.of(elements);
+    list = unlock..removeWhere((e) => set.contains(e));
+    if (list.length == originalLength) return this;
+    return LFlat<T>.unsafe(list);
+  }
+
+  // TODO: Still need to implement efficiently.
+  L<T> removeMany(T element) =>
+      !contains(element) ? this : LFlat<T>.unsafe(unlock..removeWhere((e) => e == element));
+
   // TODO: Still need to implement efficiently.
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
   /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
@@ -904,7 +958,23 @@ abstract class L<T> implements Iterable<T> {
           ? this
           : LFlat<T>.unsafe(unlock..length = maxLength);
 
+  /// Sorts this list according to the order specified by the [compare] function.
+  /// If [compare] is not provided, it will use the natural ordering of the type [T].
   L<T> sort([int Function(T a, T b) compare]) => LFlat<T>.unsafe(unlock..sort(compare));
+
+  /// Sorts this list according to the order specified by the [ordering] iterable.
+  /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
+  /// Note: This is not very efficient. Only use for a small number of elements.
+  L<T> sortLike(Iterable<T> ordering) {
+    assert(ordering != null);
+    Set<T> orderingSet = Set.of(ordering);
+    Set<T> newSet = Set.of(this);
+    Set<T> intersection = orderingSet.intersection(newSet);
+    Set<T> difference = newSet.difference(orderingSet);
+    List<T> result = ordering.where((element) => intersection.contains(element)).toList();
+    result.addAll(difference);
+    return LFlat<T>.unsafe(result);
+  }
 
   @override
   bool get isEmpty => _getFlushed.isEmpty;
@@ -996,8 +1066,11 @@ abstract class L<T> implements Iterable<T> {
   @override
   List<T> toList({bool growable = true}) => List.of(this, growable: growable);
 
-  @override
-  Set<T> toSet() => Set.of(this);
+  /// Ordered set.
+  LinkedHashSet<T> toLinkedHashSet() => LinkedHashSet.of(this);
+
+  /// Unordered set.
+  HashSet<T> toHashSet() => HashSet.of(this);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
