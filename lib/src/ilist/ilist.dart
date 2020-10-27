@@ -1066,6 +1066,9 @@ abstract class L<T> implements Iterable<T> {
   @override
   List<T> toList({bool growable = true}) => List.of(this, growable: growable);
 
+  @override
+  Set<T> toSet() => Set.of(this);
+
   /// Ordered set.
   LinkedHashSet<T> toLinkedHashSet() => LinkedHashSet.of(this);
 
