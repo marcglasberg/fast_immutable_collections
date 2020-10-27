@@ -511,20 +511,43 @@ The global configuration default is to have auto-flush on.
 There are a few ways to lock and unlock a list, 
 which will have different results in speed and safety.
 
-Suppose you have a `List<int> originalList = [1, 2];`.
-These are your options:
+Suppose you have some `List`.
+These are your options to create an `IList` from it:
 
-* `originalList.lock` will create an internal copy of the original list, 
+* `.lock` will create an internal defensive copy of the original list, 
 which will be used to back the `IList`.
+This is the same doing: `IList(list)`.
 
-* `originalList.lock` will create an internal copy of the original list, 
-which will be used to back the `IList`.
+* `.lockUnsafe` is fast, since it makes no defensive copies of the list.
+However, you should only use this with a new list you've created yourself,
+when you are sure no external copies exist. If the original list is modified,
+it will break the `IList` and any other derived lists in unpredictable ways.
+Use this at your own peril. This is the same doing: `IList.unsafe(list)`.
+Note you can optionally disallow unsafe constructors in the global configuration 
+by doing: `disallowUnsafeConstructors = true` (and then optionally preventing 
+further configuration changes by calling `lockConfig()`).                  
 
+These are your options to obtain a regular `List` back from an `IList`:
 
-* `[1, 2].unlock` /// Unlocks the list, returning a regular (mutable, growable) [List].
-                  /// This list is "safe", in the sense that is independent from the original [IList].
-                  List<T> get unlock => List.of(_l, growable: true); 
- 
+* `.unlock` unlocks the list, returning a regular (mutable, growable) `List`.
+This returned list is "safe", in the sense that is newly created, 
+independent of the original `IList` or any other lists.
+
+* `.unlockView` unlocks the list, returning a safe, unmodifiable (immutable) `List` view.
+The word "view" means the list is backed by the original `IList`.
+This is very fast, since it makes no copies of the `IList` items.
+However, if you try to use methods that modify the list, like `add`,
+it will throw an `UnsupportedError`.
+It is also very fast to lock this list back into an `IList`.
+
+* `unlockLazy` unlocks the list, returning a safe, modifiable (mutable) `List`.
+Using this is very fast at first, since it makes no copies of the `IList` items. 
+However, if (and only if) you use a method that mutates the list, like `add`, 
+it will unlock it internally (make a copy of all `IList` items). 
+This is transparent to you, and will happen at most only once. 
+In other words, it will unlock the `IList` lazily, only if necessary.
+If you never mutate the list, it will be very fast to lock this list
+back into an `IList`.
 
 ***************************************
 ***************************************

@@ -17,6 +17,17 @@ extension IListExtension<T> on List<T> {
   //
   /// Locks the list, returning an *immutable* list ([IList]).
   IList<T> get lock => IList<T>(this);
+
+  /// Locks the list, returning an *immutable* list ([IList]).
+  /// This is unsafe: Use it at your own peril.
+  /// This constructor is fast, since it makes no defensive copies of the list.
+  /// However, you should only use this with a new list you've created yourself,
+  /// when you are sure no external copies exist. If the original list is modified,
+  /// it will break the IList and any other derived lists in unpredictable ways.
+  /// Note you can optionally disallow unsafe constructors in the global configuration
+  /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
+  /// further configuration changes by calling `lockConfig()`).
+  IList<T> get lockUnsafe => IList<T>.unsafe(this, config: defaultConfigList);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +87,9 @@ class IList<T> // ignore: must_be_immutable
   /// However, you should only use this with a new list you've created yourself,
   /// when you are sure no external copies exist. If the original list is modified,
   /// it will break the IList and any other derived lists in unpredictable ways.
+  /// Note you can optionally disallow unsafe constructors in the global configuration
+  /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
+  /// further configuration changes by calling `lockConfig()`).
   IList.unsafe(List<T> list, {@required this.config})
       : assert(config != null),
         _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list) {
@@ -499,7 +513,7 @@ class IList<T> // ignore: must_be_immutable
   /// ```
   ///
   /// Returns -1 if [element] is not found.
-  /// 
+  ///
   /// ```dart
   /// notes.indexWhere((note) => note.startsWith('k'));       // -1
   /// ```
@@ -518,7 +532,7 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// The first time an object [:o:] is encountered so that [:o == element:],
   /// the index of [:o:] is returned.
-  /// 
+  ///
   /// ```dart
   /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
   /// notes.lastIndexOf('re', 2); // 1
@@ -529,7 +543,7 @@ class IList<T> // ignore: must_be_immutable
   /// ```dart
   /// notes.lastIndexOf('re');    // 3
   /// ```
-  /// 
+  ///
   /// Returns -1 if [element] is not found.
   ///
   /// ```dart
@@ -558,7 +572,7 @@ class IList<T> // ignore: must_be_immutable
   /// ```
   ///
   /// Returns -1 if [element] is not found.
-  /// 
+  ///
   /// ```dart
   /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
   /// ```
@@ -603,19 +617,19 @@ class IList<T> // ignore: must_be_immutable
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   /// Example with [List]:
-  /// 
+  ///
   /// ```dart
   /// final List<int> list = List(3);
   /// list.fillRange(0, 2, 1);
   /// print(list);  // [1, 1, null]
   /// ```
-  /// 
+  ///
   /// Example with [IList]:
-  /// 
+  ///
   /// ```dart
   /// final IList<int> iList = IList();
   /// iList.fillRange(0, 2, 1);
-  /// print(iList); // [1, 1, null] 
+  /// print(iList); // [1, 1, null]
   /// ```
   ///
   /// If the element type is not nullable, omitting [fillValue] or passing `null`

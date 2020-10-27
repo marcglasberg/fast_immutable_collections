@@ -7,9 +7,6 @@ import 'hash.dart';
 /// In your app initialization you may want to lock the configuration.
 void lockConfig() => _isConfigLocked = true;
 
-// TODO: Não seria interessante um getter pra `isConfigLocked` também?
-// TODO: Existe algum motivo específico para que `lockConfig` seja feito por uma função,
-// enquanto que `disallowUnsafeConstructors` é feito por um setter?
 bool _isConfigLocked = false;
 
 /// While `identical(collection1, collection2)` will compare the identity of the collection
