@@ -452,11 +452,76 @@ expect(students, [james, sara, lucy]);
 print(students.greetings()); 
 ```   
 
-
 ### Flushing the IList
+
+As explained, `fast_immutable_collections` is fast because it creates a new collection 
+by internally "composing" the source collection with some other information, 
+saving only the difference between the source and destination collections, 
+instead of copying the whole collection each time.
+
+After a lot of modifications, 
+these composed collections may end up with lots of information to coordinate the composition, 
+and may become slower than a regular mutable collection.
+
+The loss of speed depends on the type of collection. 
+For example, the `IList` doesn't suffer much from deep compositions,
+while the `ISet` and the `IMap` will take more of a hit.  
+
+If you call `flush` in an immutable collection, 
+it will internally remove all the composition,
+making sure the is perfectly optimized again. For example:
+
+```dart
+var ilist = [1.2].lock.add([3, 4]).add(5);
+ilist.flush;
+```         
+
+Please note, `flush` is a getter which returns the exact same instance, 
+just so that you can chain other methods to it if you want. 
+But it does NOT create a new list. 
+It actually just optimizes the current list, internally.
+
+If you flush a list which is already flushed, nothing will happen,
+and it won't take any time to flush the list again.
+So you don't need to worry about flushing the list more than once.
+
+Also, note flush just optimizes the list **internally**, 
+and no external difference will be visible. 
+So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
+
+#### Auto-flush      
+  
+Depending on the global configuration, 
+the collections will flush automatically for you, 
+once per asynchronous gap, as soon as you use them again.   
+
+For example, suppose you take a collection and add and remove a lot of items, synchronously.
+No flushing will take place during these process.
+After the asynchronous gap, as soon as you try to get, add or remove an item from it,
+it will flush automatically.  
+
+The global configuration default is to have auto-flush on.
+
 
 ### Advanced usage
 
+There are a few ways to lock and unlock a list, 
+which will have different results in speed and safety.
+
+Suppose you have a `List<int> originalList = [1, 2];`.
+These are your options:
+
+* `originalList.lock` will create an internal copy of the original list, 
+which will be used to back the `IList`.
+
+* `originalList.lock` will create an internal copy of the original list, 
+which will be used to back the `IList`.
+
+
+* `[1, 2].unlock` /// Unlocks the list, returning a regular (mutable, growable) [List].
+                  /// This list is "safe", in the sense that is independent from the original [IList].
+                  List<T> get unlock => List.of(_l, growable: true); 
+ 
 
 ***************************************
 ***************************************

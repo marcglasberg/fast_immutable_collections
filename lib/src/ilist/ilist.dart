@@ -336,7 +336,7 @@ class IList<T> // ignore: must_be_immutable
       _l.lastWhere(test, orElse: orElse);
 
   @override
-  IList<E> map<E>(E Function(T e) f, {ConfigList config}) =>
+  IList<E> map<E>(E Function(T element) f, {ConfigList config}) =>
       IList._(_l.map(f), config: config ?? (T == E ? this.config : defaultConfigList));
 
   @override
@@ -925,7 +925,7 @@ abstract class L<T> implements Iterable<T> {
       _getFlushed.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T e) f) => _getFlushed.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => _getFlushed.map(f);
 
   @override
   T reduce(T Function(T value, T element) combine) => _getFlushed.reduce(combine);

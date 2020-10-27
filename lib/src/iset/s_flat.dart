@@ -71,7 +71,7 @@ class SFlat<T> extends S<T> {
       _set.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T e) f) => ISet(_set.map(f));
+  Iterable<E> map<E>(E Function(T element) f) => ISet(_set.map(f));
 
   @override
   T reduce(T Function(T value, T element) combine) => _set.reduce(combine);
