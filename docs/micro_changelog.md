@@ -7,6 +7,18 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
+## 27/10/2020
+
+### 1. Philippe Fanaro
+
+1. Completed tests for new methods of:
+    - `IterableToImmutableExtension`
+    - `IMapOfSetsExtension`
+1. Current TODOs:
+    - Complete tests for new methods of:
+        - `IMap`
+        - `IMapOfSets`
+
 ## 26/10/2020
 
 ### 1. Philippe Fanaro
@@ -15,11 +27,6 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `IList`
     - `ISet`
     - `Item`
-    - `IterableToImmutableExtension`
-1. Current TODOs:
-    - Complete tests for new methods of:
-        - `IMap`
-        - `IMapOfSets`
 
 ## 21/10/2020
 

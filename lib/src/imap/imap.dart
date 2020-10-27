@@ -1,11 +1,15 @@
 import 'dart:collection';
 import 'package:collection/collection.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:meta/meta.dart';
+import '../ilist/ilist.dart';
+import '../imap_of_sets/imap_of_sets.dart';
+import '../iset/iset.dart';
+import '../utils/immutable_collection.dart';
 import 'm_add.dart';
 import 'm_add_all.dart';
 import 'm_flat.dart';
 import 'm_replace.dart';
+import 'unmodifiable_map_view.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
