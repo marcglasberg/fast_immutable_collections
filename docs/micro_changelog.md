@@ -16,9 +16,11 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `IterableToImmutableExtension`
     - `IMapOfSetsExtension`
     - `IMap`
+    - `IMapOfSets`
 1. Current TODOs:
-    - Complete tests for new methods of:
-        - `IMapOfSets`
+    - Review Benchmarks
+    - Add normalized columns to the benchmark tables
+    - Benchmark App
 
 ## 26/10/2020
 

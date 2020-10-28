@@ -52,8 +52,8 @@ void main() {
 
     test(
         "UnmodifiableListView.add method",
-        () => views.forEach((UnmodifiableListView<int> view) =>
-            expect(() => view.add(4), throwsUnsupportedError)));
+        () => views.forEach(
+            (UnmodifiableListView<int> view) => expect(() => view.add(4), throwsUnsupportedError)));
 
     test(
         "UnmodifiableListView.remove method",

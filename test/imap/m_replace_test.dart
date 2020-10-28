@@ -84,7 +84,9 @@ void main() {
         expect(m.unlock, <String, int>{"a": 1, "b": 4, "c": 3});
       });
 
-      test("If the item being passed is a variable, a pointer to it shouldn't exist inside MReplace", () {
+      test(
+          "If the item being passed is a variable, a pointer to it shouldn't exist inside MReplace",
+          () {
         const Map<String, int> original = {"a": 1, "b": 2};
         final MFlat<String, int> mFlat = MFlat(original);
         final MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
@@ -118,11 +120,13 @@ void main() {
         expect(m.unlock, <String, int>{"a": 1, "b": 4, "c": 3, "d": 4});
       });
 
-      test("If the items being passed are from a variable, "
+      test(
+          "If the items being passed are from a variable, "
           "it shouldn't have a pointer to the variable", () {
         final Map<String, int> original = {"a": 1, "b": 2};
         final MFlat<String, int> mFlat = MFlat(original);
-        final MReplace<String, int> mReplace1 = MReplace(mFlat, "b", 4), mReplace2 = MReplace(mFlat, "b", 5);
+        final MReplace<String, int> mReplace1 = MReplace(mFlat, "b", 4),
+            mReplace2 = MReplace(mFlat, "b", 5);
 
         expect(mReplace1.unlock, <String, int>{"a": 1, "b": 4});
         expect(mReplace2.unlock, <String, int>{"a": 1, "b": 5});
@@ -162,7 +166,9 @@ void main() {
 
         expect(original, <String, int>{"a": 1, "b": 2});
         expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
-        expect(m.unlock, <String, int>{"a": 1,});
+        expect(m.unlock, <String, int>{
+          "a": 1,
+        });
       });
     });
   });

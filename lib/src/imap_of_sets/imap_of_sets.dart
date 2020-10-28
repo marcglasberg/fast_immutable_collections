@@ -47,7 +47,7 @@ class IMapOfSets<K, V> //
       : config = config ?? defaultConfigMapOfSets,
         _mapOfSets = (config == null)
             ? mapOfSets ?? IMap.empty<K, ISet<V>>()
-            : mapOfSets.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
+            : mapOfSets?.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
                     config: config.asConfigMap) ??
                 IMap.empty<K, ISet<V>>(config.asConfigMap);
 
@@ -337,9 +337,9 @@ class IMapOfSets<K, V> //
   /// For each key that is already in this map, its resulting set will contain
   /// the values of the original map, plus the ones of the other [map].
   ///
-  /// For example: if `map = {"a": {1,2}}`, then
+  /// For example: if `map = {"a": {1, 2}}`, then
   /// `map.addAll({"a": {3}, "b": {4}})` will result in
-  /// `{"a": {1,2,3}, "b": {4}}`
+  /// `{"a": {1, 2, 3}, "b": {4}}`
   ///
   /// The operation is equivalent to doing [addValues] for each key:set in [map].
   ///
@@ -352,9 +352,9 @@ class IMapOfSets<K, V> //
   /// For each key that is already in this map, its resulting set will contain
   /// the values of the original map, plus the ones of the other [entries].
   ///
-  /// For example: if `map = {"a": {1,2}}`, then
+  /// For example: if `map = {"a": {1, 2}}`, then
   /// `map.addAll({"a": {3}, "b": {4}})` will result in
-  /// `{"a": {1,2,3}, "b": {4}}`
+  /// `{"a": {1, 2, 3}, "b": {4}}`
   ///
   /// The operation is equivalent to doing [addValues] for each key:set in [entries].
   ///
@@ -385,7 +385,7 @@ class IMapOfSets<K, V> //
     return IMapOfSets.from(result, config: config);
   }
 
-  void clear() => empty<K, V>(config);
+  IMapOfSets<K, V> clear() => empty<K, V>(config);
 
   void forEach(void Function(K key, ISet<V> set) f) => _mapOfSets.forEach(f);
 

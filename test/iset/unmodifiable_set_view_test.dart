@@ -67,8 +67,8 @@ void main() {
   group("Mutations are not allowed |", () {
     test(
         "UnmodifiableSetView.add method",
-        () => views.forEach((UnmodifiableSetView<int> view) =>
-            expect(() => view.add(4), throwsUnsupportedError)));
+        () => views.forEach(
+            (UnmodifiableSetView<int> view) => expect(() => view.add(4), throwsUnsupportedError)));
 
     test(
         "UnmodifiableSetView.remove method",
