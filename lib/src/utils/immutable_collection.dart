@@ -1,8 +1,8 @@
 import "package:meta/meta.dart";
 
-import "hash.dart";
 import "../ilist/ilist.dart";
 import "../iset/iset.dart";
+import "hash.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
