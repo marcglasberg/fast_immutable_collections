@@ -8,7 +8,7 @@ void main() {
   const List<int> emptyList = [];
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_empty');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_empty');
 
     test('`List` (Mutable)', () {
       final MutableListEmptyBenchmark listResult =

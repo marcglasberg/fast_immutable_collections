@@ -9,7 +9,7 @@ void main() {
   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList(size: size);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_contains');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_contains');
 
     test('`List` (Mutable)', () {
       final MutableListContainsBenchmark listContainsBenchmark =

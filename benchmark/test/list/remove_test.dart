@@ -10,7 +10,7 @@ void main() {
   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList()..remove(1);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_remove');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_remove');
 
     test('`List` (Mutable)', () {
       final MutableListRemoveBenchmark listRemoveBenchmark =

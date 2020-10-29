@@ -10,7 +10,7 @@ void main() {
   final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: size)..remove(1);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_remove');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'set_remove');
 
     test('`List` (Mutable)', () {
       final MutableSetRemoveBenchmark mutableSetRemoveBenchmark =

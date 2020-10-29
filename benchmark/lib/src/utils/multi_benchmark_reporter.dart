@@ -1,5 +1,5 @@
-import 'config.dart';
 import 'collection_benchmark_base.dart';
+import 'config.dart';
 import 'table_score_emitter.dart';
 
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
@@ -7,7 +7,7 @@ abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
 
   /// Specify the basic forms &mdash; e.g. with `null`s &mdash; of your
   /// benchmarks and the [configure] method will reconfigure them with the
-  /// [configs].
+  /// [Config]s.
   List<B> get baseBenchmarks;
 
   String prefixName;
@@ -20,7 +20,7 @@ abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   void configure() {
     configs.forEach((Config config) {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(reportName: '${prefixName}_runs_${config.runs}_size_${config.size}');
+          TableScoreEmitter(prefixName: prefixName, config: config);
 
       baseBenchmarks.forEach((B baseBenchmark) => benchmarks
           .add(baseBenchmark.reconfigure(newConfig: config, newEmitter: tableScoreEmitter)));

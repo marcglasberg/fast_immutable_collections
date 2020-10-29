@@ -1,16 +1,15 @@
 import 'package:test/test.dart';
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import 'package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart';
 
 void main() {
-  const int size = 100;
+  const int size = 1000;
   const Config config = Config(runs: 100, size: size);
   final int numberToRead =
       ListBenchmarkBase.getDummyGeneratedList(size: config.size)[ListReadBenchmark.indexToRead];
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_read');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_read');
 
     test('`List` (Mutable)', () {
       final MutableListReadBenchmark listReadBenchmark =

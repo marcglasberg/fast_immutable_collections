@@ -11,7 +11,7 @@ void main() {
           List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_add');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'set_add');
 
     test('`Set` (Mutable)', () {
       final MutableSetAddBenchmark mutableSetAddBenchmark =

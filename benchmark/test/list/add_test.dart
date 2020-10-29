@@ -10,7 +10,7 @@ void main() {
       List<int>.generate(ListAddBenchmark.innerRuns, (int index) => index);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_add');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_add');
 
     test('`List` (Mutable)', () {
       final MutableListAddBenchmark listAddBenchmark =

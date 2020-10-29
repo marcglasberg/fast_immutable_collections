@@ -9,7 +9,7 @@ void main() {
   final Set<int> expectedSet = {};
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_empty');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'set_empty');
 
     test('`Set` (Mutable)', () {
       final MutableSetEmptyBenchmark setEmptyBenchmark =

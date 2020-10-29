@@ -10,7 +10,7 @@ void main() {
     ..addAll(SetAddAllBenchmark.setToAdd);
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_add_all');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'set_add_all');
 
     test('`Set` (Mutable)', () {
       final MutableSetAddAllBenchmark mutableSetAddAllBenchmark =

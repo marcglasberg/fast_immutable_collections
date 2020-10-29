@@ -9,7 +9,7 @@ void main() {
   final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
 
   group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_add_all');
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_add_all');
 
     test('`List` (Mutable)', () {
       final MutableListAddAllBenchmark listAddAllBenchmark =
