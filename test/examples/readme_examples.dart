@@ -1,5 +1,3 @@
-import "dart:collection";
-
 import "package:fast_immutable_collections/src/ilist/ilist_mixin.dart";
 import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
