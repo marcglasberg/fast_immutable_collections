@@ -1,9 +1,9 @@
-import 'dart:collection';
+import "dart:collection";
 
-import 'package:meta/meta.dart';
+import "package:meta/meta.dart";
 
-import '../imap/imap.dart';
-import '../utils/immutable_collection.dart';
+import "../imap/imap.dart";
+import "../utils/immutable_collection.dart";
 
 @immutable
 class UnmodifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeEmpty {

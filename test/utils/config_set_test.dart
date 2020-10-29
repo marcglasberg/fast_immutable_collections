@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   group("ConfigSet |", () {
@@ -77,9 +77,9 @@ void main() {
     });
 
     test("ConfigSet.toString", () {
-      expect(configSet1.toString(), 'ConfigSet{isDeepEquals: true, autoSort: true}');
-      expect(configSet2.toString(), 'ConfigSet{isDeepEquals: false, autoSort: true}');
-      expect(configSet3.toString(), 'ConfigSet{isDeepEquals: true, autoSort: false}');
+      expect(configSet1.toString(), "ConfigSet{isDeepEquals: true, autoSort: true}");
+      expect(configSet2.toString(), "ConfigSet{isDeepEquals: false, autoSort: true}");
+      expect(configSet3.toString(), "ConfigSet{isDeepEquals: true, autoSort: false}");
     });
 
     group("defaultConfigSet |", () {

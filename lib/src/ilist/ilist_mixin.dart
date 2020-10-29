@@ -1,8 +1,8 @@
-import 'dart:math';
+import "dart:math";
 
-import '../imap/imap.dart';
-import '../utils/immutable_collection.dart';
-import 'ilist.dart';
+import "../imap/imap.dart";
+import "../utils/immutable_collection.dart";
+import "ilist.dart";
 
 /// This mixin implements all [IList] members.
 /// It is meant to help you wrap an [IList] into another class (composition).
@@ -12,7 +12,7 @@ import 'ilist.dart';
 /// 1) Override the [iList] getter to return the inner [IList].
 /// 2) Override the [newInstance] method to return a new instance of the class.
 ///
-/// All other methods are efficiently implemented in terms of the [iList] and you don't need
+/// All other methods are efficiently implemented in terms of the [iList] and you don"t need
 /// to worry about them.
 ///
 /// Example:
@@ -89,7 +89,7 @@ mixin IListMixin<T, I extends IListMixin<T, I>> implements Iterable<T>, CanBeEmp
   void forEach(void Function(T element) f) => iList.forEach(f);
 
   @override
-  String join([String separator = '']) => iList.join(separator);
+  String join([String separator = ""]) => iList.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

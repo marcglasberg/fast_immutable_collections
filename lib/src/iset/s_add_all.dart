@@ -1,8 +1,8 @@
-import 'iset.dart';
+import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// Note that adding repeated members won't work as the expected behavior for regular `Set`s,
+/// Note that adding repeated members won"t work as the expected behavior for regular `Set`s,
 /// because that behavior is implemented elsewhere ([S]).
 class SAddAll<T> extends S<T> {
   final S<T> _s;
@@ -26,7 +26,7 @@ class SAddAll<T> extends S<T> {
 
   @override
   bool contains(Object element) {
-    // Check the real set first (it's faster).
+    // Check the real set first (it"s faster).
     if (_setOrS.contains(element)) return true;
     return _s.contains(element);
   }

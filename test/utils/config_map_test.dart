@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   group("ConfigMap |", () {
@@ -113,13 +113,13 @@ void main() {
 
     test("ConfigMap.toString method", () {
       expect(configMap1.toString(),
-          'ConfigMap{isDeepEquals: true, autoSortKeys: true, autoSortValues: true}');
+          "ConfigMap{isDeepEquals: true, autoSortKeys: true, autoSortValues: true}");
       expect(configMap2.toString(),
-          'ConfigMap{isDeepEquals: false, autoSortKeys: true, autoSortValues: true}');
+          "ConfigMap{isDeepEquals: false, autoSortKeys: true, autoSortValues: true}");
       expect(configMap3.toString(),
-          'ConfigMap{isDeepEquals: true, autoSortKeys: false, autoSortValues: true}');
+          "ConfigMap{isDeepEquals: true, autoSortKeys: false, autoSortValues: true}");
       expect(configMap4.toString(),
-          'ConfigMap{isDeepEquals: true, autoSortKeys: true, autoSortValues: false}');
+          "ConfigMap{isDeepEquals: true, autoSortKeys: true, autoSortValues: false}");
     });
   });
 

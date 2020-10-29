@@ -1,8 +1,8 @@
-import 'package:collection/collection.dart';
-import 'package:test/test.dart';
+import "package:collection/collection.dart";
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/ilist/l_flat.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 
 void main() {
   final List<int> original = [1, 2, 3];
@@ -41,7 +41,7 @@ void main() {
   });
 
   group("Iterator |", () {
-    test('Iterating on the underlying iterator', () {
+    test("Iterating on the underlying iterator", () {
       final Iterator<int> iter = lFlat.iterator;
 
       expect(iter.current, isNull);
@@ -283,9 +283,9 @@ void main() {
     });
 
     test("LFlat.join method", () {
-      expect(lFlat.join(','), '1,2,3,4,5,6');
-      expect(LFlat(<int>[]).join(','), '');
-      expect(LFlat.empty().join(','), '');
+      expect(lFlat.join(","), "1,2,3,4,5,6");
+      expect(LFlat(<int>[]).join(","), "");
+      expect(LFlat.empty().join(","), "");
     });
 
     test("LFlat.lastWhere method", () {

@@ -25,19 +25,19 @@
 /// | `unmodifiable`   | `UnmodifiableListMixin`   |
 void main() {
   <String, List<int>>{
-    'const': const [],
-    'default': List(0),
-    'empty': List.empty(growable: false),
-    'filled': List.filled(0, null, growable: false),
-    'from': List.of([], growable: false),
-    'generate': List.generate(0, (_) => null, growable: false),
-    'of': List.of([], growable: false),
-    'unmodifiable': List.unmodifiable([]),
+    "const": const [],
+    "default": List(0),
+    "empty": List.empty(growable: false),
+    "filled": List.filled(0, null, growable: false),
+    "from": List.of([], growable: false),
+    "generate": List.generate(0, (_) => null, growable: false),
+    "of": List.of([], growable: false),
+    "unmodifiable": List.unmodifiable([]),
   }.forEach((String listName, List<int> list) {
     try {
       list.add(1);
     } on UnsupportedError catch (e) {
-      print('${listName.padRight(12)} | ${e.message}');
+      print("${listName.padRight(12)} | ${e.message}");
     }
   });
 }

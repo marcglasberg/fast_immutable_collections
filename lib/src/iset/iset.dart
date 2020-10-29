@@ -1,11 +1,11 @@
-import 'dart:collection';
+import "dart:collection";
 
-import 'package:meta/meta.dart';
-import '../utils/immutable_collection.dart';
-import '../ilist/ilist.dart';
-import 's_flat.dart';
-import 's_add.dart';
-import 's_add_all.dart';
+import "package:meta/meta.dart";
+import "../utils/immutable_collection.dart";
+import "../ilist/ilist.dart";
+import "s_flat.dart";
+import "s_add.dart";
+import "s_add_all.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the set.
-  /// However, you should only use this with a new set you've created yourself,
+  /// However, you should only use this with a new set you"ve created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
   /// it will break the [ISet] and any other derived sets in unpredictable ways.
   ISet.unsafe(Set<T> set, {@required this.config})
@@ -109,10 +109,10 @@ class ISet<T> // ignore: must_be_immutable
   /// Returns an unordered [Set].
   Set<T> get unlock => _s.unlock;
 
-  /// 1) If the set's [config] has [ConfigSet.autoSort] `true` (the default),
+  /// 1) If the set"s [config] has [ConfigSet.autoSort] `true` (the default),
   /// it will iterate in the natural order of items. In other words, if the items
   /// are [Comparable], they will be sorted by `a.compareTo(b)`.
-  /// 2) If the set's [config] has [ConfigSet.autoSort] `false`, or if the items
+  /// 2) If the set"s [config] has [ConfigSet.autoSort] `false`, or if the items
   /// are not [Comparable], the iterator order is undefined.
   ///
   @override
@@ -124,7 +124,7 @@ class ISet<T> // ignore: must_be_immutable
       return _s.iterator;
   }
 
-  /// This iterator is very fast to create, but won't iterate in any particular order,
+  /// This iterator is very fast to create, but won"t iterate in any particular order,
   /// no matter what the set configuration is.
   Iterator<T> get fastIterator => _s.iterator;
 
@@ -142,8 +142,8 @@ class ISet<T> // ignore: must_be_immutable
   /// If [isDeepEquals] configuration is false:
   /// Will return true only if the sets internals are the same instances
   /// (comparing by identity). This will be fast even for very large sets,
-  /// since it doesn't compare each item.
-  /// Note: This is not the same as `identical(set1, set2)` since it doesn't
+  /// since it doesn"t compare each item.
+  /// Note: This is not the same as `identical(set1, set2)` since it doesn"t
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   ///
@@ -168,8 +168,8 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Will return true only if the sets internals are the same instances
   /// (comparing by identity). This will be fast even for very large sets,
-  /// since it doesn't compare each item.
-  /// Note: This is not the same as `identical(set1, set2)` since it doesn't
+  /// since it doesn"t compare each item.
+  /// Note: This is not the same as `identical(set1, set2)` since it doesn"t
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   @override
@@ -201,7 +201,7 @@ class ISet<T> // ignore: must_be_immutable
       );
 
   /// Returns a new set containing the current set minus the given item.
-  /// However, if the given item didn't exist in the current set,
+  /// However, if the given item didn"t exist in the current set,
   /// it will return the current set (same instance).
   ISet<T> remove(T item) {
     final S<T> result = _s.remove(item);
@@ -245,7 +245,7 @@ class ISet<T> // ignore: must_be_immutable
   bool contains(Object element) => _s.contains(element);
 
   @override
-  T elementAt(int index) => throw UnsupportedError('elementAt in ISet is not allowed');
+  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
 
   @override
   bool every(bool Function(T) test) => _s.every(test);
@@ -280,7 +280,7 @@ class ISet<T> // ignore: must_be_immutable
   void forEach(void Function(T element) f) => _s.forEach(f);
 
   @override
-  String join([String separator = '']) => _s.join(separator);
+  String join([String separator = ""]) => _s.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -320,7 +320,7 @@ class ISet<T> // ignore: must_be_immutable
   /// 1) If you provide a [compare] function, the list will be sorted with it.
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
-  /// set's [config] field:
+  /// set"s [config] field:
   /// - If [ConfigSet.autoSort] is `true` (the default), the list will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the list order is undefined.
@@ -344,7 +344,7 @@ class ISet<T> // ignore: must_be_immutable
   /// 1) If you provide a [compare] function, the list will be sorted with it.
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
-  /// set's [ISet.config] field:
+  /// set"s [ISet.config] field:
   /// - If [ConfigSet.autoSort] is `true` (the default), the list will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the list order is undefined.
@@ -362,7 +362,7 @@ class ISet<T> // ignore: must_be_immutable
   /// its items will maintain insertion order.
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
-  /// set's [ISet.config] field:
+  /// set"s [ISet.config] field:
   /// - If [ConfigSet.autoSort] is `true` (the default), the set will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the set order is undefined.
@@ -482,7 +482,7 @@ abstract class S<T> implements Iterable<T> {
   /// The [S] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed set, but
-  /// because that's immutable, we **cache** it.
+  /// because that"s immutable, we **cache** it.
   Set<T> _flushed;
 
   /// Returns the flushed set (flushes it only once).
@@ -565,7 +565,7 @@ abstract class S<T> implements Iterable<T> {
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
 
   @override
-  String join([String separator = '']) => _getFlushed.join(separator);
+  String join([String separator = ""]) => _getFlushed.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -606,7 +606,7 @@ abstract class S<T> implements Iterable<T> {
   Set<T> toSet() => HashSet.of(this);
 
   @override
-  T elementAt(int index) => throw UnsupportedError('elementAt in ISet is not allowed');
+  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

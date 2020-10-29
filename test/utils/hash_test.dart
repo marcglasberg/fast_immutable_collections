@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/src/utils/hash.dart';
+import "package:fast_immutable_collections/src/utils/hash.dart";
 
 void main() {
   group("Hash2 |", () {
@@ -9,7 +9,7 @@ void main() {
       hash2(1, 2),
       hash2(2, 1),
       hash2(11, 12),
-      hash2('a', [1, 2]),
+      hash2("a", [1, 2]),
     ];
 
     test("Runtime Type", () => expect(hashList, isA<List<int>>()));
@@ -39,7 +39,7 @@ void main() {
       hash3(2, 1, 3),
       hash3(1, 3, 2),
       hash3(11, 12, 13),
-      hash3('a', 99, ['d', 'e']),
+      hash3("a", 99, ["d", "e"]),
     ];
 
     test("Runtime Type", () => expect(hashList, isA<List<int>>()));
@@ -67,7 +67,7 @@ void main() {
 
   group("Hash4 |", () {
     // Not the complete permutations...
-    // Shouldn't this be some sort of recursive algorithm anyway? Why hash1, hash2, etc?
+    // Shouldn"t this be some sort of recursive algorithm anyway? Why hash1, hash2, etc?
     final List<int> hashList = [
       hash4(1, 2, 3, 4),
       hash4(1, 2, 3, 4),
@@ -75,7 +75,7 @@ void main() {
       hash4(1, 4, 2, 3),
       hash4(4, 1, 2, 3),
       hash4(11, 12, 13, 14),
-      hash4(1, 'a', [1, 2], ['a', 'b']),
+      hash4(1, "a", [1, 2], ["a", "b"]),
     ];
 
     test("Runtime Type", () => expect(hashList, isA<List<int>>()));

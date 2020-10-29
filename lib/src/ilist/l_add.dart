@@ -1,4 +1,4 @@
-import 'ilist.dart';
+import "ilist.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@ class LAdd<T> extends L<T> {
   /// Implicitly uniting the lists.
   @override
   T operator [](int index) => index < 0 || index >= length
-      ? throw RangeError.range(index, 0, length - 1, 'index')
+      ? throw RangeError.range(index, 0, length - 1, "index")
       : index == length - 1
           ? _item
           : _l[index];

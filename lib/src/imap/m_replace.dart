@@ -1,4 +1,4 @@
-import 'imap.dart';
+import "imap.dart";
 
 /// The [_m] already contains the key. But the value should be the new one.
 class MReplace<K, V> extends M<K, V> {

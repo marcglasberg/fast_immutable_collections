@@ -2,7 +2,7 @@
 
 This is a summary of the benchmarks and how they are executed.
 
-> **Note that the specifications below have not been programmatically tied to the benchmark files, so please do check the code itself if you want to *really* confirm what"s going on in the benchmarks, specially when it comes to how many times they"re run.**
+> **Note that the specifications below have not been programmatically tied to the benchmark files, so please do check the code itself if you want to *really* confirm what's going on in the benchmarks, specially when it comes to how many times they're run.**
 
 > Also note that, currently, with the [`benchmark_harness`][benchmark_harness] package, both `setup` and `teardown` are equivalent to `setUpAll` and `tearDownAll` in the [`test`][test] package.
 
