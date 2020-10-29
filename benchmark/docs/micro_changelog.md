@@ -7,10 +7,10 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
-## 28/10/2020
+## 29/10/2020
 
-- Current TODOs:
-    - Add a column of time/runs to the tables.
+1. Add a column of time/runs to the tables.
+1. Current TODOs:
     - Create a graph with one of the benchmarks inside the [example][example] app.
 
 

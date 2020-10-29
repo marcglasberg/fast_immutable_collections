@@ -40,14 +40,14 @@ class TableScoreEmitter implements ScoreEmitter {
     const String mu = "\u{03BC}";
     String report = "Data Object,"
         "Time (${mu}s),"
-        "Normalized Against Max Score,"
-        "Normalized Against Mutable List,"
-        "Normalized Agains Runs"
+        "x Max Time,"
+        "x Mutable List Time,"
+        "Time (${mu}s) / Run"
         "\n";
     _scores.forEach((String testName, double score) => report += "$testName,"
         "${score.toStringAsFixed(0).toString()},"
         "${completeTable["normalized"][testName].toString()},"
-        "${completeTable["normalizedAgainstList"][testName].toString()}"
+        "${completeTable["normalizedAgainstList"][testName].toString()},"
         "${completeTable["normalizedAgainstRuns"][testName].toString()}"
         "\n");
 

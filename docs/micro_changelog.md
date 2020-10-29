@@ -7,9 +7,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 [changelog]: ../CHANGELOG.md
 
-## 27/10/2020
+## 29/10/2020
 
-### 1. Philippe Fanaro
+1. Replaced single quotes (`'`) for double quotes `"`.
+    - This has been enforced both on the `benchmark` and overall packages, through the `analysis_options.yaml`'s `prefer_double_quotes` setting.
+
+## 27/10/2020
 
 1. Completed tests for new methods of:
     - `Item`
@@ -24,15 +27,11 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ## 26/10/2020
 
-### 1. Philippe Fanaro
-
 1. Completed tests for new methods of:
     - `IList`
     - `ISet`
 
 ## 21/10/2020
-
-### 1. Philippe Fanaro
 
 1. Fixed some broken tests.
 1. Added tests ensuring the immutability of:
@@ -42,8 +41,6 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
     - `MReplace`
 
 ## 20/10/2020
-
-### 1. Philippe Fanaro
 
 1. Tests for:
     - `ConfigSet`
@@ -60,26 +57,18 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ## 18/10/2020
 
-### 1. Philippe Fanaro
-
 1. Started tests for the config objects.
 
 ## 17/10/2020
-
-### 1. Philippe Fanaro
 
 1. Completed the views.
 
 ## 16/10/2020
 
-### 1. Philippe Fanaro
-
 1. Added tests for the `IList` views.
 1. Started the other views.
 
 ## 15/10/2020
-
-### 1. Philippe Fanaro
 
 1. Completed tests for `equals`/`same`/`hashCode` on:
     - `IMapOfSets`
@@ -88,16 +77,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ## 14/10/2020
 
-### 1. Philippe Fanaro
-
 1. Completed tests for `equals`/`same`/`hashCode` on:
     - `IList`
     - `ISet`
     - `IMap`
 
 ## 12/10/2020
-
-### 1. Philippe Fanaro
 
 1. Improvements to the structure of the top-level [`README`][readme].
 1. Included the views and the configuration classes in the [`CHANGELOG`][changelog].
@@ -114,8 +99,6 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ## 08/10/2020
 
-### 1. Philippe Fanaro
-
 1. Completed tests for:
     - `IMap`
     - `IMapOfSets`
@@ -125,16 +108,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ## 07/10/2020
 
-### 1. Philippe Fanaro
-
 1. Completed basic tests for:
     - `MAdd`
     - `MAddAll`
     - `Entry`
 
 ## 06/10/2020
-
-### 1. Philippe Fanaro
 
 1. Improved and completed tests, and ensured immutability for:
     - `IList`
@@ -145,8 +124,6 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ## 05/10/2020
 
-### 1. Philippe Fanaro
-
 1. Completed tests and ensured immutability for:
     - `SFlat`
     - `SAdd`
@@ -154,16 +131,12 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 
 ## 02/10/2020
 
-### 1. Philippe Fanaro
-
 1. Completed the immutability tests for `LFlat`.
 1. Completed the tests for `IMapOfSets`.
     - Apparently, when adding elements to the key, the `IMapOfSets` is still adding the repeated key, which is causing errors.
     - In the `anyKey` method, if `any` returns `null`, we will have an error when we try to calculate `.key` &mdash; just replace it for `?.key`?
 
 ## 01/10/2020
-
-### 1. Philippe Fanaro
 
 1. Added a section to the `README.md` about the idea behind the implemantion.
 1. More tests to ensure immutability to `LAdd`.
@@ -178,8 +151,6 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Added more tests to ensure the immutability of `IList`s.
 
 ## 30/09/2020
-
-### 1. Philippe Fanaro
 
 1. Cleaning up the unnecessary methods and implementations.
     - If you want to go back to them, this is the commit: `e4a3e63f28c0e1de93fd31759e0bf939772fdfae`
@@ -196,8 +167,6 @@ A summary of detailed changes, aimed at developers. This constrasts with the [`C
 1. Added tests for `unlock` on `LFlat` and `Ladd`.
 
 ## 29/09/2020
-
-### 1. Philippe Fanaro
 
 > Shouldn't the `length` on `LAdd` et al. be cached/initialized on object creation? This way we wouldn't have to worry about nested `length` calls in the background... It's more costly memory-wise, but it's not the same as caching everything from every object. And it would make the cost of accessing the `length` constant instead of dependent on the random nested underlying structure.
 
