@@ -1,10 +1,10 @@
-import 'dart:collection';
-import 'package:meta/meta.dart';
-import '../ilist/ilist.dart';
-import '../imap/imap.dart';
-import '../iset/iset.dart';
-import '../utils/hash.dart';
-import '../utils/immutable_collection.dart';
+import "dart:collection";
+import "package:meta/meta.dart";
+import "../ilist/ilist.dart";
+import "../imap/imap.dart";
+import "../iset/iset.dart";
+import "../utils/hash.dart";
+import "../utils/immutable_collection.dart";
 
 /// An **immutable**, unordered, map of sets.
 @immutable
@@ -158,7 +158,7 @@ class IMapOfSets<K, V> //
   bool get isNotEmpty => _mapOfSets.isNotEmpty;
 
   /// Find the [key]/[set] entry, and add the [value] to the [set].
-  /// If the [key] doesn't exist, will first create it with an empty [set],
+  /// If the [key] doesn"t exist, will first create it with an empty [set],
   /// and then add the [value] to it.
   ///
   IMapOfSets<K, V> add(K key, V value) {
@@ -168,7 +168,7 @@ class IMapOfSets<K, V> //
   }
 
   /// Find the [key]/[set] entry, and add all the [values] to the [set].
-  /// If the [key] doesn't exist, will first create it with an empty [set],
+  /// If the [key] doesn"t exist, will first create it with an empty [set],
   /// and then add the [values] to it.
   ///
   IMapOfSets<K, V> addValues(K key, Iterable<V> values) {
@@ -178,7 +178,7 @@ class IMapOfSets<K, V> //
   }
 
   /// Find the [key]/[set] entry, and remove the [value] from the [set].
-  /// If the [key] doesn't exist, don't do anything.
+  /// If the [key] doesn"t exist, don"t do anything.
   /// It the [set] becomes empty, the [key] will be removed entirely.
   ///
   IMapOfSets<K, V> remove(K key, V value) {
@@ -216,7 +216,7 @@ class IMapOfSets<K, V> //
   }
 
   /// Remove the given [key], if it exists, and its corresponding [set].
-  /// If the [key] doesn't exist, don't do anything.
+  /// If the [key] doesn"t exist, don"t do anything.
   ///
   IMapOfSets<K, V> removeSet(K key) {
     IMap<K, ISet<V>> newMapOfSets = _mapOfSets.remove(key);
@@ -229,22 +229,22 @@ class IMapOfSets<K, V> //
   }
 
   /// Return the [set] for the given [key].
-  /// If the [key] doesn't exist, return an empty set (never return `null`).
+  /// If the [key] doesn"t exist, return an empty set (never return `null`).
   ISet<V> get(K key) => _mapOfSets[key] ?? ISet.empty<V>(config.asConfigSet);
 
   /// Return the [set] for the given [key].
-  /// If the [key] doesn't exist, return an empty set (never return `null`).
+  /// If the [key] doesn"t exist, return an empty set (never return `null`).
   ISet<V> getOrNull(K key) => _mapOfSets[key];
 
   /// Return the [set] for the given [key].
-  /// If the [key] doesn't exist, return `null`.
+  /// If the [key] doesn"t exist, return `null`.
   ISet<V> operator [](K key) => _mapOfSets[key];
 
   /// Return `true` if the given [key] exists (with a non-empty [set]).
   bool containsKey(K key) => _mapOfSets.containsKey(key);
 
   /// Return any `key:set` entry where the value exists in the set.
-  /// If that entry doesn't exist, return `null`.
+  /// If that entry doesn"t exist, return `null`.
   MapEntry<K, ISet<V>> entryWithValue(V value) {
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       var set = entry.value;
@@ -254,11 +254,11 @@ class IMapOfSets<K, V> //
   }
 
   /// Return any key entry where the value exists in its set.
-  /// If it doesn't find the value, return `null`.
+  /// If it doesn"t find the value, return `null`.
   K keyWithValue(V value) => entryWithValue(value)?.key;
 
   /// Return any `key:set` entry where the value exists in the set.
-  /// If that entry doesn't exist, return `null`.
+  /// If that entry doesn"t exist, return `null`.
   Set<MapEntry<K, ISet<V>>> allEntriesWithValue(V value) {
     Set<MapEntry<K, ISet<V>>> entriesWithValue = {};
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
@@ -294,8 +294,8 @@ class IMapOfSets<K, V> //
   /// If [isDeepEquals] configuration is `false`:
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn't compare each entry.
-  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// since it doesn"t compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn"t
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   ///
@@ -319,8 +319,8 @@ class IMapOfSets<K, V> //
 
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn't compare each entry.
-  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// since it doesn"t compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn"t
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
@@ -407,7 +407,7 @@ class IMapOfSets<K, V> //
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned [set] to the map.
   ///
-  /// It's an error if the key is not present and [ifAbsent] is not provided.
+  /// It"s an error if the key is not present and [ifAbsent] is not provided.
   ///
   IMapOfSets<K, V> update(K key, ISet<V> Function(ISet<V> set) update,
           {ISet<V> Function() ifAbsent}) =>

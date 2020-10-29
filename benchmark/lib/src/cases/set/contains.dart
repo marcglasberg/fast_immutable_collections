@@ -1,13 +1,13 @@
-import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:kt_dart/collection.dart';
-import 'package:meta/meta.dart';
+import "package:benchmark_harness/benchmark_harness.dart";
+import "package:built_collection/built_collection.dart";
+import "package:kt_dart/collection.dart";
+import "package:meta/meta.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import '../../utils/config.dart';
-import '../../utils/collection_benchmark_base.dart';
-import '../../utils/multi_benchmark_reporter.dart';
+import "../../utils/config.dart";
+import "../../utils/collection_benchmark_base.dart";
+import "../../utils/multi_benchmark_reporter.dart";
 
 class SetContainsBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
@@ -22,12 +22,12 @@ class SetContainsBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
     BuiltSetContainsBenchmark(config: null, emitter: null),
   ];
 
-  SetContainsBenchmark({this.prefixName = 'set_contains', @required this.configs});
+  SetContainsBenchmark({this.prefixName = "set_contains", @required this.configs});
 }
 
 class MutableSetContainsBenchmark extends SetBenchmarkBase {
   MutableSetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'Set (Mutable)', config: config, emitter: emitter);
+      : super(name: "Set (Mutable)", config: config, emitter: emitter);
 
   @override
   MutableSetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -52,7 +52,7 @@ class MutableSetContainsBenchmark extends SetBenchmarkBase {
 
 class ISetContainsBenchmark extends SetBenchmarkBase {
   ISetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'ISet', config: config, emitter: emitter);
+      : super(name: "ISet", config: config, emitter: emitter);
 
   @override
   ISetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -77,7 +77,7 @@ class ISetContainsBenchmark extends SetBenchmarkBase {
 
 class KtSetContainsBenchmark extends SetBenchmarkBase {
   KtSetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'KtSet', config: config, emitter: emitter);
+      : super(name: "KtSet", config: config, emitter: emitter);
 
   @override
   KtSetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -103,7 +103,7 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
 
 class BuiltSetContainsBenchmark extends SetBenchmarkBase {
   BuiltSetContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'BuiltSet', config: config, emitter: emitter);
+      : super(name: "BuiltSet", config: config, emitter: emitter);
 
   @override
   BuiltSetContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>

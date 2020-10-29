@@ -1,14 +1,14 @@
-import 'package:test/test.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/imap/m_flat.dart';
-import 'package:fast_immutable_collections/src/imap/m_replace.dart';
+import "package:test/test.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/imap/m_flat.dart";
+import "package:fast_immutable_collections/src/imap/m_replace.dart";
 
 void main() {
   group("Basic Methods |", () {
-    final Map<String, int> originalMap = {'a': 1, 'b': 2, 'c': 3};
+    final Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, 'a', 2);
-    final Map<String, int> finalMap = {'a': 2, 'b': 2, 'c': 3};
+    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
 
     test("Emptiness Properties", () {
       expect(mReplace.isEmpty, isFalse);
@@ -16,8 +16,8 @@ void main() {
     });
 
     test("MReplace.contains method", () {
-      expect(mReplace.contains('a', 2), isTrue);
-      expect(mReplace.contains('a', 1), isFalse);
+      expect(mReplace.contains("a", 2), isTrue);
+      expect(mReplace.contains("a", 1), isFalse);
     });
 
     test("MReplace.containsKey method",

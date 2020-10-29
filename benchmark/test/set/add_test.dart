@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 10;
@@ -10,10 +10,10 @@ void main() {
       SetBenchmarkBase.getDummyGeneratedSet(size: size).toList() +
           List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'set_add');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "set_add");
 
-    test('`Set` (Mutable)', () {
+    test("`Set` (Mutable)", () {
       final MutableSetAddBenchmark mutableSetAddBenchmark =
           MutableSetAddBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -22,7 +22,7 @@ void main() {
       expect(mutableSetAddBenchmark.toMutable(), expectedSet);
     });
 
-    test('`ISet`', () {
+    test("`ISet`", () {
       final ISetAddBenchmark iSetAddBenchmark =
           ISetAddBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -31,7 +31,7 @@ void main() {
       expect(iSetAddBenchmark.toMutable(), expectedSet);
     });
 
-    test('`KtSet`', () {
+    test("`KtSet`", () {
       final KtSetAddBenchmark ktSetAddBenchmark =
           KtSetAddBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -40,7 +40,7 @@ void main() {
       expect(ktSetAddBenchmark.toMutable(), expectedSet);
     });
 
-    test('`BuiltSet` with `.rebuild()`', () {
+    test("`BuiltSet` with `.rebuild()`", () {
       final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark =
           BuiltSetAddWithRebuildBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -49,7 +49,7 @@ void main() {
       expect(builtSetAddWithRebuildBenchmark.toMutable(), expectedSet);
     });
 
-    test('`BuiltSet` with `ListBuilder', () {
+    test("`BuiltSet` with `ListBuilder", () {
       final BuiltSetAddWithSetBuilderBenchmark builtSetAddWithListBuilderBenchmark =
           BuiltSetAddWithSetBuilderBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -59,8 +59,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final SetAddBenchmark setAddBenchmark = SetAddBenchmark(configs: [config, config]);
 
       setAddBenchmark.report();

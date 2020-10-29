@@ -1,13 +1,13 @@
-import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:kt_dart/kt.dart';
-import 'package:meta/meta.dart';
+import "package:benchmark_harness/benchmark_harness.dart";
+import "package:built_collection/built_collection.dart";
+import "package:kt_dart/kt.dart";
+import "package:meta/meta.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import '../../utils/config.dart';
-import '../../utils/multi_benchmark_reporter.dart';
-import '../../utils/collection_benchmark_base.dart';
+import "../../utils/config.dart";
+import "../../utils/multi_benchmark_reporter.dart";
+import "../../utils/collection_benchmark_base.dart";
 
 class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   static const int indexToRead = 100;
@@ -24,12 +24,12 @@ class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
     BuiltListReadBenchmark(config: null, emitter: null),
   ];
 
-  ListReadBenchmark({this.prefixName = 'list_read', @required this.configs});
+  ListReadBenchmark({this.prefixName = "list_read", @required this.configs});
 }
 
 class MutableListReadBenchmark extends ListBenchmarkBase {
   MutableListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+      : super(name: "List (Mutable)", config: config, emitter: emitter);
 
   @override
   MutableListReadBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -50,7 +50,7 @@ class MutableListReadBenchmark extends ListBenchmarkBase {
 
 class IListReadBenchmark extends ListBenchmarkBase {
   IListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'IList', config: config, emitter: emitter);
+      : super(name: "IList", config: config, emitter: emitter);
 
   @override
   IListReadBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -71,7 +71,7 @@ class IListReadBenchmark extends ListBenchmarkBase {
 
 class KtListReadBenchmark extends ListBenchmarkBase {
   KtListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'KtList', config: config, emitter: emitter);
+      : super(name: "KtList", config: config, emitter: emitter);
 
   @override
   IListReadBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -93,7 +93,7 @@ class KtListReadBenchmark extends ListBenchmarkBase {
 
 class BuiltListReadBenchmark extends ListBenchmarkBase {
   BuiltListReadBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'BuiltList', config: config, emitter: emitter);
+      : super(name: "BuiltList", config: config, emitter: emitter);
 
   @override
   IListReadBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>

@@ -1,8 +1,6 @@
-import 'dart:collection';
-
-import 'package:fast_immutable_collections/src/ilist/ilist_mixin.dart';
-import 'package:test/test.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/src/ilist/ilist_mixin.dart";
+import "package:test/test.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 int testCount = 0;
 
@@ -67,7 +65,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("IList methods return IList", () {
-    IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl']
+    IList<int> ilist = ["Bob", "Alice", "Dominic", "Carl"]
         .lock
         .sort() // Alice, Bob, Carl, Dominic
         .map((name) => name.length) // 5, 3, 4, 7
@@ -232,7 +230,7 @@ class Student {
   Student(this.name, this.age);
 
   @override
-  String toString() => 'Student{name: $name, age: $age}';
+  String toString() => "Student{name: $name, age: $age}";
 
   @override
   bool operator ==(Object other) =>

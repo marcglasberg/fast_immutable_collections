@@ -1,9 +1,9 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/iset/s_add_all.dart';
-import 'package:fast_immutable_collections/src/iset/s_add.dart';
-import 'package:fast_immutable_collections/src/iset/s_flat.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/iset/s_add_all.dart";
+import "package:fast_immutable_collections/src/iset/s_add.dart";
+import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 void main() {
   group("Basic Usage Tests and Checks |", () {

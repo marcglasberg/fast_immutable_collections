@@ -1,7 +1,7 @@
-import 'package:collection/collection.dart';
+import "package:collection/collection.dart";
 
-import '../utils/hash.dart';
-import 'iset.dart';
+import "../utils/hash.dart";
+import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ class SFlat<T> extends S<T> {
   void forEach(void Function(T element) f) => _set.forEach(f);
 
   @override
-  String join([String separator = '']) => _set.join(separator);
+  String join([String separator = ""]) => _set.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

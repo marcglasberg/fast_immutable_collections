@@ -1,8 +1,8 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/iset/s_add.dart';
-import 'package:fast_immutable_collections/src/iset/s_flat.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/iset/s_add.dart";
+import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 void main() {
   final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
@@ -45,7 +45,7 @@ void main() {
   });
 
   group("Ensuring Immutability |", () {
-    group('SAdd.add method |', () {
+    group("SAdd.add method |", () {
       test("Changing the passed mutable set doesn't change the LAdd", () {
         final Set<int> original = {1, 2};
         final SFlat<int> sFlat = SFlat(original);

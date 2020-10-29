@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 10;
@@ -9,10 +9,10 @@ void main() {
   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList(size: size) +
       List<int>.generate(ListAddBenchmark.innerRuns, (int index) => index);
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_add');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_add");
 
-    test('`List` (Mutable)', () {
+    test("`List` (Mutable)", () {
       final MutableListAddBenchmark listAddBenchmark =
           MutableListAddBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -21,7 +21,7 @@ void main() {
       expect(listAddBenchmark.toMutable(), expectedList);
     });
 
-    test('`IList`', () {
+    test("`IList`", () {
       final IListAddBenchmark iListAddBenchmark =
           IListAddBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -30,7 +30,7 @@ void main() {
       expect(iListAddBenchmark.toMutable(), expectedList);
     });
 
-    test('`KtList`', () {
+    test("`KtList`", () {
       final KtListAddBenchmark ktListAddBenchmark =
           KtListAddBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -39,7 +39,7 @@ void main() {
       expect(ktListAddBenchmark.toMutable(), expectedList);
     });
 
-    test('`BuiltList` with `rebuild`', () {
+    test("`BuiltList` with `rebuild`", () {
       final BuiltListAddWithRebuildBenchmark builtListAddWithRebuildBenchmark =
           BuiltListAddWithRebuildBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -48,7 +48,7 @@ void main() {
       expect(builtListAddWithRebuildBenchmark.toMutable(), expectedList);
     });
 
-    test('`BuiltList` with `ListBuilder`', () {
+    test("`BuiltList` with `ListBuilder`", () {
       final BuiltListAddWithListBuilderBenchmark builtListAddWithListBuilderBenchmark =
           BuiltListAddWithListBuilderBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -58,8 +58,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final ListAddBenchmark addBenchmark = ListAddBenchmark(configs: [config, config]);
 
       addBenchmark.report();

@@ -1,19 +1,19 @@
-import 'collection_benchmark_base.dart';
-import 'config.dart';
-import 'multi_benchmark_reporter.dart';
+import "collection_benchmark_base.dart";
+import "config.dart";
+import "multi_benchmark_reporter.dart";
 
-import '../cases/list/add.dart';
-import '../cases/list/add_all.dart';
-import '../cases/list/contains.dart';
-import '../cases/list/empty.dart';
-import '../cases/list/read.dart';
-import '../cases/list/remove.dart';
+import "../cases/list/add.dart";
+import "../cases/list/add_all.dart";
+import "../cases/list/contains.dart";
+import "../cases/list/empty.dart";
+import "../cases/list/read.dart";
+import "../cases/list/remove.dart";
 
-import '../cases/set/add.dart';
-import '../cases/set/add_all.dart';
-import '../cases/set/contains.dart';
-import '../cases/set/empty.dart';
-import '../cases/set/remove.dart';
+import "../cases/set/add.dart";
+import "../cases/set/add_all.dart";
+import "../cases/set/contains.dart";
+import "../cases/set/empty.dart";
+import "../cases/set/remove.dart";
 
 abstract class CollectionFullReporter<M extends MultiBenchmarkReporter,
     B extends CollectionBenchmarkBase> {

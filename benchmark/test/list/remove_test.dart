@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 100;
@@ -9,10 +9,10 @@ void main() {
 
   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList()..remove(1);
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_remove');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_remove");
 
-    test('`List` (Mutable)', () {
+    test("`List` (Mutable)", () {
       final MutableListRemoveBenchmark listRemoveBenchmark =
           MutableListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -21,7 +21,7 @@ void main() {
       expect(listRemoveBenchmark.toMutable(), expectedList);
     });
 
-    test('`IList`', () {
+    test("`IList`", () {
       final IListRemoveBenchmark iListRemoveBenchmark =
           IListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -30,7 +30,7 @@ void main() {
       expect(iListRemoveBenchmark.toMutable(), expectedList);
     });
 
-    test('`KtList`', () {
+    test("`KtList`", () {
       final KtListRemoveBenchmark ktListRemoveBenchmark =
           KtListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -39,7 +39,7 @@ void main() {
       expect(ktListRemoveBenchmark.toMutable(), expectedList);
     });
 
-    test('`BuiltList`', () {
+    test("`BuiltList`", () {
       final BuiltListRemoveBenchmark builtListRemoveBenchmark =
           BuiltListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -49,8 +49,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final ListRemoveBenchmark removeBenchmark = ListRemoveBenchmark(configs: [config, config]);
 
       removeBenchmark.report();

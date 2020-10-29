@@ -1,8 +1,8 @@
-import 'package:collection/collection.dart';
-import 'package:test/test.dart';
+import "package:collection/collection.dart";
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fast_immutable_collections/src/iset/s_flat.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 void main() {
   final List<int> originalList = [1, 2, 3, 3];
@@ -272,9 +272,9 @@ void main() {
     });
 
     test("SFlat.join method", () {
-      expect(sFlat.join(','), '1,2,3,4,5,6');
-      expect(SFlat(<int>[]).join(','), '');
-      expect(SFlat.empty().join(','), '');
+      expect(sFlat.join(","), "1,2,3,4,5,6");
+      expect(SFlat(<int>[]).join(","), "");
+      expect(SFlat.empty().join(","), "");
     });
 
     test("SFlat.lastWhere method", () {
@@ -376,9 +376,9 @@ void main() {
   });
 
   group("MapEntryEquality Class |", () {
-    const MapEntry<String, int> mapEntry1 = MapEntry('a', 1),
-        mapEntry2 = MapEntry('a', 2),
-        mapEntry3 = MapEntry('a', 1);
+    const MapEntry<String, int> mapEntry1 = MapEntry("a", 1),
+        mapEntry2 = MapEntry("a", 2),
+        mapEntry3 = MapEntry("a", 1);
 
     test("MapEntryEquality.equals method", () {
       expect(MapEntryEquality().equals(mapEntry1, mapEntry1), isTrue);
@@ -395,7 +395,7 @@ void main() {
 
     test("MapEntryEquality.hash method of a different type of object", () {
       expect(MapEntryEquality().hash(1), 1.hashCode);
-      expect(MapEntryEquality().hash('a'), 'a'.hashCode);
+      expect(MapEntryEquality().hash("a"), "a".hashCode);
     });
 
     test("MapEntryEquality.isValidKey method", () {

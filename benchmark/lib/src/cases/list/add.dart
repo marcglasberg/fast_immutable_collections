@@ -1,13 +1,13 @@
-import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:kt_dart/kt.dart';
-import 'package:meta/meta.dart';
+import "package:benchmark_harness/benchmark_harness.dart";
+import "package:built_collection/built_collection.dart";
+import "package:kt_dart/kt.dart";
+import "package:meta/meta.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import '../../utils/config.dart';
-import '../../utils/multi_benchmark_reporter.dart';
-import '../../utils/collection_benchmark_base.dart';
+import "../../utils/config.dart";
+import "../../utils/multi_benchmark_reporter.dart";
+import "../../utils/collection_benchmark_base.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,14 +27,14 @@ class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
     BuiltListAddWithListBuilderBenchmark(config: null, emitter: null),
   ];
 
-  ListAddBenchmark({this.prefixName = 'list_add', @required this.configs});
+  ListAddBenchmark({this.prefixName = "list_add", @required this.configs});
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListAddBenchmark extends ListBenchmarkBase {
   MutableListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+      : super(name: "List (Mutable)", config: config, emitter: emitter);
 
   @override
   MutableListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -60,7 +60,7 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
 
 class IListAddBenchmark extends ListBenchmarkBase {
   IListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'IList', config: config, emitter: emitter);
+      : super(name: "IList", config: config, emitter: emitter);
 
   @override
   IListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -89,7 +89,7 @@ class IListAddBenchmark extends ListBenchmarkBase {
 
 class KtListAddBenchmark extends ListBenchmarkBase {
   KtListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'KtList', config: config, emitter: emitter);
+      : super(name: "KtList", config: config, emitter: emitter);
 
   @override
   KtListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -116,7 +116,7 @@ class KtListAddBenchmark extends ListBenchmarkBase {
 
 class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   BuiltListAddWithRebuildBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'BuiltList with Rebuild', config: config, emitter: emitter);
+      : super(name: "BuiltList with Rebuild", config: config, emitter: emitter);
 
   @override
   BuiltListAddWithRebuildBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -147,7 +147,7 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   BuiltListAddWithListBuilderBenchmark({
     @required Config config,
     @required ScoreEmitter emitter,
-  }) : super(name: 'BuiltList with List Builder', config: config, emitter: emitter);
+  }) : super(name: "BuiltList with List Builder", config: config, emitter: emitter);
 
   @override
   BuiltListAddWithListBuilderBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>

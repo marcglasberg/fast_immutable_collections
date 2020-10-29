@@ -1,5 +1,5 @@
-import '../utils/immutable_collection.dart';
-import 'ilist.dart';
+import "../utils/immutable_collection.dart";
+import "ilist.dart";
 
 /// This mixin implements all [Iterable] members, plus `operator []`.
 /// It is meant to help you wrap an [IList] into another iterable class (composition).
@@ -16,7 +16,7 @@ mixin IterableIListMixin<T> implements Iterable<T>, CanBeEmpty {
   bool any(bool Function(T) test) => iList.any(test);
 
   @override
-  Iterable<R> cast<R>() => throw UnsupportedError('cast');
+  Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
   @override
   bool contains(Object element) => iList.contains(element);
@@ -59,7 +59,7 @@ mixin IterableIListMixin<T> implements Iterable<T>, CanBeEmpty {
   void forEach(void Function(T element) f) => iList.forEach(f);
 
   @override
-  String join([String separator = '']) => iList.join(separator);
+  String join([String separator = ""]) => iList.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

@@ -1,9 +1,9 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  const Map<String, int> baseMap = {'a': 1, 'b': 2, 'c': 3};
+  const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
   final IMap<String, int> iMap = baseMap.lock;
   final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(iMap),
       unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
@@ -15,10 +15,10 @@ void main() {
   group("Non-mutable operations |", () {
     test("UnmodifiableMapView.[] operator", () {
       views.forEach((UnmodifiableMapView<String, int> view) {
-        expect(view['a'], 1);
-        expect(view['b'], 2);
-        expect(view['c'], 3);
-        expect(view['d'], isNull);
+        expect(view["a"], 1);
+        expect(view["b"], 2);
+        expect(view["c"], 3);
+        expect(view["d"], isNull);
       });
     });
 
@@ -39,7 +39,7 @@ void main() {
     test(
         "UnmodifiableMapView.[]= operator",
         () => views.forEach((UnmodifiableMapView<String, int> view) =>
-            expect(() => view['a'] = 10, throwsUnsupportedError)));
+            expect(() => view["a"] = 10, throwsUnsupportedError)));
 
     test("UnmodifiableMapView.clear method", () {
       views.forEach((UnmodifiableMapView<String, int> view) =>
@@ -48,7 +48,7 @@ void main() {
 
     test("UnmodifiableMapView.remove method", () {
       views.forEach((UnmodifiableMapView<String, int> view) =>
-          expect(() => view.remove('a'), throwsUnsupportedError));
+          expect(() => view.remove("a"), throwsUnsupportedError));
     });
   });
 }

@@ -1,16 +1,16 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const Config config = Config(runs: 100, size: 0);
   const List<int> emptyList = [];
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_empty');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_empty");
 
-    test('`List` (Mutable)', () {
+    test("`List` (Mutable)", () {
       final MutableListEmptyBenchmark listResult =
           MutableListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
       expect(listResult.toMutable(), emptyList);
     });
 
-    test('`IList`', () {
+    test("`IList`", () {
       final IListEmptyBenchmark iListEmptyBenchmark =
           IListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -28,7 +28,7 @@ void main() {
       expect(iListEmptyBenchmark.toMutable(), emptyList);
     });
 
-    test('`KtList`', () {
+    test("`KtList`", () {
       final KtListEmptyBenchmark ktListEmptyBenchmark =
           KtListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -37,7 +37,7 @@ void main() {
       expect(ktListEmptyBenchmark.toMutable(), emptyList);
     });
 
-    test('`BuiltList`', () {
+    test("`BuiltList`", () {
       final BuiltListEmptyBenchmark builtListEmptyBenchmark =
           BuiltListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -47,8 +47,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final ListEmptyBenchmark emptyBenchmark = ListEmptyBenchmark(configs: [config, config]);
 
       emptyBenchmark.report();

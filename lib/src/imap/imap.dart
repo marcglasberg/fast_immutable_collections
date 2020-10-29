@@ -1,15 +1,15 @@
-import 'dart:collection';
-import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
-import '../ilist/ilist.dart';
-import '../imap_of_sets/imap_of_sets.dart';
-import '../iset/iset.dart';
-import '../utils/immutable_collection.dart';
-import 'm_add.dart';
-import 'm_add_all.dart';
-import 'm_flat.dart';
-import 'm_replace.dart';
-import 'unmodifiable_map_view.dart';
+import "dart:collection";
+import "package:collection/collection.dart";
+import "package:meta/meta.dart";
+import "../ilist/ilist.dart";
+import "../imap_of_sets/imap_of_sets.dart";
+import "../iset/iset.dart";
+import "../utils/immutable_collection.dart";
+import "m_add.dart";
+import "m_add_all.dart";
+import "m_flat.dart";
+import "m_replace.dart";
+import "unmodifiable_map_view.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -115,7 +115,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the map.
-  /// However, you should only use this with a new map you've created yourself,
+  /// However, you should only use this with a new map you"ve created yourself,
   /// when you are sure no external copies exist. If the original map is modified,
   /// it will break the IMap and any other derived maps in unpredictable ways.
   IMap.unsafe(Map<K, V> map, {@required this.config})
@@ -199,8 +199,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If [isDeepEquals] configuration is `false`:
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn't compare each entry.
-  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// since it doesn"t compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn"t
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   ///
@@ -238,8 +238,8 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn't compare each entry.
-  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
+  /// since it doesn"t compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn"t
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
@@ -282,7 +282,7 @@ class IMap<K, V> // ignore: must_be_immutable
       IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
 
   /// Returns a new map containing the current map minus the given key and its value.
-  /// However, if the current map doesn't contain the key,
+  /// However, if the current map doesn"t contain the key,
   /// it will return the current map (same instance).
   IMap<K, V> remove(K key) {
     M<K, V> result = _m.remove(key);
@@ -369,25 +369,25 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns an empty map with the same configuration.
   IMap<K, V> clear() => empty<K, V>(config);
 
-  /// Look up the value of [key], or add a new value if it isn't there.
+  /// Look up the value of [key], or add a new value if it isn"t there.
   ///
   /// Returns the modified map, and sets the [value] associated to [key],
   /// if there is one. Otherwise calls [ifAbsent] to get a new value,
   /// associates [key] to that value, and then sets the new [value].
   ///
   /// ```dart
-  /// IMap<String, int> scores = {'Bob': 36}.lock;
+  /// IMap<String, int> scores = {"Bob": 36}.lock;
   ///
   /// Item<int> item = Item();
-  /// for (String key in ['Bob', 'Rohan', 'Sophia']) {
+  /// for (String key in ["Bob", "Rohan", "Sophia"]) {
   ///   item = Item();
   ///   scores = scores.putIfAbsent(key, () => key.length, value: item);
   ///   print(value);    // 36, 5, 6
   /// }
   ///
-  /// scores['Bob'];     // 36
-  /// scores['Rohan'];   //  5
-  /// scores['Sophia'];  //  6
+  /// scores["Bob"];     // 36
+  /// scores["Rohan"];   //  5
+  /// scores["Sophia"];  //  6
   /// ```
   ///
   /// Calling [ifAbsent] must not add or remove keys from the map.
@@ -410,7 +410,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned value to the map.
   ///
-  /// It's an error if the key is not present and [ifAbsent] is not provided.
+  /// It"s an error if the key is not present and [ifAbsent] is not provided.
   ///
   IMap<K, V> update(K key, V Function(V value) update, {V Function() ifAbsent, Item<V> value}) {
     // TODO: Still need to implement efficiently.
@@ -438,7 +438,7 @@ abstract class M<K, V> {
   /// The [M] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed map, but
-  /// because that's immutable, we cache it.
+  /// because that"s immutable, we cache it.
   Map<K, V> _flushed;
 
   /// Returns the flushed map (flushes it only once).

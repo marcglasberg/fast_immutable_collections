@@ -290,9 +290,9 @@ class IList<T> // ignore: must_be_immutable
 
   /// Removes the first occurrence of [item] from this list.
   ///
-  ///     IList<String> parts = ['head', 'shoulders', 'knees', 'toes'].lock;
-  ///     parts.remove('head');
-  ///     parts.join(', ');     // 'shoulders, knees, toes'
+  ///     IList<String> parts = ["head", "shoulders", "knees", "toes"].lock;
+  ///     parts.remove("head");
+  ///     parts.join(", ");     // "shoulders, knees, toes"
   ///
   /// The method has no effect if [item] was not in the list.
   ///
@@ -313,9 +313,9 @@ class IList<T> // ignore: must_be_immutable
 
   /// Removes all occurrences of [item] from this list.
   ///
-  ///     IList<String> parts = ['head', 'shoulders', 'knees', 'head', 'toes'].lock;
-  ///     parts.remove('head');
-  ///     parts.join(', ');     // 'shoulders, knees, toes'
+  ///     IList<String> parts = ["head", "shoulders", "knees", "head", "toes"].lock;
+  ///     parts.remove("head");
+  ///     parts.join(", ");     // "shoulders, knees, toes"
   ///
   /// The method has no effect if [item] was not in the list.
   ///
@@ -428,7 +428,7 @@ class IList<T> // ignore: must_be_immutable
   void forEach(void Function(T element) f) => _l.forEach(f);
 
   @override
-  String join([String separator = '']) => _l.join(separator);
+  String join([String separator = ""]) => _l.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

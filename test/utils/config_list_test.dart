@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   group("ConfigList |", () {
@@ -44,8 +44,8 @@ void main() {
     });
 
     test("ConfigList.toString method", () {
-      expect(configList1.toString(), 'ConfigList{isDeepEquals: true}');
-      expect(configList2.toString(), 'ConfigList{isDeepEquals: false}');
+      expect(configList1.toString(), "ConfigList{isDeepEquals: true}");
+      expect(configList2.toString(), "ConfigList{isDeepEquals: false}");
     });
 
     group("defaultConfigList |", () {

@@ -1,4 +1,4 @@
-import 'ilist.dart';
+import "ilist.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,7 +25,7 @@ class LAddAll<T> extends L<T> {
   /// TODO: FALTA FAZER DE FORMA EFICIENTE:
   @override
   T operator [](int index) => index < 0 || index >= length
-      ? throw RangeError.range(index, 0, length - 1, 'index')
+      ? throw RangeError.range(index, 0, length - 1, "index")
       : super[index];
 
   @override

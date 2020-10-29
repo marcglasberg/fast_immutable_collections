@@ -1,8 +1,8 @@
-import 'iset.dart';
+import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// Note that adding repeated members won't work as the expected behavior for regular `Set`s,
+/// Note that adding repeated members won"t work as the expected behavior for regular `Set`s,
 /// because that behavior is implemented elsewhere ([S]).
 class SAdd<T> extends S<T> {
   final S<T> _s;

@@ -12,7 +12,7 @@ Please do check out the [`benchmark_harness`][benchmark_harness] package before 
    - A simple example would be something like:
        ```dart
        class _SampleBenchmark extends ListBenchmarkBase {
-         _SampleBenchmark({ScoreEmitter emitter}): super('Sample', emitter: emitter);
+         _SampleBenchmark({ScoreEmitter emitter}): super("Sample", emitter: emitter);
 
          @override
          void run() => null; // is going to run `n` times.
@@ -38,7 +38,7 @@ Add this to your `dart.json`, which holds your editor's user's snippets:
     "prefix": "benchx",
     "body": [
         "class _$1Benchmark extends $2BenchmarkBase {",
-        "  _$1Benchmark({ScoreEmitter emitter}): super('${3:name on report}', emitter: emitter);",
+        "  _$1Benchmark({ScoreEmitter emitter}): super("${3:name on report}", emitter: emitter);",
         "",
         "  @override",
         "  void run() => $4;",

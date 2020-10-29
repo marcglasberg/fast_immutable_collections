@@ -1,13 +1,13 @@
-import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:kt_dart/collection.dart';
-import 'package:meta/meta.dart';
+import "package:benchmark_harness/benchmark_harness.dart";
+import "package:built_collection/built_collection.dart";
+import "package:kt_dart/collection.dart";
+import "package:meta/meta.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import '../../utils/config.dart';
-import '../../utils/multi_benchmark_reporter.dart';
-import '../../utils/collection_benchmark_base.dart';
+import "../../utils/config.dart";
+import "../../utils/multi_benchmark_reporter.dart";
+import "../../utils/collection_benchmark_base.dart";
 
 class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
@@ -22,12 +22,12 @@ class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
     BuiltListRemoveBenchmark(config: null, emitter: null),
   ];
 
-  ListRemoveBenchmark({this.prefixName = 'list_remove', @required this.configs});
+  ListRemoveBenchmark({this.prefixName = "list_remove", @required this.configs});
 }
 
 class MutableListRemoveBenchmark extends ListBenchmarkBase {
   MutableListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'List (Mutable)', config: config, emitter: emitter);
+      : super(name: "List (Mutable)", config: config, emitter: emitter);
 
   @override
   MutableListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -47,7 +47,7 @@ class MutableListRemoveBenchmark extends ListBenchmarkBase {
 
 class IListRemoveBenchmark extends ListBenchmarkBase {
   IListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'IList', config: config, emitter: emitter);
+      : super(name: "IList", config: config, emitter: emitter);
 
   @override
   IListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -67,7 +67,7 @@ class IListRemoveBenchmark extends ListBenchmarkBase {
 
 class KtListRemoveBenchmark extends ListBenchmarkBase {
   KtListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'KtList', config: config, emitter: emitter);
+      : super(name: "KtList", config: config, emitter: emitter);
 
   @override
   KtListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
@@ -87,7 +87,7 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
 
 class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   BuiltListRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: 'BuiltList', config: config, emitter: emitter);
+      : super(name: "BuiltList", config: config, emitter: emitter);
 
   @override
   BuiltListRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>

@@ -1,4 +1,4 @@
-import 'imap.dart';
+import "imap.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +22,7 @@ class MAddAll<K, V> extends M<K, V> {
   Iterable<V> get values => _m.values.followedBy(_items.values);
 
   @override
-  // Check the real map first (it's faster).
+  // Check the real map first (it"s faster).
   V operator [](K key) => _items[key] ?? _m[key];
 
   @override
@@ -33,14 +33,14 @@ class MAddAll<K, V> extends M<K, V> {
 
   @override
   bool containsKey(K key) {
-    // Check the real map first (it's faster).
+    // Check the real map first (it"s faster).
     if (_items.containsKey(key)) return true;
     return _m.containsKey(key);
   }
 
   @override
   bool containsValue(V value) {
-    // Check the real map first (it's faster).
+    // Check the real map first (it"s faster).
     if (_items.containsValue(value)) return true;
     return _m.containsValue(value);
   }

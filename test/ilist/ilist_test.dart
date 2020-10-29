@@ -1,9 +1,9 @@
-import 'dart:collection';
-import 'dart:math';
+import "dart:collection";
+import "dart:math";
 
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,9 +263,9 @@ void main() {
           });
 
           test("If Iterable, will only be equal if in order and the same items", () {
-            expect(iList1.equalItems({'a': 1}.values), isFalse);
-            expect(iList1.equalItems({'a': 2, 'b': 1}.values), isFalse);
-            expect(iList1.equalItems({'a': 1, 'b': 2}.values), isTrue);
+            expect(iList1.equalItems({"a": 1}.values), isFalse);
+            expect(iList1.equalItems({"a": 2, "b": 1}.values), isFalse);
+            expect(iList1.equalItems({"a": 1, "b": 2}.values), isTrue);
           });
 
           group("IList.unorderedEqualItems method |", () {
@@ -836,10 +836,10 @@ void main() {
   });
 
   test("IList.asMap method", () {
-    final IList<String> iList = ['hel', 'lo', 'there'].lock;
+    final IList<String> iList = ["hel", "lo", "there"].lock;
 
     expect(iList.asMap(), isA<IMap<int, String>>());
-    expect(iList.asMap().unlock, {0: 'hel', 1: 'lo', 2: 'there'});
+    expect(iList.asMap().unlock, {0: "hel", 1: "lo", 2: "there"});
   });
 
   test("IList.clear method", () {
@@ -853,61 +853,61 @@ void main() {
   });
 
   group("Replacing and Related Methods |", () {
-    final IList<String> notes = ['do', 're', 'mi', 're'].lock;
+    final IList<String> notes = ["do", "re", "mi", "re"].lock;
 
-    tearDown(() => expect(notes, ['do', 're', 'mi', 're']));
+    tearDown(() => expect(notes, ["do", "re", "mi", "re"]));
 
     group("Index Operations |", () {
       test("IList.indexOf method", () {
-        expect(notes.indexOf('re'), 1);
-        expect(notes.indexOf('re', 2), 3);
+        expect(notes.indexOf("re"), 1);
+        expect(notes.indexOf("re", 2), 3);
         // TODO: Marcelo, mudei o `for` para `<= _length - 1`.
-        expect(notes.indexOf('fa'), -1);
+        expect(notes.indexOf("fa"), -1);
       });
 
       test("IList.indexWhere method", () {
-        expect(notes.indexWhere((String element) => element == 're'), 1);
-        expect(notes.indexWhere((String element) => element == 're', 2), 3);
+        expect(notes.indexWhere((String element) => element == "re"), 1);
+        expect(notes.indexWhere((String element) => element == "re", 2), 3);
         // TODO: Marcelo, mudei o `for` para `<= _length - 1`.
-        expect(notes.indexWhere((String element) => element == 'fa'), -1);
+        expect(notes.indexWhere((String element) => element == "fa"), -1);
       });
 
       test("IList.lastIndexOf method", () {
-        expect(notes.lastIndexOf('re', 2), 1);
-        expect(notes.lastIndexOf('re'), 3);
-        expect(notes.lastIndexOf('fa'), -1);
+        expect(notes.lastIndexOf("re", 2), 1);
+        expect(notes.lastIndexOf("re"), 3);
+        expect(notes.lastIndexOf("fa"), -1);
       });
 
       test("IList.lastIndexWhere method", () {
-        expect(notes.lastIndexWhere((String note) => note.startsWith('r')), 3);
-        expect(notes.lastIndexWhere((String note) => note.startsWith('r'), 2), 1);
-        expect(notes.lastIndexWhere((String note) => note.startsWith('k')), -1);
+        expect(notes.lastIndexWhere((String note) => note.startsWith("r")), 3);
+        expect(notes.lastIndexWhere((String note) => note.startsWith("r"), 2), 1);
+        expect(notes.lastIndexWhere((String note) => note.startsWith("k")), -1);
       });
     });
 
     group("Replace |", () {
       test("IList.replaceFirst method", () {
-        expect(notes.replaceFirst(from: 're', to: 'fa'), ['do', 'fa', 'mi', 're']);
-        expect(notes.replaceFirst(from: 'fa', to: 'sol'), ['do', 're', 'mi', 're']);
+        expect(notes.replaceFirst(from: "re", to: "fa"), ["do", "fa", "mi", "re"]);
+        expect(notes.replaceFirst(from: "fa", to: "sol"), ["do", "re", "mi", "re"]);
       });
 
       test("IList.replaceAll method", () {
-        expect(notes.replaceAll(from: 're', to: 'fa'), ['do', 'fa', 'mi', 'fa']);
-        expect(notes.replaceAll(from: 'fa', to: 'sol'), ['do', 're', 'mi', 're']);
+        expect(notes.replaceAll(from: "re", to: "fa"), ["do", "fa", "mi", "fa"]);
+        expect(notes.replaceAll(from: "fa", to: "sol"), ["do", "re", "mi", "re"]);
       });
 
       test("IList.replaceFirstWhere method", () {
         expect(
-            notes.replaceFirstWhere((String item) => item == 're', 'fa'), ['do', 'fa', 'mi', 're']);
-        expect(notes.replaceFirstWhere((String item) => item == 'fa', 'sol'),
-            ['do', 're', 'mi', 're']);
+            notes.replaceFirstWhere((String item) => item == "re", "fa"), ["do", "fa", "mi", "re"]);
+        expect(notes.replaceFirstWhere((String item) => item == "fa", "sol"),
+            ["do", "re", "mi", "re"]);
       });
 
       test("IList.replaceAllWhere method", () {
         expect(
-            notes.replaceAllWhere((String item) => item == 're', 'fa'), ['do', 'fa', 'mi', 'fa']);
+            notes.replaceAllWhere((String item) => item == "re", "fa"), ["do", "fa", "mi", "fa"]);
         expect(
-            notes.replaceAllWhere((String item) => item == 'fa', 'sol'), ['do', 're', 'mi', 're']);
+            notes.replaceAllWhere((String item) => item == "fa", "sol"), ["do", "re", "mi", "re"]);
       });
 
       test("IList.replaceRange method", () {
@@ -924,10 +924,10 @@ void main() {
       });
 
       test("IList.getRange method", () {
-        final IList<String> colors = ['red', 'green', 'blue', 'orange', 'pink'].lock;
+        final IList<String> colors = ["red", "green", "blue", "orange", "pink"].lock;
         final Iterable<String> range = colors.getRange(1, 4);
-        expect(range, ['green', 'blue', 'orange']);
-        expect(colors, ['red', 'green', 'blue', 'orange', 'pink']);
+        expect(range, ["green", "blue", "orange"]);
+        expect(colors, ["red", "green", "blue", "orange", "pink"]);
         // TODO: Marcelo, o comportamento de `colors.length` na documentação é algo mutável,
         // Você vai querer implementá-lo adaptadamente?
       });
@@ -941,37 +941,37 @@ void main() {
 
     group("Insert |", () {
       test("IList.insert method", () {
-        expect(notes.insert(2, 'fa'), ['do', 're', 'fa', 'mi', 're']);
+        expect(notes.insert(2, "fa"), ["do", "re", "fa", "mi", "re"]);
       });
 
       test("IList.insertAll method", () {
-        expect(notes.insertAll(3, ['fa', 'fo', 'fu']), ['do', 're', 'mi', 'fa', 'fo', 'fu', 're']);
+        expect(notes.insertAll(3, ["fa", "fo", "fu"]), ["do", "re", "mi", "fa", "fo", "fu", "re"]);
       });
     });
 
     group("Remove |", () {
       test("IList.removeAt method", () {
-        expect(notes.removeAt(2), ['do', 're', 're']);
+        expect(notes.removeAt(2), ["do", "re", "re"]);
         final Item<String> item = Item();
-        expect(notes.removeAt(1, item), ['do', 'mi', 're']);
-        expect(item.value, 're');
+        expect(notes.removeAt(1, item), ["do", "mi", "re"]);
+        expect(item.value, "re");
       });
 
       test("IList.removeLast method", () {
-        expect(notes.removeLast(), ['do', 're', 'mi']);
+        expect(notes.removeLast(), ["do", "re", "mi"]);
         final Item<String> item = Item();
-        expect(notes.removeLast(item), ['do', 're', 'mi']);
-        expect(item.value, 're');
+        expect(notes.removeLast(item), ["do", "re", "mi"]);
+        expect(item.value, "re");
       });
 
       test("IList.removeRange method", () {
-        expect(notes.removeRange(1, 3), ['do', 're']);
+        expect(notes.removeRange(1, 3), ["do", "re"]);
       });
 
       test("IList.removeWhere method", () {
-        final IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
-        expect(numbers.removeWhere((String item) => item.length == 3), ['three', 'four']);
-        expect(numbers, ['one', 'two', 'three', 'four']);
+        final IList<String> numbers = ["one", "two", "three", "four"].lock;
+        expect(numbers.removeWhere((String item) => item.length == 3), ["three", "four"]);
+        expect(numbers, ["one", "two", "three", "four"]);
       });
     });
 
@@ -989,44 +989,44 @@ void main() {
         // TODO: Marcelo, isso parece estar fazendo o oposto do que deveria.
         expect(
             notes.process(
-              test: (IList<String> iList, int index, String item) => iList[index] == 're',
+              test: (IList<String> iList, int index, String item) => iList[index] == "re",
               apply: (IList<String> iList, int index, String item) => [item + item],
             ),
-            ['do', 'rere', 'mi', 'rere']);
+            ["do", "rere", "mi", "rere"]);
         expect(
             notes.process(
-              test: (IList<String> iList, int index, String item) => iList[index] == 'fa',
+              test: (IList<String> iList, int index, String item) => iList[index] == "fa",
               apply: (IList<String> iList, int index, String item) => [item + item],
             ),
-            ['do', 're', 'mi', 're']);
+            ["do", "re", "mi", "re"]);
         expect(
             notes.process(
               apply: (IList<String> iList, int index, String item) => [item + item],
             ),
-            ['dodo', 'rere', 'mimi', 'rere']);
+            ["dodo", "rere", "mimi", "rere"]);
       });
 
       test("IList.sublist method", () {
-        final IList<String> colors = ['red', 'green', 'blue', 'orange', 'pink'].lock;
-        expect(colors.sublist(1, 3), ['green', 'blue']);
-        expect(colors.sublist(1), ['green', 'blue', 'orange', 'pink']);
-        expect(colors, ['red', 'green', 'blue', 'orange', 'pink']);
+        final IList<String> colors = ["red", "green", "blue", "orange", "pink"].lock;
+        expect(colors.sublist(1, 3), ["green", "blue"]);
+        expect(colors.sublist(1), ["green", "blue", "orange", "pink"]);
+        expect(colors, ["red", "green", "blue", "orange", "pink"]);
       });
 
       test("IList.retainWhere method", () {
-        final IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
-        expect(numbers.retainWhere((String item) => item.length == 3), ['one', 'two']);
-        expect(numbers, ['one', 'two', 'three', 'four']);
+        final IList<String> numbers = ["one", "two", "three", "four"].lock;
+        expect(numbers.retainWhere((String item) => item.length == 3), ["one", "two"]);
+        expect(numbers, ["one", "two", "three", "four"]);
       });
 
       test("IList.reversed getter", () {
-        expect(notes.reversed, ['re', 'mi', 're', 'do']);
+        expect(notes.reversed, ["re", "mi", "re", "do"]);
       });
 
       test("IList.setAll method", () {
-        final IList<String> iList = ['a', 'b', 'c'].lock;
-        expect(iList.setAll(1, ['bee', 'sea']), ['a', 'bee', 'sea']);
-        expect(iList, ['a', 'b', 'c']);
+        final IList<String> iList = ["a", "b", "c"].lock;
+        expect(iList.setAll(1, ["bee", "sea"]), ["a", "bee", "sea"]);
+        expect(iList, ["a", "b", "c"]);
       });
 
       test("IList.shuffle method", () {

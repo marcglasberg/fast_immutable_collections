@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   group("sameCollection function |", () {
@@ -66,19 +66,19 @@ void main() {
 
   group("MapIteratorExtension |", () {
     const List<MapEntry<String, int>> entryList = [
-      MapEntry('a', 1),
-      MapEntry('b', 2),
-      MapEntry('c', 3),
+      MapEntry("a", 1),
+      MapEntry("b", 2),
+      MapEntry("c", 3),
     ];
 
     test("MapIteratorExtension.toIterable method", () {
       final Iterator<MapEntry<String, int>> iterator = entryList.iterator;
       final Iterable<MapEntry<String, int>> iterable = iterator.toIterable();
 
-      expect(iterable.contains(const MapEntry('a', 1)), isTrue);
-      expect(iterable.contains(const MapEntry('b', 2)), isTrue);
-      expect(iterable.contains(const MapEntry('c', 3)), isTrue);
-      expect(iterable.contains(const MapEntry('d', 4)), isFalse);
+      expect(iterable.contains(const MapEntry("a", 1)), isTrue);
+      expect(iterable.contains(const MapEntry("b", 2)), isTrue);
+      expect(iterable.contains(const MapEntry("c", 3)), isTrue);
+      expect(iterable.contains(const MapEntry("d", 4)), isFalse);
     });
 
     test("MapIteratorExtension.toMap method", () {
@@ -105,9 +105,9 @@ void main() {
     });
 
     test("Item.toString", () {
-      expect(item.toString(), 'null');
+      expect(item.toString(), "null");
       item.set(10);
-      expect(item.toString(), '10');
+      expect(item.toString(), "10");
     });
 
     group("Equals and Hash |", () {

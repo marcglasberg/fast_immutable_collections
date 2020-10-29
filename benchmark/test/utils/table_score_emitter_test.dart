@@ -1,33 +1,44 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'report');
+  group("Table and Scores |", () {
+    const Config config = Config(runs: 100, size: 100);
 
-  tableScoreEmitter.emit('Test1', 1);
-  tableScoreEmitter.emit('List (Mutable)', 10);
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "report", config: config);
 
-  test('`emit` adds values to the `scores`', () => expect(tableScoreEmitter.scores['Test1'], 1));
+    tableScoreEmitter.emit("List (Mutable)", 10);
+    tableScoreEmitter.emit("Collection1", 1);
 
-  test('Normalized column', () {
-    expect(tableScoreEmitter.completeTable['normalized']['Test1'], 0.1);
-    expect(tableScoreEmitter.completeTable['normalized']['List (Mutable)'], 1);
+    test("TableScoreEmitter.emit adds values to the TableScoreEmitter.scores",
+        () => expect(tableScoreEmitter.scores["Collection1"], 1));
+
+    test("Normalized column", () {
+      expect(tableScoreEmitter.table["normalized"]["Collection1"], 0.1);
+      expect(tableScoreEmitter.table["normalized"]["List (Mutable)"], 1);
+    });
+
+    test("Normalized column against the mutable list", () {
+      tableScoreEmitter.emit("Collection2", 100);
+
+      expect(tableScoreEmitter.table["normalizedAgainstList"]["Collection2"], 10);
+    });
+
+    test("Normalized column against runs (time / runs)", () {
+      expect(tableScoreEmitter.table["normalizedAgainstRuns"]["List (Mutable)"], .1);
+      expect(tableScoreEmitter.table["normalizedAgainstRuns"]["Collection1"], .01);
+      expect(tableScoreEmitter.table["normalizedAgainstRuns"]["Collection2"], 1);
+    });
   });
 
-  test('Normalized column against the mutable list', () {
-    tableScoreEmitter.emit('Test2', 100);
+  group("Other stuff |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "report");
 
-    expect(tableScoreEmitter.completeTable['normalizedAgainstList']['Test2'], 10);
-  });
+    tableScoreEmitter.emit("Test1", 1);
 
-  group('Other stuff |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'report');
-
-    tableScoreEmitter.emit('Test1', 1);
-
-    test('Printing',
-        () => expect(tableScoreEmitter.toString(), 'Table Score Emitter: {Test1: 1.0}'));
+    test("TableScoreEmitter.toString method",
+        () => expect(tableScoreEmitter.toString(), "Table Score Emitter: {Test1: 1.0}"));
   });
 }

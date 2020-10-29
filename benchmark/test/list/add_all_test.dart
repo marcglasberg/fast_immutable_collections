@@ -1,17 +1,17 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
   final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(reportName: 'list_add_all');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_add_all");
 
-    test('`List` (Mutable)', () {
+    test("`List` (Mutable)", () {
       final MutableListAddAllBenchmark listAddAllBenchmark =
           MutableListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -20,7 +20,7 @@ void main() {
       expect(listAddAllBenchmark.toMutable(), expectedList);
     });
 
-    test('`IList`', () {
+    test("`IList`", () {
       final IListAddAllBenchmark iListAddAllBenchmark =
           IListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -29,7 +29,7 @@ void main() {
       expect(iListAddAllBenchmark.toMutable(), expectedList);
     });
 
-    test('`KtList`', () {
+    test("`KtList`", () {
       final KtListAddAllBenchmark ktListAddAllBenchmark =
           KtListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -38,7 +38,7 @@ void main() {
       expect(ktListAddAllBenchmark.toMutable(), expectedList);
     });
 
-    test('`BuiltList`', () {
+    test("`BuiltList`", () {
       final BuiltListAddAllBenchmark builtListAddAllBenchmark =
           BuiltListAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -48,8 +48,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final ListAddAllBenchmark addAllBenchmark = ListAddAllBenchmark(configs: [config, config]);
 
       addAllBenchmark.report();
