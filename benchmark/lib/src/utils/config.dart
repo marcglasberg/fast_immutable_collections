@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import "package:meta/meta.dart";
 
 class Config {
   final int runs, size;

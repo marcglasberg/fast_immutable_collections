@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 1000;
@@ -8,10 +8,10 @@ void main() {
   final int numberToRead =
       ListBenchmarkBase.getDummyGeneratedList(size: config.size)[ListReadBenchmark.indexToRead];
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_read');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_read");
 
-    test('`List` (Mutable)', () {
+    test("`List` (Mutable)", () {
       final MutableListReadBenchmark listReadBenchmark =
           MutableListReadBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -20,7 +20,7 @@ void main() {
       expect(listReadBenchmark.newVar, numberToRead);
     });
 
-    test('`IList`', () {
+    test("`IList`", () {
       final IListReadBenchmark iListReadBenchmark =
           IListReadBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -29,7 +29,7 @@ void main() {
       expect(iListReadBenchmark.newVar, numberToRead);
     });
 
-    test('`KtList`', () {
+    test("`KtList`", () {
       final KtListReadBenchmark ktListReadBenchmark =
           KtListReadBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -38,7 +38,7 @@ void main() {
       expect(ktListReadBenchmark.newVar, numberToRead);
     });
 
-    test('`BuiltList`', () {
+    test("`BuiltList`", () {
       final BuiltListReadBenchmark builtListReadBenchmark =
           BuiltListReadBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -48,8 +48,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final ListReadBenchmark readBenchmark = ListReadBenchmark(configs: [config, config]);
 
       readBenchmark.report();

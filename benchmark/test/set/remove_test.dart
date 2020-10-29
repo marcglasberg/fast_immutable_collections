@@ -1,18 +1,18 @@
-import 'package:fast_immutable_collections_benchmarks/src/cases/set/remove.dart';
-import 'package:test/test.dart';
+import "package:fast_immutable_collections_benchmarks/src/cases/set/remove.dart";
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 100;
   const Config config = Config(runs: 1, size: size);
   final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: size)..remove(1);
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'set_remove');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "set_remove");
 
-    test('`List` (Mutable)', () {
+    test("`List` (Mutable)", () {
       final MutableSetRemoveBenchmark mutableSetRemoveBenchmark =
           MutableSetRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -21,7 +21,7 @@ void main() {
       expect(mutableSetRemoveBenchmark.toMutable(), expectedSet);
     });
 
-    test('`ISet`', () {
+    test("`ISet`", () {
       final ISetRemoveBenchmark iSetRemoveBenchmark =
           ISetRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -30,7 +30,7 @@ void main() {
       expect(iSetRemoveBenchmark.toMutable(), expectedSet);
     });
 
-    test('`KtSet`', () {
+    test("`KtSet`", () {
       final KtSetRemoveBenchmark ktSetRemoveBenchmark =
           KtSetRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -39,7 +39,7 @@ void main() {
       expect(ktSetRemoveBenchmark.toMutable(), expectedSet);
     });
 
-    test('`BuiltSet`', () {
+    test("`BuiltSet`", () {
       final BuiltSetRemoveBenchmark builtSetRemoveBenchmark =
           BuiltSetRemoveBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -49,8 +49,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final SetRemoveBenchmark setRemoveBenchmark = SetRemoveBenchmark(configs: [config, config]);
 
       setRemoveBenchmark.report();

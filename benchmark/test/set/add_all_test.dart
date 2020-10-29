@@ -1,18 +1,18 @@
-import 'package:fast_immutable_collections_benchmarks/src/cases/set/add_all.dart';
-import 'package:test/test.dart';
+import "package:fast_immutable_collections_benchmarks/src/cases/set/add_all.dart";
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const Config config = Config(runs: 1, size: 10);
   final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
     ..addAll(SetAddAllBenchmark.setToAdd);
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'set_add_all');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "set_add_all");
 
-    test('`Set` (Mutable)', () {
+    test("`Set` (Mutable)", () {
       final MutableSetAddAllBenchmark mutableSetAddAllBenchmark =
           MutableSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -21,7 +21,7 @@ void main() {
       expect(mutableSetAddAllBenchmark.toMutable(), expectedSet);
     });
 
-    test('`ISet`', () {
+    test("`ISet`", () {
       final ISetAddAllBenchmark iSetAddAllBenchmark =
           ISetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -30,7 +30,7 @@ void main() {
       expect(iSetAddAllBenchmark.toMutable(), expectedSet);
     });
 
-    test('`KtSet`', () {
+    test("`KtSet`", () {
       final KtSetAddAllBenchmark ktSetAddAllBenchmark =
           KtSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -39,7 +39,7 @@ void main() {
       expect(ktSetAddAllBenchmark.toMutable(), expectedSet);
     });
 
-    test('`BuiltSet`', () {
+    test("`BuiltSet`", () {
       final BuiltSetAddAllBenchmark builtSetAddAllBenchmark =
           BuiltSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -49,8 +49,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final SetAddAllBenchmark setAddAllBenchmark = SetAddAllBenchmark(configs: [config, config]);
 
       setAddAllBenchmark.report();

@@ -1,17 +1,17 @@
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
-import 'package:fast_immutable_collections_benchmarks/'
-    'fast_immutable_collections_benchmarks.dart';
+import "package:fast_immutable_collections_benchmarks/"
+    "fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 10;
   const Config config = Config(runs: 100, size: size);
   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList(size: size);
 
-  group('Separate Benchmarks |', () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: 'list_contains');
+  group("Separate Benchmarks |", () {
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_contains");
 
-    test('`List` (Mutable)', () {
+    test("`List` (Mutable)", () {
       final MutableListContainsBenchmark listContainsBenchmark =
           MutableListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -20,7 +20,7 @@ void main() {
       expect(listContainsBenchmark.toMutable(), expectedList);
     });
 
-    test('`IList`', () {
+    test("`IList`", () {
       final IListContainsBenchmark iListContainsBenchmark =
           IListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -29,7 +29,7 @@ void main() {
       expect(iListContainsBenchmark.toMutable(), expectedList);
     });
 
-    test('`KtList`', () {
+    test("`KtList`", () {
       final KtListContainsBenchmark ktListContainsBenchmark =
           KtListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -38,7 +38,7 @@ void main() {
       expect(ktListContainsBenchmark.toMutable(), expectedList);
     });
 
-    test('`BuiltList`', () {
+    test("`BuiltList`", () {
       final BuiltListContainsBenchmark builtListContainsBenchmark =
           BuiltListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -48,8 +48,8 @@ void main() {
     });
   });
 
-  group('Multiple Benchmarks |', () {
-    test('Simple run', () {
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
       final ListContainsBenchmark containsBenchmark =
           ListContainsBenchmark(configs: [config, config]);
 

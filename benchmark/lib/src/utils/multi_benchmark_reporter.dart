@@ -1,6 +1,6 @@
-import 'collection_benchmark_base.dart';
-import 'config.dart';
-import 'table_score_emitter.dart';
+import "collection_benchmark_base.dart";
+import "config.dart";
+import "table_score_emitter.dart";
 
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   final List<B> benchmarks = [];
