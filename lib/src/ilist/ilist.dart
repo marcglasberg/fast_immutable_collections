@@ -239,9 +239,12 @@ class IList<T> // ignore: must_be_immutable
 
   bool get isFlushed => _l is LFlat;
 
+  /// Return a new list with [item] added to the end of the current list,
+  /// (thus extending the length by one).
   IList<T> add(T item) => IList<T>._unsafe(_l.add(item), config: config);
 
-  /// Returns the concatenation of this list and [items].
+  /// Returns a new list with all [items] added to the end of the current list,
+  /// (thus extending the length by the length of items).
   IList<T> addAll(Iterable<T> items) => IList<T>._unsafe(_l.addAll(items), config: config);
 
   /// Removes the first occurrence of [item] from this list.
@@ -507,10 +510,17 @@ class IList<T> // ignore: must_be_immutable
       map((element) => (element == from) ? to : element);
 
   /// Finds the first item that satisfies the provided [test],
-  /// and replace it with [to].
-  IList<T> replaceFirstWhere(bool Function(T item) test, T to) {
+  /// and replace it with [to]. If [addIfNotFound] is false,
+  /// return the unchanged list if no item satisfies the [test].
+  /// If [addIfNotFound] is true, add the item to the end of the list
+  /// if no item satisfies the [test].
+  IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false}) {
     var index = indexWhere(test);
-    return (index == -1) ? this : put(index, to);
+    return (index != -1)
+        ? put(index, to)
+        : addIfNotFound
+            ? add(to)
+            : this;
   }
 
   /// Finds all items that satisfy the provided [test],
