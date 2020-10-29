@@ -50,8 +50,8 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 
   /// Will return true only if the collections internals are the same instances
   /// (comparing by identity). This will be fast even for very large collections,
-  /// since it doesn"t compare each item.
-  /// Note: This is not the same as `identical(col1, col2)` since it doesn"t
+  /// since it doesn't  compare each item.
+  /// Note: This is not the same as `identical(col1, col2)` since it doesn't
   /// compare the collection instances themselves, but their internal state.
   /// Comparing the internal state is better, because it will return true more often.
   bool same(C other);

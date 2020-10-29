@@ -124,7 +124,7 @@ class ISet<T> // ignore: must_be_immutable
       return _s.iterator;
   }
 
-  /// This iterator is very fast to create, but won"t iterate in any particular order,
+  /// This iterator is very fast to create, but won't iterate in any particular order,
   /// no matter what the set configuration is.
   Iterator<T> get fastIterator => _s.iterator;
 
@@ -142,8 +142,8 @@ class ISet<T> // ignore: must_be_immutable
   /// If [isDeepEquals] configuration is false:
   /// Will return true only if the sets internals are the same instances
   /// (comparing by identity). This will be fast even for very large sets,
-  /// since it doesn"t compare each item.
-  /// Note: This is not the same as `identical(set1, set2)` since it doesn"t
+  /// since it doesn't  compare each item.
+  /// Note: This is not the same as `identical(set1, set2)` since it doesn't
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   ///
@@ -168,8 +168,8 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Will return true only if the sets internals are the same instances
   /// (comparing by identity). This will be fast even for very large sets,
-  /// since it doesn"t compare each item.
-  /// Note: This is not the same as `identical(set1, set2)` since it doesn"t
+  /// since it doesn't  compare each item.
+  /// Note: This is not the same as `identical(set1, set2)` since it doesn't
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   @override
@@ -201,7 +201,7 @@ class ISet<T> // ignore: must_be_immutable
       );
 
   /// Returns a new set containing the current set minus the given item.
-  /// However, if the given item didn"t exist in the current set,
+  /// However, if the given item didn't exist in the current set,
   /// it will return the current set (same instance).
   ISet<T> remove(T item) {
     final S<T> result = _s.remove(item);

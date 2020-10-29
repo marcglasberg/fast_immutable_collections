@@ -12,7 +12,7 @@ import "ilist.dart";
 /// 1) Override the [iList] getter to return the inner [IList].
 /// 2) Override the [newInstance] method to return a new instance of the class.
 ///
-/// All other methods are efficiently implemented in terms of the [iList] and you don"t need
+/// All other methods are efficiently implemented in terms of the [iList] and you don't need
 /// to worry about them.
 ///
 /// Example:
