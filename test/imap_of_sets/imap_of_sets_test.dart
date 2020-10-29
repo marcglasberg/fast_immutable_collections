@@ -501,7 +501,7 @@ void main() {
         expect(newMapOfSets['a'], {1, 2, 3, 4});
       });
 
-      test("Adding to an inexistent key", () {
+      test("Adding to a nonexistent key", () {
         expect(iMapOfSets['z'], isNull);
         final IMapOfSets<String, int> newMapOfSets = iMapOfSets.addValues('z', [2, 3, 4]);
         expect(newMapOfSets['z'], {2, 3, 4});
@@ -826,7 +826,7 @@ void main() {
             }));
       });
 
-      test("Updating an inexistent key", () {
+      test("Updating a nonexistent key", () {
         final IMapOfSets<String, int> newIMapOfSets =
             iMapOfSets.update('4', (ISet<int> set) => {100}.lock, ifAbsent: () => {1000}.lock);
 
@@ -841,7 +841,7 @@ void main() {
       });
 
       test(
-          "Updating an inexistent key without ifAbsent yields an error",
+          "Updating a nonexistent key without ifAbsent yields an error",
           () => expect(
               () => iMapOfSets.update('4', (ISet<int> set) => {100}.lock), throwsUnsupportedError));
     });

@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import '../imap/imap.dart';
 import '../iset/iset.dart';
 import '../utils/immutable_collection.dart';
+import 'ilist_of_2.dart';
 import 'l_add.dart';
 import 'l_add_all.dart';
 import 'l_flat.dart';
@@ -28,6 +29,46 @@ extension IListExtension<T> on List<T> {
   /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
   /// further configuration changes by calling `lockConfig()`).
   IList<T> get lockUnsafe => IList<T>.unsafe(this, config: defaultConfigList);
+
+  /// Sorts this list according to the order specified by the [compare] function.
+  ///
+  /// This is similar to [sort], but uses a merge sort algorithm
+  /// (https://en.wikipedia.org/wiki/Merge_sort).
+  ///
+  /// On contrary to [sort], [orderedSort] is stable, meaning distinct objects
+  /// that compare as equal end up in the same order as they started in.
+  ///
+  void sortOrdered([int Function(T a, T b) compare]) {
+    mergeSort(this, compare: compare);
+  }
+
+  /// Moves all items that satisfy the provided [test] to the end of the list.
+  /// Keeps the relative order of the moved items.
+  void whereMoveToTheEnd(bool Function(T item) test) {
+    var compare = (T f1, T f2) {
+      bool test1 = test(f1);
+      return (test1 == test(f2))
+          ? 0
+          : test1
+              ? 1
+              : -1;
+    };
+    sortOrdered(compare);
+  }
+
+  /// Moves all items that satisfy the provided [test] to the start of the list.
+  /// Keeps the relative order of the moved items.
+  void whereMoveToTheFront(bool Function(T item) test) {
+    var compare = (T f1, T f2) {
+      bool test1 = test(f1);
+      return (test1 == test(f2))
+          ? 0
+          : test1
+              ? -1
+              : 1;
+    };
+    sortOrdered(compare);
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -427,8 +468,83 @@ class IList<T> // ignore: must_be_immutable
   /// change anything.
   IList<T> maxLength(int maxLength) => IList._unsafe(_l.maxLength(maxLength), config: config);
 
+  /// Sorts this list according to the order specified by the [compare] function.
+  ///
+  /// The [compare] function must act as a [Comparator].
+  ///
+  ///     IList<String> numbers = ['two', 'three', 'four'].lock;
+  ///     // Sort from shortest to longest.
+  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  ///     print(numbers);  // [two, four, three]
+  ///
+  /// The default List implementations use [Comparable.compare] if
+  /// [compare] is omitted.
+  ///
+  ///     IList<int> nums = [13, 2, -11].lock;
+  ///     nums = nums.sort();
+  ///     print(nums);  // [-11, 2, 13]
+  ///
+  /// A [Comparator] may compare objects as equal (return zero), even if they
+  /// are distinct objects.
+  /// The sort function is not guaranteed to be stable, so distinct objects
+  /// that compare as equal may occur in any order in the result:
+  ///
+  ///     IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  ///     print(numbers);  // [one, two, four, three] OR [two, one, four, three]
+  ///
   IList<T> sort([int Function(T a, T b) compare]) =>
       IList._unsafe(_l.sort(compare), config: config);
+
+  /// Sorts this list according to the order specified by the [compare] function.
+  ///
+  /// This is similar to [sort], but uses a merge sort algorithm
+  /// (https://en.wikipedia.org/wiki/Merge_sort).
+  ///
+  /// On contrary to [sort], [sortOrdered] is stable, meaning distinct objects
+  /// that compare as equal end up in the same order as they started in.
+  ///
+  ///     IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  ///     print(numbers);  // [one, two, four, three]
+  ///
+  IList<T> sortOrdered([int Function(T a, T b) compare]) {
+    List<T> list = unlock..sortOrdered(compare);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Divides the list into two.
+  /// The first one contains all items which satisfy the provided [test].
+  /// The last one contains all the other items.
+  /// The relative order of the items will be maintained.
+  IListOf2<IList<T>> divideIn2(bool Function(T item) test) {
+    List<T> first = [];
+    List<T> last = [];
+    for (T item in this) {
+      if (test(item))
+        first.add(item);
+      else
+        last.add(item);
+    }
+    return IListOf2(
+      IList._unsafeFromList(first, config: config),
+      IList._unsafeFromList(last, config: config),
+    );
+  }
+
+  /// Moves all items that satisfy the provided [test] to the end of the list.
+  /// Keeps the relative order of the moved items.
+  IList<T> whereMoveToTheEnd(bool Function(T item) test) {
+    IListOf2<IList<T>> lists = divideIn2(test);
+    return lists.last + lists.first;
+  }
+
+  /// Moves all items that satisfy the provided [test] to the start of the list.
+  /// Keeps the relative order of the moved items.
+  IList<T> whereMoveToTheStart(bool Function(T item) test) {
+    IListOf2<IList<T>> lists = divideIn2(test);
+    return lists.first + lists.last;
+  }
 
   @override
   List<T> toList({bool growable = true}) => _l.toList(growable: growable);
@@ -971,6 +1087,10 @@ abstract class L<T> implements Iterable<T> {
   /// Sorts this list according to the order specified by the [compare] function.
   /// If [compare] is not provided, it will use the natural ordering of the type [T].
   L<T> sort([int Function(T a, T b) compare]) => LFlat<T>.unsafe(unlock..sort(compare));
+
+  L<T> orderedSort([int Function(T a, T b) compare]) {
+    return LFlat<T>.unsafe(unlock..sort(compare));
+  }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
   /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
