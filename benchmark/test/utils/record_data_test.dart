@@ -69,6 +69,24 @@ void main() {
               isNotEmpty));
     });
 
+    test("Extracting the column's maximum value", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty();
+      recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
+      recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
+      recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
+
+      expect(recordsColumn.max, 100);
+    });
+
+    test("Extracting the column's List value", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty();
+      recordsColumn += StopwatchRecord(collectionName: "list (mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
+      
+      expect(recordsColumn.mutableRecord, 10);
+    });
+
     test("== operator", () {
       RecordsColumn recordsColumn1 = RecordsColumn.empty();
       RecordsColumn recordsColumn2 = RecordsColumn.empty();
@@ -93,20 +111,6 @@ void main() {
 
       expect(recordsColumn.toString(),
           "RecordsColumn: [StopwatchRecord: (collectionName: list, record: 10.0)]");
-    });
-
-    test("Changing the variable that points to a record doesn't change the column", () {
-      
-    });
-
-    test("Extracting the column's maximum value", () {
-      RecordsColumn recordsColumn = RecordsColumn.empty();
-      recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
-      recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
-      recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
-      recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
-
-      expect(recordsColumn.max, 100);
     });
   });
 }

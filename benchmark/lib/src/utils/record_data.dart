@@ -38,11 +38,17 @@ class RecordsColumn {
 
   double get max {
     double max = 0;
-    records.forEach((StopwatchRecord record) { 
+    records.forEach((StopwatchRecord record) {
       if (record.record > max) max = record.record;
     });
     return max;
   }
+
+  /// Finding the mutable record is linked to having the word *mutable* somewhere on the row's name.
+  double get mutableRecord => records
+      .where((StopwatchRecord record) => record.collectionName.toLowerCase().contains("mutable"))
+      .first
+      .record;
 
   @override
   bool operator ==(Object other) =>
