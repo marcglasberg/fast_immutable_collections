@@ -1,16 +1,16 @@
-import 'dart:collection';
-import 'dart:math';
-import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
-import '../imap/imap.dart';
-import '../iset/iset.dart';
-import '../utils/immutable_collection.dart';
-import 'ilist_of_2.dart';
-import 'l_add.dart';
-import 'l_add_all.dart';
-import 'l_flat.dart';
-import 'modifiable_list_view.dart';
-import 'unmodifiable_list_view.dart';
+import "dart:collection";
+import "dart:math";
+import "package:collection/collection.dart";
+import "package:meta/meta.dart";
+import "../imap/imap.dart";
+import "../iset/iset.dart";
+import "../utils/immutable_collection.dart";
+import "ilist_of_2.dart";
+import "l_add.dart";
+import "l_add_all.dart";
+import "l_flat.dart";
+import "modifiable_list_view.dart";
+import "unmodifiable_list_view.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,6 +40,19 @@ extension IListExtension<T> on List<T> {
   ///
   void sortOrdered([int Function(T a, T b) compare]) {
     mergeSort(this, compare: compare);
+  }
+
+  /// Sorts this list according to the order specified by the [ordering] iterable.
+  /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
+  /// Note: This is not very efficient. Only use for a small number of elements.
+  void sortLike(Iterable<T> ordering) {
+    assert(ordering != null);
+    Set<T> orderingSet = Set.of(ordering);
+    Set<T> newSet = Set.of(this);
+    Set<T> intersection = orderingSet.intersection(newSet);
+    Set<T> difference = newSet.difference(orderingSet);
+    clear();
+    addAll(ordering.where((element) => intersection.contains(element)).followedBy(difference));
   }
 
   /// Moves all items that satisfy the provided [test] to the end of the list.
@@ -375,6 +388,8 @@ class IList<T> // ignore: must_be_immutable
   @override
   int get length {
     final int length = _l.length;
+
+    /// Optimization: Flushes the list, if free.
     if (length == 0 && _l is! LFlat) _l = LFlat.empty<T>();
     return length;
   }
@@ -465,8 +480,32 @@ class IList<T> // ignore: must_be_immutable
 
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
   /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
-  /// change anything.
-  IList<T> maxLength(int maxLength) => IList._unsafe(_l.maxLength(maxLength), config: config);
+  /// change anything. If you want, you can provide a [priority] comparator, such as the
+  /// elements to be removed are the ones that would be in the end of a list sorted with
+  /// this comparator (the order of the remaining elements won't change).
+  IList<T> maxLength(
+    int maxLength, {
+    int Function(T a, T b) priority,
+  }) {
+    var originalLength = length;
+    if (originalLength <= maxLength)
+      return this;
+    else if (priority == null)
+      return IList._unsafe(_l.maxLength(maxLength), config: config);
+    else {
+      List<T> toBeRemovedFromEnd = unlock..sort(priority);
+      toBeRemovedFromEnd = toBeRemovedFromEnd.sublist(maxLength);
+      var result = <T>[];
+      for (int i = originalLength - 1; i >= 0; i--) {
+        var item = this[i];
+        if (!toBeRemovedFromEnd.contains(item))
+          result.add(item);
+        else
+          toBeRemovedFromEnd.remove(item);
+      }
+      return IList(result.reversed);
+    }
+  }
 
   /// Sorts this list according to the order specified by the [compare] function.
   ///
@@ -508,10 +547,10 @@ class IList<T> // ignore: must_be_immutable
   ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
   ///     print(numbers);  // [one, two, four, three]
   ///
-  IList<T> sortOrdered([int Function(T a, T b) compare]) {
-    List<T> list = unlock..sortOrdered(compare);
-    return IList._unsafeFromList(list, config: config);
-  }
+  IList<T> sortOrdered([int Function(T a, T b) compare]) =>
+      IList._unsafe(_l.sortOrdered(compare), config: config);
+
+  IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
   /// The first one contains all items which satisfy the provided [test].
@@ -719,9 +758,8 @@ class IList<T> // ignore: must_be_immutable
   int lastIndexOf(T element, [int start]) {
     var _length = length;
     start ??= _length;
-    if (start < 0 || start >= _length)
-      throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = _length - 1; i >= start; i--) if (this[i] == element) return i;
+    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--) if (this[i] == element) return i;
     return -1;
   }
 
@@ -746,9 +784,8 @@ class IList<T> // ignore: must_be_immutable
   int lastIndexWhere(bool Function(T element) test, [int start]) {
     var _length = length;
     start ??= _length;
-    if (start < 0 || start >= _length)
-      throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = _length - 1; i >= start; i--) if (test(this[i])) return i;
+    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--) if (test(this[i])) return i;
     return -1;
   }
 
@@ -1088,8 +1125,8 @@ abstract class L<T> implements Iterable<T> {
   /// If [compare] is not provided, it will use the natural ordering of the type [T].
   L<T> sort([int Function(T a, T b) compare]) => LFlat<T>.unsafe(unlock..sort(compare));
 
-  L<T> orderedSort([int Function(T a, T b) compare]) {
-    return LFlat<T>.unsafe(unlock..sort(compare));
+  L<T> sortOrdered([int Function(T a, T b) compare]) {
+    return LFlat<T>.unsafe(unlock..sortOrdered(compare));
   }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.

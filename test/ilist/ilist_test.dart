@@ -516,6 +516,21 @@ void main() {
       expect(ilist5.unlock, []);
     });
 
+    test("Priority", () {
+      final IList<int> ilist = [5, 5, 3, 8, 12, 18, 32, 2, 1, 9].lock;
+      expect(ilist.maxLength(3), [5, 5, 3]); // No priority.
+      expect(ilist.maxLength(100, priority: (int a, int b) => a.compareTo(b)),
+          [5, 5, 3, 8, 12, 18, 32, 2, 1, 9]); // No priority.
+      expect(ilist.maxLength(3, priority: (int a, int b) => a.compareTo(b)),
+          [3, 2, 1]); // No priority.
+      expect(ilist.maxLength(4, priority: (int a, int b) => a.compareTo(b)),
+          [5, 3, 2, 1]); // No priority.
+      expect(ilist.maxLength(5, priority: (int a, int b) => a.compareTo(b)),
+          [5, 5, 3, 2, 1]); // No priority.
+      expect(ilist.maxLength(6, priority: (int a, int b) => a.compareTo(b)),
+          [5, 5, 3, 8, 2, 1]); // No priority.
+    });
+
     test("Invalid argument", () => expect(() => ilist1.maxLength(-1), throwsArgumentError));
   });
 
