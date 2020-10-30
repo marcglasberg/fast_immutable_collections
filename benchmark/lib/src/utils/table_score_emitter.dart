@@ -10,23 +10,23 @@ import "config.dart";
 class TableScoreEmitter implements ScoreEmitter {
   final String _prefixName;
   final Config _config;
-  final Map<String, double> _scores = {};
+  final Map<String, double> _stopwatchRecords = {};
 
-  Map<String, double> get scores => _scores;
+  Map<String, double> get scores => _stopwatchRecords;
 
   TableScoreEmitter({@required String prefixName, Config config})
       : _prefixName = prefixName,
         _config = config;
 
   @override
-  void emit(String testName, double value) => _scores[testName] = value;
+  void emit(String testName, double time) => _stopwatchRecords[testName] = time;
 
   /// You can't get the [table] before the benchmarks have finished because all
   /// data is needed to build it.
   Map<String, Map<String, double>> get table {
     final Map<String, Map<String, double>> completeTable = {};
 
-    completeTable["scores"] = _scores;
+    completeTable["scores"] = _stopwatchRecords;
     completeTable["normalized"] = _normalizedAgainstMax;
     completeTable["normalizedAgainstList"] = _normalizedAgainstList;
     completeTable["normalizedAgainstRuns"] = _normalizedAgainstRuns;
@@ -44,7 +44,7 @@ class TableScoreEmitter implements ScoreEmitter {
         "x Mutable List Time,"
         "Time (${mu}s) / Run"
         "\n";
-    _scores.forEach((String testName, double score) => report += "$testName,"
+    _stopwatchRecords.forEach((String testName, double score) => report += "$testName,"
         "${score.toStringAsFixed(0).toString()},"
         "${completeTable["normalized"][testName].toString()},"
         "${completeTable["normalizedAgainstList"][testName].toString()},"
@@ -58,19 +58,19 @@ class TableScoreEmitter implements ScoreEmitter {
     final Map<String, double> normalizedColumn = {};
     final double maxScore = _maxScore();
 
-    _scores.forEach((String testName, double score) =>
+    _stopwatchRecords.forEach((String testName, double score) =>
         normalizedColumn[testName] = double.parse((score / maxScore).toStringAsFixed(2)));
 
     return normalizedColumn;
   }
 
-  double _maxScore() => _scores.values.toList().reduce(max);
+  double _maxScore() => _stopwatchRecords.values.toList().reduce(max);
 
   Map<String, double> get _normalizedAgainstMax {
     final Map<String, double> normalizedColumn = {};
     final double maxScore = _maxScore();
 
-    _scores.forEach((String testName, double score) =>
+    _stopwatchRecords.forEach((String testName, double score) =>
         normalizedColumn[testName] = double.parse((score / maxScore).toStringAsFixed(2)));
 
     return normalizedColumn;
@@ -79,9 +79,9 @@ class TableScoreEmitter implements ScoreEmitter {
   Map<String, double> get _normalizedAgainstList {
     final Map<String, double> normalizedAgainstListColumn = {};
     final double listScore =
-        _scores[_scores.keys.firstWhere((String key) => key.toLowerCase().contains("mutable"))];
+        _stopwatchRecords[_stopwatchRecords.keys.firstWhere((String key) => key.toLowerCase().contains("mutable"))];
 
-    _scores.forEach((String testName, double score) => normalizedAgainstListColumn[testName] =
+    _stopwatchRecords.forEach((String testName, double score) => normalizedAgainstListColumn[testName] =
         double.parse((score / listScore).toStringAsFixed(2)));
 
     return normalizedAgainstListColumn;
@@ -102,5 +102,5 @@ class TableScoreEmitter implements ScoreEmitter {
   }
 
   @override
-  String toString() => "Table Score Emitter: ${_scores.toString()}";
+  String toString() => "Table Score Emitter: ${_stopwatchRecords.toString()}";
 }

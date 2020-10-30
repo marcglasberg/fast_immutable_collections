@@ -1,5 +1,6 @@
 import "package:meta/meta.dart";
 
+@immutable
 class Config {
   final int runs, size;
 
