@@ -1196,7 +1196,7 @@ abstract class L<T> implements Iterable<T> {
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
 
   @override
-  String join([String separator = '']) => _getFlushed.join(separator);
+  String join([String separator = ""]) => _getFlushed.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
