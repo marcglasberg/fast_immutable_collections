@@ -534,7 +534,7 @@ void main() {
       expect(iList.contains(4), isTrue);
     });
 
-    test("Toggling an inexistent element", () {
+    test("Toggling a nonexistent element", () {
       expect(iList.contains(6), isFalse);
 
       iList = iList.toggle(6);
@@ -1050,6 +1050,18 @@ void main() {
         final int expectedTotal = shuffles * ((iList.first + iList.last) ~/ 2);
         final int maxError = expectedTotal ~/ 50;
         shuffledSum.forEach((int sum) => expect((expectedTotal - sum).abs(), lessThan(maxError)));
+      });
+
+      test("IList.whereMoveToTheEnd and whereMoveToTheFront methods", () {
+        final IList<int> numbs = [1, 5, 20, 21, 19, 16, 54, 50, 23, 55, 18, 20, 15].lock;
+
+        /// Even numbers to the end.
+        expect(numbs.whereMoveToTheEnd((n) => n % 2 == 0),
+            [1, 5, 21, 19, 23, 55, 15, 20, 16, 54, 50, 18, 20]);
+
+        /// Even numbers to the front.
+        expect(numbs.whereMoveToTheStart((n) => n % 2 == 0),
+            [20, 16, 54, 50, 18, 20, 1, 5, 21, 19, 23, 55, 15]);
       });
     });
   });

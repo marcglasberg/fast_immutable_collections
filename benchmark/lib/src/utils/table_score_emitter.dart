@@ -21,7 +21,7 @@ class TableScoreEmitter implements ScoreEmitter {
   @override
   void emit(String testName, double value) => _scores[testName] = value;
 
-  /// You can"t get the [table] before the benchmarks have finished because all
+  /// You can't get the [table] before the benchmarks have finished because all
   /// data is needed to build it.
   Map<String, Map<String, double>> get table {
     final Map<String, Map<String, double>> completeTable = {};

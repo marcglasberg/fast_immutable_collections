@@ -1,15 +1,16 @@
-import "dart:collection";
-import "dart:math";
-import "package:collection/collection.dart";
-import "package:meta/meta.dart";
-import "../imap/imap.dart";
-import "../iset/iset.dart";
-import "../utils/immutable_collection.dart";
-import "l_add.dart";
-import "l_add_all.dart";
-import "l_flat.dart";
-import "modifiable_list_view.dart";
-import "unmodifiable_list_view.dart";
+import 'dart:collection';
+import 'dart:math';
+import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
+import '../imap/imap.dart';
+import '../iset/iset.dart';
+import '../utils/immutable_collection.dart';
+import 'ilist_of_2.dart';
+import 'l_add.dart';
+import 'l_add_all.dart';
+import 'l_flat.dart';
+import 'modifiable_list_view.dart';
+import 'unmodifiable_list_view.dart';
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -21,13 +22,53 @@ extension IListExtension<T> on List<T> {
   /// Locks the list, returning an *immutable* list ([IList]).
   /// This is unsafe: Use it at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the list.
-  /// However, you should only use this with a new list you"ve created yourself,
+  /// However, you should only use this with a new list you've created yourself,
   /// when you are sure no external copies exist. If the original list is modified,
   /// it will break the IList and any other derived lists in unpredictable ways.
   /// Note you can optionally disallow unsafe constructors in the global configuration
   /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
   /// further configuration changes by calling `lockConfig()`).
   IList<T> get lockUnsafe => IList<T>.unsafe(this, config: defaultConfigList);
+
+  /// Sorts this list according to the order specified by the [compare] function.
+  ///
+  /// This is similar to [sort], but uses a merge sort algorithm
+  /// (https://en.wikipedia.org/wiki/Merge_sort).
+  ///
+  /// On contrary to [sort], [orderedSort] is stable, meaning distinct objects
+  /// that compare as equal end up in the same order as they started in.
+  ///
+  void sortOrdered([int Function(T a, T b) compare]) {
+    mergeSort(this, compare: compare);
+  }
+
+  /// Moves all items that satisfy the provided [test] to the end of the list.
+  /// Keeps the relative order of the moved items.
+  void whereMoveToTheEnd(bool Function(T item) test) {
+    var compare = (T f1, T f2) {
+      bool test1 = test(f1);
+      return (test1 == test(f2))
+          ? 0
+          : test1
+              ? 1
+              : -1;
+    };
+    sortOrdered(compare);
+  }
+
+  /// Moves all items that satisfy the provided [test] to the start of the list.
+  /// Keeps the relative order of the moved items.
+  void whereMoveToTheFront(bool Function(T item) test) {
+    var compare = (T f1, T f2) {
+      bool test1 = test(f1);
+      return (test1 == test(f2))
+          ? 0
+          : test1
+              ? -1
+              : 1;
+    };
+    sortOrdered(compare);
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +125,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Unsafe constructor. Use this at your own peril.
   /// This constructor is fast, since it makes no defensive copies of the list.
-  /// However, you should only use this with a new list you"ve created yourself,
+  /// However, you should only use this with a new list you've created yourself,
   /// when you are sure no external copies exist. If the original list is modified,
   /// it will break the IList and any other derived lists in unpredictable ways.
   /// Note you can optionally disallow unsafe constructors in the global configuration
@@ -172,8 +213,8 @@ class IList<T> // ignore: must_be_immutable
   /// If [isDeepEquals] configuration is false:
   /// Will return true only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
-  /// since it doesn"t compare each item.
-  /// Note: This is not the same as `identical(list1, list2)` since it doesn"t
+  /// since it doesn't compare each item.
+  /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   ///
@@ -219,8 +260,8 @@ class IList<T> // ignore: must_be_immutable
 
   /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
-  /// since it doesn"t compare each item.
-  /// Note: This is not the same as `identical(list1, list2)` since it doesn"t
+  /// since it doesn't compare each item.
+  /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
@@ -423,12 +464,87 @@ class IList<T> // ignore: must_be_immutable
   IList<E> whereType<E>() => IList._(_l.whereType<E>(), config: config);
 
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
-  /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn"t
+  /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
   /// change anything.
   IList<T> maxLength(int maxLength) => IList._unsafe(_l.maxLength(maxLength), config: config);
 
+  /// Sorts this list according to the order specified by the [compare] function.
+  ///
+  /// The [compare] function must act as a [Comparator].
+  ///
+  ///     IList<String> numbers = ['two', 'three', 'four'].lock;
+  ///     // Sort from shortest to longest.
+  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  ///     print(numbers);  // [two, four, three]
+  ///
+  /// The default List implementations use [Comparable.compare] if
+  /// [compare] is omitted.
+  ///
+  ///     IList<int> nums = [13, 2, -11].lock;
+  ///     nums = nums.sort();
+  ///     print(nums);  // [-11, 2, 13]
+  ///
+  /// A [Comparator] may compare objects as equal (return zero), even if they
+  /// are distinct objects.
+  /// The sort function is not guaranteed to be stable, so distinct objects
+  /// that compare as equal may occur in any order in the result:
+  ///
+  ///     IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  ///     print(numbers);  // [one, two, four, three] OR [two, one, four, three]
+  ///
   IList<T> sort([int Function(T a, T b) compare]) =>
       IList._unsafe(_l.sort(compare), config: config);
+
+  /// Sorts this list according to the order specified by the [compare] function.
+  ///
+  /// This is similar to [sort], but uses a merge sort algorithm
+  /// (https://en.wikipedia.org/wiki/Merge_sort).
+  ///
+  /// On contrary to [sort], [sortOrdered] is stable, meaning distinct objects
+  /// that compare as equal end up in the same order as they started in.
+  ///
+  ///     IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  ///     print(numbers);  // [one, two, four, three]
+  ///
+  IList<T> sortOrdered([int Function(T a, T b) compare]) {
+    List<T> list = unlock..sortOrdered(compare);
+    return IList._unsafeFromList(list, config: config);
+  }
+
+  /// Divides the list into two.
+  /// The first one contains all items which satisfy the provided [test].
+  /// The last one contains all the other items.
+  /// The relative order of the items will be maintained.
+  IListOf2<IList<T>> divideIn2(bool Function(T item) test) {
+    List<T> first = [];
+    List<T> last = [];
+    for (T item in this) {
+      if (test(item))
+        first.add(item);
+      else
+        last.add(item);
+    }
+    return IListOf2(
+      IList._unsafeFromList(first, config: config),
+      IList._unsafeFromList(last, config: config),
+    );
+  }
+
+  /// Moves all items that satisfy the provided [test] to the end of the list.
+  /// Keeps the relative order of the moved items.
+  IList<T> whereMoveToTheEnd(bool Function(T item) test) {
+    IListOf2<IList<T>> lists = divideIn2(test);
+    return lists.last + lists.first;
+  }
+
+  /// Moves all items that satisfy the provided [test] to the start of the list.
+  /// Keeps the relative order of the moved items.
+  IList<T> whereMoveToTheStart(bool Function(T item) test) {
+    IListOf2<IList<T>> lists = divideIn2(test);
+    return lists.first + lists.last;
+  }
 
   @override
   List<T> toList({bool growable = true}) => _l.toList(growable: growable);
@@ -450,9 +566,9 @@ class IList<T> // ignore: must_be_immutable
   /// in numerical order.
   ///
   /// ```dart
-  /// final IList<String> words = ["hel", "lo", "there"].lock;
+  /// final IList<String> words = ['hel', 'lo', 'there'].lock;
   /// final IMap<int, String> iMap = words.asMap();
-  /// print(iMap[0] + iMap[1]); // Prints "hello";
+  /// print(iMap[0] + iMap[1]); // Prints 'hello';
   /// iMap.keys.toList(); // [0, 1, 2, 3]
   /// ```
   IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListView(this).asMap());
@@ -469,15 +585,15 @@ class IList<T> // ignore: must_be_immutable
   /// If [start] is not provided, this method searches from the start of the list.
   ///
   /// ```dart
-  /// final IList<String> notes = ["do", "re", "mi", "re"].lock;
-  /// notes.indexOf("re");    // 1
-  /// notes.indexOf("re", 2); // 3
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// notes.indexOf('re');    // 1
+  /// notes.indexOf('re', 2); // 3
   /// ```
   ///
   /// Returns -1 if [element] is not found.
   ///
   /// ```dart
-  /// notes.indexOf("fa");    // -1
+  /// notes.indexOf('fa');    // -1
   /// ```
   int indexOf(T element, [int start = 0]) {
     start ??= 0;
@@ -558,15 +674,15 @@ class IList<T> // ignore: must_be_immutable
   /// the index of `o` is returned.
   ///
   /// ```dart
-  /// final IList<String> notes = ["do", "re", "mi", "re"].lock;
-  /// notes.indexWhere((note) => note.startsWith("r"));       // 1
-  /// notes.indexWhere((note) => note.startsWith("r"), 2);    // 3
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// notes.indexWhere((note) => note.startsWith('r'));       // 1
+  /// notes.indexWhere((note) => note.startsWith('r'), 2);    // 3
   /// ```
   ///
   /// Returns -1 if [element] is not found.
   ///
   /// ```dart
-  /// notes.indexWhere((note) => note.startsWith("k"));       // -1
+  /// notes.indexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int indexWhere(bool Function(T element) test, [int start = 0]) {
     start ??= 0;
@@ -585,20 +701,20 @@ class IList<T> // ignore: must_be_immutable
   /// the index of [:o:] is returned.
   ///
   /// ```dart
-  /// final IList<String> notes = ["do", "re", "mi", "re"].lock;
-  /// notes.lastIndexOf("re", 2); // 1
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// notes.lastIndexOf('re', 2); // 1
   /// ```
   ///
   /// If [start] is not provided, this method searches from the end of the list.
   ///
   /// ```dart
-  /// notes.lastIndexOf("re");    // 3
+  /// notes.lastIndexOf('re');    // 3
   /// ```
   ///
   /// Returns -1 if [element] is not found.
   ///
   /// ```dart
-  /// notes.lastIndexOf("fa");    // -1
+  /// notes.lastIndexOf('fa');    // -1
   /// ```
   int lastIndexOf(T element, [int start]) {
     var _length = length;
@@ -617,15 +733,15 @@ class IList<T> // ignore: must_be_immutable
   /// If [start] is omitted, it defaults to the [length] of the list.
   ///
   /// ```dart
-  /// final IList<String> notes = ["do", "re", "mi", "re"].lock;
-  /// notes.lastIndexWhere((note) => note.startsWith("r"));       // 3
-  /// notes.lastIndexWhere((note) => note.startsWith("r"), 2);    // 1
+  /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
+  /// notes.lastIndexWhere((note) => note.startsWith('r'));       // 3
+  /// notes.lastIndexWhere((note) => note.startsWith('r'), 2);    // 1
   /// ```
   ///
   /// Returns -1 if [element] is not found.
   ///
   /// ```dart
-  /// notes.lastIndexWhere((note) => note.startsWith("k"));       // -1
+  /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int lastIndexWhere(bool Function(T element) test, [int start]) {
     var _length = length;
@@ -641,12 +757,12 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// ```dart
   /// final IList<int> iList = [1, 2, 3, 4, 5].lock;
-  /// iList.replaceRange(1, 4, [6, 7]).join(", "); // "1, 6, 7, 5"
+  /// iList.replaceRange(1, 4, [6, 7]).join(', '); // '1, 6, 7, 5'
   /// ```
   ///
   /// The provided range, given by [start] and [end], must be valid.
   /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
-  /// `len` is this list"s `length`. The range starts at `start` and has length
+  /// `len` is this list's `length`. The range starts at `start` and has length
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   /// This method does not work on fixed-length lists, even when [replacement]
@@ -664,7 +780,7 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// The provided range, given by [start] and [end], must be valid.
   /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
-  /// `len` is this list"s `length`. The range starts at `start` and has length
+  /// `len` is this list's `length`. The range starts at `start` and has length
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   /// Example with [List]:
@@ -699,18 +815,18 @@ class IList<T> // ignore: must_be_immutable
   /// of the call.
   ///
   /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
-  /// `len` is this list"s `length`. The range starts at `start` and has length
+  /// `len` is this list's `length`. The range starts at `start` and has length
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   /// The returned [Iterable] behaves like `skip(start).take(end - start)`.
   /// That is, it does *not* throw if this list changes size.
   ///
   /// ```dart
-  /// final IList<String> colors = ["red", "green", "blue", "orange", "pink"].lock;
+  /// final IList<String> colors = ['red', 'green', 'blue', 'orange', 'pink'].lock;
   /// final Iterable<String> range = colors.getRange(1, 4);
-  /// range.join(", ");  // "green, blue, orange"
+  /// range.join(', ');  // 'green, blue, orange'
   /// colors.length = 3;
-  /// range.join(", ");  // "green, blue"
+  /// range.join(', ');  // 'green, blue'
   /// ```
   Iterable<T> getRange(int start, int end) {
     // TODO: Still need to implement efficiently.
@@ -798,7 +914,7 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// The provided range, given by [start] and [end], must be valid.
   /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
-  /// `len` is this list"s `length`. The range starts at `start` and has length
+  /// `len` is this list's `length`. The range starts at `start` and has length
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   IList<T> removeRange(int start, int end) {
@@ -813,9 +929,9 @@ class IList<T> // ignore: must_be_immutable
   /// An object [:o:] satisfies [test] if [:test(o):] is true.
   ///
   /// ```dart
-  /// final IList<String> numbers = ["one", "two", "three", "four"].lock;
+  /// final IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
   /// final IList<String> newNumbers = numbers.removeWhere((item) => item.length == 3);
-  /// newNumbers.join(", "); // "three, four"
+  /// newNumbers.join(', '); // 'three, four'
   /// ```
   IList<T> removeWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
@@ -829,9 +945,9 @@ class IList<T> // ignore: must_be_immutable
   /// An object [:o:] satisfies [test] if [:test(o):] is true.
   ///
   /// ```dart
-  /// final IList<String> numbers = ["one", "two", "three", "four"].lock;
+  /// final IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
   /// final IList<String> newNumbers = numbers.retainWhere((item) => item.length == 3);
-  /// newNumbers.join(", "); // "one, two"
+  /// newNumbers.join(', '); // 'one, two'
   /// ```
   IList<T> retainWhere(bool Function(T element) test) {
     // TODO: Still need to implement efficiently.
@@ -851,8 +967,8 @@ class IList<T> // ignore: must_be_immutable
   /// at position [index] in this list.
   ///
   /// ```dart
-  /// final IList<String> iList = ["a", "b", "c"].lock;
-  /// iList.setAll(1, ["bee", "sea"]).join(", "); // "a, bee, sea"
+  /// final IList<String> iList = ['a', 'b', 'c'].lock;
+  /// iList.setAll(1, ['bee', 'sea']).join(', '); // 'a, bee, sea'
   /// ```
   ///
   /// This operation does not increase the length of `this`.
@@ -878,12 +994,12 @@ class IList<T> // ignore: must_be_immutable
   /// final IList<int> iList1 = [1, 2, 3, 4].lock;
   /// final IList<int> iList2 = [5, 6, 7, 8, 9].lock;
   /// // Copies the 4th and 5th items in iList2 as the 2nd and 3rd items of iList1.
-  /// iList1.setRange(1, 3, iList2, 3).join(", "); // "1, 8, 9, 4"
+  /// iList1.setRange(1, 3, iList2, 3).join(', '); // '1, 8, 9, 4'
   /// ```
   ///
   /// The provided range, given by [start] and [end], must be valid.
   /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
-  /// `len` is this list"s `length`. The range starts at `start` and has length
+  /// `len` is this list's `length`. The range starts at `start` and has length
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
   /// The [iterable] must have enough objects to fill the range from `start`
@@ -917,7 +1033,7 @@ abstract class L<T> implements Iterable<T> {
   /// The [L] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
   /// Note these fallback methods need to calculate the flushed list, but
-  /// because that"s immutable, we cache it.
+  /// because that's immutable, we cache it.
   List<T> _flushed;
 
   /// Returns the flushed set (flushes it only once).
@@ -960,7 +1076,7 @@ abstract class L<T> implements Iterable<T> {
 
   // TODO: Still need to implement efficiently.
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
-  /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn"t
+  /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
   /// change anything.
   L<T> maxLength(int maxLength) => maxLength < 0
       ? throw ArgumentError(maxLength)
@@ -972,8 +1088,12 @@ abstract class L<T> implements Iterable<T> {
   /// If [compare] is not provided, it will use the natural ordering of the type [T].
   L<T> sort([int Function(T a, T b) compare]) => LFlat<T>.unsafe(unlock..sort(compare));
 
+  L<T> orderedSort([int Function(T a, T b) compare]) {
+    return LFlat<T>.unsafe(unlock..sort(compare));
+  }
+
   /// Sorts this list according to the order specified by the [ordering] iterable.
-  /// Elements which don"t appear in [ordering] will be included in the end, in no particular order.
+  /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
   /// Note: This is not very efficient. Only use for a small number of elements.
   L<T> sortLike(Iterable<T> ordering) {
     assert(ordering != null);
@@ -1039,7 +1159,7 @@ abstract class L<T> implements Iterable<T> {
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
 
   @override
-  String join([String separator = ""]) => _getFlushed.join(separator);
+  String join([String separator = '']) => _getFlushed.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

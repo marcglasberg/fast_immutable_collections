@@ -87,7 +87,7 @@ Size refers to the *length* of the original list before the insertion of the new
 
 ### 1.6. Contains
 
-This benchmark tests contains for *all* elements and, lastly, tries an inexistent one.
+This benchmark tests contains for *all* elements and, lastly, tries a nonexistent one.
 
 | Size |
 | ---- |

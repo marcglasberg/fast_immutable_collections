@@ -881,7 +881,7 @@ void main() {
         expect(item.value, 72);
       });
 
-      test("Updating an inexistent key", () {
+      test("Updating a nonexistent key", () {
         final IMap<String, int> scores = {"Bob": 36}.lock;
 
         final Item<int> item = Item();
@@ -893,7 +893,7 @@ void main() {
         expect(item.value, 1);
       });
 
-      test("Updating an inexistent key without the ifAbsent parameter yields an error", () {
+      test("Updating a nonexistent key without the ifAbsent parameter yields an error", () {
         final IMap<String, int> scores = {"Bob": 36}.lock;
 
         final Item<int> item = Item();

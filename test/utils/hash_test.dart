@@ -67,7 +67,7 @@ void main() {
 
   group("Hash4 |", () {
     // Not the complete permutations...
-    // Shouldn"t this be some sort of recursive algorithm anyway? Why hash1, hash2, etc?
+    // Shouldn't this be some sort of recursive algorithm anyway? Why hash1, hash2, etc?
     final List<int> hashList = [
       hash4(1, 2, 3, 4),
       hash4(1, 2, 3, 4),

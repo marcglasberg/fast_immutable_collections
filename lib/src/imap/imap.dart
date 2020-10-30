@@ -199,8 +199,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If [isDeepEquals] configuration is `false`:
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn"t compare each entry.
-  /// Note: This is not the same as `identical(map1, map2)` since it doesn"t
+  /// since it doesn't  compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   ///
@@ -238,8 +238,8 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn"t compare each entry.
-  /// Note: This is not the same as `identical(map1, map2)` since it doesn"t
+  /// since it doesn't  compare each entry.
+  /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
@@ -282,7 +282,7 @@ class IMap<K, V> // ignore: must_be_immutable
       IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
 
   /// Returns a new map containing the current map minus the given key and its value.
-  /// However, if the current map doesn"t contain the key,
+  /// However, if the current map doesn't  contain the key,
   /// it will return the current map (same instance).
   IMap<K, V> remove(K key) {
     M<K, V> result = _m.remove(key);
@@ -369,7 +369,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns an empty map with the same configuration.
   IMap<K, V> clear() => empty<K, V>(config);
 
-  /// Look up the value of [key], or add a new value if it isn"t there.
+  /// Look up the value of [key], or add a new value if it isn't there.
   ///
   /// Returns the modified map, and sets the [value] associated to [key],
   /// if there is one. Otherwise calls [ifAbsent] to get a new value,

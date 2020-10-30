@@ -708,7 +708,7 @@ void main() {
       expect(iSet.contains(3), isTrue);
     });
 
-    test("Toggling an inexistent element", () {
+    test("Toggling a nonexistent element", () {
       expect(iSet.contains(4), isFalse);
 
       iSet = iSet.toggle(4);
