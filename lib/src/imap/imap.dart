@@ -13,20 +13,6 @@ import "unmodifiable_map_view.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-extension IMapExtension<K, V> on Map<K, V> {
-  //
-  /// Locks the map, returning an *immutable* map ([IMap]).
-  IMap<K, V> get lock => IMap<K, V>(this);
-}
-
-extension IMapOfSetsExtension<K, V> on Map<K, Set<V>> {
-  //
-  /// Locks the map of sets, returning an *immutable* map ([IMapOfSets]).
-  IMapOfSets<K, V> get lock => IMapOfSets<K, V>(this);
-}
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
 /// An **immutable**, unordered map.
 @immutable
 class IMap<K, V> // ignore: must_be_immutable

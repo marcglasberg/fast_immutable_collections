@@ -1,7 +1,5 @@
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "dart:collection";
-
-import "../imap/imap.dart";
-import "../utils/immutable_collection.dart";
 
 class ModifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeEmpty {
   IMap<K, V> _iMap;

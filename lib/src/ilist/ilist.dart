@@ -1,75 +1,11 @@
-import 'dart:collection';
-import 'dart:math';
-import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
-import '../imap/imap.dart';
-import '../iset/iset.dart';
-import '../utils/immutable_collection.dart';
-import 'ilist_of_2.dart';
-import 'l_add.dart';
-import 'l_add_all.dart';
-import 'l_flat.dart';
-import 'modifiable_list_view.dart';
-import 'unmodifiable_list_view.dart';
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-extension IListExtension<T> on List<T> {
-  //
-  /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => IList<T>(this);
-
-  /// Locks the list, returning an *immutable* list ([IList]).
-  /// This is unsafe: Use it at your own peril.
-  /// This constructor is fast, since it makes no defensive copies of the list.
-  /// However, you should only use this with a new list you've created yourself,
-  /// when you are sure no external copies exist. If the original list is modified,
-  /// it will break the IList and any other derived lists in unpredictable ways.
-  /// Note you can optionally disallow unsafe constructors in the global configuration
-  /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
-  /// further configuration changes by calling `lockConfig()`).
-  IList<T> get lockUnsafe => IList<T>.unsafe(this, config: defaultConfigList);
-
-  /// Sorts this list according to the order specified by the [compare] function.
-  ///
-  /// This is similar to [sort], but uses a merge sort algorithm
-  /// (https://en.wikipedia.org/wiki/Merge_sort).
-  ///
-  /// On contrary to [sort], [orderedSort] is stable, meaning distinct objects
-  /// that compare as equal end up in the same order as they started in.
-  ///
-  void sortOrdered([int Function(T a, T b) compare]) {
-    mergeSort(this, compare: compare);
-  }
-
-  /// Moves all items that satisfy the provided [test] to the end of the list.
-  /// Keeps the relative order of the moved items.
-  void whereMoveToTheEnd(bool Function(T item) test) {
-    var compare = (T f1, T f2) {
-      bool test1 = test(f1);
-      return (test1 == test(f2))
-          ? 0
-          : test1
-              ? 1
-              : -1;
-    };
-    sortOrdered(compare);
-  }
-
-  /// Moves all items that satisfy the provided [test] to the start of the list.
-  /// Keeps the relative order of the moved items.
-  void whereMoveToTheFront(bool Function(T item) test) {
-    var compare = (T f1, T f2) {
-      bool test1 = test(f1);
-      return (test1 == test(f2))
-          ? 0
-          : test1
-              ? -1
-              : 1;
-    };
-    sortOrdered(compare);
-  }
-}
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "dart:collection";
+import "dart:math";
+import "package:collection/collection.dart";
+import "package:meta/meta.dart";
+import "l_add.dart";
+import "l_add_all.dart";
+import "l_flat.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -375,6 +311,8 @@ class IList<T> // ignore: must_be_immutable
   @override
   int get length {
     final int length = _l.length;
+
+    /// Optimization: Flushes the list, if free.
     if (length == 0 && _l is! LFlat) _l = LFlat.empty<T>();
     return length;
   }
@@ -465,8 +403,32 @@ class IList<T> // ignore: must_be_immutable
 
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
   /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
-  /// change anything.
-  IList<T> maxLength(int maxLength) => IList._unsafe(_l.maxLength(maxLength), config: config);
+  /// change anything. If you want, you can provide a [priority] comparator, such as the
+  /// elements to be removed are the ones that would be in the end of a list sorted with
+  /// this comparator (the order of the remaining elements won't change).
+  IList<T> maxLength(
+    int maxLength, {
+    int Function(T a, T b) priority,
+  }) {
+    var originalLength = length;
+    if (originalLength <= maxLength)
+      return this;
+    else if (priority == null)
+      return IList._unsafe(_l.maxLength(maxLength), config: config);
+    else {
+      List<T> toBeRemovedFromEnd = unlock..sort(priority);
+      toBeRemovedFromEnd = toBeRemovedFromEnd.sublist(maxLength);
+      var result = <T>[];
+      for (int i = originalLength - 1; i >= 0; i--) {
+        var item = this[i];
+        if (!toBeRemovedFromEnd.contains(item))
+          result.add(item);
+        else
+          toBeRemovedFromEnd.remove(item);
+      }
+      return IList(result.reversed);
+    }
+  }
 
   /// Sorts this list according to the order specified by the [compare] function.
   ///
@@ -508,10 +470,10 @@ class IList<T> // ignore: must_be_immutable
   ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
   ///     print(numbers);  // [one, two, four, three]
   ///
-  IList<T> sortOrdered([int Function(T a, T b) compare]) {
-    List<T> list = unlock..sortOrdered(compare);
-    return IList._unsafeFromList(list, config: config);
-  }
+  IList<T> sortOrdered([int Function(T a, T b) compare]) =>
+      IList._unsafe(_l.sortOrdered(compare), config: config);
+
+  IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
   /// The first one contains all items which satisfy the provided [test].
@@ -719,9 +681,8 @@ class IList<T> // ignore: must_be_immutable
   int lastIndexOf(T element, [int start]) {
     var _length = length;
     start ??= _length;
-    if (start < 0 || start >= _length)
-      throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = _length - 1; i >= start; i--) if (this[i] == element) return i;
+    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--) if (this[i] == element) return i;
     return -1;
   }
 
@@ -746,9 +707,8 @@ class IList<T> // ignore: must_be_immutable
   int lastIndexWhere(bool Function(T element) test, [int start]) {
     var _length = length;
     start ??= _length;
-    if (start < 0 || start >= _length)
-      throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = _length - 1; i >= start; i--) if (test(this[i])) return i;
+    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--) if (test(this[i])) return i;
     return -1;
   }
 
@@ -1088,8 +1048,8 @@ abstract class L<T> implements Iterable<T> {
   /// If [compare] is not provided, it will use the natural ordering of the type [T].
   L<T> sort([int Function(T a, T b) compare]) => LFlat<T>.unsafe(unlock..sort(compare));
 
-  L<T> orderedSort([int Function(T a, T b) compare]) {
-    return LFlat<T>.unsafe(unlock..sort(compare));
+  L<T> sortOrdered([int Function(T a, T b) compare]) {
+    return LFlat<T>.unsafe(unlock..sortOrdered(compare));
   }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
@@ -1159,7 +1119,7 @@ abstract class L<T> implements Iterable<T> {
   void forEach(void Function(T element) f) => _getFlushed.forEach(f);
 
   @override
-  String join([String separator = '']) => _getFlushed.join(separator);
+  String join([String separator = ""]) => _getFlushed.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>

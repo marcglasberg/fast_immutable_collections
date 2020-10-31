@@ -1,9 +1,6 @@
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "dart:collection";
-
 import "package:meta/meta.dart";
-
-import "../utils/immutable_collection.dart";
-import "../iset/iset.dart";
 
 @immutable
 class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
