@@ -129,22 +129,24 @@ void main() {
 
       final LeftLegend leftLegend = LeftLegend(results: recordsColumn);
 
-      expect(leftLegend.rows, ["List (Mutable)", "IList"]);
+      expect(leftLegend.rows, ["Collection", "List (Mutable)", "IList"]);
     });
   });
 
   group("RecordsTable |", () {
-    RecordsColumn recordsColumn = RecordsColumn.empty();
+    RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
     recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
     recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
     recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
-    final RecordsTable recordsTable = RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+    final RecordsTable recordsTable =
+        RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
 
     test("Left, legend column", () {
       expect(recordsTable.leftLegend, isA<LeftLegend>());
-      expect(recordsTable.leftLegend.rows, ["List (Mutable)", "IList", "KtList", "BuiltList"]);
+      expect(recordsTable.leftLegend.rows,
+          ["Collection", "List (Mutable)", "IList", "KtList", "BuiltList"]);
     });
 
     test("Normalized against max Column", () {
@@ -155,6 +157,7 @@ void main() {
       recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: 1);
 
       expect(recordsTable.normalizedAgainstMax, recordsColumnAnswer);
+      expect(recordsTable.normalizedAgainstMax.title, "x Max Time");
     });
 
     test("Normalized against min column", () {
@@ -165,6 +168,7 @@ void main() {
       recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: 3);
 
       expect(recordsTable.normalizedAgainstMin, recordsColumnAnswer);
+      expect(recordsTable.normalizedAgainstMin.title, "x Min Time");
     });
 
     test("Normalized against the mutable result", () {
@@ -175,6 +179,7 @@ void main() {
       recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: 3);
 
       expect(recordsTable.normalizedAgainstMutable, recordsColumnAnswer);
+      expect(recordsTable.normalizedAgainstMutable.title, "x Mutable Time");
     });
 
     test("Normalized against runs", () {
@@ -185,6 +190,7 @@ void main() {
       recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: .3);
 
       expect(recordsTable.normalizedAgainstRuns, recordsColumnAnswer);
+      expect(recordsTable.normalizedAgainstRuns.title, "Time (μs) / Runs");
     });
 
     test("Normalized against size", () {
@@ -195,6 +201,18 @@ void main() {
       recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: .03);
 
       expect(recordsTable.normalizedAgainstSize, recordsColumnAnswer);
+      expect(recordsTable.normalizedAgainstSize.title, "Time (μs) / Size");
+    });
+
+    test("toString method (for saving it as CSV)", () {
+      const String correctTableAsString = "Collection,Time (μs),"
+          "x Max Time,x Max Time,x Mutable Time,Time (μs) / Runs,Time (μs) / Size\n"
+          "List (Mutable),15.0,0.5,0.5,1.5,0.15,0.01\n"
+          "IList,20.0,0.67,0.67,2.0,0.2,0.02\n"
+          "KtList,30.0,1.0,1.0,3.0,0.3,0.03\n"
+          "";
+
+      expect(recordsTable.toString(), correctTableAsString);
     });
   });
 }
