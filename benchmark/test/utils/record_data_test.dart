@@ -5,10 +5,10 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  group("StopwatchRecord |", () {
-    const TypeMatcher<AssertionError> isAssertionError = TypeMatcher<AssertionError>();
-    final Matcher throwsAssertionError = throwsA(isAssertionError);
+  const TypeMatcher<AssertionError> isAssertionError = TypeMatcher<AssertionError>();
+  final Matcher throwsAssertionError = throwsA(isAssertionError);
 
+  group("StopwatchRecord |", () {
     test("Can't pass null", () {
       expect(() => StopwatchRecord(collectionName: null, record: null), throwsAssertionError);
       expect(() => StopwatchRecord(collectionName: null, record: 10), throwsAssertionError);
@@ -57,6 +57,11 @@ void main() {
       expect(recordsColumn.records, allOf(isA<IList<StopwatchRecord>>(), isEmpty));
     });
 
+    test("Title cannot be null nor have length equal to zero", () {
+      expect(() => RecordsColumn.empty(title: null), throwsAssertionError);
+      expect(() => RecordsColumn.empty(title: ""), throwsAssertionError);
+    });
+
     test("Adding a record", () {
       final RecordsColumn recordsColumn = RecordsColumn.empty();
       const StopwatchRecord record = StopwatchRecord(collectionName: "list", record: 10);
@@ -69,21 +74,23 @@ void main() {
               isNotEmpty));
     });
 
-    test("Extracting the column's maximum value", () {
+    group("Min & Max |", () {
       RecordsColumn recordsColumn = RecordsColumn.empty();
       recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
       recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
       recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
       recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
 
-      expect(recordsColumn.max, 100);
+      test("Extracting the column's maximum value", () => expect(recordsColumn.max, 100));
+
+      test("Extracting the column's minimum value", () => expect(recordsColumn.min, 10));
     });
 
-    test("Extracting the column's List value", () {
+    test("Extracting the column's List's value", () {
       RecordsColumn recordsColumn = RecordsColumn.empty();
       recordsColumn += StopwatchRecord(collectionName: "list (mutable)", record: 10);
       recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
-      
+
       expect(recordsColumn.mutableRecord, 10);
     });
 
@@ -111,6 +118,83 @@ void main() {
 
       expect(recordsColumn.toString(),
           "RecordsColumn: [StopwatchRecord: (collectionName: list, record: 10.0)]");
+    });
+  });
+
+  group("LeftLegend |", () {
+    test("The rows contain all of the collection names", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty();
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 11);
+
+      final LeftLegend leftLegend = LeftLegend(results: recordsColumn);
+
+      expect(leftLegend.rows, ["List (Mutable)", "IList"]);
+    });
+  });
+
+  group("RecordsTable |", () {
+    RecordsColumn recordsColumn = RecordsColumn.empty();
+    recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+    recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+    recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+    recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+    final RecordsTable recordsTable = RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
+    test("Left, legend column", () {
+      expect(recordsTable.leftLegend, isA<LeftLegend>());
+      expect(recordsTable.leftLegend.rows, ["List (Mutable)", "IList", "KtList", "BuiltList"]);
+    });
+
+    test("Normalized against max Column", () {
+      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
+      recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .33);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .5);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "KtList", record: .67);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: 1);
+
+      expect(recordsTable.normalizedAgainstMax, recordsColumnAnswer);
+    });
+
+    test("Normalized against min column", () {
+      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
+      recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: 1.5);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "KtList", record: 2);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: 3);
+
+      expect(recordsTable.normalizedAgainstMin, recordsColumnAnswer);
+    });
+
+    test("Normalized against the mutable result", () {
+      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
+      recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: 1.5);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "KtList", record: 2);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: 3);
+
+      expect(recordsTable.normalizedAgainstMutable, recordsColumnAnswer);
+    });
+
+    test("Normalized against runs", () {
+      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
+      recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .1);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .15);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "KtList", record: .2);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: .3);
+
+      expect(recordsTable.normalizedAgainstRuns, recordsColumnAnswer);
+    });
+
+    test("Normalized against size", () {
+      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
+      recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .01);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .01);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "KtList", record: .02);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: .03);
+
+      expect(recordsTable.normalizedAgainstSize, recordsColumnAnswer);
     });
   });
 }
