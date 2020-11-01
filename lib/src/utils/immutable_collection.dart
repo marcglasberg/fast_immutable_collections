@@ -94,12 +94,12 @@ extension BooleanExtension on bool {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-class Item<T> {
+class Output<T> {
   T _value;
 
   T get value => _value;
 
-  Item();
+  Output();
 
   void set(T value) {
     if (_value != null) throw StateError("Value can't be set.");
@@ -112,7 +112,7 @@ class Item<T> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Item && runtimeType == other.runtimeType && _value == other._value;
+      other is Output && runtimeType == other.runtimeType && _value == other._value;
 
   @override
   int get hashCode => _value.hashCode;

@@ -208,9 +208,9 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Reusage by composition", () {
-    var james = Student("James", 18);
-    var sara = Student("Sara", 45);
-    var lucy = Student("Lucy", 78);
+    var james = Student("James");
+    var sara = Student("Sara");
+    var lucy = Student("Lucy");
 
     var students = Students().add(james).addAll([sara, lucy]);
 
@@ -220,28 +220,77 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  testAndPrint("IMapOfSets", () {
+    var james = Student("James");
+    var sara = Student("Sara");
+    var lucy = Student("Lucy");
+    var bill = Student("Bill");
+    var megan = Student("Megan");
+
+    var math = Course("Math");
+    var geo = Course("Geography");
+    var arts = Course("Arts");
+    var english = Course("English");
+
+    var studentsPerCourse = StudentsPerCourse()
+        //
+        .addStudentToCourse(sara, math)
+        //
+        .addStudentsToCourse([james, lucy], math)
+        //
+        .addStudentsToCourse([lucy], arts)
+        //
+        .addStudentToCourse(bill, arts)
+        //
+        .addStudentsToCourses({
+          math: {bill},
+          geo: {lucy, sara}
+        })
+        //
+        .addStudentToCourses(megan, [english, arts]);
+
+    expect(
+      studentsPerCourse.toMap(),
+      {
+        math: {james, sara, lucy, bill},
+        geo: {lucy, sara},
+        arts: {lucy, bill, megan},
+        english: {megan},
+      },
+    );
+
+    expect(studentsPerCourse.courses(), {math, geo, arts, english});
+
+    expect(studentsPerCourse.removeCourse(arts).courses(), {math, geo, english});
+
+    expect(studentsPerCourse.students(), {james, sara, lucy, bill, megan});
+
+    expect(studentsPerCourse.studentsInAlphabeticOrder(), [bill, james, lucy, megan, sara]);
+
+    expect(studentsPerCourse.studentNamesInAlphabeticOrder(),
+        ["Bill", "James", "Lucy", "Megan", "Sara"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 class Student {
   final String name;
-  final int age;
 
-  Student(this.name, this.age);
+  Student(this.name);
 
   @override
-  String toString() => "Student{name: $name, age: $age}";
+  String toString() => name;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Student &&
-          runtimeType == other.runtimeType &&
-          name == other.name &&
-          age == other.age;
+      other is Student && runtimeType == other.runtimeType && name == other.name;
 
   @override
-  int get hashCode => name.hashCode ^ age.hashCode;
+  int get hashCode => name.hashCode;
 }
 
 class Students with IListMixin<Student, Students> {
@@ -255,5 +304,74 @@ class Students with IListMixin<Student, Students> {
   @override
   IList<Student> get iList => _students;
 
-  String greetings() => "Hello ${_students.map((s) => s.name).join(", ")}.";
+  String greetings() => "Hello ${_students.join(", ")}.";
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Course {
+  final String name;
+
+  Course(this.name);
+
+  @override
+  String toString() => name;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Course && runtimeType == other.runtimeType && name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class StudentsPerCourse {
+  final IMapOfSets<Course, Student> imap;
+
+  StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
+      : imap = (studentsPerCourse ?? {}).lock;
+
+  StudentsPerCourse._(this.imap);
+
+  ISet<Course> courses() => imap.keysAsSet;
+
+  ISet<Student> students() => imap.valuesAsSet;
+
+  IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
+
+  IList<Student> studentsInAlphabeticOrder() =>
+      imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
+
+  IList<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
+
+  StudentsPerCourse addStudentToCourse(Student student, Course course) =>
+      StudentsPerCourse._(imap.add(course, student));
+
+  StudentsPerCourse addStudentToCourses(Student student, Iterable<Course> courses) =>
+      StudentsPerCourse._(imap.addValuesToKeys(courses, [student]));
+
+  StudentsPerCourse addStudentsToCourse(Iterable<Student> students, Course course) =>
+      StudentsPerCourse._(imap.addValues(course, students));
+
+  StudentsPerCourse addStudentsToCourses(Map<Course, Set<Student>> studentsPerCourse) =>
+      StudentsPerCourse._(imap.addMap(studentsPerCourse));
+
+  StudentsPerCourse removeStudentFromCourse(Student student, Course course) =>
+      StudentsPerCourse._(imap.remove(course, student));
+
+  StudentsPerCourse removeStudentFromAllCourses(Student student) =>
+      StudentsPerCourse._(imap.removeValues([student]));
+
+  StudentsPerCourse removeCourse(Course course) => StudentsPerCourse._(imap.removeSet(course));
+
+  Map<Course, Set<Student>> toMap() => imap.unlock;
+
+  int get numberOfCourses => imap.lengthOfKeys;
+
+  int get numberOfStudents => imap.lengthOfNonRepeatingValues;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////

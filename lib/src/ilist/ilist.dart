@@ -853,7 +853,7 @@ class IList<T> // ignore: must_be_immutable
   /// The [index] must be in the range `0 ≤ index < length`.
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
-  IList<T> removeAt(int index, [Item<T> removedItem]) {
+  IList<T> removeAt(int index, [Output<T> removedItem]) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
     var value = list.removeAt(index);
@@ -866,7 +866,7 @@ class IList<T> // ignore: must_be_immutable
   /// The list must not be empty.
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
-  IList<T> removeLast([Item<T> removedItem]) {
+  IList<T> removeLast([Output<T> removedItem]) {
     return removeAt(length - 1, removedItem);
   }
 
