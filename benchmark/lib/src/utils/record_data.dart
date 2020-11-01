@@ -140,7 +140,7 @@ class RecordsTable {
     final IList<RecordsColumn> numericColumns = [
       resultsColumn,
       normalizedAgainstMax,
-      normalizedAgainstMax,
+      normalizedAgainstMin,
       normalizedAgainstMutable,
       normalizedAgainstRuns,
       normalizedAgainstSize,

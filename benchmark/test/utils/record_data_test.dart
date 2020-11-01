@@ -206,7 +206,7 @@ void main() {
 
     test("toString method (for saving it as CSV)", () {
       const String correctTableAsString = "Collection,Time (μs),"
-          "x Max Time,x Max Time,x Mutable Time,Time (μs) / Runs,Time (μs) / Size\n"
+          "x Max Time,x Min Time,x Mutable Time,Time (μs) / Runs,Time (μs) / Size\n"
           "List (Mutable),15.0,0.5,0.5,1.5,0.15,0.01\n"
           "IList,20.0,0.67,0.67,2.0,0.2,0.02\n"
           "KtList,30.0,1.0,1.0,3.0,0.3,0.03\n"
