@@ -967,14 +967,14 @@ void main() {
     group("Remove |", () {
       test("IList.removeAt method", () {
         expect(notes.removeAt(2), ["do", "re", "re"]);
-        final Item<String> item = Item();
+        final Output<String> item = Output();
         expect(notes.removeAt(1, item), ["do", "mi", "re"]);
         expect(item.value, "re");
       });
 
       test("IList.removeLast method", () {
         expect(notes.removeLast(), ["do", "re", "mi"]);
-        final Item<String> item = Item();
+        final Output<String> item = Output();
         expect(notes.removeLast(item), ["do", "re", "mi"]);
         expect(item.value, "re");
       });

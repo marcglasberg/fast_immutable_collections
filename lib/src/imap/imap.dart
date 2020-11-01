@@ -1,10 +1,7 @@
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "dart:collection";
 import "package:collection/collection.dart";
 import "package:meta/meta.dart";
-import "../ilist/ilist.dart";
-import "../imap_of_sets/imap_of_sets.dart";
-import "../iset/iset.dart";
-import "../utils/immutable_collection.dart";
 import "m_add.dart";
 import "m_add_all.dart";
 import "m_flat.dart";
@@ -378,7 +375,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Calling [ifAbsent] must not add or remove keys from the map.
   ///
-  IMap<K, V> putIfAbsent(K key, V Function() ifAbsent, {Item<V> value}) {
+  IMap<K, V> putIfAbsent(K key, V Function() ifAbsent, {Output<V> value}) {
     // TODO: Still need to implement efficiently.
     Map<K, V> map = unlock;
     var result = map.putIfAbsent(key, ifAbsent);
@@ -398,7 +395,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// It"s an error if the key is not present and [ifAbsent] is not provided.
   ///
-  IMap<K, V> update(K key, V Function(V value) update, {V Function() ifAbsent, Item<V> value}) {
+  IMap<K, V> update(K key, V Function(V value) update, {V Function() ifAbsent, Output<V> value}) {
     // TODO: Still need to implement efficiently.
     Map<K, V> map = unlock;
     var result = map.update(key, update, ifAbsent: ifAbsent);

@@ -853,9 +853,9 @@ void main() {
     test("IMap.putIfAbsent", () {
       IMap<String, int> scores = {"Bob": 36}.lock;
 
-      Item<int> item;
+      Output<int> item;
       for (String key in ["Bob", "Rohan", "Sophia"]) {
-        item = Item();
+        item = Output();
         // TODO: Marcelo, nomear o parametro de `value` mas com tipo `Item`, que contém um `value`
         // como propriedade me parece um tanto confuso. E o método `update` ainda possui `value`
         // como parâmetro da função de `update`.
@@ -872,7 +872,7 @@ void main() {
       test("Updating an existing key", () {
         final IMap<String, int> scores = {"Bob": 36}.lock;
 
-        final Item<int> item = Item();
+        final Output<int> item = Output();
         final IMap<String, int> updatedScores =
             scores.update("Bob", (int value) => value * 2, value: item);
 
@@ -884,7 +884,7 @@ void main() {
       test("Updating a nonexistent key", () {
         final IMap<String, int> scores = {"Bob": 36}.lock;
 
-        final Item<int> item = Item();
+        final Output<int> item = Output();
         final IMap<String, int> updatedScores =
             scores.update("Joe", (int value) => value * 2, value: item, ifAbsent: () => 1);
 
@@ -896,7 +896,7 @@ void main() {
       test("Updating a nonexistent key without the ifAbsent parameter yields an error", () {
         final IMap<String, int> scores = {"Bob": 36}.lock;
 
-        final Item<int> item = Item();
+        final Output<int> item = Output();
         expect(() => scores.update("Joe", (int value) => value * 2, value: item),
             throwsUnsupportedError);
       });

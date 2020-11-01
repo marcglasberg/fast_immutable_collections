@@ -89,9 +89,9 @@ void main() {
   });
 
   group("Item |", () {
-    Item<int> item;
+    Output<int> item;
 
-    setUp(() => item = Item());
+    setUp(() => item = Output());
 
     test("Item.value is initially null", () => expect(item.value, isNull));
 
@@ -111,9 +111,9 @@ void main() {
     });
 
     group("Equals and Hash |", () {
-      final Item<int> item1 = Item();
-      final Item<int> item2 = Item();
-      final Item<int> item3 = Item();
+      final Output<int> item1 = Output();
+      final Output<int> item2 = Output();
+      final Output<int> item3 = Output();
       item1.set(10);
       item2.set(10);
       item3.set(1);

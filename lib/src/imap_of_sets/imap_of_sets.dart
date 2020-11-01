@@ -1,3 +1,4 @@
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "dart:collection";
 import "package:meta/meta.dart";
 import "../ilist/ilist.dart";
@@ -177,6 +178,18 @@ class IMapOfSets<K, V> //
     return identical(set, newSet) ? this : replaceSet(key, newSet);
   }
 
+  /// Add all [values] to each [set] of all given [keys].
+  /// If the [key] doesn't  exist, will first create it with an empty [set],
+  /// and then add the [values] to it.
+  ///
+  IMapOfSets<K, V> addValuesToKeys(Iterable<K> keys, Iterable<V> values) {
+    var result = this;
+    for (K key in keys) {
+      result = result.addValues(key, values);
+    }
+    return result;
+  }
+
   /// Find the [key]/[set] entry, and remove the [value] from the [set].
   /// If the [key] doesn't  exist, don't do anything.
   /// It the [set] becomes empty, the [key] will be removed entirely.
@@ -192,6 +205,80 @@ class IMapOfSets<K, V> //
       return removeSet(key);
     else
       return replaceSet(key, newSet);
+  }
+
+  /// Remove all given [values] from all sets.
+  /// If some [set] becomes empty, the [key] will be removed entirely.
+  /// If you want, you can pass [numberOfRemovedValues] to get the number of removed values.
+  ///
+  IMapOfSets<K, V> removeValues(
+    List<V> values, {
+    Output<int> numberOfRemovedValues,
+  }) {
+    int countRemoved = 0;
+
+    Map<K, ISet<V>> map = {};
+    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      K key = entry.key;
+      ISet<V> set = entry.value;
+      ISet<V> newSet = set.removeAll(values);
+
+      int setLength = set.length;
+      int newSetLength = newSet.length;
+
+      countRemoved += setLength - newSetLength;
+
+      if (newSetLength == 0) {
+        // Set is empty. Discard the key:set.
+      } else if (setLength == newSetLength) {
+        // Set was NOT modified.
+        map[key] = set;
+      } else {
+        // Set was modified.
+        map[key] = newSet;
+      }
+    }
+
+    if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
+
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+  }
+
+  /// Remove, from all sets, all given [values] that satisfy the given [test].
+  /// If some [set] becomes empty, the [key] will be removed entirely.
+  /// If you want, you can pass [numberOfRemovedValues] to get the number of removed values.
+  ///
+  IMapOfSets<K, V> removeValuesWhere(
+    bool Function(K key, V value) test, {
+    Output<int> numberOfRemovedValues,
+  }) {
+    int countRemoved = 0;
+
+    Map<K, ISet<V>> map = {};
+    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      K key = entry.key;
+      ISet<V> set = entry.value;
+      ISet<V> newSet = set.removeWhere((value) => test(key, value));
+
+      int setLength = set.length;
+      int newSetLength = newSet.length;
+
+      countRemoved += setLength - newSetLength;
+
+      if (newSetLength == 0) {
+        // Set is empty. Discard the key:set.
+      } else if (setLength == newSetLength) {
+        // Set was NOT modified.
+        map[key] = set;
+      } else {
+        // Set was modified.
+        map[key] = newSet;
+      }
+    }
+
+    if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
+
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
   /// Removes the [value] from the [set] of the corresponding [key],
@@ -343,7 +430,22 @@ class IMapOfSets<K, V> //
   ///
   /// The operation is equivalent to doing [addValues] for each key:set in [map].
   ///
-  IMapOfSets<K, V> addAll(Map<K, Set<V>> map) {
+  IMapOfSets<K, V> addMap(Map<K, Set<V>> map) {
+    return addEntries(map.entries);
+  }
+
+  /// Adds all set values to this map.
+  ///
+  /// For each key that is already in this map, its resulting set will contain
+  /// the values of the original map, plus the ones of the other [map].
+  ///
+  /// For example: if `map = {"a": {1, 2}}`, then
+  /// `map.addAll({"a": {3}, "b": {4}})` will result in
+  /// `{"a": {1, 2, 3}, "b": {4}}`
+  ///
+  /// The operation is equivalent to doing [addValues] for each key:set in [map].
+  ///
+  IMapOfSets<K, V> addIMap(IMap<K, Set<V>> map) {
     return addEntries(map.entries);
   }
 
@@ -419,4 +521,22 @@ class IMapOfSets<K, V> //
   /// of invoking [update].
   IMapOfSets<K, V> updateAll(ISet<V> Function(K key, ISet<V> set) update) =>
       IMapOfSets<K, V>.from(_mapOfSets.updateAll(update), config: config);
+
+  /// Return a map where the keys are the values, and the values are the keys.
+  IMapOfSets<V, K> invertKeysAndValues([ConfigMapOfSets config]) {
+    Map<V, Set<K>> result = {};
+    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      K key = entry.key;
+      ISet<V> set = entry.value;
+      for (V value in set) {
+        var destSet = result[value];
+        if (destSet == null) {
+          destSet = {};
+          result[value] = destSet;
+        }
+        destSet.add(key);
+      }
+    }
+    return IMapOfSets<V, K>.withConfig(result, config);
+  }
 }

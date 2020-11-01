@@ -29,14 +29,13 @@ This package provides:
 but it's much **easier** to use than the former, 
 and orders of magnitude **faster** than the latter.
 
-The reason it's easier than built_collection is that there is no need for mutable/immutable cycles.
+The reason it's easier than _built_collection_ is that there is no need for mutable/immutable cycles.
 You just create your immutable collections and use them directly. 
 
-The reason it's faster than kt_dart is that it creates immutable collections by 
+The reason it's faster than _kt_dart_ is that it creates immutable collections by 
 internally saving only the difference between each collection, 
 instead of copying the whole collection each time.
-This is transparent to the developer, 
-which doesn't need to know about these implementation details. 
+This is transparent to the developer, which doesn't need to know about these implementation details. 
 Later in this document, we provide benchmarks so that you can compare speeds
 (and you can also run the benchmarks yourself).
 
@@ -338,18 +337,19 @@ You can globally change this default if you want, by using the `defaultConfigLis
 ```dart
 var list = [1, 2];
 
-// The default.
+/// The default is deep-equals.
 var ilistA1 = IList(list);
 var ilistA2 = IList(list);
 print(ilistA1 == ilistA2); // True!
 
-// Change the default to identity equals, for lists created from now on.
+/// Now we change the default to identity-equals. 
+/// This will affect lists created from now on.
 defaultConfigList = ConfigList(isDeepEquals: false);
 var ilistB1 = IList(list);
 var ilistB2 = IList(list);
 print(ilistB1 == ilistB2); // False!
 
-// Already created lists are not changed.
+/// Configuration changes don't affect existing lists.
 print(ilistA1 == ilistA2); // True!
 ```                                                                        
 
@@ -402,27 +402,20 @@ is only comparing lists with lists, set with sets, etc.
 
 ### IList reuse by composition
 
-You can use `IListMixin` and `IterableIListMixin` to easily 
+Classes `IListMixin` and `IterableIListMixin` let you easily 
 create your own immutable classes based on the `IList`.
-This helps you create a more strongly typed collection, 
-and add your own methods to it.
+This helps you create more strongly typed collections, 
+and add your own methods to them.
 
 For example, suppose you have some `Student` class:
 
 ```dart
 class Student {
-   final String name;
-   final int age;
-   
-   Student(this.name, this.age);  
-
-   String toString() => 'Student{name: $name, age: $age}';  
-
-   bool operator ==(Object other) =>
-      identical(this, other) || other is Student && runtimeType == other.runtimeType &&
-          name == other.name && age == other.age;
-  
-   int get hashCode => name.hashCode ^ age.hashCode;
+   final String name;   
+   Student(this.name); 
+   String toString() => name; 
+   bool operator ==(Object other) => identical(this, other) || other is Student && runtimeType == other.runtimeType && name == other.name;  
+   int get hashCode => name.hashCode;
 }
 ```
 
@@ -441,16 +434,16 @@ class Students with IListMixin<Student, Students> {
    IList<Student> get iList => _students;   
                                                         
    /// And then you can add your own specific methods:
-   String greetings() => "Hello ${_students.map((s) => s.name).join(", ")}.";
+   String greetings() => "Hello ${_students.join(", ")}.";
 }
 ```    
 
 And then use the class:
 
 ```dart  
-var james = Student("James", 18);
-var sara = Student("Sara", 45);
-var lucy = Student("Lucy", 78);
+var james = Student("James");
+var sara = Student("Sara");
+var lucy = Student("Lucy");
               
 // Most IList methods are available:
 var students = Students().add(james).addAll([sara, lucy]);
@@ -555,6 +548,80 @@ In other words, it will unlock the `IList` lazily, only if necessary.
 If you never mutate the list, it will be very fast to lock this list
 back into an `IList`.
 
+# IMapOfSets
+
+When you lock a `Map<K, V>` it turns into an `IMap<K, V>`.
+
+However, a locked `Map<K, Set<V>>` turns into an `IMapOfSets<K, V>`.  
+ 
+ ```dart
+/// Map to IMap
+IMap<K, V> map = {'a': 1, 'b': 2}.lock;
+
+/// Map to IMapOfSets
+IMapOfSets<K, V> map = {'a': {1, 2}, 'b': {3, 4}}.lock;
+```
+
+The `IMapOfSets` lets you add / remove **values**, 
+without having to think about the **sets** that contain them.
+For example:
+
+ ```dart
+IMapOfSets<K, V> map = {'a': {1, 2}, 'b': {3, 4}}.lock;
+
+// Prints {'a': {1, 2, 3}, 'b': {3, 4}}
+print(map.add('a', 3)); 
+```
+ 
+
+Suppose you want to create an immutable structure 
+that lets you arrange `Student`s into `Course`s.
+Each student can be enrolled into one or more courses. 
+
+This can be modeled by a map where the keys are the courses, and the values are sets of students.
+
+Implementing structures that **nest** immutable collections like this can be quite tricky.
+That's when an `IMapOfSets` comes handy:
+
+```dart
+class StudentsPerCourse {   
+  final IMapOfSets<Course, Student> imap;
+  StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+  StudentsPerCourse._(this._studentsPerCourse);
+  ISet<Course> courses() => imap.keysAsSet;
+  ISet<Student> students() => imap.valuesAsSet;
+  IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
+  IList<Student> studentsInAlphabeticOrder() => imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
+  IList<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
+  StudentsPerCourse addStudentToCourse(Student student, Course course) => StudentsPerCourse._(imap.add(course, student));
+  StudentsPerCourse addStudentToCourses(Student student, Iterable<Course> courses) => StudentsPerCourse._(imap.addValuesToKeys(courses, [student]));
+  StudentsPerCourse addStudentsToCourse(Iterable<Student> students, Course course) => StudentsPerCourse._(imap.addValues(course, students));
+  StudentsPerCourse addStudentsToCourses(Map<Course, Set<Student>> studentsPerCourse) => StudentsPerCourse._(imap.addMap(studentsPerCourse));
+  StudentsPerCourse removeStudentFromCourse(Student student, Course course) => StudentsPerCourse._(imap.remove(course, student));
+  StudentsPerCourse removeStudentFromAllCourses(Student student) => StudentsPerCourse._(imap.removeValues([student]));
+  StudentsPerCourse removeCourse(Course course) => StudentsPerCourse._(imap.removeSet(course));
+  Map<Course, Set<Student>> toMap() => imap.unlock;
+  int get numberOfCourses => imap.lengthOfKeys;  
+  int get numberOfStudents => imap.lengthOfNonRepeatingValues;
+}        
+```
+
+Note: The `IMapOfSets` configuration (`ConfigMapOfSets.allowEmptySets`) 
+lets you choose if empty sets should be removed or not.
+In the above example, this would mean having courses with no students, 
+or else removing the course automatically when the last student leaves.
+
+```dart
+/// Using the default configuration: Empty sets are removed.
+StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) 
+   : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+
+/// Specifying that a course can be empty (have no students).
+StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) 
+   : _studentsPerCourse = (studentsPerCourse ?? {}).lock
+       .withConfig(ConfigMapOfSets(allowEmptySets: true));
+```  
+  
 ***************************************
 ***************************************
 ***************************************

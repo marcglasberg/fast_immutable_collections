@@ -296,6 +296,80 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  group("Removing values |", () {
+    //
+    test("IMapOfSets.removeValues method", () {
+      final Map<String, Set<int>> original = {
+        "a": {1, 2},
+        "b": {1, 2, 3},
+        "c": {8, 12, 1},
+        "d": {2},
+        "e": {2, 0},
+        "f": {2},
+      };
+
+      final IMapOfSets<String, int> iMapOfSets = original.lock;
+
+      // Remove 1 value.
+      expect(iMapOfSets.removeValues([2]).unlock, <String, Set<int>>{
+        "a": {1},
+        "b": {1, 3},
+        "c": {8, 12, 1},
+        "e": {0},
+      });
+
+      // Remove 2 values.
+      expect(iMapOfSets.removeValues([1, 2]).unlock, <String, Set<int>>{
+        "b": {3},
+        "c": {8, 12},
+        "e": {0},
+      });
+
+      // Don't remove anything (returns same instance).
+      expect(iMapOfSets.removeValues([32, 47]).unlock, original);
+      expect(iMapOfSets.removeValues([32, 47]).same(iMapOfSets), true);
+    });
+
+    test("IMapOfSets.removeValuesWhere method", () {
+      final Map<String, Set<int>> original = {
+        "a": {1, 2},
+        "b": {1, 2, 3},
+        "c": {8, 12, 1},
+        "d": {2},
+        "e": {2, 0},
+        "f": {2},
+      };
+
+      final IMapOfSets<String, int> iMapOfSets = original.lock;
+
+      // Removes all odd values.
+      expect(
+          iMapOfSets.removeValuesWhere((key, value) => value % 2 == 0).unlock, <String, Set<int>>{
+        "a": {1},
+        "b": {1, 3},
+        "c": {1},
+      });
+
+      // Removes all odd values from keys which are not "a" and "f".
+      expect(
+          iMapOfSets
+              .removeValuesWhere((key, value) => key != "a" && key != "f" && value % 2 == 0)
+              .unlock,
+          <String, Set<int>>{
+            "a": {1, 2},
+            "b": {1, 3},
+            "c": {1},
+            "f": {2},
+          });
+
+      // Don't remove anything (returns same instance).
+      expect(iMapOfSets.removeValuesWhere((key, value) => value == 32).unlock, original);
+      expect(iMapOfSets.removeValuesWhere((key, value) => value == 32).same(iMapOfSets), true);
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   group("Initializations |", () {
     final Map<String, Set<int>> mapOfSets = {
       "a": {1, 2},
@@ -514,7 +588,7 @@ void main() {
       });
 
       test("IMapOfSets.addAll method", () {
-        final IMapOfSets<String, int> newIMapOfSets = iMapOfSets.addAll({
+        final IMapOfSets<String, int> newIMapOfSets = iMapOfSets.addMap({
           "a": {1, 2, 3},
           "b": {4},
           "c": {10, 11},
@@ -867,4 +941,31 @@ void main() {
       });
     });
   });
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("IMapOfSetsExtension.invertKeysAndValues", () {
+    IMapOfSets<String, int> iMapOfSets = {
+      "a": {1, 2},
+      "b": {1, 2, 3},
+      "c": {5, 1},
+      "d": {5, 8},
+      "e": {12, 5},
+    }.lock;
+
+    var invertedIMapOfSets = iMapOfSets.invertKeysAndValues();
+    expect(invertedIMapOfSets.unlock, {
+      1: {"a", "b", "c"},
+      2: {"a", "b"},
+      3: {"b"},
+      5: {"c", "d", "e"},
+      8: {"d"},
+      12: {"e"},
+    });
+
+    // Invert twice return to normal.
+    expect(invertedIMapOfSets.invertKeysAndValues(), iMapOfSets);
+  });
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////////
 }

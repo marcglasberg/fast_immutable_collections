@@ -187,9 +187,9 @@ mixin IListMixin<T, I extends IListMixin<T, I>> implements Iterable<T>, CanBeEmp
 
   I remove(T item) => newInstance(iList.remove(item));
 
-  I removeAt(int index, [Item<T> removedItem]) => newInstance(iList.removeAt(index, removedItem));
+  I removeAt(int index, [Output<T> removedItem]) => newInstance(iList.removeAt(index, removedItem));
 
-  I removeLast([Item<T> removedItem]) => newInstance(iList.removeLast(removedItem));
+  I removeLast([Output<T> removedItem]) => newInstance(iList.removeLast(removedItem));
 
   I removeRange(int start, int end) => newInstance(iList.removeRange(start, end));
 
