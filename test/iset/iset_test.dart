@@ -793,4 +793,40 @@ void main() {
       });
     });
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test(
+      "ISet autoSort. "
+      "Affects join, iterator, toList, toIList, and toSet.", () {
+    var originalSet = {2, 4, 1, 9, 3};
+
+    /// Sort: "1,2,3,4,9"
+    var iset = originalSet.lock.withConfig(ConfigSet(autoSort: true));
+    var result1 = iset.join(",");
+    var result2 = iset.iterator.toIterable().join(",");
+    var result3 = iset.toList().join(",");
+    var result4 = iset.toIList().join(",");
+    var result5 = iset.toSet().join(",");
+    expect(iset.config.autoSort, isTrue);
+    expect(result1, "1,2,3,4,9");
+    expect(result2, "1,2,3,4,9");
+    expect(result3, "1,2,3,4,9");
+    expect(result4, "1,2,3,4,9");
+    expect(result5, "1,2,3,4,9");
+
+    /// Does not sort: "2,4,1,9,3"
+    iset = originalSet.lock.withConfig(ConfigSet(autoSort: false));
+    result1 = iset.join(",");
+    result2 = iset.iterator.toIterable().join(",");
+    result3 = iset.toList().join(",");
+    result4 = iset.toIList().join(",");
+    result5 = iset.toSet().join(",");
+    expect(iset.config.autoSort, isFalse);
+    expect(result1, "2,4,1,9,3");
+    expect(result2, "2,4,1,9,3");
+    expect(result3, "2,4,1,9,3");
+    expect(result4, "2,4,1,9,3");
+    expect(iset.toSet(), originalSet);
+  });
 }

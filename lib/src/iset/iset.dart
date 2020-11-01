@@ -1,8 +1,6 @@
 import "dart:collection";
-
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
-import "../utils/immutable_collection.dart";
-import "../ilist/ilist.dart";
 import "s_flat.dart";
 import "s_add.dart";
 import "s_add_all.dart";
@@ -98,8 +96,32 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> get withDeepEquals =>
       config.isDeepEquals ? this : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
 
-  /// Returns an unordered [Set].
+  /// Returns a Dart [Set] (mutable, unordered, of type [HashSet]).
   Set<T> get unlock => _s.unlock;
+
+  /// Returns a Dart [Set] (mutable, ordered, of type [LinkedHashSet]).
+  Set<T> get unlockSorted {
+    var orderedList = toList(growable: false, compare: ImmutableCollection.compare);
+    return LinkedHashSet.of(orderedList);
+  }
+
+  /// Unlocks the set, returning a safe, unmodifiable (immutable) [Set] view.
+  /// The word "view" means the set is backed by the original [ISet].
+  /// Using this is very fast, since it makes no copies of the [ISet] items.
+  /// However, if you try to use methods that modify the set, like [add],
+  /// it will throw an [UnsupportedError].
+  /// It is also very fast to lock this set back into an [ISet].
+  Set<T> get unlockView => UnmodifiableSetView(this);
+
+  /// Unlocks the set, returning a safe, modifiable (mutable) [Set].
+  /// Using this is very fast at first, since it makes no copies of the [ISet]
+  /// items. However, if and only if you use a method that mutates the set,
+  /// like [add], it will unlock internally (make a copy of all ISet items).
+  /// This is transparent to you, and will happen at most only once. In other
+  /// words, it will unlock the ISet, lazily, only if necessary.
+  /// If you never mutate the set, it will be very fast to lock this set
+  /// back into an [ISet].
+  Set<T> get unlockLazy => ModifiableSetView(this);
 
   /// 1) If the set"s [config] has [ConfigSet.autoSort] `true` (the default),
   /// it will iterate in the natural order of items. In other words, if the items
@@ -145,6 +167,11 @@ class ISet<T> // ignore: must_be_immutable
           ? equalItemsAndConfig(other)
           : same(other)
       : false;
+
+  /// Returns the concatenation of this set and [other].
+  /// Returns a new set containing the elements of this set followed by
+  /// the elements of [other].
+  ISet<T> operator +(Iterable<T> other) => addAll(other);
 
   @override
   bool equalItems(covariant Iterable<T> other) =>
@@ -272,7 +299,8 @@ class ISet<T> // ignore: must_be_immutable
   void forEach(void Function(T element) f) => _s.forEach(f);
 
   @override
-  String join([String separator = ""]) => _s.join(separator);
+  String join([String separator = ""]) =>
+      config.autoSort ? toSet().join(separator) : _s.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -354,7 +382,7 @@ class ISet<T> // ignore: must_be_immutable
   /// its items will maintain insertion order.
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
-  /// set"s [ISet.config] field:
+  /// set's [ISet.config] field:
   /// - If [ConfigSet.autoSort] is `true` (the default), the set will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the set order is undefined.
@@ -478,9 +506,11 @@ abstract class S<T> implements Iterable<T> {
   Set<T> _flushed;
 
   /// Returns the flushed set (flushes it only once).
-  /// It is an error to use the flushed map outside of the [M] class.
+  /// It is an error to use the flushed set outside of the [S] class.
   Set<T> get _getFlushed {
-    _flushed ??= unlock;
+    // Note: Flush must be of type LinkedHashSet. It can't sort, but
+    // the flush is not suppose to change the order of the items.
+    _flushed ??= LinkedHashSet.of(this);
     return _flushed;
   }
 

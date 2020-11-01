@@ -997,7 +997,7 @@ abstract class L<T> implements Iterable<T> {
   List<T> _flushed;
 
   /// Returns the flushed set (flushes it only once).
-  /// It is an error to use the flushed map outside of the [M] class.
+  /// It is an error to use the flushed list outside of the [L] class.
   List<T> get _getFlushed {
     _flushed ??= unlock;
     return _flushed;

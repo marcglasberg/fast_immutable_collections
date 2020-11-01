@@ -220,6 +220,51 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  testAndPrint("ISet autoSort", () {
+    var originalSet = {2, 4, 1, 9, 3};
+
+    /// Sorts: "1,2,3,4,9"
+    var iset = originalSet.lock.withConfig(ConfigSet(autoSort: true));
+    var result1 = iset.join(",");
+    var result2 = iset.iterator.toIterable().join(",");
+    var result3 = iset.toList().join(",");
+    var result4 = iset.toIList().join(",");
+    var result5 = iset.toSet().join(",");
+    print(iset.config.autoSort);
+    print(result1);
+    print(result2);
+    print(result3);
+    print(result4);
+    print(result5);
+    expect(result1, "1,2,3,4,9");
+    expect(result2, "1,2,3,4,9");
+    expect(result3, "1,2,3,4,9");
+    expect(result4, "1,2,3,4,9");
+    expect(result5, "1,2,3,4,9");
+
+    /// Does not sort, but keeps original order: "2,4,1,9,3"
+    iset = originalSet.lock.withConfig(ConfigSet(autoSort: false));
+    result1 = iset.join(",");
+    result2 = iset.iterator.toIterable().join(",");
+    result3 = iset.toList().join(",");
+    result4 = iset.toIList().join(",");
+    result5 = iset.toSet().join(",");
+    print(result1);
+    print(result2);
+    print(result3);
+    print(result4);
+    print(result5);
+    expect(result1, "2,4,1,9,3");
+    expect(result2, "2,4,1,9,3");
+    expect(result3, "2,4,1,9,3");
+    expect(result4, "2,4,1,9,3");
+
+    // This is unordered (HashSet).
+    expect(iset.toSet(), originalSet);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   testAndPrint("IMapOfSets", () {
     var james = Student("James");
     var sara = Student("Sara");

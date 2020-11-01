@@ -577,7 +577,7 @@ void main() {
 
       test("Adding to a nonexistent key", () {
         expect(iMapOfSets["z"], isNull);
-        final IMapOfSets<String, int> newMapOfSets = iMapOfSets.addValues('z', [2, 3, 4]);
+        final IMapOfSets<String, int> newMapOfSets = iMapOfSets.addValues("z", [2, 3, 4]);
         expect(newMapOfSets["z"], {2, 3, 4});
 
         test("Adding to a nonexistent key", () {

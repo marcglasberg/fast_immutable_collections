@@ -4,7 +4,7 @@ import "../imap/imap.dart";
 import "../utils/immutable_collection.dart";
 import "ilist.dart";
 
-/// This mixin implements all [IList] members.
+/// This mixin implements all [IList] members, plus `operator []`.
 /// It is meant to help you wrap an [IList] into another class (composition).
 /// Note classes which use this mixin are not themselves ILists, but [Iterables].
 ///

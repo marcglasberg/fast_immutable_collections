@@ -1,4 +1,4 @@
-import 'package:fast_immutable_collections/src/utils/hash.dart';
+import "package:fast_immutable_collections/src/utils/hash.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 

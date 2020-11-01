@@ -510,14 +510,22 @@ The global configuration default is to have auto-flush on.
 There are a few ways to lock and unlock a list, 
 which will have different results in speed and safety.
 
+```dart
+IList<int> ilist = [1, 2, 3].lock;       // Safe
+IList<int> ilist = [1, 2, 3].lockUnsafe; // Only this one is dangerous
+List<int> list = ilist.unlock;           // Safe and mutable
+List<int> list = ilist.unlockView;       // Safe, fast and immutable
+List<int> list = ilist.unlockLazy;       // Safe, fast and mutable
+```
+
 Suppose you have some `List`.
 These are your options to create an `IList` from it:
 
-- `.lock` will create an internal defensive copy of the original list, 
+- Getter `lock` will create an internal defensive copy of the original list, 
 which will be used to back the `IList`.
 This is the same doing: `IList(list)`.
 
-- `.lockUnsafe` is fast, since it makes no defensive copies of the list.
+- Getter `lockUnsafe` is fast, since it makes no defensive copies of the list.
 However, you should only use this with a new list you've created yourself,
 when you are sure no external copies exist. If the original list is modified,
 it will break the `IList` and any other derived lists in unpredictable ways.
@@ -528,18 +536,18 @@ further configuration changes by calling `lockConfig()`).
 
 These are your options to obtain a regular `List` back from an `IList`:
 
-- `.unlock` unlocks the list, returning a regular (mutable, growable) `List`.
+- Getter `unlock` unlocks the list, returning a regular (mutable, growable) `List`.
 This returned list is "safe", in the sense that is newly created, 
 independent of the original `IList` or any other lists.
 
-- `.unlockView` unlocks the list, returning a safe, unmodifiable (immutable) `List` view.
+- Getter `unlockView` unlocks the list, returning a safe, unmodifiable (immutable) `List` view.
 The word "view" means the list is backed by the original `IList`.
 This is very fast, since it makes no copies of the `IList` items.
 However, if you try to use methods that modify the list, like `add`,
 it will throw an `UnsupportedError`.
 It is also very fast to lock this list back into an `IList`.
 
-- `unlockLazy` unlocks the list, returning a safe, modifiable (mutable) `List`.
+- Getter `unlockLazy` unlocks the list, returning a safe, modifiable (mutable) `List`.
 Using this is very fast at first, since it makes no copies of the `IList` items. 
 However, if (and only if) you use a method that mutates the list, like `add`, 
 it will unlock it internally (make a copy of all `IList` items). 
@@ -547,6 +555,145 @@ This is transparent to you, and will happen at most only once.
 In other words, it will unlock the `IList` lazily, only if necessary.
 If you never mutate the list, it will be very fast to lock this list
 back into an `IList`.
+
+
+## ISet
+
+An `ISet` is an immutable set, meaning once it's created it cannot be modified.
+An `ISet` is always **unordered** 
+(though, as we'll see, it can be automatically sorted when you use it).  
+
+You can create an `ISet` by passing an iterable to its constructor, 
+or you can simply "lock" a regular set. 
+Other iterables (which are not sets) can also be locked as sets:  
+
+```dart          
+/// Ways to build an ISet
+
+// Using the ISet constructor                                                                      
+ISet<String> iset = ISet({1, 2});
+                              
+// Locking a regular set
+ISet<String> iset = {1, 2}.lock;
+                          
+// Locking a list as set
+ISet<String> iset = [1, 2].lockAsSet;
+```                                                                           
+
+To create a regular `Set` from an `ISet`,
+you can use `Set.of`, or simply "unlock" an immutable set:
+
+```dart  
+/// Going back from ISet to Set
+                 
+var iset = {1, 2}.lock;
+                                    
+// Using Set.of                                  
+Set<String> set = Set.of(iset);                               
+                                  
+// Is the same as unlocking the ISet
+Set<String> set = iset.unlock; 
+```             
+
+ISet constructors:
+`ISet()`,
+`ISet.withConfig()`,
+`ISet.unsafe()`.
+                                                              
+### Similarities and Differences to the IList
+
+> Since I don't want to repeat myself, 
+> all the topics below are explained in much less detail here than for the IList.
+> Please read the IList explanation first, before trying to understand the ISet.
+
+
+* An `ISet` is an `Iterable`, so you can iterate over it.
+
+* `ISet` methods always return a new `ISet`, instead of modifying the original one. 
+Because of that, you can easily chain methods.
+But since `ISet` methods always return a new `ISet`, 
+it is an **error** to call some method and then discard the result. 
+
+* `ISet` has **all** the methods of `Set`,
+plus some other new and useful ones.
+However, `ISet` methods always return a new `ISet`, 
+instead of modifying the original set or returning iterables.
+
+* `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order. 
+They can be used as **map keys**, which is a very useful property in itself, 
+but can also help when implementing some other interesting data structures.
+  
+* However, `ISet`s are configurable, and you can actually create `ISet`s which
+compare their internals by identity or deep equals, as desired.
+   
+* To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
+or else use the `withConfig` method and the `ConfigSet` class to change the configuration;
+or else use the `withConfig` constructor to explicitly create the `ISet` with your desired configuration.
+ 
+* The configurations affect how the `== operator` works, 
+but you can also choose how to compare sets by using the following `ISet` methods:
+`equalItems`, `equalItemsAndConfig` and `same`.
+Note, however, there is no `unorderedEqualItems` like in the `IList`, 
+because since `ISets` are unordered the `equalItems` method already disregards the order.
+
+* Classes `ISetMixin` and `IterableISetMixin` let you easily 
+create your own immutable classes based on the `ISet`.
+This helps you create more strongly typed collections, 
+and add your own methods to them.
+
+* You can flush some `ISet` by using the getter `.flush`.
+Note flush just optimizes the set **internally**, 
+and no external difference will be visible.
+Depending on the global configuration, the `ISet`s 
+will flush automatically for you, once per asynchronous gap.  
+
+* There are a few ways to lock and unlock a set, 
+which will have different results in speed and safety.
+Getter `lock` will create an internal defensive copy of the original set.
+Getter `lockUnsafe` is fast, since it makes no defensive copies of the set.
+Getter `unlock` unlocks the set, returning a regular (mutable, growable) set.
+Getter `unlockView` unlocks the set, returning a safe, unmodifiable (immutable) set view.
+And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) set.
+
+    ```dart
+    ISet<int> iset = {1, 2, 3}.lock;       // Safe
+    ISet<int> iset = {1, 2, 3}.lockUnsafe; // Only this one is dangerous
+    Set<int> set = iset.unlock;            // Safe, mutable and unordered
+    Set<int> set = iset.unlockSorted;      // Safe, mutable and ordered 
+    Set<int> set = iset.unlockView;        // Safe, fast and immutable
+    Set<int> set = iset.unlockLazy;        // Safe, fast and mutable
+    ```                                                        
+
+  
+### Global ISet Configuration
+
+The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, autoSort: true)`:
+
+1) `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
+
+2) `autoSort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
+   will return sorted outputs.
+
+You can globally change this default if you want, by using the `defaultConfigList` setter:
+`defaultConfigSet = ConfigSet(isDeepEquals: false, autoSort: false);`
+                                                                        
+Note that `ConfigSet` is similar to `ConfigList`, but it has an extra parameter: `autosort`:
+
+```dart
+/// Prints sorted: "1,2,3,4,9"
+var iset = {2, 4, 1, 9, 3}.lock;  
+print(iset.join(","));
+
+/// Prints in any order: "2,4,1,9,3"
+var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(autoSort: false));  
+print(iset.join(","));
+``` 
+  
+As previously discussed with the `IList`, 
+the global configuration is meant to be decided during your app's initialization, and then not changed again.
+We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
+after you set your desired configuration.
+
 
 # IMapOfSets
 
@@ -591,8 +738,8 @@ class StudentsPerCourse {
   ISet<Course> courses() => imap.keysAsSet;
   ISet<Student> students() => imap.valuesAsSet;
   IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
-  IList<Student> studentsInAlphabeticOrder() => imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
-  IList<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
+  ISet<Student> studentsInAlphabeticOrder() => imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
+  ISet<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
   StudentsPerCourse addStudentToCourse(Student student, Course course) => StudentsPerCourse._(imap.add(course, student));
   StudentsPerCourse addStudentToCourses(Student student, Iterable<Course> courses) => StudentsPerCourse._(imap.addValuesToKeys(courses, [student]));
   StudentsPerCourse addStudentsToCourse(Iterable<Student> students, Course course) => StudentsPerCourse._(imap.addValues(course, students));
