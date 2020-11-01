@@ -76,10 +76,10 @@ class RecordsColumn {
 class LeftLegend {
   final RecordsColumn _results;
 
-  LeftLegend({@required RecordsColumn results}) : _results = results;
+  const LeftLegend({@required RecordsColumn results}) : _results = results;
 
   IList<String> get rows {
-    IList<String> collections = const <String>[].lock;
+    IList<String> collections = const <String>["Collection"].lock;
     _results.records
         .forEach((StopwatchRecord record) => collections = collections.add(record.collectionName));
     return collections;
@@ -95,10 +95,10 @@ class RecordsTable {
 
   LeftLegend get leftLegend => LeftLegend(results: resultsColumn);
 
-  RecordsColumn get normalizedAgainstMax => _normalize(resultsColumn.max);
+  RecordsColumn get normalizedAgainstMax => _normalize(resultsColumn.max, "x Max Time");
 
-  RecordsColumn _normalize(double norm) {
-    RecordsColumn normalizedCol = RecordsColumn.empty();
+  RecordsColumn _normalize(double norm, String title) {
+    RecordsColumn normalizedCol = RecordsColumn.empty(title: title);
     resultsColumn.records.forEach((StopwatchRecord record) {
       normalizedCol += StopwatchRecord(
         collectionName: record.collectionName,
@@ -110,13 +110,53 @@ class RecordsTable {
 
   double _round(double score) => double.parse(score.toStringAsFixed(2));
 
-  RecordsColumn get normalizedAgainstMin => _normalize(resultsColumn.min);
+  RecordsColumn get normalizedAgainstMin => _normalize(resultsColumn.min, "x Min Time");
 
-  RecordsColumn get normalizedAgainstMutable => _normalize(resultsColumn.mutableRecord);
-
-  /// Note that we are currently rounding off at 2 floating points.
-  RecordsColumn get normalizedAgainstRuns => _normalize(config.runs.toDouble());
+  RecordsColumn get normalizedAgainstMutable =>
+      _normalize(resultsColumn.mutableRecord, "x Mutable Time");
 
   /// Note that we are currently rounding off at 2 floating points.
-  RecordsColumn get normalizedAgainstSize => _normalize(config.size.toDouble());
+  RecordsColumn get normalizedAgainstRuns =>
+      _normalize(config.runs.toDouble(), "Time (${_mu}s) / Runs");
+
+  /// Note that we are currently rounding off at 2 floating points.
+  RecordsColumn get normalizedAgainstSize =>
+      _normalize(config.size.toDouble(), "Time (${_mu}s) / Size");
+
+  static const String _mu = "\u{03BC}";
+
+  @override
+  String toString() {
+    String tableAsString = "";
+
+    for (int rowIndex = 0; rowIndex < resultsColumn.records.length; rowIndex++)
+      tableAsString += _newRow(rowIndex);
+
+    return tableAsString;
+  }
+
+  // Currently inefficient. But no one should care much, the table will be very small anyway.
+  String _newRow(int rowIndex) {
+    final IList<RecordsColumn> numericColumns = [
+      resultsColumn,
+      normalizedAgainstMax,
+      normalizedAgainstMin,
+      normalizedAgainstMutable,
+      normalizedAgainstRuns,
+      normalizedAgainstSize,
+    ].lock;
+
+    String newLine = leftLegend.rows[rowIndex] + ",";
+    numericColumns.forEach((RecordsColumn column) {
+      if (rowIndex == 0) {
+        newLine += column.title;
+      } else {
+        newLine += column.records[rowIndex].record.toString();
+      }
+      newLine += ",";
+    });
+    newLine = newLine.substring(0, newLine.length - 1);
+    newLine += "\n";
+    return newLine;
+  }
 }
