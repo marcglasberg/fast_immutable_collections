@@ -363,7 +363,7 @@ void main() {
       });
 
       test("Disallowing it", () {
-        disallowUnsafeConstructors = true;
+        ImmutableCollection.disallowUnsafeConstructors = true;
         final Set<int> set = {1, 2, 3};
 
         expect(() => ISet.unsafe(set, config: ConfigSet()), throwsUnsupportedError);

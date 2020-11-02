@@ -14,18 +14,31 @@ import "l_flat.dart";
 class IList<T> // ignore: must_be_immutable
     extends ImmutableCollection<IList<T>> implements Iterable<T> {
   //
+  static ConfigList get defaultConfig => _defaultConfig;
+
+  static ConfigList _defaultConfig = const ConfigList(isDeepEquals: true);
+
+  /// Global configuration that specifies if, by default, the [IList]s
+  /// use equality or identity for their [operator ==].
+  /// By default `isDeepEquals: true` (lists are compared by equality).
+  static set defaultConfig(ConfigList config) {
+    if (ImmutableCollection.isConfigLocked)
+      throw StateError("Can't change the configuration of immutable collections.");
+    _defaultConfig = config ?? const ConfigList(isDeepEquals: true);
+  }
+
   L<T> _l;
 
   /// The list configuration.
   final ConfigList config;
 
   static IList<T> empty<T>([ConfigList config]) =>
-      IList._unsafe(LFlat.empty<T>(), config: config ?? defaultConfigList);
+      IList._unsafe(LFlat.empty<T>(), config: config ?? defaultConfig);
 
   /// Create an [IList] from any [Iterable].
   /// Fast, if the Iterable is another [IList].
   factory IList([Iterable<T> iterable]) => //
-      IList.withConfig(iterable, defaultConfigList);
+      IList.withConfig(iterable, defaultConfig);
 
   /// Create an [IList] from any [Iterable] and a [ConfigList].
   /// Fast, if the Iterable is another [IList].
@@ -47,7 +60,7 @@ class IList<T> // ignore: must_be_immutable
   }) {
     List<T> list = iSet.toList(growable: false, compare: compare);
     var l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
-    return IList._unsafe(l, config: config ?? defaultConfigList);
+    return IList._unsafe(l, config: config ?? defaultConfig);
   }
 
   /// Safe. Fast if the iterable is an IList.
@@ -70,7 +83,8 @@ class IList<T> // ignore: must_be_immutable
   IList.unsafe(List<T> list, {@required this.config})
       : assert(config != null),
         _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list) {
-    if (disallowUnsafeConstructors) throw UnsupportedError("IList.unsafe is disallowed.");
+    if (ImmutableCollection.disallowUnsafeConstructors)
+      throw UnsupportedError("IList.unsafe is disallowed.");
   }
 
   /// Unsafe.
@@ -306,7 +320,7 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   IList<E> expand<E>(Iterable<E> Function(T) f, {ConfigList config}) =>
-      IList._(_l.expand(f), config: config ?? (T == E ? this.config : defaultConfigList));
+      IList._(_l.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
 
   @override
   int get length {
@@ -374,7 +388,7 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   IList<E> map<E>(E Function(T element) f, {ConfigList config}) =>
-      IList._(_l.map(f), config: config ?? (T == E ? this.config : defaultConfigList));
+      IList._(_l.map(f), config: config ?? (T == E ? this.config : defaultConfig));
 
   @override
   T reduce(T Function(T value, T element) combine) => _l.reduce(combine);

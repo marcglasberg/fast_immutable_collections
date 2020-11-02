@@ -82,21 +82,21 @@ void main() {
       expect(configSet3.toString(), "ConfigSet{isDeepEquals: true, sort: false}");
     });
 
-    group("defaultConfigSet |", () {
+    group("defaultConfig |", () {
       test("Is initially a ConfigSet with isDeepEquals = true and sort = true", () {
-        expect(defaultConfigSet, const ConfigSet());
-        expect(defaultConfigSet.isDeepEquals, isTrue);
-        expect(defaultConfigSet.sort, isTrue);
+        expect(ISet.defaultConfig, const ConfigSet());
+        expect(ISet.defaultConfig.isDeepEquals, isTrue);
+        expect(ISet.defaultConfig.sort, isTrue);
       });
 
       test("Can modify the default", () {
-        defaultConfigSet = ConfigSet(isDeepEquals: false, sort: false);
-        expect(defaultConfigSet, const ConfigSet(isDeepEquals: false, sort: false));
+        ISet.defaultConfig = ConfigSet(isDeepEquals: false, sort: false);
+        expect(ISet.defaultConfig, const ConfigSet(isDeepEquals: false, sort: false));
       });
 
       test("Changing the default ConfigSet will throw an exception if lockConfig", () {
-        lockConfig();
-        expect(() => defaultConfigSet = ConfigSet(isDeepEquals: false), throwsStateError);
+        ImmutableCollection.lockConfig();
+        expect(() => ISet.defaultConfig = ConfigSet(isDeepEquals: false), throwsStateError);
       });
     });
   });

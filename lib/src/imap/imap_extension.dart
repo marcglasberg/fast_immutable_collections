@@ -13,7 +13,7 @@ extension IMapExtension<K, V> on Map<K, V> {
   /// Note you can optionally disallow unsafe constructors in the global configuration
   /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
   /// further configuration changes by calling `lockConfig()`).
-  IMap<K, V> get lockUnsafe => IMap<K, V>.unsafe(this, config: defaultConfigMap);
+  IMap<K, V> get lockUnsafe => IMap<K, V>.unsafe(this, config: IMap.defaultConfig);
 }
 
 extension IMapOfSetsExtension<K, V> on Map<K, Set<V>> {

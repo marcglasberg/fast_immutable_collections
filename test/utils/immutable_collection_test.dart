@@ -24,17 +24,17 @@ void main() {
   });
 
   group("disallowUnsafeConstructors |", () {
-    test("Is initially false", () => expect(disallowUnsafeConstructors, isFalse));
+    test("Is initially false", () => expect(ImmutableCollection.disallowUnsafeConstructors, isFalse));
 
     test("Changing the default to true", () {
-      expect(disallowUnsafeConstructors, isFalse);
-      disallowUnsafeConstructors = true;
-      expect(disallowUnsafeConstructors, isTrue);
+      expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);
+      ImmutableCollection.disallowUnsafeConstructors = true;
+      expect(ImmutableCollection.disallowUnsafeConstructors, isTrue);
     });
 
     test("Changing the lockConfig makes disallowUnsafeConstructors throw an exception", () {
-      lockConfig();
-      expect(() => disallowUnsafeConstructors = true, throwsStateError);
+      ImmutableCollection.lockConfig();
+      expect(() => ImmutableCollection.disallowUnsafeConstructors = true, throwsStateError);
     });
   });
 

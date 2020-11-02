@@ -15,6 +15,21 @@ import "unmodifiable_map_view.dart";
 class IMap<K, V> // ignore: must_be_immutable
     extends ImmutableCollection<IMap<K, V>> {
   //
+  static ConfigMap get defaultConfig => _defaultConfig;
+
+  static ConfigMap _defaultConfig =
+      const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
+
+  /// Global configuration that specifies if, by default, the [IMap]s
+  /// use equality or identity for their [operator ==].
+  /// By default `isDeepEquals: true` (maps are compared by equality),
+  /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
+  static set defaultConfig(ConfigMap config) {
+    if (ImmutableCollection.isConfigLocked)
+      throw StateError("Can't change the configuration of immutable collections.");
+    _defaultConfig =
+        config ?? const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
+  }
 
   M<K, V> _m;
 
@@ -22,16 +37,16 @@ class IMap<K, V> // ignore: must_be_immutable
   final ConfigMap config;
 
   static IMap<K, V> empty<K, V>([ConfigMap config]) =>
-      IMap._unsafe(MFlat.empty<K, V>(), config: config ?? defaultConfigMap);
+      IMap._unsafe(MFlat.empty<K, V>(), config: config ?? defaultConfig);
 
   /// Create an [IMap] from a [Map].
   factory IMap([Map<K, V> map]) => //
-      IMap.withConfig(map, defaultConfigMap);
+      IMap.withConfig(map, defaultConfig);
 
   /// Create an [IMap] from a [Map] and a [ConfigMap].
   factory IMap.withConfig(Map<K, V> map, ConfigMap config) => (map == null || map.isEmpty)
       ? IMap.empty<K, V>()
-      : IMap<K, V>._unsafe(MFlat<K, V>(map), config: config ?? defaultConfigMap);
+      : IMap<K, V>._unsafe(MFlat<K, V>(map), config: config ?? defaultConfig);
 
   /// Create an [IMap] from an [Iterable] of [MapEntry].
   /// If multiple [entries] have the same key,
@@ -39,11 +54,11 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap config}) {
     if (entries is IMap<K, V>)
-      return IMap._unsafe((entries as IMap<K, V>)._m, config: config ?? defaultConfigMap);
+      return IMap._unsafe((entries as IMap<K, V>)._m, config: config ?? defaultConfig);
     else {
       var map = HashMap<K, V>();
       map.addEntries(entries);
-      return IMap._unsafe(MFlat.unsafe(map), config: config ?? defaultConfigMap);
+      return IMap._unsafe(MFlat.unsafe(map), config: config ?? defaultConfig);
     }
   }
 
@@ -68,7 +83,7 @@ class IMap<K, V> // ignore: must_be_immutable
       map[key] = valueMapper(key);
     }
 
-    return IMap._(map, config: config ?? defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfig);
   }
 
   /// Create an [IMap] from the given [values].
@@ -92,7 +107,7 @@ class IMap<K, V> // ignore: must_be_immutable
       map[keyMapper(value)] = value;
     }
 
-    return IMap._(map, config: config ?? defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfig);
   }
 
   /// Creates a Map instance in which the keys and values are computed
@@ -123,12 +138,12 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigMap config,
   }) {
     Map<K, V> map = Map.fromIterable(iterable, key: keyMapper, value: valueMapper);
-    return IMap._(map, config: config ?? defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfig);
   }
 
   factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values, {ConfigMap config}) {
     Map<K, V> map = Map.fromIterables(keys, values);
-    return IMap._(map, config: config ?? defaultConfigMap);
+    return IMap._(map, config: config ?? defaultConfig);
   }
 
   /// Unsafe.
@@ -142,7 +157,8 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap.unsafe(Map<K, V> map, {@required this.config})
       : assert(config != null),
         _m = (map == null) ? MFlat.empty<K, V>() : MFlat<K, V>.unsafe(map) {
-    if (disallowUnsafeConstructors) throw UnsupportedError("IMap.unsafe is disallowed.");
+    if (ImmutableCollection.disallowUnsafeConstructors)
+      throw UnsupportedError("IMap.unsafe is disallowed.");
   }
 
   /// Unsafe.
@@ -499,7 +515,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   IMap<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper, {ConfigMap config}) =>
       IMap<RK, RV>._(_m.map(mapper),
-          config: config ?? ((RK == K && RV == V) ? this.config : defaultConfigMap));
+          config: config ?? ((RK == K && RV == V) ? this.config : defaultConfig));
 
   @override
   String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";

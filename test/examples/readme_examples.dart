@@ -153,7 +153,7 @@ void main() {
     expect(ilistA1 == ilistA2, isTrue);
 
     // Change the default to identity equals, for lists created from now on.
-    defaultConfigList = ConfigList(isDeepEquals: false);
+    IList.defaultConfig = ConfigList(isDeepEquals: false);
     var ilistB1 = IList(list);
     var ilistB2 = IList(list);
     print(ilistB1 == ilistB2); // False!
@@ -164,7 +164,7 @@ void main() {
     expect(ilistA1 == ilistA2, isTrue);
 
     // Change the default back to deep equals.
-    defaultConfigList = ConfigList(isDeepEquals: true);
+    IList.defaultConfig = ConfigList(isDeepEquals: true);
     var ilistC1 = IList(list);
     var ilistC2 = IList(list);
     print(ilistC1 == ilistC2); // True!

@@ -13,5 +13,5 @@ extension ISetExtension<T> on Set<T> {
   /// Note you can optionally disallow unsafe constructors in the global configuration
   /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
   /// further configuration changes by calling `lockConfig()`).
-  ISet<T> get lockUnsafe => ISet<T>.unsafe(this, config: defaultConfigSet);
+  ISet<T> get lockUnsafe => ISet<T>.unsafe(this, config: ISet.defaultConfig);
 }

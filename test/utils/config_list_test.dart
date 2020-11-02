@@ -48,20 +48,20 @@ void main() {
       expect(configList2.toString(), "ConfigList{isDeepEquals: false}");
     });
 
-    group("defaultConfigList |", () {
+    group("defaultConfig |", () {
       test("Is initially a ConfigList with isDeepEquals = true", () {
-        expect(defaultConfigList, const ConfigList());
-        expect(defaultConfigList.isDeepEquals, isTrue);
+        expect(IList.defaultConfig, const ConfigList());
+        expect(IList.defaultConfig.isDeepEquals, isTrue);
       });
 
       test("Can modify the default", () {
-        defaultConfigList = ConfigList(isDeepEquals: false);
-        expect(defaultConfigList, const ConfigList(isDeepEquals: false));
+        IList.defaultConfig = ConfigList(isDeepEquals: false);
+        expect(IList.defaultConfig, const ConfigList(isDeepEquals: false));
       });
 
       test("Changing the default ConfigList will throw an exception if lockConfig", () {
-        lockConfig();
-        expect(() => defaultConfigList = ConfigList(isDeepEquals: false), throwsStateError);
+        ImmutableCollection.lockConfig();
+        expect(() => IList.defaultConfig = ConfigList(isDeepEquals: false), throwsStateError);
       });
     });
   });

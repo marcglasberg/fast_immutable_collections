@@ -1,41 +1,50 @@
-import "package:meta/meta.dart";
-
-import "../ilist/ilist.dart";
-import "../iset/iset.dart";
-import "hash.dart";
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-/// In your app initialization you may want to lock the configuration.
-void lockConfig() => _isConfigLocked = true;
-
-bool _isConfigLocked = false;
-
-/// While `identical(collection1, collection2)` will compare the identity of the collection
-/// itself, `same(collection1, collection2)` will compare its internal state by identity.
-/// Note `same` is practically as fast as `identical`, but will give less false negatives.
-/// So it is almost always recommended to use `same` instead of `identical`.
-///
-bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
-  if (c1 == null && c2 == null) return true;
-  if (c1 == null || c2 == null) return false;
-  return c1.same(c2);
-}
-
-/// Global configuration that specifies if unsafe constructors can be used or not.
-set disallowUnsafeConstructors(bool value) {
-  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _disallowUnsafeConstructors = value ?? false;
-}
-
-bool get disallowUnsafeConstructors => _disallowUnsafeConstructors;
-
-bool _disallowUnsafeConstructors = false;
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   //
+  /// In your app initialization, call this if you want to lock the configuration,
+  /// so that no one can change it anymore.
+  ///
+  /// These are the setters which you can use to configure and then lock:
+  /// 1. `ImmutableCollection.autoFlush`
+  /// 2. `ImmutableCollection.disallowUnsafeConstructors`
+  /// 3. `IList.defaultConfig`
+  /// 4. `ISet.defaultConfig`
+  /// 5. `IMap.defaultConfig`
+  /// 6. `IMapOfSets.defaultConfig`
+  ///
+  static void lockConfig() => _isConfigLocked = true;
+
+  static bool get isConfigLocked => _isConfigLocked;
+
+  static bool get autoFlush => _autoFlush;
+
+  static bool get disallowUnsafeConstructors => _disallowUnsafeConstructors;
+
+  static bool _isConfigLocked = false;
+
+  static bool _autoFlush = true;
+
+  static bool _disallowUnsafeConstructors = false;
+
+  /// Global configuration that specifies if the collections should flush automatically.
+  /// The default is true.
+  static set autoFlush(bool value) {
+    if (ImmutableCollection.isConfigLocked)
+      throw StateError("Can't change the configuration of immutable collections.");
+    _autoFlush = value ?? true;
+  }
+
+  /// Global configuration that specifies if unsafe constructors can be used or not.
+  /// The default is false.
+  static set disallowUnsafeConstructors(bool value) {
+    if (ImmutableCollection.isConfigLocked)
+      throw StateError("Can't change the configuration of immutable collections.");
+    _disallowUnsafeConstructors = value ?? false;
+  }
+
   static int compare(Object a, Object b) => a is Comparable && b is Comparable ? a.compareTo(b) : 0;
 
   /// Will return true only if the collection items are equal to the iterable items.
@@ -57,6 +66,19 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// compare the collection instances themselves, but their internal state.
   /// Comparing the internal state is better, because it will return true more often.
   bool same(C other);
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// While `identical(collection1, collection2)` will compare the identity of the collection
+/// itself, `same(collection1, collection2)` will compare its internal state by identity.
+/// Note `same` is practically as fast as `identical`, but will give less false negatives.
+/// So it is almost always recommended to use `same` instead of `identical`.
+///
+bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
+  if (c1 == null && c2 == null) return true;
+  if (c1 == null || c2 == null) return false;
+  return c1.same(c2);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,261 +139,6 @@ class Output<T> {
   @override
   int get hashCode => _value.hashCode;
 }
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-/// - If [isDeepEquals] is `false`, the [IList] equals operator (`==`) compares by identity.
-/// - If [isDeepEquals] is `true` (the default), the [IList] equals operator (`==`) compares all items, ordered.
-@immutable
-class ConfigList {
-  //
-  /// If `false`, the equals operator (`==`) compares by identity.
-  /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
-  final bool isDeepEquals;
-
-  const ConfigList({this.isDeepEquals = true});
-
-  ConfigList copyWith({bool isDeepEquals}) {
-    var config = ConfigList(
-      isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-    );
-    return (config == this) ? this : config;
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ConfigList && runtimeType == other.runtimeType && isDeepEquals == other.isDeepEquals;
-
-  @override
-  int get hashCode => isDeepEquals.hashCode;
-
-  @override
-  String toString() => "ConfigList{isDeepEquals: $isDeepEquals}";
-}
-
-/// Global configuration that specifies if, by default, the immutable
-/// collections use equality or identity for their [operator ==].
-/// By default [isDeepEquals]==true (collections are compared by equality).
-set defaultConfigList(ConfigList config) {
-  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _defaultConfigList = config ?? const ConfigList(isDeepEquals: true);
-}
-
-ConfigList get defaultConfigList => _defaultConfigList;
-
-ConfigList _defaultConfigList = const ConfigList(isDeepEquals: true);
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-/// The set configuration.
-/// - If [isDeepEquals] is `false`, the [ISet] equals operator (`==`) compares by identity.
-/// - If [isDeepEquals] is `true` (the default), the [ISet] equals operator (`==`) compares all items, unordered.
-/// - If the [compare] function is defined, sorted outputs will use it as a comparator.
-@immutable
-class ConfigSet {
-  //
-  /// If `false`, the equals operator (`==`) compares by identity.
-  /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
-  final bool isDeepEquals;
-
-  /// If true, will sort the list output of items.
-  final bool sort;
-
-  const ConfigSet({
-    this.isDeepEquals = true,
-    this.sort = true,
-  });
-
-  ConfigSet copyWith({
-    bool isDeepEquals,
-    bool sort,
-  }) {
-    var config = ConfigSet(
-      isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      sort: sort ?? this.sort,
-    );
-    return (config == this) ? this : config;
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ConfigSet &&
-          runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals &&
-          sort == other.sort;
-
-  @override
-  int get hashCode => hash2(isDeepEquals, sort);
-
-  @override
-  String toString() => "ConfigSet{"
-      "isDeepEquals: $isDeepEquals, "
-      "sort: $sort}";
-}
-
-/// Global configuration that specifies if, by default, the immutable
-/// collections use equality or identity for their [operator ==].
-/// By default [isDeepEquals]==true (collections are compared by equality).
-///
-set defaultConfigSet(ConfigSet config) {
-  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _defaultConfigSet = config ?? const ConfigSet(isDeepEquals: true, sort: true);
-}
-
-ConfigSet get defaultConfigSet => _defaultConfigSet;
-
-ConfigSet _defaultConfigSet = const ConfigSet(isDeepEquals: true, sort: true);
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-/// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
-/// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
-/// - If [sortKeys] is `true` (the default), will sort the list output of keys.
-/// - If [sortValues] is `true` (the default), will sort the list output of values.
-@immutable
-class ConfigMap {
-  //
-  /// If `false`, the equals operator (`==`) compares by identity.
-  /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
-  final bool isDeepEquals;
-
-  /// If `true` (the default), will sort the list output of keys.
-  final bool sortKeys;
-
-  /// If `true` (the default), will sort the list output of values.
-  final bool sortValues;
-
-  const ConfigMap({
-    this.isDeepEquals = true,
-    this.sortKeys = true,
-    this.sortValues = true,
-  });
-
-  ConfigMap copyWith({
-    bool isDeepEquals,
-    bool sortKeys,
-    bool sortValues,
-  }) {
-    var config = ConfigMap(
-      isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      sortKeys: sortKeys ?? this.sortKeys,
-      sortValues: sortValues ?? this.sortValues,
-    );
-    return (config == this) ? this : config;
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ConfigMap &&
-          runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals &&
-          sortKeys == other.sortKeys &&
-          sortValues == other.sortValues;
-
-  @override
-  int get hashCode => hash3(isDeepEquals, sortKeys, sortValues);
-
-  @override
-  String toString() => "ConfigMap{"
-      "isDeepEquals: $isDeepEquals, "
-      "sortKeys: $sortKeys, "
-      "sortValues: $sortValues}";
-}
-
-/// Global configuration that specifies if, by default, the immutable
-/// collections use equality or identity for their [operator ==].
-/// By default [isDeepEquals]==true (collections are compared by equality).
-///
-set defaultConfigMap(ConfigMap config) {
-  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _defaultConfigMap =
-      config ?? const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
-}
-
-ConfigMap get defaultConfigMap => _defaultConfigMap;
-
-ConfigMap _defaultConfigMap =
-    const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-/// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
-/// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
-/// - If [sortKeys] is `true` (the default), will sort the list output of keys.
-/// - If [sortValues] is `true` (the default), will sort the list output of values.
-@immutable
-class ConfigMapOfSets {
-  //
-  /// If `false`, the equals operator (`==`) compares by identity.
-  /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
-  final bool isDeepEquals;
-
-  /// If `true` (the default), will sort the list output of keys.
-  final bool sortKeys;
-
-  /// If `true` (the default), will sort the list output of values.
-  final bool sortValues;
-
-  const ConfigMapOfSets({
-    this.isDeepEquals = true,
-    this.sortKeys = true,
-    this.sortValues = true,
-  });
-
-  ConfigMap get asConfigMap => ConfigMap(
-      isDeepEquals: isDeepEquals, sortKeys: sortValues, sortValues: sortValues);
-
-  ConfigSet get asConfigSet => ConfigSet(isDeepEquals: isDeepEquals, sort: sortValues);
-
-  ConfigMapOfSets copyWith({
-    bool isDeepEquals,
-    bool sortKeys,
-    bool sortValues,
-  }) {
-    var config = ConfigMapOfSets(
-      isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      sortKeys: sortKeys ?? this.sortKeys,
-      sortValues: sortValues ?? this.sortValues,
-    );
-    return (config == this) ? this : config;
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ConfigMapOfSets &&
-          runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals &&
-          sortKeys == other.sortKeys &&
-          sortValues == other.sortValues;
-
-  @override
-  int get hashCode => hash3(isDeepEquals, sortKeys, sortValues);
-
-  @override
-  String toString() => "ConfigMapOfSets{"
-      "isDeepEquals: $isDeepEquals, "
-      "sortKeys: $sortKeys, "
-      "sortValues: $sortValues}";
-}
-
-/// Global configuration that specifies if, by default, the immutable
-/// collections use equality or identity for their [operator ==].
-/// By default [isDeepEquals]==true (collections are compared by equality).
-///
-set defaultConfigMapOfSets(ConfigMapOfSets config) {
-  if (_isConfigLocked) throw StateError("Can't change the configuration of immutable collections.");
-  _defaultConfigMapOfSets =
-      config ?? const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
-}
-
-ConfigMapOfSets get defaultConfigMapOfSets => _defaultConfigMapOfSets;
-
-ConfigMapOfSets _defaultConfigMapOfSets =
-    const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 

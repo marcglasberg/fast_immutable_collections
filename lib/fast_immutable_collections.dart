@@ -3,6 +3,7 @@
 library fast_immutable_collections;
 
 export "src/utils/immutable_collection.dart";
+export "src/utils/configs.dart";
 
 // IList:
 export "src/ilist/ilist.dart";

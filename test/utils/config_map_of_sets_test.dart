@@ -140,24 +140,24 @@ void main() {
     });
   });
 
-  group("defaultConfigMapOfSets |", () {
+  group("defaultConfig |", () {
     test("Is initially a ConfigMapOfSets with all attributes true", () {
-      expect(defaultConfigMapOfSets, const ConfigMapOfSets());
-      expect(defaultConfigMapOfSets.isDeepEquals, isTrue);
-      expect(defaultConfigMapOfSets.sortKeys, isTrue);
-      expect(defaultConfigMapOfSets.sortValues, isTrue);
+      expect(IMapOfSets.defaultConfig, const ConfigMapOfSets());
+      expect(IMapOfSets.defaultConfig.isDeepEquals, isTrue);
+      expect(IMapOfSets.defaultConfig.sortKeys, isTrue);
+      expect(IMapOfSets.defaultConfig.sortValues, isTrue);
     });
 
     test("Can modify the default", () {
-      defaultConfigMapOfSets =
+      IMapOfSets.defaultConfig =
           ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
-      expect(defaultConfigMapOfSets,
+      expect(IMapOfSets.defaultConfig,
           const ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false));
     });
 
     test("Changing the default ConfigMapOfSets will throw an exception if lockConfig", () {
-      lockConfig();
-      expect(() => defaultConfigMapOfSets = ConfigMapOfSets(isDeepEquals: false), throwsStateError);
+      ImmutableCollection.lockConfig();
+      expect(() => IMapOfSets.defaultConfig = ConfigMapOfSets(isDeepEquals: false), throwsStateError);
     });
   });
 }

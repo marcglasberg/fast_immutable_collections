@@ -529,10 +529,8 @@ void main() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group("Testing the remaining methods |", () {
-    IMapOfSets<String, int> iMapOfSets = IMapOfSets.empty();
-    iMapOfSets = iMapOfSets.add("a", 1);
-    iMapOfSets = iMapOfSets.add("a", 2);
-    iMapOfSets = iMapOfSets.add("b", 3);
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
 
     test("IMapOfSets [] operator", () {
       expect(iMapOfSets["a"], ISet({1, 2}));
@@ -688,7 +686,7 @@ void main() {
           expect(newIMapOfSets.entryWithValue(3).asEntry, Entry("b", ISet<int>({3})));
           expect(newIMapOfSets.entryWithValue(4), isNull);
 
-          expect(newIMapOfSets.entries, contains(entryWhere(key: 'A', value: 1)));
+          expect(newIMapOfSets.comparableEntries, contains(Entry("A", 1)));
         });
 
         test("IMapOfSets.allEntriesWithValue method", () {

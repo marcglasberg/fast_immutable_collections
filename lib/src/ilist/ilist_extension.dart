@@ -15,7 +15,7 @@ extension IListExtension<T> on List<T> {
   /// Note you can optionally disallow unsafe constructors in the global configuration
   /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
   /// further configuration changes by calling `lockConfig()`).
-  IList<T> get lockUnsafe => IList<T>.unsafe(this, config: defaultConfigList);
+  IList<T> get lockUnsafe => IList<T>.unsafe(this, config: IList.defaultConfig);
 
   /// Sorts this list according to the order specified by the [compare] function.
   ///

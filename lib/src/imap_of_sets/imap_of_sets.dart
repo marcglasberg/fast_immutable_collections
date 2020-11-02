@@ -12,6 +12,21 @@ import "../utils/immutable_collection.dart";
 class IMapOfSets<K, V> //
     extends ImmutableCollection<IMapOfSets<K, V>> {
   //
+  static ConfigMapOfSets get defaultConfig => _defaultConfig;
+
+  static ConfigMapOfSets _defaultConfig =
+      const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+
+  /// Global configuration that specifies if, by default, the [IMapOfSet]s
+  /// use equality or identity for their [operator ==].
+  /// By default `isDeepEquals: true` (maps of sets are compared by equality),
+  /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
+  static set defaultConfig(ConfigMapOfSets config) {
+    if (ImmutableCollection.isConfigLocked)
+      throw StateError("Can't change the configuration of immutable collections.");
+    _defaultConfig =
+        config ?? const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+  }
 
   final IMap<K, ISet<V>> _mapOfSets;
 
@@ -22,14 +37,14 @@ class IMapOfSets<K, V> //
       IMapOfSets<K, V>.from(null, config: config);
 
   factory IMapOfSets([Map<K, Iterable<V>> mapOfSets]) => //
-      IMapOfSets.withConfig(mapOfSets, defaultConfigMapOfSets);
+      IMapOfSets.withConfig(mapOfSets, defaultConfig);
 
   factory IMapOfSets.withConfig(
     Map<K, Iterable<V>> mapOfSets,
     ConfigMapOfSets config,
   ) {
-    ConfigSet configSet = config?.asConfigSet ?? defaultConfigSet;
-    ConfigMap configMap = config?.asConfigMap ?? defaultConfigMap;
+    ConfigSet configSet = config?.asConfigSet ?? ISet.defaultConfig;
+    ConfigMap configMap = config?.asConfigMap ?? IMap.defaultConfig;
 
     return (mapOfSets == null)
         ? empty<K, V>()
@@ -39,13 +54,13 @@ class IMapOfSets<K, V> //
               mapOfSets.values.map((value) => ISet.withConfig(value, configSet)),
               config: configMap,
             ),
-            config: config ?? defaultConfigMapOfSets,
+            config: config ?? defaultConfig,
           );
   }
 
   /// If you provide [config], the map and all sets will use it.
   IMapOfSets.from(IMap<K, ISet<V>> mapOfSets, {ConfigMapOfSets config})
-      : config = config ?? defaultConfigMapOfSets,
+      : config = config ?? defaultConfig,
         _mapOfSets = (config == null)
             ? mapOfSets ?? IMap.empty<K, ISet<V>>()
             : mapOfSets?.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
@@ -105,6 +120,8 @@ class IMapOfSets<K, V> //
   /// For example, if the map is {1: {a, b}, 2: {x, y}},
   /// it will return [(1:{a,b}), 2:{x, y}].
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
+
+  Iterable<Entry<K, ISet<V>>> get comparableEntries => _mapOfSets.entries.map((e) => e.asEntry);
 
   Iterable<K> get keys => _mapOfSets.keys;
 
@@ -495,7 +512,7 @@ class IMapOfSets<K, V> //
     MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
     ConfigMapOfSets config,
   }) =>
-      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper), config: config ?? defaultConfigMapOfSets);
+      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper), config: config ?? defaultConfig);
 
   /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
   IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>

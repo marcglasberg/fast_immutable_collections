@@ -331,7 +331,7 @@ internal state is better, because it will return `true` more often.
 As explained above, the **default** configuration of the `IList` is that it compares by 
 deep equality: They are equal if they have the same items in the same order.
 
-You can globally change this default if you want, by using the `defaultConfigList` setter:
+You can globally change this default if you want, by using the `defaultConfig` setter:
 
 ```dart
 var list = [1, 2];
@@ -343,7 +343,7 @@ print(ilistA1 == ilistA2); // True!
 
 /// Now we change the default to identity-equals. 
 /// This will affect lists created from now on.
-defaultConfigList = ConfigList(isDeepEquals: false);
+defaultConfig = ConfigList(isDeepEquals: false);
 var ilistB1 = IList(list);
 var ilistB2 = IList(list);
 print(ilistB1 == ilistB2); // False!
@@ -501,7 +501,14 @@ No flushing will take place during these process.
 After the asynchronous gap, as soon as you try to get, add or remove an item from it,
 it will flush automatically.  
 
-The global configuration default is to have auto-flush on.
+The global configuration default is to have auto-flush on. It's easy to disable this:
+
+```dart
+autoFlush = false;
+
+// You can also lock further changes to the global configuration, if you want:                                              
+lockConfig();
+```dart
 
 
 ## Advanced usage
@@ -668,8 +675,8 @@ The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, so
 2) `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
    will return sorted outputs.
 
-You can globally change this default if you want, by using the `defaultConfigSet` setter:
-`defaultConfigSet = ConfigSet(isDeepEquals: false, sort: false);`
+You can globally change this default if you want, by using the `defaultConfig` setter:
+`defaultConfig = ConfigSet(isDeepEquals: false, sort: false);`
                                                                         
 Note that `ConfigSet` is similar to `ConfigList`, but it has an extra parameter: `Sort`:
 
@@ -845,8 +852,8 @@ The **default** configuration of the `IMap` is
 3) `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
 will return sorted outputs.
 
-You can globally change this default if you want, by using the `defaultConfigMap` setter:
-`defaultConfigMap = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
+You can globally change this default if you want, by using the `defaultConfig` setter:
+`defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
                                                                         
 Note that `ConfigMap` is similar to `ConfigSet`, 
 but it has separate sort parameters for keys and values: `sortKeys` and `sortValues`:

@@ -12,6 +12,20 @@ import "s_add_all.dart";
 class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
   //
+  static ConfigSet get defaultConfig => _defaultConfig;
+
+  static ConfigSet _defaultConfig = const ConfigSet(isDeepEquals: true, sort: true);
+
+  /// Global configuration that specifies if, by default, the [ISet]s
+  /// use equality or identity for their [operator ==].
+  /// By default `isDeepEquals: true` (sets are compared by equality)
+  /// and `sort: true` (certain sets outputs are sorted).
+  static set defaultConfig(ConfigSet config) {
+    if (ImmutableCollection.isConfigLocked)
+      throw StateError("Can't change the configuration of immutable collections.");
+    _defaultConfig = config ?? const ConfigSet(isDeepEquals: true, sort: true);
+  }
+
   S<T> _s;
 
   /// The set configuration.
@@ -19,13 +33,13 @@ class ISet<T> // ignore: must_be_immutable
 
   static ISet<T> empty<T>([ConfigSet config]) => ISet._unsafe(
         SFlat.empty<T>(),
-        config: config ?? defaultConfigSet,
+        config: config ?? defaultConfig,
       );
 
   /// Create an [ISet] from any [Iterable].
   /// Fast, if the Iterable is another [ISet].
   factory ISet([Iterable<T> iterable]) => //
-      ISet.withConfig(iterable, defaultConfigSet);
+      ISet.withConfig(iterable, defaultConfig);
 
   /// Create an [ISet] from any [Iterable] and a [ConfigSet].
   /// Fast, if the Iterable is another [ISet].
@@ -39,7 +53,7 @@ class ISet<T> // ignore: must_be_immutable
               ? ISet.empty<T>(config)
               : ISet<T>._unsafe(
                   SFlat<T>(iterable),
-                  config: config ?? defaultConfigSet,
+                  config: config ?? defaultConfig,
                 );
 
   /// Safe. Fast if the iterable is an ISet.
@@ -59,7 +73,7 @@ class ISet<T> // ignore: must_be_immutable
   /// it will break the [ISet] and any other derived sets in unpredictable ways.
   ISet.unsafe(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
-    if (disallowUnsafeConstructors) throw UnsupportedError("ISet.unsafe is disallowed.");
+    if (ImmutableCollection.disallowUnsafeConstructors) throw UnsupportedError("ISet.unsafe is disallowed.");
   }
 
   /// Unsafe.
@@ -271,7 +285,7 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   ISet<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet config}) =>
-      ISet._(_s.expand(f), config: config ?? (T == E ? this.config : defaultConfigSet));
+      ISet._(_s.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
 
   @override
   int get length => _s.length;
@@ -308,7 +322,7 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   ISet<E> map<E>(E Function(T element) f, {ConfigSet config}) =>
-      ISet._(_s.map(f), config: config ?? (T == E ? this.config : defaultConfigSet));
+      ISet._(_s.map(f), config: config ?? (T == E ? this.config : defaultConfig));
 
   @override
   T reduce(T Function(T value, T element) combine) => _s.reduce(combine);

@@ -10,13 +10,19 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   /// If you need it to be comparable, you can use this getter to turn
   /// it into an [Entry]. This makes testing easier. For example:
   ///
+  ///     MapEntry mapEntry = map.entries.first;
+  ///
   ///     // Does NOT work.
-  ///     expect(map.entries.first, MapEntry("a", 1));
+  ///     expect(mapEntry, MapEntry("a", 1));
   ///
   ///     // Works!
-  ///     expect(map.entries.first.asEntry, Entry("a", 1));
+  ///     expect(mapEntry.asEntry, Entry("a", 1));
   ///
-  ///  Note another alternative is to use MapEntry matchers.
+  ///  Note another alternative is to use [containsPair] matcher in the map:
+  ///
+  ///     // See https://pub.dev/documentation/matcher/latest/matcher/containsPair.html
+  ///     expect(map, containsPair("a", 1));
+  ///
   ///
   Entry<K, V> get asEntry => Entry.from<K, V>(this);
 
@@ -37,6 +43,7 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   ///
   /// Note: This is not called "compareTo" as to not mislead people into thinking
   /// [MapEntry] is [Comparable]. See: https://github.com/dart-lang/sdk/issues/32559
+  /// and https://github.com/dart-lang/matcher/issues/100
   ///
   int compareKeyAndValue(MapEntry other) => compare(this, other);
 }

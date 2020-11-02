@@ -123,23 +123,23 @@ void main() {
     });
   });
 
-  group("defaultConfigMap |", () {
+  group("defaultConfig |", () {
     test("Is initially a ConfigMap with all attributes true", () {
-      expect(defaultConfigMap, const ConfigMap());
-      expect(defaultConfigMap.isDeepEquals, isTrue);
-      expect(defaultConfigMap.sortKeys, isTrue);
-      expect(defaultConfigMap.sortValues, isTrue);
+      expect(IMap.defaultConfig, const ConfigMap());
+      expect(IMap.defaultConfig.isDeepEquals, isTrue);
+      expect(IMap.defaultConfig.sortKeys, isTrue);
+      expect(IMap.defaultConfig.sortValues, isTrue);
     });
 
     test("Can modify the default", () {
-      defaultConfigMap = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);
-      expect(defaultConfigMap,
+      IMap.defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);
+      expect(IMap.defaultConfig,
           const ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false));
     });
 
     test("Changing the default ConfigMap will throw an exception if lockConfig", () {
-      lockConfig();
-      expect(() => defaultConfigMap = ConfigMap(isDeepEquals: false), throwsStateError);
+      ImmutableCollection.lockConfig();
+      expect(() => IMap.defaultConfig = ConfigMap(isDeepEquals: false), throwsStateError);
     });
   });
 }

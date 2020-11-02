@@ -430,7 +430,7 @@ void main() {
       });
 
       test("Disallowing it", () {
-        disallowUnsafeConstructors = true;
+        ImmutableCollection.disallowUnsafeConstructors = true;
         final List<int> list = [1, 2, 3];
 
         expect(() => IList.unsafe(list, config: ConfigList()), throwsUnsupportedError);

@@ -101,7 +101,7 @@ void main() {
       });
 
       test("Disallowing it", () {
-        disallowUnsafeConstructors = true;
+        ImmutableCollection.disallowUnsafeConstructors = true;
         final Map<String, int> map = {"a": 1, "b": 2};
 
         expect(() => IMap.unsafe(map, config: ConfigMap()), throwsUnsupportedError);
@@ -665,35 +665,35 @@ void main() {
       test("IMap.values getter", () => expect(iMap.values.toSet(), values.toSet()));
 
       test("IMap.entryList getter", () {
-        expect(iMap.entryList, isA<IList<MapEntry<String, int>>>());
-        iMap.entryList
+        expect(iMap.entryList(), isA<IList<MapEntry<String, int>>>());
+        iMap.entryList()
             .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
       });
 
       test("IMap.entrySet getter", () {
-        expect(iMap.entrySet, isA<ISet<MapEntry<String, int>>>());
-        iMap.entrySet
+        expect(iMap.entrySet(), isA<ISet<MapEntry<String, int>>>());
+        iMap.entrySet()
             .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
       });
 
       test("IMap.keyList getter", () {
-        expect(iMap.keyList, isA<IList<String>>());
-        iMap.keyList.forEach((String key) => expect(keys.contains(key), isTrue));
+        expect(iMap.keyList(), isA<IList<String>>());
+        iMap.keyList().forEach((String key) => expect(keys.contains(key), isTrue));
       });
 
       test("IMap.keySet getter", () {
-        expect(iMap.keySet, isA<ISet<String>>());
-        iMap.keySet.forEach((String key) => expect(keys.contains(key), isTrue));
+        expect(iMap.keySet(), isA<ISet<String>>());
+        iMap.keySet().forEach((String key) => expect(keys.contains(key), isTrue));
       });
 
       test("IMap.valueList getter", () {
-        expect(iMap.valueList, isA<IList<int>>());
-        iMap.valueList.forEach((int value) => expect(values.contains(value), isTrue));
+        expect(iMap.valueList(), isA<IList<int>>());
+        iMap.valueList().forEach((int value) => expect(values.contains(value), isTrue));
       });
 
       test("IMap.valueSet getter", () {
-        expect(iMap.valueSet, isA<ISet<int>>());
-        iMap.valueSet.forEach((int value) => expect(values.contains(value), isTrue));
+        expect(iMap.valueSet(), isA<ISet<int>>());
+        iMap.valueSet().forEach((int value) => expect(values.contains(value), isTrue));
       });
     });
 
@@ -760,23 +760,23 @@ void main() {
 
     group("IMap to List/Set Family |", () {
       test("IMap.toList method", () {
-        expect(iMap.toList(), isA<List<MapEntry<String, int>>>());
+        expect(iMap.toEntryList(), isA<List<MapEntry<String, int>>>());
         iMap
-            .toList()
+            .toEntryList()
             .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
       });
 
       test("IMap.toIList method", () {
-        expect(iMap.toIList(), isA<IList<MapEntry<String, int>>>());
+        expect(iMap.entryList(), isA<IList<MapEntry<String, int>>>());
         iMap
-            .toIList()
+            .entryList()
             .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
       });
 
       test("IMap.toISet method", () {
-        expect(iMap.toISet(), isA<ISet<MapEntry<String, int>>>());
+        expect(iMap.toEntrySet(), isA<ISet<MapEntry<String, int>>>());
         iMap
-            .toISet()
+            .toEntrySet()
             .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
       });
 
@@ -791,13 +791,13 @@ void main() {
       });
 
       test("IMap.toKeyISet method", () {
-        expect(iMap.toKeyISet(), isA<ISet<String>>());
-        expect(iMap.toKeyISet(), keys.toSet());
+        expect(iMap.keySet(), isA<ISet<String>>());
+        expect(iMap.keySet(), keys.toSet());
       });
 
       test("IMap.toValueISet method", () {
-        expect(iMap.toValueISet(), isA<ISet<int>>());
-        expect(iMap.toValueISet(), values.toSet());
+        expect(iMap.valueSet(), isA<ISet<int>>());
+        expect(iMap.valueSet(), values.toSet());
       });
     });
 
