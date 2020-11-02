@@ -280,17 +280,17 @@ void main() {
       final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
 
       expect(iMap.isDeepEquals, isTrue);
-      expect(iMap.config.autoSortKeys, isTrue);
-      expect(iMap.config.autoSortValues, isTrue);
+      expect(iMap.config.sortKeys, isTrue);
+      expect(iMap.config.sortValues, isTrue);
 
       final IMap<String, int> iMapWithCompare = iMap.withConfig(iMap.config.copyWith(
-        autoSortKeys: false,
-        autoSortValues: false,
+        sortKeys: false,
+        sortValues: false,
       ));
 
       expect(iMapWithCompare.isDeepEquals, isTrue);
-      expect(iMapWithCompare.config.autoSortKeys, isFalse);
-      expect(iMapWithCompare.config.autoSortValues, isFalse);
+      expect(iMapWithCompare.config.sortKeys, isFalse);
+      expect(iMapWithCompare.config.sortValues, isFalse);
     });
   });
 

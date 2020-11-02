@@ -116,22 +116,22 @@ class ISet<T> // ignore: must_be_immutable
   /// Unlocks the set, returning a safe, modifiable (mutable) [Set].
   /// Using this is very fast at first, since it makes no copies of the [ISet]
   /// items. However, if and only if you use a method that mutates the set,
-  /// like [add], it will unlock internally (make a copy of all ISet items).
+  /// like [add], it will unlock internally (make a copy of all [ISet] items).
   /// This is transparent to you, and will happen at most only once. In other
-  /// words, it will unlock the ISet, lazily, only if necessary.
+  /// words, it will unlock the [ISet], lazily, only if necessary.
   /// If you never mutate the set, it will be very fast to lock this set
   /// back into an [ISet].
   Set<T> get unlockLazy => ModifiableSetView(this);
 
-  /// 1) If the set"s [config] has [ConfigSet.autoSort] `true` (the default),
+  /// 1) If the set"s [config] has [ConfigSet.sort] `true` (the default),
   /// it will iterate in the natural order of items. In other words, if the items
   /// are [Comparable], they will be sorted by `a.compareTo(b)`.
-  /// 2) If the set"s [config] has [ConfigSet.autoSort] `false`, or if the items
+  /// 2) If the set"s [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], the iterator order is undefined.
   ///
   @override
   Iterator<T> get iterator {
-    if (config.autoSort) {
+    if (config.sort) {
       var sortedList = _s.toList(growable: false)..sort(ImmutableCollection.compare);
       return sortedList.iterator;
     } else
@@ -300,7 +300,7 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   String join([String separator = ""]) =>
-      config.autoSort ? toSet().join(separator) : _s.join(separator);
+      config.sort ? toSet().join(separator) : _s.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -341,10 +341,10 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
   /// set"s [config] field:
-  /// - If [ConfigSet.autoSort] is `true` (the default), the list will be sorted with
+  /// - If [ConfigSet.sort] is `true` (the default), the list will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the list order is undefined.
-  /// - If [ConfigSet.autoSort] is `false`, the list order is undefined.
+  /// - If [ConfigSet.sort] is `false`, the list order is undefined.
   ///
   @override
   List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
@@ -353,7 +353,7 @@ class ISet<T> // ignore: must_be_immutable
     if (compare != null) {
       result.sort(compare);
     } else {
-      if (config.autoSort) result.sort(ImmutableCollection.compare);
+      if (config.sort) result.sort(ImmutableCollection.compare);
     }
 
     return result;
@@ -365,10 +365,10 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
   /// set"s [ISet.config] field:
-  /// - If [ConfigSet.autoSort] is `true` (the default), the list will be sorted with
+  /// - If [ConfigSet.sort] is `true` (the default), the list will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the list order is undefined.
-  /// - If [ConfigSet.autoSort] is `false`, the list order is undefined.
+  /// - If [ConfigSet.sort] is `false`, the list order is undefined.
   ///
   /// You can also provide a [config] for the [IList].
   ///
@@ -383,12 +383,12 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
   /// set's [ISet.config] field:
-  /// - If [ConfigSet.autoSort] is `true` (the default), the set will be sorted with
+  /// - If [ConfigSet.sort] is `true` (the default), the set will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the set order is undefined.
   /// The set will be a [LinkedHashSet], which is ORDERED, meaning further iteration of
   /// its items will maintain insertion order.
-  /// - If [ConfigSet.autoSort] is `false`, the set order is undefined. The set will
+  /// - If [ConfigSet.sort] is `false`, the set order is undefined. The set will
   /// be a [HashSet], which is NOT ordered. Note this is the same as unlocking the
   /// set with [ISet.unlock].
   ///
@@ -398,7 +398,7 @@ class ISet<T> // ignore: must_be_immutable
       var orderedList = toList(growable: false, compare: compare);
       return LinkedHashSet.of(orderedList);
     } else {
-      if (config.autoSort) {
+      if (config.sort) {
         var orderedList = toList(growable: false);
         return LinkedHashSet.of(orderedList);
       } else {

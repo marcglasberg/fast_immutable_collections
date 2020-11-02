@@ -414,26 +414,26 @@ void main() {
     };
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets(mapOfSets);
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, autoSortKeys: false, autoSortValues: false);
+        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
 
     test("IMapOfSets.withConfig factory constructor", () {
       final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
 
       expect(iMapOfSets2.config.isDeepEquals, isFalse);
-      expect(iMapOfSets2.config.autoSortKeys, isFalse);
-      expect(iMapOfSets2.config.autoSortValues, isFalse);
+      expect(iMapOfSets2.config.sortKeys, isFalse);
+      expect(iMapOfSets2.config.sortValues, isFalse);
     });
 
     test("IMapOfSets.withConfig method", () {
       expect(iMapOfSets1.config.isDeepEquals, isTrue);
-      expect(iMapOfSets1.config.autoSortKeys, isTrue);
-      expect(iMapOfSets1.config.autoSortValues, isTrue);
+      expect(iMapOfSets1.config.sortKeys, isTrue);
+      expect(iMapOfSets1.config.sortValues, isTrue);
 
       final IMapOfSets<String, int> iMapOfSets2 = iMapOfSets1.withConfig(configMapOfSets);
 
       expect(iMapOfSets2.config.isDeepEquals, isFalse);
-      expect(iMapOfSets2.config.autoSortKeys, isFalse);
-      expect(iMapOfSets2.config.autoSortValues, isFalse);
+      expect(iMapOfSets2.config.sortKeys, isFalse);
+      expect(iMapOfSets2.config.sortValues, isFalse);
     });
 
     test("IMap.isIdentityEquals getter", () {
@@ -451,15 +451,15 @@ void main() {
               iMapOfSets2.config,
               const ConfigMapOfSets(
                 isDeepEquals: false,
-                autoSortKeys: false,
-                autoSortValues: false,
+                sortKeys: false,
+                sortValues: false,
               )));
 
       test("IMapOfSets.configSet getter", () {
         expect(
             iMapOfSets2.configSet,
             const ConfigSet(
-              autoSort: false,
+              sort: false,
               isDeepEquals: false,
             ));
       });
@@ -470,8 +470,8 @@ void main() {
               iMapOfSets2.configMap,
               const ConfigMap(
                 isDeepEquals: false,
-                autoSortKeys: false,
-                autoSortValues: false,
+                sortKeys: false,
+                sortValues: false,
               )));
     });
   });

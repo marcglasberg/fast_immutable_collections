@@ -34,6 +34,9 @@ class IMap<K, V> // ignore: must_be_immutable
       : IMap<K, V>._unsafe(MFlat<K, V>(map), config: config ?? defaultConfigMap);
 
   /// Create an [IMap] from an [Iterable] of [MapEntry].
+  /// If multiple [entries] have the same key,
+  /// later occurrences overwrite the earlier ones.
+  ///
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap config}) {
     if (entries is IMap<K, V>)
       return IMap._unsafe((entries as IMap<K, V>)._m, config: config ?? defaultConfigMap);
@@ -44,6 +47,13 @@ class IMap<K, V> // ignore: must_be_immutable
     }
   }
 
+  /// Create an [IMap] from the given [keys].
+  /// The values will be the result of applying [valueMapper] to the [keys].
+  /// If a key repeats, later occurrences overwrite the earlier ones.
+  ///
+  ///     // Results in {"Jim": 3, "David": 5}
+  ///     IMap<String, int> imap = IMap.fromKeys(["Jim", "David"], (String name) => name.length);
+  ///
   factory IMap.fromKeys({
     @required Iterable<K> keys,
     @required V Function(K) valueMapper,
@@ -61,6 +71,13 @@ class IMap<K, V> // ignore: must_be_immutable
     return IMap._(map, config: config ?? defaultConfigMap);
   }
 
+  /// Create an [IMap] from the given [values].
+  /// The keys will be the result of applying [keyMapper] to the [values].
+  /// If a key repeats, later occurrences overwrite the earlier ones.
+  ///
+  ///     // Results in {3: "Jim", 5: "David"}
+  ///     IMap<int, String> imap = IMap.fromValues((String name) => name.length, ["Jim", "David"]);
+  ///
   factory IMap.fromValues({
     @required K Function(V) keyMapper,
     @required Iterable<V> values,
@@ -78,6 +95,27 @@ class IMap<K, V> // ignore: must_be_immutable
     return IMap._(map, config: config ?? defaultConfigMap);
   }
 
+  /// Creates a Map instance in which the keys and values are computed
+  /// from the [iterable].
+  ///
+  /// For each element of the [iterable] this constructor computes a key/value
+  /// pair, by applying [keyMapper] and [valueMapper] respectively.
+  ///
+  /// The example below creates a new Map from a List. The keys of `map` are
+  /// `list` values converted to strings, and the values of the `map` are the
+  /// squares of the `list` values:
+  ///
+  ///     List<int> list = [1, 2, 3];
+  ///     IMap<String, int> map = new IMap.fromIterable(list,
+  ///         keyMapper: (item) => item.toString(),
+  ///         valueMapper: (item) => item * item);
+  ///
+  /// If no values are specified for [keyMapper] and [valueMapper],
+  /// the default is the identity function.
+  ///
+  /// The keys computed by the source [iterable] do not need to be unique. The
+  /// last occurrence of a key will simply overwrite any previous value.
+  ///
   factory IMap.fromIterable(
     Iterable iterable, {
     K Function(dynamic) keyMapper,
@@ -167,6 +205,27 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
+
+  /// Returns a Dart [Map] (mutable, ordered, of type [LinkedHashMap]).
+  Map<K, V> get unlockSorted => <K, V>{}..addEntries(entryList);
+
+  /// Unlocks the map, returning a safe, unmodifiable (immutable) [Map] view.
+  /// The word "view" means the set is backed by the original [IMap].
+  /// Using this is very fast, since it makes no copies of the [IMap] entries.
+  /// However, if you try to use methods that modify the map, like [add],
+  /// it will throw an [UnsupportedError].
+  /// It is also very fast to lock this map back into an [IMap].
+  Map<K, V> get unlockView => UnmodifiableMapView(this);
+
+  /// Unlocks the map, returning a safe, modifiable (mutable) [Map].
+  /// Using this is very fast at first, since it makes no copies of the [IMap]
+  /// entries. However, if and only if you use a method that mutates the map,
+  /// like [add], it will unlock internally (make a copy of all [IMap] entries).
+  /// This is transparent to you, and will happen at most only once. In other
+  /// words, it will unlock the [IMap], lazily, only if necessary.
+  /// If you never mutate the map, it will be very fast to lock this map
+  /// back into an [IMap].
+  Map<K, V> get unlockLazy => ModifiableMapView(this);
 
   @override
   bool get isEmpty => _m.isEmpty;

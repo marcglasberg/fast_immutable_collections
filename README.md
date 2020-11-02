@@ -45,7 +45,7 @@ Later in this document, we provide benchmarks so that you can compare speeds
 [built_collection]: https://pub.dev/packages/built_collection
 [kt_dart]: https://pub.dev/packages/kt_dart
 
-## IList
+# IList
 
 An `IList` is an immutable list, meaning once it's created it cannot be modified. 
 You can create an `IList` by passing an iterable to its constructor, 
@@ -215,9 +215,8 @@ IList methods and getters:
 `setAll`,
 `setRange`,
 `shuffle`.
-
                                                                         
-### IList Equality 
+## IList Equality 
    
 By default, `IList`s are equal if they have the same items in the same order.
 
@@ -327,7 +326,7 @@ Note: This is not the same as `identical(list1, list2)` since it doesn't
 compare the lists themselves, but their internal state. Comparing the
 internal state is better, because it will return `true` more often.
   
-### Global IList Configuration
+## Global IList Configuration
 
 As explained above, the **default** configuration of the `IList` is that it compares by 
 deep equality: They are equal if they have the same items in the same order.
@@ -360,7 +359,7 @@ We strongly suggest that you prohibit further changes to the global configuratio
 after you set your desired configuration.
 
 
-### Usage in tests
+## Usage in tests
 
 An `IList` is not a `List`, so this is false:
 
@@ -400,7 +399,7 @@ If you ask me, this is all very confusing.
 A good rule of thumb to avoid all these `expect` complexities 
 is only comparing lists with lists, set with sets, etc.
 
-### IList reuse by composition
+## IList reuse by composition
 
 Classes `IListMixin` and `IterableIListMixin` let you easily 
 create your own immutable classes based on the `IList`.
@@ -454,7 +453,7 @@ expect(students, [james, sara, lucy]);
 print(students.greetings()); 
 ```   
 
-### Flushing the IList
+## Flushing the IList
 
 As explained, `fast_immutable_collections` is fast because it creates a new collection 
 by internally "composing" the source collection with some other information, 
@@ -491,7 +490,7 @@ Also, note flush just optimizes the list **internally**,
 and no external difference will be visible. 
 So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
-#### Auto-flush      
+### Auto-flush      
   
 Depending on the global configuration, 
 the collections will flush automatically for you, 
@@ -505,7 +504,7 @@ it will flush automatically.
 The global configuration default is to have auto-flush on.
 
 
-### Advanced usage
+## Advanced usage
 
 There are a few ways to lock and unlock a list, 
 which will have different results in speed and safety.
@@ -557,7 +556,7 @@ If you never mutate the list, it will be very fast to lock this list
 back into an `IList`.
 
 
-## ISet
+# ISet
 
 An `ISet` is an immutable set, meaning once it's created it cannot be modified.
 An `ISet` is always **unordered** 
@@ -600,24 +599,19 @@ ISet constructors:
 `ISet.withConfig()`,
 `ISet.unsafe()`.
                                                               
-### Similarities and Differences to the IList
+## Similarities and Differences to the IList
 
 > Since I don't want to repeat myself, 
 > all the topics below are explained in much less detail here than for the IList.
 > Please read the IList explanation first, before trying to understand the ISet.
 
-
 * An `ISet` is an `Iterable`, so you can iterate over it.
 
-* `ISet` methods always return a new `ISet`, instead of modifying the original one. 
+* `ISet` has **all** the methods of `Set`, plus some other new and useful ones.
+`ISet` methods always return a new `ISet`, instead of modifying the original one. 
 Because of that, you can easily chain methods.
 But since `ISet` methods always return a new `ISet`, 
 it is an **error** to call some method and then discard the result. 
-
-* `ISet` has **all** the methods of `Set`,
-plus some other new and useful ones.
-However, `ISet` methods always return a new `ISet`, 
-instead of modifying the original set or returning iterables.
 
 * `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order. 
 They can be used as **map keys**, which is a very useful property in itself, 
@@ -665,19 +659,19 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
     ```                                                        
 
   
-### Global ISet Configuration
+## Global ISet Configuration
 
-The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, autoSort: true)`:
+The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true)`:
 
 1) `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
 
-2) `autoSort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
+2) `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
    will return sorted outputs.
 
-You can globally change this default if you want, by using the `defaultConfigList` setter:
-`defaultConfigSet = ConfigSet(isDeepEquals: false, autoSort: false);`
+You can globally change this default if you want, by using the `defaultConfigSet` setter:
+`defaultConfigSet = ConfigSet(isDeepEquals: false, sort: false);`
                                                                         
-Note that `ConfigSet` is similar to `ConfigList`, but it has an extra parameter: `autosort`:
+Note that `ConfigSet` is similar to `ConfigList`, but it has an extra parameter: `Sort`:
 
 ```dart
 /// Prints sorted: "1,2,3,4,9"
@@ -685,11 +679,172 @@ var iset = {2, 4, 1, 9, 3}.lock;
 print(iset.join(","));
 
 /// Prints in any order: "2,4,1,9,3"
-var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(autoSort: false));  
+var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: false));  
 print(iset.join(","));
 ``` 
   
 As previously discussed with the `IList`, 
+the global configuration is meant to be decided during your app's initialization, and then not changed again.
+We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
+after you set your desired configuration.
+
+
+# IMap
+
+An `IMap` is an immutable map, meaning once it's created it cannot be modified.
+An `IMap` is always **unordered** 
+(though, as we'll see, it can be automatically sorted when you use it).  
+
+You can create an `IMap` by passing a regular map to its constructor, 
+or you can simply "lock" a regular map. 
+There are also a few other specialized constructors:  
+
+```dart          
+/// Ways to build an IMap
+
+// Using the IMap constructor                                                                      
+IMap<String, int> imap = IMap({"a": 1, "b": 2});
+                              
+// Locking a regular map
+IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+                          
+// From map entries
+IMap<String, int> imap = IMap.fromEntries([MapEntry("a", 1), MapEntry("b", 2)]);
+
+// From keys and a value-mapper
+// This results in {"Jim": 3, "David": 5}
+IMap<String, int> imap = 
+    IMap.fromKeys(keys: ["Jim", "David"], 
+                  valueMapper: (name) => name.length);
+
+// From a key-mapper and values          
+// This results in {3: "Jim", 5: "David"}
+IMap<int, String> imap = 
+    IMap.fromValues(keyMapper: (name) => name.length, 
+                    values: ["Jim", "David"]);
+
+// From an Iterable and key/value mappers          
+// This results in {"JIM": 3, "DAVID": 5}
+IMap<int, String> imap = 
+    IMap.fromIterable(["Jim", "David"], 
+                      keyMapper: (name) => name.toUppercase(),
+                      valueMapper: (name) => name.length);
+
+// From key and value Iterables          
+// This results in {"a": 1, "b": 2}
+IMap<int, String> imap = IMap.fromIterables(["a", "b"], [1, 2]);                      
+```                                                                           
+
+To create a regular `Map` from an `IMap`, you can "unlock" an immutable map:
+
+```dart  
+/// Going back from IMap to Map
+                 
+IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+Map<String, int> map = imap.unlock; 
+```             
+                                                             
+## Similarities and Differences to the IList/ISet
+
+> Since I don't want to repeat myself, 
+> all the topics below are explained in much less detail here than for the IList.
+> Please read the IList explanation first, before trying to understand the IMap.
+
+* Just like a regular map, an `IMap` is **not**an `Iterable`.
+However, you can iterate over its entries, keys and values:
+
+```dart
+Iterable<MapEntry<K, V>> get entries;  
+Iterable<K> get keys;
+Iterable<V> get values;
+IList<MapEntry<K, V>> get entryList;
+ISet<MapEntry<K, V>> get entrySet;
+IList<K> get keyList;
+IList<V> get valueList;
+ISet<K> get keySet;
+ISet<V> get valueSet;
+Iterator<MapEntry<K, V>> get iterator;
+List<MapEntry<K, V>> toList() => List.of(entries);
+IList<MapEntry<K, V>> toIList() => IList(entries);
+ISet<MapEntry<K, V>> toISet() => ISet(entries);
+Set<K> toKeySet();
+Set<V> toValueSet();
+ISet<K> toKeyISet();
+ISet<V> toValueISet();
+```
+
+* `IMap` has **all** the methods of `Map`, plus some other new and useful ones. 
+`IMap` methods always return a new `IMap`, instead of modifying the original one. 
+Because of that, you can easily chain methods.
+But since `IMap` methods always return a new `IMap`, 
+it is an **error** to call some method and then discard the result. 
+
+* `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order. 
+These maps can be used as **map keys** themselves.
+  
+* However, `IMap`s are configurable, and you can actually create `IMap`s which
+compare their internals by identity or deep equals, as desired.
+   
+* To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
+or else use the `withConfig` method and the `ConfigMap` class to change the configuration;
+or else use the `withConfig` constructor to explicitly create the `IMap` with your desired configuration.
+ 
+* The configurations affect how the `== operator` works, 
+but you can also choose how to compare sets by using the following `IMap` methods:
+`equalItems`, `equalItemsAndConfig`, `equalItemsToIMap` and `same`.
+Note, however, there is no `unorderedEqualItems` like in the `IList`, 
+because since `IMaps` are unordered the `equalItems` method already disregards the order.
+
+* You can flush some `IMap` by using the getter `.flush`.
+Note flush just optimizes the set **internally**, 
+and no external difference will be visible.
+Depending on the global configuration, the `IMap`s 
+will flush automatically for you, once per asynchronous gap.  
+
+* There are a few ways to lock and unlock a map, 
+which will have different results in speed and safety.
+Getter `lock` will create an internal defensive copy of the original map.
+Getter `lockUnsafe` is fast, since it makes no defensive copies of the map.
+Getter `unlock` unlocks the map, returning a regular (mutable, growable) set.
+Getter `unlockView` unlocks the map, returning a safe, unmodifiable (immutable) map view.
+And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) map.
+
+    ```dart
+    IMap<String, int> imap = {"a": 1, "b": 2}.lock;        // Safe
+    IMap<String, int> imap = {"a": 1, "b": 2}.lockUnsafe;  // Only this one is dangerous
+    Map<String, int> set = imap.unlock;                    // Safe, mutable and unordered
+    Map<String, int> set = imap.unlockSorted;              // Safe, mutable and ordered 
+    Map<String, int> set = imap.unlockView;                // Safe, fast and immutable
+    Map<String, int> set = imap.unlockLazy;                // Safe, fast and mutable
+    ```                                                        
+
+  
+## Global IMap Configuration
+
+The **default** configuration of the `IMap` is `ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true)`:
+
+1) `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
+
+2) `sort: true` means `IMap.iterator`, and methods `IMap.toList`, `IMap.toIList` and `IMap.toSet`
+   will return sorted outputs.
+
+You can globally change this default if you want, by using the `defaultConfigMap` setter:
+`defaultConfigMap = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
+                                                                        
+Note that `ConfigMap` is similar to `ConfigSet`, 
+but it has separate sort parameters for keys and values: `sortKeys` and `sortValues`:
+
+```dart
+/// Prints sorted: "1,2,4,9"
+var imap = {2: "a", 4: "x", 1: "z", 9: "k"}.lock;  
+print(imap.keyList.join(","));
+
+/// Prints in any order: "2,4,1,9"
+var imap = {2: "a", 4: "x", 1: "z", 9: "k"}.lock.withConfig(ConfigMap(sortKeys: false));  
+print(imap.keyList.join(","));
+``` 
+  
+As previously discussed with `IList` and `ISet`, 
 the global configuration is meant to be decided during your app's initialization, and then not changed again.
 We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
 after you set your desired configuration.

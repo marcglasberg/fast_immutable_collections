@@ -6,29 +6,29 @@ void main() {
   group("ConfigMapOfSets", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
-        configMapOfSets3 = ConfigMapOfSets(autoSortKeys: false),
-        configMapOfSets4 = ConfigMapOfSets(autoSortValues: false);
+        configMapOfSets3 = ConfigMapOfSets(sortKeys: false),
+        configMapOfSets4 = ConfigMapOfSets(sortValues: false);
 
     test("ConfigMapOfSets.isDeepEquals getter", () {
       expect(configMapOfSets1.isDeepEquals, isTrue);
       expect(configMapOfSets2.isDeepEquals, isFalse);
     });
 
-    test("ConfigMapOfSets.autoSortKeys getter", () {
-      expect(configMapOfSets1.autoSortKeys, isTrue);
-      expect(configMapOfSets3.autoSortKeys, isFalse);
+    test("ConfigMapOfSets.sortKeys getter", () {
+      expect(configMapOfSets1.sortKeys, isTrue);
+      expect(configMapOfSets3.sortKeys, isFalse);
     });
 
-    test("ConfigMapOfSets.autoSortValues getter", () {
-      expect(configMapOfSets1.autoSortValues, isTrue);
-      expect(configMapOfSets4.autoSortValues, isFalse);
+    test("ConfigMapOfSets.sortValues getter", () {
+      expect(configMapOfSets1.sortValues, isTrue);
+      expect(configMapOfSets4.sortValues, isFalse);
     });
 
     test("ConfigMapOfSets.asConfigSet getter", () {
       expect(configMapOfSets1.asConfigSet, const ConfigSet());
       expect(configMapOfSets2.asConfigSet, const ConfigSet(isDeepEquals: false));
       expect(configMapOfSets3.asConfigSet, const ConfigSet());
-      expect(configMapOfSets4.asConfigSet, const ConfigSet(autoSort: false));
+      expect(configMapOfSets4.asConfigSet, const ConfigSet(sort: false));
     });
 
     test("ConfigMapOfSets.asConfigMap getter", () {
@@ -36,14 +36,14 @@ void main() {
       expect(configMapOfSets2.asConfigMap, const ConfigMap(isDeepEquals: false));
       expect(configMapOfSets3.asConfigMap, const ConfigMap());
       expect(configMapOfSets4.asConfigMap,
-          const ConfigMap(autoSortKeys: false, autoSortValues: false));
+          const ConfigMap(sortKeys: false, sortValues: false));
     });
 
     test("ConfigMapOfSets.== operator", () {
       final ConfigMapOfSets configMapOfSets5 = ConfigMapOfSets(),
           configMapOfSets6 = ConfigMapOfSets(isDeepEquals: false),
-          configMapOfSets7 = ConfigMapOfSets(autoSortKeys: false),
-          configMapOfSets8 = ConfigMapOfSets(autoSortValues: false);
+          configMapOfSets7 = ConfigMapOfSets(sortKeys: false),
+          configMapOfSets8 = ConfigMapOfSets(sortValues: false);
 
       expect(configMapOfSets1 == configMapOfSets1, isTrue);
       expect(configMapOfSets1 == configMapOfSets2, isFalse);
@@ -85,41 +85,41 @@ void main() {
     test("ConfigMapOfSets.copyWith method", () {
       final ConfigMapOfSets configMapOfSetsIdentical = configMapOfSets1.copyWith(),
           configMapOfSets1WithDeepFalse = configMapOfSets1.copyWith(isDeepEquals: false),
-          configMapOfSets1WithAutoSortKeysFalse = configMapOfSets1.copyWith(autoSortKeys: false),
-          configMapOfSets1WithAutoSortValuesFalse =
-              configMapOfSets1.copyWith(autoSortValues: false),
+          configMapOfSets1WithSortKeysFalse = configMapOfSets1.copyWith(sortKeys: false),
+          configMapOfSets1WithSortValuesFalse =
+              configMapOfSets1.copyWith(sortValues: false),
           configMapOfSets1WithAllFalse = configMapOfSets1.copyWith(
-              isDeepEquals: false, autoSortKeys: false, autoSortValues: false);
+              isDeepEquals: false, sortKeys: false, sortValues: false);
 
       expect(identical(configMapOfSets1, configMapOfSetsIdentical), isTrue);
 
       expect(identical(configMapOfSets1, configMapOfSets1WithDeepFalse), isFalse);
       expect(configMapOfSets1.isDeepEquals, !configMapOfSets1WithDeepFalse.isDeepEquals);
-      expect(configMapOfSets1.autoSortKeys, configMapOfSets1WithDeepFalse.autoSortKeys);
-      expect(configMapOfSets1.autoSortValues, configMapOfSets1WithDeepFalse.autoSortValues);
+      expect(configMapOfSets1.sortKeys, configMapOfSets1WithDeepFalse.sortKeys);
+      expect(configMapOfSets1.sortValues, configMapOfSets1WithDeepFalse.sortValues);
 
-      expect(identical(configMapOfSets1, configMapOfSets1WithAutoSortKeysFalse), isFalse);
-      expect(configMapOfSets1.isDeepEquals, configMapOfSets1WithAutoSortKeysFalse.isDeepEquals);
-      expect(configMapOfSets1.autoSortKeys, !configMapOfSets1WithAutoSortKeysFalse.autoSortKeys);
-      expect(configMapOfSets1.autoSortValues, configMapOfSets1WithAutoSortKeysFalse.autoSortValues);
+      expect(identical(configMapOfSets1, configMapOfSets1WithSortKeysFalse), isFalse);
+      expect(configMapOfSets1.isDeepEquals, configMapOfSets1WithSortKeysFalse.isDeepEquals);
+      expect(configMapOfSets1.sortKeys, !configMapOfSets1WithSortKeysFalse.sortKeys);
+      expect(configMapOfSets1.sortValues, configMapOfSets1WithSortKeysFalse.sortValues);
 
-      expect(identical(configMapOfSets1, configMapOfSets1WithAutoSortValuesFalse), isFalse);
-      expect(configMapOfSets1.isDeepEquals, configMapOfSets1WithAutoSortValuesFalse.isDeepEquals);
-      expect(configMapOfSets1.autoSortKeys, configMapOfSets1WithAutoSortValuesFalse.autoSortKeys);
+      expect(identical(configMapOfSets1, configMapOfSets1WithSortValuesFalse), isFalse);
+      expect(configMapOfSets1.isDeepEquals, configMapOfSets1WithSortValuesFalse.isDeepEquals);
+      expect(configMapOfSets1.sortKeys, configMapOfSets1WithSortValuesFalse.sortKeys);
       expect(
-          configMapOfSets1.autoSortValues, !configMapOfSets1WithAutoSortValuesFalse.autoSortValues);
+          configMapOfSets1.sortValues, !configMapOfSets1WithSortValuesFalse.sortValues);
 
       expect(identical(configMapOfSets1, configMapOfSets1WithAllFalse), isFalse);
       expect(configMapOfSets1.isDeepEquals, !configMapOfSets1WithAllFalse.isDeepEquals);
-      expect(configMapOfSets1.autoSortKeys, !configMapOfSets1WithAllFalse.autoSortKeys);
-      expect(configMapOfSets1.autoSortValues, !configMapOfSets1WithAllFalse.autoSortValues);
+      expect(configMapOfSets1.sortKeys, !configMapOfSets1WithAllFalse.sortKeys);
+      expect(configMapOfSets1.sortValues, !configMapOfSets1WithAllFalse.sortValues);
     });
 
     test("ConfigMapOfSets.hashCode getter", () {
       expect(configMapOfSets1.hashCode, ConfigMap().hashCode);
       expect(configMapOfSets2.hashCode, ConfigMap(isDeepEquals: false).hashCode);
-      expect(configMapOfSets3.hashCode, ConfigMap(autoSortKeys: false).hashCode);
-      expect(configMapOfSets4.hashCode, ConfigMap(autoSortValues: false).hashCode);
+      expect(configMapOfSets3.hashCode, ConfigMap(sortKeys: false).hashCode);
+      expect(configMapOfSets4.hashCode, ConfigMap(sortValues: false).hashCode);
       expect(configMapOfSets1.hashCode, isNot(configMapOfSets2.hashCode));
       expect(configMapOfSets1.hashCode, isNot(configMapOfSets3.hashCode));
       expect(configMapOfSets1.hashCode, isNot(configMapOfSets4.hashCode));
@@ -130,13 +130,13 @@ void main() {
 
     test("ConfigMapOfSets.toString method", () {
       expect(configMapOfSets1.toString(),
-          "ConfigMapOfSets{isDeepEquals: true, autoSortKeys: true, autoSortValues: true}");
+          "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: true}");
       expect(configMapOfSets2.toString(),
-          "ConfigMapOfSets{isDeepEquals: false, autoSortKeys: true, autoSortValues: true}");
+          "ConfigMapOfSets{isDeepEquals: false, sortKeys: true, sortValues: true}");
       expect(configMapOfSets3.toString(),
-          "ConfigMapOfSets{isDeepEquals: true, autoSortKeys: false, autoSortValues: true}");
+          "ConfigMapOfSets{isDeepEquals: true, sortKeys: false, sortValues: true}");
       expect(configMapOfSets4.toString(),
-          "ConfigMapOfSets{isDeepEquals: true, autoSortKeys: true, autoSortValues: false}");
+          "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: false}");
     });
   });
 
@@ -144,15 +144,15 @@ void main() {
     test("Is initially a ConfigMapOfSets with all attributes true", () {
       expect(defaultConfigMapOfSets, const ConfigMapOfSets());
       expect(defaultConfigMapOfSets.isDeepEquals, isTrue);
-      expect(defaultConfigMapOfSets.autoSortKeys, isTrue);
-      expect(defaultConfigMapOfSets.autoSortValues, isTrue);
+      expect(defaultConfigMapOfSets.sortKeys, isTrue);
+      expect(defaultConfigMapOfSets.sortValues, isTrue);
     });
 
     test("Can modify the default", () {
       defaultConfigMapOfSets =
-          ConfigMapOfSets(isDeepEquals: false, autoSortKeys: false, autoSortValues: false);
+          ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
       expect(defaultConfigMapOfSets,
-          const ConfigMapOfSets(isDeepEquals: false, autoSortKeys: false, autoSortValues: false));
+          const ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false));
     });
 
     test("Changing the default ConfigMapOfSets will throw an exception if lockConfig", () {

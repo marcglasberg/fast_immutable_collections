@@ -220,17 +220,17 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  testAndPrint("ISet autoSort", () {
+  testAndPrint("ISet sort", () {
     var originalSet = {2, 4, 1, 9, 3};
 
     /// Sorts: "1,2,3,4,9"
-    var iset = originalSet.lock.withConfig(ConfigSet(autoSort: true));
+    var iset = originalSet.lock.withConfig(ConfigSet(sort: true));
     var result1 = iset.join(",");
     var result2 = iset.iterator.toIterable().join(",");
     var result3 = iset.toList().join(",");
     var result4 = iset.toIList().join(",");
     var result5 = iset.toSet().join(",");
-    print(iset.config.autoSort);
+    print(iset.config.sort);
     print(result1);
     print(result2);
     print(result3);
@@ -243,7 +243,7 @@ void main() {
     expect(result5, "1,2,3,4,9");
 
     /// Does not sort, but keeps original order: "2,4,1,9,3"
-    iset = originalSet.lock.withConfig(ConfigSet(autoSort: false));
+    iset = originalSet.lock.withConfig(ConfigSet(sort: false));
     result1 = iset.join(",");
     result2 = iset.iterator.toIterable().join(",");
     result3 = iset.toList().join(",");

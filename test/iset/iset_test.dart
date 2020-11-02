@@ -292,14 +292,14 @@ void main() {
       final ISet<int> iSet = ISet({1, 2});
 
       expect(iSet.isDeepEquals, isTrue);
-      expect(iSet.config.autoSort, isTrue);
+      expect(iSet.config.sort, isTrue);
 
       final ISet<int> iSetWithCompare = iSet.withConfig(
-        iSet.config.copyWith(autoSort: false),
+        iSet.config.copyWith(sort: false),
       );
 
       expect(iSetWithCompare.isDeepEquals, isTrue);
-      expect(iSetWithCompare.config.autoSort, isFalse);
+      expect(iSetWithCompare.config.sort, isFalse);
     });
   });
 
@@ -655,7 +655,7 @@ void main() {
   group("ISet.iterator |", () {
     test("ISet.iterator getter", () {
       ISet<int> iSet = {2, 5, 3, 7, 9, 6, 1}.lock;
-      expect(iSet.config.autoSort, isTrue);
+      expect(iSet.config.sort, isTrue);
 
       // The regular iterator is SORTED.
       expect(iSet.iterator.toList(), [1, 2, 3, 5, 6, 7, 9]);
@@ -671,8 +671,8 @@ void main() {
       // ---
 
       // But you can configure the set NOT to sort the iterator.
-      iSet = iSet.withConfig(const ConfigSet(autoSort: false));
-      expect(iSet.config.autoSort, isFalse);
+      iSet = iSet.withConfig(const ConfigSet(sort: false));
+      expect(iSet.config.sort, isFalse);
       expect(iSet.iterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
       result = [];
       for (int value in iSet) result.add(value);
@@ -797,18 +797,18 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test(
-      "ISet autoSort. "
+      "ISet sort. "
       "Affects join, iterator, toList, toIList, and toSet.", () {
     var originalSet = {2, 4, 1, 9, 3};
 
     /// Sort: "1,2,3,4,9"
-    var iset = originalSet.lock.withConfig(ConfigSet(autoSort: true));
+    var iset = originalSet.lock.withConfig(ConfigSet(sort: true));
     var result1 = iset.join(",");
     var result2 = iset.iterator.toIterable().join(",");
     var result3 = iset.toList().join(",");
     var result4 = iset.toIList().join(",");
     var result5 = iset.toSet().join(",");
-    expect(iset.config.autoSort, isTrue);
+    expect(iset.config.sort, isTrue);
     expect(result1, "1,2,3,4,9");
     expect(result2, "1,2,3,4,9");
     expect(result3, "1,2,3,4,9");
@@ -816,13 +816,13 @@ void main() {
     expect(result5, "1,2,3,4,9");
 
     /// Does not sort: "2,4,1,9,3"
-    iset = originalSet.lock.withConfig(ConfigSet(autoSort: false));
+    iset = originalSet.lock.withConfig(ConfigSet(sort: false));
     result1 = iset.join(",");
     result2 = iset.iterator.toIterable().join(",");
     result3 = iset.toList().join(",");
     result4 = iset.toIList().join(",");
     result5 = iset.toSet().join(",");
-    expect(iset.config.autoSort, isFalse);
+    expect(iset.config.sort, isFalse);
     expect(result1, "2,4,1,9,3");
     expect(result2, "2,4,1,9,3");
     expect(result3, "2,4,1,9,3");
