@@ -8,37 +8,33 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Creating immutable lists |", () {
-    final IList iList1 = IList(), iList2 = IList([]);
-    final iList3 = IList<String>([]),
-        iList4 = IList([1]),
-        iList5 = IList.empty<int>(),
-        iList6 = [].lock;
+  test("Runtime Type", () {
+    expect(IList(), isA<IList>());
+    expect(IList([]), isA<IList>());
+    expect(IList<String>([]), isA<IList<String>>());
+    expect(IList([1]), isA<IList<int>>());
+    expect(IList.empty<int>(), isA<IList<int>>());
+    expect([].lock, isA<IList>());
+  });
 
-    test("Runtime Type", () {
-      expect(iList1, isA<IList>());
-      expect(iList2, isA<IList>());
-      expect(iList3, isA<IList<String>>());
-      expect(iList4, isA<IList<int>>());
-      expect(iList5, isA<IList<int>>());
-      expect(iList6, isA<IList>());
-    });
+  test("Emptiness Properties", () {
+    expect(IList().isEmpty, isTrue);
+    expect(IList().isNotEmpty, isFalse);
 
-    test("Emptiness Properties", () {
-      expect(iList1.isEmpty, isTrue);
-      expect(iList2.isEmpty, isTrue);
-      expect(iList3.isEmpty, isTrue);
-      expect(iList4.isEmpty, isFalse);
-      expect(iList5.isEmpty, isTrue);
-      expect(iList6.isEmpty, isTrue);
+    expect(IList([]).isEmpty, isTrue);
+    expect(IList([]).isNotEmpty, isFalse);
 
-      expect(iList1.isNotEmpty, isFalse);
-      expect(iList2.isNotEmpty, isFalse);
-      expect(iList3.isNotEmpty, isFalse);
-      expect(iList4.isNotEmpty, isTrue);
-      expect(iList5.isNotEmpty, isFalse);
-      expect(iList6.isNotEmpty, isFalse);
-    });
+    expect(IList<String>([]).isEmpty, isTrue);
+    expect(IList<String>([]).isNotEmpty, isFalse);
+
+    expect(IList([1]).isEmpty, isFalse);
+    expect(IList([1]).isNotEmpty, isTrue);
+
+    expect(IList.empty<int>().isEmpty, isTrue);
+    expect(IList.empty<int>().isNotEmpty, isFalse);
+
+    expect([].lock.isEmpty, isTrue);
+    expect([].lock.isNotEmpty, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
