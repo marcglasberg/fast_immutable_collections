@@ -123,10 +123,10 @@ class ISet<T> // ignore: must_be_immutable
   /// back into an [ISet].
   Set<T> get unlockLazy => ModifiableSetView(this);
 
-  /// 1) If the set"s [config] has [ConfigSet.sort] `true` (the default),
+  /// 1) If the set's [config] has [ConfigSet.sort] `true` (the default),
   /// it will iterate in the natural order of items. In other words, if the items
   /// are [Comparable], they will be sorted by `a.compareTo(b)`.
-  /// 2) If the set"s [config] has [ConfigSet.sort] `false`, or if the items
+  /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], the iterator order is undefined.
   ///
   @override
@@ -340,7 +340,7 @@ class ISet<T> // ignore: must_be_immutable
   /// 1) If you provide a [compare] function, the list will be sorted with it.
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
-  /// set"s [config] field:
+  /// set's [config] field:
   /// - If [ConfigSet.sort] is `true` (the default), the list will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the list order is undefined.
@@ -364,7 +364,7 @@ class ISet<T> // ignore: must_be_immutable
   /// 1) If you provide a [compare] function, the list will be sorted with it.
   ///
   /// 2) If no [compare] function is provided, the list will be sorted according to the
-  /// set"s [ISet.config] field:
+  /// set's [ISet.config] field:
   /// - If [ConfigSet.sort] is `true` (the default), the list will be sorted with
   /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
   /// items implement [Comparable]. Otherwise, the list order is undefined.

@@ -683,10 +683,12 @@ void main() {
         final IMapOfSets<String, int> newIMapOfSets = iMapOfSets.add("d", 1);
 
         test("IMapOfSets.entryWithValue method", () {
-          expect(newIMapOfSets.entryWithValue(1).entry, Entry("a", ISet<int>({1, 2})));
-          expect(newIMapOfSets.entryWithValue(2).entry, Entry("a", ISet<int>({1, 2})));
-          expect(newIMapOfSets.entryWithValue(3).entry, Entry("b", ISet<int>({3})));
+          expect(newIMapOfSets.entryWithValue(1).asEntry, Entry("a", ISet<int>({1, 2})));
+          expect(newIMapOfSets.entryWithValue(2).asEntry, Entry("a", ISet<int>({1, 2})));
+          expect(newIMapOfSets.entryWithValue(3).asEntry, Entry("b", ISet<int>({3})));
           expect(newIMapOfSets.entryWithValue(4), isNull);
+
+          expect(newIMapOfSets.entries, contains(entryWhere(key: 'A', value: 1)));
         });
 
         test("IMapOfSets.allEntriesWithValue method", () {
@@ -723,8 +725,8 @@ void main() {
       ];
 
       for (int i = 0; i < correctFlattenedMap.length; i++) {
-        expect(flattenedIMap[i].entry.key, correctFlattenedMap[i].entry.key);
-        expect(flattenedIMap[i].entry.value, correctFlattenedMap[i].entry.value);
+        expect(flattenedIMap[i].asEntry.key, correctFlattenedMap[i].asEntry.key);
+        expect(flattenedIMap[i].asEntry.value, correctFlattenedMap[i].asEntry.value);
       }
     });
 

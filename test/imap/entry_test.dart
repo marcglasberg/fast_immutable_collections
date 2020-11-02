@@ -19,7 +19,7 @@ void main() {
     });
 
     test("From the MapEntryExtension.entry getter", () {
-      final Entry<String, int> entry = MapEntry("a", 1).entry;
+      final Entry<String, int> entry = MapEntry("a", 1).asEntry;
 
       expect(entry.key, "a");
       expect(entry.value, 1);

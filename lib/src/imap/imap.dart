@@ -180,34 +180,147 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> get withDeepEquals =>
       config.isDeepEquals ? this : IMap._unsafe(_m, config: config.copyWith(isDeepEquals: true));
 
+  /// Returns an [Iterable] of the map entries.
+  /// Note this is always fast and UNORDERED. If you need order, please use [entryList].
   Iterable<MapEntry<K, V>> get entries => _m.entries;
 
+  /// Returns an [Iterable] of the map keys.
+  /// Note this is always fast and UNORDERED. If you need order, please use [keyList].
   Iterable<K> get keys => _m.keys;
 
+  /// Returns an [Iterable] of the map values.
+  /// Note this is always fast and UNORDERED. If you need order, please use [valueList].
   Iterable<V> get values => _m.values;
 
-  /// Order is undefined.
-  IList<MapEntry<K, V>> get entryList => IList(entries);
+  /// Returns an [IList] of the map entries.
+  /// Optionally, you may provide a [config] for the list.
+  /// The list will be sorted if the map's [sortKeys] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  IList<MapEntry<K, V>> entryList({
+    int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare,
+    ConfigList config,
+  }) {
+    var result = IList.withConfig(entries, config);
+    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    return result;
+  }
 
-  ISet<MapEntry<K, V>> get entrySet => ISet(entries);
+  /// Returns an [IList] of the map keys.
+  /// Optionally, you may provide a [config] for the list.
+  /// The list will be sorted if the map's [sortKeys] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  IList<K> keyList({
+    int Function(K a, K b) compare,
+    ConfigList config,
+  }) {
+    var result = IList.withConfig(keys, config);
+    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    return result;
+  }
 
-  /// Order is undefined.
-  IList<K> get keyList => IList(keys);
+  /// Returns an [IList] of the map values.
+  /// Optionally, you may provide a [config] for the list.
+  /// The list will be sorted if the map's [sortValues] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  IList<V> valueList({
+    int Function(V a, V b) compare,
+    ConfigList config,
+  }) {
+    var result = IList.withConfig(values, config);
+    if (compare != null || this.config.sortValues) result = result.sort(compare);
+    return result;
+  }
 
-  /// Order is undefined.
-  IList<V> get valueList => IList(values);
+  /// Returns an [ISet] of the map entries.
+  /// Optionally, you may provide a [config] for the set.
+  ISet<MapEntry<K, V>> entrySet({
+    ConfigSet config,
+  }) =>
+      ISet.withConfig(entries, config);
 
-  ISet<K> get keySet => ISet(keys);
+  /// Returns an [ISet] of the map keys.
+  /// Optionally, you may provide a [config] for the set.
+  ISet<K> keySet({
+    ConfigSet config,
+  }) =>
+      ISet.withConfig(keys, config);
 
-  ISet<V> get valueSet => ISet(values);
+  /// Returns an [ISet] of the map values.
+  /// Optionally, you may provide a [config] for the set.
+  ISet<V> valueSet({
+    ConfigSet config,
+  }) =>
+      ISet.withConfig(values, config);
 
-  Iterator<MapEntry<K, V>> get iterator => _m.iterator;
+  /// Returns a [List] of the map entries.
+  /// The list will be sorted if the map's [sortKeys] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  List<MapEntry<K, V>> toEntryList([int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare]) {
+    var result = List.of(entries);
+    if (compare != null || config.sortKeys) result.sort(compare ?? MapEntryExtension.compare);
+    return result;
+  }
+
+  /// Returns a [List] of the map keys.
+  /// The list will be sorted if the map's [sortKeys] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  List<K> toKeyList([int Function(K a, K b) compare]) {
+    var result = List.of(keys);
+    if (compare != null || config.sortKeys) result.sort(compare);
+    return result;
+  }
+
+  /// Returns a [List] of the map values.
+  /// The list will be sorted if the map's [sortValues] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  List<V> toValueList([int Function(V a, V b) compare]) {
+    var result = List.of(values);
+    if (compare != null || config.sortValues) result.sort(compare);
+    return result;
+  }
+
+  /// Returns an [ISet] of the map entries.
+  /// The set will be sorted if the map's [sortKeys] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  Set<MapEntry<K, V>> toEntrySet([int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare]) =>
+      toEntryList(compare).toSet();
+
+  /// Returns a [Set] of the map keys.
+  /// The set will be sorted if the map's [sortKeys] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  Set<K> toKeySet([int Function(K a, K b) compare]) => toKeyList(compare).toSet();
+
+  /// Returns a [Set] of the map values.
+  /// The set will be sorted if the map's [sortValues] configuration is true,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  Set<V> toValueSet([int Function(V a, V b) compare]) => toValueList(compare).toSet();
+
+  /// 1) If the map's [config] has [ConfigMap.sortKeys] `true` (the default),
+  /// it will iterate in the natural order of entries. In other words, if the keys/values
+  /// are [Comparable], they will be sorted first by `keyA.compareTo(keyB)`
+  /// and then by `valueA.compareTo(valueB)`.
+  /// 2) If the map's [config] has [ConfigMap.sortKeys] `false`, or if the keys/values
+  /// are not [Comparable], the iterator order is undefined.
+  ///
+  Iterator<MapEntry<K, V>> get iterator => config.sortKeys ? toEntryList().iterator : _m.iterator;
+
+  /// This iterator is very fast to create, but won't iterate in any particular order,
+  /// no matter what the map configuration is.
+  Iterator<MapEntry<K, V>> get fastIterator => _m.iterator;
 
   /// Returns a regular Dart (mutable) Map.
   Map<K, V> get unlock => _m.unlock;
 
   /// Returns a Dart [Map] (mutable, ordered, of type [LinkedHashMap]).
-  Map<K, V> get unlockSorted => <K, V>{}..addEntries(entryList);
+  Map<K, V> get unlockSorted => <K, V>{}..addEntries(entryList());
 
   /// Unlocks the map, returning a safe, unmodifiable (immutable) [Map] view.
   /// The word "view" means the set is backed by the original [IMap].
@@ -377,23 +490,6 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool containsEntry(MapEntry<K, V> entry) => _m.contains(entry.key, entry.value);
 
-  /// Order is undefined.
-  List<MapEntry<K, V>> toList() => List.of(entries);
-
-  /// Order is undefined.
-  IList<MapEntry<K, V>> toIList() => IList(entries);
-
-  ISet<MapEntry<K, V>> toISet() => ISet(entries);
-
-  Set<K> toKeySet() => keys.toSet();
-
-  Set<V> toValueSet() => values.toSet();
-
-  ISet<K> toKeyISet() => ISet(keys);
-
-  /// Will remove duplicate values.
-  ISet<V> toValueISet() => ISet(values);
-
   int get length => _m.length;
 
   void forEach(void Function(K key, V value) f) => _m.forEach(f);
@@ -486,16 +582,14 @@ abstract class M<K, V> {
   /// Returns the flushed map (flushes it only once).
   /// It is an error to use the flushed map outside of the [M] class.
   Map<K, V> get _getFlushed {
-    _flushed ??= unlock;
+    // Note: Flush must be of type LinkedHashMap. It can't sort, but
+    // the flush is not suppose to change the order of the items.
+    _flushed ??= <K, V>{}..addEntries(entries);
     return _flushed;
   }
 
   /// Returns a regular Dart (mutable) Map.
-  Map<K, V> get unlock {
-    Map<K, V> map = HashMap<K, V>();
-    map.addEntries(entries);
-    return map;
-  }
+  Map<K, V> get unlock => HashMap<K, V>()..addEntries(entries);
 
   Iterable<MapEntry<K, V>> get entries;
 

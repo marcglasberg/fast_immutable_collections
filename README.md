@@ -753,24 +753,37 @@ Map<String, int> map = imap.unlock;
 * Just like a regular map, an `IMap` is **not**an `Iterable`.
 However, you can iterate over its entries, keys and values:
 
-```dart
+```dart               
+/// Unordered
 Iterable<MapEntry<K, V>> get entries;  
 Iterable<K> get keys;
 Iterable<V> get values;
-IList<MapEntry<K, V>> get entryList;
-ISet<MapEntry<K, V>> get entrySet;
-IList<K> get keyList;
-IList<V> get valueList;
-ISet<K> get keySet;
-ISet<V> get valueSet;
-Iterator<MapEntry<K, V>> get iterator;
-List<MapEntry<K, V>> toList() => List.of(entries);
-IList<MapEntry<K, V>> toIList() => IList(entries);
-ISet<MapEntry<K, V>> toISet() => ISet(entries);
+
+/// Ordered (according to the configuration)
+IList<MapEntry<K, V>> entryList();
+IList<K> keyList();
+IList<V> valueList();                       
+             
+/// Unordered
+ISet<MapEntry<K, V>> entrySet();
+ISet<K> keySet();
+ISet<V> valueSet();
+
+/// Ordered (according to the configuration)
+List<MapEntry<K, V>> toEntryList();
+List<K> toKeyList();
+List<V> toValueList();
+
+/// Ordered (according to the configuration)
+Set<MapEntry<K, V>> toEntrySet();
 Set<K> toKeySet();
 Set<V> toValueSet();
-ISet<K> toKeyISet();
-ISet<V> toValueISet();
+                                            
+/// Ordered (according to the configuration)
+Iterator<MapEntry<K, V>> get iterator;
+             
+/// Unordered, but fast
+Iterator<MapEntry<K, V>> get fastIterator;
 ```
 
 * `IMap` has **all** the methods of `Map`, plus some other new and useful ones. 
@@ -821,12 +834,16 @@ And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) 
   
 ## Global IMap Configuration
 
-The **default** configuration of the `IMap` is `ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true)`:
+The **default** configuration of the `IMap` is 
+`ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true)`:
 
 1) `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
 
-2) `sort: true` means `IMap.iterator`, and methods `IMap.toList`, `IMap.toIList` and `IMap.toSet`
-   will return sorted outputs.
+2) `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
+`IMap.toKeyList`, `IMap.toEntrySet` and `IMap.toKeySet` will return sorted outputs.
+
+3) `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
+will return sorted outputs.
 
 You can globally change this default if you want, by using the `defaultConfigMap` setter:
 `defaultConfigMap = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
@@ -845,9 +862,10 @@ print(imap.keyList.join(","));
 ``` 
   
 As previously discussed with `IList` and `ISet`, 
-the global configuration is meant to be decided during your app's initialization, and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
-after you set your desired configuration.
+the global configuration is meant to be decided during your app's initialization, 
+and then not changed again.
+We strongly suggest that you prohibit further changes to the global configuration 
+by calling `lockConfig();` after you set your desired configuration.
 
 
 # IMapOfSets
