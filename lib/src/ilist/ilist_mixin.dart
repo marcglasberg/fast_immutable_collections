@@ -31,7 +31,13 @@ import "ilist.dart";
 /// }
 /// ```
 ///
-/// See also: [IterableIListMixin].
+/// Unfortunately, the [expect] method in tests compares [Iterable]s by comparing its items.
+/// So if you create a class that implement [Iterable] and then you want to use the [expect]
+/// method, it will just compare its items, completing ignoring its operator ==.
+/// For this reason, I suggest that you use [IterableIListMixin] only for class which
+/// are meant as a pure collections.
+///
+/// See also: [IterableLikeIListMixin] and [IterableIListMixin].
 ///
 mixin IListMixin<T, I extends IListMixin<T, I>> implements Iterable<T>, CanBeEmpty {
   //
