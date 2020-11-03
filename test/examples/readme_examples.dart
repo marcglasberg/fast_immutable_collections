@@ -1,4 +1,4 @@
-import "package:fast_immutable_collections/src/ilist/ilist_mixin.dart";
+import "package:fast_immutable_collections/src/ilist/from_ilist_mixin.dart";
 import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -338,7 +338,7 @@ class Student {
   int get hashCode => name.hashCode;
 }
 
-class Students with IListMixin<Student, Students> {
+class Students with FromIListMixin<Student, Students> {
   final IList<Student> _students;
 
   Students([Iterable<Student> students]) : _students = IList(students);
@@ -347,7 +347,7 @@ class Students with IListMixin<Student, Students> {
   Students newInstance(IList<Student> iList) => Students(iList);
 
   @override
-  IList<Student> get iList => _students;
+  IList<Student> get iter => _students;
 
   String greetings() => "Hello ${_students.join(", ")}.";
 }
