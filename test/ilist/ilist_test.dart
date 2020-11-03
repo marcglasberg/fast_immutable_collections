@@ -439,15 +439,9 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("IList.add method", () {
-    expect([1, 2, 3].lock, [1, 2, 3]);
-    expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]);
-  });
+  test("IList.add method", () => expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]));
 
-  test("IList.addAll method", () {
-    expect([1, 2, 3].lock, [1, 2, 3]);
-    expect([1, 2, 3, 4].lock.addAll([5, 6]), [1, 2, 3, 4, 5, 6]);
-  });
+  test("IList.addAll method", () => expect([1, 2, 3, 4].lock.addAll([5, 6]), [1, 2, 3, 4, 5, 6]));
 
   test("IList.add and IList.addAll methods at the same time",
       () => expect([1, 2, 3].lock.add(10).addAll([20, 30]).unlock, [1, 2, 3, 10, 20, 30]));
