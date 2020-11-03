@@ -17,7 +17,7 @@ void main() {
     expect([].lock, isA<IList>());
   });
 
-  test("Emptiness Properties", () {
+  test("isEmpty | isNotEmpty", () {
     expect(IList().isEmpty, isTrue);
     expect(IList().isNotEmpty, isFalse);
 
@@ -39,346 +39,352 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Ensuring Immutability |", () {
-    group("IList.add method |", () {
-      test("Changing the passed mutable list doesn't change the IList", () {
-        final List<int> original = [1, 2];
-        final IList<int> iList = original.lock;
+  test(
+      "Ensuring Immutability | IList.add method | "
+      "Changing the passed mutable list doesn't change the IList", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList = original.lock;
 
-        expect(iList, original);
+    expect(iList, original);
 
-        original.add(3);
-        original.add(4);
+    original.add(3);
+    original.add(4);
 
-        expect(original, <int>[1, 2, 3, 4]);
-        expect(iList.unlock, <int>[1, 2]);
-      });
+    expect(original, <int>[1, 2, 3, 4]);
+    expect(iList.unlock, <int>[1, 2]);
+  });
 
-      test("Changing the IList also doesn't change the original list", () {
-        final List<int> original = [1, 2];
-        final IList<int> iList = original.lock;
+  test(
+      "Ensuring Immutability | IList.add method | "
+      "Changing the IList also doesn't change the original list", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList = original.lock;
 
-        expect(iList, original);
+    expect(iList, original);
 
-        final IList<int> iListNew = iList.add(3);
+    final IList<int> iListNew = iList.add(3);
 
-        expect(original, <int>[1, 2]);
-        expect(iList, <int>[1, 2]);
-        expect(iListNew, <int>[1, 2, 3]);
-      });
+    expect(original, <int>[1, 2]);
+    expect(iList, <int>[1, 2]);
+    expect(iListNew, <int>[1, 2, 3]);
+  });
 
-      test("If the item being passed is a variable, a pointer to it shouldn't exist inside IList",
-          () {
-        final List<int> original = [1, 2];
-        final IList<int> iList = original.lock;
+  test(
+      "Ensuring Immutability | IList.add method | "
+      "If the item being passed is a variable, a pointer to it shouldn't exist inside IList", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList = original.lock;
 
-        expect(iList, original);
+    expect(iList, original);
 
-        int willChange = 4;
-        final IList<int> iListNew = iList.add(willChange);
+    int willChange = 4;
+    final IList<int> iListNew = iList.add(willChange);
 
-        willChange = 5;
+    willChange = 5;
 
-        expect(original, <int>[1, 2]);
-        expect(iList, <int>[1, 2]);
-        expect(willChange, 5);
-        expect(iListNew, <int>[1, 2, 4]);
-      });
-    });
+    expect(original, <int>[1, 2]);
+    expect(iList, <int>[1, 2]);
+    expect(willChange, 5);
+    expect(iListNew, <int>[1, 2, 4]);
+  });
 
-    group("IList.addAll method |", () {
-      test("Changing the passed mutable list doesn't change the IList", () {
-        final List<int> original = [1, 2];
-        final IList<int> iList = original.lock;
+  test(
+      "Ensuring Immutability | IList.addAll method | "
+      "Changing the passed mutable list doesn't change the IList", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList = original.lock;
 
-        expect(iList, <int>[1, 2]);
+    expect(iList, <int>[1, 2]);
 
-        original.addAll(<int>[3, 4]);
+    original.addAll(<int>[3, 4]);
 
-        expect(original, <int>[1, 2, 3, 4]);
-        expect(iList, <int>[1, 2]);
-      });
+    expect(original, <int>[1, 2, 3, 4]);
+    expect(iList, <int>[1, 2]);
+  });
 
-      test("Changing the passed immutable list doesn't change the IList", () {
-        final List<int> original = [1, 2];
-        final IList<int> iList = original.lock;
+  test(
+      "Ensuring Immutability | IList.addAll method | "
+      "Changing the passed immutable list doesn't change the IList", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList = original.lock;
 
-        expect(iList, <int>[1, 2]);
+    expect(iList, <int>[1, 2]);
 
-        final IList<int> iListNew = iList.addAll(<int>[3, 4]);
+    final IList<int> iListNew = iList.addAll(<int>[3, 4]);
 
-        expect(original, <int>[1, 2]);
-        expect(iList, <int>[1, 2]);
-        expect(iListNew, <int>[1, 2, 3, 4]);
-      });
+    expect(original, <int>[1, 2]);
+    expect(iList, <int>[1, 2]);
+    expect(iListNew, <int>[1, 2, 3, 4]);
+  });
 
-      test(
-          "If the items being passed are from a variable, "
-          "it shouldn't have a pointer to the variable", () {
-        final List<int> original = [1, 2];
-        final IList<int> iList1 = original.lock;
-        final IList<int> iList2 = original.lock;
+  test(
+      "Ensuring Immutability | IList.addAll method | "
+      "If the items being passed are from a variable, "
+      "it shouldn't have a pointer to the variable", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList1 = original.lock;
+    final IList<int> iList2 = original.lock;
 
-        expect(iList1, original);
-        expect(iList2, original);
+    expect(iList1, original);
+    expect(iList2, original);
 
-        final IList<int> iListNew = iList1.addAll(iList2);
-        original.add(3);
+    final IList<int> iListNew = iList1.addAll(iList2);
+    original.add(3);
 
-        expect(original, <int>[1, 2, 3]);
-        expect(iList1, <int>[1, 2]);
-        expect(iList2, <int>[1, 2]);
-        expect(iListNew, <int>[1, 2, 1, 2]);
-      });
-    });
+    expect(original, <int>[1, 2, 3]);
+    expect(iList1, <int>[1, 2]);
+    expect(iList2, <int>[1, 2]);
+    expect(iListNew, <int>[1, 2, 1, 2]);
+  });
 
-    group("IList.remove method |", () {
-      test("Changing the passed mutable list doesn't change the IList", () {
-        final List<int> original = [1, 2];
-        final IList<int> iList = original.lock;
+  test(
+      "Ensuring Immutability | IList.remove method | "
+      "Changing the passed mutable list doesn't change the IList", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList = original.lock;
 
-        expect(iList, [1, 2]);
+    expect(iList, [1, 2]);
 
-        original.remove(2);
+    original.remove(2);
 
-        expect(original, <int>[1]);
-        expect(iList, <int>[1, 2]);
-      });
+    expect(original, <int>[1]);
+    expect(iList, <int>[1, 2]);
+  });
 
-      test("Removing from the original IList doesn't change it", () {
-        final List<int> original = [1, 2];
-        final IList<int> iList = original.lock;
+  test(
+      "Ensuring Immutability | IList.remove method | "
+      "Removing from the original IList doesn't change it", () {
+    final List<int> original = [1, 2];
+    final IList<int> iList = original.lock;
 
-        expect(iList, <int>[1, 2]);
+    expect(iList, <int>[1, 2]);
 
-        final IList<int> iListNew = iList.remove(1);
+    final IList<int> iListNew = iList.remove(1);
 
-        expect(original, <int>[1, 2]);
-        expect(iList, <int>[1, 2]);
-        expect(iListNew, <int>[2]);
-      });
-    });
+    expect(original, <int>[1, 2]);
+    expect(iList, <int>[1, 2]);
+    expect(iListNew, <int>[2]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Equals and Other Comparisons |", () {
-    group("Equals Operator |", () {
-      test("IList with identity-equals compares the list instance, not the items", () {
-        final IList<int> myList1 = IList([1, 2]).withIdentityEquals;
-        expect(myList1 == myList1, isTrue);
-        expect(myList1 == IList([1, 2]).withIdentityEquals, isFalse);
-        expect(myList1 == IList([2, 1]).withIdentityEquals, isFalse);
-        expect(myList1 == [1, 2].lock, isFalse);
-        expect(myList1 == IList([1, 2, 3]).withIdentityEquals, isFalse);
-      });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "IList with identity-equals compares the list instance, not the items", () {
+    final IList<int> myList1 = IList([1, 2]).withIdentityEquals;
+    expect(myList1 == myList1, isTrue);
+    expect(IList([1, 2]).withIdentityEquals == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]).withIdentityEquals == IList([2, 1]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]).withIdentityEquals == [1, 2].lock, isFalse);
+    expect(IList([1, 2]).withIdentityEquals == IList([1, 2, 3]).withIdentityEquals, isFalse);
+  });
 
-      test("IList with deep-equals compares the items, not necessarily the list instance", () {
-        final IList<int> myList = IList([1, 2]);
-        expect(myList == myList, isTrue);
-        expect(myList == IList([1, 2]), isTrue);
-        expect(myList == IList([2, 1]), isFalse);
-        expect(myList == [1, 2].lock.withDeepEquals, isTrue);
-        expect(myList == IList([1, 2, 3]), isFalse);
-      });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "IList with deep-equals compares the items, not necessarily the list instance", () {
+    final IList<int> myList = IList([1, 2]);
+    expect(myList == myList, isTrue);
+    expect(IList([1, 2]) == IList([1, 2]), isTrue);
+    expect(IList([1, 2]) == IList([2, 1]), isFalse);
+    expect(IList([1, 2]) == [1, 2].lock.withDeepEquals, isTrue);
+    expect(IList([1, 2]) == IList([1, 2, 3]), isFalse);
+  });
 
-      test("IList with deep-equals is always different from iList with identity-equals", () {
-        expect(IList([1, 2]).withDeepEquals == IList([1, 2]).withIdentityEquals, isFalse);
-        expect(IList([1, 2]).withIdentityEquals == IList([1, 2]).withDeepEquals, isFalse);
-        expect(IList([1, 2]).withDeepEquals == IList([1, 2]), isTrue);
-        expect(IList([1, 2]) == IList([1, 2]).withDeepEquals, isTrue);
-      });
-    });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "IList with deep-equals is always different from iList with identity-equals", () {
+    expect(IList([1, 2]).withDeepEquals == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]).withIdentityEquals == IList([1, 2]).withDeepEquals, isFalse);
+    expect(IList([1, 2]).withDeepEquals == IList([1, 2]), isTrue);
+    expect(IList([1, 2]) == IList([1, 2]).withDeepEquals, isTrue);
+  });
 
-    group("Other Comparisons |", () {
-      test("IList.isIdentityEquals and IList.isDeepEquals properties", () {
-        final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]).withIdentityEquals;
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "IList.isIdentityEquals and IList.isDeepEquals properties", () {
+    expect(IList([1, 2]).isIdentityEquals, isFalse);
+    expect(IList([1, 2]).isDeepEquals, isTrue);
+    expect(IList([1, 2]).withIdentityEquals.isIdentityEquals, isTrue);
+    expect(IList([1, 2]).withIdentityEquals.isDeepEquals, isFalse);
+  });
 
-        expect(iList1.isIdentityEquals, isFalse);
-        expect(iList1.isDeepEquals, isTrue);
-        expect(iList2.isIdentityEquals, isTrue);
-        expect(iList2.isDeepEquals, isFalse);
-      });
+  test(
+      "Equals and Other Comparisons | Equals Operator | Same, Equals and the == Operator | "
+      "IList.same method", () {
+    final IList<int> iList1 = IList([1, 2]);
+    expect(iList1.same(iList1), isTrue);
+    expect(iList1.same(IList([1, 2])), isFalse);
+    expect(iList1.same(IList([1])), isFalse);
+    expect(iList1.same(IList(([2, 1]))), isFalse);
+    expect(iList1.same(IList([1, 2]).withIdentityEquals), isFalse);
+    expect(iList1.same(iList1.remove(3)), isTrue);
+  });
 
-      group("Same, Equals and the == Operator |", () {
-        final IList<int> iList1 = IList([1, 2]),
-            iList2 = IList([1, 2]),
-            iList3 = IList([1]),
-            iList4 = IList(([2, 1])),
-            iList5 = IList([1, 2]).withIdentityEquals;
+  test(
+      "Equals and Other Comparisons | Equals Operator | Same, Equals and the == Operator | "
+      "IList.equalItemsAndConfig method", () {
+    final IList<int> iList1 = IList([1, 2]);
+    expect(iList1.equalItemsAndConfig(iList1), isTrue);
+    expect(iList1.equalItemsAndConfig(IList([1, 2])), isTrue);
+    expect(iList1.equalItemsAndConfig(IList([1])), isFalse);
+    expect(iList1.equalItemsAndConfig(IList(([2, 1]))), isFalse);
+    expect(iList1.equalItemsAndConfig(IList([1, 2]).withIdentityEquals), isFalse);
+    expect(iList1.equalItemsAndConfig(iList1.remove(3)), isTrue);
+  });
 
-        test("IList.same method", () {
-          expect(iList1.same(iList1), isTrue);
-          expect(iList1.same(iList2), isFalse);
-          expect(iList1.same(iList3), isFalse);
-          expect(iList1.same(iList4), isFalse);
-          expect(iList1.same(iList5), isFalse);
-          expect(iList1.same(iList1.remove(3)), isTrue);
-        });
+  test(
+      "Equals and Other Comparisons | Equals Operator | Same, Equals and the == Operator | "
+      "IList.== operator", () {
+    final IList<int> iList1 = IList([1, 2]);
+    expect(iList1 == iList1, isTrue);
+    expect(iList1 == IList([1, 2]), isTrue);
+    expect(iList1 == IList([1]), isFalse);
+    expect(iList1 == IList(([2, 1])), isFalse);
+    expect(iList1 == IList([1, 2]).withIdentityEquals, isFalse);
+  });
 
-        test("IList.equalItemsAndConfig method", () {
-          expect(iList1.equalItemsAndConfig(iList1), isTrue);
-          expect(iList1.equalItemsAndConfig(iList2), isTrue);
-          expect(iList1.equalItemsAndConfig(iList3), isFalse);
-          expect(iList1.equalItemsAndConfig(iList4), isFalse);
-          expect(iList1.equalItemsAndConfig(iList5), isFalse);
-          expect(iList1.equalItemsAndConfig(iList1.remove(3)), isTrue);
-        });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "Same, Equals and the == Operator | IList.equalItems method | "
+      "Identity", () {
+    final IList<int> iList1 = IList([1, 2]);
+    expect(iList1.equalItems(iList1), isTrue);
+  });
 
-        test("IList.== operator", () {
-          expect(iList1 == iList1, isTrue);
-          expect(iList1 == iList2, isTrue);
-          expect(iList1 == iList3, isFalse);
-          expect(iList1 == iList4, isFalse);
-          expect(iList1 == iList5, isFalse);
-        });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "Same, Equals and the == Operator | IList.equalItems method | "
+      "Passing a set", () {
+    expect(() => IList([1, 2]).equalItems(ISet([1, 2])), throwsStateError);
+    expect(() => IList([1, 2]).equalItems(HashSet()..add(1)..add(2)), throwsStateError);
+  });
 
-        group("IList.equalItems method |", () {
-          final IList<int> iList1 = IList([1, 2]),
-              iList2 = IList([1]),
-              iList3 = IList([2, 1]),
-              iList4 = IList([1, 2]);
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "Same, Equals and the == Operator | IList.equalItems method | "
+      "If IList, will only be equal if in order and the same items", () {
+    expect(IList([1, 2]).equalItems(IList([1])), isFalse);
+    expect(IList([1, 2]).equalItems(IList([2, 1])), isFalse);
+    expect(IList([1, 2]).equalItems(IList([1, 2])), isTrue);
+  });
 
-          test("Identity", () => expect(iList1.equalItems(iList1), isTrue));
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "Same, Equals and the == Operator | IList.equalItems method | "
+      "If List, will only be equal if in order and the same items", () {
+    expect(IList([1, 2]).equalItems(IList([1]).toList()), isFalse);
+    expect(IList([1, 2]).equalItems(IList([2, 1]).toList()), isFalse);
+    expect(IList([1, 2]).equalItems(IList([1, 2]).toList()), isTrue);
+  });
 
-          test("Passing a set", () {
-            expect(() => iList1.equalItems(ISet([1, 2])), throwsStateError);
-            expect(() => iList1.equalItems(HashSet()..add(1)..add(2)), throwsStateError);
-          });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "Same, Equals and the == Operator | IList.equalItems method | "
+      "If Iterable, will only be equal if in order and the same items", () {
+    expect(IList([1, 2]).equalItems({"a": 1}.values), isFalse);
+    expect(IList([1, 2]).equalItems({"a": 2, "b": 1}.values), isFalse);
+    expect(IList([1, 2]).equalItems({"a": 1, "b": 2}.values), isTrue);
+  });
 
-          test("If IList, will only be equal if in order and the same items", () {
-            expect(iList1.equalItems(iList2), isFalse);
-            expect(iList1.equalItems(iList3), isFalse);
-            expect(iList1.equalItems(iList4), isTrue);
-          });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "Same, Equals and the == Operator | IList.unorderedEqualItems method | "
+      "Identity", () {
+    final IList<int> iList1 = IList([1, 2]);
+    expect(iList1.unorderedEqualItems(iList1), isTrue);
+  });
 
-          test("If List, will only be equal if in order and the same items", () {
-            expect(iList1.equalItems(iList2.toList()), isFalse);
-            expect(iList1.equalItems(iList3.toList()), isFalse);
-            expect(iList1.equalItems(iList4.toList()), isTrue);
-          });
+  test(
+      "Equals and Other Comparisons | Equals Operator | "
+      "Same, Equals and the == Operator | IList.unorderedEqualItems method | "
+      "If Iterable, then compares each item with no specific order", () {
+    expect(IList([1, 2]).unorderedEqualItems(IList([1])), isFalse);
+    expect(IList([1, 2]).unorderedEqualItems(IList([2, 1])), isTrue);
+    expect(IList([1, 2]).unorderedEqualItems(IList([1, 2])), isTrue);
+    expect(IList([1, 2]).unorderedEqualItems({1}), isFalse);
+    expect(IList([1, 2]).unorderedEqualItems({1, 2}), isTrue);
+  });
 
-          test("If Iterable, will only be equal if in order and the same items", () {
-            expect(iList1.equalItems({"a": 1}.values), isFalse);
-            expect(iList1.equalItems({"a": 2, "b": 1}.values), isFalse);
-            expect(iList1.equalItems({"a": 1, "b": 2}.values), isTrue);
-          });
+  test("IList.hashCode method | " "deepEquals vs deepEquals", () {
+    expect(IList([1, 2]) == IList([1, 2]), isTrue);
+    expect(IList([1, 2]) == IList([1, 2, 3]), isFalse);
+    expect(IList([1, 2]) == IList([2, 1]), isFalse);
+    expect(IList([1, 2]).hashCode, IList([1, 2]).hashCode);
+    expect(IList([1, 2]).hashCode, isNot(IList([1, 2, 3]).hashCode));
+    expect(IList([1, 2]).hashCode, isNot(IList([2, 1]).hashCode));
+  });
 
-          group("IList.unorderedEqualItems method |", () {
-            test("Identity", () => expect(iList1.unorderedEqualItems(iList1), isTrue));
+  test("IList.hashCode method | " "identityEquals vs identityEquals", () {
+    expect(IList([1, 2]).withIdentityEquals == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]).withIdentityEquals == IList([1, 2, 3]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]).withIdentityEquals == IList([2, 1]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]).withIdentityEquals.hashCode,
+        isNot(IList([1, 2]).withIdentityEquals.hashCode));
+    expect(IList([1, 2]).withIdentityEquals.hashCode,
+        isNot(IList([1, 2, 3]).withIdentityEquals.hashCode));
+    expect(IList([1, 2]).withIdentityEquals.hashCode,
+        isNot(IList([2, 1]).withIdentityEquals.hashCode));
+  });
 
-            test("If Iterable, then compares each item with no specific order", () {
-              expect(iList1.unorderedEqualItems(iList2), isFalse);
-              expect(iList1.unorderedEqualItems(iList3), isTrue);
-              expect(iList1.unorderedEqualItems(iList4), isTrue);
-              expect(iList1.unorderedEqualItems({1}), isFalse);
-              expect(iList1.unorderedEqualItems({1, 2}), isTrue);
-            });
-          });
-        });
-      });
-    });
+  test("IList.hashCode method | " "deepEquals vs identityEquals", () {
+    expect(IList([1, 2]) == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]) == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(IList([1, 2, 3]) == IList([1, 2, 3]).withIdentityEquals, isFalse);
+    expect(IList([2, 1]) == IList([2, 1]).withIdentityEquals, isFalse);
+    expect(IList([1, 2]).hashCode, isNot(IList([1, 2]).withIdentityEquals.hashCode));
+    expect(IList([1, 2]).hashCode, isNot(IList([1, 2]).withIdentityEquals.hashCode));
+    expect(IList([1, 2, 3]).hashCode, isNot(IList([1, 2, 3]).withIdentityEquals.hashCode));
+    expect(IList([2, 1]).hashCode, isNot(IList([2, 1]).withIdentityEquals.hashCode));
+  });
 
-    group("IList.hashCode method |", () {
-      final IList<int> iList1 = IList([1, 2]),
-          iList2 = IList([1, 2]),
-          iList3 = IList([1, 2, 3]),
-          iList4 = IList([2, 1]);
-      final IList<int> iList1WithIdentity = iList1.withIdentityEquals,
-          iList2WithIdentity = iList2.withIdentityEquals,
-          iList3WithIdentity = iList3.withIdentityEquals,
-          iList4WithIdentity = iList4.withIdentityEquals;
+  test("IList.withConfig method", () {
+    final IList<int> iList = IList([1, 2]);
 
-      test("deepEquals vs deepEquals", () {
-        expect(iList1 == iList2, isTrue);
-        expect(iList1 == iList3, isFalse);
-        expect(iList1 == iList4, isFalse);
-        expect(iList1.hashCode, iList2.hashCode);
-        expect(iList1.hashCode, isNot(iList3.hashCode));
-        expect(iList1.hashCode, isNot(iList4.hashCode));
-      });
+    expect(iList.isDeepEquals, isTrue);
 
-      test("identityEquals vs identityEquals", () {
-        expect(iList1WithIdentity == iList2WithIdentity, isFalse);
-        expect(iList1WithIdentity == iList3WithIdentity, isFalse);
-        expect(iList1WithIdentity == iList4WithIdentity, isFalse);
-        expect(iList1WithIdentity.hashCode, isNot(iList2WithIdentity.hashCode));
-        expect(iList1WithIdentity.hashCode, isNot(iList3WithIdentity.hashCode));
-        expect(iList1WithIdentity.hashCode, isNot(iList4WithIdentity.hashCode));
-      });
+    IList<int> iListNewConfig = iList.withConfig(iList.config.copyWith());
 
-      test("deepEquals vs identityEquals", () {
-        expect(iList1 == iList1WithIdentity, isFalse);
-        expect(iList2 == iList2WithIdentity, isFalse);
-        expect(iList3 == iList3WithIdentity, isFalse);
-        expect(iList4 == iList4WithIdentity, isFalse);
-        expect(iList1.hashCode, isNot(iList1WithIdentity.hashCode));
-        expect(iList2.hashCode, isNot(iList2WithIdentity.hashCode));
-        expect(iList3.hashCode, isNot(iList3WithIdentity.hashCode));
-        expect(iList4.hashCode, isNot(iList4WithIdentity.hashCode));
-      });
-    });
+    IList<int> iListNewConfigIdentity =
+        iList.withConfig(iList.config.copyWith(isDeepEquals: false));
 
-    test("IList.withConfig method", () {
-      final IList<int> iList = IList([1, 2]);
+    expect(iListNewConfig.isDeepEquals, isTrue);
+    expect(iListNewConfigIdentity.isDeepEquals, isFalse);
+  });
 
-      expect(iList.isDeepEquals, isTrue);
+  test("IList.withConfigFrom method", () {
+    final IList<int> iList = IList([1, 2]);
 
-      IList<int> iListNewConfig = iList.withConfig(iList.config.copyWith());
+    expect(iList.isDeepEquals, isTrue);
 
-      IList<int> iListNewConfigIdentity =
-          iList.withConfig(iList.config.copyWith(isDeepEquals: false));
+    final IList<int> iListWithNoDeepEquals = iList.withConfig(ConfigList(isDeepEquals: false));
 
-      expect(iListNewConfig.isDeepEquals, isTrue);
-      expect(iListNewConfigIdentity.isDeepEquals, isFalse);
-    });
+    expect(iListWithNoDeepEquals.isDeepEquals, isFalse);
 
-    test("IList.withConfigFrom method", () {
-      final IList<int> iList = IList([1, 2]);
+    final IList<int> iListWithConfig = iList.withConfigFrom(iListWithNoDeepEquals);
 
-      expect(iList.isDeepEquals, isTrue);
-
-      final IList<int> iListWithNoDeepEquals = iList.withConfig(ConfigList(isDeepEquals: false));
-
-      expect(iListWithNoDeepEquals.isDeepEquals, isFalse);
-
-      final IList<int> iListWithConfig = iList.withConfigFrom(iListWithNoDeepEquals);
-
-      expect(iListWithConfig.isDeepEquals, isFalse);
-    });
+    expect(iListWithConfig.isDeepEquals, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Creating immutable lists with extensions |", () {
-    test("From an empty list", () {
-      final IList iList = [].lock;
+  test("Creating immutable lists with extensions |" "From an empty list", () {
+    expect([].lock, isA<IList>());
+    expect([].lock.isEmpty, isTrue);
+    expect([].lock.isNotEmpty, isFalse);
+  });
 
-      expect(iList, isA<IList>());
-      expect(iList.isEmpty, isTrue);
-      expect(iList.isNotEmpty, isFalse);
-    });
+  test("Creating immutable lists with extensions |" "From a list with one int item", () {
+    expect([1].lock, isA<IList<int>>());
+    expect([1].lock.isEmpty, isFalse);
+    expect([1].lock.isNotEmpty, isTrue);
+  });
 
-    test("From a list with one int item", () {
-      final IList iList = [1].lock;
+  test("Creating immutable lists with extensions |" "From a list with one null string",
+      () => expect([null].lock, isA<IList<String>>()));
 
-      expect(iList, isA<IList<int>>());
-      expect(iList.isEmpty, isFalse);
-      expect(iList.isNotEmpty, isTrue);
-    });
-
-    test("From a list with one null string", () {
-      final String text = null;
-      final IList<String> typedList = [text].lock;
-
-      expect(typedList, isA<IList<String>>());
-    });
-
-    test("From an empty list typed with String", () {
-      final typedList = <String>[].lock;
-
-      expect(typedList, isA<IList<String>>());
-    });
+  test("Creating immutable lists with extensions |" "From an empty list typed with String", () {
+    final typedList = <String>[].lock;
+    expect(typedList, isA<IList<String>>());
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
