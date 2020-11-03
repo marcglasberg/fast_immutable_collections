@@ -11,6 +11,7 @@ export "src/ilist/ilist_extension.dart";
 export "src/ilist/ilist_mixin.dart";
 export "src/ilist/ilist_of_2.dart";
 export "src/ilist/iterable_ilist_mixin.dart";
+export "src/ilist/iterable_like_ilist_mixin.dart";
 export "src/ilist/modifiable_list_view.dart";
 export "src/ilist/unmodifiable_list_view.dart";
 
