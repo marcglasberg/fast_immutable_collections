@@ -19,7 +19,7 @@ class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final Config config;
   @override
-  List<ListBenchmarkBase> benchmarks;
+  IList<ListBenchmarkBase> benchmarks;
 
   ListAddBenchmark({this.prefixName = "list_add", @required this.config})
       : super(prefixName: prefixName, config: config) {
@@ -29,7 +29,7 @@ class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
       KtListAddBenchmark(emitter: emitter),
       BuiltListAddWithRebuildBenchmark(emitter: emitter),
       BuiltListAddWithListBuilderBenchmark(emitter: emitter),
-    ];
+    ].lock;
   }
 }
 

@@ -1,3 +1,5 @@
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "collection_benchmark_base.dart";
 import "config.dart";
 import "table_score_emitter.dart";
@@ -5,7 +7,7 @@ import "table_score_emitter.dart";
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   String prefixName;
   Config config;
-  List<B> benchmarks;
+  IList<B> benchmarks;
   final TableScoreEmitter emitter;
 
   MultiBenchmarkReporter({

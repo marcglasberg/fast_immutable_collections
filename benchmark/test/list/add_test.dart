@@ -66,15 +66,13 @@ void main() {
           List<int>.generate(100, (int index) => index);
       expect(builtListAddWithListBuilderBenchmark.toMutable(), expectedList);
     });
-  }, skip: true);
+  });
 
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final ListAddBenchmark addBenchmark = ListAddBenchmark(config: Config(runs: 100, size: 100));
 
       addBenchmark.report();
-
-      print(addBenchmark.emitter.table.toString());
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index) +
           List<int>.generate(100, (int index) => index);
