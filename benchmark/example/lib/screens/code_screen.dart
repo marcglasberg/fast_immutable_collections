@@ -2,7 +2,7 @@ import "dart:io";
 
 import "package:flutter/material.dart";
 
-import "../widgets/button.dart";
+import "../widgets/collection_button.dart";
 
 class CodeScreen extends StatelessWidget {
   final String description;
@@ -37,7 +37,12 @@ class CodeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: <Widget>[
-                expandedCollectionButton(label: "OK", onPressed: () => Navigator.pop(context)),
+                Expanded(
+                  child: CollectionButton(
+                    label: "OK",
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
               ],
             ),
           ),
@@ -74,4 +79,3 @@ class CodeScreen extends StatelessWidget {
     );
   }
 }
-

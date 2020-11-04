@@ -1,11 +1,5 @@
 import "package:flutter/material.dart";
 
-Expanded expandedCollectionButton({String label, VoidCallback onPressed}) {
-  return Expanded(
-    child: CollectionButton(label: label, onPressed: onPressed),
-  );
-}
-
 class CollectionButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;

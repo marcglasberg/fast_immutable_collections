@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 
-import "../widgets/button.dart";
+import "../widgets/collection_button.dart";
 import "multi_benchmark_screen.dart";
 
 class CollectionChoiceScreen extends StatelessWidget {

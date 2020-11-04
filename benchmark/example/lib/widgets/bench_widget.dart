@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 import "../screens/code_screen.dart";
-import "button.dart";
+import "collection_button.dart";
 
 class BenchWidget extends StatefulWidget {
   final String description;
@@ -51,31 +51,37 @@ class _BenchWidgetState extends State<BenchWidget> {
             const SizedBox(height: 12),
             Row(
               children: <Widget>[
-                expandedCollectionButton(
-                  label: "Run",
-                  onPressed: () {
-                    setState(() => isRunning = true);
-                    results = widget.run();
-                    print(results);
-                    setState(() => isRunning = false);
-                  },
-                ),
-                const SizedBox(width: 12),
-                expandedCollectionButton(
-                  label: "Results",
-                  onPressed: isRunning ? () => print("View results!") : null,
-                ),
-                const SizedBox(width: 12),
-                expandedCollectionButton(
-                    label: "Code",
+                Expanded(
+                  child: CollectionButton(
+                    label: "Run",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) {
-                          return CodeScreen(widget.description, widget.code);
-                        }),
-                      );
-                    }),
+                      setState(() => isRunning = true);
+                      results = widget.run();
+                      print(results);
+                      setState(() => isRunning = false);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: CollectionButton(
+                    label: "Results",
+                    onPressed: !isRunning ? () => print("View results!") : null,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: CollectionButton(
+                      label: "Code",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) {
+                            return CodeScreen(widget.description, widget.code);
+                          }),
+                        );
+                      }),
+                ),
               ],
             ),
           ],
