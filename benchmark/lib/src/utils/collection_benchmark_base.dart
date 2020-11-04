@@ -25,7 +25,7 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
 
   /// If one of the parameters is not passed, then the current one is used.
   /// This method will be important later on for reconfiguring the benchmark in
-  /// the [MultiBenchmarkReporter]"s [configure] method.
+  /// the [MultiBenchmarkReporter]'s [configure] method.
   CollectionBenchmarkBase reconfigure({Config newConfig, ScoreEmitter newEmitter});
 }
 
