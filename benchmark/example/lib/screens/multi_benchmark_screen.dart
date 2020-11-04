@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter/foundation.dart";
 
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+
 import "../utils/benchmarks_code.dart";
 import "../widgets/bench_widget.dart";
 
@@ -20,10 +22,10 @@ class MultiBenchmarkScreen extends StatelessWidget {
         return <Widget>[
           BenchWidget(description: "Add", code: add_code, run: add_run),
           BenchWidget(description: "AddAll", code: add_all_code, run: add_all_run),
-          BenchWidget(description: "Remove", code: {}, run: () {}),
-          BenchWidget(description: "RemoveAll", code: {}, run: () {}),
-          BenchWidget(description: "Get", code: {}, run: () {}),
-          BenchWidget(description: "Empty", code: {}, run: () {}),
+          BenchWidget(description: "Remove", code: {}, run: remove_run),
+          BenchWidget(description: "RemoveAll", code: {}, run: remove_all_run),
+          BenchWidget(description: "Get", code: {}, run: get_run),
+          BenchWidget(description: "Empty", code: {}, run: empty_run),
         ];
       case CollectionType.set:
         return <Widget>[];
@@ -65,6 +67,23 @@ class MultiBenchmarkScreen extends StatelessWidget {
       );
 }
 
-void add_run() => print("RUN add_code!");
+RecordsTable add_run() => RecordsTable(resultsColumn: null, config: null);
 
-void add_all_run() => print("RUN add_all_code!");
+RecordsTable add_all_run() => RecordsTable(resultsColumn: null, config: null);
+
+RecordsTable remove_run() => RecordsTable(resultsColumn: null, config: null);
+
+RecordsTable remove_all_run() => RecordsTable(resultsColumn: null, config: null);
+
+RecordsTable get_run() => RecordsTable(resultsColumn: null, config: null);
+
+// TODO: probably chaging the parameter to be a benchmark instead of a function will greatly help
+// simplifying this...
+RecordsTable empty_run() {
+  final ListEmptyBenchmark listEmptyBenchmark =
+      ListEmptyBenchmark(configs: const [Config(runs: 100, size: 100)]);
+
+  listEmptyBenchmark.report();
+
+  return listEmptyBenchmark.firstTable;
+}

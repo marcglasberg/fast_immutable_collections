@@ -1,5 +1,6 @@
 import "collection_benchmark_base.dart";
 import "config.dart";
+import "record_data.dart";
 import "table_score_emitter.dart";
 
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
@@ -9,6 +10,8 @@ abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   /// benchmarks and the [configure] method will reconfigure them with the
   /// [Config]s.
   List<B> get baseBenchmarks;
+
+  RecordsTable get firstTable => (benchmarks.first.emitter as TableScoreEmitter).table;
 
   String prefixName;
   List<Config> configs;

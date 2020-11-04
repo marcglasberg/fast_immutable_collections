@@ -1,12 +1,14 @@
 import "package:flutter/material.dart";
 
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+
 import "../screens/code_screen.dart";
 import "button.dart";
 
 class BenchWidget extends StatefulWidget {
   final String description;
   final Map<String, String> code;
-  final VoidCallback run;
+  final RecordsTable Function() run;
 
   BenchWidget({
     this.description,
@@ -19,12 +21,13 @@ class BenchWidget extends StatefulWidget {
 }
 
 class _BenchWidgetState extends State<BenchWidget> {
-  bool hasResults;
+  bool isRunning;
+  RecordsTable results;
 
   @override
   void initState() {
     super.initState();
-    hasResults = false;
+    isRunning = false;
   }
 
   @override
@@ -45,25 +48,30 @@ class _BenchWidgetState extends State<BenchWidget> {
                 fontSize: 20,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Row(
               children: <Widget>[
                 expandedCollectionButton(
                   label: "Run",
-                  onPressed: widget.run,
+                  onPressed: () {
+                    setState(() => isRunning = true);
+                    results = widget.run();
+                    print(results);
+                    setState(() => isRunning = false);
+                  },
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 expandedCollectionButton(
                   label: "Results",
-                  onPressed: hasResults ? () => print("View results!") : null,
+                  onPressed: isRunning ? () => print("View results!") : null,
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 expandedCollectionButton(
                     label: "Code",
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) {
+                        MaterialPageRoute(builder: (_) {
                           return CodeScreen(widget.description, widget.code);
                         }),
                       );
