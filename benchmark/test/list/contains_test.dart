@@ -1,62 +1,62 @@
-import "package:test/test.dart";
+// import "package:test/test.dart";
 
-import "package:fast_immutable_collections_benchmarks/"
-    "fast_immutable_collections_benchmarks.dart";
+// import "package:fast_immutable_collections_benchmarks/"
+//     "fast_immutable_collections_benchmarks.dart";
 
-void main() {
-  const int size = 10;
-  const Config config = Config(runs: 100, size: size);
-  final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList(size: size);
+// void main() {
+//   const int size = 10;
+//   const Config config = Config(runs: 100, size: size);
+//   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList(size: size);
 
-  group("Separate Benchmarks |", () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_contains");
+//   group("Separate Benchmarks |", () {
+//     final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_contains");
 
-    test("`List` (Mutable)", () {
-      final MutableListContainsBenchmark listContainsBenchmark =
-          MutableListContainsBenchmark(config: config, emitter: tableScoreEmitter);
+//     test("`List` (Mutable)", () {
+//       final MutableListContainsBenchmark listContainsBenchmark =
+//           MutableListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
-      listContainsBenchmark.report();
+//       listContainsBenchmark.report();
 
-      expect(listContainsBenchmark.toMutable(), expectedList);
-    });
+//       expect(listContainsBenchmark.toMutable(), expectedList);
+//     });
 
-    test("`IList`", () {
-      final IListContainsBenchmark iListContainsBenchmark =
-          IListContainsBenchmark(config: config, emitter: tableScoreEmitter);
+//     test("`IList`", () {
+//       final IListContainsBenchmark iListContainsBenchmark =
+//           IListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
-      iListContainsBenchmark.report();
+//       iListContainsBenchmark.report();
 
-      expect(iListContainsBenchmark.toMutable(), expectedList);
-    });
+//       expect(iListContainsBenchmark.toMutable(), expectedList);
+//     });
 
-    test("`KtList`", () {
-      final KtListContainsBenchmark ktListContainsBenchmark =
-          KtListContainsBenchmark(config: config, emitter: tableScoreEmitter);
+//     test("`KtList`", () {
+//       final KtListContainsBenchmark ktListContainsBenchmark =
+//           KtListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
-      ktListContainsBenchmark.report();
+//       ktListContainsBenchmark.report();
 
-      expect(ktListContainsBenchmark.toMutable(), expectedList);
-    });
+//       expect(ktListContainsBenchmark.toMutable(), expectedList);
+//     });
 
-    test("`BuiltList`", () {
-      final BuiltListContainsBenchmark builtListContainsBenchmark =
-          BuiltListContainsBenchmark(config: config, emitter: tableScoreEmitter);
+//     test("`BuiltList`", () {
+//       final BuiltListContainsBenchmark builtListContainsBenchmark =
+//           BuiltListContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
-      builtListContainsBenchmark.report();
+//       builtListContainsBenchmark.report();
 
-      expect(builtListContainsBenchmark.toMutable(), expectedList);
-    });
-  });
+//       expect(builtListContainsBenchmark.toMutable(), expectedList);
+//     });
+//   });
 
-  group("Multiple Benchmarks |", () {
-    test("Simple run", () {
-      final ListContainsBenchmark containsBenchmark =
-          ListContainsBenchmark(configs: [config, config]);
+//   group("Multiple Benchmarks |", () {
+//     test("Simple run", () {
+//       final ListContainsBenchmark containsBenchmark =
+//           ListContainsBenchmark(configs: [config, config]);
 
-      containsBenchmark.report();
+//       containsBenchmark.report();
 
-      containsBenchmark.benchmarks
-          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
-    });
-  });
-}
+//       containsBenchmark.benchmarks
+//           .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
+//     });
+//   });
+// }

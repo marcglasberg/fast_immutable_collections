@@ -79,11 +79,12 @@ RecordsTable get_run() => RecordsTable(resultsColumn: null, config: null);
 
 // TODO: probably chaging the parameter to be a benchmark instead of a function will greatly help
 // simplifying this...
-RecordsTable empty_run() {
-  final ListEmptyBenchmark listEmptyBenchmark =
-      ListEmptyBenchmark(configs: const [Config(runs: 100, size: 100)]);
+RecordsTable empty_run() => RecordsTable(resultsColumn: null, config: null);
+// RecordsTable empty_run() {
+//   final ListEmptyBenchmark listEmptyBenchmark =
+//       ListEmptyBenchmark(configs: const [Config(runs: 100, size: 100)]);
 
-  listEmptyBenchmark.report();
+//   listEmptyBenchmark.report();
 
-  return listEmptyBenchmark.firstTable;
-}
+//   return listEmptyBenchmark.firstTable;
+// }

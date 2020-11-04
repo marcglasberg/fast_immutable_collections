@@ -17,28 +17,27 @@ class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final String prefixName;
   @override
-  final List<Config> configs;
+  final Config config;
   @override
-  final List<ListBenchmarkBase> baseBenchmarks = [
-    MutableListAddBenchmark(config: null, emitter: null),
-    IListAddBenchmark(config: null, emitter: null),
-    KtListAddBenchmark(config: null, emitter: null),
-    BuiltListAddWithRebuildBenchmark(config: null, emitter: null),
-    BuiltListAddWithListBuilderBenchmark(config: null, emitter: null),
-  ];
+  List<ListBenchmarkBase> benchmarks;
 
-  ListAddBenchmark({this.prefixName = "list_add", @required this.configs});
+  ListAddBenchmark({this.prefixName = "list_add", @required this.config})
+      : super(prefixName: prefixName, config: config) {
+    benchmarks = <ListBenchmarkBase>[
+      MutableListAddBenchmark(emitter: emitter),
+      IListAddBenchmark(emitter: emitter),
+      KtListAddBenchmark(emitter: emitter),
+      BuiltListAddWithRebuildBenchmark(emitter: emitter),
+      BuiltListAddWithListBuilderBenchmark(emitter: emitter),
+    ];
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListAddBenchmark extends ListBenchmarkBase {
-  MutableListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "List (Mutable)", config: config, emitter: emitter);
-
-  @override
-  MutableListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableListAddBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableListAddBenchmark({@required ScoreEmitter emitter})
+      : super(name: "List (Mutable)", emitter: emitter);
 
   List<int> _list;
   List<int> _fixedList;
@@ -59,12 +58,7 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IListAddBenchmark extends ListBenchmarkBase {
-  IListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "IList", config: config, emitter: emitter);
-
-  @override
-  IListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      IListAddBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  IListAddBenchmark({@required ScoreEmitter emitter}) : super(name: "IList", emitter: emitter);
 
   IList<int> _iList;
   IList<int> _result;
@@ -88,12 +82,7 @@ class IListAddBenchmark extends ListBenchmarkBase {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtListAddBenchmark extends ListBenchmarkBase {
-  KtListAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "KtList", config: config, emitter: emitter);
-
-  @override
-  KtListAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      KtListAddBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtListAddBenchmark({@required ScoreEmitter emitter}) : super(name: "KtList", emitter: emitter);
 
   KtList<int> _ktList;
   KtList<int> _result;
@@ -115,12 +104,8 @@ class KtListAddBenchmark extends ListBenchmarkBase {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
-  BuiltListAddWithRebuildBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "BuiltList with Rebuild", config: config, emitter: emitter);
-
-  @override
-  BuiltListAddWithRebuildBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltListAddWithRebuildBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltListAddWithRebuildBenchmark({@required ScoreEmitter emitter})
+      : super(name: "BuiltList with Rebuild", emitter: emitter);
 
   BuiltList<int> _builtList;
   BuiltList<int> _result;
@@ -144,15 +129,8 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
-  BuiltListAddWithListBuilderBenchmark({
-    @required Config config,
-    @required ScoreEmitter emitter,
-  }) : super(name: "BuiltList with List Builder", config: config, emitter: emitter);
-
-  @override
-  BuiltListAddWithListBuilderBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltListAddWithListBuilderBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltListAddWithListBuilderBenchmark({@required ScoreEmitter emitter})
+      : super(name: "BuiltList with List Builder", emitter: emitter);
 
   BuiltList<int> _builtList;
   BuiltList<int> _result;

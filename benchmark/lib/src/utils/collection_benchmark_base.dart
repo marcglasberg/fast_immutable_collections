@@ -2,15 +2,18 @@ import "package:benchmark_harness/benchmark_harness.dart";
 import "package:meta/meta.dart";
 
 import "config.dart";
+import "table_score_emitter.dart";
 
 abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
-  final Config config;
+  @override
+  final TableScoreEmitter emitter;
 
   const CollectionBenchmarkBase({
     @required String name,
-    @required this.config,
-    @required ScoreEmitter emitter,
-  }) : super(name, emitter: emitter);
+    @required this.emitter,
+  }) : super(name);
+
+  Config get config => emitter.config;
 
   @override
   void exercise() {
@@ -22,19 +25,13 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   @visibleForTesting
   @visibleForOverriding
   T toMutable();
-
-  /// If one of the parameters is not passed, then the current one is used.
-  /// This method will be important later on for reconfiguring the benchmark in
-  /// the [MultiBenchmarkReporter]'s [configure] method.
-  CollectionBenchmarkBase reconfigure({Config newConfig, ScoreEmitter newEmitter});
 }
 
 abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   const ListBenchmarkBase({
     @required String name,
-    @required Config config,
-    @required ScoreEmitter emitter,
-  }) : super(name: name, config: config, emitter: emitter);
+    @required TableScoreEmitter emitter,
+  }) : super(name: name, emitter: emitter);
 
   static List<int> getDummyGeneratedList({int size = 10000}) =>
       List<int>.generate(size, (int index) => index);
@@ -45,12 +42,13 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   List<int> toMutable();
 }
 
+// TODO: reintegrate set benchmarks to the new design.
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   const SetBenchmarkBase({
     @required String name,
     @required Config config,
-    @required ScoreEmitter emitter,
-  }) : super(name: name, config: config, emitter: emitter);
+    @required TableScoreEmitter emitter,
+  }) : super(name: name, emitter: emitter);
 
   static Set<int> getDummyGeneratedSet({int size = 10000}) =>
       Set<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: size));
