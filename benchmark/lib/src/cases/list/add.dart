@@ -5,7 +5,7 @@ import "package:meta/meta.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "../../utils/config.dart";
+import "../../utils/table_score_emitter.dart";
 import "../../utils/multi_benchmark_reporter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
@@ -15,22 +15,17 @@ class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   static const int innerRuns = 100;
 
   @override
-  final String prefixName;
-  @override
-  final Config config;
-  @override
-  IList<ListBenchmarkBase> benchmarks;
+  final IList<ListBenchmarkBase> benchmarks;
 
-  ListAddBenchmark({this.prefixName = "list_add", @required this.config})
-      : super(prefixName: prefixName, config: config) {
-    benchmarks = <ListBenchmarkBase>[
-      MutableListAddBenchmark(emitter: emitter),
-      IListAddBenchmark(emitter: emitter),
-      KtListAddBenchmark(emitter: emitter),
-      BuiltListAddWithRebuildBenchmark(emitter: emitter),
-      BuiltListAddWithListBuilderBenchmark(emitter: emitter),
-    ].lock;
-  }
+  ListAddBenchmark({@required TableScoreEmitter emitter})
+      : benchmarks = <ListBenchmarkBase>[
+          MutableListAddBenchmark(emitter: emitter),
+          IListAddBenchmark(emitter: emitter),
+          KtListAddBenchmark(emitter: emitter),
+          BuiltListAddWithRebuildBenchmark(emitter: emitter),
+          BuiltListAddWithListBuilderBenchmark(emitter: emitter),
+        ].lock,
+        super(emitter: emitter);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////

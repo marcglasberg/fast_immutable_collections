@@ -1,19 +1,16 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:meta/meta.dart";
 
 import "collection_benchmark_base.dart";
-import "config.dart";
 import "table_score_emitter.dart";
 
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
-  String prefixName;
-  Config config;
-  IList<B> benchmarks;
   final TableScoreEmitter emitter;
 
-  MultiBenchmarkReporter({
-    this.prefixName,
-    this.config,
-  }) : emitter = TableScoreEmitter(prefixName: prefixName, config: config);
+  @visibleForOverriding
+  IList<B> benchmarks;
+
+  MultiBenchmarkReporter({@required this.emitter});
 
   void report() => benchmarks.forEach((B benchmark) => benchmark.report());
 

@@ -70,7 +70,9 @@ void main() {
 
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
-      final ListAddBenchmark addBenchmark = ListAddBenchmark(config: Config(runs: 100, size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_iList", config: Config(runs: 100, size: 100));
+      final ListAddBenchmark addBenchmark = ListAddBenchmark(emitter: tableScoreEmitter);
 
       addBenchmark.report();
 
