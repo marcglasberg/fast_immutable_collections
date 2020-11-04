@@ -127,12 +127,28 @@ class RecordsTable {
 
   @override
   String toString() {
-    String tableAsString = "";
+    String tableAsString = _header();
 
     for (int rowIndex = 0; rowIndex < resultsColumn.records.length; rowIndex++)
       tableAsString += _newRow(rowIndex);
 
     return tableAsString;
+  }
+
+  String _header() {
+    final IList<RecordsColumn> numericColumns = [
+      resultsColumn,
+      normalizedAgainstMax,
+      normalizedAgainstMin,
+      normalizedAgainstMutable,
+      normalizedAgainstRuns,
+      normalizedAgainstSize,
+    ].lock;
+
+    String header = leftLegend.rows.first + ",";
+    numericColumns.forEach((RecordsColumn column) => header += column.title);
+
+    return header + "\n";
   }
 
   // Currently inefficient. But no one should care much, the table will be very small anyway.
@@ -146,17 +162,10 @@ class RecordsTable {
       normalizedAgainstSize,
     ].lock;
 
-    String newLine = leftLegend.rows[rowIndex] + ",";
-    numericColumns.forEach((RecordsColumn column) {
-      if (rowIndex == 0) {
-        newLine += column.title;
-      } else {
-        newLine += column.records[rowIndex].record.toString();
-      }
-      newLine += ",";
-    });
+    String newLine = leftLegend.rows[rowIndex + 1] + ",";
+    numericColumns.forEach(
+        (RecordsColumn column) => newLine += column.records[rowIndex].record.toString() + ",");
     newLine = newLine.substring(0, newLine.length - 1);
-    newLine += "\n";
-    return newLine;
+    return newLine + "\n";
   }
 }

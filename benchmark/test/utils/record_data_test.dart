@@ -205,11 +205,21 @@ void main() {
     });
 
     test("toString method (for saving it as CSV)", () {
-      const String correctTableAsString = "Collection,Time (μs),"
-          "x Max Time,x Min Time,x Mutable Time,Time (μs) / Runs,Time (μs) / Size\n"
-          "List (Mutable),15.0,0.5,0.5,1.5,0.15,0.01\n"
-          "IList,20.0,0.67,0.67,2.0,0.2,0.02\n"
-          "KtList,30.0,1.0,1.0,3.0,0.3,0.03\n"
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
+      const String correctTableAsString =
+          "Collection,Time (μs)x Max Timex Min Timex Mutable TimeTime (μs) / RunsTime (μs) / Size\n"
+          "List (Mutable),10.0,0.33,1.0,1.0,0.1,0.01\n"
+          "IList,15.0,0.5,1.5,1.5,0.15,0.01\n"
+          "KtList,20.0,0.67,2.0,2.0,0.2,0.02\n"
+          "BuiltList,30.0,1.0,3.0,3.0,0.3,0.03\n"
           "";
 
       expect(recordsTable.toString(), correctTableAsString);
