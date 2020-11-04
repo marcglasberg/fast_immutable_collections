@@ -1,21 +1,12 @@
 import "package:flutter/material.dart";
 
-import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
-
+import "screens/multi_benchmark_screen.dart";
 import "widgets/button.dart";
 
-void main() => runApp(BenchmarkApp());
+void main() => runApp(const BenchmarkApp());
 
 class BenchmarkApp extends StatelessWidget {
-  final ListEmptyBenchmark listEmptyBenchmark =
-      ListEmptyBenchmark(configs: const [Config(runs: 100, size: 100)]);
-
-  BenchmarkApp() {
-    listEmptyBenchmark.report();
-  }
-
-  RecordsTable get table =>
-      (listEmptyBenchmark.benchmarks.first.emitter as TableScoreEmitter).table;
+  const BenchmarkApp();
 
   @override
   Widget build(BuildContext context) {
@@ -23,74 +14,70 @@ class BenchmarkApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           toolbarHeight: kToolbarHeight * 1.3,
-          title: Text(
+          title: const Text(
             "Fast Immutable Collections Benchmarks",
             maxLines: 2,
             style: TextStyle(color: Colors.white, height: 1.3),
           ),
         ),
-        body: CollectionChoiceScreen(),
+        body: const CollectionChoiceScreen(),
       ),
     );
   }
 }
 
 class CollectionChoiceScreen extends StatelessWidget {
+  const CollectionChoiceScreen();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color(0xFFCCCCCC),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 40),
-            Text(
-              "Choose a collection type to benchmark:",
-              style: const TextStyle(fontSize: 20),
+      color: const Color(0xFFCCCCCC),
+      width: double.infinity,
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: .25 * MediaQuery.of(context).size.height),
+          Text(
+            "Choose a collection type to benchmark:",
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey[600],
             ),
-            SizedBox(height: 40),
-            Expanded(
-                child: SingleChildScrollView(
-                    child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          const SizedBox(height: 30),
+          SingleChildScrollView(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Card(
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            button(
-                              label: "List",
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            button(
-                              label: "Map",
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            button(
-                              label: "Set",
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                CollectionButton(
+                  label: "List",
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => MultiBenchmarkScreen(collectionType: CollectionType.list)),
+                  ),
+                ),
+                CollectionButton(
+                  label: "Set",
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => MultiBenchmarkScreen(collectionType: CollectionType.list)),
+                  ),
+                ),
+                CollectionButton(
+                  label: "Map",
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => MultiBenchmarkScreen(collectionType: CollectionType.list)),
                   ),
                 ),
               ],
-            )))
-          ],
-        ));
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
