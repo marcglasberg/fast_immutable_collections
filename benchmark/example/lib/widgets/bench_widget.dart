@@ -8,12 +8,12 @@ import "collection_button.dart";
 class BenchWidget extends StatefulWidget {
   final String description;
   final Map<String, String> code;
-  final RecordsTable Function() run;
+  final MultiBenchmarkReporter benchmark;
 
   BenchWidget({
     this.description,
     this.code,
-    this.run,
+    @required this.benchmark,
   });
 
   @override
@@ -21,13 +21,22 @@ class BenchWidget extends StatefulWidget {
 }
 
 class _BenchWidgetState extends State<BenchWidget> {
-  bool isRunning;
-  RecordsTable results;
+  bool _isRunning;
+  RecordsTable _results;
 
   @override
   void initState() {
     super.initState();
-    isRunning = false;
+    _isRunning = false;
+  }
+
+  // TODO: not working... it doesn't disable the button during processing probably because it is
+  // being executed synchronously.
+  void _run() {
+    setState(() => _isRunning = true);
+    widget.benchmark.report();
+    _results = widget.benchmark.emitter.table;
+    setState(() => _isRunning = false);
   }
 
   @override
@@ -54,33 +63,26 @@ class _BenchWidgetState extends State<BenchWidget> {
                 Expanded(
                   child: CollectionButton(
                     label: "Run",
-                    onPressed: () {
-                      setState(() => isRunning = true);
-                      results = widget.run();
-                      print(results);
-                      setState(() => isRunning = false);
-                    },
+                    onPressed: _isRunning ? null : _run,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: CollectionButton(
                     label: "Results",
-                    onPressed: !isRunning ? () => print("View results!") : null,
+                    onPressed: !_isRunning ? () => print("View results!") : null,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: CollectionButton(
-                      label: "Code",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) {
-                            return CodeScreen(widget.description, widget.code);
-                          }),
-                        );
-                      }),
+                    label: "Code",
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => CodeScreen(widget.description, widget.code)),
+                    ),
+                  ),
                 ),
               ],
             ),

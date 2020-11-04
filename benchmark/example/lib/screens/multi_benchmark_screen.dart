@@ -16,26 +16,6 @@ class MultiBenchmarkScreen extends StatelessWidget {
     @required this.collectionType,
   }) : super(key: key);
 
-  List<Widget> get _benchmarks {
-    switch (collectionType) {
-      case CollectionType.list:
-        return <Widget>[
-          BenchWidget(description: "Add", code: add_code, run: add_run),
-          BenchWidget(description: "AddAll", code: add_all_code, run: add_all_run),
-          BenchWidget(description: "Remove", code: {}, run: remove_run),
-          BenchWidget(description: "RemoveAll", code: {}, run: remove_all_run),
-          BenchWidget(description: "Get", code: {}, run: get_run),
-          BenchWidget(description: "Empty", code: {}, run: empty_run),
-        ];
-      case CollectionType.set:
-        return <Widget>[];
-      case CollectionType.map:
-        return <Widget>[];
-      default:
-        throw UnimplementedError("No benchmarks for this collection type you've somehow chosen.");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,26 +45,78 @@ class MultiBenchmarkScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: 17),
         ),
       );
+
+  List<Widget> get _benchmarks {
+    switch (collectionType) {
+      case CollectionType.list:
+        return <Widget>[
+          BenchWidget(
+            description: "Add",
+            code: add_code,
+            benchmark: ListAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "list_add",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "AddAll",
+            code: add_all_code,
+            benchmark: ListAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "list_add_all",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Contains",
+            code: {},
+            benchmark: ListAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "list_contains",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Empty",
+            code: {},
+            benchmark: ListAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "list_empty",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Read",
+            code: {},
+            benchmark: ListAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "list_read",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Remove",
+            code: {},
+            benchmark: ListAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "list_remove",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+        ];
+      case CollectionType.set:
+        return <Widget>[];
+      case CollectionType.map:
+        return <Widget>[];
+      default:
+        throw UnimplementedError("No benchmarks for this collection type you've somehow chosen.");
+    }
+  }
 }
-
-RecordsTable add_run() => RecordsTable(resultsColumn: null, config: null);
-
-RecordsTable add_all_run() => RecordsTable(resultsColumn: null, config: null);
-
-RecordsTable remove_run() => RecordsTable(resultsColumn: null, config: null);
-
-RecordsTable remove_all_run() => RecordsTable(resultsColumn: null, config: null);
-
-RecordsTable get_run() => RecordsTable(resultsColumn: null, config: null);
-
-// TODO: probably chaging the parameter to be a benchmark instead of a function will greatly help
-// simplifying this...
-RecordsTable empty_run() => RecordsTable(resultsColumn: null, config: null);
-// RecordsTable empty_run() {
-//   final ListEmptyBenchmark listEmptyBenchmark =
-//       ListEmptyBenchmark(configs: const [Config(runs: 100, size: 100)]);
-
-//   listEmptyBenchmark.report();
-
-//   return listEmptyBenchmark.firstTable;
-// }
