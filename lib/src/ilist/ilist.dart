@@ -331,6 +331,9 @@ class IList<T> // ignore: must_be_immutable
     return length;
   }
 
+  /// Returns `true` if the given index is valid (between 0 and length-1).
+  bool inRange(int index) => index >= 0 && index < length;
+
   /// Returns the first element.
   /// Throws a [StateError] if the list is empty.
   @override
