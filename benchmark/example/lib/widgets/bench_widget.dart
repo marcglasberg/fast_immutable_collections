@@ -48,17 +48,17 @@ class _BenchWidgetState extends State<BenchWidget> {
             SizedBox(height: 12),
             Row(
               children: <Widget>[
-                button(
+                expandedCollectionButton(
                   label: "Run",
                   onPressed: widget.run,
                 ),
                 SizedBox(width: 12),
-                button(
+                expandedCollectionButton(
                   label: "Results",
                   onPressed: hasResults ? () => print("View results!") : null,
                 ),
                 SizedBox(width: 12),
-                button(
+                expandedCollectionButton(
                     label: "Code",
                     onPressed: () {
                       Navigator.push(

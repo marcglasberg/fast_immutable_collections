@@ -37,7 +37,7 @@ class CodeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: <Widget>[
-                button(label: "OK", onPressed: () => Navigator.pop(context)),
+                expandedCollectionButton(label: "OK", onPressed: () => Navigator.pop(context)),
               ],
             ),
           ),

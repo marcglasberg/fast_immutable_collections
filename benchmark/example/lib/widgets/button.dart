@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 
-Expanded button({String label, VoidCallback onPressed}) {
+Expanded expandedCollectionButton({String label, VoidCallback onPressed}) {
   return Expanded(
     child: CollectionButton(label: label, onPressed: onPressed),
   );
