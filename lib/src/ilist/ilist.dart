@@ -45,12 +45,18 @@ class IList<T> // ignore: must_be_immutable
   factory IList.withConfig(
     Iterable<T> iterable,
     ConfigList config,
-  ) =>
-      iterable is IList<T>
-          ? iterable
-          : (iterable == null) || iterable.isEmpty
-              ? IList.empty<T>(config)
-              : IList<T>._unsafe(LFlat<T>(iterable), config: config);
+  ) {
+    config = config ?? defaultConfig;
+    return iterable is IList<T>
+        ? (config == iterable.config)
+            ? iterable
+            : iterable.isEmpty
+                ? IList.empty<T>(config)
+                : IList<T>._(iterable, config: config)
+        : ((iterable == null) || iterable.isEmpty)
+            ? IList.empty<T>(config)
+            : IList<T>._unsafe(LFlat<T>(iterable), config: config);
+  }
 
   /// Special IList constructor from ISet.
   factory IList.fromISet(
