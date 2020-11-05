@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 import "../screens/code_screen.dart";
+import "../screens/graph_screen.dart";
 import "collection_button.dart";
 
 class BenchWidget extends StatefulWidget {
@@ -33,11 +34,15 @@ class _BenchWidgetState extends State<BenchWidget> {
   // TODO: not working... it doesn't disable the button during processing probably because it is
   // being executed synchronously.
   void _run() {
-    setState(() => _isRunning = true);
-    // widget.benchmark.report();
-    // _results = widget.benchmark.emitter.table;
+    // setState(() => _isRunning = true);
+    setState(() {
+      widget.benchmark.report();
+      _results = widget.benchmark.emitter.table;
+    });
     // setState(() => _isRunning = false);
   }
+
+  bool get _isNotRunningAndHasResuls => !_isRunning && _results != null;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +57,11 @@ class _BenchWidgetState extends State<BenchWidget> {
               height: 110,
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(.3),
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(4),
                 ),
               ),
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             ),
           Container(
             width: double.infinity,
@@ -86,7 +91,12 @@ class _BenchWidgetState extends State<BenchWidget> {
                     Expanded(
                       child: CollectionButton(
                         label: "Results",
-                        onPressed: !_isRunning ? () => print("View results!") : null,
+                        onPressed: _isNotRunningAndHasResuls
+                            ? () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => GraphScreen(recordsTable: _results)))
+                            : null,
                       ),
                     ),
                     const SizedBox(width: 12),

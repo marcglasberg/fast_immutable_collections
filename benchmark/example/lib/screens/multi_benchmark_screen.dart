@@ -18,20 +18,26 @@ class MultiBenchmarkScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFCCCCCC),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _benchmarks,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Choose a benchmark to test"),
+      ),
+      body: Container(
+        color: const Color(0xFFCCCCCC),
+        child: Column(
+          children: <Widget>[
+            const SizedBox(height: 15),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _benchmarks,
+                ),
               ),
             ),
-          ),
-          if (!kReleaseMode) _releaseModeWarning(),
-        ],
+            if (!kReleaseMode) _releaseModeWarning(),
+          ],
+        ),
       ),
     );
   }
