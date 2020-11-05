@@ -1,7 +1,6 @@
 import "package:test/test.dart";
 
-import "package:fast_immutable_collections_benchmarks/"
-    "fast_immutable_collections_benchmarks.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
   const int size = 100;
@@ -10,9 +9,10 @@ void main() {
   final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
 
   group("Separate Benchmarks |", () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "set_read");
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "set_read", config: Config(runs: 100, size: 100));
 
-    test("`Set` (Mutable)", () {
+    test("Set (Mutable)", () {
       final MutableSetContainsBenchmark mutableSetContainsBenchmark =
           MutableSetContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -22,7 +22,7 @@ void main() {
       expect(mutableSetContainsBenchmark.contains, expectedContains);
     });
 
-    test("`ISet`", () {
+    test("ISet", () {
       final ISetContainsBenchmark iSetContainsBenchmark =
           ISetContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -32,7 +32,7 @@ void main() {
       expect(iSetContainsBenchmark.contains, expectedContains);
     });
 
-    test("`KtSet`", () {
+    test("KtSet", () {
       final KtSetContainsBenchmark ktSetContainsBenchmark =
           KtSetContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
@@ -42,7 +42,7 @@ void main() {
       expect(ktSetContainsBenchmark.contains, expectedContains);
     });
 
-    test("`BuiltSet`", () {
+    test("BuiltSet", () {
       final BuiltSetContainsBenchmark builtSetContainsBenchmark =
           BuiltSetContainsBenchmark(config: config, emitter: tableScoreEmitter);
 
