@@ -45,12 +45,18 @@ class IList<T> // ignore: must_be_immutable
   factory IList.withConfig(
     Iterable<T> iterable,
     ConfigList config,
-  ) =>
-      iterable is IList<T>
-          ? iterable
-          : (iterable == null) || iterable.isEmpty
-              ? IList.empty<T>(config)
-              : IList<T>._unsafe(LFlat<T>(iterable), config: config);
+  ) {
+    config = config ?? defaultConfig;
+    return iterable is IList<T>
+        ? (config == iterable.config)
+            ? iterable
+            : iterable.isEmpty
+                ? IList.empty<T>(config)
+                : IList<T>._(iterable, config: config)
+        : ((iterable == null) || iterable.isEmpty)
+            ? IList.empty<T>(config)
+            : IList<T>._unsafe(LFlat<T>(iterable), config: config);
+  }
 
   /// Special IList constructor from ISet.
   factory IList.fromISet(
@@ -330,6 +336,9 @@ class IList<T> // ignore: must_be_immutable
     if (length == 0 && _l is! LFlat) _l = LFlat.empty<T>();
     return length;
   }
+
+  /// Returns `true` if the given index is valid (between 0 and length-1).
+  bool inRange(int index) => index >= 0 && index < length;
 
   /// Returns the first element.
   /// Throws a [StateError] if the list is empty.

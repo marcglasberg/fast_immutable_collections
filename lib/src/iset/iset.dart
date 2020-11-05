@@ -46,15 +46,18 @@ class ISet<T> // ignore: must_be_immutable
   factory ISet.withConfig(
     Iterable<T> iterable,
     ConfigSet config,
-  ) =>
-      iterable is ISet<T>
-          ? iterable
-          : (iterable == null) || iterable.isEmpty
-              ? ISet.empty<T>(config)
-              : ISet<T>._unsafe(
-                  SFlat<T>(iterable),
-                  config: config ?? defaultConfig,
-                );
+  ) {
+    config = config ?? defaultConfig;
+    return iterable is ISet<T>
+        ? (config == iterable.config)
+            ? iterable
+            : iterable.isEmpty
+                ? ISet.empty<T>(config)
+                : ISet<T>._(iterable, config: config)
+        : ((iterable == null) || iterable.isEmpty)
+            ? ISet.empty<T>(config)
+            : ISet<T>._unsafe(SFlat<T>(iterable), config: config);
+  }
 
   /// Safe. Fast if the iterable is an ISet.
   ISet._(
@@ -73,7 +76,8 @@ class ISet<T> // ignore: must_be_immutable
   /// it will break the [ISet] and any other derived sets in unpredictable ways.
   ISet.unsafe(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
-    if (ImmutableCollection.disallowUnsafeConstructors) throw UnsupportedError("ISet.unsafe is disallowed.");
+    if (ImmutableCollection.disallowUnsafeConstructors)
+      throw UnsupportedError("ISet.unsafe is disallowed.");
   }
 
   /// Unsafe.

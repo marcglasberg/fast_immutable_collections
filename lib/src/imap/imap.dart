@@ -44,9 +44,12 @@ class IMap<K, V> // ignore: must_be_immutable
       IMap.withConfig(map, defaultConfig);
 
   /// Create an [IMap] from a [Map] and a [ConfigMap].
-  factory IMap.withConfig(Map<K, V> map, ConfigMap config) => (map == null || map.isEmpty)
-      ? IMap.empty<K, V>()
-      : IMap<K, V>._unsafe(MFlat<K, V>(map), config: config ?? defaultConfig);
+  factory IMap.withConfig(Map<K, V> map, ConfigMap config) {
+    config = config ?? defaultConfig;
+    return (map == null || map.isEmpty)
+        ? IMap.empty<K, V>(config)
+        : IMap<K, V>._unsafe(MFlat<K, V>(map), config: config);
+  }
 
   /// Create an [IMap] from an [Iterable] of [MapEntry].
   /// If multiple [entries] have the same key,
