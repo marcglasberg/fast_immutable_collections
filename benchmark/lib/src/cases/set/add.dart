@@ -1,40 +1,33 @@
-import "package:benchmark_harness/benchmark_harness.dart";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
 import "package:meta/meta.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "../../utils/config.dart";
-import "../../utils/collection_benchmark_base.dart";
+import "../../utils/table_score_emitter.dart";
 import "../../utils/multi_benchmark_reporter.dart";
+import "../../utils/collection_benchmark_base.dart";
 
 class SetAddBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   static const int innerRuns = 100;
 
   @override
-  final String prefixName;
-  @override
-  final List<Config> configs;
-  @override
-  final List<SetBenchmarkBase> baseBenchmarks = [
-    MutableSetAddBenchmark(config: null, emitter: null),
-    ISetAddBenchmark(config: null, emitter: null),
-    KtSetAddBenchmark(config: null, emitter: null),
-    BuiltSetAddWithRebuildBenchmark(config: null, emitter: null),
-    BuiltSetAddWithSetBuilderBenchmark(config: null, emitter: null),
-  ];
+  final IList<SetBenchmarkBase> benchmarks;
 
-  SetAddBenchmark({this.prefixName = "set_add", @required this.configs});
+  SetAddBenchmark({@required TableScoreEmitter emitter})
+      : benchmarks = <SetBenchmarkBase>[
+          MutableSetAddBenchmark(emitter: emitter),
+          ISetAddBenchmark(emitter: emitter),
+          KtSetAddBenchmark(emitter: emitter),
+          BuiltSetAddWithRebuildBenchmark(emitter: emitter),
+          BuiltSetAddWithSetBuilderBenchmark(emitter: emitter),
+        ].lock,
+        super(emitter: emitter);
 }
 
 class MutableSetAddBenchmark extends SetBenchmarkBase {
-  MutableSetAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "Set (Mutable)", config: config, emitter: emitter);
-
-  @override
-  MutableSetAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableSetAddBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableSetAddBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "Set (Mutable)", emitter: emitter);
 
   Set<int> _set;
   Set<int> _fixedSet;
@@ -53,12 +46,7 @@ class MutableSetAddBenchmark extends SetBenchmarkBase {
 }
 
 class ISetAddBenchmark extends SetBenchmarkBase {
-  ISetAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "ISet", config: config, emitter: emitter);
-
-  @override
-  ISetAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      ISetAddBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  ISetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
   ISet<int> _iSet;
   ISet<int> _result;
@@ -77,12 +65,7 @@ class ISetAddBenchmark extends SetBenchmarkBase {
 }
 
 class KtSetAddBenchmark extends SetBenchmarkBase {
-  KtSetAddBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "KtSet", config: config, emitter: emitter);
-
-  @override
-  KtSetAddBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      KtSetAddBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtSetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "KtSet", emitter: emitter);
 
   KtSet<int> _ktSet;
   KtSet<int> _result;
@@ -104,12 +87,8 @@ class KtSetAddBenchmark extends SetBenchmarkBase {
 }
 
 class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
-  BuiltSetAddWithRebuildBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "BuiltSet with Rebuild", config: config, emitter: emitter);
-
-  @override
-  BuiltSetAddWithRebuildBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltSetAddWithRebuildBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltSetAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "BuiltSet with Rebuild", emitter: emitter);
 
   BuiltSet<int> _builtSet;
   BuiltSet<int> _result;
@@ -129,13 +108,8 @@ class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
 }
 
 class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
-  BuiltSetAddWithSetBuilderBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "BuiltSet with ListBuilder", config: config, emitter: emitter);
-
-  @override
-  BuiltSetAddWithSetBuilderBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltSetAddWithSetBuilderBenchmark(
-          config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltSetAddWithSetBuilderBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "BuiltSet with ListBuilder", emitter: emitter);
 
   BuiltSet<int> _builtSet;
   BuiltSet<int> _result;

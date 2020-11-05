@@ -1,60 +1,72 @@
-import "package:fast_immutable_collections_benchmarks/src/cases/set/add_all.dart";
 import "package:test/test.dart";
 
-import "package:fast_immutable_collections_benchmarks/"
-    "fast_immutable_collections_benchmarks.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  const Config config = Config(runs: 1, size: 10);
-  final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
-    ..addAll(SetAddAllBenchmark.setToAdd);
-
   group("Separate Benchmarks |", () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "set_add_all");
-
-    test("`Set` (Mutable)", () {
+    test("Set (Mutable)", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "add_all_set_mutable", config: Config(runs: 100, size: 100));
       final MutableSetAddAllBenchmark mutableSetAddAllBenchmark =
-          MutableSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+          MutableSetAddAllBenchmark(emitter: tableScoreEmitter);
 
       mutableSetAddAllBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
+        ..addAll(SetAddAllBenchmark.setToAdd);
       expect(mutableSetAddAllBenchmark.toMutable(), expectedSet);
     });
 
-    test("`ISet`", () {
+    test("ISet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_all_iSet", config: Config(runs: 100, size: 100));
       final ISetAddAllBenchmark iSetAddAllBenchmark =
-          ISetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+          ISetAddAllBenchmark(emitter: tableScoreEmitter);
 
       iSetAddAllBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
+        ..addAll(SetAddAllBenchmark.setToAdd);
       expect(iSetAddAllBenchmark.toMutable(), expectedSet);
     });
 
-    test("`KtSet`", () {
+    test("KtSet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_all_ktSet", config: Config(runs: 100, size: 100));
       final KtSetAddAllBenchmark ktSetAddAllBenchmark =
-          KtSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+          KtSetAddAllBenchmark(emitter: tableScoreEmitter);
 
       ktSetAddAllBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
+        ..addAll(SetAddAllBenchmark.setToAdd);
       expect(ktSetAddAllBenchmark.toMutable(), expectedSet);
     });
 
-    test("`BuiltSet`", () {
+    test("BuiltSet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_all_builtSet", config: Config(runs: 100, size: 100));
       final BuiltSetAddAllBenchmark builtSetAddAllBenchmark =
-          BuiltSetAddAllBenchmark(config: config, emitter: tableScoreEmitter);
+          BuiltSetAddAllBenchmark(emitter: tableScoreEmitter);
 
       builtSetAddAllBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
+        ..addAll(SetAddAllBenchmark.setToAdd);
       expect(builtSetAddAllBenchmark.toMutable(), expectedSet);
     });
   });
 
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
-      final SetAddAllBenchmark setAddAllBenchmark = SetAddAllBenchmark(configs: [config, config]);
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_all", config: Config(runs: 100, size: 100));
+      final SetAddAllBenchmark setAddAllBenchmark = SetAddAllBenchmark(emitter: tableScoreEmitter);
 
       setAddAllBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
+        ..addAll(SetAddAllBenchmark.setToAdd);
       setAddAllBenchmark.benchmarks
           .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
     });

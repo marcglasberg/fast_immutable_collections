@@ -1,70 +1,89 @@
 import "package:test/test.dart";
 
-import "package:fast_immutable_collections_benchmarks/"
-    "fast_immutable_collections_benchmarks.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  const int size = 10;
-  const Config config = Config(runs: 1, size: size);
-  final Set<int> expectedSet = Set<int>.of(
-      SetBenchmarkBase.getDummyGeneratedSet(size: size).toList() +
-          List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
-
   group("Separate Benchmarks |", () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "set_add");
-
-    test("`Set` (Mutable)", () {
+    test("Set (Mutable)", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_set_mutable", config: Config(runs: 100, size: 100));
       final MutableSetAddBenchmark mutableSetAddBenchmark =
-          MutableSetAddBenchmark(config: config, emitter: tableScoreEmitter);
+          MutableSetAddBenchmark(emitter: tableScoreEmitter);
 
       mutableSetAddBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(
+          SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
+              List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
       expect(mutableSetAddBenchmark.toMutable(), expectedSet);
     });
 
-    test("`ISet`", () {
-      final ISetAddBenchmark iSetAddBenchmark =
-          ISetAddBenchmark(config: config, emitter: tableScoreEmitter);
+    test("ISet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_iSet", config: Config(runs: 100, size: 100));
+      final ISetAddBenchmark iSetAddBenchmark = ISetAddBenchmark(emitter: tableScoreEmitter);
 
       iSetAddBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(
+          SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
+              List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
       expect(iSetAddBenchmark.toMutable(), expectedSet);
     });
 
-    test("`KtSet`", () {
-      final KtSetAddBenchmark ktSetAddBenchmark =
-          KtSetAddBenchmark(config: config, emitter: tableScoreEmitter);
+    test("KtSet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_ktSet", config: Config(runs: 100, size: 100));
+      final KtSetAddBenchmark ktSetAddBenchmark = KtSetAddBenchmark(emitter: tableScoreEmitter);
 
       ktSetAddBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(
+          SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
+              List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
       expect(ktSetAddBenchmark.toMutable(), expectedSet);
     });
 
-    test("`BuiltSet` with `.rebuild()`", () {
+    test("BuiltSet with .rebuild()", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "add_builtSet_with_rebuild", config: Config(runs: 100, size: 100));
       final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark =
-          BuiltSetAddWithRebuildBenchmark(config: config, emitter: tableScoreEmitter);
+          BuiltSetAddWithRebuildBenchmark(emitter: tableScoreEmitter);
 
       builtSetAddWithRebuildBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(
+          SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
+              List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
       expect(builtSetAddWithRebuildBenchmark.toMutable(), expectedSet);
     });
 
-    test("`BuiltSet` with `ListBuilder", () {
+    test("BuiltSet with ListBuilder", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "add_builtSet_with_listBuilder", config: Config(runs: 100, size: 100));
       final BuiltSetAddWithSetBuilderBenchmark builtSetAddWithListBuilderBenchmark =
-          BuiltSetAddWithSetBuilderBenchmark(config: config, emitter: tableScoreEmitter);
+          BuiltSetAddWithSetBuilderBenchmark(emitter: tableScoreEmitter);
 
       builtSetAddWithListBuilderBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(
+          SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
+              List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
       expect(builtSetAddWithListBuilderBenchmark.toMutable(), expectedSet);
     });
   });
 
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
-      final SetAddBenchmark setAddBenchmark = SetAddBenchmark(configs: [config, config]);
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add", config: Config(runs: 100, size: 100));
+      final SetAddBenchmark setAddBenchmark = SetAddBenchmark(emitter: tableScoreEmitter);
 
       setAddBenchmark.report();
 
+      final Set<int> expectedSet = Set<int>.of(
+          SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
+              List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
       setAddBenchmark.benchmarks
           .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
     });

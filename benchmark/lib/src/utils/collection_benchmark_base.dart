@@ -42,11 +42,9 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   List<int> toMutable();
 }
 
-// TODO: reintegrate set benchmarks to the new design.
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   const SetBenchmarkBase({
     @required String name,
-    @required Config config,
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 
