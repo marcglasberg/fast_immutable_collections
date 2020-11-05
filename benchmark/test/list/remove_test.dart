@@ -1,62 +1,67 @@
-// import "package:test/test.dart";
+import "package:test/test.dart";
 
-// import "package:fast_immutable_collections_benchmarks/"
-//     "fast_immutable_collections_benchmarks.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
-// void main() {
-//   const int size = 100;
-//   const Config config = Config(runs: 100, size: size);
+void main() {
+  group("Separate Benchmarks |", () {
+    test("List (Mutable)", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "remove_list_mutable", config: Config(runs: 100, size: 100));
+      final MutableListRemoveBenchmark listRemoveBenchmark =
+          MutableListRemoveBenchmark(emitter: tableScoreEmitter);
 
-//   final List<int> expectedList = ListBenchmarkBase.getDummyGeneratedList()..remove(1);
+      listRemoveBenchmark.report();
 
-//   group("Separate Benchmarks |", () {
-//     final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_remove");
+      expect(listRemoveBenchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList()..remove(1));
+    });
 
-//     test("`List` (Mutable)", () {
-//       final MutableListRemoveBenchmark listRemoveBenchmark =
-//           MutableListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+    test("IList", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "remove_list_mutable", config: Config(runs: 100, size: 100));
+      final IListRemoveBenchmark iListRemoveBenchmark =
+          IListRemoveBenchmark(emitter: tableScoreEmitter);
 
-//       listRemoveBenchmark.report();
+      iListRemoveBenchmark.report();
 
-//       expect(listRemoveBenchmark.toMutable(), expectedList);
-//     });
+      expect(
+          iListRemoveBenchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList()..remove(1));
+    });
 
-//     test("`IList`", () {
-//       final IListRemoveBenchmark iListRemoveBenchmark =
-//           IListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+    test("KtList", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "remove_list_mutable", config: Config(runs: 100, size: 100));
+      final KtListRemoveBenchmark ktListRemoveBenchmark =
+          KtListRemoveBenchmark(emitter: tableScoreEmitter);
 
-//       iListRemoveBenchmark.report();
+      ktListRemoveBenchmark.report();
 
-//       expect(iListRemoveBenchmark.toMutable(), expectedList);
-//     });
+      expect(
+          ktListRemoveBenchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList()..remove(1));
+    });
 
-//     test("`KtList`", () {
-//       final KtListRemoveBenchmark ktListRemoveBenchmark =
-//           KtListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+    test("BuiltList", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "remove_list_mutable", config: Config(runs: 100, size: 100));
+      final BuiltListRemoveBenchmark builtListRemoveBenchmark =
+          BuiltListRemoveBenchmark(emitter: tableScoreEmitter);
 
-//       ktListRemoveBenchmark.report();
+      builtListRemoveBenchmark.report();
 
-//       expect(ktListRemoveBenchmark.toMutable(), expectedList);
-//     });
+      expect(builtListRemoveBenchmark.toMutable(),
+          ListBenchmarkBase.getDummyGeneratedList()..remove(1));
+    });
+  });
 
-//     test("`BuiltList`", () {
-//       final BuiltListRemoveBenchmark builtListRemoveBenchmark =
-//           BuiltListRemoveBenchmark(config: config, emitter: tableScoreEmitter);
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "remove_list_mutable", config: Config(runs: 100, size: 100));
+      final ListRemoveBenchmark removeBenchmark = ListRemoveBenchmark(emitter: tableScoreEmitter);
 
-//       builtListRemoveBenchmark.report();
+      removeBenchmark.report();
 
-//       expect(builtListRemoveBenchmark.toMutable(), expectedList);
-//     });
-//   });
-
-//   group("Multiple Benchmarks |", () {
-//     test("Simple run", () {
-//       final ListRemoveBenchmark removeBenchmark = ListRemoveBenchmark(configs: [config, config]);
-
-//       removeBenchmark.report();
-
-//       removeBenchmark.benchmarks
-//           .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
-//     });
-//   });
-// }
+      removeBenchmark.benchmarks
+          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList()..remove(1)));
+    });
+  });
+}

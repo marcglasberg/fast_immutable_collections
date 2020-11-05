@@ -1,61 +1,68 @@
-// import "package:test/test.dart";
+import "package:test/test.dart";
 
-// import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
-// void main() {
-//   const int size = 1000;
-//   const Config config = Config(runs: 100, size: size);
-//   final int numberToRead =
-//       ListBenchmarkBase.getDummyGeneratedList(size: config.size)[ListReadBenchmark.indexToRead];
+void main() {
+  group("Separate Benchmarks |", () {
+    test("List (Mutable)", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "read_list_mutable", config: Config(runs: 100, size: 1000));
+      final MutableListReadBenchmark listReadBenchmark =
+          MutableListReadBenchmark(emitter: tableScoreEmitter);
 
-//   group("Separate Benchmarks |", () {
-//     final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_read");
+      listReadBenchmark.report();
 
-//     test("`List` (Mutable)", () {
-//       final MutableListReadBenchmark listReadBenchmark =
-//           MutableListReadBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(listReadBenchmark.newVar,
+          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+    });
 
-//       listReadBenchmark.report();
+    test("IList", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "read_iList", config: Config(runs: 100, size: 1000));
+      final IListReadBenchmark iListReadBenchmark = IListReadBenchmark(emitter: tableScoreEmitter);
 
-//       expect(listReadBenchmark.newVar, numberToRead);
-//     });
+      iListReadBenchmark.report();
 
-//     test("`IList`", () {
-//       final IListReadBenchmark iListReadBenchmark =
-//           IListReadBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(iListReadBenchmark.newVar,
+          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+    });
 
-//       iListReadBenchmark.report();
+    test("KtList", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "read_ktList", config: Config(runs: 100, size: 1000));
+      final KtListReadBenchmark ktListReadBenchmark =
+          KtListReadBenchmark(emitter: tableScoreEmitter);
 
-//       expect(iListReadBenchmark.newVar, numberToRead);
-//     });
+      ktListReadBenchmark.report();
 
-//     test("`KtList`", () {
-//       final KtListReadBenchmark ktListReadBenchmark =
-//           KtListReadBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(ktListReadBenchmark.newVar,
+          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+    });
 
-//       ktListReadBenchmark.report();
+    test("BuiltList", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "read_builtList", config: Config(runs: 100, size: 1000));
+      final BuiltListReadBenchmark builtListReadBenchmark =
+          BuiltListReadBenchmark(emitter: tableScoreEmitter);
 
-//       expect(ktListReadBenchmark.newVar, numberToRead);
-//     });
+      builtListReadBenchmark.report();
 
-//     test("`BuiltList`", () {
-//       final BuiltListReadBenchmark builtListReadBenchmark =
-//           BuiltListReadBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(builtListReadBenchmark.newVar,
+          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+    });
+  });
 
-//       builtListReadBenchmark.report();
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "read", config: Config(runs: 100, size: 1000));
+      final ListReadBenchmark readBenchmark = ListReadBenchmark(emitter: tableScoreEmitter);
 
-//       expect(builtListReadBenchmark.newVar, numberToRead);
-//     });
-//   });
+      readBenchmark.report();
 
-//   group("Multiple Benchmarks |", () {
-//     test("Simple run", () {
-//       final ListReadBenchmark readBenchmark = ListReadBenchmark(configs: [config, config]);
-
-//       readBenchmark.report();
-
-//       readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-//           expect(benchmark.toMutable()[ListReadBenchmark.indexToRead], numberToRead));
-//     });
-//   });
-// }
+      readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) => expect(
+          benchmark.toMutable()[ListReadBenchmark.indexToRead],
+          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]));
+    });
+  });
+}
