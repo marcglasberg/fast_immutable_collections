@@ -5,7 +5,6 @@ import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "../../utils/table_score_emitter.dart";
-import "../../utils/multi_benchmark_reporter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
 class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
