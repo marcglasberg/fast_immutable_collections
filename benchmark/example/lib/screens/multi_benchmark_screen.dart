@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/foundation.dart";
 
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 import "../utils/benchmarks_code.dart";
@@ -35,22 +36,21 @@ class MultiBenchmarkScreen extends StatelessWidget {
                 ),
               ),
             ),
-            if (!kReleaseMode) _releaseModeWarning(),
+            if (!kReleaseMode)
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                width: double.infinity,
+                color: Colors.black,
+                child: const Text(
+                  "Please run this in release mode!",
+                  style: TextStyle(color: Colors.white, fontSize: 17),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
-
-  Container _releaseModeWarning() => Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        width: double.infinity,
-        color: Colors.black,
-        child: const Text(
-          "Please run this in release mode!",
-          style: TextStyle(color: Colors.white, fontSize: 17),
-        ),
-      );
 
   List<Widget> get _benchmarks {
     switch (collectionType) {
@@ -58,7 +58,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         return <Widget>[
           BenchWidget(
             description: "Add",
-            code: add_code,
+            code: list_add_code,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_add",
@@ -68,7 +68,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "AddAll",
-            code: add_all_code,
+            code: list_add_all_code,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_add_all",
@@ -78,7 +78,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Contains",
-            code: {},
+            code: {}.lock,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_contains",
@@ -88,7 +88,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Empty",
-            code: {},
+            code: {}.lock,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_empty",
@@ -98,7 +98,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Read",
-            code: {},
+            code: {}.lock,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_read",
@@ -108,7 +108,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Remove",
-            code: {},
+            code: {}.lock,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_remove",

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 import "../screens/code_screen.dart";
@@ -8,7 +9,7 @@ import "collection_button.dart";
 
 class BenchWidget extends StatefulWidget {
   final String description;
-  final Map<String, String> code;
+  final IMap<String, String> code;
   final MultiBenchmarkReporter benchmark;
 
   BenchWidget({
