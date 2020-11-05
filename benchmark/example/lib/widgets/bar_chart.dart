@@ -21,5 +21,13 @@ class BarChart extends StatelessWidget {
       ];
 
   @override
-  Widget build(BuildContext context) => charts.BarChart(_seriesList, animate: false);
+  Widget build(BuildContext context) {
+    return charts.BarChart(
+      _seriesList,
+      animate: true,
+      behaviors: <charts.ChartBehavior>[
+        charts.SeriesLegend(),
+      ],
+    );
+  }
 }

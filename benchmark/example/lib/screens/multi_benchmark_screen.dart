@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/foundation.dart";
 
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 import "../utils/benchmarks_code.dart";
@@ -69,7 +68,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "AddAll",
             code: ListCode.add_all,
-            benchmark: ListAddBenchmark(
+            benchmark: ListAddAllBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_add_all",
                 config: Config(runs: 100, size: 100),
@@ -79,7 +78,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "Contains",
             code: ListCode.contains,
-            benchmark: ListAddBenchmark(
+            benchmark: ListContainsBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_contains",
                 config: Config(runs: 100, size: 100),
@@ -89,7 +88,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "Empty",
             code: ListCode.empty,
-            benchmark: ListAddBenchmark(
+            benchmark: ListEmptyBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_empty",
                 config: Config(runs: 100, size: 100),
@@ -99,7 +98,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "Read",
             code: ListCode.read,
-            benchmark: ListAddBenchmark(
+            benchmark: ListReadBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_read",
                 config: Config(runs: 100, size: 100),
@@ -109,7 +108,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "Remove",
             code: ListCode.remove,
-            benchmark: ListAddBenchmark(
+            benchmark: ListRemoveBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_remove",
                 config: Config(runs: 100, size: 100),
@@ -132,7 +131,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "AddAll",
             code: SetCode.add_all,
-            benchmark: SetAddBenchmark(
+            benchmark: SetAddAllBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "set_add_all",
                 config: Config(runs: 100, size: 100),
@@ -142,7 +141,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "Contains",
             code: SetCode.contains,
-            benchmark: SetAddBenchmark(
+            benchmark: SetContainsBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "set_contains",
                 config: Config(runs: 100, size: 100),
@@ -152,7 +151,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "Empty",
             code: SetCode.contains,
-            benchmark: SetAddBenchmark(
+            benchmark: SetEmptyBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "set_empty",
                 config: Config(runs: 100, size: 100),
@@ -162,7 +161,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           BenchWidget(
             description: "Remove",
             code: SetCode.contains,
-            benchmark: SetAddBenchmark(
+            benchmark: SetRemoveBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "set_remove",
                 config: Config(runs: 100, size: 100),

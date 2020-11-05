@@ -11,6 +11,7 @@ class GraphScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(recordsTable);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Graph Results"),
