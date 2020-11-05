@@ -58,7 +58,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         return <Widget>[
           BenchWidget(
             description: "Add",
-            code: list_add_code,
+            code: ListCode.add,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_add",
@@ -68,7 +68,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "AddAll",
-            code: list_add_all_code,
+            code: ListCode.add_all,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_add_all",
@@ -78,7 +78,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Contains",
-            code: {}.lock,
+            code: ListCode.contains,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_contains",
@@ -88,7 +88,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Empty",
-            code: {}.lock,
+            code: ListCode.empty,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_empty",
@@ -98,7 +98,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Read",
-            code: {}.lock,
+            code: ListCode.read,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_read",
@@ -108,7 +108,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Remove",
-            code: {}.lock,
+            code: ListCode.remove,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_remove",
@@ -118,11 +118,63 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
         ];
       case CollectionType.set:
-        return <Widget>[];
+        return <Widget>[
+          BenchWidget(
+            description: "Add",
+            code: SetCode.add,
+            benchmark: SetAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_add",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "AddAll",
+            code: SetCode.add_all,
+            benchmark: SetAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_add_all",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Contains",
+            code: SetCode.contains,
+            benchmark: SetAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_contains",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Empty",
+            code: SetCode.contains,
+            benchmark: SetAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_empty",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Remove",
+            code: SetCode.contains,
+            benchmark: SetAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_remove",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+        ];
       case CollectionType.map:
         return <Widget>[];
       default:
-        throw UnimplementedError("No benchmarks for this collection type you've somehow chosen.");
+        throw UnimplementedError(
+            "No benchmarks for this collection type you've somehow managed to choose.");
     }
   }
 }
