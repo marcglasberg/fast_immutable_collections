@@ -1064,7 +1064,18 @@ list.sort(compareTo);
 expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
 ``` 
 
+## nullableCompareTo
+
+If your collection can have nulls, you can use `nullableCompareTo`
+instead of `compareTo`. For example:
  
+```dart
+// Results in: [1, 2, null]
+[2, null, 1].sort((a, b) => a.nullableCompareTo(b));
+
+// Results in: [null, 1, 2]
+[2, null, 1].sort((a, b) => a.nullableCompareTo(b, nullsBefore: true));
+``` 
 
 ***************************************
 ***************************************

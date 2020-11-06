@@ -159,4 +159,32 @@ void main() {
 
     expect(isInconsistent, isTrue);
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("nullableCompareTo", () {
+    //
+    expect(1.nullableCompareTo(2), -1);
+    expect(2.nullableCompareTo(1), 1);
+    expect((null as int).nullableCompareTo(1), 1); // ignore: unnecessary_cast
+    expect(1.nullableCompareTo(null), -1);
+    expect((null as int).nullableCompareTo(null), 0); // ignore: unnecessary_cast
+
+    expect(1.nullableCompareTo(2, nullsBefore: true), -1);
+    expect(2.nullableCompareTo(1, nullsBefore: true), 1);
+    expect((null as int).nullableCompareTo(1, nullsBefore: true), -1); // ignore: unnecessary_cast
+    expect(1.nullableCompareTo(null, nullsBefore: true), 1);
+    expect((null as int).nullableCompareTo(null, nullsBefore: true), 0); // ignore: unnecessary_cast
+
+    // Nulls go to the end.
+    expect([2, null, 1]..sort((a, b) => a.nullableCompareTo(b)), [1, 2, null]);
+
+    // Nulls go to the start.
+    expect([2, null, 1]..sort((a, b) => a.nullableCompareTo(b, nullsBefore: true)),
+        [null, 1, 2]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

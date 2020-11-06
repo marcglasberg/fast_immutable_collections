@@ -8,9 +8,31 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 ///                    a.length.compareTo(b.length)
 ///                      .if0(a.compareTo(b));
 ///
-extension ComparatorExtension<T> on int {
+extension ComparatorExtension on int {
   int if0(int then) => this == 0 ? then : this;
 }
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+extension ComparableExtension<T extends Comparable<T>> on Comparable<T> {
+  /// If your collection can have nulls, you can use [nullableCompareTo]
+  /// instead of [compareTo]. For example:
+  ///
+  ///      // Results in: [1, 2, null]
+  ///      [2, null, 1].sort((int a, int b) => a.nullableCompareTo(b));
+  ///
+  ///      // Results in: [null, 1, 2]
+  ///      [2, null, 1].sort((int a, int b) => a.nullableCompareTo(b, nullsBefore: true));
+  ///
+  int nullableCompareTo(T other, {bool nullsBefore = false}) {
+    if (this == null && other == null) return 0;
+    if (this == null) return nullsBefore ? -1 : 1;
+    if (other == null) return nullsBefore ? 1 : -1;
+    return compareTo(other);
+  }
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// The [sortBy] function can be used to create a comparator to sort
 /// collections, comparing [a] and [b] such that:
@@ -63,6 +85,8 @@ int Function(T, T) sortBy<T>(
       if (ta == tb) return (then == null) ? 0 : then(a, b);
       return ta ? -1 : 1;
     };
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// The [sortLike] function can be used to create a comparator to sort
 /// collections, comparing [a] and [b] such that:
