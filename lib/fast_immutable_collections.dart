@@ -4,7 +4,7 @@ library fast_immutable_collections;
 
 export "src/base/immutable_collection.dart";
 export "src/base/configs.dart";
-export "src/base/sort_by.dart";
+export "src/base/sort.dart";
 
 // IList:
 export "src/ilist/ilist.dart";

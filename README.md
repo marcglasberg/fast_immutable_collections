@@ -949,6 +949,117 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
        .withConfig(ConfigMapOfSets(allowEmptySets: true));
 ```  
   
+  
+# Comparators
+
+To help you sort collections, 
+we provide the global comparator functions `sortBy` and `sortLike`, 
+and the `if0` extension,
+which make it easy for you to create other complex comparators,
+as described below. 
+
+## SortBy comparator
+
+The `sortBy` function lets you define a rule, 
+and then possibly nest it with other rules with lower priority.
+For example, suppose you have a list of numbers 
+which you want to sort according to the following rules:
+
+> 1) If present, number 14 is always the first, followed by number 15.
+> 2) Otherwise, odd numbers come before even ones.
+> 3) Otherwise, come numbers which are multiples of 3,
+> 4) Otherwise, come numbers which are multiples of 5,
+> 5) Otherwise, numbers come in their natural order.
+
+You start by creating the first rule: `sortBy((x) => x == 15)` and
+then nesting the next rule in the `then` parameter:
+`sortBy((x) => x == 15, then: sortBy((x) => x % 2 == 1)`.
+
+After all the rules are in place you have this: 
+
+```dart
+int Function(int, int) compareTo = sortBy((x) => x == 14,
+   then: sortBy((x) => x == 15,
+       then: sortBy((x) => x % 2 == 1,
+           then: sortBy((x) => x % 3 == 0,
+               then: sortBy((x) => x % 5 == 0,
+                   then: (int a, int b) => a.compareTo(b),
+               )))));
+``` 
+
+## SortLike comparator
+
+The `sortLike` function lets you define a list with the desired sort order. 
+For example, if you want to sort numbers in this order: `[7, 3, 4, 21, 2]`
+you can do it like this: `sortLike([7, 3, 4, 21, 2])`.
+
+You can also nest other comparators, including mixing `sortBy` and `sortLike`.
+For example, to implement the following rules:  
+
+> 1) Order should be [7, 3, 4, 21, 2] when these values appear.
+> 2) Otherwise, odd numbers come before even ones.
+> 3) Otherwise, numbers come in their natural order.
+
+```dart                  
+int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
+   then: sortBy((x) => x % 2 == 1,
+       then: (int a, int b) => a.compareTo(b),
+           ));
+``` 
+
+Important: When nested comparators are used, make sure you don't create
+inconsistencies. For example, a rule that states `a<b then a>c then b<c`
+may result in different orders for the same items depending on their initial 
+position. This also means inconsistent rules may not be followed precisely.
+
+## if0 extension
+
+The `if0` function lets you nest comparators.
+
+You can think of `if0` as a "then",
+so that these two comparators are equivalent:
+
+```dart
+/// This:
+var compareTo = (String a, String b) 
+       => a.length.compareTo(b.length).if0(a.compareTo(b));
+
+/// Is the same as this:
+var compareTo = (String a, String b) {
+   int result = a.length.compareTo(b.length);
+   if (result == 0) result = a.compareTo(b);
+   return result;
+}
+```
+
+Examples:
+
+```dart
+var list = ["aaa", "ccc", "b", "c", "bbb", "a", "aa", "bb", "cc"];
+                  
+/// Example 1. 
+/// String come in their natural order.
+var compareTo = (String a, String b) => a.compareTo(b);
+list.sort(compareTo);
+expect(list, ["a", "aa", "aaa", "b", "bb", "bbb", "c", "cc", "ccc"]);
+
+/// Example 2. 
+/// Strings are ordered according to their length.
+/// Otherwise, they come in their natural order.
+compareTo = (String a, String b) => a.length.compareTo(b.length).if0(a.compareTo(b));
+list.sort(compareTo);
+expect(list, ["a", "b", "c", "aa", "bb", "cc", "aaa", "bbb", "ccc"]);
+
+/// Example 3. 
+/// Strings are ordered according to their length.
+/// Otherwise, they come in their natural order, inverted.
+compareTo = (String a, String b) => a.length.compareTo(b.length).if0(-a.compareTo(b));
+list.sort(compareTo);
+expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
+``` 
+
+ 
+
 ***************************************
 ***************************************
 ***************************************
