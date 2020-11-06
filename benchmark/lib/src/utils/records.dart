@@ -153,9 +153,9 @@ class RecordsTable {
     ].lock;
 
     String header = leftLegend.rows.first + ",";
-    numericColumns.forEach((RecordsColumn column) => header += column.title);
+    numericColumns.forEach((RecordsColumn column) => header += column.title + ",");
 
-    return header + "\n";
+    return header.substring(0, header.length - 1) + "\n";
   }
 
   // Currently inefficient. But no one should care much, the table will be very small anyway.
@@ -172,7 +172,7 @@ class RecordsTable {
     String newLine = leftLegend.rows[rowIndex + 1] + ",";
     numericColumns.forEach(
         (RecordsColumn column) => newLine += column.records[rowIndex].record.toString() + ",");
-    newLine = newLine.substring(0, newLine.length - 1);
-    return newLine + "\n";
+
+    return newLine.substring(0, newLine.length - 1) + "\n";
   }
 }

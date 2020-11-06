@@ -8,12 +8,12 @@ import "../screens/graph_screen.dart";
 import "collection_button.dart";
 
 class BenchWidget extends StatefulWidget {
-  final String description;
+  final String title;
   final IMap<String, String> code;
   final MultiBenchmarkReporter benchmark;
 
   BenchWidget({
-    this.description,
+    this.title,
     this.code,
     @required this.benchmark,
   });
@@ -72,7 +72,7 @@ class _BenchWidgetState extends State<BenchWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.description,
+                  widget.title,
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
@@ -96,7 +96,10 @@ class _BenchWidgetState extends State<BenchWidget> {
                             ? () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => GraphScreen(recordsTable: _results)))
+                                    builder: (_) => GraphScreen(
+                                          title: widget.title,
+                                          recordsTable: _results,
+                                        )))
                             : null,
                       ),
                     ),
@@ -106,8 +109,7 @@ class _BenchWidgetState extends State<BenchWidget> {
                         label: "Code",
                         onPressed: () => Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (_) => CodeScreen(widget.description, widget.code)),
+                          MaterialPageRoute(builder: (_) => CodeScreen(widget.title, widget.code)),
                         ),
                       ),
                     ),
