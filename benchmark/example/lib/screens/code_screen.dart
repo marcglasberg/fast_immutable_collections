@@ -2,13 +2,15 @@ import "dart:io";
 
 import "package:flutter/material.dart";
 
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "../widgets/collection_button.dart";
 
 class CodeScreen extends StatelessWidget {
   final String description;
-  final Map<String, String> code;
+  final IMap<String, String> code;
 
-  CodeScreen(this.description, this.code);
+  const CodeScreen(this.description, this.code);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class CodeScreen extends StatelessWidget {
   Widget _code(String title, String code) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(

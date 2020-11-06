@@ -1,118 +1,98 @@
-// import "package:benchmark_harness/benchmark_harness.dart";
-// import "package:built_collection/built_collection.dart";
-// import "package:kt_dart/collection.dart";
-// import "package:meta/meta.dart";
+import "package:built_collection/built_collection.dart";
+import "package:kt_dart/collection.dart";
+import "package:meta/meta.dart";
 
-// import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-// import "../../utils/config.dart";
-// import "../../utils/multi_benchmark_reporter.dart";
-// import "../../utils/collection_benchmark_base.dart";
+import "../../utils/table_score_emitter.dart";
+import "../../utils/collection_benchmark_base.dart";
 
-// class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-//   static const List<int> baseList = [1, 2, 3], listToAdd = [4, 5, 6];
+class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
+  static const List<int> baseList = [1, 2, 3], listToAdd = [4, 5, 6];
 
-//   @override
-//   final String prefixName;
-//   @override
-//   final List<Config> configs;
-//   @override
-//   final List<ListBenchmarkBase> baseBenchmarks = [
-//     MutableListAddAllBenchmark(config: null, emitter: null),
-//     IListAddAllBenchmark(config: null, emitter: null),
-//     KtListAddAllBenchmark(config: null, emitter: null),
-//     BuiltListAddAllBenchmark(config: null, emitter: null),
-//   ];
+  @override
+  final IList<ListBenchmarkBase> benchmarks;
 
-//   ListAddAllBenchmark({this.prefixName = "list_add_all", @required this.configs});
-// }
+  ListAddAllBenchmark({@required TableScoreEmitter emitter})
+      : benchmarks = <ListBenchmarkBase>[
+          MutableListAddAllBenchmark(emitter: emitter),
+          IListAddAllBenchmark(emitter: emitter),
+          KtListAddAllBenchmark(emitter: emitter),
+          BuiltListAddAllBenchmark(emitter: emitter),
+        ].lock,
+        super(emitter: emitter);
+}
 
-// class MutableListAddAllBenchmark extends ListBenchmarkBase {
-//   MutableListAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "List (Mutable)", config: config, emitter: emitter);
+class MutableListAddAllBenchmark extends ListBenchmarkBase {
+  MutableListAddAllBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "List (Mutable)", emitter: emitter);
 
-//   @override
-//   MutableListAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       MutableListAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  List<int> _list;
+  List<int> _fixedList;
 
-//   List<int> _list;
-//   List<int> _fixedList;
+  @override
+  List<int> toMutable() => _list;
 
-//   @override
-//   List<int> toMutable() => _list;
+  @override
+  void setup() => _fixedList = List<int>.of(ListAddAllBenchmark.baseList);
 
-//   @override
-//   void setup() => _fixedList = List<int>.of(ListAddAllBenchmark.baseList);
+  @override
+  void run() {
+    _list = List<int>.of(_fixedList);
+    _list.addAll(ListAddAllBenchmark.listToAdd);
+  }
+}
 
-//   @override
-//   void run() {
-//     _list = List<int>.of(_fixedList);
-//     _list.addAll(ListAddAllBenchmark.listToAdd);
-//   }
-// }
+class IListAddAllBenchmark extends ListBenchmarkBase {
+  IListAddAllBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "IList", emitter: emitter);
 
-// class IListAddAllBenchmark extends ListBenchmarkBase {
-//   IListAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "IList", config: config, emitter: emitter);
+  IList<int> _iList;
+  IList<int> _result;
 
-//   @override
-//   IListAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       IListAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  @override
+  List<int> toMutable() => _result.unlock;
 
-//   IList<int> _iList;
-//   IList<int> _result;
+  @override
+  void setup() => _iList = IList<int>(ListAddAllBenchmark.baseList);
 
-//   @override
-//   List<int> toMutable() => _result.unlock;
+  @override
+  void run() => _result = _iList.addAll(ListAddAllBenchmark.listToAdd);
+}
 
-//   @override
-//   void setup() => _iList = IList<int>(ListAddAllBenchmark.baseList);
+class KtListAddAllBenchmark extends ListBenchmarkBase {
+  KtListAddAllBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "KtList", emitter: emitter);
 
-//   @override
-//   void run() => _result = _iList.addAll(ListAddAllBenchmark.listToAdd);
-// }
+  KtList<int> _ktList;
+  KtList<int> _result;
 
-// class KtListAddAllBenchmark extends ListBenchmarkBase {
-//   KtListAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "KtList", config: config, emitter: emitter);
+  @override
+  List<int> toMutable() => _result.asList();
 
-//   @override
-//   KtListAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       KtListAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  @override
+  void setup() => _ktList = KtList<int>.from(ListAddAllBenchmark.baseList);
 
-//   KtList<int> _ktList;
-//   KtList<int> _result;
+  /// If the added list were already of type `KtList`, then it would be much
+  /// faster.
+  @override
+  void run() => _result = _ktList.plus(KtList<int>.from(ListAddAllBenchmark.listToAdd));
+}
 
-//   @override
-//   List<int> toMutable() => _result.asList();
+class BuiltListAddAllBenchmark extends ListBenchmarkBase {
+  BuiltListAddAllBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "BuiltList", emitter: emitter);
 
-//   @override
-//   void setup() => _ktList = KtList<int>.from(ListAddAllBenchmark.baseList);
+  BuiltList<int> _builtList;
+  BuiltList<int> _result;
 
-//   /// If the added list were already of type `KtList`, then it would be much
-//   /// faster.
-//   @override
-//   void run() => _result = _ktList.plus(KtList<int>.from(ListAddAllBenchmark.listToAdd));
-// }
+  @override
+  List<int> toMutable() => _result.asList();
 
-// class BuiltListAddAllBenchmark extends ListBenchmarkBase {
-//   BuiltListAddAllBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "BuiltList", config: config, emitter: emitter);
+  @override
+  void setup() => _builtList = BuiltList<int>.of(ListAddAllBenchmark.baseList);
 
-//   @override
-//   BuiltListAddAllBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       BuiltListAddAllBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
-
-//   BuiltList<int> _builtList;
-//   BuiltList<int> _result;
-
-//   @override
-//   List<int> toMutable() => _result.asList();
-
-//   @override
-//   void setup() => _builtList = BuiltList<int>.of(ListAddAllBenchmark.baseList);
-
-//   @override
-//   void run() => _result = _builtList
-//       .rebuild((ListBuilder<int> listBuilder) => listBuilder.addAll(ListAddAllBenchmark.listToAdd));
-// }
+  @override
+  void run() => _result = _builtList
+      .rebuild((ListBuilder<int> listBuilder) => listBuilder.addAll(ListAddAllBenchmark.listToAdd));
+}

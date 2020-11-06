@@ -1,115 +1,107 @@
-// import "package:benchmark_harness/benchmark_harness.dart";
-// import "package:built_collection/built_collection.dart";
-// import "package:kt_dart/kt.dart";
-// import "package:meta/meta.dart";
+import "package:built_collection/built_collection.dart";
+import "package:kt_dart/kt.dart";
+import "package:meta/meta.dart";
 
-// import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-// import "../../utils/config.dart";
-// import "../../utils/multi_benchmark_reporter.dart";
-// import "../../utils/collection_benchmark_base.dart";
+import "../../utils/table_score_emitter.dart";
+import "../../utils/collection_benchmark_base.dart";
 
-// class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-//   @override
-//   final String prefixName;
-//   @override
-//   final List<Config> configs;
-//   @override
-//   final List<ListBenchmarkBase> baseBenchmarks = [
-//     MutableListContainsBenchmark(config: null, emitter: null),
-//     IListContainsBenchmark(config: null, emitter: null),
-//     KtListContainsBenchmark(config: null, emitter: null),
-//     BuiltListContainsBenchmark(config: null, emitter: null),
-//   ];
+class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
+  @override
+  final IList<ListBenchmarkBase> benchmarks;
 
-//   ListContainsBenchmark({this.prefixName = "list_contains", @required this.configs});
-// }
+  ListContainsBenchmark({@required TableScoreEmitter emitter})
+      : benchmarks = <ListBenchmarkBase>[
+          MutableListContainsBenchmark(emitter: emitter),
+          IListContainsBenchmark(emitter: emitter),
+          KtListContainsBenchmark(emitter: emitter),
+          BuiltListContainsBenchmark(emitter: emitter),
+        ].lock,
+        super(emitter: emitter);
+}
 
-// class MutableListContainsBenchmark extends ListBenchmarkBase {
-//   MutableListContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "List (Mutable)", config: config, emitter: emitter);
+class MutableListContainsBenchmark extends ListBenchmarkBase {
+  MutableListContainsBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "List (Mutable)", emitter: emitter);
 
-//   @override
-//   MutableListContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       MutableListContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  List<int> _list;
+  bool _contains;
 
-//   List<int> _list;
+  bool get contains => _contains;
 
-//   @override
-//   List<int> toMutable() => _list;
+  @override
+  List<int> toMutable() => _list;
 
-//   @override
-//   void setup() => _list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+  @override
+  void setup() => _list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
 
-//   @override
-//   void run() {
-//     for (int i = 0; i < _list.length + 1; i++) _list.contains(i);
-//   }
-// }
+  @override
+  void run() {
+    for (int i = 0; i < _list.length + 1; i++) _contains = _list.contains(i);
+  }
+}
 
-// class IListContainsBenchmark extends ListBenchmarkBase {
-//   IListContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "IList", config: config, emitter: emitter);
+class IListContainsBenchmark extends ListBenchmarkBase {
+  IListContainsBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "IList", emitter: emitter);
 
-//   @override
-//   IListContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       IListContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  IList<int> _iList;
+  bool _contains;
 
-//   IList<int> _iList;
+  bool get contains => _contains;
 
-//   @override
-//   List<int> toMutable() => _iList.unlock;
+  @override
+  List<int> toMutable() => _iList.unlock;
 
-//   @override
-//   void setup() => _iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  @override
+  void setup() => _iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
-//   @override
-//   void run() {
-//     for (int i = 0; i < _iList.length + 1; i++) _iList.contains(i);
-//   }
-// }
+  @override
+  void run() {
+    for (int i = 0; i < _iList.length + 1; i++) _contains = _iList.contains(i);
+  }
+}
 
-// class KtListContainsBenchmark extends ListBenchmarkBase {
-//   KtListContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "KtList", config: config, emitter: emitter);
+class KtListContainsBenchmark extends ListBenchmarkBase {
+  KtListContainsBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "KtList", emitter: emitter);
 
-//   @override
-//   KtListContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       KtListContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtList<int> _ktList;
+  bool _contains;
 
-//   KtList<int> _ktList;
+  bool get contains => _contains;
 
-//   @override
-//   List<int> toMutable() => _ktList.asList();
+  @override
+  List<int> toMutable() => _ktList.asList();
 
-//   @override
-//   void setup() => _ktList = KtList.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  @override
+  void setup() => _ktList = KtList.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
-//   @override
-//   void run() {
-//     for (int i = 0; i < _ktList.size + 1; i++) _ktList.contains(i);
-//   }
-// }
+  @override
+  void run() {
+    for (int i = 0; i < _ktList.size + 1; i++) _contains = _ktList.contains(i);
+  }
+}
 
-// class BuiltListContainsBenchmark extends ListBenchmarkBase {
-//   BuiltListContainsBenchmark({@required Config config, @required ScoreEmitter emitter})
-//       : super(name: "BuiltList", config: config, emitter: emitter);
+class BuiltListContainsBenchmark extends ListBenchmarkBase {
+  BuiltListContainsBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "BuiltList", emitter: emitter);
 
-//   @override
-//   BuiltListContainsBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-//       BuiltListContainsBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltList<int> _builtList;
+  bool _contains;
 
-//   BuiltList<int> _builtList;
+  bool get contains => _contains;
 
-//   @override
-//   List<int> toMutable() => _builtList.asList();
+  @override
+  List<int> toMutable() => _builtList.asList();
 
-//   @override
-//   void setup() =>
-//       _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  @override
+  void setup() =>
+      _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
-//   @override
-//   void run() {
-//     for (int i = 0; i < _builtList.length + 1; i++) _builtList.contains(i);
-//   }
-// }
+  @override
+  void run() {
+    for (int i = 0; i < _builtList.length + 1; i++) _contains = _builtList.contains(i);
+  }
+}

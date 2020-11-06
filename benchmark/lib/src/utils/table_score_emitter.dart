@@ -1,9 +1,10 @@
 import "dart:io";
+
 import "package:benchmark_harness/benchmark_harness.dart";
 import "package:meta/meta.dart";
 import "package:path/path.dart" as p;
-import "config.dart";
-import "record_data.dart";
+
+import "records.dart";
 
 class TableScoreEmitter implements ScoreEmitter {
   final String prefixName;

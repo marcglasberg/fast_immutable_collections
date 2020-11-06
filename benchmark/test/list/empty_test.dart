@@ -1,60 +1,64 @@
-// import "package:test/test.dart";
+import "package:test/test.dart";
 
-// import "package:fast_immutable_collections_benchmarks/"
-//     "fast_immutable_collections_benchmarks.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
-// void main() {
-//   const Config config = Config(runs: 100, size: 0);
-//   const List<int> emptyList = [];
+void main() {
+  group("Separate Benchmarks |", () {
+    test("List (Mutable)", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_list_mutable", config: Config(runs: 100, size: 0));
+      final MutableListEmptyBenchmark listResult =
+          MutableListEmptyBenchmark(emitter: tableScoreEmitter);
 
-//   group("Separate Benchmarks |", () {
-//     final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "list_empty");
+      listResult.report();
 
-//     test("`List` (Mutable)", () {
-//       final MutableListEmptyBenchmark listResult =
-//           MutableListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(listResult.toMutable(), <int>[]);
+    });
 
-//       listResult.report();
+    test("IList", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_iList", config: Config(runs: 100, size: 0));
+      final IListEmptyBenchmark iListEmptyBenchmark =
+          IListEmptyBenchmark(emitter: tableScoreEmitter);
 
-//       expect(listResult.toMutable(), emptyList);
-//     });
+      iListEmptyBenchmark.report();
 
-//     test("`IList`", () {
-//       final IListEmptyBenchmark iListEmptyBenchmark =
-//           IListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(iListEmptyBenchmark.toMutable(), <int>[]);
+    });
 
-//       iListEmptyBenchmark.report();
+    test("KtList", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_ktList", config: Config(runs: 100, size: 0));
+      final KtListEmptyBenchmark ktListEmptyBenchmark =
+          KtListEmptyBenchmark(emitter: tableScoreEmitter);
 
-//       expect(iListEmptyBenchmark.toMutable(), emptyList);
-//     });
+      ktListEmptyBenchmark.report();
 
-//     test("`KtList`", () {
-//       final KtListEmptyBenchmark ktListEmptyBenchmark =
-//           KtListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(ktListEmptyBenchmark.toMutable(), <int>[]);
+    });
 
-//       ktListEmptyBenchmark.report();
+    test("BuiltList", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_builtList", config: Config(runs: 100, size: 0));
+      final BuiltListEmptyBenchmark builtListEmptyBenchmark =
+          BuiltListEmptyBenchmark(emitter: tableScoreEmitter);
 
-//       expect(ktListEmptyBenchmark.toMutable(), emptyList);
-//     });
+      builtListEmptyBenchmark.report();
 
-//     test("`BuiltList`", () {
-//       final BuiltListEmptyBenchmark builtListEmptyBenchmark =
-//           BuiltListEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+      expect(builtListEmptyBenchmark.toMutable(), <int>[]);
+    });
+  });
 
-//       builtListEmptyBenchmark.report();
+  group("Multiple Benchmarks |", () {
+    test("Simple run", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty", config: Config(runs: 100, size: 0));
+      final ListEmptyBenchmark emptyBenchmark = ListEmptyBenchmark(emitter: tableScoreEmitter);
 
-//       expect(builtListEmptyBenchmark.toMutable(), emptyList);
-//     });
-//   });
+      emptyBenchmark.report();
 
-//   group("Multiple Benchmarks |", () {
-//     test("Simple run", () {
-//       final ListEmptyBenchmark emptyBenchmark = ListEmptyBenchmark(configs: [config, config]);
-
-//       emptyBenchmark.report();
-
-//       emptyBenchmark.benchmarks
-//           .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), emptyList));
-//     });
-//   });
-// }
+      emptyBenchmark.benchmarks
+          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), <int>[]));
+    });
+  });
+}

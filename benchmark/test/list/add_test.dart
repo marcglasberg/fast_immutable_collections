@@ -31,7 +31,7 @@ void main() {
 
     test("KtList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "list_add", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_ktList", config: Config(runs: 100, size: 100));
       final KtListAddBenchmark ktListAddBenchmark = KtListAddBenchmark(emitter: tableScoreEmitter);
 
       ktListAddBenchmark.report();
@@ -42,8 +42,8 @@ void main() {
     });
 
     test("BuiltList with rebuild", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "list_add", config: Config(runs: 100, size: 100));
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "add_builtList_with_rebuild", config: Config(runs: 100, size: 100));
       final BuiltListAddWithRebuildBenchmark builtListAddWithRebuildBenchmark =
           BuiltListAddWithRebuildBenchmark(emitter: tableScoreEmitter);
 
@@ -55,8 +55,8 @@ void main() {
     });
 
     test("BuiltList with ListBuilder", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "list_add", config: Config(runs: 100, size: 100));
+      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+          prefixName: "add_builtList_with_listBuilder", config: Config(runs: 100, size: 100));
       final BuiltListAddWithListBuilderBenchmark builtListAddWithListBuilderBenchmark =
           BuiltListAddWithListBuilderBenchmark(emitter: tableScoreEmitter);
 
@@ -71,7 +71,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_iList", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add", config: Config(runs: 100, size: 100));
       final ListAddBenchmark addBenchmark = ListAddBenchmark(emitter: tableScoreEmitter);
 
       addBenchmark.report();

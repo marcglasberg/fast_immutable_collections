@@ -1,8 +1,23 @@
 import "package:benchmark_harness/benchmark_harness.dart";
 import "package:meta/meta.dart";
 
-import "config.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
+import "records.dart";
 import "table_score_emitter.dart";
+
+abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
+  final TableScoreEmitter emitter;
+
+  @visibleForOverriding
+  IList<B> benchmarks;
+
+  MultiBenchmarkReporter({@required this.emitter});
+
+  void report() => benchmarks.forEach((B benchmark) => benchmark.report());
+
+  void saveReports() => benchmarks.forEach((B benchmark) => benchmark.emitter.saveReport());
+}
 
 abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   @override
@@ -42,11 +57,9 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   List<int> toMutable();
 }
 
-// TODO: reintegrate set benchmarks to the new design.
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   const SetBenchmarkBase({
     @required String name,
-    @required Config config,
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 

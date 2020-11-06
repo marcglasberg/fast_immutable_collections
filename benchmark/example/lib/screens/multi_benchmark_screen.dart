@@ -18,33 +18,38 @@ class MultiBenchmarkScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFCCCCCC),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _benchmarks,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Choose a benchmark to test"),
+      ),
+      body: Container(
+        color: const Color(0xFFCCCCCC),
+        child: Column(
+          children: <Widget>[
+            const SizedBox(height: 15),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _benchmarks,
+                ),
               ),
             ),
-          ),
-          if (!kReleaseMode) _releaseModeWarning(),
-        ],
+            if (!kReleaseMode)
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                width: double.infinity,
+                color: Colors.black,
+                child: const Text(
+                  "Please run this in release mode!",
+                  style: TextStyle(color: Colors.white, fontSize: 17),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
-
-  Container _releaseModeWarning() => Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        width: double.infinity,
-        color: Colors.black,
-        child: const Text(
-          "Please run this in release mode!",
-          style: TextStyle(color: Colors.white, fontSize: 17),
-        ),
-      );
 
   List<Widget> get _benchmarks {
     switch (collectionType) {
@@ -52,7 +57,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         return <Widget>[
           BenchWidget(
             description: "Add",
-            code: add_code,
+            code: ListCode.add,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_add",
@@ -62,8 +67,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "AddAll",
-            code: add_all_code,
-            benchmark: ListAddBenchmark(
+            code: ListCode.add_all,
+            benchmark: ListAddAllBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_add_all",
                 config: Config(runs: 100, size: 100),
@@ -72,8 +77,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Contains",
-            code: {},
-            benchmark: ListAddBenchmark(
+            code: ListCode.contains,
+            benchmark: ListContainsBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_contains",
                 config: Config(runs: 100, size: 100),
@@ -82,8 +87,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Empty",
-            code: {},
-            benchmark: ListAddBenchmark(
+            code: ListCode.empty,
+            benchmark: ListEmptyBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_empty",
                 config: Config(runs: 100, size: 100),
@@ -92,8 +97,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Read",
-            code: {},
-            benchmark: ListAddBenchmark(
+            code: ListCode.read,
+            benchmark: ListReadBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_read",
                 config: Config(runs: 100, size: 100),
@@ -102,8 +107,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             description: "Remove",
-            code: {},
-            benchmark: ListAddBenchmark(
+            code: ListCode.remove,
+            benchmark: ListRemoveBenchmark(
               emitter: TableScoreEmitter(
                 prefixName: "list_remove",
                 config: Config(runs: 100, size: 100),
@@ -112,11 +117,63 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
         ];
       case CollectionType.set:
-        return <Widget>[];
+        return <Widget>[
+          BenchWidget(
+            description: "Add",
+            code: SetCode.add,
+            benchmark: SetAddBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_add",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "AddAll",
+            code: SetCode.add_all,
+            benchmark: SetAddAllBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_add_all",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Contains",
+            code: SetCode.contains,
+            benchmark: SetContainsBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_contains",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Empty",
+            code: SetCode.contains,
+            benchmark: SetEmptyBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_empty",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+          BenchWidget(
+            description: "Remove",
+            code: SetCode.contains,
+            benchmark: SetRemoveBenchmark(
+              emitter: TableScoreEmitter(
+                prefixName: "set_remove",
+                config: Config(runs: 100, size: 100),
+              ),
+            ),
+          ),
+        ];
       case CollectionType.map:
         return <Widget>[];
       default:
-        throw UnimplementedError("No benchmarks for this collection type you've somehow chosen.");
+        throw UnimplementedError(
+            "No benchmarks for this collection type you've somehow managed to choose.");
     }
   }
 }

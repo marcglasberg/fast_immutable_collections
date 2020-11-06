@@ -1,37 +1,29 @@
-import "package:benchmark_harness/benchmark_harness.dart";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
 import "package:meta/meta.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "../../utils/config.dart";
+import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
-import "../../utils/multi_benchmark_reporter.dart";
 
 class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
-  final String prefixName;
-  @override
-  final List<Config> configs;
-  @override
-  final List<SetBenchmarkBase> baseBenchmarks = [
-    MutableSetRemoveBenchmark(config: null, emitter: null),
-    ISetRemoveBenchmark(config: null, emitter: null),
-    KtSetRemoveBenchmark(config: null, emitter: null),
-    BuiltSetRemoveBenchmark(config: null, emitter: null),
-  ];
+  final IList<SetBenchmarkBase> benchmarks;
 
-  SetRemoveBenchmark({this.prefixName = "set_remove", @required this.configs});
+  SetRemoveBenchmark({@required TableScoreEmitter emitter})
+      : benchmarks = <SetBenchmarkBase>[
+          MutableSetRemoveBenchmark(emitter: emitter),
+          ISetRemoveBenchmark(emitter: emitter),
+          KtSetRemoveBenchmark(emitter: emitter),
+          BuiltSetRemoveBenchmark(emitter: emitter),
+        ].lock,
+        super(emitter: emitter);
 }
 
 class MutableSetRemoveBenchmark extends SetBenchmarkBase {
-  MutableSetRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "List (Mutable)", config: config, emitter: emitter);
-
-  @override
-  MutableSetRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableSetRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableSetRemoveBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "List (Mutable)", emitter: emitter);
 
   Set<int> _set;
 
@@ -46,12 +38,8 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
 }
 
 class ISetRemoveBenchmark extends SetBenchmarkBase {
-  ISetRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "ISet", config: config, emitter: emitter);
-
-  @override
-  ISetRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      ISetRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  ISetRemoveBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "ISet", emitter: emitter);
 
   ISet<int> _fixedSet;
   ISet<int> _iSet;
@@ -67,12 +55,8 @@ class ISetRemoveBenchmark extends SetBenchmarkBase {
 }
 
 class KtSetRemoveBenchmark extends SetBenchmarkBase {
-  KtSetRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "KtSet", config: config, emitter: emitter);
-
-  @override
-  KtSetRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      KtSetRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtSetRemoveBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "KtSet", emitter: emitter);
 
   KtSet<int> _fixedSet;
   KtSet<int> _ktSet;
@@ -88,12 +72,8 @@ class KtSetRemoveBenchmark extends SetBenchmarkBase {
 }
 
 class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
-  BuiltSetRemoveBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "BuiltSet", config: config, emitter: emitter);
-
-  @override
-  BuiltSetRemoveBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltSetRemoveBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltSetRemoveBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "BuiltSet", emitter: emitter);
 
   BuiltSet<int> _fixedSet;
   BuiltSet<int> _builtSet;

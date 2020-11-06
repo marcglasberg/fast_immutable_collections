@@ -1,61 +1,63 @@
 import "package:test/test.dart";
 
-import "package:fast_immutable_collections_benchmarks/"
-    "fast_immutable_collections_benchmarks.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  const int size = 100;
-  const Config config = Config(runs: 100, size: size);
-  final Set<int> expectedSet = {};
-
   group("Separate Benchmarks |", () {
-    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(prefixName: "set_empty");
-
-    test("`Set` (Mutable)", () {
+    test("Set (Mutable)", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_set_mutable", config: Config(runs: 100, size: 100));
       final MutableSetEmptyBenchmark setEmptyBenchmark =
-          MutableSetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+          MutableSetEmptyBenchmark(emitter: tableScoreEmitter);
 
       setEmptyBenchmark.report();
 
-      expect(setEmptyBenchmark.toMutable(), expectedSet);
+      expect(setEmptyBenchmark.toMutable(), <int>{});
     });
 
-    test("`ISet`", () {
-      final ISetEmptyBenchmark iSetEmptyBenchmark =
-          ISetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+    test("ISet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_iSet", config: Config(runs: 100, size: 100));
+      final ISetEmptyBenchmark iSetEmptyBenchmark = ISetEmptyBenchmark(emitter: tableScoreEmitter);
 
       iSetEmptyBenchmark.report();
 
-      expect(iSetEmptyBenchmark.toMutable(), expectedSet);
+      expect(iSetEmptyBenchmark.toMutable(), <int>{});
     });
 
-    test("`KtSet`", () {
+    test("KtSet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_ktSet", config: Config(runs: 100, size: 100));
       final KtSetEmptyBenchmark ktSetEmptyBenchmark =
-          KtSetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+          KtSetEmptyBenchmark(emitter: tableScoreEmitter);
 
       ktSetEmptyBenchmark.report();
 
-      expect(ktSetEmptyBenchmark.toMutable(), expectedSet);
+      expect(ktSetEmptyBenchmark.toMutable(), <int>{});
     });
 
-    test("`BuiltSet`", () {
+    test("BuiltSet", () {
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty_builtSet", config: Config(runs: 100, size: 100));
       final BuiltSetEmptyBenchmark builtSetEmptyBenchmark =
-          BuiltSetEmptyBenchmark(config: config, emitter: tableScoreEmitter);
+          BuiltSetEmptyBenchmark(emitter: tableScoreEmitter);
 
       builtSetEmptyBenchmark.report();
 
-      expect(builtSetEmptyBenchmark.toMutable(), expectedSet);
+      expect(builtSetEmptyBenchmark.toMutable(), <int>{});
     });
   });
 
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
-      final SetEmptyBenchmark emptyBenchmark = SetEmptyBenchmark(configs: [config, config]);
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "empty", config: Config(runs: 100, size: 100));
+      final SetEmptyBenchmark emptyBenchmark = SetEmptyBenchmark(emitter: tableScoreEmitter);
 
       emptyBenchmark.report();
 
       emptyBenchmark.benchmarks
-          .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
+          .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), <int>{}));
     });
   });
 }

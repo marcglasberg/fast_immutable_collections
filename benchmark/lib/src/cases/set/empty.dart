@@ -1,37 +1,29 @@
-import "package:benchmark_harness/benchmark_harness.dart";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
 import "package:meta/meta.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
-import "../../utils/config.dart";
-import "../../utils/multi_benchmark_reporter.dart";
 
 class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
-  final String prefixName;
-  @override
-  final List<Config> configs;
-  @override
-  final List<SetBenchmarkBase> baseBenchmarks = [
-    MutableSetEmptyBenchmark(config: null, emitter: null),
-    ISetEmptyBenchmark(config: null, emitter: null),
-    KtSetEmptyBenchmark(config: null, emitter: null),
-    BuiltSetEmptyBenchmark(config: null, emitter: null),
-  ];
+  final IList<SetBenchmarkBase> benchmarks;
 
-  SetEmptyBenchmark({this.prefixName = "set_empty", @required this.configs});
+  SetEmptyBenchmark({@required TableScoreEmitter emitter})
+      : benchmarks = <SetBenchmarkBase>[
+          MutableSetEmptyBenchmark(emitter: emitter),
+          ISetEmptyBenchmark(emitter: emitter),
+          KtSetEmptyBenchmark(emitter: emitter),
+          BuiltSetEmptyBenchmark(emitter: emitter),
+        ].lock,
+        super(emitter: emitter);
 }
 
 class MutableSetEmptyBenchmark extends SetBenchmarkBase {
-  MutableSetEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "Set (Mutable)", config: config, emitter: emitter);
-
-  @override
-  MutableSetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      MutableSetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  MutableSetEmptyBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "Set (Mutable)", emitter: emitter);
 
   Set<int> _set;
 
@@ -43,12 +35,7 @@ class MutableSetEmptyBenchmark extends SetBenchmarkBase {
 }
 
 class ISetEmptyBenchmark extends SetBenchmarkBase {
-  ISetEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "ISet", config: config, emitter: emitter);
-
-  @override
-  ISetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      ISetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  ISetEmptyBenchmark({@required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
   ISet<int> _iSet;
 
@@ -60,12 +47,8 @@ class ISetEmptyBenchmark extends SetBenchmarkBase {
 }
 
 class KtSetEmptyBenchmark extends SetBenchmarkBase {
-  KtSetEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "KtSet", config: config, emitter: emitter);
-
-  @override
-  KtSetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      KtSetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  KtSetEmptyBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "KtSet", emitter: emitter);
 
   KtSet<int> _ktSet;
 
@@ -77,12 +60,8 @@ class KtSetEmptyBenchmark extends SetBenchmarkBase {
 }
 
 class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
-  BuiltSetEmptyBenchmark({@required Config config, @required ScoreEmitter emitter})
-      : super(name: "BuiltSet", config: config, emitter: emitter);
-
-  @override
-  BuiltSetEmptyBenchmark reconfigure({Config newConfig, ScoreEmitter newEmitter}) =>
-      BuiltSetEmptyBenchmark(config: newConfig ?? config, emitter: newEmitter ?? emitter);
+  BuiltSetEmptyBenchmark({@required TableScoreEmitter emitter})
+      : super(name: "BuiltSet", emitter: emitter);
 
   BuiltSet<int> _builtSet;
 
