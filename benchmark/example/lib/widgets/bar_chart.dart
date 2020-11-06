@@ -25,9 +25,10 @@ class BarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return charts.BarChart(
       _seriesList,
-      vertical: false,
       animate: true,
-      animationDuration: Duration(seconds: 1, milliseconds: 250),
+      animationDuration: const Duration(seconds: 1, milliseconds: 250),
+      barRendererDecorator: charts.BarLabelDecorator<String>(),
+      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       behaviors: <charts.ChartBehavior>[
         charts.SeriesLegend(position: charts.BehaviorPosition.top),
       ],
