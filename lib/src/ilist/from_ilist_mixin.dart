@@ -1,8 +1,5 @@
 import "dart:math";
-
-import "../imap/imap.dart";
-import "../utils/immutable_collection.dart";
-import "ilist.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// This mixin implements all [IList] methods, plus `operator []`,
 /// but it does NOT implement [Iterable] nor [IList].
