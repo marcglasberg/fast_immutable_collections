@@ -5,18 +5,19 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "../widgets/bar_chart.dart";
 
 class GraphScreen extends StatelessWidget {
+  final String title;
   final RecordsTable recordsTable;
 
-  const GraphScreen({@required this.recordsTable});
+  const GraphScreen({@required this.title, @required this.recordsTable});
 
   @override
   Widget build(BuildContext context) {
-    print(recordsTable);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Graph Results"),
+        title: Text("$title Benchmark Graph Results"),
       ),
       body: Container(
+        padding: const EdgeInsets.only(left: 5),
         child: BarChart(recordsTable: recordsTable),
       ),
     );

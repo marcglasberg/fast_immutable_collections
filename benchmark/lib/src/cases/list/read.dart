@@ -8,7 +8,7 @@ import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
 class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-  static const int indexToRead = 100;
+  static const int indexToRead = 10;
 
   @override
   final IList<ListBenchmarkBase> benchmarks;

@@ -8,16 +8,17 @@ class BarChart extends StatelessWidget {
 
   const BarChart({@required this.recordsTable});
 
-  List<StopwatchRecord> get _data => recordsTable.normalizedAgainstMax.records.toList();
+  List<StopwatchRecord> get _normalizedAgainstMax =>
+      recordsTable.normalizedAgainstMax.records.toList();
 
   List<charts.Series<StopwatchRecord, String>> get _seriesList => [
         charts.Series<StopwatchRecord, String>(
-          id: "Benchmark",
+          id: "Normalized Against\nthe Maximum Value",
           colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
           domainFn: (StopwatchRecord record, _) => record.collectionName,
           measureFn: (StopwatchRecord record, _) => record.record,
-          data: _data,
-        )
+          data: _normalizedAgainstMax,
+        ),
       ];
 
   @override
@@ -25,8 +26,11 @@ class BarChart extends StatelessWidget {
     return charts.BarChart(
       _seriesList,
       animate: true,
+      animationDuration: const Duration(seconds: 1, milliseconds: 250),
+      barRendererDecorator: charts.BarLabelDecorator<String>(),
+      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       behaviors: <charts.ChartBehavior>[
-        charts.SeriesLegend(),
+        charts.SeriesLegend(position: charts.BehaviorPosition.top),
       ],
     );
   }

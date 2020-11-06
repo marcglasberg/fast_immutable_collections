@@ -56,7 +56,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
       case CollectionType.list:
         return <Widget>[
           BenchWidget(
-            description: "Add",
+            title: "Add",
             code: ListCode.add,
             benchmark: ListAddBenchmark(
               emitter: TableScoreEmitter(
@@ -66,7 +66,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "AddAll",
+            title: "AddAll",
             code: ListCode.add_all,
             benchmark: ListAddAllBenchmark(
               emitter: TableScoreEmitter(
@@ -76,7 +76,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "Contains",
+            title: "Contains",
             code: ListCode.contains,
             benchmark: ListContainsBenchmark(
               emitter: TableScoreEmitter(
@@ -86,7 +86,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "Empty",
+            title: "Empty",
             code: ListCode.empty,
             benchmark: ListEmptyBenchmark(
               emitter: TableScoreEmitter(
@@ -96,7 +96,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "Read",
+            title: "Read",
             code: ListCode.read,
             benchmark: ListReadBenchmark(
               emitter: TableScoreEmitter(
@@ -106,7 +106,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "Remove",
+            title: "Remove",
             code: ListCode.remove,
             benchmark: ListRemoveBenchmark(
               emitter: TableScoreEmitter(
@@ -119,7 +119,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
       case CollectionType.set:
         return <Widget>[
           BenchWidget(
-            description: "Add",
+            title: "Add",
             code: SetCode.add,
             benchmark: SetAddBenchmark(
               emitter: TableScoreEmitter(
@@ -129,7 +129,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "AddAll",
+            title: "AddAll",
             code: SetCode.add_all,
             benchmark: SetAddAllBenchmark(
               emitter: TableScoreEmitter(
@@ -139,7 +139,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "Contains",
+            title: "Contains",
             code: SetCode.contains,
             benchmark: SetContainsBenchmark(
               emitter: TableScoreEmitter(
@@ -149,7 +149,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "Empty",
+            title: "Empty",
             code: SetCode.contains,
             benchmark: SetEmptyBenchmark(
               emitter: TableScoreEmitter(
@@ -159,7 +159,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
             ),
           ),
           BenchWidget(
-            description: "Remove",
+            title: "Remove",
             code: SetCode.contains,
             benchmark: SetRemoveBenchmark(
               emitter: TableScoreEmitter(
