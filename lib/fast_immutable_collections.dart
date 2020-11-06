@@ -2,8 +2,9 @@
 /// {@category Collections, Immutable, Flutter}
 library fast_immutable_collections;
 
-export "src/utils/immutable_collection.dart";
-export "src/utils/configs.dart";
+export "src/base/immutable_collection.dart";
+export "src/base/configs.dart";
+export "src/base/sort_by.dart";
 
 // IList:
 export "src/ilist/ilist.dart";

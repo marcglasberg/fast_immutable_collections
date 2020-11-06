@@ -1,5 +1,4 @@
-import "../utils/immutable_collection.dart";
-import "iset.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// This mixin implements all [ISet] members.
 /// It is meant to help you wrap an [ISet] into another class (composition).
