@@ -80,6 +80,9 @@ int Function(T, T) sortBy<T>(
 ///   only one of them is present and the other is not, and [then]
 ///   is provided, then the order between [a] and [b] with be given by [then].
 ///
+/// Optionally, you can provide a [mapper] function, to convert [a] and [b]
+/// into the type of values in [order].
+///
 /// Notes:
 ///
 /// - [order] should be [List] or [IList], otherwise it will be converted
@@ -108,22 +111,32 @@ int Function(T, T) sortBy<T>(
 ///
 /// Note [sortLike] can be combined with [sortBy].
 ///
-int Function(T, T) sortLike<T>(
-  Iterable<T> order, {
+int Function(T, T) sortLike<T, E>(
+  Iterable<E> order, {
+  E Function(T) mapper,
   int Function(T, T) then,
 }) =>
     (T a, T b) {
       if (a == b) return 0;
       int posA, posB;
-      if (order is List<T>) {
-        posA = order.indexOf(a);
-        posB = order.indexOf(b);
-      } else if (order is IList<T>) {
-        posA = order.indexOf(a);
-        posB = order.indexOf(b);
+
+      E ma, mb;
+      if (mapper != null) {
+        ma = mapper(a);
+        mb = mapper(b);
       } else {
-        posA = order.toList().indexOf(a);
-        posB = order.toList().indexOf(b);
+        ma = a as E;
+        mb = b as E;
+      }
+      if (order is List<E>) {
+        posA = order.indexOf(ma);
+        posB = order.indexOf(mb);
+      } else if (order is IList<E>) {
+        posA = order.indexOf(ma);
+        posB = order.indexOf(mb);
+      } else {
+        posA = order.toList().indexOf(ma);
+        posB = order.toList().indexOf(mb);
       }
 
       return (posA != -1 && posB != -1)

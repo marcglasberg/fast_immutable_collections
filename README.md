@@ -1012,6 +1012,12 @@ inconsistencies. For example, a rule that states `a<b then a>c then b<c`
 may result in different orders for the same items depending on their initial 
 position. This also means inconsistent rules may not be followed precisely.
 
+Please note, your order list may be of a different type than the values you
+are sorting. If this is the case, you can provide a `mapper` function, 
+to convert the values into the `order` type. See the `sort_test.dart`
+file for more information and runnable examples. 
+
+
 ## if0 extension
 
 The `if0` function lets you nest comparators.

@@ -93,6 +93,41 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  test("sortLike with mapper", () {
+    IList<String> list = [
+      "1",
+      "123456789",
+      "12",
+      "123456789012345678901234567",
+      "123456789012",
+      "123",
+      "123456789012",
+      "12345678901234",
+      "12345678901",
+      "1234567",
+      "",
+      "1234"
+    ].lock;
+
+    /// Comparator Rules:
+    /// 1) Order should be length [7, 3, 4, 21, 2] when these values appear.
+    /// 2) Otherwise, strings with odd length come before even ones.
+    /// 3) Otherwise, string come ordered according to their length.
+    int Function(String, String) compareTo = sortLike(const [7, 3, 4, 21, 2],
+        mapper: (String text) => text.length,
+        then: sortBy(
+          (x) => x.length % 2 == 1,
+          then: (String a, String b) => a.length.compareTo(b.length),
+        ));
+
+    for (int i = 1; i < 1000; i++) {
+      list = list.shuffle().sort(compareTo);
+      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+    }
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   test("Sort with inconsistencies.", () {
     IList<int> list = [3, 4, 9].lock;
 
