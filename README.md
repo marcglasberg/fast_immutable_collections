@@ -453,63 +453,6 @@ expect(students, [james, sara, lucy]);
 print(students.greetings()); 
 ```   
 
-## Flushing the IList
-
-As explained, `fast_immutable_collections` is fast because it creates a new collection 
-by internally "composing" the source collection with some other information, 
-saving only the difference between the source and destination collections, 
-instead of copying the whole collection each time.
-
-After a lot of modifications, 
-these composed collections may end up with lots of information to coordinate the composition, 
-and may become slower than a regular mutable collection.
-
-The loss of speed depends on the type of collection. 
-For example, the `IList` doesn't suffer much from deep compositions,
-while the `ISet` and the `IMap` will take more of a hit.  
-
-If you call `flush` in an immutable collection, 
-it will internally remove all the composition,
-making sure the is perfectly optimized again. For example:
-
-```dart
-var ilist = [1.2].lock.add([3, 4]).add(5);
-ilist.flush;
-```         
-
-Please note, `flush` is a getter which returns the exact same instance, 
-just so that you can chain other methods to it if you want. 
-But it does NOT create a new list. 
-It actually just optimizes the current list, internally.
-
-If you flush a list which is already flushed, nothing will happen,
-and it won't take any time to flush the list again.
-So you don't need to worry about flushing the list more than once.
-
-Also, note flush just optimizes the list **internally**, 
-and no external difference will be visible. 
-So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
-
-### Auto-flush      
-  
-Depending on the global configuration, 
-the collections will flush automatically for you, 
-once per asynchronous gap, as soon as you use them again.   
-
-For example, suppose you take a collection and add and remove a lot of items, synchronously.
-No flushing will take place during these process.
-After the asynchronous gap, as soon as you try to get, add or remove an item from it,
-it will flush automatically.  
-
-The global configuration default is to have auto-flush on. It's easy to disable this:
-
-```dart
-autoFlush = false;
-
-// You can also lock further changes to the global configuration, if you want:                                              
-lockConfig();
-```dart
-
 
 ## Advanced usage
 
@@ -1075,7 +1018,140 @@ instead of `compareTo`. For example:
 
 // Results in: [null, 1, 2]
 [2, null, 1].sort((a, b) => a.nullableCompareTo(b, nullsBefore: true));
-``` 
+```              
+
+## Flushing 
+
+As explained, `fast_immutable_collections` is fast because it creates a new collection 
+by internally "composing" the source collection with some other information, 
+saving only the difference between the source and destination collections, 
+instead of copying the whole collection each time.
+
+After a lot of modifications, 
+these composed collections may end up with lots of information to coordinate the composition, 
+and may become slower than a regular mutable collection.
+
+The loss of speed depends on the type of collection. 
+For example, the `IList` doesn't suffer much from deep compositions,
+while the `ISet` and the `IMap` will take more of a hit.  
+
+If you call `flush` in an immutable collection, 
+it will internally remove all the composition,
+making sure the is perfectly optimized again. For example:
+
+```dart
+var ilist = [1.2].lock.add([3, 4]).add(5);
+ilist.flush;
+```         
+
+Please note, `flush` is a getter which returns the exact same instance, 
+just so that you can chain other methods to it if you want. 
+But it does NOT create a new list. 
+It actually just optimizes the current list, internally.
+
+If you flush a list which is already flushed, nothing will happen,
+and it won't take any time to flush the list again.
+So you don't need to worry about flushing the list more than once.
+
+Also, note flush just optimizes the list **internally**, 
+and no external difference will be visible. 
+So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
+
+
+### Auto-flush      
+
+Usually you don't need to flush your collections manually.
+Depending on the global configuration, 
+the collections will flush automatically for you, 
+once per asynchronous gap, as soon as you use them again.   
+
+For example, suppose you take a collection and then add and remove a lot of items, synchronously.
+No flushing will take place during this process.
+But after the asynchronous gap, as soon as you try to get, add or remove an item from it,
+it will flush automatically.  
+
+The global configuration default is to have auto-flush on. It's easy to disable this:
+
+```dart
+autoFlush = false;
+
+// You can also lock further changes to the global configuration, if desired:                                              
+lockConfig();
+```                                                    
+
+Auto-flush is an advanced topic, and you don't need to understand this at all to use the immutable collections.
+However, in case you want to tweak the auto-flush configuration, here goes a detailed explanation.
+
+Each collection will keep a `counter` variable which starts at `0` 
+and is incremented each time some collection methods are used, as long as `counter >= 0`. 
+As soon as this counter reaches a certain value called the `refreshFactor`, 
+the collection is marked for flushing.
+
+There is also a global counter called an `asyncCounter` which starts at `1`. 
+When a collection is marked for flushing, 
+it first creates a future to increment the `asyncCounter`. 
+Then, the collection's own `counter` is set to be `-asyncCounter`. 
+Having a negative value means the collection's `counter` will not
+be incremented anymore. However, when `counter` is negative and different from `-asyncCounter` 
+it means we are one async gap after the collection was marked for flushing. 
+
+At this point, the collection will be flushed and its `counter` will return to zero. 
+
+Example: 
+
+```text
+1. The refreshFactor is 3. The asyncCounter is 1.
+ 
+2. List is created. Its counter is 0, smaller than the refreshFactor.
+
+3. List is used. Its counter is now 1, smaller than the refreshFactor.
+ 
+4. List is used. Its counter is now 2, smaller than the refreshFactor.
+
+5. List is used. Its counter is now 3, equal to the refreshFactor.
+   For this reason, the list counter is set at negative asyncCounter (-1), 
+   and the asyncCounter is set to increment in the future.    
+
+6. List is used. Since its counter is negative, its not incremented.
+   Since the counter is negative and equal to negative asyncCounter, it is not flushed.  
+  
+7. Here comes the async gap. The asyncCounter was set to increment, so it now becomes 2.
+
+8. List is used. Since its counter is negative, it is not incremented.
+   Since the counter is negative and different than negative asyncCounter, the list is flushed.
+   Also, its counter reverts to 0.                                   
+```   
+
+The auto-flush process is a heuristic only.
+However, note the process is very fast (uses only simple integer operations) 
+and uses just a few bytes of memory to work.
+It guarantees that if a collection is being used a lot it will flush more often than one which is not.
+It also guarantees a collection will not auto-flush in the middle of sync operations.
+Finally, it saves no references to the collections, so doesn't prevent them to be garbage collected. 
+
+If you think about the update/publish cycle of the `built_collections` package, 
+it has an intermediate state (the builder) which is not a valid collection, 
+and then you publish it manually.
+In contrast, `fast_immutable_collections` does have a valid intermediate state (unflushed)
+which you can use as a valid collection, 
+and then it publishes automatically (flushes) after the async gap.
+
+As discussed, the default is to have auto-flush turned on, but you can turn it off. 
+If you leave it on, you can tweak the `refreshFactor` for lists, sets and maps. 
+Usually, lists should have a higher `refreshFactor` because they are generally still very efficient when unflushed.
+
+The minimum `refreshFactor` you can choose is `1`, which means the collections will always flush in the 
+next async gap after they are touched.    
+
+```dart
+ilistRefreshFactor = 150;
+isetRefreshFactor = 15;
+imapRefreshFactor = 15;
+
+// Lock further changes, if desired:                                              
+lockConfig();
+```                                                    
+    
 
 ***************************************
 ***************************************

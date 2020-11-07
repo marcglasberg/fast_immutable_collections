@@ -424,7 +424,8 @@ class IMap<K, V> // ignore: must_be_immutable
       ? (flush._m as MFlat<K, V>).deepMapHashcode() ^ config.hashCode
       : identityHashCode(_m) ^ config.hashCode;
 
-  /// Compacts the map.
+  /// Flushes the map, if necessary. Chainable method.
+  /// If the map is already flushed, don't do anything.
   IMap<K, V> get flush {
     if (!isFlushed) _m = MFlat<K, V>.unsafe(unlock);
     return this;

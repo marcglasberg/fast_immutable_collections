@@ -9,6 +9,29 @@ import "l_flat.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+int _asyncCounter = 1;
+
+int get asyncCounter => _asyncCounter;
+
+void resetAsyncCounter() {
+  _asyncCounter = 1;
+}
+
+bool _asyncCounterMarkedForIncrement = false;
+
+bool get asyncCounterMarkedForIncrement => _asyncCounterMarkedForIncrement;
+
+void incrementAsyncCounter() {
+  if (!_asyncCounterMarkedForIncrement) {
+    _asyncCounterMarkedForIncrement = true;
+    Future(() {
+      _asyncCounter++;
+      if (_asyncCounter == 1000000) resetAsyncCounter();
+      _asyncCounterMarkedForIncrement = false;
+    });
+  }
+}
+
 /// An **immutable** list.
 @immutable
 class IList<T> // ignore: must_be_immutable
@@ -18,12 +41,61 @@ class IList<T> // ignore: must_be_immutable
 
   static ConfigList _defaultConfig = const ConfigList(isDeepEquals: true);
 
+  static int _refreshFactor = 3;
+
+  static int get refreshFactor => _refreshFactor;
+
+  static set refreshFactor(int value) {
+    if (value >= 1)
+      _refreshFactor = value;
+    else
+      throw StateError("RefreshFactor can't be $value.");
+  }
+
+  int _counter = 0;
+
+  int get counter => _counter;
+
+  /// Auto-flush:
+  /// Keeps a counter variable which starts at `0` and is incremented each
+  /// time some collection methods are used, as long as `counter >= 0`.
+  /// As soon as counter reaches the refresh-factor, the collection is marked
+  /// for flushing. There is also a global counter called an `asyncCounter`
+  /// which starts at `1`. When a collection is marked for flushing, it first
+  /// creates a future to increment the `asyncCounter`. Then, the collection's
+  /// own `counter` is set to be `-asyncCounter`. Having a negative value means
+  /// the collection's `counter` will not be incremented anymore. However, when
+  /// `counter` is negative and different from `-asyncCounter` it means we are
+  /// one async gap after the collection was marked for flushing.
+  /// At this point, the collection will flush and `counter` returns to zero.
+  /// Note: _count is called in methods which read values. It's not called
+  /// in methods which create new ILists or flush the list.
+  void _count() {
+    if (isFlushed) {
+      _counter = 0;
+    } else {
+      if (_counter >= 0) {
+        _counter++;
+        if (_counter == _refreshFactor) {
+          incrementAsyncCounter();
+          _counter = -_asyncCounter;
+        }
+      } else {
+        if (_counter != -_asyncCounter) {
+          flush;
+          _counter = 0;
+        }
+      }
+    }
+  }
+
   /// Global configuration that specifies if, by default, the [IList]s
   /// use equality or identity for their [operator ==].
   /// By default `isDeepEquals: true` (lists are compared by equality).
   static set defaultConfig(ConfigList config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _defaultConfig = config ?? const ConfigList(isDeepEquals: true);
   }
 
@@ -117,12 +189,14 @@ class IList<T> // ignore: must_be_immutable
   }
 
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
-  IList<T> get withIdentityEquals =>
-      config.isDeepEquals ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false)) : this;
+  IList<T> get withIdentityEquals => config.isDeepEquals
+      ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false))
+      : this;
 
   /// Creates a list with `deepEquals` (compares all list items by equality).
-  IList<T> get withDeepEquals =>
-      config.isDeepEquals ? this : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
+  IList<T> get withDeepEquals => config.isDeepEquals
+      ? this
+      : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
 
   IList<T> withConfigFrom(IList<T> other) => withConfig(other.config);
 
@@ -188,9 +262,12 @@ class IList<T> // ignore: must_be_immutable
   @override
   bool equalItems(covariant Iterable<T> other) {
     if (identical(this, other)) return true;
-    if (other is IList<T>) return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
-    if (other is List<T>) return const ListEquality().equals(UnmodifiableListView(this), other);
-    if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
+    if (other is IList<T>)
+      return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
+    if (other is List<T>)
+      return const ListEquality().equals(UnmodifiableListView(this), other);
+    if (other is HashSet || other is ISet)
+      throw StateError("Can't compare to unordered set.");
     return const IterableEquality().equals(_l, other);
   }
 
@@ -199,7 +276,8 @@ class IList<T> // ignore: must_be_immutable
   /// pair is equal. This may be slow for very large lists, since it compares each item,
   /// one by one.
   bool unorderedEqualItems(covariant Iterable<T> other) {
-    if (identical(this, other) || (other is IList<T> && same(other))) return true;
+    if (identical(this, other) || (other is IList<T> && same(other)))
+      return true;
     return const UnorderedIterableEquality().equals(_l, other);
   }
 
@@ -221,16 +299,21 @@ class IList<T> // ignore: must_be_immutable
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
-  bool same(IList<T> other) => identical(_l, other._l) && (config == other.config);
+  bool same(IList<T> other) =>
+      identical(_l, other._l) && (config == other.config);
 
   @override
   int get hashCode => isDeepEquals
       ? (flush._l as LFlat<T>).deepListHashcode() ^ config.hashCode
       : identityHashCode(_l) ^ config.hashCode;
 
-  /// Compacts the list. Chainable method.
+  /// Flushes the list, if necessary. Chainable method.
+  /// If the list is already flushed, don't do anything.
   IList<T> get flush {
-    if (!isFlushed) _l = LFlat<T>(_l);
+    if (!isFlushed) {
+      _l = LFlat<T>(_l);
+      _counter = 0;
+    }
     return this;
   }
 
@@ -242,7 +325,8 @@ class IList<T> // ignore: must_be_immutable
 
   /// Returns a new list with all [items] added to the end of the current list,
   /// (thus extending the length by the length of items).
-  IList<T> addAll(Iterable<T> items) => IList<T>._unsafe(_l.addAll(items), config: config);
+  IList<T> addAll(Iterable<T> items) =>
+      IList<T>._unsafe(_l.addAll(items), config: config);
 
   /// Removes the first occurrence of [item] from this list.
   ///
@@ -254,7 +338,9 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> remove(T item) {
     final L<T> result = _l.remove(item);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    return identical(result, _l)
+        ? this
+        : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of all [items] from this list.
@@ -264,7 +350,9 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> removeAll(Iterable<T> items) {
     final L<T> result = _l.removeAll(items);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    return identical(result, _l)
+        ? this
+        : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of [item] from this list.
@@ -277,7 +365,9 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> removeMany(T item) {
     final L<T> result = _l.removeMany(item);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    return identical(result, _l)
+        ? this
+        : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all nulls from this list.
@@ -300,40 +390,63 @@ class IList<T> // ignore: must_be_immutable
 
   /// Removes the element, if it exists in the list.
   /// Otherwise, adds it to the list.
-  IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
+  IList<T> toggle(T element) =>
+      contains(element) ? remove(element) : add(element);
 
-  T operator [](int index) => _l[index];
+  T operator [](int index) {
+    _count();
+    return _l[index];
+  }
 
   @override
-  bool any(bool Function(T) test) => _l.any(test);
+  bool any(bool Function(T) test) {
+    _count();
+    return _l.any(test);
+  }
 
   @override
   IList<R> cast<R>() {
     var result = _l.cast<R>();
     return (result is L<R>)
-        ? IList._unsafe(result, config: ConfigList(isDeepEquals: config.isDeepEquals))
-        : IList._(result, config: ConfigList(isDeepEquals: config.isDeepEquals));
+        ? IList._unsafe(result,
+            config: ConfigList(isDeepEquals: config.isDeepEquals))
+        : IList._(result,
+            config: ConfigList(isDeepEquals: config.isDeepEquals));
   }
 
   @override
-  bool contains(Object element) => _l.contains(element);
+  bool contains(Object element) {
+    _count();
+    return _l.contains(element);
+  }
 
   @override
-  T elementAt(int index) => _l[index];
+  T elementAt(int index) {
+    _count();
+    return _l[index];
+  }
 
   @override
-  bool every(bool Function(T) test) => _l.every(test);
+  bool every(bool Function(T) test) {
+    _count();
+    return _l.every(test);
+  }
 
   @override
   IList<E> expand<E>(Iterable<E> Function(T) f, {ConfigList config}) =>
-      IList._(_l.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
+      IList._(_l.expand(f),
+          config: config ?? (T == E ? this.config : defaultConfig));
 
   @override
   int get length {
     final int length = _l.length;
 
     /// Optimization: Flushes the list, if free.
-    if (length == 0 && _l is! LFlat) _l = LFlat.empty<T>();
+    if (length == 0 && _l is! LFlat)
+      _l = LFlat.empty<T>();
+    else
+      _count();
+
     return length;
   }
 
@@ -343,12 +456,18 @@ class IList<T> // ignore: must_be_immutable
   /// Returns the first element.
   /// Throws a [StateError] if the list is empty.
   @override
-  T get first => _l.first;
+  T get first {
+    _count();
+    return _l.first;
+  }
 
   /// Returns the last element.
   /// Throws a [StateError] if the list is empty.
   @override
-  T get last => _l.last;
+  T get last {
+    _count();
+    return _l.last;
+  }
 
   /// Checks that this iterable has only one element, and returns that element.
   /// Throws a [StateError] if the list is empty or has more than one element.
@@ -356,73 +475,100 @@ class IList<T> // ignore: must_be_immutable
   T get single => _l.single;
 
   /// Returns the first element, or `null` if the list is empty.
-  T get firstOrNull => isEmpty ? null : _l.first;
+  T get firstOrNull => isEmpty ? null : first;
 
   /// Returns the last element, or `null` if the list is empty.
-  T get lastOrNull => isEmpty ? null : _l.last;
+  T get lastOrNull => isEmpty ? null : last;
 
   /// Checks that the list has only one element, and returns that element.
   /// Return `null` if the list is empty or has more than one element.
   T get singleOrNull => (length != 1) ? null : _l.last;
 
   /// Returns the first element, or [orElse] if the list is empty.
-  T firstOr(T orElse) => isEmpty ? orElse : _l.first;
+  T firstOr(T orElse) => isEmpty ? orElse : first;
 
   /// Returns the last element, or [orElse] if the list is empty.
-  T lastOr(T orElse) => isEmpty ? orElse : _l.last;
+  T lastOr(T orElse) => isEmpty ? orElse : last;
 
   /// Checks if the list has only one element, and returns that element.
   /// Return `null` if the list is empty or has more than one element.
-  T singleOr(T orElse) => (length != 1) ? orElse : _l.first;
+  T singleOr(T orElse) => (length != 1) ? orElse : first;
 
   @override
-  T firstWhere(bool Function(T) test, {T Function() orElse}) => _l.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T) test, {T Function() orElse}) {
+    _count();
+    return _l.firstWhere(test, orElse: orElse);
+  }
 
   @override
-  E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
-      _l.fold(initialValue, combine);
+  E fold<E>(E initialValue, E Function(E previousValue, T element) combine) {
+    _count();
+    return _l.fold(initialValue, combine);
+  }
 
   @override
-  IList<T> followedBy(Iterable<T> other) => IList._(_l.followedBy(other), config: config);
+  IList<T> followedBy(Iterable<T> other) =>
+      IList._(_l.followedBy(other), config: config);
 
   @override
-  void forEach(void Function(T element) f) => _l.forEach(f);
+  void forEach(void Function(T element) f) {
+    _count();
+    _l.forEach(f);
+  }
 
   @override
   String join([String separator = ""]) => _l.join(separator);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _l.lastWhere(test, orElse: orElse);
+  T lastWhere(bool Function(T element) test, {T Function() orElse}) {
+    _count();
+    return _l.lastWhere(test, orElse: orElse);
+  }
 
   @override
-  IList<E> map<E>(E Function(T element) f, {ConfigList config}) =>
-      IList._(_l.map(f), config: config ?? (T == E ? this.config : defaultConfig));
+  IList<E> map<E>(E Function(T element) f, {ConfigList config}) {
+    _count();
+    return IList._(_l.map(f),
+        config: config ?? (T == E ? this.config : defaultConfig));
+  }
 
   @override
-  T reduce(T Function(T value, T element) combine) => _l.reduce(combine);
+  T reduce(T Function(T value, T element) combine) {
+    _count();
+    return _l.reduce(combine);
+  }
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _l.singleWhere(test, orElse: orElse);
+  T singleWhere(bool Function(T element) test, {T Function() orElse}) {
+    _count();
+    return _l.singleWhere(test, orElse: orElse);
+  }
 
   @override
   IList<T> skip(int count) => IList._(_l.skip(count), config: config);
 
   @override
-  IList<T> skipWhile(bool Function(T value) test) => IList._(_l.skipWhile(test), config: config);
+  IList<T> skipWhile(bool Function(T value) test) =>
+      IList._(_l.skipWhile(test), config: config);
 
   @override
   IList<T> take(int count) => IList._(_l.take(count), config: config);
 
   @override
-  IList<T> takeWhile(bool Function(T value) test) => IList._(_l.takeWhile(test), config: config);
+  IList<T> takeWhile(bool Function(T value) test) =>
+      IList._(_l.takeWhile(test), config: config);
 
   @override
-  IList<T> where(bool Function(T element) test) => IList._(_l.where(test), config: config);
+  IList<T> where(bool Function(T element) test) {
+    _count();
+    return IList._(_l.where(test), config: config);
+  }
 
   @override
-  IList<E> whereType<E>() => IList._(_l.whereType<E>(), config: config);
+  IList<E> whereType<E>() {
+    _count();
+    return IList._(_l.whereType<E>(), config: config);
+  }
 
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
   /// with only `maxLength` elements. If the list has `maxLength` or less elements, doesn't
@@ -496,7 +642,8 @@ class IList<T> // ignore: must_be_immutable
   IList<T> sortOrdered([int Function(T a, T b) compare]) =>
       IList._unsafe(_l.sortOrdered(compare), config: config);
 
-  IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
+  IList<T> sortLike(Iterable<T> ordering) =>
+      IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
   /// The first one contains all items which satisfy the provided [test].
@@ -532,10 +679,16 @@ class IList<T> // ignore: must_be_immutable
   }
 
   @override
-  List<T> toList({bool growable = true}) => _l.toList(growable: growable);
+  List<T> toList({bool growable = true}) {
+    _count();
+    return _l.toList(growable: growable);
+  }
 
   @override
-  Set<T> toSet() => _l.toSet();
+  Set<T> toSet() {
+    _count();
+    return _l.toSet();
+  }
 
   @override
   String toString() => "[${_l.join(", ")}]";
@@ -556,7 +709,10 @@ class IList<T> // ignore: must_be_immutable
   /// print(iMap[0] + iMap[1]); // Prints 'hello';
   /// iMap.keys.toList(); // [0, 1, 2, 3]
   /// ```
-  IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListView(this).asMap());
+  IMap<int, T> asMap() {
+    _count();
+    return IMap<int, T>(UnmodifiableListView(this).asMap());
+  }
 
   /// Returns an empty list with the same configuration.
   IList<T> clear() => empty<T>(config);
@@ -581,6 +737,7 @@ class IList<T> // ignore: must_be_immutable
   /// notes.indexOf('fa');    // -1
   /// ```
   int indexOf(T element, [int start = 0]) {
+    _count();
     start ??= 0;
     var _length = length;
     if (start < 0 || start >= _length)
@@ -594,6 +751,7 @@ class IList<T> // ignore: must_be_immutable
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
   IList<T> put(int index, T value) {
+    _count();
     // TODO: Still need to implement efficiently.
     var list = toList(growable: false);
     list[index] = value;
@@ -615,7 +773,8 @@ class IList<T> // ignore: must_be_immutable
   /// return the unchanged list if no item satisfies the [test].
   /// If [addIfNotFound] is true, add the item to the end of the list
   /// if no item satisfies the [test].
-  IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false}) {
+  IList<T> replaceFirstWhere(bool Function(T item) test, T to,
+      {bool addIfNotFound = false}) {
     var index = indexWhere(test);
     return (index != -1)
         ? put(index, to)
@@ -670,6 +829,7 @@ class IList<T> // ignore: must_be_immutable
   /// notes.indexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int indexWhere(bool Function(T element) test, [int start = 0]) {
+    _count();
     start ??= 0;
     var _length = length;
     if (start < 0 || start >= _length)
@@ -702,10 +862,13 @@ class IList<T> // ignore: must_be_immutable
   /// notes.lastIndexOf('fa');    // -1
   /// ```
   int lastIndexOf(T element, [int start]) {
+    _count();
     var _length = length;
     start ??= _length;
-    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = min(start, _length - 1); i >= 0; i--) if (this[i] == element) return i;
+    if (start < 0)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--)
+      if (this[i] == element) return i;
     return -1;
   }
 
@@ -728,10 +891,13 @@ class IList<T> // ignore: must_be_immutable
   /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int lastIndexWhere(bool Function(T element) test, [int start]) {
+    _count();
     var _length = length;
     start ??= _length;
-    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = min(start, _length - 1); i >= 0; i--) if (test(this[i])) return i;
+    if (start < 0)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--)
+      if (test(this[i])) return i;
     return -1;
   }
 
@@ -754,7 +920,8 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> replaceRange(int start, int end, Iterable<T> replacement) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: true)..replaceRange(start, end, replacement),
+    return IList._unsafeFromList(
+        toList(growable: true)..replaceRange(start, end, replacement),
         config: config);
   }
 
@@ -787,7 +954,8 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> fillRange(int start, int end, [T fillValue]) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: false)..fillRange(start, end, fillValue),
+    return IList._unsafeFromList(
+        toList(growable: false)..fillRange(start, end, fillValue),
         config: config);
   }
 
@@ -838,7 +1006,8 @@ class IList<T> // ignore: must_be_immutable
   /// If `end` is equal to `start`, then the returned list is empty.
   IList<T> sublist(int start, [int end]) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
+    return IList._unsafeFromList(toList(growable: false).sublist(start, end),
+        config: config);
   }
 
   /// Inserts the object at position [index] in this list.
@@ -850,7 +1019,8 @@ class IList<T> // ignore: must_be_immutable
   /// The [index] value must be non-negative and no greater than [length].
   IList<T> insert(int index, T element) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: true)..insert(index, element), config: config);
+    return IList._unsafeFromList(toList(growable: true)..insert(index, element),
+        config: config);
   }
 
   /// Inserts all objects of [iterable] at position [index] in this list.
@@ -862,7 +1032,8 @@ class IList<T> // ignore: must_be_immutable
   /// The [index] value must be non-negative and no greater than [length].
   IList<T> insertAll(int index, Iterable<T> iterable) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: true)..insertAll(index, iterable),
+    return IList._unsafeFromList(
+        toList(growable: true)..insertAll(index, iterable),
         config: config);
   }
 
@@ -995,7 +1166,8 @@ class IList<T> // ignore: must_be_immutable
   /// If `iterable` depends on this list in some other way, no guarantees are
   /// made.
   ///
-  IList<T> setRange(int start, int end, Iterable<T> iterable, [int skipCount = 0]) {
+  IList<T> setRange(int start, int end, Iterable<T> iterable,
+      [int skipCount = 0]) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
     list.setRange(start, end, iterable, skipCount);
@@ -1042,7 +1214,8 @@ abstract class L<T> implements Iterable<T> {
       );
 
   // TODO: Still need to implement efficiently.
-  L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
+  L<T> remove(T element) =>
+      !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
   L<T> removeAll(Iterable<T> elements) {
     var list = unlock;
@@ -1054,8 +1227,9 @@ abstract class L<T> implements Iterable<T> {
   }
 
   // TODO: Still need to implement efficiently.
-  L<T> removeMany(T element) =>
-      !contains(element) ? this : LFlat<T>.unsafe(unlock..removeWhere((e) => e == element));
+  L<T> removeMany(T element) => !contains(element)
+      ? this
+      : LFlat<T>.unsafe(unlock..removeWhere((e) => e == element));
 
   // TODO: Still need to implement efficiently.
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
@@ -1094,7 +1268,8 @@ abstract class L<T> implements Iterable<T> {
     Set<T> newSet = Set.of(this);
     Set<T> intersection = orderingSet.intersection(newSet);
     Set<T> difference = newSet.difference(orderingSet);
-    List<T> result = ordering.where((element) => intersection.contains(element)).toList();
+    List<T> result =
+        ordering.where((element) => intersection.contains(element)).toList();
     result.addAll(difference);
     return LFlat<T>.unsafe(result);
   }
@@ -1162,7 +1337,8 @@ abstract class L<T> implements Iterable<T> {
   Iterable<E> map<E>(E Function(T element) f) => _getFlushed.map(f);
 
   @override
-  T reduce(T Function(T value, T element) combine) => _getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) =>
+      _getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -1172,13 +1348,15 @@ abstract class L<T> implements Iterable<T> {
   Iterable<T> skip(int count) => _getFlushed.skip(count);
 
   @override
-  Iterable<T> skipWhile(bool Function(T value) test) => _getFlushed.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) =>
+      _getFlushed.skipWhile(test);
 
   @override
   Iterable<T> take(int count) => _getFlushed.take(count);
 
   @override
-  Iterable<T> takeWhile(bool Function(T value) test) => _getFlushed.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) =>
+      _getFlushed.takeWhile(test);
 
   @override
   Iterable<T> where(bool Function(T element) test) => _getFlushed.where(test);

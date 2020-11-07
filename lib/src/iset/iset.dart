@@ -217,7 +217,8 @@ class ISet<T> // ignore: must_be_immutable
       ? (flush._s as SFlat<T>).deepSetHashcode() ^ config.hashCode
       : identityHashCode(_s) ^ config.hashCode;
 
-  /// Compacts the set *and* returns it.
+  /// Flushes the set, if necessary. Chainable method.
+  /// If the set is already flushed, don't do anything.
   ISet<T> get flush {
     if (!isFlushed) _s = SFlat<T>.unsafe(_s.unlock);
     return this;
