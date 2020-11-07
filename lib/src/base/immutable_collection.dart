@@ -23,29 +23,65 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 
   static bool get disallowUnsafeConstructors => _disallowUnsafeConstructors;
 
+  static bool get asyncAutoflush => _asyncAutoflush;
+
+  static int get asyncCounter => _asyncCounter;
+
+  static bool get asyncCounterMarkedForIncrement =>
+      _asyncCounterMarkedForIncrement;
+
   static bool _isConfigLocked = false;
 
   static bool _autoFlush = true;
 
+  static int _asyncCounter = 1;
+
   static bool _disallowUnsafeConstructors = false;
+
+  static bool _asyncAutoflush = true;
+
+  static bool _asyncCounterMarkedForIncrement = false;
+
+  static void resetAsyncCounter() {
+    _asyncCounter = 1;
+  }
+
+  static void markAsyncCounterToIncrement() {
+    if (!_asyncCounterMarkedForIncrement) {
+      _asyncCounterMarkedForIncrement = true;
+      Future(() {
+        // Increments, but resets at some point.
+        _asyncCounter++;
+        if (_asyncCounter == 10000) resetAsyncCounter();
+        _asyncCounterMarkedForIncrement = false;
+      });
+    }
+  }
 
   /// Global configuration that specifies if the collections should flush automatically.
   /// The default is true.
   static set autoFlush(bool value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _autoFlush = value ?? true;
+  }
+
+  static set asyncAutoflush(bool value) {
+    if (value != null) _asyncAutoflush = value;
   }
 
   /// Global configuration that specifies if unsafe constructors can be used or not.
   /// The default is false.
   static set disallowUnsafeConstructors(bool value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _disallowUnsafeConstructors = value ?? false;
   }
 
-  static int compare(Object a, Object b) => a is Comparable && b is Comparable ? a.compareTo(b) : 0;
+  static int compare(Object a, Object b) =>
+      a is Comparable && b is Comparable ? a.compareTo(b) : 0;
 
   /// Will return true only if the collection items are equal to the iterable items.
   /// If the collection is ordered, it will also check if the items are in the same order.
@@ -134,7 +170,9 @@ class Output<T> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Output && runtimeType == other.runtimeType && _value == other._value;
+      other is Output &&
+          runtimeType == other.runtimeType &&
+          _value == other._value;
 
   @override
   int get hashCode => _value.hashCode;
@@ -159,7 +197,8 @@ extension IteratorExtension<T> on Iterator<T> {
     while (moveNext()) yield current;
   }
 
-  List<T> toList({bool growable = true}) => List.of(toIterable(), growable: growable);
+  List<T> toList({bool growable = true}) =>
+      List.of(toIterable(), growable: growable);
 
   Set<T> toSet() => Set.of(toIterable());
 }

@@ -9,38 +9,6 @@ import "l_flat.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool _asyncAutoflush = true;
-
-bool get asyncAutoflush => _asyncAutoflush;
-
-set asyncAutoflush(bool value) {
-  if (value != null) _asyncAutoflush = value;
-}
-
-int _asyncCounter = 1;
-
-int get asyncCounter => _asyncCounter;
-
-void resetAsyncCounter() {
-  _asyncCounter = 1;
-}
-
-bool _asyncCounterMarkedForIncrement = false;
-
-bool get asyncCounterMarkedForIncrement => _asyncCounterMarkedForIncrement;
-
-void markAsyncCounterToIncrement() {
-  if (!_asyncCounterMarkedForIncrement) {
-    _asyncCounterMarkedForIncrement = true;
-    Future(() {
-      // Increments, but resets at some point.
-      _asyncCounter++;
-      if (_asyncCounter == 10000) resetAsyncCounter();
-      _asyncCounterMarkedForIncrement = false;
-    });
-  }
-}
-
 /// An **immutable** list.
 @immutable
 class IList<T> // ignore: must_be_immutable
@@ -92,16 +60,16 @@ class IList<T> // ignore: must_be_immutable
       if (_counter >= 0) {
         _counter++;
         if (_counter == _refreshFactor) {
-          if (asyncAutoflush) {
-            markAsyncCounterToIncrement();
-            _counter = -_asyncCounter;
+          if (ImmutableCollection.asyncAutoflush) {
+            ImmutableCollection.markAsyncCounterToIncrement();
+            _counter = -ImmutableCollection.asyncCounter;
           } else {
             flush;
             _counter = 0;
           }
         }
       } else {
-        if (_counter != -_asyncCounter) {
+        if (_counter != -ImmutableCollection.asyncCounter) {
           flush;
           _counter = 0;
         }
