@@ -1058,18 +1058,11 @@ and no external difference will be visible.
 So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
 
-### Auto-flush      
+## Auto-flush      
 
 Usually you don't need to flush your collections manually.
 Depending on the global configuration, 
-the collections will flush automatically for you, 
-once per asynchronous gap, as soon as you use them again.   
-
-For example, suppose you take a collection and then add and remove a lot of items, synchronously.
-No flushing will take place during this process.
-But after the asynchronous gap, as soon as you try to get, add or remove an item from it,
-it will flush automatically.  
-
+the collections will flush automatically for you.
 The global configuration default is to have auto-flush on. It's easy to disable this:
 
 ```dart
@@ -1079,13 +1072,36 @@ autoFlush = false;
 lockConfig();
 ```                                                    
 
-Auto-flush is an advanced topic, and you don't need to understand this at all to use the immutable collections.
-However, in case you want to tweak the auto-flush configuration, here goes a detailed explanation.
+If you leave it on, you can configure auto-flush to happen after you use a collection a few times.
+And you also can configure it to flush at most once per asynchronous gap.   
 
-Each collection will keep a `counter` variable which starts at `0` 
-and is incremented each time some collection methods are used, as long as `counter >= 0`. 
+Auto-flush is an advanced topic, 
+and you don't need to read the following detailed explanation at all to use the immutable collections.
+However, in case you want to tweak the auto-flush configuration, here it goes:
+
+### Sync Auto-flush
+
+If your auto-flush is set to occur synchronously:
+
+Each collection keeps a `counter` variable which starts at `0` 
+and is incremented each time some collection methods are called. 
+As soon as this counter reaches a certain value called the `refreshFactor`, 
+the collection is flushed.
+
+### Async Auto-flush
+
+If your auto-flush is set to occur asynchronously: 
+
+If you take a collection and add or remove a lot of items synchronously,
+no flushing will take place.
+
+Each collection still keeps a `counter` variable which starts at `0`, 
+but it will be incremented during methods calls only while `counter >= 0`. 
 As soon as this counter reaches a certain value called the `refreshFactor`, 
 the collection is marked for flushing.
+
+But after the asynchronous gap, as soon as you try to get, add or remove an item from it,
+it will flush automatically.  
 
 There is also a global counter called an `asyncCounter` which starts at `1`. 
 When a collection is marked for flushing, 
@@ -1127,7 +1143,7 @@ However, note the process is very fast (uses only simple integer operations)
 and uses just a few bytes of memory to work.
 It guarantees that if a collection is being used a lot it will flush more often than one which is not.
 It also guarantees a collection will not auto-flush in the middle of sync operations.
-Finally, it saves no references to the collections, so doesn't prevent them to be garbage collected. 
+Finally, it saves no references to the collections, so doesn't prevent them to be garbage collected.
 
 If you think about the update/publish cycle of the `built_collections` package, 
 it has an intermediate state (the builder) which is not a valid collection, 

@@ -220,7 +220,11 @@ class ISet<T> // ignore: must_be_immutable
   /// Flushes the set, if necessary. Chainable method.
   /// If the set is already flushed, don't do anything.
   ISet<T> get flush {
-    if (!isFlushed) _s = SFlat<T>.unsafe(_s.unlock);
+    if (!isFlushed) {
+      // Flushes the original _s because maybe it's used elsewhere.
+      // Or maybe it was flushed already, and we can use it as is.
+      _s = SFlat<T>.unsafe(_s.getFlushed);
+    }
     return this;
   }
 
@@ -526,7 +530,7 @@ abstract class S<T> implements Iterable<T> {
 
   /// Returns the flushed set (flushes it only once).
   /// It is an error to use the flushed set outside of the [S] class.
-  Set<T> get _getFlushed {
+  Set<T> get getFlushed {
     // Note: Flush must be of type LinkedHashSet. It can't sort, but
     // the flush is not suppose to change the order of the items.
     _flushed ??= LinkedHashSet.of(this);
@@ -559,86 +563,86 @@ abstract class S<T> implements Iterable<T> {
   S<T> remove(T element) => !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 
   @override
-  bool get isEmpty => _getFlushed.isEmpty;
+  bool get isEmpty => getFlushed.isEmpty;
 
   @override
   bool get isNotEmpty => !isEmpty;
 
   @override
-  bool any(bool Function(T) test) => _getFlushed.any(test);
+  bool any(bool Function(T) test) => getFlushed.any(test);
 
   @override
-  Iterable<R> cast<R>() => _getFlushed.cast<R>();
+  Iterable<R> cast<R>() => getFlushed.cast<R>();
 
   @override
   bool contains(Object element);
 
   @override
-  bool every(bool Function(T) test) => _getFlushed.every(test);
+  bool every(bool Function(T) test) => getFlushed.every(test);
 
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f) => _getFlushed.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f) => getFlushed.expand(f);
 
   @override
-  int get length => _getFlushed.length;
+  int get length => getFlushed.length;
 
   @override
-  T get first => _getFlushed.first;
+  T get first => getFlushed.first;
 
   @override
-  T get last => _getFlushed.last;
+  T get last => getFlushed.last;
 
   @override
-  T get single => _getFlushed.single;
+  T get single => getFlushed.single;
 
   @override
   T firstWhere(bool Function(T) test, {T Function() orElse}) =>
-      _getFlushed.firstWhere(test, orElse: orElse);
+      getFlushed.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
-      _getFlushed.fold(initialValue, combine);
+      getFlushed.fold(initialValue, combine);
 
   @override
-  Iterable<T> followedBy(Iterable<T> other) => _getFlushed.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => getFlushed.followedBy(other);
 
   @override
-  void forEach(void Function(T element) f) => _getFlushed.forEach(f);
+  void forEach(void Function(T element) f) => getFlushed.forEach(f);
 
   @override
-  String join([String separator = ""]) => _getFlushed.join(separator);
+  String join([String separator = ""]) => getFlushed.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _getFlushed.lastWhere(test, orElse: orElse);
+      getFlushed.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T element) f) => _getFlushed.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => getFlushed.map(f);
 
   @override
-  T reduce(T Function(T value, T element) combine) => _getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) => getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _getFlushed.singleWhere(test, orElse: orElse);
+      getFlushed.singleWhere(test, orElse: orElse);
 
   @override
-  Iterable<T> skip(int count) => _getFlushed.skip(count);
+  Iterable<T> skip(int count) => getFlushed.skip(count);
 
   @override
-  Iterable<T> skipWhile(bool Function(T value) test) => _getFlushed.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) => getFlushed.skipWhile(test);
 
   @override
-  Iterable<T> take(int count) => _getFlushed.take(count);
+  Iterable<T> take(int count) => getFlushed.take(count);
 
   @override
-  Iterable<T> takeWhile(bool Function(T value) test) => _getFlushed.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) => getFlushed.takeWhile(test);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => _getFlushed.where(test);
+  Iterable<T> where(bool Function(T element) test) => getFlushed.where(test);
 
   @override
-  Iterable<E> whereType<E>() => _getFlushed.whereType<E>();
+  Iterable<E> whereType<E>() => getFlushed.whereType<E>();
 
   @override
   List<T> toList({bool growable = true}) => List.of(this, growable: growable);

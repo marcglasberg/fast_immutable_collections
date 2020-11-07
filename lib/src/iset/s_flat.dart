@@ -16,6 +16,9 @@ class SFlat<T> extends S<T> {
   SFlat.unsafe(this._set) : assert(_set != null);
 
   @override
+  Set<T> get getFlushed => _set;
+
+  @override
   bool contains(Object element) => _set.contains(element);
 
   @override

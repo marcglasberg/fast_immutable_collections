@@ -17,15 +17,16 @@ class LFlat<T> extends L<T> {
   LFlat.unsafe(this._list) : assert(_list != null);
 
   @override
+  List<T> get getFlushed => _list;
+
+  @override
   Iterator<T> get iterator => _list.iterator;
 
   @override
   bool get isEmpty => _list.isEmpty;
 
   @override
-  bool any(bool Function(T) test) {
-    return _list.any(test);
-  }
+  bool any(bool Function(T) test) => _list.any(test);
 
   @override
   Iterable<R> cast<R>() => _list.cast<R>();

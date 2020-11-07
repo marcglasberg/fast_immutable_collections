@@ -9,6 +9,14 @@ import "l_flat.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
+bool _asyncAutoflush = true;
+
+bool get asyncAutoflush => _asyncAutoflush;
+
+set asyncAutoflush(bool value) {
+  if (value != null) _asyncAutoflush = value;
+}
+
 int _asyncCounter = 1;
 
 int get asyncCounter => _asyncCounter;
@@ -21,12 +29,13 @@ bool _asyncCounterMarkedForIncrement = false;
 
 bool get asyncCounterMarkedForIncrement => _asyncCounterMarkedForIncrement;
 
-void incrementAsyncCounter() {
+void markAsyncCounterToIncrement() {
   if (!_asyncCounterMarkedForIncrement) {
     _asyncCounterMarkedForIncrement = true;
     Future(() {
+      // Increments, but resets at some point.
       _asyncCounter++;
-      if (_asyncCounter == 1000000) resetAsyncCounter();
+      if (_asyncCounter == 10000) resetAsyncCounter();
       _asyncCounterMarkedForIncrement = false;
     });
   }
@@ -56,7 +65,13 @@ class IList<T> // ignore: must_be_immutable
 
   int get counter => _counter;
 
-  /// Auto-flush:
+  /// Sync Auto-flush:
+  /// Keeps a counter variable which starts at `0` and is incremented each
+  /// time some collection methods are used.
+  /// As soon as counter reaches the refresh-factor, the collection is flushed
+  /// and `counter` returns to `0`.
+  ///
+  /// Async Auto-flush:
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used, as long as `counter >= 0`.
   /// As soon as counter reaches the refresh-factor, the collection is marked
@@ -77,8 +92,13 @@ class IList<T> // ignore: must_be_immutable
       if (_counter >= 0) {
         _counter++;
         if (_counter == _refreshFactor) {
-          incrementAsyncCounter();
-          _counter = -_asyncCounter;
+          if (asyncAutoflush) {
+            markAsyncCounterToIncrement();
+            _counter = -_asyncCounter;
+          } else {
+            flush;
+            _counter = 0;
+          }
         }
       } else {
         if (_counter != -_asyncCounter) {
@@ -311,7 +331,9 @@ class IList<T> // ignore: must_be_immutable
   /// If the list is already flushed, don't do anything.
   IList<T> get flush {
     if (!isFlushed) {
-      _l = LFlat<T>(_l);
+      // Flushes the original _l because maybe it's used elsewhere.
+      // Or maybe it was flushed already, and we can use it as is.
+      _l = LFlat<T>.unsafe(_l.getFlushed);
       _counter = 0;
     }
     return this;
@@ -321,12 +343,34 @@ class IList<T> // ignore: must_be_immutable
 
   /// Return a new list with [item] added to the end of the current list,
   /// (thus extending the length by one).
-  IList<T> add(T item) => IList<T>._unsafe(_l.add(item), config: config);
+  IList<T> add(T item) {
+    var result = IList<T>._unsafe(_l.add(item), config: config);
+
+    // A list created with `add` has a larger counter than its source collection.
+    // This improves the order in which collections are flushed.
+    // If the outer list is used, it will be flushed before the inner list.
+    // If the inner list is not used directly, it will not flush unnecessarily,
+    // and also may be garbage collected.
+    result._counter = _counter + 1;
+
+    return result;
+  }
 
   /// Returns a new list with all [items] added to the end of the current list,
   /// (thus extending the length by the length of items).
-  IList<T> addAll(Iterable<T> items) =>
-      IList<T>._unsafe(_l.addAll(items), config: config);
+  IList<T> addAll(Iterable<T> items) {
+    var result = IList<T>._unsafe(_l.addAll(items), config: config);
+
+    // A list created with `add` has a larger counter than both its source
+    // collections. This improves the order in which collections are flushed.
+    // If the outer list is used, it will be flushed before the inner lists.
+    // If the inner lists are not used directly, they will not flush
+    // unnecessarily, and also may be garbage collected.
+    result._counter =
+        max(_counter, ((items is IList<T>) ? items._counter : 0)) + 1;
+
+    return result;
+  }
 
   /// Removes the first occurrence of [item] from this list.
   ///
@@ -1191,9 +1235,9 @@ abstract class L<T> implements Iterable<T> {
   /// because that's immutable, we cache it.
   List<T> _flushed;
 
-  /// Returns the flushed set (flushes it only once).
+  /// Returns the flushed list (flushes it only once).
   /// It is an error to use the flushed list outside of the [L] class.
-  List<T> get _getFlushed {
+  List<T> get getFlushed {
     _flushed ??= unlock;
     return _flushed;
   }
@@ -1275,94 +1319,94 @@ abstract class L<T> implements Iterable<T> {
   }
 
   @override
-  bool get isEmpty => _getFlushed.isEmpty;
+  bool get isEmpty => getFlushed.isEmpty;
 
   @override
   bool get isNotEmpty => !isEmpty;
 
   @override
-  bool any(bool Function(T) test) => _getFlushed.any(test);
+  bool any(bool Function(T) test) => getFlushed.any(test);
 
   @override
-  Iterable<R> cast<R>() => _getFlushed.cast<R>();
+  Iterable<R> cast<R>() => getFlushed.cast<R>();
 
   @override
-  bool contains(Object element) => _getFlushed.contains(element);
+  bool contains(Object element) => getFlushed.contains(element);
 
-  T operator [](int index) => _getFlushed[index];
-
-  @override
-  T elementAt(int index) => _getFlushed[index];
+  T operator [](int index) => getFlushed[index];
 
   @override
-  bool every(bool Function(T) test) => _getFlushed.every(test);
+  T elementAt(int index) => getFlushed[index];
 
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f) => _getFlushed.expand(f);
+  bool every(bool Function(T) test) => getFlushed.every(test);
 
   @override
-  int get length => _getFlushed.length;
+  Iterable<E> expand<E>(Iterable<E> Function(T) f) => getFlushed.expand(f);
 
   @override
-  T get first => _getFlushed.first;
+  int get length => getFlushed.length;
 
   @override
-  T get last => _getFlushed.last;
+  T get first => getFlushed.first;
 
   @override
-  T get single => _getFlushed.single;
+  T get last => getFlushed.last;
+
+  @override
+  T get single => getFlushed.single;
 
   @override
   T firstWhere(bool Function(T) test, {T Function() orElse}) =>
-      _getFlushed.firstWhere(test, orElse: orElse);
+      getFlushed.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
-      _getFlushed.fold(initialValue, combine);
+      getFlushed.fold(initialValue, combine);
 
   @override
-  Iterable<T> followedBy(Iterable<T> other) => _getFlushed.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => getFlushed.followedBy(other);
 
   @override
-  void forEach(void Function(T element) f) => _getFlushed.forEach(f);
+  void forEach(void Function(T element) f) => getFlushed.forEach(f);
 
   @override
-  String join([String separator = ""]) => _getFlushed.join(separator);
+  String join([String separator = ""]) => getFlushed.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _getFlushed.lastWhere(test, orElse: orElse);
+      getFlushed.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T element) f) => _getFlushed.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => getFlushed.map(f);
 
   @override
   T reduce(T Function(T value, T element) combine) =>
-      _getFlushed.reduce(combine);
+      getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _getFlushed.singleWhere(test, orElse: orElse);
+      getFlushed.singleWhere(test, orElse: orElse);
 
   @override
-  Iterable<T> skip(int count) => _getFlushed.skip(count);
+  Iterable<T> skip(int count) => getFlushed.skip(count);
 
   @override
   Iterable<T> skipWhile(bool Function(T value) test) =>
-      _getFlushed.skipWhile(test);
+      getFlushed.skipWhile(test);
 
   @override
-  Iterable<T> take(int count) => _getFlushed.take(count);
+  Iterable<T> take(int count) => getFlushed.take(count);
 
   @override
   Iterable<T> takeWhile(bool Function(T value) test) =>
-      _getFlushed.takeWhile(test);
+      getFlushed.takeWhile(test);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => _getFlushed.where(test);
+  Iterable<T> where(bool Function(T element) test) => getFlushed.where(test);
 
   @override
-  Iterable<E> whereType<E>() => _getFlushed.whereType<E>();
+  Iterable<E> whereType<E>() => getFlushed.whereType<E>();
 
   @override
   List<T> toList({bool growable = true}) => List.of(this, growable: growable);
