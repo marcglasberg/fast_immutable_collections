@@ -223,8 +223,7 @@ class ISet<T> // ignore: must_be_immutable
   /// of type [LinkedHashSet]. This map is "safe", in the sense that is independent
   /// from the original [ISet].
   Set<T> get unlockSorted {
-    var orderedList =
-        toList(growable: false, compare: ImmutableCollection.compare);
+    var orderedList = toList(growable: false, compare: compareObject);
     return LinkedHashSet.of(orderedList);
   }
 
@@ -255,8 +254,7 @@ class ISet<T> // ignore: must_be_immutable
   @override
   Iterator<T> get iterator {
     if (config.sort) {
-      var sortedList = _s.toList(growable: false)
-        ..sort(ImmutableCollection.compare);
+      var sortedList = _s.toList(growable: false)..sort(compareObject);
       return sortedList.iterator;
     } else
       return _s.iterator;
@@ -464,7 +462,7 @@ class ISet<T> // ignore: must_be_immutable
         if (initial) {
           initial = false;
           result = item;
-        } else if (ImmutableCollection.compare(result, item) > 0) result = item;
+        } else if (compareObject(result, item) > 0) result = item;
       }
       return result;
     } else
@@ -486,7 +484,7 @@ class ISet<T> // ignore: must_be_immutable
         if (initial) {
           initial = false;
           result = item;
-        } else if (ImmutableCollection.compare(result, item) < 0) result = item;
+        } else if (compareObject(result, item) < 0) result = item;
       }
       return result;
     } else
@@ -609,7 +607,7 @@ class ISet<T> // ignore: must_be_immutable
     if (compare != null) {
       result.sort(compare);
     } else {
-      if (config.sort) result.sort(ImmutableCollection.compare);
+      if (config.sort) result.sort(compare ?? compareObject);
     }
 
     return result;

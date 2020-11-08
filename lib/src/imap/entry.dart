@@ -26,16 +26,6 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   ///
   Entry<K, V> get asEntry => Entry.from<K, V>(this);
 
-  static int compare(MapEntry a, MapEntry b) {
-    if (a == null) {
-      return b == null ? 0 : 1;
-    } else if (b == null) return -1;
-
-    int result = ImmutableCollection.compare(a.key, b.key);
-    if (result == 0) result = ImmutableCollection.compare(a, b.value);
-    return result;
-  }
-
   /// Compare the keys of the map entries, if they are [Comparable].
   /// If the keys are the same or not [Comparable], then compare the values,
   /// if they are [Comparable].
@@ -45,7 +35,7 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   /// [MapEntry] is [Comparable]. See: https://github.com/dart-lang/sdk/issues/32559
   /// and https://github.com/dart-lang/matcher/issues/100
   ///
-  int compareKeyAndValue(MapEntry other) => compare(this, other);
+  int compareKeyAndValue(MapEntry other) => compareObject(this, other);
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +48,8 @@ class Entry<K, V> implements Comparable<Entry<K, V>> {
 
   const Entry(this.key, this.value);
 
-  static Entry<K, V> from<K, V>(MapEntry<K, V> entry) => Entry(entry.key, entry.value);
+  static Entry<K, V> from<K, V>(MapEntry<K, V> entry) =>
+      Entry(entry.key, entry.value);
 
   @override
   String toString() => "Entry(${key.toString()}: ${value.toString()})";
@@ -76,8 +67,8 @@ class Entry<K, V> implements Comparable<Entry<K, V>> {
 
   @override
   int compareTo(Entry<K, V> other) {
-    int result = ImmutableCollection.compare(key, other.key);
-    if (result == 0) result = ImmutableCollection.compare(value, other.value);
+    int result = compareObject(key, other.key);
+    if (result == 0) result = compareObject(value, other.value);
     return result;
   }
 }

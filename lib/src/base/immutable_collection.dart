@@ -90,10 +90,6 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
     });
   }
 
-  /// If [a] and [b] are both of type [Comparable], compare them with their
-  /// natural comparator. Otherwise, return 0 (which means unordered).
-  static int compare(Object a, Object b) =>
-      a is Comparable && b is Comparable ? a.compareTo(b) : 0;
 
   /// Flushes this collection, if necessary. Chainable method.
   /// If collection list is already flushed, don't do anything.

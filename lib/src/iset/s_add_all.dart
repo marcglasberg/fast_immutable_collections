@@ -26,7 +26,7 @@ class SAddAll<T> extends S<T> {
 
   @override
   bool contains(Object element) {
-    // Check the real set first (it"s faster).
+    // Check the real set first (It's faster).
     if (_setOrS.contains(element)) return true;
     return _s.contains(element);
   }

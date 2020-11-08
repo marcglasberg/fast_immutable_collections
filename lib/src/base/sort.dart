@@ -169,3 +169,29 @@ int Function(T, T) sortLike<T, E>(
               ? 0
               : then(a, b);
     };
+
+/// 1) If [a] and [b] are both of type [Comparable], compare them with their
+/// natural comparator.
+///
+/// 2) If [a] and [b] are map-entries, compare their keys (if they are
+/// [Comparable]). If the keys don't have order (are the same or not
+/// [Comparable]), compare their values (if they are [Comparable]).
+///
+/// 3) If [a] and [b] are booleans, compare them such as true > false.
+///
+/// Otherwise, return 0 (which means unordered).
+///
+int compareObject(Object a, Object b) {
+  if (a == null) {
+    return b == null ? 0 : 1;
+  } else if (b == null) return -1;
+  if (a is Comparable && b is Comparable) return a.compareTo(b);
+  if (a is MapEntry && b is MapEntry) {
+    int result = compareObject(a.key, b.key);
+    if (result == 0) result = compareObject(a.value, b.value);
+    return result;
+  }
+  if (a is bool && b is bool) return a.compareTo(b);
+  return 0;
+}
+

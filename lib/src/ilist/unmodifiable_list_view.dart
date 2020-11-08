@@ -16,11 +16,11 @@ import "package:meta/meta.dart";
 ///
 /// ## How does it compare to [List.unmodifiable]?
 ///
-/// [List.unmodifiable] is slow, but it"s always safe, because it is not a view, and
+/// [List.unmodifiable] is slow, but It's always safe, because it is not a view, and
 /// actually creates a new list. On the other hand, [UnmodifiableListView] is fast, but if
 /// you create it from a regular [List] and then modify that original [List], you will also
 /// be modifying the view. Also note, if you create an [UnmodifiableListView] from a [IList],
-/// then it"s totally safe because the original [IList] can't be modified (unless of course,
+/// then It's totally safe because the original [IList] can't be modified (unless of course,
 /// again, you"ve created it from a [IList.unsafe] constructor.
 ///
 @immutable

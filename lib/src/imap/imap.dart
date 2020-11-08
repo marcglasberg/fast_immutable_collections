@@ -332,7 +332,7 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigList config,
   }) {
     _count();
-    var result = IList.withConfig(entries, config);
+    var result = IList<MapEntry<K, V>>.withConfig(entries, config);
     if (compare != null || this.config.sortKeys) result = result.sort(compare);
     return result;
   }
@@ -400,9 +400,9 @@ class IMap<K, V> // ignore: must_be_immutable
   List<MapEntry<K, V>> toEntryList(
       [int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare]) {
     _count();
-    var result = List.of(entries);
+    var result = List<MapEntry<K, V>>.of(entries);
     if (compare != null || config.sortKeys)
-      result.sort(compare ?? MapEntryExtension.compare);
+      result.sort(compare ?? compareObject);
     return result;
   }
 
@@ -793,10 +793,14 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned value to the map.
   ///
-  /// It"s an error if the key is not present and [ifAbsent] is not provided.
+  /// It's an error if the key is not present and [ifAbsent] is not provided.
   ///
-  IMap<K, V> update(K key, V Function(V value) update,
-      {V Function() ifAbsent, Output<V> value}) {
+  IMap<K, V> update(
+    K key,
+    V Function(V value) update, {
+    V Function() ifAbsent,
+    Output<V> value,
+  }) {
     // TODO: Still need to implement efficiently.
     Map<K, V> map = unlock;
     var result = map.update(key, update, ifAbsent: ifAbsent);

@@ -558,7 +558,7 @@ class IMapOfSets<K, V> //
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned [set] to the map.
   ///
-  /// It"s an error if the key is not present and [ifAbsent] is not provided.
+  /// It's an error if the key is not present and [ifAbsent] is not provided.
   ///
   IMapOfSets<K, V> update(K key, ISet<V> Function(ISet<V> set) update,
           {ISet<V> Function() ifAbsent}) =>
