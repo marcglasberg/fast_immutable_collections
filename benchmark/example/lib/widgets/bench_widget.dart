@@ -32,18 +32,20 @@ class _BenchWidgetState extends State<BenchWidget> {
     _isRunning = false;
   }
 
-  // TODO: not working... it doesn't disable the button during processing probably because it is
-  // being executed synchronously.
   void _run() {
-    // setState(() => _isRunning = true);
-    setState(() {
-      widget.benchmark.report();
-      _results = widget.benchmark.emitter.table;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() => _isRunning = true);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          widget.benchmark.report();
+          _results = widget.benchmark.emitter.table;
+          _isRunning = false;
+        });
+      });
     });
-    // setState(() => _isRunning = false);
   }
 
-  bool get _isNotRunningAndHasResuls => !_isRunning && _results != null;
+  bool get _isNotRunningAndHasResults => !_isRunning && _results != null;
 
   @override
   Widget build(BuildContext context) {
@@ -51,74 +53,91 @@ class _BenchWidgetState extends State<BenchWidget> {
       margin: const EdgeInsets.all(16),
       child: Stack(
         children: [
-          if (_isRunning)
-            Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              height: 110,
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(.3),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(4),
-                ),
-              ),
-              child: const CircularProgressIndicator(),
-            ),
-          Container(
-            width: double.infinity,
-            height: 110,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  widget.title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: CollectionButton(
-                        label: "Run",
-                        onPressed: _isRunning ? null : _run,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: CollectionButton(
-                        label: "Results",
-                        onPressed: _isNotRunningAndHasResuls
-                            ? () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => GraphScreen(
-                                          title: widget.title,
-                                          recordsTable: _results,
-                                        )))
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: CollectionButton(
-                        label: "Code",
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => CodeScreen(widget.title, widget.code)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          _content(context),
+          if (_isRunning) _pleaseWait(),
+        ],
+      ),
+    );
+  }
+
+  Container _content(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 110,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            widget.title,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w800,
+              fontSize: 20,
             ),
           ),
+          const SizedBox(height: 12),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: CollectionButton(
+                  label: "Run",
+                  onPressed: _isRunning ? null : _run,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: CollectionButton(
+                  label: "Results",
+                  onPressed: _isNotRunningAndHasResults
+                      ? () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => GraphScreen(
+                                    title: widget.title,
+                                    recordsTable: _results,
+                                  )))
+                      : null,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: CollectionButton(
+                  label: "Code",
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => CodeScreen(widget.title, widget.code)),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  Container _pleaseWait() {
+    return Container(
+      alignment: Alignment.center,
+      width: double.infinity,
+      height: 110,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.75),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(4),
+        ),
+      ),
+      child: Text(
+        "Please Wait.\nCreating benchmarks...",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w800,
+          fontSize: 20,
+          height: 1.4,
+        ),
       ),
     );
   }
