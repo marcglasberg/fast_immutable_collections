@@ -832,27 +832,62 @@ class IList<T> // ignore: must_be_immutable
   IList<T> replaceAllWhere(bool Function(T element) test, T to) =>
       map((element) => test(element) ? to : element);
 
+  /// Allows for complex processing of a list.
+  ///
   /// Iterates through each item. If the item satisfies the provided [test],
-  /// replace it with applying [apply]. Otherwise, keep the item unchanged.
-  /// If [test] is not provided, it will apply [apply] to all items.
+  /// replace it with applying [convert]. Otherwise, keep the item unchanged.
+  /// If [test] is not provided, it will apply [convert] to all items.
+  ///
+  /// Function [convert] can:
+  /// - Keep the item unchanged by returning `null`.
+  /// - Remove an item by returning an empty iterable.
+  /// - Convert an item to a single item by returning an iterable with an item.
+  /// - Convert an item to many items, by returning an iterable with multiple
+  /// items.
+  ///
+  /// If no items satisfy the [test], or if [convert] kept items unchanged,
+  /// [process] will return the same list instance.
+  ///
   IList<T> process({
     bool Function(IList<T> list, int index, T item) test,
-    @required Iterable<T> Function(IList<T> list, int index, T item) apply,
+    @required Iterable<T> Function(IList<T> list, int index, T item) convert,
   }) {
-    assert(apply != null);
+    assert(convert != null);
     // ---
 
+    bool any = false;
     List<T> result = [];
     int _length = length;
     for (int index = 0; index < _length; index++) {
       T item = this[index];
-      var satisfiesTest = test == null ? true : test(this, index, item);
-      if (satisfiesTest)
+      var satisfiesTest = (test == null) ? true : test(this, index, item);
+      if (!satisfiesTest)
         result.add(item);
-      else
-        result.addAll(apply(this, index, item));
+      else {
+        var converted = convert(this, index, item);
+
+        // Keep the item unchanged by returning `null`.
+        if (converted == null) {
+          result.add(item);
+        }
+        // Remove an item by returning an empty iterable.
+        else if (converted.isEmpty) {
+          any = true;
+        }
+        // Convert an item to a single item by returning an iterable with an item.
+        else if (converted.length == 1) {
+          var newItem = converted.first;
+          result.add(newItem);
+          if (!identical(item, newItem)) any = true;
+        }
+        // Convert an item to many items, by returning an iterable with multiple
+        else {
+          result.addAll(converted);
+          any = true;
+        }
+      }
     }
-    return IList._unsafeFromList(result, config: config);
+    return any ? IList._unsafeFromList(result, config: config) : this;
   }
 
   /// Returns the first index in the list that satisfies the provided [test].

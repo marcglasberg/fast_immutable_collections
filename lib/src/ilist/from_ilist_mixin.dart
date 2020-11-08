@@ -170,7 +170,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   I process(
           {bool Function(IList<T> list, int index, T item) test,
           Iterable<T> Function(IList<T> list, int index, T item) apply}) =>
-      newInstance(iter.process(test: test, apply: apply));
+      newInstance(iter.process(test: test, convert: apply));
 
   I put(int index, T value) => newInstance(iter.put(index, value));
 
