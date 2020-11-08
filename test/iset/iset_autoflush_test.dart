@@ -2,27 +2,27 @@ import "dart:math";
 import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-extension TestExtension on IList {
-  int get counter => InternalsForTestingPurposesIList(this).counter;
+extension TestExtension on ISet {
+  int get counter => InternalsForTestingPurposesISet(this).counter;
 }
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Sync auto-flush when the list is already flushed.", () async {
+  test("Sync auto-flush when the set is already flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
-    IList.asyncAutoflush = false;
-    IList.flushFactor = 4;
+    ISet.asyncAutoflush = false;
+    ISet.flushFactor = 4;
     expect(ImmutableCollection.asyncCounter, 1);
 
-    // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
-    expect(ilist.isFlushed, isTrue);
-    expect(ilist.counter, 0);
+    // The set is flushed. Counter is 0.
+    var iset = {1, 2, 3, 4}.lock;
+    expect(iset.isFlushed, isTrue);
+    expect(iset.counter, 0);
 
-    // Since the list is flushed, the counter remains at 0.
-    ilist[0];
-    expect(ilist.counter, 0);
+    // Since the set is flushed, the counter remains at 0.
+    iset.contains(0);
+    expect(iset.counter, 0);
 
     expect(ImmutableCollection.asyncCounter, 1);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
@@ -34,32 +34,32 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is flushed, the counter remains at 0.
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
+    // Since the set is flushed, the counter remains at 0.
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
 
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
-    expect(ilist, [1, 2, 3, 4]);
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
+    expect(iset, [1, 2, 3, 4]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Async auto-flush when the list is already flushed.", () async {
+  test("Async auto-flush when the set is already flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
-    IList.asyncAutoflush = true;
-    IList.flushFactor = 4;
+    ISet.asyncAutoflush = true;
+    ISet.flushFactor = 4;
     expect(ImmutableCollection.asyncCounter, 1);
 
-    // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
-    expect(ilist.isFlushed, isTrue);
-    expect(ilist.counter, 0);
+    // The set is flushed. Counter is 0.
+    var iset = {1, 2, 3, 4}.lock;
+    expect(iset.isFlushed, isTrue);
+    expect(iset.counter, 0);
 
-    // Since the list is flushed, the counter remains at 0.
-    ilist[0];
-    expect(ilist.counter, 0);
+    // Since the set is flushed, the counter remains at 0.
+    iset.contains(0);
+    expect(iset.counter, 0);
 
     expect(ImmutableCollection.asyncCounter, 1);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
@@ -71,59 +71,59 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is flushed, the counter remains at 0.
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
+    // Since the set is flushed, the counter remains at 0.
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
 
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
-    expect(ilist, [1, 2, 3, 4]);
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
+    expect(iset, [1, 2, 3, 4]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Async auto-flush when the list is NOT flushed.", () async {
+  test("Async auto-flush when the set is NOT flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
-    IList.asyncAutoflush = true;
-    IList.flushFactor = 4;
+    ISet.asyncAutoflush = true;
+    ISet.flushFactor = 4;
     expect(ImmutableCollection.asyncCounter, 1);
 
-    // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
-    expect(ilist.isFlushed, isTrue);
+    // The set is flushed. Counter is 0.
+    var iset = {1, 2, 3, 4}.lock;
+    expect(iset.isFlushed, isTrue);
 
-    // We add a value, so that the list is NOT flushed.
+    // We add a value, so that the set is NOT flushed.
     // Counter is 1 (the add method increments counter by 1).
-    ilist = ilist.add(5);
-    expect(ilist.counter, 1);
-    expect(ilist.isFlushed, isFalse);
+    iset = iset.add(5);
+    expect(iset.counter, 1);
+    expect(iset.isFlushed, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
-    expect(ilist.counter, 2);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 2.
+    iset.contains(0);
+    expect(iset.counter, 2);
+    expect(iset.isFlushed, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
-    expect(ilist.counter, 3);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 3.
+    iset.contains(0);
+    expect(iset.counter, 3);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 4.
+    // Since the set is NOT flushed, the counter grows to 4.
     // The counter reached the flushFactor (4), so it turns into
     // negative asyncCounter (-1). Also, the asyncCounter increment
     // is scheduled.
-    ilist[0];
-    expect(ilist.counter, -1);
-    expect(ilist.isFlushed, isFalse);
+    iset.contains(0);
+    expect(iset.counter, -1);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isTrue);
 
-    // The list is NOT flushed, but since the counter is already negative
+    // The set is NOT flushed, but since the counter is already negative
     // it doesn't change anymore.
-    ilist[0];
-    expect(ilist.counter, -1);
-    expect(ilist.isFlushed, isFalse);
+    iset.contains(0);
+    expect(iset.counter, -1);
+    expect(iset.isFlushed, isFalse);
 
     expect(ImmutableCollection.asyncCounter, 1);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isTrue);
@@ -135,54 +135,54 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 2);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Counter is still negative. And the list is still NOT flushed.
-    expect(ilist.counter, -1);
-    expect(ilist.isFlushed, isFalse);
+    // Counter is still negative. And the set is still NOT flushed.
+    expect(iset.counter, -1);
+    expect(iset.isFlushed, isFalse);
 
     // Now that the counter is negative, but it's NOT equal no negative
-    // asyncCounter, the list will be flushed and counter will be reset to 0.
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
-    expect(ilist, [1, 2, 3, 4, 5]);
+    // asyncCounter, the set will be flushed and counter will be reset to 0.
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
+    expect(iset, [1, 2, 3, 4, 5]);
 
-    // Since the list is now flushed, the counter remains at 0.
-    ilist[0];
-    expect(ilist.counter, 0);
+    // Since the set is now flushed, the counter remains at 0.
+    iset.contains(0);
+    expect(iset.counter, 0);
     expect(ImmutableCollection.asyncCounter, 2);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // We add a value, so that the list is now NOT flushed.
+    // We add a value, so that the set is now NOT flushed.
     // Counter is 1 (the add method increments counter by 1).
-    ilist = ilist.add(6);
-    expect(ilist.counter, 1);
-    expect(ilist.isFlushed, isFalse);
+    iset = iset.add(6);
+    expect(iset.counter, 1);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
-    expect(ilist.counter, 2);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 2.
+    iset.contains(0);
+    expect(iset.counter, 2);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
-    expect(ilist.counter, 3);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 3.
+    iset.contains(0);
+    expect(iset.counter, 3);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 4.
+    // Since the set is NOT flushed, the counter grows to 4.
     // The counter again reached the flushFactor (4), so it turns into
     // negative asyncCounter (-2). Also, the asyncCounter increment
     // is scheduled.
-    ilist[0];
-    expect(ilist.counter, -2);
-    expect(ilist.isFlushed, isFalse);
+    iset.contains(0);
+    expect(iset.counter, -2);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isTrue);
 
-    // Counter is still negative. And the list is still NOT flushed.
-    expect(ilist.counter, -2);
-    expect(ilist.isFlushed, isFalse);
+    // Counter is still negative. And the set is still NOT flushed.
+    expect(iset.counter, -2);
+    expect(iset.isFlushed, isFalse);
 
     await Future.delayed(Duration(milliseconds: 1));
 
@@ -191,59 +191,59 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 3);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Counter is still negative. And the list is still NOT flushed.
-    expect(ilist.counter, -2);
-    expect(ilist.isFlushed, isFalse);
+    // Counter is still negative. And the set is still NOT flushed.
+    expect(iset.counter, -2);
+    expect(iset.isFlushed, isFalse);
 
     // Now that the counter is negative, but it's NOT equal no negative
-    // asyncCounter, the list will be flushed and counter will be reset to 0.
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
-    expect(ilist, [1, 2, 3, 4, 5, 6]);
+    // asyncCounter, the set will be flushed and counter will be reset to 0.
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
+    expect(iset, [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Sync auto-flush when the list is NOT flushed.", () async {
+  test("Sync auto-flush when the set is NOT flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
-    IList.asyncAutoflush = false;
-    IList.flushFactor = 4;
+    ISet.asyncAutoflush = false;
+    ISet.flushFactor = 4;
     expect(ImmutableCollection.asyncCounter, 1);
 
-    // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
-    expect(ilist.isFlushed, isTrue);
+    // The set is flushed. Counter is 0.
+    var iset = {1, 2, 3, 4}.lock;
+    expect(iset.isFlushed, isTrue);
 
-    // We add a value, so that the list is NOT flushed.
+    // We add a value, so that the set is NOT flushed.
     // Counter is 1 (the add method increments counter by 1).
-    ilist = ilist.add(5);
-    expect(ilist.counter, 1);
-    expect(ilist.isFlushed, isFalse);
+    iset = iset.add(5);
+    expect(iset.counter, 1);
+    expect(iset.isFlushed, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
-    expect(ilist.counter, 2);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 2.
+    iset.contains(0);
+    expect(iset.counter, 2);
+    expect(iset.isFlushed, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
-    expect(ilist.counter, 3);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 3.
+    iset.contains(0);
+    expect(iset.counter, 3);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 4.
+    // Since the set is NOT flushed, the counter grows to 4.
     // The counter reached the flushFactor (4), so it is flushed
     // and counter is reset to zero.
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // The list is flushed, and counter so the counter is not incremented.
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
+    // The set is flushed, and counter so the counter is not incremented.
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
 
     // The asyncCounter is not touched (and in fact is irrelevant).
     expect(ImmutableCollection.asyncCounter, 1);
@@ -258,35 +258,35 @@ void main() {
 
     // We'll repeat everything again, just to make sure
     // nothing changes the second time.
-    // If we add another value, the list becomes NOT flushed again.
+    // If we add another value, the set becomes NOT flushed again.
     // Counter is 1 (the add method increments counter by 1).
-    ilist = ilist.add(6);
-    expect(ilist.counter, 1);
-    expect(ilist.isFlushed, isFalse);
+    iset = iset.add(6);
+    expect(iset.counter, 1);
+    expect(iset.isFlushed, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
-    expect(ilist.counter, 2);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 2.
+    iset.contains(0);
+    expect(iset.counter, 2);
+    expect(iset.isFlushed, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
-    expect(ilist.counter, 3);
-    expect(ilist.isFlushed, isFalse);
+    // Since the set is NOT flushed, the counter grows to 3.
+    iset.contains(0);
+    expect(iset.counter, 3);
+    expect(iset.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // Since the list is NOT flushed, the counter grows to 4.
+    // Since the set is NOT flushed, the counter grows to 4.
     // The counter reached the flushFactor (4), so it is flushed
     // and counter is reset to zero.
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
-    // The list is flushed, and counter so the counter is not incremented.
-    ilist[0];
-    expect(ilist.counter, 0);
-    expect(ilist.isFlushed, isTrue);
+    // The set is flushed, and counter so the counter is not incremented.
+    iset.contains(0);
+    expect(iset.counter, 0);
+    expect(iset.isFlushed, isTrue);
 
     // The asyncCounter is not touched (and in fact is irrelevant).
     expect(ImmutableCollection.asyncCounter, 1);
@@ -296,70 +296,70 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test(
-      "Method 'add' makes counter equal to the source list counter, "
+      "Method 'add' makes counter equal to the source set counter, "
       "plus one.", () async {
     ImmutableCollection.resetAllConfigurations();
-    IList.asyncAutoflush = true;
-    IList.flushFactor = 4;
+    ISet.asyncAutoflush = true;
+    ISet.flushFactor = 4;
     expect(ImmutableCollection.asyncCounter, 1);
 
-    // The list is flushed. Counter is 0.
-    var ilist1 = [1, 2, 3, 4].lock;
-    expect(ilist1.isFlushed, isTrue);
+    // The set is flushed. Counter is 0.
+    var iset1 = {1, 2, 3, 4}.lock;
+    expect(iset1.isFlushed, isTrue);
 
-    var ilist2 = ilist1.add(1);
-    ilist2 = ilist2.add(1);
+    var iset2 = iset1.add(1);
+    iset2 = iset2.add(1);
 
-    var ilist3 = ilist2.add(1);
+    var iset3 = iset2.add(1);
 
-    expect(ilist1.counter, 0);
-    expect(ilist2.counter, 2);
-    expect(ilist3.counter, 3);
+    expect(iset1.counter, 0);
+    expect(iset2.counter, 2);
+    expect(iset3.counter, 3);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test(
       "Method 'addAll' makes counter equal to "
-      "the larger counter of its source lists, plus one.", () async {
+      "the larger counter of its source sets, plus one.", () async {
     ImmutableCollection.resetAllConfigurations();
-    IList.asyncAutoflush = true;
-    IList.flushFactor = 4;
+    ISet.asyncAutoflush = true;
+    ISet.flushFactor = 4;
     expect(ImmutableCollection.asyncCounter, 1);
 
-    // The list is flushed. Counter is 0.
-    var ilist1 = [1, 2, 3, 4].lock;
-    expect(ilist1.isFlushed, isTrue);
-    expect(ilist1.counter, 0);
+    // The set is flushed. Counter is 0.
+    var iset1 = {1, 2, 3, 4}.lock;
+    expect(iset1.isFlushed, isTrue);
+    expect(iset1.counter, 0);
 
     // Adding regular iterables only increments by 1.
-    var ilist2 = ilist1.addAll([1, 2, 3]);
-    ilist2 = ilist2.addAll([4, 5, 6]);
-    expect(ilist2.counter, 2);
+    var iset2 = iset1.addAll([1, 2, 3]);
+    iset2 = iset2.addAll([4, 5, 6]);
+    expect(iset2.counter, 2);
 
-    // Adding ILists will get the larger counter plus 1.
+    // Adding ISets will get the larger counter plus 1.
 
-    var ilist3 = ilist2.add(1);
-    expect(ilist3.counter, 3);
+    var iset3 = iset2.add(8);
+    expect(iset3.counter, 3);
 
-    var ilist4 = ilist3.add(1);
-    expect(InternalsForTestingPurposesIList(ilist4).counter, 4);
+    var iset4 = iset3.add(9);
+    expect(InternalsForTestingPurposesISet(iset4).counter, 4);
 
-    /// ilist3 has counter 3.
-    /// ilist4 has counter 4.
-    /// Both ilist5 and ilist6 will have counter = max(3, 4) + 1.
-    var ilist5 = ilist3.addAll(ilist4);
-    var ilist6 = ilist4.addAll(ilist3);
-    expect(ilist5.counter, max(3, 4) + 1);
-    expect(ilist6.counter, max(3, 4) + 1);
+    /// iset3 has counter 3.
+    /// iset4 has counter 4.
+    /// Both iset5 and iset6 will have counter = max(3, 4) + 1.
+    var iset5 = iset3.addAll(iset4);
+    var iset6 = iset4.addAll(iset3);
+    expect(iset5.counter, max(3, 4) + 1);
+    expect(iset6.counter, max(3, 4) + 1);
 
-    /// ilist7 will have counter = max(3, 3) + 1.
-    var ilist7 = ilist3.addAll(ilist3);
-    expect(ilist7.counter, max(3, 3) + 1);
+    /// iset7 will have counter = max(3, 3) + 1.
+    var iset7 = iset3.addAll(iset3);
+    expect(iset7.counter, max(3, 3) + 1);
 
-    /// ilist7 will have counter = max(4, 4) + 1.
-    var ilist8 = ilist4.addAll(ilist4);
-    expect(ilist8.counter, max(4, 4) + 1);
+    /// iset7 will have counter = max(4, 4) + 1.
+    var iset8 = iset4.addAll(iset4);
+    expect(iset8.counter, max(4, 4) + 1);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -370,8 +370,8 @@ void main() {
       "increment, and only after the async gap. "
       "Also check it resets to 1, at some point.", () async {
     ImmutableCollection.resetAllConfigurations();
-    IList.asyncAutoflush = true;
-    IList.flushFactor = 4;
+    ISet.asyncAutoflush = true;
+    ISet.flushFactor = 4;
     await Future.delayed(Duration(milliseconds: 100));
 
     // When reset, the asyncCounter is 1.

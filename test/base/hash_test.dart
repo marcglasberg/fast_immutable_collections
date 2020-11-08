@@ -1,4 +1,4 @@
-import 'package:fast_immutable_collections/src/base/hash.dart';
+import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:test/test.dart";
 
 void main() {

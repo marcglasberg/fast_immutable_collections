@@ -1085,7 +1085,7 @@ If your auto-flush is set to occur synchronously:
 
 Each collection keeps a `counter` variable which starts at `0` 
 and is incremented each time some collection methods are called. 
-As soon as this counter reaches a certain value called the `refreshFactor`, 
+As soon as this counter reaches a certain value called the `flushFactor`, 
 the collection is flushed.
 
 ### Async Auto-flush
@@ -1097,7 +1097,7 @@ no flushing will take place.
 
 Each collection still keeps a `counter` variable which starts at `0`, 
 but it will be incremented during methods calls only while `counter >= 0`. 
-As soon as this counter reaches a certain value called the `refreshFactor`, 
+As soon as this counter reaches a certain value called the `flushFactor`, 
 the collection is marked for flushing.
 
 But after the asynchronous gap, as soon as you try to get, add or remove an item from it,
@@ -1116,15 +1116,15 @@ At this point, the collection will be flushed and its `counter` will return to z
 Example: 
 
 ```text
-1. The refreshFactor is 3. The asyncCounter is 1.
+1. The flushFactor is 3. The asyncCounter is 1.
  
-2. List is created. Its counter is 0, smaller than the refreshFactor.
+2. List is created. Its counter is 0, smaller than the flushFactor.
 
-3. List is used. Its counter is now 1, smaller than the refreshFactor.
+3. List is used. Its counter is now 1, smaller than the flushFactor.
  
-4. List is used. Its counter is now 2, smaller than the refreshFactor.
+4. List is used. Its counter is now 2, smaller than the flushFactor.
 
-5. List is used. Its counter is now 3, equal to the refreshFactor.
+5. List is used. Its counter is now 3, equal to the flushFactor.
    For this reason, the list counter is set at negative asyncCounter (-1), 
    and the asyncCounter is set to increment in the future.    
 
@@ -1153,16 +1153,16 @@ which you can use as a valid collection,
 and then it publishes automatically (flushes) after the async gap.
 
 As discussed, the default is to have auto-flush turned on, but you can turn it off. 
-If you leave it on, you can tweak the `refreshFactor` for lists, sets and maps. 
-Usually, lists should have a higher `refreshFactor` because they are generally still very efficient when unflushed.
+If you leave it on, you can tweak the `flushFactor` for lists, sets and maps. 
+Usually, lists should have a higher `flushFactor` because they are generally still very efficient when unflushed.
 
-The minimum `refreshFactor` you can choose is `1`, which means the collections will always flush in the 
+The minimum `flushFactor` you can choose is `1`, which means the collections will always flush in the 
 next async gap after they are touched.    
 
 ```dart
-ilistRefreshFactor = 150;
-isetRefreshFactor = 15;
-imapRefreshFactor = 15;
+ilistflushFactor = 150;
+isetflushFactor = 15;
+imapflushFactor = 15;
 
 // Lock further changes, if desired:                                              
 lockConfig();

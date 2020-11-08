@@ -1,8 +1,8 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import 'package:fast_immutable_collections/src/base/hash.dart';
+import "package:fast_immutable_collections/src/base/hash.dart";
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 class SFlat<T> extends S<T> {
   final Set<T> _set;
@@ -112,16 +112,18 @@ class SFlat<T> extends S<T> {
     return const SetEquality(MapEntryEquality()).equals(_set, set);
   }
 
-  bool deepSetEquals(SFlat<T> other) =>
-      (other == null) ? false : const SetEquality(MapEntryEquality()).equals(_set, other._set);
+  bool deepSetEquals(SFlat<T> other) => (other == null)
+      ? false
+      : const SetEquality(MapEntryEquality()).equals(_set, other._set);
 
   int deepSetHashcode() => const SetEquality(MapEntryEquality()).hash(_set);
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
-/// This works for any object, not only map entries, but `MapEntry` gets special treatment.
-/// We consider two map-entries equal when their respective key and values are equal.
+/// This works for any object, not only map entries, but `MapEntry` gets special
+/// treatment. We consider two map-entries equal when their respective key and
+/// values are equal.
 class MapEntryEquality<E> implements Equality<E> {
   const MapEntryEquality();
 
@@ -141,4 +143,4 @@ class MapEntryEquality<E> implements Equality<E> {
   bool isValidKey(Object o) => true;
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
