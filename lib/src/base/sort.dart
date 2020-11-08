@@ -1,5 +1,81 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+/// 1) If [a] and [b] are both null, they don't have order. If one of them
+/// is null, it will come later, unless the [nullsBefore] is true, in which
+/// case the null will come before.
+///
+/// 1) Otherwise, if [a] and [b] are both of type [Comparable], compare them
+/// with their natural comparator.
+///
+/// 2) Otherwise, if [a] and [b] are map-entries, compare their keys. If their
+/// keys compare as the same, then compare their values.
+///
+/// 3) Otherwise, if [a] and [b] are booleans, compare them such as `true`
+/// comes after `false`.
+///
+/// 4) Otherwise, return 0 (which means unordered).
+///
+/// Example:
+///
+///      [2, null, 1]..sort(compareObject);
+///
+/// Example with nulls coming before:
+///
+///      [2, null, 1]..sort((a, b) => compareObject(a, b, nullsBefore: true));`
+///
+int compareObject<T extends Object>(
+  Object a,
+  Object b, {
+  bool nullsBefore = false,
+}) {
+  if (a == null)
+    return (b == null) ? 0 : (nullsBefore ? -1 : 1);
+  else if (b == null) return (nullsBefore ? 1 : -1);
+  if (a is Comparable && b is Comparable) return a.compareTo(b);
+  if (a is MapEntry && b is MapEntry)
+    return compareObject(a.key, b.key).if0(compareObject(a.value, b.value));
+  if (a is bool && b is bool) return a.compareTo(b);
+  return 0;
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+
+extension ComparableExtension on Object {
+  /// 1) If this object and [other] are both null, they don't have order. If
+  /// one of them is null, it will come later, unless the [nullsBefore] is true,
+  /// in which case the null will come before.
+  ///
+  /// 1) Otherwise, if this object and [other] are both of type [Comparable],
+  /// compare them with their natural comparator.
+  ///
+  /// 2) Otherwise, if this object and [other] are map-entries, compare their
+  /// keys. If their keys compare as the same, then compare their values.
+  ///
+  /// 3) Otherwise, if this object and [other] are booleans, compare them such
+  /// as `true` comes after `false`.
+  ///
+  /// 4) Otherwise, return 0 (which means unordered).
+  ///
+  /// Examples:
+  ///
+  ///      5.compareObjectTo(2);
+  ///      true.compareObjectTo(false);
+  ///      MapEntry('a', 5).compareObjectTo(MapEntry('b', 3));
+  ///
+  /// Example with nulls coming before:
+  ///
+  ///      5.compareObjectTo(2, nullsBefore: true);
+  ///
+  int compareObjectTo(
+    Object other, {
+    bool nullsBefore = false,
+    bool compareHashCodes = true,
+  }) =>
+      compareObject(this, other, nullsBefore: nullsBefore);
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+
 /// The [if0] extension lets you nest comparators. For example:
 ///
 ///     // 1) Strings are ordered according to their length.
@@ -12,27 +88,7 @@ extension ComparatorExtension on int {
   int if0(int then) => this == 0 ? then : this;
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
-
-extension ComparableExtension<T extends Comparable<T>> on Comparable<T> {
-  /// If your collection can have nulls, you can use [nullableCompareTo]
-  /// instead of [compareTo]. For example:
-  ///
-  ///      // Results in: [1, 2, null]
-  ///      [2, null, 1].sort((int a, int b) => a.nullableCompareTo(b));
-  ///
-  ///      // Results in: [null, 1, 2]
-  ///      [2, null, 1].sort((int a, int b) => a.nullableCompareTo(b, nullsBefore: true));
-  ///
-  int nullableCompareTo(T other, {bool nullsBefore = false}) {
-    if (this == null && other == null) return 0;
-    if (this == null) return nullsBefore ? -1 : 1;
-    if (other == null) return nullsBefore ? 1 : -1;
-    return compareTo(other);
-  }
-}
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 /// The [sortBy] function can be used to create a comparator to sort
 /// collections, comparing [a] and [b] such that:
@@ -86,7 +142,7 @@ int Function(T, T) sortBy<T>(
       return ta ? -1 : 1;
     };
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 /// The [sortLike] function can be used to create a comparator to sort
 /// collections, comparing [a] and [b] such that:
@@ -169,29 +225,3 @@ int Function(T, T) sortLike<T, E>(
               ? 0
               : then(a, b);
     };
-
-/// 1) If [a] and [b] are both of type [Comparable], compare them with their
-/// natural comparator.
-///
-/// 2) If [a] and [b] are map-entries, compare their keys (if they are
-/// [Comparable]). If the keys don't have order (are the same or not
-/// [Comparable]), compare their values (if they are [Comparable]).
-///
-/// 3) If [a] and [b] are booleans, compare them such as true > false.
-///
-/// Otherwise, return 0 (which means unordered).
-///
-int compareObject(Object a, Object b) {
-  if (a == null) {
-    return b == null ? 0 : 1;
-  } else if (b == null) return -1;
-  if (a is Comparable && b is Comparable) return a.compareTo(b);
-  if (a is MapEntry && b is MapEntry) {
-    int result = compareObject(a.key, b.key);
-    if (result == 0) result = compareObject(a.value, b.value);
-    return result;
-  }
-  if (a is bool && b is bool) return a.compareTo(b);
-  return 0;
-}
-

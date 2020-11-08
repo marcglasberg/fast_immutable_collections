@@ -5,6 +5,56 @@ void main() {
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  test("compareObject", () {
+    //
+    // Natural order between "a" and "b".
+    expect(
+        ["a", "b"]
+          ..shuffle()
+          ..sort(compareObject),
+        ["a", "b"]);
+
+    // Natural order between 1 and 2. Nulls come after.
+    expect(
+        [1, 2, null]
+          ..shuffle()
+          ..sort(compareObject),
+        [1, 2, null]);
+
+    // Natural order between 1 and 2. Nulls come before.
+    expect(
+        [1, 2, null]
+          ..shuffle()
+          ..sort((a, b) => compareObject(a, b, nullsBefore: true)),
+        [null, 1, 2]);
+
+    // True comes after false.
+    expect(
+        [true, false]
+          ..shuffle()
+          ..sort(compareObject),
+        [false, true]);
+
+    // Natural order of keys.
+    var entryA20 = MapEntry("a", 20);
+    var entryB10 = MapEntry("b", 10);
+    expect(
+        [entryB10, entryA20]
+          ..shuffle()
+          ..sort(compareObject),
+        [entryA20, entryB10]);
+
+    // Natural order of values (since keys are the same).
+    var entryA10 = MapEntry("a", 10);
+    expect(
+        [entryA20, entryA10]
+          ..shuffle()
+          ..sort(compareObject),
+        [entryA10, entryA20]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   test("if0 extension", () {
     var list = ["aaa", "ccc", "b", "c", "bbb", "a", "aa", "bb", "cc"];
 
@@ -18,7 +68,8 @@ void main() {
     /// Comparator Rules:
     /// 1) Strings are ordered according to their length.
     /// 2) Otherwise, they come in their natural order.
-    compareTo = (String a, String b) => a.length.compareTo(b.length).if0(a.compareTo(b));
+    compareTo = (String a, String b) =>
+        a.length.compareTo(b.length).if0(a.compareTo(b));
     list.shuffle();
     list.sort(compareTo);
     expect(list, ["a", "b", "c", "aa", "bb", "cc", "aaa", "bbb", "ccc"]);
@@ -26,7 +77,8 @@ void main() {
     /// Comparator Rules:
     /// 1) Strings are ordered according to their length.
     /// 2) Otherwise, they come in their natural order, inverted.
-    compareTo = (String a, String b) => a.length.compareTo(b.length).if0(-a.compareTo(b));
+    compareTo = (String a, String b) =>
+        a.length.compareTo(b.length).if0(-a.compareTo(b));
     list.shuffle();
     list.sort(compareTo);
     expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
@@ -35,7 +87,24 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("sortBy", () {
-    List<int> list = [1, 15, 3, 21, 360, 9, 17, 300, 25, 5, 22, 10, 12, 27, 14, 5];
+    List<int> list = [
+      1,
+      15,
+      3,
+      21,
+      360,
+      9,
+      17,
+      300,
+      25,
+      5,
+      22,
+      10,
+      12,
+      27,
+      14,
+      5
+    ];
 
     /// Comparator Rules:
     /// 1) If present, number 14 is always the first, followed by number 15.
@@ -122,7 +191,8 @@ void main() {
 
     for (int i = 1; i < 1000; i++) {
       list = list.shuffle().sort(compareTo);
-      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+      expect(list.map((text) => text.length),
+          [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
     }
   });
 
@@ -162,29 +232,30 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("nullableCompareTo", () {
+  test("compareObjectTo", () {
     //
-    expect(1.nullableCompareTo(2), -1);
-    expect(2.nullableCompareTo(1), 1);
-    expect((null as int).nullableCompareTo(1), 1); // ignore: unnecessary_cast
-    expect(1.nullableCompareTo(null), -1);
-    expect((null as int).nullableCompareTo(null), 0); // ignore: unnecessary_cast
+    int nullValue;
 
-    expect(1.nullableCompareTo(2, nullsBefore: true), -1);
-    expect(2.nullableCompareTo(1, nullsBefore: true), 1);
-    expect((null as int).nullableCompareTo(1, nullsBefore: true), -1); // ignore: unnecessary_cast
-    expect(1.nullableCompareTo(null, nullsBefore: true), 1);
-    expect((null as int).nullableCompareTo(null, nullsBefore: true), 0); // ignore: unnecessary_cast
+    expect(1.compareObjectTo(2), -1);
+    expect(2.compareObjectTo(1), 1);
+    expect(nullValue.compareObjectTo(1), 1);
+    expect(1.compareObjectTo(null), -1);
+    expect(nullValue.compareObjectTo(null), 0);
+
+    expect(1.compareObjectTo(2, nullsBefore: true), -1);
+    expect(2.compareObjectTo(1, nullsBefore: true), 1);
+    expect(nullValue.compareObjectTo(1, nullsBefore: true), -1);
+    expect(1.compareObjectTo(null, nullsBefore: true), 1);
+    expect(nullValue.compareObjectTo(null, nullsBefore: true), 0);
 
     // Nulls go to the end.
-    expect([2, null, 1]..sort((a, b) => a.nullableCompareTo(b)), [1, 2, null]);
+    expect([2, null, 1]..sort((a, b) => a.compareObjectTo(b)), [1, 2, null]);
 
     // Nulls go to the start.
-    expect([2, null, 1]..sort((a, b) => a.nullableCompareTo(b, nullsBefore: true)),
+    expect(
+        [2, null, 1]..sort((a, b) => a.compareObjectTo(b, nullsBefore: true)),
         [null, 1, 2]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 }

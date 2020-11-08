@@ -896,12 +896,55 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
 # Comparators
 
 To help you sort collections, 
-we provide the global comparator functions `sortBy` and `sortLike`, 
-and the `if0` extension,
+we provide the global comparator functions `compareObject`, `sortBy` and `sortLike`, 
+and the `compareObjectTo` and `if0` extensions,
 which make it easy for you to create other complex comparators,
 as described below. 
 
-## SortBy comparator
+## CompareObject function
+
+The `compareObject` function lets you easily compare `a` and `b`, as follows:
+
+If `a` or `b` is `null`, it will come later (the default), 
+unless the `nullsBefore` parameter is `true`, 
+in which case the `null` one will come before.
+
+If `a` and `b` are both of type `Comparable`, it compares them with their natural comparator.
+
+If `a` and `b` are map-entries, it compares their keys first, and then, if necessary, their values. 
+
+If `a` and `b` are booleans, it compares them such as `true > false`.
+
+If all the above can't distinguish them, it will return `0` (which means unordered).
+
+You can use the comparator in sorts:
+
+```dart
+// Results in: [1, 2, null]
+[1, 2, null, 3].sort(compareObject);
+
+// Results in: [null, 1, 2]
+[1, 2, null, 3].sort((a, b) => compareObject(a, b, nullsBefore: true));
+```             
+
+
+## CompareObjectTo extension
+
+Beside the `compareObject` function above, 
+you can also use the `compareObjectTo` extension.
+
+For example: 
+ 
+```dart
+// Results in: [1, 2, null]
+[1, 2, null, 3].sort((a, b) => a.compareObjectTo(b));
+
+// Results in: [null, 1, 2]
+[1, 2, null, 3].sort((a, b) => a.compareObjectTo(b, nullsBefore: true));
+```              
+
+
+## SortBy function
 
 The `sortBy` function lets you define a rule, 
 and then possibly nest it with other rules with lower priority.
@@ -930,7 +973,8 @@ int Function(int, int) compareTo = sortBy((x) => x == 14,
                )))));
 ``` 
 
-## SortLike comparator
+
+## SortLike function
 
 The `sortLike` function lets you define a list with the desired sort order. 
 For example, if you want to sort numbers in this order: `[7, 3, 4, 21, 2]`
@@ -1006,19 +1050,6 @@ compareTo = (String a, String b) => a.length.compareTo(b.length).if0(-a.compareT
 list.sort(compareTo);
 expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
 ``` 
-
-## nullableCompareTo
-
-If your collection can have nulls, you can use `nullableCompareTo`
-instead of `compareTo`. For example:
- 
-```dart
-// Results in: [1, 2, null]
-[2, null, 1].sort((a, b) => a.nullableCompareTo(b));
-
-// Results in: [null, 1, 2]
-[2, null, 1].sort((a, b) => a.nullableCompareTo(b, nullsBefore: true));
-```              
 
 ## Flushing 
 
