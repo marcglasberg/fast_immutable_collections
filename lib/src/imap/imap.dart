@@ -304,9 +304,16 @@ class IMap<K, V> // ignore: must_be_immutable
 
   bool get isIdentityEquals => !config.isDeepEquals;
 
-  /// Returns an [Iterable] of the map entries. Note this is always fast
-  /// and UNORDERED. If you need order, please use [entryList].
+  /// Returns an [Iterable] of the map entries of type [MapEntry].
+  /// Note this is always fast and UNORDERED.
+  /// If you need order, please use [entryList].
   Iterable<MapEntry<K, V>> get entries => _m.entries;
+
+  /// Returns an [Iterable] of the map entries of type [Entry]. On contrary to
+  /// [MapEntry], [Entry] is comparable and implements equals and hashcode by
+  /// using its key and value. Note this is always fast and UNORDERED.
+  Iterable<Entry<K, V>> get comparableEntries =>
+      _m.entries.map((e) => e.asEntry);
 
   /// Returns an [Iterable] of the map keys. Note this is always fast
   /// and UNORDERED. If you need order, please use [keyList].

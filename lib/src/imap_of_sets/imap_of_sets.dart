@@ -146,9 +146,6 @@ class IMapOfSets<K, V> //
   /// it will return [(1:{a,b}), 2:{x, y}].
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
-  Iterable<Entry<K, ISet<V>>> get comparableEntries =>
-      _mapOfSets.entries.map((e) => e.asEntry);
-
   Iterable<K> get keys => _mapOfSets.keys;
 
   Iterable<ISet<V>> get sets => _mapOfSets.values;
@@ -379,7 +376,7 @@ class IMapOfSets<K, V> //
 
   /// Return any `key:set` entry where the value exists in the set.
   /// If that entry doesn't  exist, return `null`.
-  MapEntry<K, ISet<V>> entryWithValue(V value) {
+  MapEntry<K, ISet<V>> getEntryWithValue(V value) {
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       var set = entry.value;
       if (set.contains(value)) return entry;
@@ -389,7 +386,7 @@ class IMapOfSets<K, V> //
 
   /// Return any key entry where the value exists in its set.
   /// If it doesn't  find the value, return `null`.
-  K keyWithValue(V value) => entryWithValue(value)?.key;
+  K getKeyWithValue(V value) => getEntryWithValue(value)?.key;
 
   /// Return any `key:set` entry where the value exists in the set.
   /// If that entry doesn't  exist, return `null`.
@@ -412,7 +409,7 @@ class IMapOfSets<K, V> //
   }
 
   /// Return true if the value exists in any of the sets.
-  bool containsValue(V value) => entryWithValue(value) != null;
+  bool containsValue(V value) => getEntryWithValue(value) != null;
 
   /// Return `true` if the given [key] entry exists, and its set contains the given [value].
   bool contains(K key, V value) => get(key).contains(value);

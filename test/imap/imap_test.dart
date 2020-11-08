@@ -32,7 +32,7 @@ void main() {
       expect(iMap5.isNotEmpty, isFalse);
     });
 
-    test("IMap.unlock getter", () {
+    test("IMap.unlock", () {
       final Map<String, int> map = {"a": 1, "b": 2};
       final IMap<String, int> iMap = IMap(map);
       expect(iMap.unlock, map);
@@ -700,49 +700,60 @@ void main() {
 
     group("Keys, Values and Entries |", () {
       test(
-          "IMap.entries getter",
+          "IMap.entries",
           () => iMap.entries.forEach((MapEntry<String, int> entry) =>
               expect(finalMap[entry.key], entry.value)));
 
-      test("IMap.keys getter", () => expect(iMap.keys.toSet(), keys.toSet()));
+      test("IMap.comparableEntries", () {
+        expect(iMap.comparableEntries.toSet(), {
+          Entry("a", 1),
+          Entry("b", 2),
+          Entry("c", 3),
+          Entry("d", 4),
+          Entry("e", 5),
+          Entry("f", 6)
+        });
+      });
 
-      test("IMap.values getter",
+      test("IMap.keys", () => expect(iMap.keys.toSet(), keys.toSet()));
+
+      test("IMap.values",
           () => expect(iMap.values.toSet(), values.toSet()));
 
-      test("IMap.entryList getter", () {
+      test("IMap.entryList", () {
         expect(iMap.entryList(), isA<IList<MapEntry<String, int>>>());
         iMap.entryList().forEach((MapEntry<String, int> entry) =>
             expect(finalMap[entry.key], entry.value));
       });
 
-      test("IMap.entrySet getter", () {
+      test("IMap.entrySet", () {
         expect(iMap.entrySet(), isA<ISet<MapEntry<String, int>>>());
         iMap.entrySet().forEach((MapEntry<String, int> entry) =>
             expect(finalMap[entry.key], entry.value));
       });
 
-      test("IMap.keyList getter", () {
+      test("IMap.keyList", () {
         expect(iMap.keyList(), isA<IList<String>>());
         iMap
             .keyList()
             .forEach((String key) => expect(keys.contains(key), isTrue));
       });
 
-      test("IMap.keySet getter", () {
+      test("IMap.keySet", () {
         expect(iMap.keySet(), isA<ISet<String>>());
         iMap
             .keySet()
             .forEach((String key) => expect(keys.contains(key), isTrue));
       });
 
-      test("IMap.valueList getter", () {
+      test("IMap.valueList", () {
         expect(iMap.valueList(), isA<IList<int>>());
         iMap
             .valueList()
             .forEach((int value) => expect(values.contains(value), isTrue));
       });
 
-      test("IMap.valueSet getter", () {
+      test("IMap.valueSet", () {
         expect(iMap.valueSet(), isA<ISet<int>>());
         iMap
             .valueSet()
@@ -750,7 +761,7 @@ void main() {
       });
     });
 
-    test("IMap.iterator getter", () {
+    test("IMap.iterator", () {
       final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
       Map<String, int> result = iterator.toMap();
       expect(result, finalMap);
@@ -976,7 +987,7 @@ void main() {
   // //////////////////////////////////////////////////////////////////////////////////////////////////
 
   group("IMapOfSetsExtension |", () {
-    test("IMapOfSetsExtension.lock getter", () {
+    test("IMapOfSetsExtension.lock", () {
       const Map<String, Set<int>> map = {
         "a": {1, 2},
         "b": {1, 2, 3}
