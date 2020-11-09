@@ -29,12 +29,17 @@ class CodeScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  for (MapEntry<String, String> entry in code.entries) _code(entry.key, entry.value)
+                  for (MapEntry<String, String> codeEntry in code.entries)
+                    _CodeBlock(title: codeEntry.key, code: codeEntry.value)
                 ],
               ),
             ),
           ),
-          Container(width: double.infinity, height: 1.0, color: Colors.black),
+          Container(
+            width: double.infinity,
+            height: 1.0,
+            color: Colors.black,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -52,8 +57,20 @@ class CodeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _code(String title, String code) {
+class _CodeBlock extends StatelessWidget {
+  final String title;
+  final String code;
+
+  const _CodeBlock({
+    Key key,
+    @required this.title,
+    @required this.code,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -62,11 +79,19 @@ class CodeScreen extends StatelessWidget {
           child: Text(
             title,
             textAlign: TextAlign.left,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w800,
+              fontSize: 18,
+            ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 8.0, bottom: 20),
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 8.0,
+            bottom: 20,
+          ),
           child: Text(
             code,
             style: TextStyle(
@@ -76,7 +101,11 @@ class CodeScreen extends StatelessWidget {
             ),
           ),
         ),
-        Container(width: double.infinity, height: 1.0, color: Colors.grey),
+        Container(
+          width: double.infinity,
+          height: 1.0,
+          color: Colors.grey,
+        ),
       ],
     );
   }
