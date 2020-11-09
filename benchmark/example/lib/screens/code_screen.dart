@@ -69,7 +69,7 @@ class _CodeBlock extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

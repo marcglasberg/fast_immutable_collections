@@ -10,7 +10,7 @@ class CollectionButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return RaisedButton(
       color: Colors.blue,
       disabledColor: Colors.blue.withOpacity(0.4),
