@@ -1201,7 +1201,7 @@ void main() {
     }
 
     final int expectedTotal = shuffles * ((iList.first + iList.last) ~/ 2);
-    final int maxError = expectedTotal ~/ 50;
+    final int maxError = (expectedTotal * .02).round();
     shuffledSum.forEach((int sum) => expect((expectedTotal - sum).abs(), lessThan(maxError)));
   });
 

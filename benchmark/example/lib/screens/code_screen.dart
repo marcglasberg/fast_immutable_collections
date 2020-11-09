@@ -64,10 +64,9 @@ class _CodeBlock extends StatelessWidget {
   final String code;
 
   const _CodeBlock({
-    Key key,
     @required this.title,
     @required this.code,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
