@@ -143,8 +143,10 @@ The sub, unordered lists are my highlights, it's probably simpler if you go thro
 1. [Introduction to Dart VM][intro_dart_vm]
 1. [What does `external` mean in Dart?][external_in_dart]
     - Basically that the method is implemented elsewhere, probably by a subclass. It's kind of like an abstract method outside an abstract class.
+1. [An example of how to graph benchmarks][funkia].
 
 
 [dart_compiled_or_interpreted]: https://www.quora.com/Is-Dart-a-compiled-or-interpreted-language
 [external_in_dart]: https://stackoverflow.com/q/24929659/4756173
+[funkia]: https://funkia.github.io/list/benchmarks/
 [intro_dart_vm]: https://mrale.ph/dartvm/
