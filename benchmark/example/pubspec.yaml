@@ -10,6 +10,9 @@ environment:
   flutter: ">=1.17.0 <1.24.0"
   sdk: ">=2.7.0 <3.0.0"
 
+flutter:
+  uses-material-design: true
+
 dependencies:
   flutter:
     sdk: flutter
