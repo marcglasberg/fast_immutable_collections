@@ -8,6 +8,9 @@ class Config {
   const Config({@required this.runs, @required this.size})
       : assert(runs != null && runs > 0),
         assert(size != null && size >= 0);
+
+  @override
+  String toString() => "Config: (runs: $runs, size: $size)";
 }
 
 @immutable

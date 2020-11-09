@@ -5,12 +5,19 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 
 import "../widgets/bar_chart.dart";
 
-class GraphScreen extends StatelessWidget {
+class GraphScreen extends StatefulWidget {
   final String title;
-  final RecordsTable recordsTable;
+  final IList<RecordsTable> tables;
 
-  const GraphScreen({@required this.title, @required this.recordsTable});
+  const GraphScreen({@required this.title, @required this.tables});
 
+  @override
+  _GraphScreenState createState() => _GraphScreenState();
+}
+
+class _GraphScreenState extends State<GraphScreen> {
+  /// Currently, only 5 configurations are possible, but you can easily change it by adding more
+  /// icons, though the bottom bar will get crowded.
   static final IList<Icon> _sizeIcons = const [
     Icon(Icons.filter_1),
     Icon(Icons.filter_2),
@@ -19,31 +26,39 @@ class GraphScreen extends StatelessWidget {
     Icon(Icons.filter_5),
   ].lock;
 
+  int _currentTableIndex = 0;
+
+  RecordsTable get _currentTable => widget.tables[_currentTableIndex];
+
+  List<BottomNavigationBarItem> bottomItems;
+
+  @override
+  void initState() {
+    super.initState();
+    bottomItems = <BottomNavigationBarItem>[
+      for (int i = 0; i < widget.tables.length; i++)
+        BottomNavigationBarItem(
+          icon: _sizeIcons[i],
+          label: "Size: ${widget.tables[i].config.size}",
+        ),
+    ];
+  }
+
+  void _onTap(int index) => setState(() => _currentTableIndex = index);
+
   @override
   Widget build(_) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("$title Benchmark Graph Results"),
+        title: Text("${widget.title} Benchmark Graph Results"),
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 5),
-        child: BarChart(recordsTable: recordsTable),
+        child: BarChart(recordsTable: _currentTable),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: _sizeIcons[0],
-            label: "Size: 1",
-          ),
-          BottomNavigationBarItem(
-            icon: _sizeIcons[1],
-            label: "Size: 2",
-          ),
-          BottomNavigationBarItem(
-            icon: _sizeIcons[2],
-            label: "Size: 3",
-          ),
-        ],
+        items: bottomItems,
+        onTap: _onTap,
       ),
     );
   }

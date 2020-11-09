@@ -29,7 +29,7 @@ class CodeScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  for (MapEntry<String, String> codeEntry in code.entries)
+                  for (final MapEntry<String, String> codeEntry in code.entries)
                     _CodeBlock(title: codeEntry.key, code: codeEntry.value)
                 ],
               ),

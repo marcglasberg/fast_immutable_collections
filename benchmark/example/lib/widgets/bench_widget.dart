@@ -10,12 +10,12 @@ import "collection_button.dart";
 class BenchWidget extends StatefulWidget {
   final String title;
   final IMap<String, String> code;
-  final MultiBenchmarkReporter benchmark;
+  final IList<MultiBenchmarkReporter> benchmarks;
 
   BenchWidget({
     this.title,
     this.code,
-    @required this.benchmark,
+    @required this.benchmarks,
   });
 
   @override
@@ -23,22 +23,19 @@ class BenchWidget extends StatefulWidget {
 }
 
 class _BenchWidgetState extends State<BenchWidget> {
-  bool _isRunning;
-  RecordsTable _results;
-
-  @override
-  void initState() {
-    super.initState();
-    _isRunning = false;
-  }
+  bool _isRunning = false;
+  IList<RecordsTable> _results;
 
   void _run() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() => _isRunning = true);
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => setState(() {
-          widget.benchmark.report();
-          _results = widget.benchmark.emitter.table;
+          _results = const <RecordsTable>[].lock;
+          widget.benchmarks.forEach((MultiBenchmarkReporter benchmark) {
+            benchmark.report();
+            _results = _results.add(benchmark.emitter.table);
+          });
           _isRunning = false;
         }),
       );
@@ -95,7 +92,7 @@ class _BenchWidgetState extends State<BenchWidget> {
                           MaterialPageRoute(
                               builder: (_) => GraphScreen(
                                     title: widget.title,
-                                    recordsTable: _results,
+                                    tables: _results,
                                   )))
                       : null,
                 ),
