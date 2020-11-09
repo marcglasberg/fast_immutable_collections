@@ -11,10 +11,7 @@ enum CollectionType { list, set, map }
 class MultiBenchmarkScreen extends StatelessWidget {
   final CollectionType collectionType;
 
-  const MultiBenchmarkScreen({
-    Key key,
-    @required this.collectionType,
-  }) : super(key: key);
+  const MultiBenchmarkScreen({@required this.collectionType});
 
   @override
   Widget build(_) {

@@ -5,10 +5,9 @@ class CollectionButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CollectionButton({
-    Key key,
     @required this.label,
     @required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
