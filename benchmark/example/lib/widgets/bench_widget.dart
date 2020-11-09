@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import "package:flutter/material.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
@@ -26,6 +28,14 @@ class _BenchWidgetState extends State<BenchWidget> {
   bool _isRunning = false;
   IList<RecordsTable> _results;
 
+  void _goToResults() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) => GraphScreen(
+                title: widget.title,
+                tables: _results,
+              )));
+
   void _run() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() => _isRunning = true);
@@ -37,6 +47,7 @@ class _BenchWidgetState extends State<BenchWidget> {
             _results = _results.add(benchmark.emitter.table);
           });
           _isRunning = false;
+          _goToResults();
         }),
       );
     });
@@ -86,15 +97,7 @@ class _BenchWidgetState extends State<BenchWidget> {
               Expanded(
                 child: CollectionButton(
                   label: "Results",
-                  onPressed: _isNotRunningAndHasResults
-                      ? () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => GraphScreen(
-                                    title: widget.title,
-                                    tables: _results,
-                                  )))
-                      : null,
+                  onPressed: _isNotRunningAndHasResults ? _goToResults : null,
                 ),
               ),
               const SizedBox(width: 12),

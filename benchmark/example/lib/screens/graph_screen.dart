@@ -42,6 +42,14 @@ class _GraphScreenState extends State<GraphScreen> {
           label: "Size: ${widget.tables[i].config.size}",
         ),
     ];
+    // TODO: fix the fact that the BottomNavigationBar only accepts >= 2 items.
+    if (bottomItems.length == 1)
+      bottomItems.add(
+        BottomNavigationBarItem(
+          icon: Icon(Icons.filter_none),
+          label: "none",
+        ),
+      );
   }
 
   void _onTap(int index) => setState(() => _currentTableIndex = index);
