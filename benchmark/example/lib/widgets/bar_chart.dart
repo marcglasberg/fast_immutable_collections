@@ -22,11 +22,11 @@ class BarChart extends StatelessWidget {
       ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return charts.BarChart(
       _seriesList,
       animate: true,
-      animationDuration: const Duration(seconds: 1, milliseconds: 250),
+      animationDuration: const Duration(milliseconds: 100),
       barRendererDecorator: charts.BarLabelDecorator<String>(),
       domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       behaviors: <charts.ChartBehavior>[

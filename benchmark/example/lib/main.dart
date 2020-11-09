@@ -8,7 +8,7 @@ class BenchmarkApp extends StatelessWidget {
   const BenchmarkApp();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(

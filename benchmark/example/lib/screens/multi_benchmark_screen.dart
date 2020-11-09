@@ -17,7 +17,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choose a benchmark to test"),

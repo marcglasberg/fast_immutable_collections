@@ -35,13 +35,13 @@ class _BenchWidgetState extends State<BenchWidget> {
   void _run() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() => _isRunning = true);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => setState(() {
           widget.benchmark.report();
           _results = widget.benchmark.emitter.table;
           _isRunning = false;
-        });
-      });
+        }),
+      );
     });
   }
 
@@ -52,9 +52,9 @@ class _BenchWidgetState extends State<BenchWidget> {
     return Card(
       margin: const EdgeInsets.all(16),
       child: Stack(
-        children: [
+        children: <Widget>[
           _content(context),
-          if (_isRunning) _pleaseWait(),
+          if (_isRunning) _PleaseWait(),
         ],
       ),
     );
@@ -106,8 +106,7 @@ class _BenchWidgetState extends State<BenchWidget> {
                   label: "Code",
                   onPressed: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => CodeScreen(widget.title, widget.code)),
+                    MaterialPageRoute(builder: (_) => CodeScreen(widget.title, widget.code)),
                   ),
                 ),
               ),
@@ -117,8 +116,13 @@ class _BenchWidgetState extends State<BenchWidget> {
       ),
     );
   }
+}
 
-  Container _pleaseWait() {
+class _PleaseWait extends StatelessWidget {
+  const _PleaseWait({Key key}) : super(key: key);
+
+  @override
+  Widget build(_) {
     return Container(
       alignment: Alignment.center,
       width: double.infinity,
@@ -130,7 +134,7 @@ class _BenchWidgetState extends State<BenchWidget> {
         ),
       ),
       child: Text(
-        "Please Wait.\nCreating benchmarks...",
+        "Please Wait.\nRunning the benchmarks...",
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,

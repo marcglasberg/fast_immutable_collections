@@ -11,7 +11,7 @@ class GraphScreen extends StatelessWidget {
   const GraphScreen({@required this.title, @required this.recordsTable});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return Scaffold(
       appBar: AppBar(
         title: Text("$title Benchmark Graph Results"),
