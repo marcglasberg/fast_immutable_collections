@@ -27,32 +27,41 @@ class _GraphScreenState extends State<GraphScreen> {
   ].lock;
 
   int _currentTableIndex = 0;
+  List<BottomNavigationBarItem> _bottomItems;
+
+  /// We will need to add an artifial button to the bottom bar if there's only one benchmark, since
+  /// it requires at least 2 items.
+  bool _onlyOneBenchmark = false;
 
   RecordsTable get _currentTable => widget.tables[_currentTableIndex];
-
-  List<BottomNavigationBarItem> bottomItems;
 
   @override
   void initState() {
     super.initState();
-    bottomItems = <BottomNavigationBarItem>[
+    _bottomItems = <BottomNavigationBarItem>[
       for (int i = 0; i < widget.tables.length; i++)
         BottomNavigationBarItem(
           icon: _sizeIcons[i],
           label: "Size: ${widget.tables[i].config.size}",
         ),
     ];
-    // TODO: fix the fact that the BottomNavigationBar only accepts >= 2 items.
-    if (bottomItems.length == 1)
-      bottomItems.add(
+    if (_bottomItems.length == 1) {
+      _onlyOneBenchmark = true;
+      _bottomItems.add(
         BottomNavigationBarItem(
-          icon: Icon(Icons.filter_none),
-          label: "none",
+          icon: Icon(Icons.arrow_back),
+          label: "Go back",
         ),
       );
+    }
   }
 
-  void _onTap(int index) => setState(() => _currentTableIndex = index);
+  void _onTap(int index) => setState(() {
+        if (_onlyOneBenchmark && index == 1)
+          Navigator.of(context).pop();
+        else
+          _currentTableIndex = index;
+      });
 
   @override
   Widget build(_) {
@@ -65,7 +74,7 @@ class _GraphScreenState extends State<GraphScreen> {
         child: BarChart(recordsTable: _currentTable),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: bottomItems,
+        items: _bottomItems,
         onTap: _onTap,
       ),
     );

@@ -47,7 +47,7 @@ class CodeScreen extends StatelessWidget {
                 Expanded(
                   child: CollectionButton(
                     label: "OK",
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
               ],

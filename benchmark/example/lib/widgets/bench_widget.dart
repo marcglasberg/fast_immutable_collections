@@ -28,13 +28,14 @@ class _BenchWidgetState extends State<BenchWidget> {
   bool _isRunning = false;
   IList<RecordsTable> _results;
 
-  void _goToResults() => Navigator.push(
-      context,
-      MaterialPageRoute(
+  void _goToResults() => Navigator.of(context).push(
+        MaterialPageRoute(
           builder: (_) => GraphScreen(
-                title: widget.title,
-                tables: _results,
-              )));
+            title: widget.title,
+            tables: _results,
+          ),
+        ),
+      );
 
   void _run() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -61,14 +62,14 @@ class _BenchWidgetState extends State<BenchWidget> {
       margin: const EdgeInsets.all(16),
       child: Stack(
         children: <Widget>[
-          _content(context),
+          _content,
           if (_isRunning) _PleaseWait(),
         ],
       ),
     );
   }
 
-  Container _content(BuildContext context) {
+  Container get _content {
     return Container(
       width: double.infinity,
       height: 110,
@@ -104,9 +105,13 @@ class _BenchWidgetState extends State<BenchWidget> {
               Expanded(
                 child: CollectionButton(
                   label: "Code",
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => CodeScreen(widget.title, widget.code)),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => CodeScreen(
+                        widget.title,
+                        widget.code,
+                      ),
+                    ),
                   ),
                 ),
               ),

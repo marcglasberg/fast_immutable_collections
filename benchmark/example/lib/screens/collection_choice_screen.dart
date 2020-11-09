@@ -28,26 +28,32 @@ class CollectionChoiceScreen extends StatelessWidget {
               children: <Widget>[
                 CollectionButton(
                   label: "List",
-                  onPressed: () => Navigator.push(
-                    context,
+                  onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (_) => MultiBenchmarkScreen(collectionType: CollectionType.list)),
+                      builder: (_) => MultiBenchmarkScreen(
+                        collectionType: CollectionType.list,
+                      ),
+                    ),
                   ),
                 ),
                 CollectionButton(
                   label: "Set",
-                  onPressed: () => Navigator.push(
-                    context,
+                  onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (_) => MultiBenchmarkScreen(collectionType: CollectionType.list)),
+                      builder: (_) => MultiBenchmarkScreen(
+                        collectionType: CollectionType.list,
+                      ),
+                    ),
                   ),
                 ),
                 CollectionButton(
                   label: "Map",
-                  onPressed: () => Navigator.push(
-                    context,
+                  onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (_) => MultiBenchmarkScreen(collectionType: CollectionType.list)),
+                      builder: (_) => MultiBenchmarkScreen(
+                        collectionType: CollectionType.list,
+                      ),
+                    ),
                   ),
                 ),
               ],
