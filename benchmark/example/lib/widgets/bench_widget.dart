@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import "package:flutter/material.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";

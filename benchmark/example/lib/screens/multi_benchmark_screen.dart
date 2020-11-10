@@ -45,160 +45,245 @@ class MultiBenchmarkScreen extends StatelessWidget {
   List<Widget> get _benchmarks {
     switch (collectionType) {
       case CollectionType.list:
-        return <Widget>[
-          BenchWidget(
-            title: "Add",
-            code: ListCode.add,
-            benchmarks: [
-              ListAddBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_add_1",
-                  config: Config(runs: 10, size: 10),
-                ),
-              ),
-              ListAddBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_add_2",
-                  config: Config(runs: 10, size: 100),
-                ),
-              ),
-              ListAddBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_add_3",
-                  config: Config(runs: 10, size: 500),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "AddAll",
-            code: ListCode.addAll,
-            benchmarks: [
-              ListAddAllBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_add_all",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "Contains",
-            code: ListCode.contains,
-            benchmarks: [
-              ListContainsBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_contains",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "Empty",
-            code: ListCode.empty,
-            benchmarks: [
-              ListEmptyBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_empty",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "Read",
-            code: ListCode.read,
-            benchmarks: [
-              ListReadBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_read",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "Remove",
-            code: ListCode.remove,
-            benchmarks: [
-              ListRemoveBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "list_remove",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-        ];
+        return _listBenchmarks;
       case CollectionType.set:
-        return <Widget>[
-          BenchWidget(
-            title: "Add",
-            code: SetCode.add,
-            benchmarks: [
-              SetAddBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "set_add",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "AddAll",
-            code: SetCode.addAll,
-            benchmarks: [
-              SetAddAllBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "set_add_all",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "Contains",
-            code: SetCode.contains,
-            benchmarks: [
-              SetContainsBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "set_contains",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "Empty",
-            code: SetCode.contains,
-            benchmarks: [
-              SetEmptyBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "set_empty",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-          BenchWidget(
-            title: "Remove",
-            code: SetCode.contains,
-            benchmarks: [
-              SetRemoveBenchmark(
-                emitter: TableScoreEmitter(
-                  prefixName: "set_remove",
-                  config: Config(runs: 100, size: 100),
-                ),
-              ),
-            ].lock,
-          ),
-        ];
+        return _setBenchmarks;
       case CollectionType.map:
-        return <Widget>[];
+        return _mapBenchmarks;
       default:
         throw UnimplementedError(
             "No benchmarks for this collection type you've somehow managed to choose.");
     }
   }
+
+  static final List<Widget> _listBenchmarks = [
+    BenchWidget(
+      title: "Add",
+      code: ListCode.add,
+      benchmarks: [
+        ListAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_add_1",
+            config: Config(runs: 10, size: 10),
+          ),
+        ),
+        ListAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_add_2",
+            config: Config(runs: 10, size: 100),
+          ),
+        ),
+        ListAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_add_3",
+            config: Config(runs: 10, size: 500),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "AddAll",
+      code: ListCode.addAll,
+      benchmarks: [
+        ListAddAllBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_add_all",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Contains",
+      code: ListCode.contains,
+      benchmarks: [
+        ListContainsBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_contains",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Empty",
+      code: ListCode.empty,
+      benchmarks: [
+        ListEmptyBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_empty",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Read",
+      code: ListCode.read,
+      benchmarks: [
+        ListReadBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_read",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Remove",
+      code: ListCode.remove,
+      benchmarks: [
+        ListRemoveBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_remove",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+  ];
+
+  static final List<Widget> _setBenchmarks = [
+    BenchWidget(
+      title: "Add",
+      code: SetCode.add,
+      benchmarks: [
+        SetAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_add_1",
+            config: Config(runs: 10, size: 10),
+          ),
+        ),
+        SetAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_add_2",
+            config: Config(runs: 10, size: 50),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "AddAll",
+      code: SetCode.addAll,
+      benchmarks: [
+        SetAddAllBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_add_all",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Contains",
+      code: SetCode.contains,
+      benchmarks: [
+        SetContainsBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_contains",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Empty",
+      code: SetCode.contains,
+      benchmarks: [
+        SetEmptyBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_empty",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Remove",
+      code: SetCode.contains,
+      benchmarks: [
+        SetRemoveBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_remove",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+  ];
+
+  static final List<Widget> _mapBenchmarks = [
+    BenchWidget(
+      title: "Add",
+      code: MapCode.add,
+      benchmarks: [
+        MapAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_add",
+            config: Config(runs: 100, size: 100),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "AddAll",
+      code: MapCode.addAll,
+      benchmarks: [
+        MapAddAllBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_add_all",
+            config: Config(runs: 100, size: 10),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "ContainsValue",
+      code: MapCode.containsValue,
+      benchmarks: [
+        MapContainsValueBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_contains_value",
+            config: Config(runs: 100, size: 10),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Empty",
+      code: MapCode.empty,
+      benchmarks: [
+        MapEmptyBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_empty",
+            config: Config(runs: 100, size: 0),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Read",
+      code: MapCode.read,
+      benchmarks: [
+        MapReadBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_read",
+            config: Config(runs: 100, size: 1000),
+          ),
+        ),
+      ].lock,
+    ),
+    BenchWidget(
+      title: "Remove",
+      code: MapCode.remove,
+      benchmarks: [
+        MapRemoveBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_remove",
+            config: Config(runs: 100, size: 1000),
+          ),
+        ),
+      ].lock,
+    ),
+  ];
 }
