@@ -71,3 +71,19 @@ abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   @override
   Set<int> toMutable();
 }
+
+abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>> {
+  const MapBenchmarkBase({
+    @required String name,
+    @required TableScoreEmitter emitter,
+  }) : super(name: name, emitter: emitter);
+
+  static Map<String, int> getDummyGeneratedMap({int size = 10000}) =>
+      Map<String, int>.fromEntries(List<MapEntry<String, int>>.generate(
+          size, (int index) => MapEntry<String, int>(index.toString(), index)));
+
+  @visibleForTesting
+  @visibleForOverriding
+  @override
+  Map<String, int> toMutable();
+}
