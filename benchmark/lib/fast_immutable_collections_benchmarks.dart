@@ -15,6 +15,7 @@ export "src/cases/map/add.dart";
 export "src/cases/map/add_all.dart";
 export "src/cases/map/contains_value.dart";
 export "src/cases/map/empty.dart";
+export "src/cases/map/read.dart";
 
 export "src/cases/set/add.dart";
 export "src/cases/set/add_all.dart";
