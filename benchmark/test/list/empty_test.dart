@@ -7,12 +7,12 @@ void main() {
     test("List (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "empty_list_mutable", config: Config(runs: 100, size: 0));
-      final MutableListEmptyBenchmark listResult =
+      final MutableListEmptyBenchmark listEmptyBenchmark =
           MutableListEmptyBenchmark(emitter: tableScoreEmitter);
 
-      listResult.report();
+      listEmptyBenchmark.report();
 
-      expect(listResult.toMutable(), <int>[]);
+      expect(listEmptyBenchmark.toMutable(), <int>[]);
     });
 
     test("IList", () {
