@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
-import "package:flutter/foundation.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 import "../utils/benchmarks_code.dart";
 import "../widgets/bench_widget.dart";
+import "../widgets/release_mode_warning.dart";
 
 enum CollectionType { list, set, map }
 
@@ -33,19 +33,10 @@ class MultiBenchmarkScreen extends StatelessWidget {
                 ),
               ),
             ),
-            if (!kReleaseMode)
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                width: double.infinity,
-                color: Colors.black,
-                child: const Text(
-                  "Please run this in release mode!",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                ),
-              ),
           ],
         ),
       ),
+      bottomNavigationBar: const ReleaseModeWarning(),
     );
   }
 

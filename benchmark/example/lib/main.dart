@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 
 import "screens/collection_choice_screen.dart";
+import 'widgets/release_mode_warning.dart';
 
 void main() => runApp(const BenchmarkApp());
 
@@ -20,6 +21,7 @@ class BenchmarkApp extends StatelessWidget {
           ),
         ),
         body: const CollectionChoiceScreen(),
+        bottomNavigationBar: const ReleaseModeWarning(),
       ),
     );
   }
