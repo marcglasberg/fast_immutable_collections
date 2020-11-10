@@ -72,7 +72,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             title: "AddAll",
-            code: ListCode.add_all,
+            code: ListCode.addAll,
             benchmarks: [
               ListAddAllBenchmark(
                 emitter: TableScoreEmitter(
@@ -147,7 +147,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
           ),
           BenchWidget(
             title: "AddAll",
-            code: SetCode.add_all,
+            code: SetCode.addAll,
             benchmarks: [
               SetAddAllBenchmark(
                 emitter: TableScoreEmitter(

@@ -15,7 +15,7 @@ abstract class ListCode {
         "  _result = listBuilder.build();",
   }.lock;
 
-  static final IMap<String, String> add_all = {
+  static final IMap<String, String> addAll = {
     "List (Mutable)":
         "_list = List<int>.of(_fixedList);\n" "  _list.addAll(ListAddAllBenchmark.listToAdd);",
     "IList": "_result = _iList.addAll(ListAddAllBenchmark.listToAdd);",
@@ -75,7 +75,7 @@ abstract class SetCode {
         "  _result = setBuilder.build();",
   }.lock;
 
-  static final IMap<String, String> add_all = {
+  static final IMap<String, String> addAll = {
     "Set (Mutable)":
         "_set = Set<int>.of(_fixedSet);\n" "  _set.addAll(SetAddAllBenchmark.setToAdd);",
     "ISet": "_iSet = _fixedISet.addAll(SetAddAllBenchmark.setToAdd);",
@@ -106,5 +106,62 @@ abstract class SetCode {
     "KtSet": "_ktSet = _fixedSet.minusElement(1).toSet();",
     "BuiltSet": "_builtSet = _fixedSet.rebuild((SetBuilder<int> setBuilder) =>\n"
         "  setBuilder.remove(1));",
+  }.lock;
+}
+
+abstract class MapCode {
+  static final IMap<String, String> add = {
+    "Map (Mutable)":
+        "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n" "  _map.addAll({i.toString(): i});",
+    "IMap": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+        "  _result = _result.add(i.toString(), i);",
+    "KtMap": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+        "  _result = _result.plus(<String, int>{i.toString(): i}.toImmutableMap());",
+    "BuiltMap with Rebuild": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+        "  _result = _result.rebuild((MapBuilder<String, int> mapBuilder) =>\n"
+        "  mapBuilder.addAll(<String, int>{i.toString(): i}));",
+    "BuiltMap with ListBuilder": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+        "  mapBuilder.addAll(<String, int>{i.toString(): i});\n"
+        "  _result = mapBuilder.build();"
+  }.lock;
+
+  static final IMap<String, String> addAll = {
+    "Map (Mutable)":
+        "_map = Map<String, int>.of(_fixedMap);\n" "_map.addAll(MapAddAllBenchmark.mapToAdd);",
+    "IMap": "_result = _iMap.addAll(MapAddAllBenchmark.mapToAdd.lock);",
+    "KtMap": "_result = _ktMap.plus(KtMap<String, int>.from(MapAddAllBenchmark.mapToAdd));",
+    "BuiltMap": "_result = _builtMap.rebuild((MapBuilder<String, int> mapBuilder) => "
+        "mapBuilder.addAll(MapAddAllBenchmark.mapToAdd));",
+  }.lock;
+
+  static final IMap<String, String> containsValue = {
+    "Map (Mutable)":
+        "for (int i = 0; i < _map.length + 1; i++)\n" "  _contains = _map.containsValue(i);",
+    "IMap": "for (int i = 0; i < _iMap.length + 1; i++)\n" "  _contains = _iMap.containsValue(i);",
+    "KtMap": "for (int i = 0; i < _ktMap.size + 1; i++)\n" "  _contains = _ktMap.containsValue(i);",
+    "BuiltMap": "for (int i = 0; i < _builtMap.length + 1; i++)\n"
+        "  _contains = _builtMap.containsValue(i);",
+  }.lock;
+
+  static final IMap<String, String> empty = {
+    "Map (Mutable)": "_map = <String, int>{};",
+    "IMap": "_iMap = IMap<String, int>();",
+    "KtMap": "_ktMap = KtMap<String, int>.empty();",
+    "BuiltMap": "_builtMap = BuiltMap<String, int>();",
+  }.lock;
+
+  static final IMap<String, String> read = {
+    "Map (Mutable)": "_newVar = _map[MapReadBenchmark.keyToRead];",
+    "IMap": "_newVar = _iMap[MapReadBenchmark.keyToRead];",
+    "KtMap": "_newVar = _ktMap[MapReadBenchmark.keyToRead];",
+    "BuiltMap": "_newVar = _builtMap[MapReadBenchmark.keyToRead];",
+  }.lock;
+
+  static final IMap<String, String> remove = {
+    "Map (Mutable)": "_map.remove('1');",
+    "IMap": "_iMap = _iMap.remove('1');",
+    "KtMap": "_ktMap = _ktMap.minus('1');",
+    "BuiltMap": "_builtMap = _builtMap.rebuild((MapBuilder<String, int> mapBuilder)\n"
+        " => mapBuilder.remove('1'));",
   }.lock;
 }
