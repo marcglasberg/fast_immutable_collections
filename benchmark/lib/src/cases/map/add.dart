@@ -89,7 +89,7 @@ class KtMapAddBenchmark extends MapBenchmarkBase {
 
 class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+      : super(name: "BuiltMap with Rebuild", emitter: emitter);
 
   BuiltMap<String, int> _builtMap;
   BuiltMap<String, int> _result;
@@ -112,7 +112,7 @@ class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
 
 class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithListBuilderBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+      : super(name: "BuiltMap with ListBuilder", emitter: emitter);
 
   BuiltMap<String, int> _builtMap;
   BuiltMap<String, int> _result;

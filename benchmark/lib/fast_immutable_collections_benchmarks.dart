@@ -12,6 +12,7 @@ export "src/cases/list/read.dart";
 export "src/cases/list/remove.dart";
 
 export "src/cases/map/add.dart";
+export "src/cases/map/add_all.dart";
 
 export "src/cases/set/add.dart";
 export "src/cases/set/add_all.dart";
