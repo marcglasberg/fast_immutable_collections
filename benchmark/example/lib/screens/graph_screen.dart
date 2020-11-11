@@ -76,6 +76,7 @@ class _GraphScreenState extends State<GraphScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: _bottomItems,
         onTap: _onTap,
+        currentIndex: _currentTableIndex,
       ),
     );
   }

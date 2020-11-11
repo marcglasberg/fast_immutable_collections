@@ -160,6 +160,12 @@ class MultiBenchmarkScreen extends StatelessWidget {
             config: Config(runs: 10, size: 50),
           ),
         ),
+        SetAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_add_3",
+            config: Config(runs: 10, size: 100),
+          ),
+        ),
       ].lock,
     ),
     BenchWidget(
@@ -219,8 +225,20 @@ class MultiBenchmarkScreen extends StatelessWidget {
       benchmarks: [
         MapAddBenchmark(
           emitter: TableScoreEmitter(
-            prefixName: "map_add",
-            config: Config(runs: 100, size: 100),
+            prefixName: "map_add_1",
+            config: Config(runs: 10, size: 10),
+          ),
+        ),
+        MapAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_add_2",
+            config: Config(runs: 10, size: 100),
+          ),
+        ),
+        MapAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "map_add_3",
+            config: Config(runs: 10, size: 500),
           ),
         ),
       ].lock,
