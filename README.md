@@ -15,7 +15,7 @@
 [github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
 [github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
 
-# 2. Introduction
+## 1.1. Introduction
 
 This package provides:
 
@@ -59,42 +59,39 @@ Later in this document, we provide benchmarks so that you can compare speeds
 <!-- TOC depthFrom:2 orderedList:true updateOnSave:false -->
 
 - [1. Fast Immutable Collections](#1-fast-immutable-collections)
-- [2. Introduction](#2-introduction)
-- [3. IList](#3-ilist)
-    - [3.1. IList Equality](#31-ilist-equality)
-    - [3.2. Global IList Configuration](#32-global-ilist-configuration)
-    - [3.3. Usage in tests](#33-usage-in-tests)
-    - [3.4. IList reuse by composition](#34-ilist-reuse-by-composition)
-    - [3.5. Advanced usage](#35-advanced-usage)
-- [4. ISet](#4-iset)
-    - [4.1. Similarities and Differences to the IList](#41-similarities-and-differences-to-the-ilist)
-    - [4.2. Global ISet Configuration](#42-global-iset-configuration)
-- [5. IMap](#5-imap)
-    - [5.1. Similarities and Differences to the IList/ISet](#51-similarities-and-differences-to-the-ilistiset)
-    - [5.2. Global IMap Configuration](#52-global-imap-configuration)
-- [6. IMapOfSets](#6-imapofsets)
-- [7. Comparators](#7-comparators)
-    - [7.1. CompareObject function](#71-compareobject-function)
-    - [7.2. CompareObjectTo extension](#72-compareobjectto-extension)
-    - [7.3. SortBy function](#73-sortby-function)
-    - [7.4. SortLike function](#74-sortlike-function)
-    - [7.5. if0 extension](#75-if0-extension)
-    - [7.6. Flushing](#76-flushing)
-    - [7.7. Auto-flush](#77-auto-flush)
-        - [7.7.1. Sync Auto-flush](#771-sync-auto-flush)
-        - [7.7.2. Async Auto-flush](#772-async-auto-flush)
-    - [7.8. Why Immutable Collections (and immutable objects in general) are useful?](#78-why-immutable-collections-and-immutable-objects-in-general-are-useful)
-    - [7.9. Benchmarks Summary](#79-benchmarks-summary)
-    - [7.10. The Motivation for the `IMapOfSets` Collection Class](#710-the-motivation-for-the-imapofsets-collection-class)
-    - [7.11. The Implementation's Idea](#711-the-implementations-idea)
-    - [7.12. Other Resources & Documentation](#712-other-resources--documentation)
-    - [7.13. For the Developer or Contributor](#713-for-the-developer-or-contributor)
-        - [7.13.1. Formatting](#7131-formatting)
+    - [1.1. Introduction](#11-introduction)
+- [2. IList](#2-ilist)
+    - [2.1. IList Equality](#21-ilist-equality)
+    - [2.2. Global IList Configuration](#22-global-ilist-configuration)
+    - [2.3. Usage in tests](#23-usage-in-tests)
+    - [2.4. IList reuse by composition](#24-ilist-reuse-by-composition)
+    - [2.5. Advanced usage](#25-advanced-usage)
+- [3. ISet](#3-iset)
+    - [3.1. Similarities and Differences to the IList](#31-similarities-and-differences-to-the-ilist)
+    - [3.2. Global ISet Configuration](#32-global-iset-configuration)
+- [4. IMap](#4-imap)
+    - [4.1. Similarities and Differences to the IList/ISet](#41-similarities-and-differences-to-the-ilistiset)
+    - [4.2. Global IMap Configuration](#42-global-imap-configuration)
+- [5. IMapOfSets](#5-imapofsets)
+- [6. Comparators](#6-comparators)
+    - [6.1. CompareObject function](#61-compareobject-function)
+    - [6.2. CompareObjectTo extension](#62-compareobjectto-extension)
+    - [6.3. SortBy function](#63-sortby-function)
+    - [6.4. SortLike function](#64-sortlike-function)
+    - [6.5. if0 extension](#65-if0-extension)
+    - [6.6. Flushing](#66-flushing)
+    - [6.7. Auto-flush](#67-auto-flush)
+        - [6.7.1. Sync Auto-flush](#671-sync-auto-flush)
+        - [6.7.2. Async Auto-flush](#672-async-auto-flush)
+- [7. About the Benchmarks](#7-about-the-benchmarks)
+- [8. Other Resources & Documentation](#8-other-resources--documentation)
+- [9. For the Developer or Contributor](#9-for-the-developer-or-contributor)
+    - [9.1. Formatting](#91-formatting)
 
 <!-- /TOC -->
 
 
-# 3. IList
+# 2. IList
 
 An `IList` is an immutable list, meaning once it's created it cannot be modified. 
 You can create an `IList` by passing an iterable to its constructor, 
@@ -267,7 +264,7 @@ IList methods and getters:
 `setRange`,
 `shuffle`.
                                                                         
-## 3.1. IList Equality 
+## 2.1. IList Equality 
    
 By default, `IList`s are equal if they have the same items in the same order.
 
@@ -378,7 +375,7 @@ Note: This is not the same as `identical(list1, list2)` since it doesn't
 compare the lists themselves, but their internal state. Comparing the
 internal state is better, because it will return `true` more often.
   
-## 3.2. Global IList Configuration
+## 2.2. Global IList Configuration
 
 As explained above, the **default** configuration of the `IList` is that it compares by 
 deep equality: They are equal if they have the same items in the same order.
@@ -411,7 +408,7 @@ We strongly suggest that you prohibit further changes to the global configuratio
 after you set your desired configuration.
 
 
-## 3.3. Usage in tests
+## 2.3. Usage in tests
 
 An `IList` is not a `List`, so this is false:
 
@@ -451,7 +448,7 @@ If you ask me, this is all very confusing.
 A good rule of thumb to avoid all these `expect` complexities 
 is only comparing lists with lists, set with sets, etc.
 
-## 3.4. IList reuse by composition
+## 2.4. IList reuse by composition
 
 Classes `IListMixin` and `IterableIListMixin` let you easily 
 create your own immutable classes based on the `IList`.
@@ -513,7 +510,7 @@ print(students.greetings());
 ```   
 
 
-## 3.5. Advanced usage
+## 2.5. Advanced usage
 
 There are a few ways to lock and unlock a list, 
 which will have different results in speed and safety.
@@ -565,7 +562,7 @@ If you never mutate the list, it will be very fast to lock this list
 back into an `IList`.
 
 
-# 4. ISet
+# 3. ISet
 
 An `ISet` is an immutable set, meaning once it's created it cannot be modified.
 An `ISet` is always **unordered** 
@@ -608,7 +605,7 @@ ISet constructors:
 `ISet.withConfig()`,
 `ISet.unsafe()`.
                                                               
-## 4.1. Similarities and Differences to the IList
+## 3.1. Similarities and Differences to the IList
 
 > Since I don't want to repeat myself, 
 > all the topics below are explained in much less detail here than for the IList.
@@ -668,7 +665,7 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
     ```                                                        
 
   
-## 4.2. Global ISet Configuration
+## 3.2. Global ISet Configuration
 
 The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true)`:
 
@@ -698,7 +695,7 @@ We strongly suggest that you prohibit further changes to the global configuratio
 after you set your desired configuration.
 
 
-# 5. IMap
+# 4. IMap
 
 An `IMap` is an immutable map, meaning once it's created it cannot be modified.
 An `IMap` is always **unordered** 
@@ -753,7 +750,7 @@ IMap<String, int> imap = {"a": 1, "b": 2}.lock;
 Map<String, int> map = imap.unlock; 
 ```             
                                                              
-## 5.1. Similarities and Differences to the IList/ISet
+## 4.1. Similarities and Differences to the IList/ISet
 
 > Since I don't want to repeat myself, 
 > all the topics below are explained in much less detail here than for the IList.
@@ -841,7 +838,7 @@ And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) 
     ```                                                        
 
   
-## 5.2. Global IMap Configuration
+## 4.2. Global IMap Configuration
 
 The **default** configuration of the `IMap` is 
 `ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true)`:
@@ -877,7 +874,7 @@ We strongly suggest that you prohibit further changes to the global configuratio
 by calling `lockConfig();` after you set your desired configuration.
 
 
-# 6. IMapOfSets
+# 5. IMapOfSets
 
 When you lock a `Map<K, V>` it turns into an `IMap<K, V>`.
 
@@ -976,7 +973,7 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
 ```  
   
   
-# 7. Comparators
+# 6. Comparators
 
 To help you sort collections, 
 we provide the global comparator functions `compareObject`, `sortBy` and `sortLike`, 
@@ -984,7 +981,7 @@ and the `compareObjectTo` and `if0` extensions,
 which make it easy for you to create other complex comparators,
 as described below. 
 
-## 7.1. CompareObject function
+## 6.1. CompareObject function
 
 The `compareObject` function lets you easily compare `a` and `b`, as follows:
 
@@ -1011,7 +1008,7 @@ You can use the comparator in sorts:
 ```             
 
 
-## 7.2. CompareObjectTo extension
+## 6.2. CompareObjectTo extension
 
 Beside the `compareObject` function above, 
 you can also use the `compareObjectTo` extension.
@@ -1027,7 +1024,7 @@ For example:
 ```              
 
 
-## 7.3. SortBy function
+## 6.3. SortBy function
 
 The `sortBy` function lets you define a rule, 
 and then possibly nest it with other rules with lower priority.
@@ -1057,7 +1054,7 @@ int Function(int, int) compareTo = sortBy((x) => x == 14,
 ``` 
 
 
-## 7.4. SortLike function
+## 6.4. SortLike function
 
 The `sortLike` function lets you define a list with the desired sort order. 
 For example, if you want to sort numbers in this order: `[7, 3, 4, 21, 2]`
@@ -1088,7 +1085,7 @@ to convert the values into the `order` type. See the `sort_test.dart`
 file for more information and runnable examples. 
 
 
-## 7.5. if0 extension
+## 6.5. if0 extension
 
 The `if0` function lets you nest comparators.
 
@@ -1134,7 +1131,7 @@ list.sort(compareTo);
 expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
 ``` 
 
-## 7.6. Flushing 
+## 6.6. Flushing 
 
 As explained, `fast_immutable_collections` is fast because it creates a new collection 
 by internally "composing" the source collection with some other information, 
@@ -1172,7 +1169,7 @@ and no external difference will be visible.
 So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
 
-## 7.7. Auto-flush      
+## 6.7. Auto-flush      
 
 Usually you don't need to flush your collections manually.
 Depending on the global configuration, 
@@ -1193,7 +1190,7 @@ Auto-flush is an advanced topic,
 and you don't need to read the following detailed explanation at all to use the immutable collections.
 However, in case you want to tweak the auto-flush configuration, here it goes:
 
-### 7.7.1. Sync Auto-flush
+### 6.7.1. Sync Auto-flush
 
 If your auto-flush is set to occur synchronously:
 
@@ -1202,7 +1199,7 @@ and is incremented each time some collection methods are called.
 As soon as this counter reaches a certain value called the `flushFactor`, 
 the collection is flushed.
 
-### 7.7.2. Async Auto-flush
+### 6.7.2. Async Auto-flush
 
 If your auto-flush is set to occur asynchronously: 
 
@@ -1309,33 +1306,28 @@ imapflushFactor = 15;
 lockConfig();
 ```                                                    
     
+# 7. About the Benchmarks
 
-***************************************
-***************************************
-***************************************
+Having benchmarks for this project is essential to justifying its existence, after all, if it isn't faster or on par with competitors, there would be no point in creating/publishing this package. Luckily, that isn't the case.
 
-## 7.8. Why Immutable Collections (and immutable objects in general) are useful?
+The [`benchmark` package][benchmark] demonstrates that this package's collections are close to even its mutable counterparts, both under development and production environments.
 
-<!-- TODO: Add motivation for this project and its use. -->
+You can either run the benchmarks:
 
-## 7.9. Benchmarks Summary
+- With pure Dart, through, for example:
+    ```cmd
+    dart benchmark/lib/src/benchmarks.dart
+    ```
+- Or with Flutter, by running the [example app][example].
 
-<!-- TODO: Add summarized tables that, hopefully, quickly justify this package's existence.-->
+You can find more info on the benchmarks, by reading [its documentation][benchmark_docs].
 
-## 7.10. The Motivation for the `IMapOfSets` Collection Class
 
-<!-- TODO: Complete. -->
+[benchmark]: benchmark/
+[benchmark_docs]: benchmark/README.md
+[example]: benchmark/example/
 
-## 7.11. The Implementation's Idea
-
-Basically, behind the scenes, this is what happens when you pass a `List` to an `IList`, 
-the other collection objects follow the same idea:
-
-1. A *new* copy of the object is made with `List.of`, so the original object won't be modified at all.
-    1. When you add an element to the `IList`, it will be registered as an *immutable* property behind the scenes, and not `add`ed to the original `List`.
-    1. When you add a collection of elements (`Iterable`) to the `IList`, it will also be registered as an *immutable* property, as a new copy of the `Iterable` if necessary to ensure the original won't be changed.
-
-## 7.12. Other Resources & Documentation
+# 8. Other Resources & Documentation
 
 The [`docs`][docs] folder features information which might be useful for you either as an end user or a developer:
 
@@ -1352,9 +1344,9 @@ The [`docs`][docs] folder features information which might be useful for you eit
 [resources]: docs/resources.md
 [uml]: docs/uml.puml
 
-## 7.13. For the Developer or Contributor
+# 9. For the Developer or Contributor
 
-### 7.13.1. Formatting 
+## 9.1. Formatting 
 
 This project uses 100-character lines instead of the typical 80. If you're on VS Code, simply add this line to your `settings.json`:
 
