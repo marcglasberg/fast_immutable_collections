@@ -1146,12 +1146,12 @@ these composed collections may end up with lots of information to coordinate the
 and may become slower than a regular mutable collection.
 
 The loss of speed depends on the type of collection. 
-For example, the `IList` doesn't suffer much from deep compositions,
-while the `ISet` and the `IMap` will take more of a hit.  
+For example, `IList` doesn't suffer much from deep compositions,
+while `ISet` and `IMap` will take more of a hit.  
 
-If you call `flush` in an immutable collection, 
+If you call `flush` on an immutable collection, 
 it will internally remove all the composition,
-making sure the is perfectly optimized again. For example:
+making sure it is perfectly optimized again. For example:
 
 ```dart
 var ilist = [1.2].lock.add([3, 4]).add(5);
@@ -1159,7 +1159,7 @@ ilist.flush;
 ```         
 
 Please note, `flush` is a getter which returns the exact same instance, 
-just so that you can chain other methods to it if you want. 
+just so you can chain other methods on it, if you wish. 
 But it does NOT create a new list. 
 It actually just optimizes the current list, internally.
 
@@ -1167,7 +1167,7 @@ If you flush a list which is already flushed, nothing will happen,
 and it won't take any time to flush the list again.
 So you don't need to worry about flushing the list more than once.
 
-Also, note flush just optimizes the list **internally**, 
+Also, note that flushing just optimizes the list **internally**, 
 and no external difference will be visible. 
 So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
@@ -1187,7 +1187,7 @@ lockConfig();
 ```                                                    
 
 If you leave it on, you can configure auto-flush to happen after you use a collection a few times.
-And you also can configure it to flush at most once per asynchronous gap.   
+And you can also configure it to flush at most once per asynchronous gap.   
 
 Auto-flush is an advanced topic, 
 and you don't need to read the following detailed explanation at all to use the immutable collections.
@@ -1210,7 +1210,7 @@ If you take a collection and add or remove a lot of items synchronously,
 no flushing will take place.
 
 Each collection still keeps a `counter` variable which starts at `0`, 
-but it will be incremented during methods calls only while `counter >= 0`. 
+but it will be incremented during method calls only while `counter >= 0`. 
 As soon as this counter reaches a certain value called the `flushFactor`, 
 the collection is marked for flushing.
 
@@ -1227,27 +1227,54 @@ it means we are one async gap after the collection was marked for flushing.
 
 At this point, the collection will be flushed and its `counter` will return to zero. 
 
-Example: 
+An example, as an ordered list with summarized states and as an ordered list with a narrative:
+
+1. The initial setup:
+    - `flushFactor = 3`
+    - `asyncCounter = 1`
+1. The `IList` is created.
+    - `counter = 0`
+    - `counter < flushFactor`
+1. `IList` is used.
+    - `counter = 1`
+    - `counter < flushFactor`
+1. `IList` is used.
+    - `counter = 2`
+    - `counter < flushFactor`
+1. `IList` is used.
+    - `counter = 3`
+    - `counter = flushFactor`
+    - `counter = -asyncCounter = -1`
+    - `asyncCounter` is now  set to increment in the future.
+1. `IList` is used.
+    - Since `counter < 0`, it's not incremented.
+    - Since `counter = -asyncCounter < 0`, it is not flushed.
+1. Here comes the async gap.
+    - The `asyncCounter` was set to increment, so: `asyncCounter = 2`.
+1. `IList` is used.
+    - Since `counter < 0`, it is not incremented.
+    - Since `counter < 0 && counter != -asyncCounter`, the list is flushed.
+    - And `counter = 0`.
 
 ```text
 1. The flushFactor is 3. The asyncCounter is 1.
  
-2. List is created. Its counter is 0, smaller than the flushFactor.
+2. IList is created. Its counter is 0, smaller than the flushFactor.
 
-3. List is used. Its counter is now 1, smaller than the flushFactor.
+3. IList is used. Its counter is now 1, smaller than the flushFactor.
  
-4. List is used. Its counter is now 2, smaller than the flushFactor.
+4. IList is used. Its counter is now 2, smaller than the flushFactor.
 
-5. List is used. Its counter is now 3, equal to the flushFactor.
+5. IList is used. Its counter is now 3, equal to the flushFactor.
    For this reason, the list counter is set at negative asyncCounter (-1), 
    and the asyncCounter is set to increment in the future.    
 
-6. List is used. Since its counter is negative, its not incremented.
+6. IList is used. Since its counter is negative, it's not incremented.
    Since the counter is negative and equal to negative asyncCounter, it is not flushed.  
   
 7. Here comes the async gap. The asyncCounter was set to increment, so it now becomes 2.
 
-8. List is used. Since its counter is negative, it is not incremented.
+8. IList is used. Since its counter is negative, it is not incremented.
    Since the counter is negative and different than negative asyncCounter, the list is flushed.
    Also, its counter reverts to 0.                                   
 ```   
@@ -1255,9 +1282,9 @@ Example:
 The auto-flush process is a heuristic only.
 However, note the process is very fast (uses only simple integer operations) 
 and uses just a few bytes of memory to work.
-It guarantees that if a collection is being used a lot it will flush more often than one which is not.
+It guarantees that, if a collection is being used a lot, it will flush more often than one which is not being used that often.
 It also guarantees a collection will not auto-flush in the middle of sync operations.
-Finally, it saves no references to the collections, so doesn't prevent them to be garbage collected.
+Finally, it saves no references to the collections, so it doesn't prevent them from being garbage collected.
 
 If you think about the update/publish cycle of the `built_collections` package, 
 it has an intermediate state (the builder) which is not a valid collection, 
