@@ -29,10 +29,10 @@ This package provides:
 but it's much **easier** to use than the former, 
 and orders of magnitude **faster** than the latter.
 
-The reason it's easier than _built_collection_ is that there is no need for mutable/immutable cycles.
+The reason it's **easier** than [built_collection][built_collection] is that there is no need for mutable/immutable cycles.
 You just create your immutable collections and use them directly. 
 
-The reason it's faster than _kt_dart_ is that it creates immutable collections by 
+The reason it's **faster** than [kt_dart][kt_dart] is that it creates immutable collections by 
 internally saving only the difference between each collection, 
 instead of copying the whole collection each time.
 This is transparent to the developer, which doesn't need to know about these implementation details. 
@@ -149,12 +149,14 @@ IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl'].lock
 ```       
 
 IList constructors:
+
 `IList()`,
 `IList.withConfig()`,
 `IList.fromISet()`,
 `IList.unsafe()`.
 
 IList methods and getters:
+
 `empty`,
 `withConfig`,
 `withIdentityEquals`,
@@ -251,6 +253,7 @@ Map<IList, int> sumResult = {};
 String getSum(int a, int b) {
    var keys = [a, b].lock;
    var sum = sumResult[keys];
+
    if (sum != null) {
      return "Got from cache: $a + $b = $sum";
    } else {
@@ -410,10 +413,14 @@ For example, suppose you have some `Student` class:
 
 ```dart
 class Student {
-   final String name;   
-   Student(this.name); 
+   final String name;
+
+   Student(this.name);
+
    String toString() => name; 
+
    bool operator ==(Object other) => identical(this, other) || other is Student && runtimeType == other.runtimeType && name == other.name;  
+
    int get hashCode => name.hashCode;
 }
 ```
@@ -428,8 +435,11 @@ class Students with IListMixin<Student, Students> {
 
    /// This is the boilerplate to create the collection:
    final IList<Student> _students;
+
    Students([Iterable<Student> students]) : _students = IList(students);
+
    Students newInstance(IList<Student> iList) => Students(iList);
+
    IList<Student> get iList => _students;   
                                                         
    /// And then you can add your own specific methods:
@@ -555,43 +565,43 @@ ISet constructors:
 > all the topics below are explained in much less detail here than for the IList.
 > Please read the IList explanation first, before trying to understand the ISet.
 
-* An `ISet` is an `Iterable`, so you can iterate over it.
+- An `ISet` is an `Iterable`, so you can iterate over it.
 
-* `ISet` has **all** the methods of `Set`, plus some other new and useful ones.
+- `ISet` has **all** the methods of `Set`, plus some other new and useful ones.
 `ISet` methods always return a new `ISet`, instead of modifying the original one. 
 Because of that, you can easily chain methods.
 But since `ISet` methods always return a new `ISet`, 
 it is an **error** to call some method and then discard the result. 
 
-* `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order. 
+- `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order. 
 They can be used as **map keys**, which is a very useful property in itself, 
 but can also help when implementing some other interesting data structures.
   
-* However, `ISet`s are configurable, and you can actually create `ISet`s which
+- However, `ISet`s are configurable, and you can actually create `ISet`s which
 compare their internals by identity or deep equals, as desired.
    
-* To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
+- To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
 or else use the `withConfig` method and the `ConfigSet` class to change the configuration;
 or else use the `withConfig` constructor to explicitly create the `ISet` with your desired configuration.
  
-* The configurations affect how the `== operator` works, 
+- The configurations affect how the `== operator` works, 
 but you can also choose how to compare sets by using the following `ISet` methods:
 `equalItems`, `equalItemsAndConfig` and `same`.
 Note, however, there is no `unorderedEqualItems` like in the `IList`, 
 because since `ISets` are unordered the `equalItems` method already disregards the order.
 
-* Classes `ISetMixin` and `IterableISetMixin` let you easily 
+- Classes `ISetMixin` and `IterableISetMixin` let you easily 
 create your own immutable classes based on the `ISet`.
 This helps you create more strongly typed collections, 
 and add your own methods to them.
 
-* You can flush some `ISet` by using the getter `.flush`.
+- You can flush some `ISet` by using the getter `.flush`.
 Note flush just optimizes the set **internally**, 
 and no external difference will be visible.
 Depending on the global configuration, the `ISet`s 
 will flush automatically for you, once per asynchronous gap.  
 
-* There are a few ways to lock and unlock a set, 
+- There are a few ways to lock and unlock a set, 
 which will have different results in speed and safety.
 Getter `lock` will create an internal defensive copy of the original set.
 Getter `lockUnsafe` is fast, since it makes no defensive copies of the set.
@@ -613,9 +623,9 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
 
 The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true)`:
 
-1) `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
+1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
 
-2) `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
+1. `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
    will return sorted outputs.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
@@ -700,7 +710,7 @@ Map<String, int> map = imap.unlock;
 > all the topics below are explained in much less detail here than for the IList.
 > Please read the IList explanation first, before trying to understand the IMap.
 
-* Just like a regular map, an `IMap` is **not**an `Iterable`.
+- Just like a regular map, an `IMap` is **not**an `Iterable`.
 However, you can iterate over its entries, keys and values:
 
 ```dart               
@@ -736,35 +746,35 @@ Iterator<MapEntry<K, V>> get iterator;
 Iterator<MapEntry<K, V>> get fastIterator;
 ```
 
-* `IMap` has **all** the methods of `Map`, plus some other new and useful ones. 
+- `IMap` has **all** the methods of `Map`, plus some other new and useful ones. 
 `IMap` methods always return a new `IMap`, instead of modifying the original one. 
 Because of that, you can easily chain methods.
 But since `IMap` methods always return a new `IMap`, 
 it is an **error** to call some method and then discard the result. 
 
-* `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order. 
+- `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order. 
 These maps can be used as **map keys** themselves.
   
-* However, `IMap`s are configurable, and you can actually create `IMap`s which
+- However, `IMap`s are configurable, and you can actually create `IMap`s which
 compare their internals by identity or deep equals, as desired.
    
-* To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
+- To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
 or else use the `withConfig` method and the `ConfigMap` class to change the configuration;
 or else use the `withConfig` constructor to explicitly create the `IMap` with your desired configuration.
  
-* The configurations affect how the `== operator` works, 
+- The configurations affect how the `== operator` works, 
 but you can also choose how to compare sets by using the following `IMap` methods:
 `equalItems`, `equalItemsAndConfig`, `equalItemsToIMap` and `same`.
 Note, however, there is no `unorderedEqualItems` like in the `IList`, 
 because since `IMaps` are unordered the `equalItems` method already disregards the order.
 
-* You can flush some `IMap` by using the getter `.flush`.
+- You can flush some `IMap` by using the getter `.flush`.
 Note flush just optimizes the set **internally**, 
 and no external difference will be visible.
 Depending on the global configuration, the `IMap`s 
 will flush automatically for you, once per asynchronous gap.  
 
-* There are a few ways to lock and unlock a map, 
+- There are a few ways to lock and unlock a map, 
 which will have different results in speed and safety.
 Getter `lock` will create an internal defensive copy of the original map.
 Getter `lockUnsafe` is fast, since it makes no defensive copies of the map.
@@ -787,12 +797,12 @@ And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) 
 The **default** configuration of the `IMap` is 
 `ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true)`:
 
-1) `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
+1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
 
-2) `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
+1. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
 `IMap.toKeyList`, `IMap.toEntrySet` and `IMap.toKeySet` will return sorted outputs.
 
-3) `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
+1. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
 will return sorted outputs.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
@@ -854,26 +864,50 @@ Implementing structures that **nest** immutable collections like this can be qui
 That's when an `IMapOfSets` comes handy:
 
 ```dart
-class StudentsPerCourse {   
+class StudentsPerCourse {
   final IMapOfSets<Course, Student> imap;
-  StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+
+  StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
+      : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+
   StudentsPerCourse._(this._studentsPerCourse);
+
   ISet<Course> courses() => imap.keysAsSet;
+
   ISet<Student> students() => imap.valuesAsSet;
+
   IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
-  ISet<Student> studentsInAlphabeticOrder() => imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
+
+  ISet<Student> studentsInAlphabeticOrder() =>
+      imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
+
   ISet<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
-  StudentsPerCourse addStudentToCourse(Student student, Course course) => StudentsPerCourse._(imap.add(course, student));
-  StudentsPerCourse addStudentToCourses(Student student, Iterable<Course> courses) => StudentsPerCourse._(imap.addValuesToKeys(courses, [student]));
-  StudentsPerCourse addStudentsToCourse(Iterable<Student> students, Course course) => StudentsPerCourse._(imap.addValues(course, students));
-  StudentsPerCourse addStudentsToCourses(Map<Course, Set<Student>> studentsPerCourse) => StudentsPerCourse._(imap.addMap(studentsPerCourse));
-  StudentsPerCourse removeStudentFromCourse(Student student, Course course) => StudentsPerCourse._(imap.remove(course, student));
-  StudentsPerCourse removeStudentFromAllCourses(Student student) => StudentsPerCourse._(imap.removeValues([student]));
+
+  StudentsPerCourse addStudentToCourse(Student student, Course course) =>
+      StudentsPerCourse._(imap.add(course, student));
+
+  StudentsPerCourse addStudentToCourses(Student student, Iterable<Course> courses) =>
+      StudentsPerCourse._(imap.addValuesToKeys(courses, [student]));
+
+  StudentsPerCourse addStudentsToCourse(Iterable<Student> students, Course course) =>
+      StudentsPerCourse._(imap.addValues(course, students));
+
+  StudentsPerCourse addStudentsToCourses(Map<Course, Set<Student>> studentsPerCourse) =>
+      StudentsPerCourse._(imap.addMap(studentsPerCourse));
+
+  StudentsPerCourse removeStudentFromCourse(Student student, Course course) =>
+      StudentsPerCourse._(imap.remove(course, student));
+
+  StudentsPerCourse removeStudentFromAllCourses(Student student) =>
+      StudentsPerCourse._(imap.removeValues([student]));
+
   StudentsPerCourse removeCourse(Course course) => StudentsPerCourse._(imap.removeSet(course));
   Map<Course, Set<Student>> toMap() => imap.unlock;
-  int get numberOfCourses => imap.lengthOfKeys;  
+
+  int get numberOfCourses => imap.lengthOfKeys;
+  
   int get numberOfStudents => imap.lengthOfNonRepeatingValues;
-}        
+}     
 ```
 
 Note: The `IMapOfSets` configuration (`ConfigMapOfSets.allowEmptySets`) 
@@ -951,11 +985,11 @@ and then possibly nest it with other rules with lower priority.
 For example, suppose you have a list of numbers 
 which you want to sort according to the following rules:
 
-> 1) If present, number 14 is always the first, followed by number 15.
-> 2) Otherwise, odd numbers come before even ones.
-> 3) Otherwise, come numbers which are multiples of 3,
-> 4) Otherwise, come numbers which are multiples of 5,
-> 5) Otherwise, numbers come in their natural order.
+> 1. If present, number 14 is always the first, followed by number 15.
+> 1. Otherwise, odd numbers come before even ones.
+> 1. Otherwise, come numbers which are multiples of 3,
+> 1. Otherwise, come numbers which are multiples of 5,
+> 1. Otherwise, numbers come in their natural order.
 
 You start by creating the first rule: `sortBy((x) => x == 15)` and
 then nesting the next rule in the `then` parameter:
@@ -983,9 +1017,9 @@ you can do it like this: `sortLike([7, 3, 4, 21, 2])`.
 You can also nest other comparators, including mixing `sortBy` and `sortLike`.
 For example, to implement the following rules:  
 
-> 1) Order should be [7, 3, 4, 21, 2] when these values appear.
-> 2) Otherwise, odd numbers come before even ones.
-> 3) Otherwise, numbers come in their natural order.
+> 1. Order should be [7, 3, 4, 21, 2] when these values appear.
+> 1. Otherwise, odd numbers come before even ones.
+> 1. Otherwise, numbers come in their natural order.
 
 ```dart                  
 int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
