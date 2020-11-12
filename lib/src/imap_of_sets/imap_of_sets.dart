@@ -10,8 +10,8 @@ class IMapOfSets<K, V> //
   //
   static ConfigMapOfSets get defaultConfig => _defaultConfig;
 
-  static ConfigMapOfSets _defaultConfig = const ConfigMapOfSets(
-      isDeepEquals: true, sortKeys: true, sortValues: true);
+  static ConfigMapOfSets _defaultConfig =
+      const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
 
   /// Global configuration that specifies if, by default, the [IMapOfSet]s
   /// use equality or identity for their [operator ==].
@@ -19,11 +19,9 @@ class IMapOfSets<K, V> //
   /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
   static set defaultConfig(ConfigMapOfSets config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
-    _defaultConfig = config ??
-        const ConfigMapOfSets(
-            isDeepEquals: true, sortKeys: true, sortValues: true);
+      throw StateError("Can't change the configuration of immutable collections.");
+    _defaultConfig =
+        config ?? const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
   }
 
   final IMap<K, ISet<V>> _mapOfSets;
@@ -44,9 +42,7 @@ class IMapOfSets<K, V> //
   /// Whether this collection is already flushed or not.
   /// Note: This will flush the map and all its internal sets.
   @override
-  bool get isFlushed =>
-      _mapOfSets.isFlushed &&
-      _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
+  bool get isFlushed => _mapOfSets.isFlushed && _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
 
   /// Returns an empty [IMapOfSets], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
@@ -71,8 +67,7 @@ class IMapOfSets<K, V> //
         : IMapOfSets._unsafe(
             IMap.fromIterables(
               mapOfSets.keys,
-              mapOfSets.values
-                  .map((value) => ISet.withConfig(value, configSet)),
+              mapOfSets.values.map((value) => ISet.withConfig(value, configSet)),
               config: configMap,
             ),
             config: config ?? defaultConfig,
@@ -84,9 +79,7 @@ class IMapOfSets<K, V> //
       : config = config ?? defaultConfig,
         _mapOfSets = (config == null)
             ? mapOfSets ?? IMap.empty<K, ISet<V>>()
-            : mapOfSets?.map(
-                    (key, value) =>
-                        MapEntry(key, value.withConfig(config.asConfigSet)),
+            : mapOfSets?.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
                     config: config.asConfigMap) ??
                 IMap.empty<K, ISet<V>>(config.asConfigMap);
 
@@ -118,9 +111,7 @@ class IMapOfSets<K, V> //
   ///
   IMapOfSets<K, V> withConfig(ConfigMapOfSets config) {
     assert(config != null);
-    return (config == this.config)
-        ? this
-        : IMapOfSets._unsafe(_mapOfSets, config: config);
+    return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
   }
 
   Map<K, Set<V>> get unlock {
@@ -205,7 +196,7 @@ class IMapOfSets<K, V> //
   IMapOfSets<K, V> add(K key, V value) {
     ISet<V> set = _mapOfSets[key] ?? ISet<V>();
     ISet<V> newSet = set.add(value);
-    return identical(set, newSet) ? this : replaceSet(key, newSet);
+    return set.same(newSet) ? this : replaceSet(key, newSet);
   }
 
   /// Find the [key]/[set] entry, and add all the [values] to the [set].
@@ -215,7 +206,7 @@ class IMapOfSets<K, V> //
   IMapOfSets<K, V> addValues(K key, Iterable<V> values) {
     ISet<V> set = _mapOfSets[key] ?? ISet<V>();
     ISet<V> newSet = set.addAll(values);
-    return identical(set, newSet) ? this : replaceSet(key, newSet);
+    return set.same(newSet) ? this : replaceSet(key, newSet);
   }
 
   /// Add all [values] to each [set] of all given [keys].
@@ -239,12 +230,11 @@ class IMapOfSets<K, V> //
     if (set == null) return this;
     ISet<V> newSet = set.remove(value);
 
-    if (identical(set, newSet))
-      return this;
-    else if (newSet.isEmpty)
-      return removeSet(key);
-    else
-      return replaceSet(key, newSet);
+    return set.same(newSet)
+        ? this
+        : newSet.isEmpty
+            ? removeSet(key)
+            : replaceSet(key, newSet);
   }
 
   /// Remove all given [values] from all sets.
@@ -281,9 +271,7 @@ class IMapOfSets<K, V> //
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
 
-    return (countRemoved == 0)
-        ? this
-        : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
   /// Remove, from all sets, all given [values] that satisfy the given [test].
@@ -320,9 +308,7 @@ class IMapOfSets<K, V> //
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
 
-    return (countRemoved == 0)
-        ? this
-        : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
   /// Removes the [value] from the [set] of the corresponding [key],
@@ -351,12 +337,9 @@ class IMapOfSets<K, V> //
   ///
   IMapOfSets<K, V> removeSet(K key) {
     IMap<K, ISet<V>> newMapOfSets = _mapOfSets.remove(key);
-    return identical(_mapOfSets, newMapOfSets)
+    return _mapOfSets.same(newMapOfSets)
         ? this
-        : IMapOfSets<K, V>.from(
-            newMapOfSets,
-            config: config,
-          );
+        : IMapOfSets<K, V>.from(newMapOfSets, config: config);
   }
 
   /// Return the [set] for the given [key].
@@ -438,8 +421,7 @@ class IMapOfSets<K, V> //
       : false;
 
   @override
-  bool equalItems(Iterable other) =>
-      throw UnsupportedError("Work in progress!");
+  bool equalItems(Iterable other) => throw UnsupportedError("Work in progress!");
 
   @override
   bool equalItemsAndConfig(IMapOfSets<K, V> other) =>
@@ -540,8 +522,7 @@ class IMapOfSets<K, V> //
     MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
     ConfigMapOfSets config,
   }) =>
-      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper),
-          config: config ?? defaultConfig);
+      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper), config: config ?? defaultConfig);
 
   /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
   IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>
@@ -559,8 +540,7 @@ class IMapOfSets<K, V> //
   ///
   IMapOfSets<K, V> update(K key, ISet<V> Function(ISet<V> set) update,
           {ISet<V> Function() ifAbsent}) =>
-      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent),
-          config: config);
+      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent), config: config);
 
   /// Updates all sets.
   ///
