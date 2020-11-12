@@ -73,6 +73,7 @@ Later in this document, we provide benchmarks so that you can compare speeds
     - [4.1. Similarities and Differences to the IList/ISet](#41-similarities-and-differences-to-the-ilistiset)
     - [4.2. Global IMap Configuration](#42-global-imap-configuration)
 - [5. IMapOfSets](#5-imapofsets)
+    - [5.1. Motivation](#51-motivation)
 - [6. Comparators](#6-comparators)
     - [6.1. CompareObject function](#61-compareobject-function)
     - [6.2. CompareObjectTo extension](#62-compareobjectto-extension)
@@ -380,7 +381,7 @@ internal state is better, because it will return `true` more often.
   
 ## 2.2. Global IList Configuration
 
-As explained above, the **default** configuration of the `IList` is that it compares by 
+As explained above, the **default** configuration of `IList` is that it compares by 
 deep equality: They are equal if they have the same items in the same order.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
@@ -676,7 +677,7 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
   
 ## 3.2. Global ISet Configuration
 
-The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true)`:
+The **default** configuration of `ISet` is `ConfigSet(isDeepEquals: true, sort: true)`:
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
 
@@ -686,7 +687,7 @@ The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, so
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigSet(isDeepEquals: false, sort: false);`
                                                                         
-Note that `ConfigSet` is similar to `ConfigList`, but it has an extra parameter: `Sort`:
+Note that `ConfigSet` is similar to `ConfigList`, but has an extra parameter: `Sort`:
 
 ```dart
 /// Prints sorted: "1,2,3,4,9"
@@ -698,7 +699,7 @@ var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: false));
 print(iset.join(","));
 ``` 
   
-As previously discussed with the `IList`, 
+As previously discussed with `IList`, 
 the global configuration is meant to be decided during your app's initialization, and then not changed again.
 We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
 after you set your desired configuration.
@@ -717,7 +718,7 @@ There are also a few other specialized constructors:
 ```dart          
 /// Ways to build an IMap
 
-// Using the IMap constructor                                                                      
+// Using the IMap constructor                                                    
 IMap<String, int> imap = IMap({"a": 1, "b": 2});
                               
 // Locking a regular map
@@ -762,13 +763,15 @@ Map<String, int> map = imap.unlock;
 ## 4.1. Similarities and Differences to the IList/ISet
 
 > Since I don't want to repeat myself, 
-> all the topics below are explained in much less detail here than for the IList.
-> Please read the IList explanation first, before trying to understand the IMap.
+> all the topics below are explained in much less detail than for IList.
+> Please read the IList explanation first, before trying to understand IMap.
 
-- Just like a regular map, an `IMap` is **not**an `Iterable`.
+- Just like a regular map (`Map`), an `IMap` is **not** an `Iterable`.
 However, you can iterate over its entries, keys and values:
 
-```dart               
+```dart
+/// IMap Methods:
+
 /// Unordered
 Iterable<MapEntry<K, V>> get entries;  
 Iterable<K> get keys;
@@ -804,8 +807,8 @@ Iterator<MapEntry<K, V>> get fastIterator;
 - `IMap` has **all** the methods of `Map`, plus some other new and useful ones. 
 `IMap` methods always return a new `IMap`, instead of modifying the original one. 
 Because of that, you can easily chain methods.
-But since `IMap` methods always return a new `IMap`, 
-it is an **error** to call some method and then discard the result. 
+But, since `IMap` methods always return a new `IMap`, 
+it is an **error** to call a method and then discard the result. 
 
 - `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order. 
 These maps can be used as **map keys** themselves.
@@ -823,7 +826,7 @@ but you can also choose how to compare sets by using the following `IMap` method
 Note, however, there is no `unorderedEqualItems` like in the `IList`, 
 because since `IMaps` are unordered the `equalItems` method already disregards the order.
 
-- You can flush some `IMap` by using the getter `.flush`.
+- You can flush a `IMap` by using the getter `.flush`.
 Note flush just optimizes the set **internally**, 
 and no external difference will be visible.
 Depending on the global configuration, the `IMap`s 
@@ -840,16 +843,16 @@ And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) 
     ```dart
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;        // Safe
     IMap<String, int> imap = {"a": 1, "b": 2}.lockUnsafe;  // Only this one is dangerous
-    Map<String, int> set = imap.unlock;                    // Safe, mutable and unordered
-    Map<String, int> set = imap.unlockSorted;              // Safe, mutable and ordered 
-    Map<String, int> set = imap.unlockView;                // Safe, fast and immutable
-    Map<String, int> set = imap.unlockLazy;                // Safe, fast and mutable
+    Map<String, int> map = imap.unlock;                    // Safe, mutable and unordered
+    Map<String, int> map = imap.unlockSorted;              // Safe, mutable and ordered 
+    Map<String, int> map = imap.unlockView;                // Safe, fast and immutable
+    Map<String, int> map = imap.unlockLazy;                // Safe, fast and mutable
     ```                                                        
 
   
 ## 4.2. Global IMap Configuration
 
-The **default** configuration of the `IMap` is 
+The **default** configuration of `IMap` is 
 `ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true)`:
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
@@ -904,20 +907,22 @@ For example:
  ```dart
 IMapOfSets<K, V> map = {'a': {1, 2}, 'b': {3, 4}}.lock;
 
-// Prints {'a': {1, 2, 3}, 'b': {3, 4}}
-print(map.add('a', 3)); 
+print(map.add('a', 3)); // Prints {'a': {1, 2, 3}, 'b': {3, 4}}
+print(map.add('b', 3)); // Prints {'a': {1, 2}, 'b': {3, 4}}
 ```
- 
 
+## 5.1. Motivation
+ 
 Suppose you want to create an immutable structure 
 that lets you arrange `Student`s into `Course`s.
-Each student can be enrolled into one or more courses. 
+Each student can be enrolled into one or more courses, but we wouldn't like to have the same student multiple times in the same course.
 
 This can be modeled by a map where the keys are the courses, and the values are sets of students.
 
 Implementing structures that **nest** immutable collections like this can be quite tricky.
 That's when an `IMapOfSets` comes handy:
 
+<!-- TODO: Marcelo, a propriedade principal é `imap` ou _studentsPerCourse? -->
 ```dart
 class StudentsPerCourse {
   final IMapOfSets<Course, Student> imap;
@@ -962,7 +967,7 @@ class StudentsPerCourse {
   int get numberOfCourses => imap.lengthOfKeys;
   
   int get numberOfStudents => imap.lengthOfNonRepeatingValues;
-}     
+}
 ```
 
 Note: The `IMapOfSets` configuration (`ConfigMapOfSets.allowEmptySets`) 
@@ -980,8 +985,7 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
    : _studentsPerCourse = (studentsPerCourse ?? {}).lock
        .withConfig(ConfigMapOfSets(allowEmptySets: true));
 ```  
-  
-  
+
 # 6. Comparators
 
 To help you sort collections, 
@@ -994,19 +998,19 @@ as described below.
 
 The `compareObject` function lets you easily compare `a` and `b`, as follows:
 
-If `a` or `b` is `null`, it will come later (the default), 
+- If `a` or `b` is `null`, it will come later (the default), 
 unless the `nullsBefore` parameter is `true`, 
 in which case the `null` one will come before.
 
-If `a` and `b` are both of type `Comparable`, it compares them with their natural comparator.
+- If `a` and `b` are both of type `Comparable`, it compares them with their natural comparator.
 
-If `a` and `b` are map-entries, it compares their keys first, and then, if necessary, their values. 
+- If `a` and `b` are map-entries, it compares their keys first, and then, if necessary, their values. 
 
-If `a` and `b` are booleans, it compares them such as `true > false`.
+- If `a` and `b` are booleans, it compares them such as `true > false`.
 
-If all the above can't distinguish them, it will return `0` (which means unordered).
+- If all the above can't distinguish them, it will return `0` (which means unordered).
 
-You can use the comparator in sorts:
+You can use the comparator in the sorting method:
 
 ```dart
 // Results in: [1, 2, null]
@@ -1015,7 +1019,6 @@ You can use the comparator in sorts:
 // Results in: [null, 1, 2]
 [1, 2, null, 3].sort((a, b) => compareObject(a, b, nullsBefore: true));
 ```             
-
 
 ## 6.2. CompareObjectTo extension
 
@@ -1032,11 +1035,10 @@ For example:
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b, nullsBefore: true));
 ```              
 
-
 ## 6.3. SortBy function
 
 The `sortBy` function lets you define a rule, 
-and then possibly nest it with other rules with lower priority.
+and then possibly nest it with other rules of lower priority.
 For example, suppose you have a list of numbers 
 which you want to sort according to the following rules:
 
@@ -1062,7 +1064,6 @@ int Function(int, int) compareTo = sortBy((x) => x == 14,
                )))));
 ``` 
 
-
 ## 6.4. SortLike function
 
 The `sortLike` function lets you define a list with the desired sort order. 
@@ -1084,7 +1085,7 @@ int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
 ``` 
 
 Important: When nested comparators are used, make sure you don't create
-inconsistencies. For example, a rule that states `a<b then a>c then b<c`
+inconsistencies. For example, a rule that states `a < b then a > c then b < c`
 may result in different orders for the same items depending on their initial 
 position. This also means inconsistent rules may not be followed precisely.
 
@@ -1092,7 +1093,6 @@ Please note, your order list may be of a different type than the values you
 are sorting. If this is the case, you can provide a `mapper` function, 
 to convert the values into the `order` type. See the `sort_test.dart`
 file for more information and runnable examples. 
-
 
 ## 6.5. if0 extension
 
@@ -1120,7 +1120,7 @@ Examples:
 var list = ["aaa", "ccc", "b", "c", "bbb", "a", "aa", "bb", "cc"];
                   
 /// Example 1. 
-/// String come in their natural order.
+/// Strings coming in their natural order.
 var compareTo = (String a, String b) => a.compareTo(b);
 list.sort(compareTo);
 expect(list, ["a", "aa", "aaa", "b", "bb", "bbb", "c", "cc", "ccc"]);
