@@ -7,10 +7,8 @@ import "../utils/benchmarks_code.dart";
 import "../widgets/bench_widget.dart";
 import "../widgets/release_mode_warning.dart";
 
-enum CollectionType { list, set, map }
-
 class MultiBenchmarkScreen extends StatelessWidget {
-  final CollectionType collectionType;
+  final Type collectionType;
 
   const MultiBenchmarkScreen({@required this.collectionType});
 
@@ -44,15 +42,14 @@ class MultiBenchmarkScreen extends StatelessWidget {
   /// error.
   List<Widget> get _benchmarks {
     switch (collectionType) {
-      case CollectionType.list:
+      case List:
         return _listBenchmarks;
-      case CollectionType.set:
+      case Set:
         return _setBenchmarks;
-      case CollectionType.map:
+      case Map:
         return _mapBenchmarks;
       default:
-        throw UnimplementedError(
-            "No benchmarks for this collection type you've somehow managed to choose.");
+        throw UnimplementedError("No benchmarks for this collection type.");
     }
   }
 

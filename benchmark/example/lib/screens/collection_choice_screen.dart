@@ -34,7 +34,7 @@ class CollectionChoiceScreen extends StatelessWidget {
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => MultiBenchmarkScreen(
-                          collectionType: CollectionType.list,
+                          collectionType: List,
                         ),
                       ),
                     ),
@@ -45,7 +45,7 @@ class CollectionChoiceScreen extends StatelessWidget {
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => MultiBenchmarkScreen(
-                          collectionType: CollectionType.set,
+                          collectionType: Set,
                         ),
                       ),
                     ),
@@ -56,7 +56,7 @@ class CollectionChoiceScreen extends StatelessWidget {
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => MultiBenchmarkScreen(
-                          collectionType: CollectionType.map,
+                          collectionType: Map,
                         ),
                       ),
                     ),
