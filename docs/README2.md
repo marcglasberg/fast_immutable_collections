@@ -63,8 +63,8 @@ Later in this document, we provide benchmarks so that you can compare speeds
 - [2. IList](#2-ilist)
     - [2.1. IList Equality](#21-ilist-equality)
     - [2.2. Global IList Configuration](#22-global-ilist-configuration)
-    - [2.3. Usage in tests](#23-usage-in-tests)
-    - [2.4. IList reuse by composition](#24-ilist-reuse-by-composition)
+    - [2.3. Usage in Tests](#23-usage-in-tests)
+    - [2.4. IList Reuse by Composition](#24-ilist-reuse-by-composition)
     - [2.5. Advanced usage](#25-advanced-usage)
 - [3. ISet](#3-iset)
     - [3.1. Similarities and Differences to the IList](#31-similarities-and-differences-to-the-ilist)
@@ -101,7 +101,8 @@ Other iterables (which are not lists) can also be locked as lists:
 ```dart          
 /// Ways to build an IList
 
-// Using the IList constructor                                                                      
+// Using the IList constructor
+
 IList<String> ilist = IList([1, 2]);
                               
 // Locking a regular list
@@ -159,16 +160,16 @@ var ilist = [1, 2, 3].lock.add(4).remove(2);
 ```   
 
 Since `IList` methods always return a new `IList`, 
-it is an **error** to call some method and then discard the result: 
+it is an **error** to call a method and then discard the result: 
 
 ```dart                                     
 var ilist = [1, 2].lock;
                                                   
-// Wrong
+// Wrong... the result is gone into the void, garbage-collected
 ilist.add(3);              
 print(ilist); // 1, 2
 
-// Also wrong
+// Also wrong... the operation is not assigned to the new list and garbage-collected
 ilist = ilist..add(3);              
 print(ilist); // 1, 2
 
@@ -316,7 +317,7 @@ print(getSum(5, 3)); // Got from cache: 5 + 3 = 8
 
 However, `IList`s are configurable, and you can actually create `IList`s which
 compare their internals by identity or deep equals, as desired.
-There are 3 main ways to do achieve:
+There are 3 main ways to achieve this:
  
 1. You can use getters `withIdentityEquals` and `withDeepEquals`:
 
@@ -333,7 +334,7 @@ There are 3 main ways to do achieve:
     ```
 
 1. You can also use the `withConfig` method 
-and the `ConfigList` class to change the configuration:
+and the `ConfigList` &mdash; which is also a part of the global configuration suite &mdash; class to change the configuration:
 
     ```dart
     var list = [1, 2];
@@ -356,24 +357,26 @@ explicitly create the `IList` with your desired configuration:
     print(list.lock == ilist2); // False!
     ```
 
-The above described configurations affects how the `== operator` works, 
+The above described how configurations affect how the `== operator` works, 
 but you can also choose how to compare lists by using the following `IList` methods:
 
-- `equalItems` will return true only if the IList items are equal to the iterable items,
+- `equalItems` will return `true` only if the IList items are equal to the iterable items,
   and in the same order. This may be slow for very large lists, since it compares each item,
-  one by one. You can compare the list with ordered sets, but unordered sets will throw an error.
-- `unorderedEqualItems` will return true only if the IList and the iterable items have the same number of elements,
+  one by one. You can compare the list with *ordered* sets, but *unordered* sets will throw an error.
+- `unorderedEqualItems` will return `true` only if the IList and the iterable items have the same number of elements,
 and the elements of the IList can be paired with the elements of the iterable, so that each
 pair is equal. This may be slow for very large lists, since it compares each item,
 one by one.
-- `equalItemsAndConfig` will return true only if the list items are equal and in the same order,
+- `equalItemsAndConfig` will return `true` only if the list items are equal and in the same order,
 and the list configurations are equal. This may be slow for very large lists, since it compares each item, one by one.
-- `same` will return true only if the lists internals are the same instances
+- `same` will return `true` only if the lists internals are the same instances
 (comparing by identity). This will be fast even for very large lists,
 since it doesn't compare each item.
 Note: This is not the same as `identical(list1, list2)` since it doesn't
 compare the lists themselves, but their internal state. Comparing the
 internal state is better, because it will return `true` more often.
+
+<!-- TODO: Marcelo, não está claro para mim &mdash; e presumo que não estará para leitores futuros &mdash; o que você quer dizer com "will return `true` more often", mas especificamente o "often". Eu diria que o AND adicional com a configuração faria com que seria menos provável que houvesse `true` como resultado...-->
   
 ## 2.2. Global IList Configuration
 
@@ -407,8 +410,7 @@ The global configuration is meant to be decided during your app's initialization
 We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
 after you set your desired configuration.
 
-
-## 2.3. Usage in tests
+## 2.3. Usage in Tests
 
 An `IList` is not a `List`, so this is false:
 
@@ -421,7 +423,7 @@ the `expect` method actually compares all `Iterables` by comparing their items.
 Since `List` and `IList` are iterables, you can write the following tests: 
 
 ```dart                                 
-/// All these tests pass:
+/// **All these tests pass**:
 
 expect([1, 2], [1, 2]); // List with List, same order.
 expect([1, 2].lock, [1, 2]); // IList with List, same order.
@@ -434,7 +436,7 @@ expect([2, 1], isNot([1, 2].lock)); // List with IList, wrong order.
 expect([2, 1].lock, isNot([1, 2].lock)); // IList with IList, wrong order.
 ```                   
 
-So, for comparing `List` with `IList` and vice-versa this is fine.
+So, for comparing `List` with `IList` and vice-versa, this is fine.
 
 However, `expect` treats `Set`s differently, resulting that 
 `expect(a, b)` may be different from `expect(b, a)`. For example:
@@ -448,7 +450,7 @@ If you ask me, this is all very confusing.
 A good rule of thumb to avoid all these `expect` complexities 
 is only comparing lists with lists, set with sets, etc.
 
-## 2.4. IList reuse by composition
+## 2.4. IList Reuse by Composition
 
 Classes `IListMixin` and `IterableIListMixin` let you easily 
 create your own immutable classes based on the `IList`.
@@ -459,16 +461,22 @@ For example, suppose you have some `Student` class:
 
 ```dart
 class Student {
-   final String name;
+  final String name;
 
-   Student(this.name);
+  Student(this.name);
 
-   String toString() => name; 
+  @override
+  String toString() => name;
 
-   bool operator ==(Object other) => identical(this, other) || other is Student && runtimeType == other.runtimeType && name == other.name;  
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Student && runtimeType == other.runtimeType && name == other.name;
 
-   int get hashCode => name.hashCode;
+  @override
+  int get hashCode => name.hashCode;
 }
+
 ```
 
 And suppose you want to create a `Students` class 
@@ -476,9 +484,9 @@ which is an immutable collection of `Student`s.
 
 You can easily implement it using the `IListMixin`:
 
+<!-- TODO: Marcelo, você mudou o nome desse mixin para `FromIListMixin`? -->
 ```dart  
 class Students with IListMixin<Student, Students> {
-
    /// This is the boilerplate to create the collection:
    final IList<Student> _students;
 
@@ -528,7 +536,7 @@ These are your options to create an `IList` from it:
 
 - Getter `lock` will create an internal defensive copy of the original list, 
 which will be used to back the `IList`.
-This is the same doing: `IList(list)`.
+This is the same as doing: `IList(list)`.
 
 - Getter `lockUnsafe` is fast, since it makes no defensive copies of the list.
 However, you should only use this with a new list you've created yourself,
@@ -554,7 +562,7 @@ It is also very fast to lock this list back into an `IList`.
 
 - Getter `unlockLazy` unlocks the list, returning a safe, modifiable (mutable) `List`.
 Using this is very fast at first, since it makes no copies of the `IList` items. 
-However, if (and only if) you use a method that mutates the list, like `add`, 
+However, iff (if and only if) you use a method that mutates the list, like `add`, 
 it will unlock it internally (make a copy of all `IList` items). 
 This is transparent to you, and will happen at most only once. 
 In other words, it will unlock the `IList` lazily, only if necessary.
@@ -575,7 +583,7 @@ Other iterables (which are not sets) can also be locked as sets:
 ```dart          
 /// Ways to build an ISet
 
-// Using the ISet constructor                                                                      
+// Using the ISet constructor                                                    
 ISet<String> iset = ISet({1, 2});
                               
 // Locking a regular set
@@ -601,6 +609,7 @@ Set<String> set = iset.unlock;
 ```             
 
 ISet constructors:
+
 `ISet()`,
 `ISet.withConfig()`,
 `ISet.unsafe()`.
@@ -608,16 +617,16 @@ ISet constructors:
 ## 3.1. Similarities and Differences to the IList
 
 > Since I don't want to repeat myself, 
-> all the topics below are explained in much less detail here than for the IList.
-> Please read the IList explanation first, before trying to understand the ISet.
+> all the topics below are explained in much less detail than for IList.
+> Please read the IList explanation first, before trying to understand ISet.
 
 - An `ISet` is an `Iterable`, so you can iterate over it.
 
 - `ISet` has **all** the methods of `Set`, plus some other new and useful ones.
 `ISet` methods always return a new `ISet`, instead of modifying the original one. 
 Because of that, you can easily chain methods.
-But since `ISet` methods always return a new `ISet`, 
-it is an **error** to call some method and then discard the result. 
+But, since `ISet` methods always return a new `ISet`, 
+it is an **error** to call a method and then discard the result. 
 
 - `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order. 
 They can be used as **map keys**, which is a very useful property in itself, 
@@ -634,14 +643,14 @@ or else use the `withConfig` constructor to explicitly create the `ISet` with yo
 but you can also choose how to compare sets by using the following `ISet` methods:
 `equalItems`, `equalItemsAndConfig` and `same`.
 Note, however, there is no `unorderedEqualItems` like in the `IList`, 
-because since `ISets` are unordered the `equalItems` method already disregards the order.
+because, since `ISets` are unordered the `equalItems`, method already disregards the order.
 
 - Classes `ISetMixin` and `IterableISetMixin` let you easily 
 create your own immutable classes based on the `ISet`.
 This helps you create more strongly typed collections, 
 and add your own methods to them.
 
-- You can flush some `ISet` by using the getter `.flush`.
+- You can flush an `ISet` by using the getter `.flush`.
 Note flush just optimizes the set **internally**, 
 and no external difference will be visible.
 Depending on the global configuration, the `ISet`s 
