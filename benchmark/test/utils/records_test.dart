@@ -4,9 +4,23 @@ import "package:test/test.dart";
 
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
+const TypeMatcher<AssertionError> isAssertionError = TypeMatcher<AssertionError>();
+final Matcher throwsAssertionError = throwsA(isAssertionError);
+
 void main() {
-  const TypeMatcher<AssertionError> isAssertionError = TypeMatcher<AssertionError>();
-  final Matcher throwsAssertionError = throwsA(isAssertionError);
+  group("Config |", () {
+    test("Only accepts runs bigger than 0",
+        () => expect(() => Config(runs: 0, size: 10), throwsAssertionError));
+
+    test("Only accepts sizes bigger or equal than 0",
+        () => expect(() => Config(runs: 10, size: -1), throwsAssertionError));
+
+    test("toString()", () {
+      const Config config = Config(runs: 10, size: 10);
+
+      expect(config.toString(), "Config: (runs: 10, size: 10)");
+    });
+  });
 
   group("StopwatchRecord |", () {
     test("Can't pass null", () {
@@ -43,7 +57,7 @@ void main() {
       expect(listRecord1, isNot(iListRecord2));
     });
 
-    test("toString method", () {
+    test("toString()", () {
       const StopwatchRecord record = StopwatchRecord(collectionName: "list", record: 10);
 
       expect(record.toString(), "StopwatchRecord: (collectionName: list, record: 10.0)");
@@ -75,15 +89,25 @@ void main() {
     });
 
     group("Min & Max |", () {
-      RecordsColumn recordsColumn = RecordsColumn.empty();
-      recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
-      recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
-      recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
-      recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
+      test("Extracting the column's maximum value", () {
+        RecordsColumn recordsColumn = RecordsColumn.empty();
+        recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
+        recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
+        recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
+        recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
 
-      test("Extracting the column's maximum value", () => expect(recordsColumn.max, 100));
+        expect(recordsColumn.max, 100);
+      });
 
-      test("Extracting the column's minimum value", () => expect(recordsColumn.min, 10));
+      test("Extracting the column's minimum value", () {
+        RecordsColumn recordsColumn = RecordsColumn.empty();
+        recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
+        recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
+        recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
+        recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
+
+        expect(recordsColumn.min, 10);
+      });
     });
 
     test("Extracting the column's List's value", () {
@@ -112,7 +136,7 @@ void main() {
       expect(recordsColumn2, recordsColumn1);
     });
 
-    test("toString method", () {
+    test("toString()", () {
       RecordsColumn recordsColumn = RecordsColumn.empty();
       recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
 
@@ -134,22 +158,31 @@ void main() {
   });
 
   group("RecordsTable |", () {
-    RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
-    recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
-    recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
-    recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
-    recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
-
-    final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
-
     test("Left, legend column", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
       expect(recordsTable.leftLegend, isA<LeftLegend>());
       expect(recordsTable.leftLegend.rows,
           ["Collection", "List (Mutable)", "IList", "KtList", "BuiltList"]);
     });
 
     test("Normalized against max Column", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .33);
       recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .5);
@@ -161,6 +194,15 @@ void main() {
     });
 
     test("Normalized against min column", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
       recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: 1.5);
@@ -172,6 +214,15 @@ void main() {
     });
 
     test("Normalized against the mutable result", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
       recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: 1.5);
@@ -183,6 +234,15 @@ void main() {
     });
 
     test("Normalized against runs", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .1);
       recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .15);
@@ -194,6 +254,15 @@ void main() {
     });
 
     test("Normalized against size", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .01);
       recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .01);
@@ -204,7 +273,7 @@ void main() {
       expect(recordsTable.normalizedAgainstSize.title, "Time (μs) / Size");
     });
 
-    test("toString method (for saving it as CSV)", () {
+    test("toString() (for saving it as CSV)", () {
       RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
       recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
       recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
