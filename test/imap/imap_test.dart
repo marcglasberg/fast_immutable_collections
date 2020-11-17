@@ -4,294 +4,272 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Creating immutable maps |", () {
-    final IMap iMap1 = IMap(), iMap2 = IMap({});
+  test("Runtime Type", () {
+    final IMap iMap1 = IMap();
+    final iMap2 = IMap({});
     final iMap3 = IMap<String, int>({});
     final iMap4 = IMap({"a": 1});
     final iMap5 = IMap.empty<String, int>();
 
-    test("Runtime Type", () {
-      expect(iMap1, isA<IMap>());
-      expect(iMap2, isA<IMap>());
-      expect(iMap3, isA<IMap<String, int>>());
-      expect(iMap4, isA<IMap<String, int>>());
-      expect(iMap5, isA<IMap<String, int>>());
-    });
+    expect(iMap1, isA<IMap>());
+    expect(iMap2, isA<IMap>());
+    expect(iMap3, isA<IMap<String, int>>());
+    expect(iMap4, isA<IMap<String, int>>());
+    expect(iMap5, isA<IMap<String, int>>());
+  });
 
-    test("Emptiness Properties", () {
-      expect(iMap1.isEmpty, isTrue);
-      expect(iMap2.isEmpty, isTrue);
-      expect(iMap3.isEmpty, isTrue);
-      expect(iMap4.isEmpty, isFalse);
-      expect(iMap5.isEmpty, isTrue);
+  test("isEmpty | isNotEmpty", () {
+    final IMap iMap1 = IMap();
+    final iMap2 = IMap({});
+    final iMap3 = IMap<String, int>({});
+    final iMap4 = IMap({"a": 1});
+    final iMap5 = IMap.empty<String, int>();
 
-      expect(iMap1.isNotEmpty, isFalse);
-      expect(iMap2.isNotEmpty, isFalse);
-      expect(iMap3.isNotEmpty, isFalse);
-      expect(iMap4.isNotEmpty, isTrue);
-      expect(iMap5.isNotEmpty, isFalse);
-    });
+    expect(iMap1.isEmpty, isTrue);
+    expect(iMap2.isEmpty, isTrue);
+    expect(iMap3.isEmpty, isTrue);
+    expect(iMap4.isEmpty, isFalse);
+    expect(iMap5.isEmpty, isTrue);
 
-    test("IMap.unlock", () {
-      final Map<String, int> map = {"a": 1, "b": 2};
-      final IMap<String, int> iMap = IMap(map);
-      expect(iMap.unlock, map);
-      expect(identical(iMap.unlock, map), isFalse);
-    });
+    expect(iMap1.isNotEmpty, isFalse);
+    expect(iMap2.isNotEmpty, isFalse);
+    expect(iMap3.isNotEmpty, isFalse);
+    expect(iMap4.isNotEmpty, isTrue);
+    expect(iMap5.isNotEmpty, isFalse);
+  });
 
-    test("IMap.fromEntries factory constructor", () {
-      const List<MapEntry<String, int>> entries = [
-        MapEntry<String, int>("a", 1),
-        MapEntry<String, int>("b", 2),
-      ];
-      final IMap<String, int> fromEntries = IMap.fromEntries(entries);
+  test("IMap.unlock", () {
+    final Map<String, int> map = {"a": 1, "b": 2};
+    final IMap<String, int> iMap = IMap(map);
+    expect(iMap.unlock, map);
+    expect(identical(iMap.unlock, map), isFalse);
+  });
 
-      expect(fromEntries["a"], 1);
-      expect(fromEntries["b"], 2);
-    });
+  test("IMap.fromEntries() factory constructor", () {
+    const List<MapEntry<String, int>> entries = [
+      MapEntry<String, int>("a", 1),
+      MapEntry<String, int>("b", 2),
+    ];
+    final IMap<String, int> fromEntries = IMap.fromEntries(entries);
 
-    test("IMap.fromKeys factory constructor", () {
-      const List<String> keys = ["a", "b"];
-      final IMap<String, int> fromKeys =
-          IMap.fromKeys(keys: keys, valueMapper: (String key) => key.hashCode);
+    expect(fromEntries["a"], 1);
+    expect(fromEntries["b"], 2);
+  });
 
-      expect(fromKeys["a"], "a".hashCode);
-      expect(fromKeys["b"], "b".hashCode);
-    });
+  test("IMap.fromKeys() factory constructor", () {
+    const List<String> keys = ["a", "b"];
+    final IMap<String, int> fromKeys =
+        IMap.fromKeys(keys: keys, valueMapper: (String key) => key.hashCode);
 
-    test("IMap.fromValues factory constructor", () {
-      const List<int> values = [1, 2];
-      final IMap<String, int> fromKeys =
-          IMap.fromValues(values: values, keyMapper: (int value) => value.toString());
+    expect(fromKeys["a"], "a".hashCode);
+    expect(fromKeys["b"], "b".hashCode);
+  });
 
-      expect(fromKeys["1"], 1);
-      expect(fromKeys["2"], 2);
-    });
+  test("IMap.fromValues() factory constructor", () {
+    const List<int> values = [1, 2];
+    final IMap<String, int> fromKeys =
+        IMap.fromValues(values: values, keyMapper: (int value) => value.toString());
 
-    test("IMap.fromIterable factory constructor", () {
-      const Iterable<int> iterable = [1, 2];
-      final IMap fromIterable = IMap.fromIterable(iterable,
-          keyMapper: (key) => (key + 1).toString(), valueMapper: (value) => value + 2);
+    expect(fromKeys["1"], 1);
+    expect(fromKeys["2"], 2);
+  });
 
-      expect(fromIterable["2"], 3);
-      expect(fromIterable["3"], 4);
-    });
+  test("IMap.fromIterable() factory constructor", () {
+    const Iterable<int> iterable = [1, 2];
+    final IMap fromIterable = IMap.fromIterable(iterable,
+        keyMapper: (key) => (key + 1).toString(), valueMapper: (value) => value + 2);
 
-    test("IMap.fromIterables factory constructor", () {
-      const Iterable<String> keys = ["a", "b"];
-      const Iterable<int> values = [1, 2];
-      final IMap<String, int> fromIterables = IMap.fromIterables(keys, values);
+    expect(fromIterable["2"], 3);
+    expect(fromIterable["3"], 4);
+  });
 
-      expect(fromIterables["a"], 1);
-      expect(fromIterables["b"], 2);
-    });
+  test("IMap.fromIterables() factory constructor", () {
+    const Iterable<String> keys = ["a", "b"];
+    const Iterable<int> values = [1, 2];
+    final IMap<String, int> fromIterables = IMap.fromIterables(keys, values);
 
-    group("IMap.unsafe constructor", () {
-      test("Normal usage", () {
-        final Map<String, int> map = {"a": 1, "b": 2};
-        final IMap<String, int> iMap = IMap.unsafe(map, config: ConfigMap());
+    expect(fromIterables["a"], 1);
+    expect(fromIterables["b"], 2);
+  });
 
-        expect(map, {"a": 1, "b": 2});
-        expect(iMap.unlock, {"a": 1, "b": 2});
+  test("IMap.unsafe constructor | Normal usage", () {
+    final Map<String, int> map = {"a": 1, "b": 2};
+    final IMap<String, int> iMap = IMap.unsafe(map, config: ConfigMap());
 
-        map.addAll({"c": 3});
+    expect(map, {"a": 1, "b": 2});
+    expect(iMap.unlock, {"a": 1, "b": 2});
 
-        expect(map, {"a": 1, "b": 2, "c": 3});
-        expect(iMap.unlock, {"a": 1, "b": 2, "c": 3});
-      });
+    map.addAll({"c": 3});
 
-      test("Disallowing it", () {
-        ImmutableCollection.disallowUnsafeConstructors = true;
-        final Map<String, int> map = {"a": 1, "b": 2};
+    expect(map, {"a": 1, "b": 2, "c": 3});
+    expect(iMap.unlock, {"a": 1, "b": 2, "c": 3});
+  });
 
-        expect(() => IMap.unsafe(map, config: ConfigMap()), throwsUnsupportedError);
-      });
-    });
+  test("IMap.unsafe constructor | Disallowing it", () {
+    ImmutableCollection.disallowUnsafeConstructors = true;
+    final Map<String, int> map = {"a": 1, "b": 2};
+
+    expect(() => IMap.unsafe(map, config: ConfigMap()), throwsUnsupportedError);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+  test(
+      "Equals Operator | "
+      "IMap with identity-equals compares the map instance, not the items.", () {
+    var myMap = IMap({"a": 1, "b": 2}).withIdentityEquals;
+    expect(myMap == myMap, isTrue);
+    expect(myMap == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
+    expect(myMap == {"a": 1, "b": 2}.lock.withIdentityEquals, isFalse);
+    expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).withIdentityEquals, isFalse);
+  });
 
-  group("Equals and Other Comparisons |", () {
-    group("Equals Operator |", () {
-      test(
-          "IMap with identity-equals compares the map instance, "
-          "not the items.", () {
-        var myMap = IMap({"a": 1, "b": 2}).withIdentityEquals;
-        expect(myMap == myMap, isTrue);
-        expect(myMap == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
-        expect(myMap == {"a": 1, "b": 2}.lock.withIdentityEquals, isFalse);
-        expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).withIdentityEquals, isFalse);
-      });
+  test("Equals Operator | " "IMap with deep-equals compares the items, not the map instance.", () {
+    var myMap = IMap({"a": 1, "b": 2}).withDeepEquals;
+    expect(myMap == myMap, isTrue);
+    expect(myMap == IMap({"b": 2}).add("a", 1).withDeepEquals, isTrue);
+    expect(myMap == IMap({"a": 1, "b": 2}).withDeepEquals, isTrue);
+    expect(myMap == {"a": 1, "b": 2}.lock.withDeepEquals, isTrue);
+    expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).withDeepEquals, isFalse);
 
-      test("IMap with deep-equals compares the items, not the map instance.", () {
-        var myMap = IMap({"a": 1, "b": 2}).withDeepEquals;
-        expect(myMap == myMap, isTrue);
-        expect(myMap == IMap({"b": 2}).add("a", 1).withDeepEquals, isTrue);
-        expect(myMap == IMap({"a": 1, "b": 2}).withDeepEquals, isTrue);
-        expect(myMap == {"a": 1, "b": 2}.lock.withDeepEquals, isTrue);
-        expect(myMap == IMap({"a": 1, "b": 2, "c": 3}).withDeepEquals, isFalse);
+    myMap = IMap({"a": 1, "b": 2});
+    expect(myMap == myMap, isTrue);
+    expect(myMap == IMap({"a": 1, "b": 2}), isTrue);
+    expect(myMap == IMap({"a": 1, "b": 2, "c": 3}), isFalse);
+  });
 
-        myMap = IMap({"a": 1, "b": 2});
-        expect(myMap == myMap, isTrue);
-        expect(myMap == IMap({"a": 1, "b": 2}), isTrue);
-        expect(myMap == IMap({"a": 1, "b": 2, "c": 3}), isFalse);
-      });
+  test(
+      "Equals Operator | "
+      "IMap with deep-equals is always different "
+      "from iMap with identity-equals", () {
+    expect(IMap({"a": 1, "b": 2}).withDeepEquals == IMap({"a": 1, "b": 2}).withIdentityEquals,
+        isFalse);
+    expect(IMap({"a": 1, "b": 2}).withIdentityEquals == IMap({"a": 1, "b": 2}).withDeepEquals,
+        isFalse);
+    expect(IMap({"a": 1, "b": 2}).withIdentityEquals == IMap({"a": 1, "b": 2}), isFalse);
+    expect(IMap({"a": 1, "b": 2}) == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
+  });
 
-      test(
-          "IMap with deep-equals is always different "
-          "from iMap with identity-equals.", () {
-        expect(IMap({"a": 1, "b": 2}).withDeepEquals == IMap({"a": 1, "b": 2}).withIdentityEquals,
-            isFalse);
-        expect(IMap({"a": 1, "b": 2}).withIdentityEquals == IMap({"a": 1, "b": 2}).withDeepEquals,
-            isFalse);
-        expect(IMap({"a": 1, "b": 2}).withIdentityEquals == IMap({"a": 1, "b": 2}), isFalse);
-        expect(IMap({"a": 1, "b": 2}) == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
-      });
-    });
+  test("IMap.isIdentityEquals and IMap.isDeepEquals properties", () {
+    final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2}),
+        iMap2 = IMap({"a": 1, "b": 2}).withIdentityEquals;
 
-    group("Other Comparisons |", () {
-      test("IMap.isIdentityEquals and IMap.isDeepEquals properties", () {
-        final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2}),
-            iMap2 = IMap({"a": 1, "b": 2}).withIdentityEquals;
+    expect(iMap1.isIdentityEquals, isFalse);
+    expect(iMap1.isDeepEquals, isTrue);
+    expect(iMap2.isIdentityEquals, isTrue);
+    expect(iMap2.isDeepEquals, isFalse);
+  });
 
-        expect(iMap1.isIdentityEquals, isFalse);
-        expect(iMap1.isDeepEquals, isTrue);
-        expect(iMap2.isIdentityEquals, isTrue);
-        expect(iMap2.isDeepEquals, isFalse);
-      });
+  test("IMap.same method", () {
+    final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2});
+    expect(iMap1.same(iMap1), isTrue);
+    expect(iMap1.same(IMap({"a": 1, "b": 2})), isFalse);
+    expect(iMap1.same(IMap({"a": 1})), isFalse);
+    expect(iMap1.same(IMap({"b": 2}).add("a", 1)), isFalse);
+    expect(iMap1.same(IMap({"a": 1, "b": 2}).withIdentityEquals), isFalse);
+    expect(iMap1.same(iMap1.remove("c")), isTrue);
+  });
 
-      group("Same, Equals and the == Operator |", () {
-        final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2}),
-            iMap2 = IMap({"a": 1, "b": 2}),
-            iMap3 = IMap({"a": 1}),
-            iMap4 = IMap({"b": 2}).add("a", 1),
-            iMap5 = IMap({"a": 1, "b": 2}).withIdentityEquals;
+  test("IMap.equalItemsAndConfig method", () {
+    final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2});
+    expect(iMap1.equalItemsAndConfig(iMap1), isTrue);
+    expect(iMap1.equalItemsAndConfig(IMap({"a": 1, "b": 2})), isTrue);
+    expect(iMap1.equalItemsAndConfig(IMap({"a": 1})), isFalse);
+    expect(iMap1.equalItemsAndConfig(IMap({"b": 2}).add("a", 1)), isTrue);
+    expect(iMap1.equalItemsAndConfig(IMap({"a": 1, "b": 2}).withIdentityEquals), isFalse);
+    expect(iMap1.equalItemsAndConfig(iMap1.remove("c")), isTrue);
+  });
 
-        test("IMap.same method", () {
-          expect(iMap1.same(iMap1), isTrue);
-          expect(iMap1.same(iMap2), isFalse);
-          expect(iMap1.same(iMap3), isFalse);
-          expect(iMap1.same(iMap4), isFalse);
-          expect(iMap1.same(iMap5), isFalse);
-          expect(iMap1.same(iMap1.remove("c")), isTrue);
-        });
+  test("IMap.equalItems method | Null", () {
+    expect(IMap({"a": 1, "b": 2}).equalItems(null), isFalse);
+  });
 
-        test("IMap.equalItemsAndConfig method", () {
-          expect(iMap1.equalItemsAndConfig(iMap1), isTrue);
-          expect(iMap1.equalItemsAndConfig(iMap2), isTrue);
-          expect(iMap1.equalItemsAndConfig(iMap3), isFalse);
-          expect(iMap1.equalItemsAndConfig(iMap4), isTrue);
-          expect(iMap1.equalItemsAndConfig(iMap5), isFalse);
-          expect(iMap1.equalItemsAndConfig(iMap1.remove("c")), isTrue);
-        });
+  test("IMap.equalItems method | Identity", () {
+    final Iterable<MapEntry<String, int>> iterable1 = [
+      MapEntry<String, int>("a", 1),
+      MapEntry<String, int>("b", 2),
+    ];
+    expect(IMap({"a": 1, "b": 2}).equalItems(iterable1), isTrue);
+  });
 
-        group("IMap.equalItems method |", () {
-          final Iterable<MapEntry<String, int>> iterable1 = [
-                MapEntry<String, int>("a", 1),
-                MapEntry<String, int>("b", 2),
-              ],
-              iterable3 = [
-                MapEntry<String, int>("a", 1),
-              ],
-              iterable4 = [
-                MapEntry<String, int>("b", 2),
-                MapEntry<String, int>("a", 1),
-              ];
+  test("IMap.equalItems method | The order doesn't matter", () {
+    final Iterable<MapEntry<String, int>> iterable4 = [
+      MapEntry<String, int>("b", 2),
+      MapEntry<String, int>("a", 1),
+    ];
+    expect(IMap({"a": 1, "b": 2}).equalItems(iterable4), isTrue);
+  });
 
-          test("Null", () => expect(iMap1.equalItems(null), isFalse));
+  test("IMap.equalItems method | Different items yield false", () {
+    final Iterable<MapEntry<String, int>> iterable3 = [
+      MapEntry<String, int>("a", 1),
+    ];
+    expect(IMap({"a": 1, "b": 2}).equalItems(iterable3), isFalse);
+  });
 
-          test("Identity", () => expect(iMap1.equalItems(iterable1), isTrue));
+  test("Equal Items To... | IMap.equalItemsToMap", () {
+    final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
+    expect(iMap.equalItemsToMap({"a": 1, "b": 2}), isTrue);
+    expect(iMap.equalItemsToMap({"a": 1, "b": 3}), isFalse);
+    expect(iMap.equalItemsToMap({"a": 1, "c": 2}), isFalse);
+    expect(iMap.equalItemsToMap({"a": 1, "b": 2, "c": 3}), isFalse);
+  });
 
-          test("The order doesn't matter", () => expect(iMap1.equalItems(iterable4), isTrue));
+  test("Equal Items To... | IMap.equalItemsToIMap", () {
+    final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
+    expect(iMap.equalItemsToIMap({"a": 1, "b": 2}.lock), isTrue);
+    expect(iMap.equalItemsToIMap({"a": 1, "b": 3}.lock), isFalse);
+    expect(iMap.equalItemsToIMap({"a": 1, "c": 2}.lock), isFalse);
+    expect(iMap.equalItemsToIMap({"a": 1, "b": 2, "c": 3}.lock), isFalse);
+  });
+  test("IMap.hashCode() | deepEquals vs deepEquals", () {
+    final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2});
+    expect(iMap1 == IMap({"a": 1, "b": 2}), isTrue);
+    expect(iMap1 == IMap({"a": 1, "b": 2, "c": 3}), isFalse);
+    expect(iMap1 == IMap({"b": 2}).add("a", 1), isTrue);
+    expect(iMap1.hashCode, IMap({"a": 1, "b": 2}).hashCode);
+    expect(iMap1.hashCode, isNot(IMap({"a": 1, "b": 2, "c": 3}).hashCode));
+    expect(iMap1.hashCode, IMap({"b": 2}).add("a", 1).hashCode);
+  });
+  test("IMap.hashCode() | identityEquals vs identityEquals", () {
+    final IMap<String, int> iMap1WithIdentity = IMap({"a": 1, "b": 2}).withIdentityEquals;
+    expect(iMap1WithIdentity == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
+    expect(iMap1WithIdentity == IMap({"a": 1, "b": 2, "c": 3}).withIdentityEquals, isFalse);
+    expect(iMap1WithIdentity == IMap({"b": 2}).add("a", 1).withIdentityEquals, isFalse);
+    expect(iMap1WithIdentity.hashCode, isNot(IMap({"a": 1, "b": 2}).withIdentityEquals.hashCode));
+    expect(iMap1WithIdentity.hashCode,
+        isNot(IMap({"a": 1, "b": 2, "c": 3}).withIdentityEquals.hashCode));
+    expect(
+        iMap1WithIdentity.hashCode, isNot(IMap({"b": 2}).add("a", 1).withIdentityEquals.hashCode));
+  });
 
-          test("Different items yield false", () => expect(iMap1.equalItems(iterable3), isFalse));
-        });
-      });
-    });
+  test("IMap.hashCode() | deepEquals vs identityEquals", () {
+    expect(IMap({"a": 1, "b": 2}) == IMap({"a": 1, "b": 2}).withIdentityEquals, isFalse);
+    expect(IMap({"a": 1, "b": 2, "c": 3}) == IMap({"a": 1, "b": 2, "c": 3}).withIdentityEquals,
+        isFalse);
+    expect(IMap({"b": 2}).add("a", 1) == IMap({"b": 2}).add("a", 1).withIdentityEquals, isFalse);
+    expect(
+        IMap({"a": 1, "b": 2}).hashCode, isNot(IMap({"a": 1, "b": 2}).withIdentityEquals.hashCode));
+    expect(IMap({"a": 1, "b": 2, "c": 3}).hashCode,
+        isNot(IMap({"a": 1, "b": 2, "c": 3}).withIdentityEquals.hashCode));
+    expect(IMap({"b": 2}).add("a", 1).hashCode,
+        isNot(IMap({"b": 2}).add("a", 1).withIdentityEquals.hashCode));
+  });
 
-    group("Equal Items To... |", () {
-      final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
-      final Map<String, int> map1 = {"a": 1, "b": 2};
-      final Map<String, int> map2 = {"a": 1, "b": 3};
-      final Map<String, int> map3 = {"a": 1, "c": 2};
-      final Map<String, int> map4 = {"a": 1, "b": 2, "c": 3};
+  test("IMap.config()", () {
+    final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
 
-      test("IMap.equalItemsToMap", () {
-        expect(iMap.equalItemsToMap(map1), isTrue);
-        expect(iMap.equalItemsToMap(map2), isFalse);
-        expect(iMap.equalItemsToMap(map3), isFalse);
-        expect(iMap.equalItemsToMap(map4), isFalse);
-      });
+    expect(iMap.isDeepEquals, isTrue);
+    expect(iMap.config.sortKeys, isTrue);
+    expect(iMap.config.sortValues, isTrue);
 
-      test("IMap.equalItemsToIMap", () {
-        final IMap<String, int> iMap1 = map1.lock;
-        final IMap<String, int> iMap2 = map2.lock;
-        final IMap<String, int> iMap3 = map3.lock;
-        final IMap<String, int> iMap4 = map4.lock;
+    final IMap<String, int> iMapWithCompare = iMap.withConfig(iMap.config.copyWith(
+      sortKeys: false,
+      sortValues: false,
+    ));
 
-        expect(iMap.equalItemsToIMap(iMap1), isTrue);
-        expect(iMap.equalItemsToIMap(iMap2), isFalse);
-        expect(iMap.equalItemsToIMap(iMap3), isFalse);
-        expect(iMap.equalItemsToIMap(iMap4), isFalse);
-      });
-    });
-
-    group("IMap.hashCode method", () {
-      final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2}),
-          iMap2 = IMap({"a": 1, "b": 2}),
-          iMap3 = IMap({"a": 1, "b": 2, "c": 3}),
-          iMap4 = IMap({"b": 2}).add("a", 1);
-      final IMap<String, int> iMap1WithIdentity = iMap1.withIdentityEquals,
-          iMap2WithIdentity = iMap2.withIdentityEquals,
-          iMap3WithIdentity = iMap3.withIdentityEquals,
-          iMap4WithIdentity = iMap4.withIdentityEquals;
-
-      test("deepEquals vs deepEquals", () {
-        expect(iMap1 == iMap2, isTrue);
-        expect(iMap1 == iMap3, isFalse);
-        expect(iMap1 == iMap4, isTrue);
-        expect(iMap1.hashCode, iMap2.hashCode);
-        expect(iMap1.hashCode, isNot(iMap3.hashCode));
-        expect(iMap1.hashCode, iMap4.hashCode);
-      });
-
-      test("identityEquals vs identityEquals", () {
-        expect(iMap1WithIdentity == iMap2WithIdentity, isFalse);
-        expect(iMap1WithIdentity == iMap3WithIdentity, isFalse);
-        expect(iMap1WithIdentity == iMap4WithIdentity, isFalse);
-        expect(iMap1WithIdentity.hashCode, isNot(iMap2WithIdentity.hashCode));
-        expect(iMap1WithIdentity.hashCode, isNot(iMap3WithIdentity.hashCode));
-        expect(iMap1WithIdentity.hashCode, isNot(iMap4WithIdentity.hashCode));
-      });
-
-      test("deepEquals vs identityEquals", () {
-        expect(iMap1 == iMap1WithIdentity, isFalse);
-        expect(iMap2 == iMap2WithIdentity, isFalse);
-        expect(iMap3 == iMap3WithIdentity, isFalse);
-        expect(iMap4 == iMap4WithIdentity, isFalse);
-        expect(iMap1.hashCode, isNot(iMap1WithIdentity.hashCode));
-        expect(iMap2.hashCode, isNot(iMap2WithIdentity.hashCode));
-        expect(iMap3.hashCode, isNot(iMap3WithIdentity.hashCode));
-        expect(iMap4.hashCode, isNot(iMap4WithIdentity.hashCode));
-      });
-    });
-
-    test("IMap.config method", () {
-      final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
-
-      expect(iMap.isDeepEquals, isTrue);
-      expect(iMap.config.sortKeys, isTrue);
-      expect(iMap.config.sortValues, isTrue);
-
-      final IMap<String, int> iMapWithCompare = iMap.withConfig(iMap.config.copyWith(
-        sortKeys: false,
-        sortValues: false,
-      ));
-
-      expect(iMapWithCompare.isDeepEquals, isTrue);
-      expect(iMapWithCompare.config.sortKeys, isFalse);
-      expect(iMapWithCompare.config.sortValues, isFalse);
-    });
+    expect(iMapWithCompare.isDeepEquals, isTrue);
+    expect(iMapWithCompare.config.sortKeys, isFalse);
+    expect(iMapWithCompare.config.sortValues, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
