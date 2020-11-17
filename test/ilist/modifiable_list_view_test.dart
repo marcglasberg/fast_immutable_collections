@@ -3,68 +3,75 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  group("Non-mutable operations |", () {
+  test("Non-mutable operations | ModifiableListView.[] operator", () {
     final IList<int> iList = [1, 2, 3].lock;
     final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
-
-    test("ModifiableListView.[] operator", () {
-      expect(modifiableListView[0], 1);
-      expect(modifiableListView[1], 2);
-      expect(modifiableListView[2], 3);
-    });
-
-    test("ModifiableListView.length getter", () => expect(modifiableListView.length, 3));
-
-    test("ModifiableListView.lock getter", () {
-      expect(modifiableListView.lock, isA<IList<int>>());
-      expect(modifiableListView.lock, [1, 2, 3]);
-    });
-
-    test("Emptiness properties", () {
-      expect(modifiableListView.isEmpty, isFalse);
-      expect(modifiableListView.isNotEmpty, isTrue);
-    });
+    expect(modifiableListView[0], 1);
+    expect(modifiableListView[1], 2);
+    expect(modifiableListView[2], 3);
   });
 
-  group("Mutations are allowed |", () {
+  test("Non-mutable operations | ModifiableListView.length", () {
     final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    expect(modifiableListView.length, 3);
+  });
 
-    ModifiableListView<int> modifiableListView;
+  test("Non-mutable operations | ModifiableListView.lock", () {
+    final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    expect(modifiableListView.lock, isA<IList<int>>());
+    expect(modifiableListView.lock, [1, 2, 3]);
+  });
 
-    setUp(() => modifiableListView = ModifiableListView(iList));
+  test("Non-mutable operations | isEmpty | isNotEmpty", () {
+    final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    expect(modifiableListView.isEmpty, isFalse);
+    expect(modifiableListView.isNotEmpty, isTrue);
+  });
 
-    test("ModifiableListView.[]= operator", () {
-      modifiableListView[2] = 4;
-      expect(modifiableListView.length, 3);
-      expect(modifiableListView[2], 4);
-    });
+  test("Mutations are allowed | ModifiableListView.[]= operator", () {
+    final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    modifiableListView[2] = 4;
+    expect(modifiableListView.length, 3);
+    expect(modifiableListView[2], 4);
+  });
 
-    test("ModifiableListView.length setter", () {
-      modifiableListView.length = 2;
-      expect(modifiableListView.length, 2);
+  test("Mutations are allowed | ModifiableListView.length setter", () {
+    final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    modifiableListView.length = 2;
+    expect(modifiableListView.length, 2);
 
-      modifiableListView.length = 4;
-      expect(modifiableListView.length, 4);
-    });
+    modifiableListView.length = 4;
+    expect(modifiableListView.length, 4);
+  });
 
-    test("ModifiableListView.add method", () {
-      modifiableListView.add(4);
-      expect(modifiableListView.length, 4);
-      expect(modifiableListView.last, 4);
-    });
+  test("Mutations are allowed | ModifiableListView.add()", () {
+    final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    modifiableListView.add(4);
+    expect(modifiableListView.length, 4);
+    expect(modifiableListView.last, 4);
+  });
 
-    test("ModifiableListView.addAll method", () {
-      modifiableListView.addAll([4, 5]);
-      expect(modifiableListView.length, 5);
-      expect(modifiableListView[3], 4);
-      expect(modifiableListView[4], 5);
-    });
+  test("Mutations are allowed | ModifiableListView.addAll()", () {
+    final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    modifiableListView.addAll([4, 5]);
+    expect(modifiableListView.length, 5);
+    expect(modifiableListView[3], 4);
+    expect(modifiableListView[4], 5);
+  });
 
-    test("ModifiableListView.remove method", () {
-      modifiableListView.remove(2);
-      expect(modifiableListView.length, 2);
-      expect(modifiableListView[0], 1);
-      expect(modifiableListView[1], 3);
-    });
+  test("Mutations are allowed | ModifiableListView.remove()", () {
+    final IList<int> iList = [1, 2, 3].lock;
+    final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
+    modifiableListView.remove(2);
+    expect(modifiableListView.length, 2);
+    expect(modifiableListView[0], 1);
+    expect(modifiableListView[1], 3);
   });
 }
