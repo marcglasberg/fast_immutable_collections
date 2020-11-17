@@ -28,7 +28,7 @@ void main() {
     expect(lAddAll.length, 5);
   });
 
-  test("Index Access | LAddAll[index] method", () {
+  test("Index Access | LAddAll[index]", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     expect(lAddAll[0], 1);
     expect(lAddAll[1], 2);
@@ -149,7 +149,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.add method | "
+      "Ensuring Immutability | LAddAll.add() | "
       "Changing the passed mutable list doesn't change the LAddAll", () {
     final List<int> original = [3, 4, 5];
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
@@ -163,7 +163,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.add method | "
+      "Ensuring Immutability | LAddAll.add() | "
       "Adding to the original LAddAll doesn't change it", () {
     final List<int> original = [3, 4, 5];
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
@@ -178,7 +178,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.add method | "
+      "Ensuring Immutability | LAddAll.add() | "
       "If the item being passed is a variable, "
       "a pointer to it shouldn't exist inside LAddAll", () {
     final List<int> original = [3, 4, 5];
@@ -198,7 +198,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.addAll method | "
+      "Ensuring Immutability | LAddAll.addAll() | "
       "Changing the passed mutable list doesn't change the LAddAll", () {
     final List<int> original = [3, 4, 5];
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
@@ -212,7 +212,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.addAll method | "
+      "Ensuring Immutability | LAddAll.addAll() | "
       "Changing the passed immutable list doesn't change the original LAddAll", () {
     final List<int> original = [3, 4, 5];
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
@@ -227,7 +227,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.addAll method | "
+      "Ensuring Immutability | LAddAll.addAll() | "
       "If the items being passed are from a variable, "
       "it shouldn't have a pointer to the variable", () {
     final List<int> original = [3, 4, 5];
@@ -247,7 +247,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.remove method | "
+      "Ensuring Immutability | LAddAll.remove() | "
       "Changing the passed mutable list doesn't change the LAddAll", () {
     final List<int> original = [3, 4, 5];
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
@@ -261,7 +261,7 @@ void main() {
   });
 
   test(
-      "Ensuring Immutability | LAddAll.remove method | "
+      "Ensuring Immutability | LAddAll.remove() | "
       "Removing from the original LAddAll doesn't change it", () {
     final List<int> original = [3, 4, 5];
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), original);
