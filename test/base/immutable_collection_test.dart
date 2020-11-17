@@ -24,7 +24,8 @@ void main() {
   });
 
   group("disallowUnsafeConstructors |", () {
-    test("Is initially false", () => expect(ImmutableCollection.disallowUnsafeConstructors, isFalse));
+    test("Is initially false",
+        () => expect(ImmutableCollection.disallowUnsafeConstructors, isFalse));
 
     test("Changing the default to true", () {
       expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);

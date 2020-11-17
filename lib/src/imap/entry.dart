@@ -48,8 +48,7 @@ class Entry<K, V> implements Comparable<Entry<K, V>> {
 
   const Entry(this.key, this.value);
 
-  static Entry<K, V> from<K, V>(MapEntry<K, V> entry) =>
-      Entry(entry.key, entry.value);
+  static Entry<K, V> from<K, V>(MapEntry<K, V> entry) => Entry(entry.key, entry.value);
 
   @override
   String toString() => "Entry(${key.toString()}: ${value.toString()})";

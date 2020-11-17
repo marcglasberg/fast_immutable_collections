@@ -112,8 +112,8 @@ void main() {
     });
 
     test("ConfigMap.toString method", () {
-      expect(configMap1.toString(),
-          "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true}");
+      expect(
+          configMap1.toString(), "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true}");
       expect(configMap2.toString(),
           "ConfigMap{isDeepEquals: false, sortKeys: true, sortValues: true}");
       expect(configMap3.toString(),

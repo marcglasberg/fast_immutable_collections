@@ -49,8 +49,7 @@ void main() {
       final ConfigSet configSetIdentical = configSet1.copyWith(),
           configSet1WithDeepFalse = configSet1.copyWith(isDeepEquals: false),
           configSet1WithSortFalse = configSet1.copyWith(sort: false),
-          configSet1WithDeepAndSortFalse =
-              configSet1.copyWith(isDeepEquals: false, sort: false);
+          configSet1WithDeepAndSortFalse = configSet1.copyWith(isDeepEquals: false, sort: false);
 
       expect(identical(configSet1, configSetIdentical), isTrue);
 

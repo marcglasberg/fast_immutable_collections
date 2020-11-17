@@ -35,8 +35,7 @@ void main() {
       expect(configMapOfSets1.asConfigMap, const ConfigMap());
       expect(configMapOfSets2.asConfigMap, const ConfigMap(isDeepEquals: false));
       expect(configMapOfSets3.asConfigMap, const ConfigMap());
-      expect(configMapOfSets4.asConfigMap,
-          const ConfigMap(sortKeys: false, sortValues: false));
+      expect(configMapOfSets4.asConfigMap, const ConfigMap(sortKeys: false, sortValues: false));
     });
 
     test("ConfigMapOfSets.== operator", () {
@@ -86,10 +85,9 @@ void main() {
       final ConfigMapOfSets configMapOfSetsIdentical = configMapOfSets1.copyWith(),
           configMapOfSets1WithDeepFalse = configMapOfSets1.copyWith(isDeepEquals: false),
           configMapOfSets1WithSortKeysFalse = configMapOfSets1.copyWith(sortKeys: false),
-          configMapOfSets1WithSortValuesFalse =
-              configMapOfSets1.copyWith(sortValues: false),
-          configMapOfSets1WithAllFalse = configMapOfSets1.copyWith(
-              isDeepEquals: false, sortKeys: false, sortValues: false);
+          configMapOfSets1WithSortValuesFalse = configMapOfSets1.copyWith(sortValues: false),
+          configMapOfSets1WithAllFalse =
+              configMapOfSets1.copyWith(isDeepEquals: false, sortKeys: false, sortValues: false);
 
       expect(identical(configMapOfSets1, configMapOfSetsIdentical), isTrue);
 
@@ -106,8 +104,7 @@ void main() {
       expect(identical(configMapOfSets1, configMapOfSets1WithSortValuesFalse), isFalse);
       expect(configMapOfSets1.isDeepEquals, configMapOfSets1WithSortValuesFalse.isDeepEquals);
       expect(configMapOfSets1.sortKeys, configMapOfSets1WithSortValuesFalse.sortKeys);
-      expect(
-          configMapOfSets1.sortValues, !configMapOfSets1WithSortValuesFalse.sortValues);
+      expect(configMapOfSets1.sortValues, !configMapOfSets1WithSortValuesFalse.sortValues);
 
       expect(identical(configMapOfSets1, configMapOfSets1WithAllFalse), isFalse);
       expect(configMapOfSets1.isDeepEquals, !configMapOfSets1WithAllFalse.isDeepEquals);
@@ -157,7 +154,8 @@ void main() {
 
     test("Changing the default ConfigMapOfSets will throw an exception if lockConfig", () {
       ImmutableCollection.lockConfig();
-      expect(() => IMapOfSets.defaultConfig = ConfigMapOfSets(isDeepEquals: false), throwsStateError);
+      expect(
+          () => IMapOfSets.defaultConfig = ConfigMapOfSets(isDeepEquals: false), throwsStateError);
     });
   });
 }

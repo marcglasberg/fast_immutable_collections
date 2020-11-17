@@ -112,9 +112,8 @@ class SFlat<T> extends S<T> {
     return const SetEquality(MapEntryEquality()).equals(_set, set);
   }
 
-  bool deepSetEquals(SFlat<T> other) => (other == null)
-      ? false
-      : const SetEquality(MapEntryEquality()).equals(_set, other._set);
+  bool deepSetEquals(SFlat<T> other) =>
+      (other == null) ? false : const SetEquality(MapEntryEquality()).equals(_set, other._set);
 
   int deepSetHashcode() => const SetEquality(MapEntryEquality()).hash(_set);
 }

@@ -47,8 +47,8 @@ void main() {
 
       builtMapRemoveBenchmark.report();
 
-      expect(
-          builtMapRemoveBenchmark.toMutable(), MapBenchmarkBase.getDummyGeneratedMap()..remove("1"));
+      expect(builtMapRemoveBenchmark.toMutable(),
+          MapBenchmarkBase.getDummyGeneratedMap()..remove("1"));
     });
   });
 

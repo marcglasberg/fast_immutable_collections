@@ -68,8 +68,7 @@ void main() {
     /// Comparator Rules:
     /// 1) Strings are ordered according to their length.
     /// 2) Otherwise, they come in their natural order.
-    compareTo = (String a, String b) =>
-        a.length.compareTo(b.length).if0(a.compareTo(b));
+    compareTo = (String a, String b) => a.length.compareTo(b.length).if0(a.compareTo(b));
     list.shuffle();
     list.sort(compareTo);
     expect(list, ["a", "b", "c", "aa", "bb", "cc", "aaa", "bbb", "ccc"]);
@@ -77,8 +76,7 @@ void main() {
     /// Comparator Rules:
     /// 1) Strings are ordered according to their length.
     /// 2) Otherwise, they come in their natural order, inverted.
-    compareTo = (String a, String b) =>
-        a.length.compareTo(b.length).if0(-a.compareTo(b));
+    compareTo = (String a, String b) => a.length.compareTo(b.length).if0(-a.compareTo(b));
     list.shuffle();
     list.sort(compareTo);
     expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
@@ -87,24 +85,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("sortBy", () {
-    List<int> list = [
-      1,
-      15,
-      3,
-      21,
-      360,
-      9,
-      17,
-      300,
-      25,
-      5,
-      22,
-      10,
-      12,
-      27,
-      14,
-      5
-    ];
+    List<int> list = [1, 15, 3, 21, 360, 9, 17, 300, 25, 5, 22, 10, 12, 27, 14, 5];
 
     /// Comparator Rules:
     /// 1) If present, number 14 is always the first, followed by number 15.
@@ -191,8 +172,7 @@ void main() {
 
     for (int i = 1; i < 1000; i++) {
       list = list.shuffle().sort(compareTo);
-      expect(list.map((text) => text.length),
-          [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
     }
   });
 
@@ -252,9 +232,7 @@ void main() {
     expect([2, null, 1]..sort((a, b) => a.compareObjectTo(b)), [1, 2, null]);
 
     // Nulls go to the start.
-    expect(
-        [2, null, 1]..sort((a, b) => a.compareObjectTo(b, nullsBefore: true)),
-        [null, 1, 2]);
+    expect([2, null, 1]..sort((a, b) => a.compareObjectTo(b, nullsBefore: true)), [null, 1, 2]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

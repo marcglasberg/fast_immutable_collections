@@ -60,8 +60,8 @@ void main() {
 
       removeBenchmark.report();
 
-      removeBenchmark.benchmarks
-          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList()..remove(1)));
+      removeBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
+          expect(benchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList()..remove(1)));
     });
   });
 }
