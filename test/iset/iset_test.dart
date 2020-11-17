@@ -4,336 +4,317 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
+  test("Runtime Type", () {
+    expect(ISet(), isA<ISet>());
+    expect(ISet({}), isA<ISet>());
+    expect(ISet<String>({}), isA<ISet<String>>());
+    expect(ISet([1]), isA<ISet<int>>());
+    expect(ISet.empty<int>(), isA<ISet<int>>());
+    expect(<int>{}.lock, isA<ISet>());
+  });
 
   group("Creating immutable sets |", () {
-    final ISet iSet1 = ISet(), iSet2 = ISet({});
-    final iSet3 = ISet<String>({}),
-        iSet4 = ISet([1]),
-        iSet5 = ISet.empty<int>(),
-        iSet6 = <int>{}.lock;
-
-    test("Runtime Type", () {
-      expect(iSet1, isA<ISet>());
-      expect(iSet2, isA<ISet>());
-      expect(iSet3, isA<ISet<String>>());
-      expect(iSet4, isA<ISet<int>>());
-      expect(iSet5, isA<ISet<int>>());
-      expect(iSet6, isA<ISet>());
-    });
-
     test("Emptiness Properties", () {
-      expect(iSet1.isEmpty, isTrue);
-      expect(iSet2.isEmpty, isTrue);
-      expect(iSet3.isEmpty, isTrue);
-      expect(iSet4.isEmpty, isFalse);
-      expect(iSet5.isEmpty, isTrue);
-      expect(iSet6.isEmpty, isTrue);
+      expect(ISet().isEmpty, isTrue);
+      expect(ISet({}).isEmpty, isTrue);
+      expect(ISet<String>({}).isEmpty, isTrue);
+      expect(ISet([1]).isEmpty, isFalse);
+      expect(ISet.empty<int>().isEmpty, isTrue);
+      expect(<int>{}.lock.isEmpty, isTrue);
 
-      expect(iSet1.isNotEmpty, isFalse);
-      expect(iSet2.isNotEmpty, isFalse);
-      expect(iSet3.isNotEmpty, isFalse);
-      expect(iSet4.isNotEmpty, isTrue);
-      expect(iSet5.isNotEmpty, isFalse);
-      expect(iSet6.isNotEmpty, isFalse);
+      expect(ISet().isNotEmpty, isFalse);
+      expect(ISet({}).isNotEmpty, isFalse);
+      expect(ISet<String>({}).isNotEmpty, isFalse);
+      expect(ISet([1]).isNotEmpty, isTrue);
+      expect(ISet.empty<int>().isNotEmpty, isFalse);
+      expect(<int>{}.lock.isNotEmpty, isFalse);
     });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Ensuring Immutability |", () {
-    group("ISet.add method |", () {
-      test("Changing the passed mutable list doesn't change the IList", () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet = original.lock;
+  test(
+      "Ensuring Immutability | ISet.add() | "
+      "Changing the passed mutable list doesn't change the IList", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet = original.lock;
 
-        expect(iSet, original);
+    expect(iSet, original);
 
-        original.add(3);
-        original.add(4);
+    original.add(3);
+    original.add(4);
 
-        expect(original, <int>{1, 2, 3, 4});
-        expect(iSet, <int>{1, 2});
-      });
+    expect(original, <int>{1, 2, 3, 4});
+    expect(iSet, <int>{1, 2});
+  });
 
-      test("Changing the ISet also doesn't change the original set", () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet = original.lock;
+  test(
+      "Ensuring Immutability | ISet.add() | "
+      "Changing the ISet also doesn't change the original set", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet = original.lock;
 
-        expect(iSet, original);
+    expect(iSet, original);
 
-        final ISet<int> iSetNew = iSet.add(3);
+    final ISet<int> iSetNew = iSet.add(3);
 
-        expect(original, <int>{1, 2});
-        expect(iSet, <int>{1, 2});
-        expect(iSetNew, <int>{1, 2, 3});
-      });
+    expect(original, <int>{1, 2});
+    expect(iSet, <int>{1, 2});
+    expect(iSetNew, <int>{1, 2, 3});
+  });
 
-      test("If the item being passed is a variable, a pointer to it shouldn't exist inside ISet",
-          () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet = original.lock;
+  test(
+      "Ensuring Immutability | ISet.add() | "
+      "If the item being passed is a variable, a pointer to it shouldn't exist inside ISet", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet = original.lock;
 
-        expect(iSet, original);
+    expect(iSet, original);
 
-        int willChange = 4;
-        final ISet<int> iSetNew = iSet.add(willChange);
+    int willChange = 4;
+    final ISet<int> iSetNew = iSet.add(willChange);
 
-        willChange = 5;
+    willChange = 5;
 
-        expect(original, <int>{1, 2});
-        expect(iSet, <int>{1, 2});
-        expect(willChange, 5);
-        expect(iSetNew, <int>{1, 2, 4});
-      });
-    });
+    expect(original, <int>{1, 2});
+    expect(iSet, <int>{1, 2});
+    expect(willChange, 5);
+    expect(iSetNew, <int>{1, 2, 4});
+  });
 
-    group("ISet.addAll method", () {
-      test("Changing the passed mutable list doesn't change the ISet", () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet = original.lock;
+  test(
+      "Ensuring Immutability | ISet.addAll() | "
+      "Changing the passed mutable list doesn't change the ISet", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet = original.lock;
 
-        expect(iSet, <int>{1, 2});
+    expect(iSet, <int>{1, 2});
 
-        original.addAll(<int>{2, 3, 4});
+    original.addAll(<int>{2, 3, 4});
 
-        expect(original, <int>{1, 2, 3, 4});
-        expect(iSet, <int>{1, 2});
-      });
+    expect(original, <int>{1, 2, 3, 4});
+    expect(iSet, <int>{1, 2});
+  });
 
-      test("Changing the passed immutable set doesn't change the ISet", () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet = original.lock;
+  test(
+      "Ensuring Immutability | ISet.addAll() | "
+      "Changing the passed immutable set doesn't change the ISet", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet = original.lock;
 
-        expect(iSet, <int>{1, 2});
+    expect(iSet, <int>{1, 2});
 
-        final ISet<int> iSetNew = iSet.addAll(<int>{2, 3, 4});
+    final ISet<int> iSetNew = iSet.addAll(<int>{2, 3, 4});
 
-        expect(original, <int>{1, 2});
-        expect(iSet, <int>{1, 2});
-        expect(iSetNew, <int>{1, 2, 3, 4});
-      });
+    expect(original, <int>{1, 2});
+    expect(iSet, <int>{1, 2});
+    expect(iSetNew, <int>{1, 2, 3, 4});
+  });
 
-      test(
-          "If the items being passed are from a variable, "
-          "it shouldn't have a pointer to the variable", () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet1 = original.lock;
-        final ISet<int> iSet2 = original.lock;
+  test(
+      "Ensuring Immutability | ISet.addAll() | "
+      "If the items being passed are from a variable, "
+      "it shouldn't have a pointer to the variable", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet1 = original.lock;
+    final ISet<int> iSet2 = original.lock;
 
-        expect(iSet1, original);
-        expect(iSet2, original);
+    expect(iSet1, original);
+    expect(iSet2, original);
 
-        final ISet<int> iSetNew = iSet1.addAll(iSet2.addAll({3, 4}));
-        original.add(3);
+    final ISet<int> iSetNew = iSet1.addAll(iSet2.addAll({3, 4}));
+    original.add(3);
 
-        expect(original, <int>{1, 2, 3});
-        expect(iSet1, <int>{1, 2});
-        expect(iSet2, <int>{1, 2});
-        expect(iSetNew, <int>{1, 2, 3, 4});
-      });
-    });
+    expect(original, <int>{1, 2, 3});
+    expect(iSet1, <int>{1, 2});
+    expect(iSet2, <int>{1, 2});
+    expect(iSetNew, <int>{1, 2, 3, 4});
+  });
 
-    group("ISet.remove method |", () {
-      test("Changing the passed mutable set doesn't change the ISet", () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet = original.lock;
+  test(
+      "Ensuring Immutability | ISet.remove() | "
+      "Changing the passed mutable set doesn't change the ISet", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet = original.lock;
 
-        expect(iSet, {1, 2});
+    expect(iSet, {1, 2});
 
-        original.remove(2);
+    original.remove(2);
 
-        expect(original, <int>{1});
-        expect(iSet, <int>{1, 2});
-      });
+    expect(original, <int>{1});
+    expect(iSet, <int>{1, 2});
+  });
 
-      test("Removing from the original ISet doesn't change it", () {
-        final Set<int> original = {1, 2};
-        final ISet<int> iSet = original.lock;
+  test(
+      "Ensuring Immutability | ISet.remove() | "
+      "Removing from the original ISet doesn't change it", () {
+    final Set<int> original = {1, 2};
+    final ISet<int> iSet = original.lock;
 
-        expect(iSet, <int>{1, 2});
+    expect(iSet, <int>{1, 2});
 
-        final ISet<int> iSetNew = iSet.remove(1);
+    final ISet<int> iSetNew = iSet.remove(1);
 
-        expect(original, <int>{1, 2});
-        expect(iSet, <int>{1, 2});
-        expect(iSetNew, <int>{2});
-      });
-    });
+    expect(original, <int>{1, 2});
+    expect(iSet, <int>{1, 2});
+    expect(iSetNew, <int>{2});
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Equals and Other Comparisons |", () {
-    group("Equals Operator |", () {
-      test("ISet with identity-equals compares the set instance, not the items.", () {
-        final ISet<int> mySet = ISet({1, 2}).withIdentityEquals;
-        expect(mySet == mySet, isTrue);
-        expect(mySet == ISet({1, 2}).withIdentityEquals, isFalse);
-        expect(mySet == ISet({2, 1}).withIdentityEquals, isFalse);
-        expect(mySet == {1, 2}.lock, isFalse);
-        expect(mySet == ISet({1, 2, 3}).withIdentityEquals, isFalse);
-      });
+  test("Equals Operator | " "ISet with identity-equals compares the set instance, not the items.",
+      () {
+    final ISet<int> mySet = ISet({1, 2}).withIdentityEquals;
+    expect(mySet == mySet, isTrue);
+    expect(mySet == ISet({1, 2}).withIdentityEquals, isFalse);
+    expect(mySet == ISet({2, 1}).withIdentityEquals, isFalse);
+    expect(mySet == {1, 2}.lock, isFalse);
+    expect(mySet == ISet({1, 2, 3}).withIdentityEquals, isFalse);
+  });
 
-      test("ISet with deep-equals compares the items, not necessarily the list instance", () {
-        final ISet<int> mySet = ISet({1, 2});
-        expect(mySet == mySet, isTrue);
-        expect(mySet == ISet({1, 2}), isTrue);
-        expect(mySet == ISet({2, 1}), isTrue);
-        expect(mySet == {1, 2}.lock.withDeepEquals, isTrue);
-        expect(mySet == ISet({1, 2, 3}), isFalse);
-      });
+  test(
+      "Equals Operator | "
+      "ISet with deep-equals compares the items, not necessarily the list instance", () {
+    final ISet<int> mySet = ISet({1, 2});
+    expect(mySet == mySet, isTrue);
+    expect(mySet == ISet({1, 2}), isTrue);
+    expect(mySet == ISet({2, 1}), isTrue);
+    expect(mySet == {1, 2}.lock.withDeepEquals, isTrue);
+    expect(mySet == ISet({1, 2, 3}), isFalse);
+  });
 
-      test("ISet with deep-equals is always different from iSet with identity-equals", () {
-        expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}).withIdentityEquals, isFalse);
-        expect(ISet({1, 2}).withIdentityEquals == ISet({1, 2}).withDeepEquals, isFalse);
-        expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}), isTrue);
-        expect(ISet({1, 2}) == ISet({1, 2}).withDeepEquals, isTrue);
-      });
-    });
+  test(
+      "Equals Operator | "
+      "ISet with deep-equals is always different from iSet with identity-equals", () {
+    expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}).withIdentityEquals, isFalse);
+    expect(ISet({1, 2}).withIdentityEquals == ISet({1, 2}).withDeepEquals, isFalse);
+    expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}), isTrue);
+    expect(ISet({1, 2}) == ISet({1, 2}).withDeepEquals, isTrue);
+  });
 
-    group("Other Comparisons |", () {
-      test("ISet.isIdentityEquals and ISet.isDeepEquals properties", () {
-        final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2}).withIdentityEquals;
+  test("ISet.isIdentityEquals and ISet.isDeepEquals properties", () {
+    final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2}).withIdentityEquals;
 
-        expect(iSet1.isIdentityEquals, isFalse);
-        expect(iSet1.isDeepEquals, isTrue);
-        expect(iSet2.isIdentityEquals, isTrue);
-        expect(iSet2.isDeepEquals, isFalse);
-      });
+    expect(iSet1.isIdentityEquals, isFalse);
+    expect(iSet1.isDeepEquals, isTrue);
+    expect(iSet2.isIdentityEquals, isTrue);
+    expect(iSet2.isDeepEquals, isFalse);
+  });
 
-      group("Same, Equals and the == Operator |", () {
-        final ISet<int> iSet1 = ISet({1, 2}),
-            iSet2 = ISet({1, 2}),
-            iSet3 = ISet({1}),
-            iSet4 = ISet({2, 1}),
-            iSet5 = ISet({1, 2}).withIdentityEquals;
+  test("ISet.same()", () {
+    final ISet<int> iSet1 = ISet({1, 2});
+    expect(iSet1.same(iSet1), isTrue);
+    expect(iSet1.same(ISet({1, 2})), isFalse);
+    expect(iSet1.same(ISet({1})), isFalse);
+    expect(iSet1.same(ISet({2, 1})), isFalse);
+    expect(iSet1.same(ISet({1, 2}).withIdentityEquals), isFalse);
+    expect(iSet1.same(iSet1.add(2)), isTrue);
+  });
 
-        test("ISet.same method", () {
-          expect(iSet1.same(iSet1), isTrue);
-          expect(iSet1.same(iSet2), isFalse);
-          expect(iSet1.same(iSet3), isFalse);
-          expect(iSet1.same(iSet4), isFalse);
-          expect(iSet1.same(iSet5), isFalse);
-          expect(iSet1.same(iSet1.add(2)), isTrue);
-        });
+  test("ISet.equalItemsAndConfig method", () {
+    final ISet<int> iSet1 = ISet({1, 2});
+    expect(iSet1.equalItemsAndConfig(iSet1), isTrue);
+    expect(iSet1.equalItemsAndConfig(ISet({1, 2})), isTrue);
+    expect(iSet1.equalItemsAndConfig(ISet({1})), isFalse);
+    expect(iSet1.equalItemsAndConfig(ISet({2, 1})), isTrue);
+    expect(iSet1.equalItemsAndConfig(ISet({1, 2}).withIdentityEquals), isFalse);
+    expect(iSet1.equalItemsAndConfig(iSet1.remove(3)), isTrue);
+  });
 
-        test("ISet.equalItemsAndConfig method", () {
-          expect(iSet1.equalItemsAndConfig(iSet1), isTrue);
-          expect(iSet1.equalItemsAndConfig(iSet2), isTrue);
-          expect(iSet1.equalItemsAndConfig(iSet3), isFalse);
-          expect(iSet1.equalItemsAndConfig(iSet4), isTrue);
-          expect(iSet1.equalItemsAndConfig(iSet5), isFalse);
-          expect(iSet1.equalItemsAndConfig(iSet1.remove(3)), isTrue);
-        });
+  test("ISet.== operator", () {
+    final ISet<int> iSet1 = ISet({1, 2});
+    expect(iSet1 == iSet1, isTrue);
+    expect(iSet1 == ISet({1, 2}), isTrue);
+    expect(iSet1 == ISet({1}), isFalse);
+    expect(iSet1 == ISet({2, 1}), isTrue);
+    expect(iSet1 == ISet({1, 2}).withIdentityEquals, isFalse);
+  });
+  test("ISet.equalItems() | Null", () => expect(ISet({1, 2}).equalItems(null), isFalse));
 
-        test("ISet.== operator", () {
-          expect(iSet1 == iSet1, isTrue);
-          expect(iSet1 == iSet2, isTrue);
-          expect(iSet1 == iSet3, isFalse);
-          expect(iSet1 == iSet4, isTrue);
-          expect(iSet1 == iSet5, isFalse);
-        });
+  test("ISet.equalItems() | Identity", () => expect(ISet({1, 2}).equalItems([1, 2]), isTrue));
 
-        group("ISet.equalItems method |", () {
-          final Iterable<int> iterable1 = [1, 2], iterable3 = [1], iterable4 = [2, 1];
+  test("ISet.equalItems() | The order doesn't matter",
+      () => expect(ISet({1, 2}).equalItems([2, 1]), isTrue));
 
-          test("Null", () => expect(iSet1.equalItems(null), isFalse));
+  test("ISet.equalItems() | Different items yield false",
+      () => expect(ISet({1, 2}).equalItems([1]), isFalse));
 
-          test("Identity", () => expect(iSet1.equalItems(iterable1), isTrue));
+  test("ISet.hashCode() | deepEquals vs deepEquals", () {
+    final ISet<int> iSet1 = ISet({1, 2});
+    expect(iSet1 == ISet({1, 2}), isTrue);
+    expect(iSet1 == ISet({1, 2, 3}), isFalse);
+    expect(iSet1 == ISet({2, 1}), isTrue);
+    expect(iSet1.hashCode, ISet({1, 2}).hashCode);
+    expect(iSet1.hashCode, isNot(ISet({1, 2, 3}).hashCode));
+    expect(iSet1.hashCode, ISet({2, 1}).hashCode);
+  });
 
-          test("The order doesn't matter", () => expect(iSet1.equalItems(iterable4), isTrue));
+  test("ISet.hashCode() | identityEquals vs identityEquals", () {
+    final ISet<int> iSet1WithIdentity = ISet({1, 2}).withIdentityEquals;
+    expect(iSet1WithIdentity == ISet({1, 2}).withIdentityEquals, isFalse);
+    expect(iSet1WithIdentity == ISet({1, 2, 3}).withIdentityEquals, isFalse);
+    expect(iSet1WithIdentity == ISet({2, 1}).withIdentityEquals, isFalse);
+    expect(iSet1WithIdentity.hashCode, isNot(ISet({1, 2}).withIdentityEquals.hashCode));
+    expect(iSet1WithIdentity.hashCode, isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
+    expect(iSet1WithIdentity.hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
+  });
 
-          test("Different items yield false", () => expect(iSet1.equalItems(iterable3), isFalse));
-        });
-      });
-    });
+  test("ISet.hashCode() | deepEquals vs identityEquals", () {
+    final ISet<int> iSet1 = ISet({1, 2});
+    final ISet<int> iSet1WithIdentity = iSet1.withIdentityEquals;
+    expect(iSet1 == iSet1WithIdentity, isFalse);
+    expect(ISet({1, 2}) == ISet({1, 2}).withIdentityEquals, isFalse);
+    expect(ISet({1, 2, 3}) == ISet({1, 2, 3}).withIdentityEquals, isFalse);
+    expect(ISet({2, 1}) == ISet({2, 1}).withIdentityEquals, isFalse);
+    expect(iSet1.hashCode, isNot(iSet1WithIdentity.hashCode));
+    expect(ISet({1, 2}).hashCode, isNot(ISet({1, 2}).withIdentityEquals.hashCode));
+    expect(ISet({1, 2, 3}).hashCode, isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
+    expect(ISet({2, 1}).hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
+  });
 
-    group("ISet.hashCode method |", () {
-      final ISet<int> iSet1 = ISet({1, 2}),
-          iSet2 = ISet({1, 2}),
-          iSet3 = ISet({1, 2, 3}),
-          iSet4 = ISet({2, 1});
-      final ISet<int> iSet1WithIdentity = iSet1.withIdentityEquals,
-          iSet2WithIdentity = iSet2.withIdentityEquals,
-          iSet3WithIdentity = iSet3.withIdentityEquals,
-          iSet4WithIdentity = iSet4.withIdentityEquals;
+  test("ISet.config()", () {
+    final ISet<int> iSet = ISet({1, 2});
 
-      test("deepEquals vs deepEquals", () {
-        expect(iSet1 == iSet2, isTrue);
-        expect(iSet1 == iSet3, isFalse);
-        expect(iSet1 == iSet4, isTrue);
-        expect(iSet1.hashCode, iSet2.hashCode);
-        expect(iSet1.hashCode, isNot(iSet3.hashCode));
-        expect(iSet1.hashCode, iSet4.hashCode);
-      });
+    expect(iSet.isDeepEquals, isTrue);
+    expect(iSet.config.sort, isTrue);
 
-      test("identityEquals vs identityEquals", () {
-        expect(iSet1WithIdentity == iSet2WithIdentity, isFalse);
-        expect(iSet1WithIdentity == iSet3WithIdentity, isFalse);
-        expect(iSet1WithIdentity == iSet4WithIdentity, isFalse);
-        expect(iSet1WithIdentity.hashCode, isNot(iSet2WithIdentity.hashCode));
-        expect(iSet1WithIdentity.hashCode, isNot(iSet3WithIdentity.hashCode));
-        expect(iSet1WithIdentity.hashCode, isNot(iSet4WithIdentity.hashCode));
-      });
+    final ISet<int> iSetWithCompare = iSet.withConfig(
+      iSet.config.copyWith(sort: false),
+    );
 
-      test("deepEquals vs identityEquals", () {
-        expect(iSet1 == iSet1WithIdentity, isFalse);
-        expect(iSet2 == iSet2WithIdentity, isFalse);
-        expect(iSet3 == iSet3WithIdentity, isFalse);
-        expect(iSet4 == iSet4WithIdentity, isFalse);
-        expect(iSet1.hashCode, isNot(iSet1WithIdentity.hashCode));
-        expect(iSet2.hashCode, isNot(iSet2WithIdentity.hashCode));
-        expect(iSet3.hashCode, isNot(iSet3WithIdentity.hashCode));
-        expect(iSet4.hashCode, isNot(iSet4WithIdentity.hashCode));
-      });
-    });
-
-    test("ISet.config method", () {
-      final ISet<int> iSet = ISet({1, 2});
-
-      expect(iSet.isDeepEquals, isTrue);
-      expect(iSet.config.sort, isTrue);
-
-      final ISet<int> iSetWithCompare = iSet.withConfig(
-        iSet.config.copyWith(sort: false),
-      );
-
-      expect(iSetWithCompare.isDeepEquals, isTrue);
-      expect(iSetWithCompare.config.sort, isFalse);
-    });
+    expect(iSetWithCompare.isDeepEquals, isTrue);
+    expect(iSetWithCompare.config.sort, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  group("Creating immutable sets with extension |", () {
-    test("From an empty set", () {
-      final ISet iList = <int>{}.lock;
+  test("From an empty set", () {
+    final ISet iSet = <int>{}.lock;
 
-      expect(iList, isA<ISet>());
-      expect(iList.isEmpty, isTrue);
-      expect(iList.isNotEmpty, isFalse);
-    });
+    expect(iSet, isA<ISet>());
+    expect(iSet.isEmpty, isTrue);
+    expect(iSet.isNotEmpty, isFalse);
+  });
 
-    test("From a set with one int item", () {
-      final ISet iSet = {1}.lock;
+  test("From a set with one int item", () {
+    final ISet iSet = {1}.lock;
 
-      expect(iSet, isA<ISet<int>>());
-      expect(iSet.isEmpty, isFalse);
-      expect(iSet.isNotEmpty, isTrue);
-    });
+    expect(iSet, isA<ISet<int>>());
+    expect(iSet.isEmpty, isFalse);
+    expect(iSet.isNotEmpty, isTrue);
+  });
 
-    test("From a set with one null string", () {
-      final String text = null;
-      final ISet<String> typedList = {text}.lock;
+  test("From a set with one null string", () {
+    final String text = null;
+    final ISet<String> typedSet = {text}.lock;
 
-      expect(typedList, isA<ISet<String>>());
-    });
+    expect(typedSet, isA<ISet<String>>());
+  });
 
-    test("From an empty set typed with String", () {
-      final typedList = <String>{}.lock;
+  test("From an empty set typed with String", () {
+    final typedSet = <String>{}.lock;
 
-      expect(typedList, isA<ISet<String>>());
-    });
+    expect(typedSet, isA<ISet<String>>());
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -5,37 +5,25 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
-    final IMap iMap1 = IMap();
-    final iMap2 = IMap({});
-    final iMap3 = IMap<String, int>({});
-    final iMap4 = IMap({"a": 1});
-    final iMap5 = IMap.empty<String, int>();
-
-    expect(iMap1, isA<IMap>());
-    expect(iMap2, isA<IMap>());
-    expect(iMap3, isA<IMap<String, int>>());
-    expect(iMap4, isA<IMap<String, int>>());
-    expect(iMap5, isA<IMap<String, int>>());
+    expect(IMap(), isA<IMap>());
+    expect(IMap({}), isA<IMap>());
+    expect(IMap<String, int>({}), isA<IMap<String, int>>());
+    expect(IMap({"a": 1}), isA<IMap<String, int>>());
+    expect(IMap.empty<String, int>(), isA<IMap<String, int>>());
   });
 
   test("isEmpty | isNotEmpty", () {
-    final IMap iMap1 = IMap();
-    final iMap2 = IMap({});
-    final iMap3 = IMap<String, int>({});
-    final iMap4 = IMap({"a": 1});
-    final iMap5 = IMap.empty<String, int>();
+    expect(IMap().isEmpty, isTrue);
+    expect(IMap({}).isEmpty, isTrue);
+    expect(IMap<String, int>({}).isEmpty, isTrue);
+    expect(IMap({"a": 1}).isEmpty, isFalse);
+    expect(IMap.empty<String, int>().isEmpty, isTrue);
 
-    expect(iMap1.isEmpty, isTrue);
-    expect(iMap2.isEmpty, isTrue);
-    expect(iMap3.isEmpty, isTrue);
-    expect(iMap4.isEmpty, isFalse);
-    expect(iMap5.isEmpty, isTrue);
-
-    expect(iMap1.isNotEmpty, isFalse);
-    expect(iMap2.isNotEmpty, isFalse);
-    expect(iMap3.isNotEmpty, isFalse);
-    expect(iMap4.isNotEmpty, isTrue);
-    expect(iMap5.isNotEmpty, isFalse);
+    expect(IMap().isNotEmpty, isFalse);
+    expect(IMap({}).isNotEmpty, isFalse);
+    expect(IMap<String, int>({}).isNotEmpty, isFalse);
+    expect(IMap({"a": 1}).isNotEmpty, isTrue);
+    expect(IMap.empty<String, int>().isNotEmpty, isFalse);
   });
 
   test("IMap.unlock", () {
