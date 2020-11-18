@@ -65,7 +65,7 @@ void main() {
     expect(configMap4 == configMap8, isTrue);
   });
 
-  test("ConfigMap.copyWith method", () {
+  test("ConfigMap.copyWith()", () {
     const ConfigMap configMap1 = ConfigMap();
     final ConfigMap configMapIdentical = configMap1.copyWith(),
         configMap1WithDeepFalse = configMap1.copyWith(isDeepEquals: false),
@@ -115,7 +115,7 @@ void main() {
     expect(configMap3.hashCode, isNot(configMap4.hashCode));
   });
 
-  test("ConfigMap.toString method", () {
+  test("ConfigMap.toString()", () {
     expect(
         ConfigMap().toString(), "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true}");
     expect(ConfigMap(isDeepEquals: false).toString(),
