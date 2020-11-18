@@ -5,8 +5,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 void main() {
   test("Non-mutable operations | UnmodifiableMapView.[] operator", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(iMap),
+    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
     final List<UnmodifiableMapView<String, int>> views = [
       unmodifiableMapView,
@@ -23,8 +22,7 @@ void main() {
 
   test("Non-mutable operations | UnmodifiableMapView.keys getter", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(iMap),
+    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
     final List<UnmodifiableMapView<String, int>> views = [
       unmodifiableMapView,
@@ -39,8 +37,7 @@ void main() {
 
   test("Non-mutable operations | UnmodifiableMapView.lock getter", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(iMap),
+    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
     final List<UnmodifiableMapView<String, int>> views = [
       unmodifiableMapView,
@@ -52,8 +49,7 @@ void main() {
 
   test("Mutations are not allowed | UnmodifiableMapView.[]= operator", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(iMap),
+    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
     final List<UnmodifiableMapView<String, int>> views = [
       unmodifiableMapView,
@@ -66,8 +62,7 @@ void main() {
 
   test("Mutations are not allowed | UnmodifiableMapView.clear()", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(iMap),
+    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
     final List<UnmodifiableMapView<String, int>> views = [
       unmodifiableMapView,
@@ -80,8 +75,7 @@ void main() {
 
   test("Mutations are not allowed | UnmodifiableMapView.remove()", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(iMap),
+    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
     final List<UnmodifiableMapView<String, int>> views = [
       unmodifiableMapView,

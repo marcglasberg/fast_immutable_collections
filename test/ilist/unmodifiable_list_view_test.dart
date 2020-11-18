@@ -5,8 +5,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 void main() {
   test("Non-mutable operations | UnmodifiableListView.[] operator", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
@@ -22,8 +21,7 @@ void main() {
 
   test("Non-mutable operations | UnmodifiableListView.length getter", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
@@ -35,8 +33,7 @@ void main() {
 
   test("Non-mutable operations | UnmodifiableListView.lock getter", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
@@ -49,8 +46,7 @@ void main() {
 
   test("Non-mutable operations | Emptiness properties", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
@@ -65,8 +61,7 @@ void main() {
 
   test("Mutations are not allowed | UnmodifiableListView.[]= operator", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
@@ -79,8 +74,7 @@ void main() {
 
   test("Mutations are not allowed | UnmodifiableListView.length setter", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
@@ -93,8 +87,7 @@ void main() {
 
   test("Mutations are not allowed | UnmodifiableListView.add method", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
@@ -107,8 +100,7 @@ void main() {
 
   test("Mutations are not allowed | UnmodifiableListView.remove method", () {
     const List<int> baseList = [1, 2, 3];
-    final IList<int> iList = baseList.lock;
-    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(iList),
+    final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
     final List<UnmodifiableListView<int>> views = [
       unmodifiableListView,
