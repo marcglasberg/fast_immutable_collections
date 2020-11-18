@@ -32,6 +32,7 @@ class _GraphScreenState extends State<GraphScreen> {
   /// We will need to add an artifial button to the bottom bar if there's only one benchmark, since
   /// it requires at least 2 items.
   bool _onlyOneBenchmark = false;
+  bool _stacked = false;
 
   RecordsTable get _currentTable => widget.tables[_currentTableIndex];
 
@@ -53,14 +54,26 @@ class _GraphScreenState extends State<GraphScreen> {
           label: "Go back",
         ),
       );
+    } else if (_bottomItems.length > 1) {
+      _bottomItems.add(
+        BottomNavigationBarItem(
+          icon: Icon(Icons.place),
+          label: "All",
+        ),
+      );
     }
   }
 
   void _onTap(int index) => setState(() {
-        if (_onlyOneBenchmark && index == 1)
+        if (_onlyOneBenchmark && index == 1) {
           Navigator.of(context).pop();
-        else
+        } else if (index == widget.tables.length) {
+          _stacked = true;
           _currentTableIndex = index;
+        } else {
+          _stacked = false;
+          _currentTableIndex = index;
+        }
       });
 
   @override
@@ -71,9 +84,14 @@ class _GraphScreenState extends State<GraphScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 5),
-        child: BarChart(recordsTable: _currentTable),
+        child: _stacked
+            ? StackedBarChart(recordsTables: widget.tables)
+            : BarChart(recordsTable: _currentTable),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        unselectedLabelStyle: TextStyle(color: Colors.grey),
         items: _bottomItems,
         onTap: _onTap,
         currentIndex: _currentTableIndex,
