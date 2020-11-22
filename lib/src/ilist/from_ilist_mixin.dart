@@ -1,8 +1,8 @@
 import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-/// This mixin implements all [IList] methods, plus `operator []`,
-/// but it does NOT implement [Iterable] nor [IList].
+/// This mixin implements all [IList] methods (without config), plus
+/// `operator []`, but it does NOT implement [Iterable] nor [IList].
 ///
 /// It is meant to help you wrap an [IList] into another class (composition).
 /// You must override the [iter] getter to return the inner [IList].
@@ -15,7 +15,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// Example:
 ///
 /// ```dart
-/// class Students with IListMixin<Student, Students> {
+/// class Students with FromIListMixin<Student, Students> {
 ///   final IList<Student> _students;
 ///
 ///   Students([Iterable<Student> students]) : _students = IList(students);
@@ -24,39 +24,40 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 ///   Students newInstance(IList<Student> iList) => Students(iList);
 ///
 ///   @override
-///   IList<Student> get iList => _students;
+///   IList<Student> get iter => _students;
 /// }
 /// ```
 ///
-/// Note: Why this class does NOT implement [Iterable]? Unfortunately, the [expect]
-/// method in tests compares [Iterable]s by comparing its items. So if you
-/// create a class that implement [Iterable] and then you want to use the [expect]
-/// method, it will just compare its items, completing ignoring its `operator ==`.
+/// Note: Why this class does NOT implement [Iterable]? Unfortunately, the
+/// [expect] method in tests compares [Iterable]s by comparing its items. So if
+/// you create a class that implement [Iterable] and then you want to use the
+/// [expect] method, it will just compare its items, completing ignoring its
+/// `operator ==`.
 ///
 /// If you need to iterate over this class, you can use the [iter] getter:
 ///
-///     class MyClass with IListMixin<T> { ... }
+///     class MyClass with FromIListMixin<T> { ... }
 ///     MyClass obj = MyClass([1, 2, 3]);
 ///     for (int value in obj.iter) print(value);
 ///
-/// Please note, if you really want to make your class [Iterable] or [IList],
-/// you can just add the `implements Iterable<T>` or `implements IList<T>`
-/// to its declaration. For example:
+/// Please note, if you really want to make your class [Iterable],
+/// you can just add the `implements Iterable<T>` to its declaration.
+/// For example:
 ///
-///     class MyClass with IListMixin<T>,
+///     class MyClass with FromIListMixin<T>,
 ///                   implements Iterable<T> { ... }
 ///     MyClass obj = MyClass([1, 2, 3]);
 ///     for (int value in obj) print(value);
 ///
-/// See also: [IterableIListMixin].
+/// See also: [FromIterableIListMixin].
 ///
 mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   //
 
-  // Classes with [IListMixin] must override this.
+  // Classes with [FromIListMixin] must override this.
   IList<T> get iter;
 
-  // Classes with [IListMixin] must override this.
+  // Classes with [FromIListMixin] must override this.
   I newInstance(IList<T> iList);
 
   Iterator<T> get iterator => iter.iterator;

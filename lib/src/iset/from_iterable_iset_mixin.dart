@@ -1,10 +1,10 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-/// This mixin implements all [Iterable] methods, plus `operator []`,
-/// but it does NOT implement [Iterable] nor [IList].
+/// This mixin implements all [Iterable] methods,
+/// but it does NOT implement [Iterable] nor [ISet].
 ///
-/// It is meant to help you wrap an [IList] into another class (composition).
-/// You must override the [iter] getter to return the inner [IList].
+/// It is meant to help you wrap an [ISet] into another class (composition).
+/// You must override the [iter] getter to return the inner [ISet].
 /// All other methods are efficiently implemented in terms of the [iter].
 ///
 /// Note: This class does NOT implement [Iterable]. Unfortunately, the [expect]
@@ -15,28 +15,23 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 ///
 /// If you need to iterate over this class, you can use the [iter] getter:
 ///
-///     class MyClass with IterableLikeIListMixin<T> { ... }
-///     MyClass obj = MyClass([1, 2, 3]);
+///     class MyClass with IterableLikeISetMixin<T> { ... }
+///     MyClass obj = MyClass({1, 2, 3});
 ///     for (int value in obj.iter) print(value);
 ///
 /// Please note, if you really want to make your class [Iterable], you can
 /// just add the `implements Iterable<T>` to its declaration. For example:
 ///
-///     class MyClass with IterableLikeIListMixin<T>,
+///     class MyClass with IterableLikeISetMixin<T>,
 ///                   implements Iterable<T> { ... }
-///     MyClass obj = MyClass([1, 2, 3]);
+///     MyClass obj = MyClass({1, 2, 3});
 ///     for (int value in obj) print(value);
 ///
 ///
-/// See also: [FromIListMixin].
+/// See also: [FromISetMixin].
 ///
-mixin FromIterableIListMixin<T> implements CanBeEmpty {
-  //
-
-  // Classes with [FromIterableIListMixin] must override this.
-  IList<T> get iter;
-
-  Iterator<T> get iterator => iter.iterator;
+mixin FromIterableISetMixin<T> implements CanBeEmpty {
+  ISet<T> get iter;
 
   bool any(bool Function(T) test) => iter.any(test);
 
@@ -44,9 +39,8 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   bool contains(Object element) => iter.contains(element);
 
-  T operator [](int index) => iter[index];
-
-  T elementAt(int index) => iter[index];
+  T elementAt(int index) =>
+      throw UnsupportedError("elementAt in ISet is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 
@@ -90,7 +84,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  IList<T> where(bool Function(T element) test) => iter.where(test);
+  ISet<T> where(bool Function(T element) test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 
@@ -99,6 +93,8 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   @override
   bool get isNotEmpty => iter.isNotEmpty;
+
+  Iterator<T> get iterator => iter.iterator;
 
   List<T> toList({bool growable = true}) => List.of(iter, growable: growable);
 

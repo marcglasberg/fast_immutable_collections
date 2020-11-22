@@ -9,7 +9,6 @@
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
 
-
 [codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
 [codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
 [github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
@@ -30,7 +29,7 @@ Other valuable features are:
 - Global configurations for altering, locking, etc. your immutable collections.
 - Mixins for you to build your own immutable collections or objects.
 - Collection views so you can work with immutable objects as if they were the mutable ones.
-- Native deep equalities, which create a more friendly of treating your objects as value objects.
+- Configurable native deep equalities, which let you treat your collections as value objects.
 
 **Fast Immutable Collections** is a competitor to the excellent
 [built_collection][built_collection] and [kt_dart][kt_dart] packages, 
@@ -271,8 +270,12 @@ By default, `IList`s are equal if they have the same items in the same order.
 ```dart                                     
 var ilist1 = [1, 2, 3].lock;
 var ilist2 = [1, 2, 3].lock;
-
-print(ilist1 == ilist2); // True!
+                                    
+// False!
+print(identical(ilist1 == ilist2));
+                         
+// True!
+print(ilist1 == ilist2);
 ```                                                                          
 
 This is in sharp contrast to regular `List`s, which are compared by identity:
@@ -282,6 +285,7 @@ var list1 = [1, 2, 3];
 var list2 = [1, 2, 3];
                       
 // Regular Lists compare by identity:
+print(identical(ilist1 == ilist2)); // False!
 print(list1 == list2); // False!
 
 // While ILists compare by deep equals:
@@ -315,8 +319,8 @@ print(getSum(5, 3)); // Got from cache: 5 + 3 = 8
 ```    
 
 However, `IList`s are configurable, and you can actually create `IList`s which
-compare their internals by identity or deep equals, as desired.
-There are 3 main ways to do achieve:
+compare their internals by **identity** or **deep equals**, as desired.
+There are 3 main ways to do it:
  
 1. You can use getters `withIdentityEquals` and `withDeepEquals`:
 
@@ -345,7 +349,7 @@ and the `ConfigList` class to change the configuration:
     ```
 
 1. Or you can use the `withConfig` constructor to
-explicitly create the `IList` with your desired configuration:
+explicitly create the `IList` already with your desired configuration:
 
     ```dart
     var list = [1, 2];
@@ -401,7 +405,7 @@ print(ilistB1 == ilistB2); // False!
 print(ilistA1 == ilistA2); // True!
 ```                                                                        
 
-**Important Note:** 
+**Important note:** 
 
 The global configuration is meant to be decided during your app's initialization, and then not changed again.
 We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
@@ -450,7 +454,7 @@ is only comparing lists with lists, set with sets, etc.
 
 ## 2.4. IList reuse by composition
 
-Classes `IListMixin` and `IterableIListMixin` let you easily 
+Classes `FromIListMixin` and `FromIterableIListMixin` let you easily 
 create your own immutable classes based on the `IList`.
 This helps you create more strongly typed collections, 
 and add your own methods to them.
@@ -474,10 +478,10 @@ class Student {
 And suppose you want to create a `Students` class 
 which is an immutable collection of `Student`s. 
 
-You can easily implement it using the `IListMixin`:
+You can easily implement it using the `FromIListMixin`:
 
 ```dart  
-class Students with IListMixin<Student, Students> {
+class Students with FromIListMixin<Student, Students> {
 
    /// This is the boilerplate to create the collection:
    final IList<Student> _students;
@@ -507,7 +511,40 @@ expect(students, [james, sara, lucy]);
                              
 // Prints: "Hello James, Sara, Lucy."
 print(students.greetings()); 
-```   
+```     
+
+There are a few aspects of native Dart collection mixins which I don't like, so I've tried to improve on those here.
+
+* First is that some Dart mixins let you create inefficient methods 
+(like fore example, a `length` getter which has to iterate through all items to yield a result).
+All mixins within `fast_immutable_collections` are as efficient as the underlying immutable collection, 
+so you don't need to worry about this problem.
+
+* Second is that the native Dart mixins implement their respective collections. 
+For example, a `ListMixin` implements `List`. I don't think this is desirable. 
+For example, should a `Students` class be an `IList` by default? I don't think so.
+For this reason, the `FromIListMixin` is not called `IListMixin`, and it does not implement `IList` nor `Iterable`.
+
+* Third, unfortunately, the `expect` method in tests compare iterables by comparing their items. 
+So, if the `Students` class were to implement `Iterable`, the `expect` method would completely ignore its 
+`operator ==`, which probably is not what you want.
+
+Note, you can still iterate through the `Students` class in the example by calling `.iter` on it:
+
+```dart  
+for (Student student in students.iter) { ... }
+```
+ 
+And also, if really do want it to implement `Iterable`, you can do so by explicitly declaring it: 
+
+```dart  
+class Students with FromIListMixin<Student, Students> implements Iterable<Student> { ... }
+
+class Students with FromIterableIListMixin<Student> implements Iterable<Student> { ... }
+```
+
+Please refer to the `FromIListMixin` and `FromIterableIListMixin` own documentation 
+to learn how to use these mixins in detail.
 
 
 ## 2.5. Advanced usage
@@ -517,7 +554,8 @@ which will have different results in speed and safety.
 
 ```dart
 IList<int> ilist = [1, 2, 3].lock;       // Safe
-IList<int> ilist = [1, 2, 3].lockUnsafe; // Only this one is dangerous
+IList<int> ilist = [1, 2, 3].lockUnsafe; // Only this way to lock a list is dangerous
+
 List<int> list = ilist.unlock;           // Safe and mutable
 List<int> list = ilist.unlockView;       // Safe, fast and immutable
 List<int> list = ilist.unlockLazy;       // Safe, fast and mutable
@@ -536,7 +574,7 @@ when you are sure no external copies exist. If the original list is modified,
 it will break the `IList` and any other derived lists in unpredictable ways.
 Use this at your own peril. This is the same doing: `IList.unsafe(list)`.
 Note you can optionally disallow unsafe constructors in the global configuration 
-by doing: `disallowUnsafeConstructors = true` (and then optionally preventing 
+by doing: `disallowUnsafeConstructors = true` (and then optionally prevent 
 further configuration changes by calling `lockConfig()`).                  
 
 These are your options to obtain a regular `List` back from an `IList`:
@@ -607,9 +645,9 @@ ISet constructors:
                                                               
 ## 3.1. Similarities and Differences to the IList
 
-> Since I don't want to repeat myself, 
-> all the topics below are explained in much less detail here than for the IList.
-> Please read the IList explanation first, before trying to understand the ISet.
+Since I don't want to repeat myself, 
+all the topics below are explained in much less detail here than for the IList.
+Please read the IList explanation first, before trying to understand the ISet.
 
 - An `ISet` is an `Iterable`, so you can iterate over it.
 
@@ -626,17 +664,17 @@ but can also help when implementing some other interesting data structures.
 - However, `ISet`s are configurable, and you can actually create `ISet`s which
 compare their internals by identity or deep equals, as desired.
    
-- To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
+- To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`;
 or else use the `withConfig` method and the `ConfigSet` class to change the configuration;
 or else use the `withConfig` constructor to explicitly create the `ISet` with your desired configuration.
  
-- The configurations affect how the `== operator` works, 
+- The configuration affects how the `== operator` works, 
 but you can also choose how to compare sets by using the following `ISet` methods:
 `equalItems`, `equalItemsAndConfig` and `same`.
 Note, however, there is no `unorderedEqualItems` like in the `IList`, 
 because since `ISets` are unordered the `equalItems` method already disregards the order.
 
-- Classes `ISetMixin` and `IterableISetMixin` let you easily 
+- Classes `FromISetMixin` and `FromIterableISetMixin` let you easily 
 create your own immutable classes based on the `ISet`.
 This helps you create more strongly typed collections, 
 and add your own methods to them.
@@ -645,7 +683,7 @@ and add your own methods to them.
 Note flush just optimizes the set **internally**, 
 and no external difference will be visible.
 Depending on the global configuration, the `ISet`s 
-will flush automatically for you, once per asynchronous gap.  
+will flush automatically for you.  
 
 - There are a few ways to lock and unlock a set, 
 which will have different results in speed and safety.
@@ -657,7 +695,7 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
 
     ```dart
     ISet<int> iset = {1, 2, 3}.lock;       // Safe
-    ISet<int> iset = {1, 2, 3}.lockUnsafe; // Only this one is dangerous
+    ISet<int> iset = {1, 2, 3}.lockUnsafe; // Only this way to lock a set is dangerous
     Set<int> set = iset.unlock;            // Safe, mutable and unordered
     Set<int> set = iset.unlockSorted;      // Safe, mutable and ordered 
     Set<int> set = iset.unlockView;        // Safe, fast and immutable
@@ -677,7 +715,7 @@ The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, so
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigSet(isDeepEquals: false, sort: false);`
                                                                         
-Note that `ConfigSet` is similar to `ConfigList`, but it has an extra parameter: `Sort`:
+Note that `ConfigSet` is similar to `ConfigList`, but it has the extra parameter `sort`:
 
 ```dart
 /// Prints sorted: "1,2,3,4,9"
@@ -752,45 +790,45 @@ Map<String, int> map = imap.unlock;
                                                              
 ## 4.1. Similarities and Differences to the IList/ISet
 
-> Since I don't want to repeat myself, 
-> all the topics below are explained in much less detail here than for the IList.
-> Please read the IList explanation first, before trying to understand the IMap.
+Since I don't want to repeat myself, 
+all the topics below are explained in much less detail here than for the IList.
+Please read the IList explanation first, before trying to understand the IMap.
 
-- Just like a regular map, an `IMap` is **not**an `Iterable`.
+- Just like a regular map, an `IMap` is **not** an `Iterable`.
 However, you can iterate over its entries, keys and values:
 
-```dart               
-/// Unordered
-Iterable<MapEntry<K, V>> get entries;  
-Iterable<K> get keys;
-Iterable<V> get values;
-
-/// Ordered (according to the configuration)
-IList<MapEntry<K, V>> entryList();
-IList<K> keyList();
-IList<V> valueList();                       
-             
-/// Unordered
-ISet<MapEntry<K, V>> entrySet();
-ISet<K> keySet();
-ISet<V> valueSet();
-
-/// Ordered (according to the configuration)
-List<MapEntry<K, V>> toEntryList();
-List<K> toKeyList();
-List<V> toValueList();
-
-/// Ordered (according to the configuration)
-Set<MapEntry<K, V>> toEntrySet();
-Set<K> toKeySet();
-Set<V> toValueSet();
-                                            
-/// Ordered (according to the configuration)
-Iterator<MapEntry<K, V>> get iterator;
-             
-/// Unordered, but fast
-Iterator<MapEntry<K, V>> get fastIterator;
-```
+    ```dart               
+    /// Unordered
+    Iterable<MapEntry<K, V>> get entries;  
+    Iterable<K> get keys;
+    Iterable<V> get values;
+    
+    /// Ordered (or not, according to the configuration)
+    IList<MapEntry<K, V>> entryList();
+    IList<K> keyList();
+    IList<V> valueList();                       
+                 
+    /// Unordered
+    ISet<MapEntry<K, V>> entrySet();
+    ISet<K> keySet();
+    ISet<V> valueSet();
+    
+    /// Ordered (or not, according to the configuration)
+    List<MapEntry<K, V>> toEntryList();
+    List<K> toKeyList();
+    List<V> toValueList();
+    
+    /// Ordered (or not, according to the configuration)
+    Set<MapEntry<K, V>> toEntrySet();
+    Set<K> toKeySet();
+    Set<V> toValueSet();
+                                                
+    /// Ordered (or not, according to the configuration)
+    Iterator<MapEntry<K, V>> get iterator;
+                 
+    /// Unordered, but fast
+    Iterator<MapEntry<K, V>> get fastIterator;
+    ```
 
 - `IMap` has **all** the methods of `Map`, plus some other new and useful ones. 
 `IMap` methods always return a new `IMap`, instead of modifying the original one. 
@@ -804,21 +842,21 @@ These maps can be used as **map keys** themselves.
 - However, `IMap`s are configurable, and you can actually create `IMap`s which
 compare their internals by identity or deep equals, as desired.
    
-- To choose a configuration you can use getters `withIdentityEquals` and `withDeepEquals`;
+- To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`;
 or else use the `withConfig` method and the `ConfigMap` class to change the configuration;
 or else use the `withConfig` constructor to explicitly create the `IMap` with your desired configuration.
  
-- The configurations affect how the `== operator` works, 
+- The configuration affects how the `== operator` works, 
 but you can also choose how to compare sets by using the following `IMap` methods:
 `equalItems`, `equalItemsAndConfig`, `equalItemsToIMap` and `same`.
 Note, however, there is no `unorderedEqualItems` like in the `IList`, 
 because since `IMaps` are unordered the `equalItems` method already disregards the order.
 
 - You can flush some `IMap` by using the getter `.flush`.
-Note flush just optimizes the set **internally**, 
+Note flush just optimizes the map **internally**, 
 and no external difference will be visible.
 Depending on the global configuration, the `IMap`s 
-will flush automatically for you, once per asynchronous gap.  
+will flush automatically for you.  
 
 - There are a few ways to lock and unlock a map, 
 which will have different results in speed and safety.
@@ -830,7 +868,8 @@ And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) 
 
     ```dart
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;        // Safe
-    IMap<String, int> imap = {"a": 1, "b": 2}.lockUnsafe;  // Only this one is dangerous
+    IMap<String, int> imap = {"a": 1, "b": 2}.lockUnsafe;  // Only this way to lock a map is dangerous
+  
     Map<String, int> set = imap.unlock;                    // Safe, mutable and unordered
     Map<String, int> set = imap.unlockSorted;              // Safe, mutable and ordered 
     Map<String, int> set = imap.unlockView;                // Safe, fast and immutable
@@ -855,7 +894,7 @@ You can globally change this default if you want, by using the `defaultConfig` s
 `defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
                                                                         
 Note that `ConfigMap` is similar to `ConfigSet`, 
-but it has separate sort parameters for keys and values: `sortKeys` and `sortValues`:
+but has separate sort parameters for keys and values: `sortKeys` and `sortValues`:
 
 ```dart
 /// Prints sorted: "1,2,4,9"
@@ -907,7 +946,7 @@ Each student can be enrolled into one or more courses.
 This can be modeled by a map where the keys are the courses, and the values are sets of students.
 
 Implementing structures that **nest** immutable collections like this can be quite tricky.
-That's when an `IMapOfSets` comes handy:
+That's where an `IMapOfSets` comes handy:
 
 ```dart
 class StudentsPerCourse {
@@ -977,15 +1016,15 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
 
 To help you sort collections, 
 we provide the global comparator functions `compareObject`, `sortBy` and `sortLike`, 
-and the `compareObjectTo` and `if0` extensions,
-which make it easy for you to create other complex comparators,
+as well as the `compareObjectTo` and `if0` extensions.
+These make it easy for you to create other complex comparators,
 as described below. 
 
 ## 6.1. CompareObject function
 
 The `compareObject` function lets you easily compare `a` and `b`, as follows:
 
-If `a` or `b` is `null`, it will come later (the default), 
+If `a` or `b` is `null`, the null one will come later (the default), 
 unless the `nullsBefore` parameter is `true`, 
 in which case the `null` one will come before.
 
@@ -1174,7 +1213,7 @@ So, for all intents and purposes, you may consider that `flush` doesn't mutate t
 Usually you don't need to flush your collections manually.
 Depending on the global configuration, 
 the collections will flush automatically for you.
-The global configuration default is to have auto-flush on. It's easy to disable this:
+The global configuration default is to have auto-flush on. It's easy to disable it:
 
 ```dart
 autoFlush = false;
@@ -1222,36 +1261,9 @@ Having a negative value means the collection's `counter` will not
 be incremented anymore. However, when `counter` is negative and different from `-asyncCounter` 
 it means we are one async gap after the collection was marked for flushing. 
 
-At this point, the collection will be flushed and its `counter` will return to zero. 
+At this point, the collection will be flushed and its `counter` will return to zero.
 
-An example, as an ordered list with summarized states and as an ordered list with a narrative:
-
-1. The initial setup:
-    - `flushFactor = 3`
-    - `asyncCounter = 1`
-1. The `IList` is created.
-    - `counter = 0`
-    - `counter < flushFactor`
-1. `IList` is used.
-    - `counter = 1`
-    - `counter < flushFactor`
-1. `IList` is used.
-    - `counter = 2`
-    - `counter < flushFactor`
-1. `IList` is used.
-    - `counter = 3`
-    - `counter = flushFactor`
-    - `counter = -asyncCounter = -1`
-    - `asyncCounter` is now  set to increment in the future.
-1. `IList` is used.
-    - Since `counter < 0`, it's not incremented.
-    - Since `counter = -asyncCounter < 0`, it is not flushed.
-1. Here comes the async gap.
-    - The `asyncCounter` was set to increment, so: `asyncCounter = 2`.
-1. `IList` is used.
-    - Since `counter < 0`, it is not incremented.
-    - Since `counter < 0 && counter != -asyncCounter`, the list is flushed.
-    - And `counter = 0`.
+An example: 
 
 ```text
 1. The flushFactor is 3. The asyncCounter is 1.
@@ -1277,8 +1289,7 @@ An example, as an ordered list with summarized states and as an ordered list wit
 ```   
 
 The auto-flush process is a heuristic only.
-However, note the process is very fast (uses only simple integer operations) 
-and uses just a few bytes of memory to work.
+However, note the process is very fast, using only simple integer operations and a few bytes of memory.
 It guarantees that, if a collection is being used a lot, it will flush more often than one which is not being used that often.
 It also guarantees a collection will not auto-flush in the middle of sync operations.
 Finally, it saves no references to the collections, so it doesn't prevent them from being garbage collected.
@@ -1288,7 +1299,7 @@ it has an intermediate state (the builder) which is not a valid collection,
 and then you publish it manually.
 In contrast, `fast_immutable_collections` does have a valid intermediate state (unflushed)
 which you can use as a valid collection, 
-and then it publishes automatically (flushes) after the async gap.
+and then it publishes automatically (flushes) after the async gap (when so configured).
 
 As discussed, the default is to have auto-flush turned on, but you can turn it off. 
 If you leave it on, you can tweak the `flushFactor` for lists, sets and maps. 
@@ -1298,9 +1309,9 @@ The minimum `flushFactor` you can choose is `1`, which means the collections wil
 next async gap after they are touched.    
 
 ```dart
-ilistflushFactor = 150;
-isetflushFactor = 15;
-imapflushFactor = 15;
+IList.flushFactor = 150;
+ISet.flushFactor = 15;
+IMap.flushFactor = 15;
 
 // Lock further changes, if desired:                                              
 lockConfig();
@@ -1308,9 +1319,11 @@ lockConfig();
     
 # 7. About the Benchmarks
 
-Having benchmarks for this project is essential to justifying its existence, after all, if it isn't faster or on par with competitors, there would be no point in creating/publishing this package. Luckily, that isn't the case.
+Having benchmarks for this project is essential to justifying its existence, after all, if it isn't faster or on par 
+with competitors, there would be no point in creating/publishing this package. Luckily, that isn't the case.
 
-The [`benchmark` package][benchmark] demonstrates that this package's collections are close to even its mutable counterparts, both under development and production environments.
+The [`benchmark` package][benchmark] demonstrates that this package's collections are close to even its mutable 
+counterparts, both under development and production environments.
 
 You can either run the benchmarks:
 

@@ -195,12 +195,14 @@ void main() {
     expect({2, 1}, isNot([1, 2])); // Ordered Set in the WRONG order with List.
 
     expect([1, 2].lock, {2, 1}); // IList with ordered Set in the WRONG order.
-    expect({2, 1}, isNot([1, 2].lock)); // Ordered Set in the WRONG order with IList.
+    expect({2, 1},
+        isNot([1, 2].lock)); // Ordered Set in the WRONG order with IList.
 
     expect({1, 2}, isNot([2, 1])); // Ordered Set in the WRONG order with List.
     expect([2, 1], {1, 2}); // List with ordered Set in the WRONG order.
 
-    expect({1, 2}, isNot([2, 1].lock)); // Ordered Set in the WRONG order with IList.
+    expect({1, 2},
+        isNot([2, 1].lock)); // Ordered Set in the WRONG order with IList.
     expect([2, 1].lock, {1, 2}); // IList with ordered Set in the WRONG order.
   });
 
@@ -305,11 +307,13 @@ void main() {
 
     expect(studentsPerCourse.courses(), {math, geo, arts, english});
 
-    expect(studentsPerCourse.removeCourse(arts).courses(), {math, geo, english});
+    expect(
+        studentsPerCourse.removeCourse(arts).courses(), {math, geo, english});
 
     expect(studentsPerCourse.students(), {james, sara, lucy, bill, megan});
 
-    expect(studentsPerCourse.studentsInAlphabeticOrder(), [bill, james, lucy, megan, sara]);
+    expect(studentsPerCourse.studentsInAlphabeticOrder(),
+        [bill, james, lucy, megan, sara]);
 
     expect(studentsPerCourse.studentNamesInAlphabeticOrder(),
         ["Bill", "James", "Lucy", "Megan", "Sara"]);
@@ -318,7 +322,24 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("compare", () {
-    List<int> list = [1, 15, 3, 21, 360, 9, 17, 300, 25, 5, 22, 10, 12, 27, 14, 5];
+    List<int> list = [
+      1,
+      15,
+      3,
+      21,
+      360,
+      9,
+      17,
+      300,
+      25,
+      5,
+      22,
+      10,
+      12,
+      27,
+      14,
+      5
+    ];
 
     /// Comparator Rules:
     /// 1) If present, number 14 is always the first, followed by number 15.
@@ -366,7 +387,9 @@ class Student {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Student && runtimeType == other.runtimeType && name == other.name;
+      other is Student &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
 
   @override
   int get hashCode => name.hashCode;
@@ -419,23 +442,28 @@ class StudentsPerCourse {
 
   ISet<Student> students() => imap.valuesAsSet;
 
-  IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
+  IMapOfSets<Student, Course> getCoursesPerStudent() =>
+      imap.invertKeysAndValues();
 
   IList<Student> studentsInAlphabeticOrder() =>
       imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
 
-  IList<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
+  IList<String> studentNamesInAlphabeticOrder() =>
+      imap.valuesAsSet.map((s) => s.name).toIList();
 
   StudentsPerCourse addStudentToCourse(Student student, Course course) =>
       StudentsPerCourse._(imap.add(course, student));
 
-  StudentsPerCourse addStudentToCourses(Student student, Iterable<Course> courses) =>
+  StudentsPerCourse addStudentToCourses(
+          Student student, Iterable<Course> courses) =>
       StudentsPerCourse._(imap.addValuesToKeys(courses, [student]));
 
-  StudentsPerCourse addStudentsToCourse(Iterable<Student> students, Course course) =>
+  StudentsPerCourse addStudentsToCourse(
+          Iterable<Student> students, Course course) =>
       StudentsPerCourse._(imap.addValues(course, students));
 
-  StudentsPerCourse addStudentsToCourses(Map<Course, Set<Student>> studentsPerCourse) =>
+  StudentsPerCourse addStudentsToCourses(
+          Map<Course, Set<Student>> studentsPerCourse) =>
       StudentsPerCourse._(imap.addMap(studentsPerCourse));
 
   StudentsPerCourse removeStudentFromCourse(Student student, Course course) =>
@@ -444,7 +472,8 @@ class StudentsPerCourse {
   StudentsPerCourse removeStudentFromAllCourses(Student student) =>
       StudentsPerCourse._(imap.removeValues([student]));
 
-  StudentsPerCourse removeCourse(Course course) => StudentsPerCourse._(imap.removeSet(course));
+  StudentsPerCourse removeCourse(Course course) =>
+      StudentsPerCourse._(imap.removeSet(course));
 
   Map<Course, Set<Student>> toMap() => imap.unlock;
 

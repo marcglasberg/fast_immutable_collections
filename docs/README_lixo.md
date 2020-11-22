@@ -453,7 +453,7 @@ is only comparing lists with lists, set with sets, etc.
 
 ## 2.4. IList Reuse by Composition
 
-Classes `IListMixin` and `IterableIListMixin` let you easily 
+Classes `FromIListMixin` and `FromIterableIListMixin` let you easily 
 create your own immutable classes based on the `IList`.
 This helps you create more strongly typed collections, 
 and add your own methods to them.
@@ -483,11 +483,11 @@ class Student {
 And suppose you want to create a `Students` class 
 which is an immutable collection of `Student`s. 
 
-You can easily implement it using the `IListMixin`:
+You can easily implement it using the `FromIListMixin`:
 
 <!-- TODO: Marcelo, você mudou o nome desse mixin para `FromIListMixin`? -->
 ```dart  
-class Students with IListMixin<Student, Students> {
+class Students with FromIListMixin<Student, Students> {
    /// This is the boilerplate to create the collection:
    final IList<Student> _students;
 
@@ -646,7 +646,7 @@ but you can also choose how to compare sets by using the following `ISet` method
 Note, however, there is no `unorderedEqualItems` like in the `IList`, 
 because, since `ISets` are unordered the `equalItems`, method already disregards the order.
 
-- Classes `ISetMixin` and `IterableISetMixin` let you easily 
+- Classes `FromISetMixin` and `FromIterableISetMixin` let you easily 
 create your own immutable classes based on the `ISet`.
 This helps you create more strongly typed collections, 
 and add your own methods to them.
