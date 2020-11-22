@@ -31,7 +31,7 @@ void main() {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final IMap<String, int> iMap = baseMap.lock;
     final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(iMap);
-    
+
     expect(modifiableMapView["a"], 1);
     modifiableMapView["a"] = 2;
     expect(modifiableMapView["a"], 2);

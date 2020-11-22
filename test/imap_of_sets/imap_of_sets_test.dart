@@ -85,8 +85,6 @@ void main() {
     expect(iMapOfSets1.hashCode, iMapOfSets4.hashCode);
   });
 
-  test("IMapOfSets.equalItems()", () => fail("Not implemented yet"));
-
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test(
