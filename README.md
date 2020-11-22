@@ -1032,10 +1032,10 @@ For example, suppose you have a list of numbers
 which you want to sort according to the following rules:
 
 > 1. If present, number 14 is always the first, followed by number 15.
-> 1. Otherwise, odd numbers come before even ones.
-> 1. Otherwise, come numbers which are multiples of 3,
-> 1. Otherwise, come numbers which are multiples of 5,
-> 1. Otherwise, numbers come in their natural order.
+> 2. Otherwise, odd numbers come before even ones.
+> 3. Otherwise, come numbers which are multiples of 3,
+> 4. Otherwise, come numbers which are multiples of 5,
+> 5. Otherwise, numbers come in their natural order.
 
 You start by creating the first rule: `sortBy((x) => x == 15)` and
 then nesting the next rule in the `then` parameter:
@@ -1064,8 +1064,8 @@ You can also nest other comparators, including mixing `sortBy` and `sortLike`.
 For example, to implement the following rules:  
 
 > 1. Order should be [7, 3, 4, 21, 2] when these values appear.
-> 1. Otherwise, odd numbers come before even ones.
-> 1. Otherwise, numbers come in their natural order.
+> 2. Otherwise, odd numbers come before even ones.
+> 3. Otherwise, numbers come in their natural order.
 
 ```dart                  
 int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
