@@ -10,8 +10,8 @@ class IMapOfSets<K, V> //
   //
   static ConfigMapOfSets get defaultConfig => _defaultConfig;
 
-  static ConfigMapOfSets _defaultConfig =
-      const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+  static ConfigMapOfSets _defaultConfig = const ConfigMapOfSets(
+      isDeepEquals: true, sortKeys: true, sortValues: true);
 
   /// Global configuration that specifies if, by default, the [IMapOfSet]s
   /// use equality or identity for their [operator ==].
@@ -19,9 +19,11 @@ class IMapOfSets<K, V> //
   /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
   static set defaultConfig(ConfigMapOfSets config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig =
-        config ?? const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
+    _defaultConfig = config ??
+        const ConfigMapOfSets(
+            isDeepEquals: true, sortKeys: true, sortValues: true);
   }
 
   final IMap<K, ISet<V>> _mapOfSets;
@@ -42,7 +44,9 @@ class IMapOfSets<K, V> //
   /// Whether this collection is already flushed or not.
   /// Note: This will flush the map and all its internal sets.
   @override
-  bool get isFlushed => _mapOfSets.isFlushed && _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
+  bool get isFlushed =>
+      _mapOfSets.isFlushed &&
+      _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
 
   /// Returns an empty [IMapOfSets], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
@@ -67,7 +71,8 @@ class IMapOfSets<K, V> //
         : IMapOfSets._unsafe(
             IMap.fromIterables(
               mapOfSets.keys,
-              mapOfSets.values.map((value) => ISet.withConfig(value, configSet)),
+              mapOfSets.values
+                  .map((value) => ISet.withConfig(value, configSet)),
               config: configMap,
             ),
             config: config ?? defaultConfig,
@@ -79,7 +84,9 @@ class IMapOfSets<K, V> //
       : config = config ?? defaultConfig,
         _mapOfSets = (config == null)
             ? mapOfSets ?? IMap.empty<K, ISet<V>>()
-            : mapOfSets?.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
+            : mapOfSets?.map(
+                    (key, value) =>
+                        MapEntry(key, value.withConfig(config.asConfigSet)),
                     config: config.asConfigMap) ??
                 IMap.empty<K, ISet<V>>(config.asConfigMap);
 
@@ -111,7 +118,9 @@ class IMapOfSets<K, V> //
   ///
   IMapOfSets<K, V> withConfig(ConfigMapOfSets config) {
     assert(config != null);
-    return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
+    return (config == this.config)
+        ? this
+        : IMapOfSets._unsafe(_mapOfSets, config: config);
   }
 
   Map<K, Set<V>> get unlock {
@@ -190,7 +199,7 @@ class IMapOfSets<K, V> //
   bool get isNotEmpty => _mapOfSets.isNotEmpty;
 
   /// Find the [key]/[set] entry, and add the [value] to the [set].
-  /// If the [key] doesn't  exist, will first create it with an empty [set],
+  /// If the [key] doesn't exist, will first create it with an empty [set],
   /// and then add the [value] to it.
   ///
   IMapOfSets<K, V> add(K key, V value) {
@@ -223,7 +232,9 @@ class IMapOfSets<K, V> //
 
   /// Find the [key]/[set] entry, and remove the [value] from the [set].
   /// If the [key] doesn't  exist, don't do anything.
-  /// It the [set] becomes empty, the [key] will be removed entirely.
+  /// It the [set] becomes empty and [removeEmptySets] is true,
+  /// the [key] will be removed entirely. Otherwise, the [key] will be kept
+  /// and the [set] will be empty (not null).
   ///
   IMapOfSets<K, V> remove(K key, V value) {
     ISet<V> set = _mapOfSets[key];
@@ -232,14 +243,17 @@ class IMapOfSets<K, V> //
 
     return set.same(newSet)
         ? this
-        : newSet.isEmpty
+        : (config.removeEmptySets && newSet.isEmpty)
             ? removeSet(key)
             : replaceSet(key, newSet);
   }
 
   /// Remove all given [values] from all sets.
-  /// If some [set] becomes empty, the [key] will be removed entirely.
-  /// If you want, you can pass [numberOfRemovedValues] to get the number of removed values.
+  /// It some [set] becomes empty and [removeEmptySets] is true,
+  /// its [key] will be removed entirely. Otherwise, its [key] will be kept
+  /// and the [set] will be empty (not null).
+  /// If you want, you can pass [numberOfRemovedValues] to get the number of
+  /// removed values.
   ///
   IMapOfSets<K, V> removeValues(
     List<V> values, {
@@ -251,14 +265,21 @@ class IMapOfSets<K, V> //
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       K key = entry.key;
       ISet<V> set = entry.value;
-      ISet<V> newSet = set.removeAll(values);
-
       int setLength = set.length;
-      int newSetLength = newSet.length;
+
+      ISet<V> newSet;
+      int newSetLength;
+      if (setLength == 0) {
+        newSet = set;
+        newSetLength = 0;
+      } else {
+        newSet = set.removeAll(values);
+        newSetLength = newSet.length;
+      }
 
       countRemoved += setLength - newSetLength;
 
-      if (newSetLength == 0) {
+      if (newSetLength == 0 && config.removeEmptySets) {
         // Set is empty. Discard the key:set.
       } else if (setLength == newSetLength) {
         // Set was NOT modified.
@@ -271,7 +292,9 @@ class IMapOfSets<K, V> //
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0)
+        ? this
+        : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
   /// Remove, from all sets, all given [values] that satisfy the given [test].
@@ -288,14 +311,21 @@ class IMapOfSets<K, V> //
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       K key = entry.key;
       ISet<V> set = entry.value;
-      ISet<V> newSet = set.removeWhere((value) => test(key, value));
-
       int setLength = set.length;
-      int newSetLength = newSet.length;
+
+      ISet<V> newSet;
+      int newSetLength;
+      if (setLength == 0) {
+        newSet = set;
+        newSetLength = 0;
+      } else {
+        newSet = set.removeWhere((value) => test(key, value));
+        newSetLength = newSet.length;
+      }
 
       countRemoved += setLength - newSetLength;
 
-      if (newSetLength == 0) {
+      if (newSetLength == 0 && config.removeEmptySets) {
         // Set is empty. Discard the key:set.
       } else if (setLength == newSetLength) {
         // Set was NOT modified.
@@ -308,7 +338,9 @@ class IMapOfSets<K, V> //
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0)
+        ? this
+        : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
   /// Removes the [value] from the [set] of the corresponding [key],
@@ -316,21 +348,33 @@ class IMapOfSets<K, V> //
   IMapOfSets<K, V> toggle(K key, V value) =>
       contains(key, value) ? remove(key, value) : add(key, value);
 
+  /// When [removeEmptySets] is true:
   /// If the given [set] is not empty, add the [key]/[set] entry.
   /// If the [key] already exists, replace it with the new [set] entirely.
-  ///
   /// If the given [set] is empty, the [key]/[set] entry will be removed
   /// (same as calling [removeSet]).
   ///
+  /// When [removeEmptySets] is false:
+  /// Add the [key]/[set] entry. If the [key] already exists, replace it with
+  /// the new [set] entirely.
+  ///
   IMapOfSets<K, V> replaceSet(K key, ISet<V> set) {
     assert(set != null);
-    return set.isEmpty
+    return (config.removeEmptySets && set.isEmpty)
         ? removeSet(key)
         : IMapOfSets<K, V>.from(
             _mapOfSets.add(key, set),
             config: config,
           );
   }
+
+  /// When [removeEmptySets] is true, the given [key] and its corresponding
+  /// [set] will be removed. This is the same as calling [removeSet].
+  ///
+  /// When [removeEmptySets] is false, the [set] for the corresponding [key]
+  /// will become empty.
+  ///
+  IMapOfSets<K, V> clearSet(K key) => replaceSet(key, ISet.empty<V>());
 
   /// Remove the given [key], if it exists, and its corresponding [set].
   /// If the [key] doesn't  exist, don't do anything.
@@ -354,11 +398,11 @@ class IMapOfSets<K, V> //
   /// If the [key] doesn't  exist, return `null`.
   ISet<V> operator [](K key) => _mapOfSets[key];
 
-  /// Return `true` if the given [key] exists (with a non-empty [set]).
+  /// Return `true` if the given [key] exists.
   bool containsKey(K key) => _mapOfSets.containsKey(key);
 
   /// Return any `key:set` entry where the value exists in the set.
-  /// If that entry doesn't  exist, return `null`.
+  /// If that entry doesn't exist, return `null`.
   MapEntry<K, ISet<V>> getEntryWithValue(V value) {
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       var set = entry.value;
@@ -425,7 +469,8 @@ class IMapOfSets<K, V> //
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
-  bool equalItems(covariant Iterable<MapEntry<K, ISet<V>>> other) => _mapOfSets.equalItems(other);
+  bool equalItems(covariant Iterable<MapEntry<K, ISet<V>>> other) =>
+      _mapOfSets.equalItems(other);
 
   @override
   bool equalItemsAndConfig(IMapOfSets<K, V> other) =>
@@ -438,7 +483,8 @@ class IMapOfSets<K, V> //
 
   /// Will return true only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMap(IMap<K, ISet<V>> other) => _mapOfSets.equalItemsToIMap(other);
+  bool equalItemsToIMap(IMap<K, ISet<V>> other) =>
+      _mapOfSets.equalItemsToIMap(other);
 
   /// Will return true only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
@@ -536,7 +582,8 @@ class IMapOfSets<K, V> //
     MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
     ConfigMapOfSets config,
   }) =>
-      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper), config: config ?? defaultConfig);
+      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper),
+          config: config ?? defaultConfig);
 
   /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
   IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>
@@ -554,7 +601,8 @@ class IMapOfSets<K, V> //
   ///
   IMapOfSets<K, V> update(K key, ISet<V> Function(ISet<V> set) update,
           {ISet<V> Function() ifAbsent}) =>
-      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent), config: config);
+      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent),
+          config: config);
 
   /// Updates all sets.
   ///

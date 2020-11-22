@@ -995,10 +995,10 @@ class StudentsPerCourse {
 }     
 ```
 
-Note: The `IMapOfSets` configuration (`ConfigMapOfSets.allowEmptySets`) 
-lets you choose if empty sets should be removed or not.
-In the above example, this would mean allowing courses with no students, 
-or else removing the course automatically when the last student leaves.
+Note: The `IMapOfSets` configuration (`ConfigMapOfSets.removeEmptySets`) 
+lets you choose if empty sets should be automatically removed or not.
+In the above example, this would mean removing the course automatically when the last student leaves,
+or else allowing courses with no students.
 
 ```dart
 /// Using the default configuration: Empty sets are removed.
@@ -1008,7 +1008,7 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
 /// Specifying that a course can be empty (have no students).
 StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) 
    : _studentsPerCourse = (studentsPerCourse ?? {}).lock
-       .withConfig(ConfigMapOfSets(allowEmptySets: true));
+       .withConfig(ConfigMapOfSets(removeEmptySets: false));
 ```  
   
   

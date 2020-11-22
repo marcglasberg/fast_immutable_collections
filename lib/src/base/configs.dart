@@ -27,7 +27,9 @@ class ConfigList {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ConfigList && runtimeType == other.runtimeType && isDeepEquals == other.isDeepEquals;
+      other is ConfigList &&
+          runtimeType == other.runtimeType &&
+          isDeepEquals == other.isDeepEquals;
 
   @override
   int get hashCode => isDeepEquals.hashCode;
@@ -161,26 +163,35 @@ class ConfigMapOfSets {
   /// If `true` (the default), will sort the list output of values.
   final bool sortValues;
 
+  /// If `true` (the default), sets which become empty are automatically
+  /// removed, together with their keys.
+  /// If `false`, empty sets and their keys are kept.
+  final bool removeEmptySets;
+
   const ConfigMapOfSets({
     this.isDeepEquals = true,
     this.sortKeys = true,
     this.sortValues = true,
+    this.removeEmptySets = true,
   });
 
-  ConfigMap get asConfigMap =>
-      ConfigMap(isDeepEquals: isDeepEquals, sortKeys: sortValues, sortValues: sortValues);
+  ConfigMap get asConfigMap => ConfigMap(
+      isDeepEquals: isDeepEquals, sortKeys: sortValues, sortValues: sortValues);
 
-  ConfigSet get asConfigSet => ConfigSet(isDeepEquals: isDeepEquals, sort: sortValues);
+  ConfigSet get asConfigSet =>
+      ConfigSet(isDeepEquals: isDeepEquals, sort: sortValues);
 
   ConfigMapOfSets copyWith({
     bool isDeepEquals,
     bool sortKeys,
     bool sortValues,
+    bool removeEmptySets,
   }) {
     var config = ConfigMapOfSets(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
       sortKeys: sortKeys ?? this.sortKeys,
       sortValues: sortValues ?? this.sortValues,
+      removeEmptySets: removeEmptySets ?? this.removeEmptySets,
     );
     return (config == this) ? this : config;
   }
@@ -192,16 +203,18 @@ class ConfigMapOfSets {
           runtimeType == other.runtimeType &&
           isDeepEquals == other.isDeepEquals &&
           sortKeys == other.sortKeys &&
-          sortValues == other.sortValues;
+          sortValues == other.sortValues &&
+          removeEmptySets == other.removeEmptySets;
 
   @override
-  int get hashCode => hash3(isDeepEquals, sortKeys, sortValues);
+  int get hashCode => hash4(isDeepEquals, sortKeys, sortValues, removeEmptySets);
 
   @override
   String toString() => "ConfigMapOfSets{"
       "isDeepEquals: $isDeepEquals, "
       "sortKeys: $sortKeys, "
-      "sortValues: $sortValues}";
+      "sortValues: $sortValues, "
+      "removeEmptySets: $removeEmptySets}";
 }
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
