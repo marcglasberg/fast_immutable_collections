@@ -54,8 +54,7 @@ Later in this document, we provide benchmarks so that you can compare speeds
 <br />
 
 
-<!-- Using this extension in VS Code: https://marketplace.visualstudio.com/items?itemName=AlanWalk.markdown-toc -->
-<!-- TOC depthFrom:2 orderedList:true updateOnSave:false -->
+<!-- TOC -->
 
 - [1. Fast Immutable Collections](#1-fast-immutable-collections)
     - [1.1. Introduction](#11-introduction)
@@ -515,17 +514,17 @@ print(students.greetings());
 
 There are a few aspects of native Dart collection mixins which I don't like, so I've tried to improve on those here.
 
-* First is that some Dart mixins let you create inefficient methods 
+- First is that some Dart mixins let you create inefficient methods 
 (like fore example, a `length` getter which has to iterate through all items to yield a result).
 All mixins within `fast_immutable_collections` are as efficient as the underlying immutable collection, 
 so you don't need to worry about this problem.
 
-* Second is that the native Dart mixins implement their respective collections. 
+- Second is that the native Dart mixins implement their respective collections. 
 For example, a `ListMixin` implements `List`. I don't think this is desirable. 
 For example, should a `Students` class be an `IList` by default? I don't think so.
 For this reason, the `FromIListMixin` is not called `IListMixin`, and it does not implement `IList` nor `Iterable`.
 
-* Third, unfortunately, the `expect` method in tests compare iterables by comparing their items. 
+- Third, unfortunately, the `expect` method in tests compare iterables by comparing their items. 
 So, if the `Students` class were to implement `Iterable`, the `expect` method would completely ignore its 
 `operator ==`, which probably is not what you want.
 
