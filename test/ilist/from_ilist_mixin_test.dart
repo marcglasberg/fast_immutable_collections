@@ -418,15 +418,9 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
 
-    students.clear();
+    final Students studentsResult = students.clear();
 
-    // TODO: Marcelo, o método `clear()` está retornando `void`. Ele não deveria
-    // retornar a nova instância?
-    expect(students.iter.unlock, <Student>[]);
-
-    // final Students studentsResult = students.clear();
-
-    // expect(studentsResult.iter.unlock, <Student>[]);
+    expect(studentsResult.iter.unlock, <Student>[]);
   });
 
   test("FromIListMixin.equalItems()", () {
@@ -484,12 +478,109 @@ void main() {
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
-    
+
     expect(students.indexOf(const Student("James")), 0);
     expect(students.indexOf(const Student("Sara")), 1);
     expect(students.indexOf(const Student("Lucy")), 2);
     expect(students.indexOf(const Student("Bob")), -1);
   });
+
+  test("FromIListMixin.indexWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.indexWhere((Student student) => student.name.length == 5), 0);
+    expect(students.indexWhere((Student student) => student.name.length == 100), -1);
+  });
+
+  test("FromIListMixin.insert()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    final Students studentsResult = students.insert(1, const Student("Bob"));
+
+    expect(studentsResult.iter, [james, const Student("Bob"), sara, lucy]);
+  });
+
+  test("FromIListMixin.insertAll()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    final Students studentsResult =
+        students.insertAll(1, [const Student("Bob"), const Student("John")]);
+
+    expect(studentsResult.iter, [james, const Student("Bob"), const Student("John"), sara, lucy]);
+  });
+
+  test("FromIListMixin.lastIndexOf()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, sara]);
+
+    expect(students.lastIndexOf(const Student("Sara")), 3);
+  });
+
+  test("FromIListMixin.lastIndexWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, sara]);
+
+    expect(students.lastIndexWhere((Student student) => student.name == "Sara"), 3);
+  });
+
+  test("FromIListMixin.lastOr()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.lastOr(const Student("Bob")), const Student("Lucy"));
+    expect(Students([]).lastOr(const Student("Bob")), const Student("Bob"));
+  });
+
+  test("FromIListMixin.lastOrNull", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.lastOrNull, const Student("Lucy"));
+    expect(Students([]).lastOrNull, isNull);
+  });
+
+  test("FromIListMixin.maxLength()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.maxLength(2).iter, [james, sara]);
+    expect(students.maxLength(0).iter, []);
+  });
+
+  test("FromIListMixing.maxLength() | Priority", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students
+            .maxLength(2,
+                priority: (Student a, Student b) => a.name.length.compareTo(b.name.length))
+            .iter,
+        [sara, lucy]);
+  });
+
+  test("FromIListMixin.process()", () {});
 }
 
 @immutable

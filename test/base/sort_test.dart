@@ -160,7 +160,7 @@ void main() {
     ].lock;
 
     /// Comparator Rules:
-    /// 
+    ///
     /// 1) Order should be length [7, 3, 4, 21, 2] when these values appear.
     /// 2) Otherwise, strings with odd length come before even ones.
     /// 3) Otherwise, string come ordered according to their length.

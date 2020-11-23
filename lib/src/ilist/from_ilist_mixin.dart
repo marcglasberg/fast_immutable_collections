@@ -152,7 +152,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   IMap<int, T> asMap() => iter.asMap();
 
-  void clear() => newInstance(iter.clear());
+  I clear() => newInstance(iter.clear());
 
   bool equalItems(covariant Iterable<T> other) => iter.equalItems(other);
 
@@ -182,7 +182,8 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   T get lastOrNull => iter.lastOrNull;
 
-  I maxLength(int maxLength) => newInstance(iter.maxLength(maxLength));
+  I maxLength(int maxLength, {int Function(T a, T b) priority}) =>
+      newInstance(iter.maxLength(maxLength, priority: priority));
 
   I process(
           {bool Function(IList<T> list, int index, T item) test,

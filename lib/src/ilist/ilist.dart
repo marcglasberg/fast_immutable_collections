@@ -812,6 +812,7 @@ class IList<T> // ignore: must_be_immutable
   /// If [test] is not provided, it will apply [convert] to all items.
   ///
   /// Function [convert] can:
+  ///
   /// - Keep the item unchanged by returning `null`.
   /// - Remove an item by returning an empty iterable.
   /// - Convert an item to a single item by returning an iterable with an item.
