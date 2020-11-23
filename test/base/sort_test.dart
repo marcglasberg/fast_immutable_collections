@@ -160,18 +160,47 @@ void main() {
     ].lock;
 
     /// Comparator Rules:
+    /// 
     /// 1) Order should be length [7, 3, 4, 21, 2] when these values appear.
     /// 2) Otherwise, strings with odd length come before even ones.
     /// 3) Otherwise, string come ordered according to their length.
-    int Function(String, String) compareTo = sortLike(const [7, 3, 4, 21, 2],
+
+    // `order is List`
+    int Function(String, String) compareToList = sortLike(const [7, 3, 4, 21, 2],
         mapper: (String text) => text.length,
         then: sortBy(
-          (x) => x.length % 2 == 1,
+          (String x) => x.length % 2 == 1,
           then: (String a, String b) => a.length.compareTo(b.length),
         ));
 
     for (int i = 1; i < 1000; i++) {
-      list = list.shuffle().sort(compareTo);
+      list = list.shuffle().sort(compareToList);
+      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+    }
+
+    // `order is IList`
+    int Function(String, String) compareToIList = sortLike([7, 3, 4, 21, 2].lock,
+        mapper: (String text) => text.length,
+        then: sortBy(
+          (String x) => x.length % 2 == 1,
+          then: (String a, String b) => a.length.compareTo(b.length),
+        ));
+
+    for (int i = 1; i < 1000; i++) {
+      list = list.shuffle().sort(compareToIList);
+      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+    }
+
+    // else: any other subtype of `Iterable`
+    int Function(String, String) compareToIterable = sortLike({7, 3, 4, 21, 2},
+        mapper: (String text) => text.length,
+        then: sortBy(
+          (String x) => x.length % 2 == 1,
+          then: (String a, String b) => a.length.compareTo(b.length),
+        ));
+
+    for (int i = 1; i < 1000; i++) {
+      list = list.shuffle().sort(compareToIterable);
       expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
     }
   });
