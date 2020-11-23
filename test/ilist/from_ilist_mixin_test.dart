@@ -1,8 +1,18 @@
+import "package:meta/meta.dart";
 import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  test("FromIListMixin.unlock", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.unlock, allOf(isA<List<Student>>(), [james, sara, lucy]));
+  });
+
   test("FromIListMixin.iterator", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -88,10 +98,175 @@ void main() {
 
     expect(students.expand((Student student) => [student, student]),
         allOf(isA<IList<Student>>(), <Student>[james, james, sara, sara, lucy, lucy].lock));
-    expect(students.expand((Student student) => <Student>[]), allOf(<Student>[].lock, isA<IList<Student>>()));
+    expect(students.expand((Student student) => <Student>[]),
+        allOf(<Student>[].lock, isA<IList<Student>>()));
+  });
+
+  test("FromIListMixin.length", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.length, 3);
+  });
+
+  test("FromIListMixin.first", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.first, const Student("James"));
+  });
+
+  test("FromIListMixin.last", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.last, const Student("Lucy"));
+  });
+
+  test("FromIListMixin.single | State exception", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(() => students.single, throwsStateError);
+  });
+
+  test("FromIListMixin.single | Access",
+      () => expect(Students([const Student("James")]).single, const Student("James")));
+
+  test("FromIListMixin.firstWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students.firstWhere((Student student) => student.name.length == 5,
+            orElse: () => const Student("John")),
+        const Student("James"));
+    expect(
+        students.firstWhere((Student student) => student.name.length == 4,
+            orElse: () => const Student("John")),
+        const Student("Sara"));
+    expect(
+        students.firstWhere((Student student) => student == const Student("Bob"),
+            orElse: () => const Student("John")),
+        const Student("John"));
+  });
+
+  test("FromIListMixin.fold()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students.fold(
+            Student("Class"),
+            (Student previousStudent, Student currentStudent) =>
+                Student(previousStudent.name + " : " + currentStudent.name)),
+        const Student("Class : James : Sara : Lucy"));
+  });
+
+  test("FromIListMixin.followedBy()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.followedBy([const Student("Bob")]).unlock,
+        [james, sara, lucy, const Student("Bob")]);
+  });
+
+  test("FromIListMixin.forEach()", () {
+    String concatenated = "";
+
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    students.forEach((Student student) => concatenated += student.name + ", ");
+
+    expect(concatenated, "James, Sara, Lucy, ");
+  });
+
+  test("FromIListMixin.join()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.join(", "), "Student: James, Student: Sara, Student: Lucy");
+    expect(Students([]).join(", "), "");
+  });
+
+  test("FromIListMixin.lastWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students.lastWhere((Student student) => student.name.length == 5,
+            orElse: () => const Student("John")),
+        const Student("James"));
+    expect(
+        students.lastWhere((Student student) => student.name.length == 4,
+            orElse: () => const Student("John")),
+        const Student("Lucy"));
+    expect(
+        students.lastWhere((Student student) => student == const Student("Bob"),
+            orElse: () => const Student("John")),
+        const Student("John"));
+  });
+
+  test("FromIListMixin.map()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    final Students students = Students([james, sara]);
+
+    expect(students.map((Student student) => Student(student.name + student.name)),
+        [const Student("JamesJames"), const Student("SaraSara")]);
+  });
+
+  test("FromIListMixin.reduce()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students.reduce((Student currentStudent, Student nextStudent) =>
+            Student(currentStudent.name + " " + nextStudent.name)),
+        Student("James Sara Lucy"));
+  });
+
+  test("FromIListMixin.singleWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students.singleWhere((Student student) => student.name == "Sara",
+            orElse: () => Student("Bob")),
+        const Student("Sara"));
+    expect(
+        students.singleWhere((Student student) => student.name == "Goat",
+            orElse: () => Student("Bob")),
+        const Student("Bob"));
   });
 }
 
+@immutable
 class Students with FromIListMixin<Student, Students> {
   final IList<Student> _students;
 
@@ -104,12 +279,25 @@ class Students with FromIListMixin<Student, Students> {
   IList<Student> get iter => _students;
 }
 
+@immutable
 abstract class ProtoStudent {
   const ProtoStudent();
 }
 
+@immutable
 class Student extends ProtoStudent {
   final String name;
 
   const Student(this.name);
+
+  @override
+  String toString() => "Student: $name";
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Student && runtimeType == other.runtimeType && name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 }

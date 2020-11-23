@@ -661,12 +661,12 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.single() | " "State exception",
+  test("IList.single() | State exception",
       () => expect(() => [1, 2, 3, 4, 5, 6].lock.single, throwsStateError));
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.single() | " "Access", () => expect([10].lock.single, 10));
+  test("IList.single() | Access", () => expect([10].lock.single, 10));
 
   //////////////////////////////////////////////////////////////////////////////
 
