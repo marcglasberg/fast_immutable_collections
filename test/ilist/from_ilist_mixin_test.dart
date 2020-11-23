@@ -360,6 +360,136 @@ void main() {
     expect(
         students.toSet(), [const Student("James"), const Student("Sara"), const Student("Lucy")]);
   });
+
+  test("FromIListMixin.+()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    final Students studentsResult = students + [james];
+
+    expect(studentsResult.unlock, [
+      const Student("James"),
+      const Student("Sara"),
+      const Student("Lucy"),
+      const Student("James")
+    ]);
+  });
+
+  test("FromIListMixin.add()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    final Students studentsResult = students.add(const Student("Bob"));
+
+    expect(studentsResult.unlock, [james, sara, lucy, const Student("Bob")]);
+  });
+
+  test("FromIListMixin.addAll()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    final Students studentsResult = students.addAll([const Student("Bob"), const Student("John")]);
+
+    expect(studentsResult.unlock, [james, sara, lucy, const Student("Bob"), const Student("John")]);
+  });
+
+  test("FromIListMixin.asMap()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.asMap().unlock, {
+      0: const Student("James"),
+      1: const Student("Sara"),
+      2: const Student("Lucy"),
+    });
+  });
+
+  test("FromIListMixin.clear()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    students.clear();
+
+    // TODO: Marcelo, o método `clear()` está retornando `void`. Ele não deveria
+    // retornar a nova instância?
+    expect(students.iter.unlock, <Student>[]);
+
+    // final Students studentsResult = students.clear();
+
+    // expect(studentsResult.iter.unlock, <Student>[]);
+  });
+
+  test("FromIListMixin.equalItems()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.equalItems([james, sara, lucy]), isTrue);
+    expect(students.equalItems([sara, lucy, james]), isFalse);
+    expect(students.equalItems([james]), isFalse);
+  });
+
+  test("FromIListMixin.fillRange()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.fillRange(1, 3, Student("Placeholder")).iter,
+        [james, const Student("Placeholder"), const Student("Placeholder")]);
+  });
+
+  test("FromIListMixin.firstOr()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.firstOr(const Student("Bob")), const Student("James"));
+    expect(Students([]).firstOr(const Student("Bob")), const Student("Bob"));
+  });
+
+  test("FromIListMixin.firstOrNull", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.firstOrNull, const Student("James"));
+    expect(Students([]).firstOrNull, isNull);
+  });
+
+  test("FromIListMixin.getRange()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.getRange(1, 3), [const Student("Sara"), const Student("Lucy")]);
+  });
+
+  test("FromIListMixin.indexOf()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+    
+    expect(students.indexOf(const Student("James")), 0);
+    expect(students.indexOf(const Student("Sara")), 1);
+    expect(students.indexOf(const Student("Lucy")), 2);
+    expect(students.indexOf(const Student("Bob")), -1);
+  });
 }
 
 @immutable
