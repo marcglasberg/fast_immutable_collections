@@ -757,7 +757,7 @@ void main() {
     expect([1, 2, 3, 4, 5, 6].lock.skip(1).unlock, [2, 3, 4, 5, 6]);
     expect([1, 2, 3, 4, 5, 6].lock.skip(3).unlock, [4, 5, 6]);
     expect([1, 2, 3, 4, 5, 6].lock.skip(5).unlock, [6]);
-    expect([1, 2, 3, 4, 5, 6].lock.skip(10).unlock, <int>[]);
+    expect([1, 2, 3, 4, 5, 6].lock.skip(10).unlock, <int[]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

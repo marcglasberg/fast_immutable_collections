@@ -580,7 +580,109 @@ void main() {
         [sara, lucy]);
   });
 
-  test("FromIListMixin.process()", () {});
+  test("FromIListMixin.process()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students
+            .process(
+                test: (_, __, Student student) => student.name.length == 5,
+                apply: (_, __, Student student) => [Student(student.name * 2)])
+            .iter,
+        [const Student("JamesJames"), sara, lucy]);
+  });
+
+  test("FromIListMixin.put()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.put(2, const Student("Bob")).iter, [james, sara, const Student("Bob")]);
+  });
+
+  test("FromIListMixin.remove()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.remove(const Student("James")).iter, [sara, lucy]);
+  });
+
+  test("FromIListMixin.removeAt()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+    final Output<Student> output = Output();
+
+    final Students removed = students.removeAt(1, output);
+
+    expect(removed.iter, [james, lucy]);
+    expect(output.value, const Student("Sara"));
+  });
+
+  test("FromIListMixin.removeLast()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+    final Output<Student> output = Output();
+
+    final Students removed = students.removeLast(output);
+
+    expect(removed.iter, [james, sara]);
+    expect(output.value, const Student("Lucy"));
+  });
+
+  test("FromIListMixin.removeRange()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.removeRange(1, 3).iter, [james]);
+  });
+
+  test("FromIListMixin.removeWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.removeWhere((Student student) => student.name.length == 4).iter, [james]);
+  });
+
+  test("FromIListMixin.replaceAll()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, james]);
+
+    expect(students.replaceAll(from: const Student("James"), to: const Student("Bob")).iter,
+        [const Student("Bob"), sara, lucy, const Student("Bob")]);
+  });
+
+  test("FromIListMixin.replaceAllWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, james]);
+
+    expect(
+        students
+            .replaceAllWhere((Student student) => student.name.length == 5, const Student("Bob"))
+            .iter,
+        [const Student("Bob"), sara, lucy, const Student("Bob")]);
+  });
+
+  test("FromIListMixin.replaceFirst()", () {
+    
+  });
 }
 
 @immutable
