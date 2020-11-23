@@ -39,8 +39,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   bool contains(Object element) => iter.contains(element);
 
-  T elementAt(int index) =>
-      throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 

@@ -27,9 +27,7 @@ class ConfigList {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ConfigList &&
-          runtimeType == other.runtimeType &&
-          isDeepEquals == other.isDeepEquals;
+      other is ConfigList && runtimeType == other.runtimeType && isDeepEquals == other.isDeepEquals;
 
   @override
   int get hashCode => isDeepEquals.hashCode;
@@ -175,11 +173,10 @@ class ConfigMapOfSets {
     this.removeEmptySets = true,
   });
 
-  ConfigMap get asConfigMap => ConfigMap(
-      isDeepEquals: isDeepEquals, sortKeys: sortValues, sortValues: sortValues);
+  ConfigMap get asConfigMap =>
+      ConfigMap(isDeepEquals: isDeepEquals, sortKeys: sortValues, sortValues: sortValues);
 
-  ConfigSet get asConfigSet =>
-      ConfigSet(isDeepEquals: isDeepEquals, sort: sortValues);
+  ConfigSet get asConfigSet => ConfigSet(isDeepEquals: isDeepEquals, sort: sortValues);
 
   ConfigMapOfSets copyWith({
     bool isDeepEquals,

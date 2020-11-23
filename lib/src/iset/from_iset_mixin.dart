@@ -45,8 +45,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   bool contains(Object element) => iter.contains(element);
 
-  T elementAt(int index) =>
-      throw UnsupportedError("elementAt in ${runtimeType} is not allowed");
+  T elementAt(int index) => throw UnsupportedError("elementAt in ${runtimeType} is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 
@@ -118,11 +117,9 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   I remove(T item) => newInstance(iter.remove(item));
 
-  I removeWhere(bool Function(T element) test) =>
-      newInstance(iter.removeWhere(test));
+  I removeWhere(bool Function(T element) test) => newInstance(iter.removeWhere(test));
 
-  I retainWhere(bool Function(T element) test) =>
-      newInstance(iter.retainWhere(test));
+  I retainWhere(bool Function(T element) test) => newInstance(iter.retainWhere(test));
 
   I toggle(T element) => newInstance(iter.toggle(element));
 
