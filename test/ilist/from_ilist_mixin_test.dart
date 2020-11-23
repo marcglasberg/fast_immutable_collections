@@ -264,6 +264,102 @@ void main() {
             orElse: () => Student("Bob")),
         const Student("Bob"));
   });
+
+  test("FromIListMixin.skip()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.skip(2), [const Student("Lucy")]);
+    expect(students.skip(10), <Student>[]);
+  });
+
+  test("FromIListMixin.skipWhile()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.skipWhile((Student student) => student.name.length > 4),
+        [const Student("Sara"), const Student("Lucy")]);
+  });
+
+  test("FromIListMixin.take()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.take(0), <Student>[]);
+    expect(students.take(1), <Student>[const Student("James")]);
+    expect(students.take(2), <Student>[const Student("James"), const Student("Sara")]);
+    expect(students.take(3),
+        <Student>[const Student("James"), const Student("Sara"), const Student("Lucy")]);
+    expect(students.take(10),
+        <Student>[const Student("James"), const Student("Sara"), const Student("Lucy")]);
+  });
+
+  test("FromIListMixin.takeWhile()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.takeWhile((Student student) => student.name.length >= 5),
+        [const Student("James")]);
+  });
+
+  test("FromIListMixin.where()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.where((Student student) => student.name.length == 5), [const Student("James")]);
+    expect(students.where((Student student) => student.name.length == 100), <Student>[]);
+  });
+
+  test("FromIListMixin.whereType()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.whereType<Student>(),
+        [const Student("James"), const Student("Sara"), const Student("Lucy")]);
+    expect(students.whereType<String>(), []);
+  });
+
+  test("FromIListMixin.isEmpty", () {
+    expect(Students([]).isEmpty, isTrue);
+    expect(Students([Student("James")]).isEmpty, isFalse);
+  });
+
+  test("FromIListMixin.isNotEmpty", () {
+    expect(Students([]).isNotEmpty, isFalse);
+    expect(Students([Student("James")]).isNotEmpty, isTrue);
+  });
+
+  test("FromIListMixin.toList()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(
+        students.toList(), [const Student("James"), const Student("Sara"), const Student("Lucy")]);
+  });
+
+  test("FromIListMixin.toSet()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, sara, lucy]);
+
+    expect(
+        students.toSet(), [const Student("James"), const Student("Sara"), const Student("Lucy")]);
+  });
 }
 
 @immutable
