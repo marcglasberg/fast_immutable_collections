@@ -206,7 +206,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  testAndPrint("Reusage by composition", () {
+  testAndPrint("Reuse by composition", () {
     var james = Student("James");
     var sara = Student("Sara");
     var lucy = Student("Lucy");
