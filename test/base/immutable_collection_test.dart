@@ -1,3 +1,4 @@
+import "package:meta/meta.dart";
 import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
@@ -29,13 +30,6 @@ void main() {
     expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);
     ImmutableCollection.disallowUnsafeConstructors = true;
     expect(ImmutableCollection.disallowUnsafeConstructors, isTrue);
-  });
-
-  test(
-      "disallowUnsafeConstructors | "
-      "Changing the lockConfig makes disallowUnsafeConstructors throw an exception", () {
-    ImmutableCollection.lockConfig();
-    expect(() => ImmutableCollection.disallowUnsafeConstructors = true, throwsStateError);
   });
 
   test("IteratorExtension | IteratorExtension.toIterable method/generator", () {
@@ -142,11 +136,83 @@ void main() {
   });
 
   test("IterableToImmutableExtension.lockAsSet", () {
-    final Set<int> set = {1, 2, 3};
+    const Set<int> set = {1, 2, 3};
     final IList<int> iList = set.lockAsList;
     final ISet<int> iSet = set.lockAsSet;
 
     expect(iList, [1, 2, 3]);
     expect(iSet, [1, 2, 3]);
   });
+
+  test("BooleanExtension | Zero", () {
+    expect(true.compareTo(true), 0);
+    expect(false.compareTo(false), 0);
+  });
+
+  test("BooleanExtension | Greater than zero", () {
+    expect(true.compareTo(false), greaterThan(0));
+    expect(true.compareTo(false), 1);
+  });
+
+  test("BooleanExtension | Less than zero", () {
+    expect(false.compareTo(true), lessThan(0));
+    expect(false.compareTo(true), -1);
+  });
+
+  test("CanBeEmptyExtension | isNullOrEmpty", () {
+    const CanBeEmptyExample exampleNull = null;
+    const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(true, null);
+    const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(false, null);
+
+    expect(exampleNull.isNullOrEmpty, isTrue);
+    expect(exampleIsEmpty.isNullOrEmpty, isTrue);
+    expect(exampleIsNotEmpty.isNullOrEmpty, isFalse);
+  });
+
+  test("CanBeEmptyExtension | isNotNullOrEmpty", () {
+    const CanBeEmptyExample exampleNull = null;
+    const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(null, true);
+    const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(null, false);
+
+    expect(exampleNull.isNotNullOrEmpty, isFalse);
+    expect(exampleIsNotEmpty.isNotNullOrEmpty, isTrue);
+    expect(exampleIsEmpty.isNotNullOrEmpty, isFalse);
+  });
+
+  test("CanBeEmptyExtension | isEmptyButNotNull", () {
+    const CanBeEmptyExample exampleNull = null;
+    const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(true, null);
+    const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(false, null);
+
+    expect(exampleNull.isEmptyButNotNull, isFalse);
+    expect(exampleIsEmpty.isEmptyButNotNull, isTrue);
+    expect(exampleIsNotEmpty.isEmptyButNotNull, isFalse);
+  });
+
+  test("ImmutableCollection.autoFlush", () => expect(ImmutableCollection.autoFlush, isTrue));
+
+  test("ImmutableCollection.autoFlush setter", () {
+    ImmutableCollection.autoFlush = false;
+
+    expect(ImmutableCollection.autoFlush, isFalse);
+
+    ImmutableCollection.autoFlush = true;
+
+    expect(ImmutableCollection.autoFlush, isTrue);
+  });
+
+  test("lockConfig", () {
+    ImmutableCollection.lockConfig();
+    expect(() => ImmutableCollection.disallowUnsafeConstructors = true, throwsStateError);
+    expect(() => ImmutableCollection.autoFlush = false, throwsStateError);
+    expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);
+  });
+}
+
+@immutable
+class CanBeEmptyExample implements CanBeEmpty {
+  @override
+  final bool isEmpty, isNotEmpty;
+
+  const CanBeEmptyExample(this.isEmpty, this.isNotEmpty);
 }
