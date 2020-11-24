@@ -19,10 +19,9 @@ extension IListExtension<T> on List<T> {
 
   /// Sorts this list according to the order specified by the [compare] function.
   ///
-  /// This is similar to [sort], but uses a merge sort algorithm
-  /// (https://en.wikipedia.org/wiki/Merge_sort).
+  /// This is similar to [sort], but uses a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort).
   ///
-  /// On contrary to [sort], [orderedSort] is stable, meaning distinct objects
+  /// Contrary to [sort], [orderedSort] is stable, meaning distinct objects
   /// that compare as equal end up in the same order as they started in.
   ///
   void sortOrdered([int Function(T a, T b) compare]) {
