@@ -1222,4 +1222,10 @@ void main() {
     expect(numbs.whereMoveToTheStart((int n) => n % 2 == 0),
         [20, 16, 54, 50, 18, 20, 1, 5, 21, 19, 23, 55, 15]);
   });
+
+  test("IList.toLinkedHashSet()", () {
+    // final IList<int> iList = [1, 2, 4, 3].lock;
+
+    // expect(iList.to)
+  });
 }

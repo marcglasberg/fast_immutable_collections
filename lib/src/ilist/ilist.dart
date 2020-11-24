@@ -1,11 +1,22 @@
 import "dart:collection";
 import "dart:math";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "package:collection/collection.dart";
 import "package:meta/meta.dart";
+
+import "../base/immutable_collection.dart";
+import "../base/configs.dart";
+import "../base/sort.dart";
+import "../imap/entry.dart";
+import "../imap/imap.dart";
+import "../iset/iset.dart";
+import "ilist_extension.dart";
+import "ilist_of_2.dart";
 import "l_add.dart";
 import "l_add_all.dart";
 import "l_flat.dart";
+import "modifiable_list_view.dart";
+import "unmodifiable_list_view.dart";
 
 /// An **immutable** list.
 @immutable
@@ -1425,8 +1436,12 @@ class InternalsForTestingPurposesIList {
   InternalsForTestingPurposesIList(this.ilist);
 
   /// To access the private counter, add this to the test file:
-  ///     extension TestExtension on IList {
-  ///        int get counter => InternalsForTestingPurposesIList(this).counter;}
+  /// 
+  /// ```dart
+  /// extension TestExtension on IList {
+  ///   int get counter => InternalsForTestingPurposesIList(this).counter;
+  /// }
+  /// ```
   int get counter => ilist._counter;
 }
 
