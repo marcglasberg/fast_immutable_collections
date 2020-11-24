@@ -51,7 +51,7 @@ void main() {
     expect(students.contains(const Student("John")), isFalse);
   });
 
-  test("FromIListMixin.[] operator", () {
+  test("FromIListMixin.[]", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
