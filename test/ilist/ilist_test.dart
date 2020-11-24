@@ -664,6 +664,14 @@ void main() {
   test("IList.length", () => expect([1, 2, 3, 4, 5, 6].lock.length, 6));
 
   //////////////////////////////////////////////////////////////////////////////
+  
+  test("IList.inRange()", () {
+    expect([1, 2, 3].lock.inRange(-1), isFalse);
+    expect([1, 2, 3].lock.inRange(1), isTrue);
+    expect([1, 2, 3].lock.inRange(3), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("IList.first", () => expect(["a", "b", "c", "d", "e", "f"].lock.first, "a"));
 
@@ -1096,6 +1104,25 @@ void main() {
       () => expect(
           ["one", "two", "three", "four"].lock.removeWhere((String item) => item.length == 3),
           ["three", "four"]));
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("IList.removeAll()", () => expect([1, 2, 3, 3, 4, 5, 5].lock.removeAll([3, 5]), [1, 2, 4]));
+
+  test(
+      "IList.removeMany()",
+      () => expect(["head", "shoulders", "knees", "head", "toes"].lock.removeMany("head"),
+          ["shoulders", "knees", "toes"]));
+
+  test("IList.removeNulls()", () => expect([1, 2, null, 4, null].lock.removeNulls(), [1, 2, 4]));
+
+  test("IList.removeDuplicates()",
+      () => expect([1, 2, 3, 3, 4, 5, 5].lock.removeDuplicates(), [1, 2, 3, 4, 5]));
+
+  test(
+      "IList.removeNullsAndDuplicates()",
+      () => expect(
+          [1, 2, 3, null, 3, 4, null, 5, 5].lock.removeNullsAndDuplicates(), [1, 2, 3, 4, 5]));
 
   //////////////////////////////////////////////////////////////////////////////
 
