@@ -4,11 +4,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   test("Simple Empty Initialization", () {
-    final UnmodifiableListView unmodifiableListView1 = UnmodifiableListView([].lock);
-    final UnmodifiableListView unmodifiableListView2 = UnmodifiableListView(null);
-
-    expect(unmodifiableListView1.isEmpty, isTrue);
-    expect(unmodifiableListView2.isEmpty, isTrue);
+    expect(UnmodifiableListView([].lock).isEmpty, isTrue);
+    expect(UnmodifiableListView(null).isEmpty, isTrue);
   });
 
   test("Non-mutable operations | UnmodifiableListView.[] operator", () {

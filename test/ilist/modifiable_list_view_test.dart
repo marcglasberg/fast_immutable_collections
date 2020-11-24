@@ -3,6 +3,11 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  test("Simple Empty Initialization", () {
+    expect(ModifiableListView([].lock).isEmpty, isTrue);
+    expect(ModifiableListView(null).isEmpty, isTrue);
+  });
+
   test("Non-mutable operations | ModifiableListView.[] operator", () {
     final IList<int> iList = [1, 2, 3].lock;
     final ModifiableListView<int> modifiableListView = ModifiableListView(iList);
