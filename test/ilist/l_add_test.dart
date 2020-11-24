@@ -1,10 +1,17 @@
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/l_add.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 
 void main() {
+  test("Initialization Assertion Errors", () {
+    expect(() => LAdd<int>(null, 2), throwsAssertionError);
+    expect(() => LAdd<int>(LFlat<int>([1, 2]), null), throwsAssertionError);
+    expect(() => LAdd<int>(null, 2), throwsAssertionError);
+    expect(() => LAdd<int>(null, null), throwsAssertionError);
+  });
+
   test("Runtime Type", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd, isA<LAdd<int>>());

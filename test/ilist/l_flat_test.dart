@@ -1,10 +1,20 @@
 import "package:collection/collection.dart";
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 
 void main() {
+  test("Initialization Assertion Errors", () => expect(() => LFlat(null), throwsAssertionError));
+
+  test("LFlat.getFlushed", () {
+    const List<int> original = [1, 2, 3];
+    final LFlat<int> lFlat = LFlat(original);
+
+    expect(lFlat.getFlushed, [1, 2, 3]);
+    expect(identical(original, lFlat.getFlushed), isFalse);
+  });
+
   test("Runtime Type", () {
     final List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat<int>(original);
