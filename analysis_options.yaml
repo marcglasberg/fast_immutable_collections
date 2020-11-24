@@ -10,4 +10,4 @@ linter:
     equal_elements_in_set: false
     omit_local_variable_types: false
     prefer_single_quotes: false
-    # prefer_double_quotes: true
+    prefer_double_quotes: true
