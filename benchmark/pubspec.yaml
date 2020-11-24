@@ -9,6 +9,8 @@ authors:
 environment:
   sdk: ">=2.8.0 <3.0.0"
 
+publish_to: none
+
 dependencies:
   benchmark_harness: ^1.0.5
   meta: ^1.2.3

@@ -1224,8 +1224,8 @@ void main() {
   });
 
   test("IList.toLinkedHashSet()", () {
-    // final IList<int> iList = [1, 2, 4, 3].lock;
+    final IList<int> iList = [1, 2, 4, 3].lock;
 
-    // expect(iList.to)
+    // expect(iList)
   });
 }
