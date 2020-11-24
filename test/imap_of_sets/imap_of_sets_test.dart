@@ -1,4 +1,4 @@
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -431,6 +431,12 @@ void main() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  test("Empty Initialization from .withConfig() factory", () {
+    expect(IMapOfSets.withConfig(null, null), isA<IMapOfSets>());
+    expect(IMapOfSets.withConfig(null, null), IMapOfSets());
+    expect(IMapOfSets.withConfig(null, null).isEmpty, isTrue);
+  });
+
   test("Config | IMapOfSets.withConfig factory constructor", () {
     final ConfigMapOfSets configMapOfSets =
         ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
@@ -443,6 +449,10 @@ void main() {
     expect(iMapOfSets2.config.isDeepEquals, isFalse);
     expect(iMapOfSets2.config.sortKeys, isFalse);
     expect(iMapOfSets2.config.sortValues, isFalse);
+  });
+
+  test("IMapOfSets.withConfig() | config cannot be null", () {
+    expect(() => IMapOfSets().withConfig(null), throwsAssertionError);
   });
 
   test("Config | IMapOfSets.withConfig()", () {
@@ -664,6 +674,17 @@ void main() {
     expect(newMapOfSets["z"], {2, 3, 4});
   });
 
+  test("IMapOfSets.addValuesToKeys()", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    final IMapOfSets<String, int> iMapOfSetsResult =
+        iMapOfSets.addValuesToKeys(["a", "b", "c"], [4, 5]);
+
+    expect(iMapOfSetsResult["a"], {1, 2, 4, 5});
+    expect(iMapOfSetsResult["b"], {3, 4, 5});
+    expect(iMapOfSetsResult["c"], {4, 5});
+  });
+
   test("IMapOfSets.addAll()", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
@@ -702,6 +723,9 @@ void main() {
     expect(newSet["a"], ISet({1, 2}));
   });
 
+  test("IMapOfSets.replaceSet() | replacement set cannot be null",
+      () => expect(() => IMapOfSets().replaceSet("a", null), throwsAssertionError));
+
   test("IMapOfSets.replaceSet() | Adding a new set on a new key", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
@@ -714,6 +738,32 @@ void main() {
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     final IMapOfSets<String, int> newSet = iMapOfSets.replaceSet("a", ISet({100}));
     expect(newSet["a"], ISet({100}));
+  });
+
+  test("IMapOfSets.replaceSet() | if removeEmptySets is true", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    final IMapOfSets<String, int> newSet = iMapOfSets.replaceSet("b", ISet({}));
+    expect(newSet["b"], isNull);
+  });
+
+  test("IMapOfSets.clearSet() | nullifies the empty set if removeEmptySets is true", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    final IMapOfSets<String, int> clearedSet = iMapOfSets.clearSet("a");
+    expect(clearedSet["a"], isNull);
+    expect(clearedSet["b"], {3});
+  });
+
+  test("IMapOfSets.clearSet() | empties set if removeEmptySets is false", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>(const ConfigMapOfSets(removeEmptySets: false))
+            .add("a", 1)
+            .add("a", 2)
+            .add("b", 3);
+    final IMapOfSets<String, int> clearedSet = iMapOfSets.clearSet("a");
+    expect(clearedSet["a"], <int>{});
+    expect(clearedSet["b"], {3});
   });
 
   test("IMapOfSets.removeSet()", () {

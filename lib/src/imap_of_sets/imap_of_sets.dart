@@ -210,7 +210,7 @@ class IMapOfSets<K, V> //
   }
 
   /// Add all [values] to each [set] of all given [keys].
-  /// If the [key] doesn't  exist, will first create it with an empty [set],
+  /// If the [key] doesn't exist, it will first create it with an empty [set],
   /// and then add the [values] to it.
   ///
   IMapOfSets<K, V> addValuesToKeys(Iterable<K> keys, Iterable<V> values) {
