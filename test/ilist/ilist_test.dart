@@ -1,7 +1,7 @@
 import "dart:collection";
 import "dart:math";
 
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -358,6 +358,15 @@ void main() {
     expect(iListNewConfigIdentity.isDeepEquals, isFalse);
   });
 
+  test("IList.withConfig() with empty IList", () {
+    final IList<int> emptyIList = <int>[].lock;
+
+    expect(IList.withConfig(emptyIList, emptyIList.config), []);
+  });
+
+  test("IList.withConfig() method | Assertion",
+      () => expect(() => [].lock.withConfig(null), throwsAssertionError));
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("IList.withConfigFrom()", () {
@@ -443,6 +452,9 @@ void main() {
     expect(list, [1, 2, 3, 4]);
     expect(iList, [1, 2, 3, 4]);
   });
+
+  test("IList.unsafe() constructor | Assertion Error",
+      () => expect(() => IList.unsafe([], config: null), throwsAssertionError));
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -1223,9 +1235,24 @@ void main() {
         [20, 16, 54, 50, 18, 20, 1, 5, 21, 19, 23, 55, 15]);
   });
 
-  test("IList.toLinkedHashSet()", () {
-    final IList<int> iList = [1, 2, 4, 3].lock;
+  test("IList.flushFactor", () => expect(IList.flushFactor, 200));
 
-    // expect(iList)
+  test("IList.flushFactor setter", () {
+    IList.flushFactor = 100;
+    expect(IList.flushFactor, 100);
+  });
+
+  test("IList.flushFactor setter | can't be smaller than or equal to 0", () {
+    expect(() => IList.flushFactor = 0, throwsStateError);
+    expect(() => IList.flushFactor = -100, throwsStateError);
+  });
+
+  test("IList.asyncAutoFlush", () => expect(IList.asyncAutoflush, isTrue));
+
+  test("lockConfig()", () {
+    ImmutableCollection.lockConfig();
+
+    expect(() => IList.flushFactor = 1000, throwsStateError);
+    expect(() => IList.asyncAutoflush = false, throwsStateError);
   });
 }
