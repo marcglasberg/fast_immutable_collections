@@ -18,9 +18,9 @@ import "ilist.dart";
 ///
 /// ```dart
 /// class MyClass with IterableLikeIListMixin<T> { ... }
-/// 
+///
 /// MyClass obj = MyClass([1, 2, 3]);
-/// 
+///
 /// for (int value in obj.iter) print(value);
 /// ```
 ///
@@ -29,9 +29,9 @@ import "ilist.dart";
 ///
 /// ```dart
 /// class MyClass with IterableLikeIListMixin<T>, implements Iterable<T> { ... }
-/// 
+///
 /// MyClass obj = MyClass([1, 2, 3]);
-/// 
+///
 /// for (int value in obj) print(value);
 /// ```
 ///
@@ -39,7 +39,7 @@ import "ilist.dart";
 mixin FromIterableIListMixin<T> implements CanBeEmpty {
   //
 
-  // Classes with [FromIterableIListMixin] must override this.
+  /// Classes with [FromIterableIListMixin] must override this.
   IList<T> get iter;
 
   Iterator<T> get iterator => iter.iterator;
