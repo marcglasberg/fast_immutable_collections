@@ -1,4 +1,4 @@
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -31,6 +31,9 @@ void main() {
 
     expect(list, [1, 2, 3, 4, 10, 5]);
   });
+
+  test("IListExtension sortLike() | the ordering can't be null",
+      () => expect(() => [1, 2, 3, 4, 10, 5].sortLike(null), throwsAssertionError));
 
   test("IListExtension.whereMoveToTheEnd()", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
