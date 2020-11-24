@@ -815,10 +815,12 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("IList.where()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.where((int v) => v < 0), []);
-    expect([1, 2, 3, 4, 5, 6].lock.where((int v) => v < 3), [1, 2]);
-    expect([1, 2, 3, 4, 5, 6].lock.where((int v) => v < 5), [1, 2, 3, 4]);
-    expect([1, 2, 3, 4, 5, 6].lock.where((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
+    final IList<int> iList = [1, 2, 3, 4, 5, 6].lock;
+
+    expect(iList.where((int v) => v < 0), []);
+    expect(iList.where((int v) => v < 3), [1, 2]);
+    expect(iList.where((int v) => v < 5), [1, 2, 3, 4]);
+    expect(iList.where((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
