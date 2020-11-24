@@ -8,7 +8,7 @@ class IListOf2<T> {
   const IListOf2(this.first, this.last);
 
   @override
-  String toString() => "[$first, $last])";
+  String toString() => "[$first, $last]";
 
   @override
   bool operator ==(Object other) =>
