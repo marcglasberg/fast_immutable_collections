@@ -663,19 +663,22 @@ class IList<T> // ignore: must_be_immutable
 
   /// Sorts this list according to the order specified by the [compare] function.
   ///
-  /// This is similar to [sort], but uses a merge sort algorithm
-  /// (https://en.wikipedia.org/wiki/Merge_sort).
+  /// This is similar to [sort], but uses a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort).
   ///
   /// On contrary to [sort], [sortOrdered] is stable, meaning distinct objects
   /// that compare as equal end up in the same order as they started in.
   ///
-  ///     IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
-  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
-  ///     print(numbers);  // [one, two, four, three]
-  ///
+  /// ```dart
+  /// IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  /// numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  /// print(numbers);  // [one, two, four, three]
+  /// ```
   IList<T> sortOrdered([int Function(T a, T b) compare]) =>
       IList._unsafe(_l.sortOrdered(compare), config: config);
 
+  /// Sorts this list according to the order specified by the [ordering] iterable.
+  /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
+  /// Note: This is not very efficient. Only use for a small number of elements.
   IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
@@ -1440,7 +1443,7 @@ class InternalsForTestingPurposesIList {
   InternalsForTestingPurposesIList(this.ilist);
 
   /// To access the private counter, add this to the test file:
-  /// 
+  ///
   /// ```dart
   /// extension TestExtension on IList {
   ///   int get counter => InternalsForTestingPurposesIList(this).counter;

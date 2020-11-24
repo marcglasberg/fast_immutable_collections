@@ -664,7 +664,7 @@ void main() {
   test("IList.length", () => expect([1, 2, 3, 4, 5, 6].lock.length, 6));
 
   //////////////////////////////////////////////////////////////////////////////
-  
+
   test("IList.inRange()", () {
     expect([1, 2, 3].lock.inRange(-1), isFalse);
     expect([1, 2, 3].lock.inRange(1), isTrue);
@@ -939,6 +939,15 @@ void main() {
   test("IList.sort()", () {
     expect([10, 2, 4, 6, 5].lock.sort(), [2, 4, 5, 6, 10]);
     expect([10, 2, 4, 6, 5].lock.sort((int a, int b) => -a.compareTo(b)), [10, 6, 5, 4, 2]);
+  });
+
+  test(
+      "IList.sortOrdered()",
+      () => expect(
+          [10, 2, 4, 6, 5].lock.sortOrdered((int a, int b) => a.compareTo(b)), [2, 4, 5, 6, 10]));
+
+  test("IList.sortLike()", () {
+    expect([10, 2, 4, 6, 5].lock.sortLike(const [4, 2]), [4, 2, 10, 6, 5]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
