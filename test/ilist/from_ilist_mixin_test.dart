@@ -1,18 +1,11 @@
+import 'dart:math';
+
 import "package:meta/meta.dart";
 import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("FromIListMixin.unlock", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy]);
-
-    expect(students.unlock, allOf(isA<List<Student>>(), [james, sara, lucy]));
-  });
-
   test("FromIListMixin.iterator", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -434,6 +427,27 @@ void main() {
     expect(students.equalItems([james]), isFalse);
   });
 
+  test("FromIListMixin.unorderedEqualItems()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.unorderedEqualItems([james, sara, lucy]), isTrue);
+    expect(students.unorderedEqualItems([sara, lucy, james]), isTrue);
+    expect(students.unorderedEqualItems([james]), isFalse);
+  });
+
+  test("FromIListMixin.same()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.same(students), isTrue);
+    expect(students.same(Students([james, sara, lucy])), isFalse);
+  });
+
   test("FromIListMixin.fillRange()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -681,7 +695,151 @@ void main() {
   });
 
   test("FromIListMixin.replaceFirst()", () {
-    
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, james]);
+
+    expect(students.replaceFirst(from: const Student("James"), to: const Student("Bob")).iter,
+        [const Student("Bob"), sara, lucy, james]);
+  });
+
+  test("FromIListMixin.replaceFirstWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, james]);
+
+    expect(
+        students
+            .replaceFirstWhere((Student student) => student.name.length == 5, const Student("Bob"))
+            .iter,
+        [const Student("Bob"), sara, lucy, james]);
+  });
+
+  test("FromIListMixin.replaceRange()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, james]);
+
+    expect(students.replaceRange(1, 3, [const Student("Bob"), const Student("John")]).iter,
+        [james, const Student("Bob"), const Student("John"), james]);
+  });
+
+  test("FromIListMixin.retainWhere()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.retainWhere((Student student) => student.name.length == 4).iter, [sara, lucy]);
+  });
+
+  test("FromIListMixin.reversed", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.reversed.iter, [lucy, sara, james]);
+  });
+
+  test("FromIListMixin.setAll()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.setAll(1, [const Student("Bob")]).iter, [james, const Student("Bob"), lucy]);
+  });
+
+  test("FromIListMixin.setRange()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.setRange(1, 3, [const Student("Bob"), const Student("John")]).iter,
+        [james, const Student("Bob"), const Student("John")]);
+  });
+
+  test("FromIListMixin.shuffle()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    final Random random = Random(0);
+
+    expect(students.shuffle(random).iter, [lucy, sara, james]);
+  });
+
+  test("FromIListMixin.singleOr()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.singleOr(Student("Bob")), Student("Bob"));
+    expect(Students([james]).singleOr(Student("Bob")), Student("James"));
+  });
+
+  test("FromIListMixin.singleOrNull", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.singleOrNull, isNull);
+    expect(Students([const Student("Bob")]).singleOrNull, const Student("Bob"));
+  });
+
+  test("FromIListMixin.sort()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.sort((Student a, Student b) => a.name.compareTo(b.name)).iter,
+        [james, lucy, sara]);
+  });
+
+  test("FromIListMixin.sublist()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.sublist(1).iter, [sara, lucy]);
+  });
+
+  test("FromIListMixin.toggle()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.toggle(const Student("Sara")).iter, [james, lucy]);
+    expect(students.toggle(const Student("Bob")).iter, [james, sara, lucy, const Student("Bob")]);
+  });
+
+  test("FromIListMixin.unlock", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.unlock, allOf(isA<List<Student>>(), [james, sara, lucy]));
+  });
+
+  test("FromIListMixin.unlockView", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.unlockView, allOf(isA<List<Student>>(), isA<UnmodifiableListView<Student>>()));
   });
 }
 

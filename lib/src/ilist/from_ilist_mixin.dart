@@ -156,6 +156,10 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   bool equalItems(covariant Iterable<T> other) => iter.equalItems(other);
 
+  bool unorderedEqualItems(covariant Iterable<T> other) => iter.unorderedEqualItems(other);
+
+  bool same(I other) => iter.same(other.iter);
+
   I fillRange(int start, int end, [T fillValue]) =>
       newInstance(iter.fillRange(start, end, fillValue));
 
@@ -239,8 +243,4 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   List<T> get unlock => iter.unlock;
 
   List<T> get unlockView => iter.unlockView;
-
-  bool unorderedEqualItems(covariant Iterable<T> other) => iter.unorderedEqualItems(other);
-
-  bool same(I other) => iter.same(other.iter);
 }
