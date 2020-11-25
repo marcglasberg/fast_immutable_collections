@@ -1,10 +1,16 @@
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/iset/s_add.dart";
 import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 void main() {
+  test("Initialization assertion errors", () {
+    expect(() => SAdd<int>(null, 2), throwsAssertionError);
+    expect(() => SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), null), throwsAssertionError);
+    expect(() => SAdd<int>(null, null), throwsAssertionError);
+  });
+
   test("Runtime Type", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd, isA<SAdd<int>>());

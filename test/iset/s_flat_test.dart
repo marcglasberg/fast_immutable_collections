@@ -1,10 +1,15 @@
 import "package:collection/collection.dart";
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 void main() {
+  test("Initialization Assertion Error", () => expect(() => SFlat(null), throwsAssertionError));
+
+  test("SFlat.getFlushed",
+      () => expect(SFlat({1, 2, 3}).getFlushed, allOf(isA<Set<int>>(), {1, 2, 3})));
+
   test("Runtime Type", () => expect(SFlat([1, 2, 3, 3]), isA<SFlat<int>>()));
 
   test("SFlat.unlock getter", () {
