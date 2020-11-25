@@ -14,6 +14,81 @@ void main() {
     expect(IMapOfSets.empty().isNotEmpty, isFalse);
   });
 
+  test("IMapOfSets.equalItems()", () {
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    });
+
+    expect(
+        iMapOfSets1.equalItems([
+          MapEntry<String, ISet<int>>("a", {1, 2}.lock),
+          MapEntry<String, ISet<int>>("b", {1, 2, 3}.lock)
+        ]),
+        isTrue);
+    expect(
+        iMapOfSets1.equalItems([
+          MapEntry<String, ISet<int>>("a", {1, 2, 3}.lock),
+          MapEntry<String, ISet<int>>("b", {1, 2, 3}.lock)
+        ]),
+        isFalse);
+    expect(
+        iMapOfSets1.equalItems([
+          MapEntry<String, ISet<int>>("b", {1, 2, 3}.lock)
+        ]),
+        isFalse);
+  });
+
+  test("IMapOfSets.equalItemsToIMap()", () {
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    });
+
+    expect(
+        iMapOfSets1.equalItemsToIMap(IMap({
+          "a": {1, 2}.lock,
+          "b": {1, 2, 3}.lock,
+        })),
+        isTrue);
+    expect(
+        iMapOfSets1.equalItemsToIMap(IMap({
+          "a": {1, 2, 3}.lock,
+          "b": {1, 2, 3}.lock,
+        })),
+        isFalse);
+    expect(
+        iMapOfSets1.equalItemsToIMap(IMap({
+          "b": {1, 2, 3}.lock,
+        })),
+        isFalse);
+  });
+
+  test("IMapOfSets.equalItemsToIMapOfSets()", () {
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    });
+
+    expect(
+        iMapOfSets1.equalItemsToIMapOfSets(IMapOfSets({
+          "a": {1, 2}.lock,
+          "b": {1, 2, 3}.lock,
+        })),
+        isTrue);
+    expect(
+        iMapOfSets1.equalItemsToIMapOfSets(IMapOfSets({
+          "a": {1, 2, 3}.lock,
+          "b": {1, 2, 3}.lock,
+        })),
+        isFalse);
+    expect(
+        iMapOfSets1.equalItemsToIMapOfSets(IMapOfSets({
+          "b": {1, 2, 3}.lock,
+        })),
+        isFalse);
+  });
+
   test("IMapOfSets.== Operator", () {
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
           "a": {1, 2},
@@ -29,11 +104,16 @@ void main() {
         }),
         iMapOfSets4 = IMapOfSets({
           "b": {1, 2, 3},
-        }).add("a", 1).add("a", 2);
+        }).add("a", 1).add("a", 2),
+        iMapOfSets5 = IMapOfSets({
+          "a": {1, 2},
+          "b": {1, 2, 3},
+        }).withConfig(ConfigMapOfSets(isDeepEquals: false));
 
     expect(iMapOfSets1 == iMapOfSets2, isTrue);
     expect(iMapOfSets1 == iMapOfSets3, isFalse);
     expect(iMapOfSets1 == iMapOfSets4, isTrue);
+    expect(iMapOfSets1 == iMapOfSets5, isFalse);
     expect(iMapOfSets1 == iMapOfSets2.remove("a", 3), isTrue);
   });
 
@@ -75,15 +155,52 @@ void main() {
         }),
         iMapOfSets4 = IMapOfSets({
           "b": {1, 2, 3},
-        }).add("a", 1).add("a", 2);
+        }).add("a", 1).add("a", 2),
+        iMapOfSets5 = IMapOfSets({
+          "a": {1, 2},
+          "b": {1, 2, 3},
+        }).withConfig(ConfigMapOfSets(isDeepEquals: false));
 
     expect(iMapOfSets1 == iMapOfSets2, isTrue);
     expect(iMapOfSets1 == iMapOfSets3, isFalse);
     expect(iMapOfSets1 == iMapOfSets4, isTrue);
+    expect(iMapOfSets1 == iMapOfSets5, isFalse);
     expect(iMapOfSets1.hashCode, iMapOfSets2.hashCode);
     expect(iMapOfSets1.hashCode, isNot(iMapOfSets3.hashCode));
     expect(iMapOfSets1.hashCode, iMapOfSets4.hashCode);
+    expect(iMapOfSets1.hashCode, isNot(iMapOfSets5.hashCode));
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("IMapOfSets.flush and IMapOfSets.isFlushed", () {
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    });
+    final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets({
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    }).addValues("a", {4, 5, 6});
+
+    expect(iMapOfSets1.unlock, {
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    });
+    expect(iMapOfSets2.unlock, {
+      "a": {1, 2, 4, 5, 6},
+      "b": {1, 2, 3},
+    });
+
+    expect(iMapOfSets1.isFlushed, isTrue);
+    expect(iMapOfSets2.isFlushed, isFalse);
+
+    iMapOfSets1.flush;
+    iMapOfSets2.flush;
+
+    expect(iMapOfSets1.isFlushed, isTrue);
+    expect(iMapOfSets2.isFlushed, isTrue);
+  }, skip: true);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -352,6 +469,24 @@ void main() {
     expect(iMapOfSets.removeValues([32, 47]).same(iMapOfSets), true);
   });
 
+  test("IMapOfSets.removeValues() | numberOfRemovedValues", () {
+    final Map<String, Set<int>> original = {
+      "a": {1, 2},
+      "b": {1, 2, 3},
+      "c": {8, 12, 1},
+      "d": {2},
+      "e": {2, 0},
+      "f": {2},
+    };
+    final Output<int> numberOfRemovedValues = Output<int>();
+
+    final IMapOfSets<String, int> iMapOfSets = original.lock;
+
+    iMapOfSets.removeValues([2], numberOfRemovedValues: numberOfRemovedValues);
+
+    expect(numberOfRemovedValues.value, 5);
+  });
+
   test("IMapOfSets.removeValuesWhere()", () {
     final Map<String, Set<int>> original = {
       "a": {1, 2},
@@ -386,6 +521,25 @@ void main() {
     // Don't remove anything (returns same instance).
     expect(iMapOfSets.removeValuesWhere((key, value) => value == 32).unlock, original);
     expect(iMapOfSets.removeValuesWhere((key, value) => value == 32).same(iMapOfSets), true);
+  });
+
+  test("IMapOfSets.removeValuesWhere() | numberOfRemovedValues", () {
+    final Map<String, Set<int>> original = {
+      "a": {1, 2},
+      "b": {1, 2, 3},
+      "c": {8, 12, 1},
+      "d": {2},
+      "e": {2, 0},
+      "f": {2},
+    };
+    final Output<int> numberOfRemovedValues = Output<int>();
+
+    final IMapOfSets<String, int> iMapOfSets = original.lock;
+
+    iMapOfSets.removeValuesWhere((String key, int value) => value == 2,
+        numberOfRemovedValues: numberOfRemovedValues);
+
+    expect(numberOfRemovedValues.value, 5);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
