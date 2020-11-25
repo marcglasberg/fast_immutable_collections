@@ -1,27 +1,32 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "../ilist/ilist.dart";
+import "immutable_collection.dart";
 
-/// 1) If [a] and [b] are both null, they don't have order. If one of them
+/// 1. If [a] and [b] are both null, they don't have order. If one of them
 /// is null, it will come later, unless the [nullsBefore] is true, in which
 /// case the null will come before.
 ///
-/// 1) Otherwise, if [a] and [b] are both of type [Comparable], compare them
+/// 2. Otherwise, if [a] and [b] are both of type [Comparable], compare them
 /// with their natural comparator.
 ///
-/// 2) Otherwise, if [a] and [b] are map-entries, compare their keys. If their
+/// 3. Otherwise, if [a] and [b] are map-entries, compare their keys. If their
 /// keys compare as the same, then compare their values.
 ///
-/// 3) Otherwise, if [a] and [b] are booleans, compare them such as `true`
+/// 4. Otherwise, if [a] and [b] are booleans, compare them such as `true`
 /// comes after `false`.
 ///
-/// 4) Otherwise, return 0 (which means unordered).
+/// 5. Otherwise, return 0 (which means unordered).
 ///
 /// Example:
 ///
-///      [2, null, 1]..sort(compareObject);
+/// ```dart
+/// [2, null, 1]..sort(compareObject);
+/// ```
 ///
 /// Example with nulls coming before:
 ///
-///      [2, null, 1]..sort((a, b) => compareObject(a, b, nullsBefore: true));`
+/// ```dart
+/// [2, null, 1]..sort((a, b) => compareObject(a, b, nullsBefore: true));
+/// ```
 ///
 int compareObject<T extends Object>(
   Object a,

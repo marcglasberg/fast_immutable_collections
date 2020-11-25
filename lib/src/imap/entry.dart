@@ -1,29 +1,30 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:fast_immutable_collections/src/base/hash.dart";
+import "../base/hash.dart";
+import "../base/sort.dart";
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 extension MapEntryExtension<K, V> on MapEntry<K, V> {
   //
-
   /// [MapEntry] is not [Comparable].
   /// If you need it to be comparable, you can use this getter to turn
   /// it into an [Entry]. This makes testing easier. For example:
   ///
-  ///     MapEntry mapEntry = map.entries.first;
+  /// ```dart
+  /// MapEntry mapEntry = map.entries.first;
   ///
-  ///     // Does NOT work.
-  ///     expect(mapEntry, MapEntry("a", 1));
+  /// // Does NOT work.
+  /// expect(mapEntry, MapEntry("a", 1));
   ///
-  ///     // Works!
-  ///     expect(mapEntry.asEntry, Entry("a", 1));
+  /// // Works!
+  /// expect(mapEntry.asEntry, Entry("a", 1));
+  /// ```
   ///
-  ///  Note another alternative is to use [containsPair] matcher in the map:
+  /// Note another alternative is to use [containsPair] matcher in the map:
   ///
-  ///     // See https://pub.dev/documentation/matcher/latest/matcher/containsPair.html
-  ///     expect(map, containsPair("a", 1));
-  ///
-  ///
+  /// ```dart
+  /// // See https://pub.dev/documentation/matcher/latest/matcher/containsPair.html
+  /// expect(map, containsPair("a", 1));
+  /// ```
   Entry<K, V> get asEntry => Entry.from<K, V>(this);
 
   /// Compare the keys of the map entries, if they are [Comparable].
@@ -32,8 +33,9 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   /// If keys and values are the same or not [Comparable], return 0.
   ///
   /// Note: This is not called "compareTo" as to not mislead people into thinking
-  /// [MapEntry] is [Comparable]. See: https://github.com/dart-lang/sdk/issues/32559
-  /// and https://github.com/dart-lang/matcher/issues/100
+  /// [MapEntry] is [Comparable].
+  /// See: [Issue #32559 of the Dart SDK](https://github.com/dart-lang/sdk/issues/32559)
+  /// and [Issue #100 of Dart's Matchers](https://github.com/dart-lang/matcher/issues/100).
   ///
   int compareKeyAndValue(MapEntry other) => compareObject(this, other);
 }
@@ -41,7 +43,7 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// Similar to a [MapEntry], but correctly implements
-/// equals ([==] comparing [key] and [value]), hashcode and [Comparable.compareTo].
+/// equals ([==] comparing [key] and [value]), [hashcode] and [Comparable.compareTo].
 class Entry<K, V> implements Comparable<Entry<K, V>> {
   final K key;
   final V value;
