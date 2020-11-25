@@ -1,10 +1,12 @@
 import "package:collection/collection.dart";
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 
 void main() {
+  test("Initialization assertion error", () => expect(() => MFlat(null), throwsAssertionError));
+
   test("Runtime type", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -121,6 +123,11 @@ void main() {
     expect(mFlat.contains("a", 1), isTrue);
     expect(mFlat.contains("a", 2), isFalse);
     expect(mFlat.contains("b", 1), isFalse);
+  });
+
+  test("MFlat.contains() | value being passed is null", () {
+    expect(MFlat({"a": 1, "b": 2, "c": 3, "d": 4}).contains("a", null), isFalse);
+    expect(MFlat({"a": 1, "b": 2, "c": 3, "d": null}).contains("d", null), isTrue);
   });
 
   test("MFlat.containsKey()", () {
