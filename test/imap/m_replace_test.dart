@@ -1,5 +1,7 @@
 import "package:test/test.dart";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:fast_immutable_collections/src/imap/m_replace.dart";
 
@@ -20,12 +22,25 @@ void main() {
     expect(mReplace.contains("a", 1), isFalse);
   });
 
+  test("MReplace.contains() | On the the content that's not been replaced", () {
+    const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
+    final MFlat<String, int> mFlat = MFlat(originalMap);
+    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    expect(mReplace.contains("b", 2), isTrue);
+    expect(mReplace.contains("c", 3), isTrue);
+  });
+
   test("MReplace.containsKey()", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
     mReplace.keys.forEach((String key) => expect(finalMap.containsKey(key), isTrue));
+  });
+
+  test("MReplace.containsValue() | simple usage", () {
+    expect(MReplace(MFlat({"a": 1, "b": 2, "c": 3}), "a", 2).containsValue(2), isTrue);
+    expect(MReplace(MFlat({"a": 1, "b": 2, "c": 3}), "a", 2).containsValue(10), isFalse);
   });
 
   test("MReplace.containsValue()", () {
