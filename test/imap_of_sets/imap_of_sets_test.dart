@@ -104,17 +104,25 @@ void main() {
         }),
         iMapOfSets4 = IMapOfSets({
           "b": {1, 2, 3},
-        }).add("a", 1).add("a", 2),
-        iMapOfSets5 = IMapOfSets({
-          "a": {1, 2},
-          "b": {1, 2, 3},
-        }).withConfig(ConfigMapOfSets(isDeepEquals: false));
+        }).add("a", 1).add("a", 2);
 
     expect(iMapOfSets1 == iMapOfSets2, isTrue);
     expect(iMapOfSets1 == iMapOfSets3, isFalse);
     expect(iMapOfSets1 == iMapOfSets4, isTrue);
-    expect(iMapOfSets1 == iMapOfSets5, isFalse);
     expect(iMapOfSets1 == iMapOfSets2.remove("a", 3), isTrue);
+  });
+
+  test("IMapOfSets.== Operator | !isDeepEquals", () {
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
+          "a": {1, 2},
+          "b": {1, 2, 3},
+        }).withConfig(ConfigMapOfSets(isDeepEquals: false)),
+        iMapOfSets2 = IMapOfSets({
+          "a": {1, 2},
+          "b": {1, 2, 3},
+        });
+
+    expect(iMapOfSets1 == iMapOfSets2, isFalse);
   });
 
   test("IMapOfSets.same()", () {
@@ -868,6 +876,37 @@ void main() {
       "b": {3, 4},
       "c": {10, 11},
     });
+  });
+
+  test("IMapOfSets.addIMap()", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+
+    expect(iMapOfSets.unlock, {
+      "a": {1, 2},
+      "b": {3},
+    });
+    expect(
+        iMapOfSets
+            .addIMap(IMap<String, Set<int>>({
+              "a": {3, 4}
+            }))
+            .unlock,
+        {
+          "a": {1, 2, 3, 4},
+          "b": {3},
+        });
+    expect(
+        iMapOfSets
+            .addIMap(IMap<String, Set<int>>({
+              "c": {3, 4}
+            }))
+            .unlock,
+        {
+          "a": {1, 2},
+          "b": {3},
+          "c": {3, 4}
+        });
   });
 
   test("IMapOfSets.remove()", () {
