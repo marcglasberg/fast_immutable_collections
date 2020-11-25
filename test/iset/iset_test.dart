@@ -1,4 +1,6 @@
-import "package:test/test.dart";
+import "dart:collection";
+
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -13,22 +15,20 @@ void main() {
     expect(<int>{}.lock, isA<ISet>());
   });
 
-  group("Creating immutable sets |", () {
-    test("Emptiness Properties", () {
-      expect(ISet().isEmpty, isTrue);
-      expect(ISet({}).isEmpty, isTrue);
-      expect(ISet<String>({}).isEmpty, isTrue);
-      expect(ISet([1]).isEmpty, isFalse);
-      expect(ISet.empty<int>().isEmpty, isTrue);
-      expect(<int>{}.lock.isEmpty, isTrue);
+  test("Emptiness Properties", () {
+    expect(ISet().isEmpty, isTrue);
+    expect(ISet({}).isEmpty, isTrue);
+    expect(ISet<String>({}).isEmpty, isTrue);
+    expect(ISet([1]).isEmpty, isFalse);
+    expect(ISet.empty<int>().isEmpty, isTrue);
+    expect(<int>{}.lock.isEmpty, isTrue);
 
-      expect(ISet().isNotEmpty, isFalse);
-      expect(ISet({}).isNotEmpty, isFalse);
-      expect(ISet<String>({}).isNotEmpty, isFalse);
-      expect(ISet([1]).isNotEmpty, isTrue);
-      expect(ISet.empty<int>().isNotEmpty, isFalse);
-      expect(<int>{}.lock.isNotEmpty, isFalse);
-    });
+    expect(ISet().isNotEmpty, isFalse);
+    expect(ISet({}).isNotEmpty, isFalse);
+    expect(ISet<String>({}).isNotEmpty, isFalse);
+    expect(ISet([1]).isNotEmpty, isTrue);
+    expect(ISet.empty<int>().isNotEmpty, isFalse);
+    expect(<int>{}.lock.isNotEmpty, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,6 +286,29 @@ void main() {
     expect(iSetWithCompare.config.sort, isFalse);
   });
 
+  test("ISet.withConfig() factory | different configs", () {
+    final ISet<int> iSet1 = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
+    final ISet<int> iSet2 = ISet.withConfig({}, ConfigSet(isDeepEquals: false));
+
+    expect(iSet1, {1, 2, 3});
+    expect(iSet1.isDeepEquals, isFalse);
+
+    expect(iSet2, <int>{});
+    expect(iSet2.isDeepEquals, isFalse);
+  });
+
+  test("ISet.withConfig() | Assertion error",
+      () => expect(() => {1, 2, 3}.lock.withConfig(null), throwsAssertionError));
+
+  test("ISet.withConfigFrom()", () {
+    final ISet<int> iSet = {1, 2, 3}.lock;
+    final ISet<int> iSetWithIdentityEquals =
+        ISet.withConfig({1, 2, 3}, const ConfigSet(isDeepEquals: false));
+
+    expect(
+        iSet.withConfigFrom(iSetWithIdentityEquals).config, const ConfigSet(isDeepEquals: false));
+  });
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("From an empty set", () {
@@ -500,6 +523,38 @@ void main() {
     expect({3, 6, 4, 1, 2, 5}.lock.last, 6);
   });
 
+  test("ISet.firstOrNull", () {
+    expect(<int>{}.lock.firstOrNull, isNull);
+    expect({1, 2, 3}.lock.firstOrNull, 1);
+  });
+
+  test("ISet.lastOrNull", () {
+    expect(<int>{}.lock.lastOrNull, isNull);
+    expect({1, 2, 3}.lock.lastOrNull, 3);
+  });
+
+  test("ISet.singleOrNull", () {
+    expect(<int>{}.lock.singleOrNull, isNull);
+    expect(<int>{1}.lock.singleOrNull, 1);
+    expect({1, 2, 3}.lock.singleOrNull, isNull);
+  });
+
+  test("ISet.firstOr()", () {
+    expect(<int>{}.lock.firstOr(10), 10);
+    expect(<int>{1, 2, 3}.lock.firstOr(10), 1);
+  });
+
+  test("ISet.lastOr()", () {
+    expect(<int>{}.lock.lastOr(10), 10);
+    expect(<int>{1, 2, 3}.lock.lastOr(10), 3);
+  });
+
+  test("ISet.singleOr()", () {
+    expect(<int>{}.lock.singleOr(10), 10);
+    expect(<int>{1}.lock.singleOr(10), 1);
+    expect(<int>{1, 2, 3}.lock.singleOr(10), 10);
+  });
+
   test("ISet.single() | State exception", () {
     final ISet<int> iSet = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(() => iSet.single, throwsStateError);
@@ -616,6 +671,11 @@ void main() {
     expect(iSet.unlock, [1, 2, 3, 4, 5, 6]);
   });
 
+  test(
+      "ISet.toList() | with compare",
+      () => expect({1, 2, 3}.lock.add(10).add(5).toList(compare: (int a, int b) => -a.compareTo(b)),
+          [10, 5, 3, 2, 1]));
+
   test("ISet.toList() | Unsupported exception", () {
     final ISet<int> iSet = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(() => iSet.toList(growable: false)..add(7), throwsUnsupportedError);
@@ -630,6 +690,12 @@ void main() {
     final ISet<int> iSet = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iSet.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
     expect(iSet.unlock, [1, 2, 3, 4, 5, 6]);
+  });
+
+  test("ISet.toSet() | with compare", () {
+    final Set<int> set = {1, 2, 3, 10, 5}.lock.toSet(compare: (int a, int b) => -a.compareTo(b));
+    expect(set, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
+    expect(set.toList(), [10, 5, 3, 2, 1]);
   });
 
   test("ISet.where()", () {
@@ -817,4 +883,41 @@ void main() {
     expect(result4, "2,4,1,9,3");
     expect(iset.toSet(), originalSet);
   });
+
+  test("ISet.flushFactor", () => expect(ISet.flushFactor, 20));
+
+  test("ISet.flushFactor setter", () {
+    ISet.flushFactor = 200;
+    expect(ISet.flushFactor, 200);
+  });
+
+  test("ISet.flushFactor setter | can't be smaller than or equal to 0", () {
+    expect(() => ISet.flushFactor = 0, throwsStateError);
+    expect(() => ISet.flushFactor = -100, throwsStateError);
+  });
+
+  test("ISet.asyncAutoFlush", () => expect(ISet.asyncAutoflush, isTrue));
+
+  test("lockConfig()", () {
+    ImmutableCollection.lockConfig();
+
+    expect(() => ISet.flushFactor = 1000, throwsStateError);
+    expect(() => ISet.asyncAutoflush = false, throwsStateError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("ISet.unlockSorted", () {
+    final ISet<int> iSet = {1, 2, 3}.lock.add(10).add(5);
+
+    expect(iSet.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
+  });
+
+  test("ISet.unlockView",
+      () => expect({1, 2, 3}.lock.unlockView, allOf(isA<UnmodifiableSetView>(), isA<Set>())));
+
+  test("ISet.unlockLazy",
+      () => expect({1, 2, 3}.lock.unlockLazy, allOf(isA<ModifiableSetView>(), isA<Set>())));
+
+  test("ISet.+()", () => expect({1, 2, 3}.lock + [1, 2, 4], {1, 2, 3, 4}));
 }

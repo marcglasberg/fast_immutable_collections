@@ -483,28 +483,28 @@ class ISet<T> // ignore: must_be_immutable
   }
 
   /// Checks that this iterable has only one element, and returns that element.
-  /// Throws a [StateError] if the list is empty or has more than one element.
+  /// Throws a [StateError] if the set is empty or has more than one element.
   @override
   T get single => _s.single;
 
-  /// Returns the first element, or `null` if the list is empty.
+  /// Returns the first element, or `null` if the set is empty.
   T get firstOrNull => firstOr(null);
 
-  /// Returns the last element, or `null` if the list is empty.
+  /// Returns the last element, or `null` if the set is empty.
   T get lastOrNull => lastOr(null);
 
-  /// Checks that the list has only one element, and returns that element.
-  /// Return `null` if the list is empty or has more than one element.
+  /// Checks that the set has only one element, and returns that element.
+  /// Return `null` if the set is empty or has more than one element.
   T get singleOrNull => singleOr(null);
 
-  /// Returns the first element, or [orElse] if the list is empty.
+  /// Returns the first element, or [orElse] if the set is empty.
   T firstOr(T orElse) => isEmpty ? orElse : first;
 
-  /// Returns the last element, or [orElse] if the list is empty.
+  /// Returns the last element, or [orElse] if the set is empty.
   T lastOr(T orElse) => isEmpty ? orElse : last;
 
-  /// Checks if the list has only one element, and returns that element.
-  /// Return `null` if the list is empty or has more than one element.
+  /// Checks if the set has only one element, and returns that element.
+  /// Return `null` if the set is empty or has more than one element.
   T singleOr(T orElse) => (length != 1) ? orElse : single;
 
   @override
