@@ -111,7 +111,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   I addAll(Iterable<T> items) => newInstance(iter.addAll(items));
 
-  void clear() => newInstance(iter.clear());
+  I clear() => newInstance(iter.clear());
 
   bool equalItems(covariant Iterable<T> other) => iter.equalItems(other);
 
