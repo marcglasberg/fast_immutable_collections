@@ -1,12 +1,20 @@
 import "dart:collection";
 import "dart:math";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "package:collection/collection.dart";
 import "package:meta/meta.dart";
+
+import "../base/immutable_collection.dart";
+import "../base/configs.dart";
+import "../base/sort.dart";
+import "../ilist/ilist.dart";
+import "../iset/iset.dart";
+import "entry.dart";
 import "m_add.dart";
 import "m_add_all.dart";
 import "m_flat.dart";
 import "m_replace.dart";
+import "modifiable_map_view.dart";
 import "unmodifiable_map_view.dart";
 
 /// An **immutable**, unordered map.
