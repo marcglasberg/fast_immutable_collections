@@ -3,6 +3,11 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  test("Empty Initialization", () {
+    expect(UnmodifiableMapView({}.lock).isEmpty, isTrue);
+    expect(UnmodifiableMapView(null).isEmpty, isTrue);
+  });
+
   test("Non-mutable operations | UnmodifiableMapView.[] operator", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),

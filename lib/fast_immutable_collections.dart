@@ -24,6 +24,7 @@ export "src/imap/unmodifiable_map_view.dart";
 
 // IMapOfSets:
 export "src/imap_of_sets/imap_of_sets.dart";
+export "src/imap_of_sets/imap_of_sets_extension.dart";
 
 // ISet:
 export "src/iset/iset.dart";

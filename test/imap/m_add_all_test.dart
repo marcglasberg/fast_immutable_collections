@@ -1,4 +1,4 @@
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -6,6 +6,12 @@ import "package:fast_immutable_collections/src/imap/m_add_all.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 
 void main() {
+  test("Initialization Assertion Errors", () {
+    expect(() => MAddAll.unsafe(null, MFlat({"b": 2, "c": 3})), throwsAssertionError);
+    expect(() => MAddAll.unsafe(MFlat({"a": 1}), null), throwsAssertionError);
+    expect(() => MAddAll.unsafe(null, null), throwsAssertionError);
+  });
+
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);

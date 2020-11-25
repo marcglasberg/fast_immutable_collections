@@ -1,4 +1,4 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "imap.dart";
 
 extension IMapExtension<K, V> on Map<K, V> {
   /// Locks the map, returning an *immutable* map ([IMap]).
@@ -14,9 +14,4 @@ extension IMapExtension<K, V> on Map<K, V> {
   /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
   /// further configuration changes by calling `lockConfig()`).
   IMap<K, V> get lockUnsafe => IMap<K, V>.unsafe(this, config: IMap.defaultConfig);
-}
-
-extension IMapOfSetsExtension<K, V> on Map<K, Set<V>> {
-  /// Locks the map of sets, returning an *immutable* map ([IMapOfSets]).
-  IMapOfSets<K, V> get lock => IMapOfSets<K, V>(this);
 }
