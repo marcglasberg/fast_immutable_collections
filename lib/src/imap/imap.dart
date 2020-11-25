@@ -948,7 +948,7 @@ class InternalsForTestingPurposesIMap {
   InternalsForTestingPurposesIMap(this.imap);
 
   /// To access the private counter, add this to the test file:
-  /// 
+  ///
   /// ```dart
   /// extension TestExtension on IMap {
   ///   int get counter => InternalsForTestingPurposesIMap(this).counter;

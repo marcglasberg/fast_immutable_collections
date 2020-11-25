@@ -892,7 +892,7 @@ class InternalsForTestingPurposesISet {
   InternalsForTestingPurposesISet(this.iset);
 
   /// To access the private counter, add this to the test file:
-  /// 
+  ///
   /// ```dart
   /// extension TestExtension on ISet {
   ///   int get counter => InternalsForTestingPurposesISet(this).counter;
