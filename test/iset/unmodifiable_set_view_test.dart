@@ -3,6 +3,11 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  test("Empty Inialization", () {
+    final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(null);
+    expect(unmodifiableSetView.lock, allOf(isA<ISet<int>>(), <int>{}));
+  });
+
   test("Non-mutable operations | UnmodifiableSetView.length getter", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
