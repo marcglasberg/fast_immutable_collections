@@ -352,16 +352,6 @@ void main() {
 }
 
 @immutable
-class Ints with FromIterableISetMixin<int> {
-  final ISet<int> _ints;
-
-  Ints([Iterable<int> ints]) : _ints = ISet(ints);
-
-  @override
-  ISet<int> get iter => _ints;
-}
-
-@immutable
 class Students with FromIterableISetMixin<Student> {
   final ISet<Student> _students;
 
