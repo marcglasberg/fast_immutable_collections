@@ -2,6 +2,7 @@
 
 [![Dart || Tests | Formatting | Analyzer][github_ci_badge]][github_actions]
 [![codecov.io][codecov_badge]][codecov]
+[![Gitter][gitter_svg]][gitter_badge]
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
 
@@ -13,6 +14,8 @@
 [codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
 [github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
 [github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
+[gitter_svg]: https://badges.gitter.im/Fast-Immutable-Collections/community.svg
+[gitter_badge]: https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 ## 1.1. Introduction
 
