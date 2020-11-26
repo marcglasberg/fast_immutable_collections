@@ -16,6 +16,16 @@ void main() {
   });
 
   test("FromISetMixin.any()", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, Student("James")]);
+
+    expect(students.any((Student student) => student.name == "James"), isTrue);
+    expect(students.any((Student student) => student.name == "John"), isFalse);
+  });
+
+  test("FromISetMixin.cast()", () {
     final Students students = Students([Student("James")]);
 
     expect(students.cast<ProtoStudent>(), isA<ISet<ProtoStudent>>());

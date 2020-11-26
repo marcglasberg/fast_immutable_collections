@@ -38,8 +38,7 @@ import "ilist.dart";
 /// See also: [FromIListMixin].
 mixin FromIterableIListMixin<T> implements CanBeEmpty {
   //
-
-  /// Classes with [FromIterableIListMixin] must override this.
+  /// Classes `with` [FromIterableIListMixin] must override this.
   IList<T> get iter;
 
   Iterator<T> get iterator => iter.iterator;
