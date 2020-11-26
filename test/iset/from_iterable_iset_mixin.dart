@@ -26,7 +26,7 @@ void main() {
   test("FromIterableISetMixin.cast()", () {
     final Students students = Students([Student("James")]);
 
-    expect(students.cast<ProtoStudent>(), isA<ISet<ProtoStudent>>());
+    expect(() => students.cast<ProtoStudent>(), throwsUnsupportedError);
   });
 
   test("FromIterableISetMixin.contains()", () {
@@ -152,8 +152,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.followedBy([const Student("Bob")]).unlock,
-        {james, sara, lucy, const Student("Bob")});
+    expect(students.followedBy([const Student("Bob")]), {james, sara, lucy, const Student("Bob")});
   });
 
   test("FromIterableISetMixin.forEach()", () {
@@ -353,26 +352,20 @@ void main() {
 }
 
 @immutable
-class Ints with FromISetMixin<int, Ints> {
+class Ints with FromIterableISetMixin<int> {
   final ISet<int> _ints;
 
   Ints([Iterable<int> ints]) : _ints = ISet(ints);
-
-  @override
-  Ints newInstance(ISet<int> iSet) => Ints(iSet);
 
   @override
   ISet<int> get iter => _ints;
 }
 
 @immutable
-class Students with FromISetMixin<Student, Students> {
+class Students with FromIterableISetMixin<Student> {
   final ISet<Student> _students;
 
   Students([Iterable<Student> students]) : _students = ISet(students);
-
-  @override
-  Students newInstance(ISet<Student> iSet) => Students(iSet);
 
   @override
   ISet<Student> get iter => _students;
