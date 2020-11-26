@@ -80,7 +80,7 @@ void main() {
     final Students students = Students([james, sara, lucy]);
 
     expect(students.every((Student student) => student.name.length > 1), isTrue);
-    expect(students.every((Student student) => student.name.length > 10), isFalse);
+    expect(students.every((Student student) => student.name.length > 4), isFalse);
   });
 
   test("FromIListMixin.expand()", () {
