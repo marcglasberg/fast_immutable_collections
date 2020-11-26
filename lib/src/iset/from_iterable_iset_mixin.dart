@@ -29,9 +29,9 @@ import "../iset/iset.dart";
 ///
 /// ```dart
 /// class MyClass with IterableLikeISetMixin<T>, implements Iterable<T> { ... }
-/// 
+///
 /// MyClass obj = MyClass({1, 2, 3});
-/// 
+///
 /// for (int value in obj) print(value);
 /// ```
 ///
