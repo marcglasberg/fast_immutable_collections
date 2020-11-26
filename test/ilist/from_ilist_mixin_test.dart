@@ -321,7 +321,7 @@ void main() {
 
     expect(students.whereType<Student>(),
         [const Student("James"), const Student("Sara"), const Student("Lucy")]);
-    expect(students.whereType<String>(), []);
+    expect(students.whereType<String>(), <Student>[]);
   });
 
   test("FromIListMixin.isEmpty", () {
@@ -351,7 +351,7 @@ void main() {
     final Students students = Students([james, sara, sara, lucy]);
 
     expect(
-        students.toSet(), [const Student("James"), const Student("Sara"), const Student("Lucy")]);
+        students.toSet(), {const Student("James"), const Student("Sara"), const Student("Lucy")});
   });
 
   test("FromIListMixin.+()", () {

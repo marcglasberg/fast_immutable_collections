@@ -9,7 +9,7 @@ import "../iset/iset.dart";
 /// All other methods are efficiently implemented in terms of the [iter].
 ///
 /// To use this mixin, your class must:
-/// 
+///
 /// 1. Override the [iter] getter to return the inner [ISet].
 /// 1. Override the [newInstance] method to return a new instance of the class.
 ///
@@ -115,6 +115,8 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   bool equalItems(covariant Iterable<T> other) => iter.equalItems(other);
 
+  bool same(I other) => iter.same(other.iter);
+
   I remove(T item) => newInstance(iter.remove(item));
 
   I removeWhere(bool Function(T element) test) => newInstance(iter.removeWhere(test));
@@ -129,8 +131,8 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   Set<T> get unlockView => iter.unlockView;
 
-  bool same(I other) => iter.same(other.iter);
-
+  // TODO: Marcelo, a tipagem dos parâmetros dos próximos métodos não deveria ser mais específica?
+  // Algo como `Iterable<T>` ou `ISet<T>` ao invés de `Set<Object>`?
   bool containsAll(Iterable<Object> other) => iter.containsAll(other);
 
   ISet<T> difference(Set<Object> other) => iter.difference(other);
@@ -139,9 +141,9 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   T lookup(Object object) => iter.lookup(object);
 
-  void removeAll(Iterable<Object> elements) => iter.removeAll(elements);
+  ISet<T> removeAll(Iterable<Object> elements) => iter.removeAll(elements);
 
-  void retainAll(Iterable<Object> elements) => iter.retainAll(elements);
+  ISet<T> retainAll(Iterable<Object> elements) => iter.retainAll(elements);
 
   ISet<T> union(Set<T> other) => iter.union(other);
 }
