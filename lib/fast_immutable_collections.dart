@@ -2,6 +2,7 @@
 /// {@category Collections, Immutable, Flutter}
 library fast_immutable_collections;
 
+// Base:
 export "src/base/immutable_collection.dart";
 export "src/base/configs.dart";
 export "src/base/sort.dart";
@@ -31,3 +32,5 @@ export "src/iset/iset.dart";
 export "src/iset/iset_extension.dart";
 export "src/iset/modifiable_set_view.dart";
 export "src/iset/unmodifiable_set_view.dart";
+export "src/iset/from_iset_mixin.dart";
+export "src/iset/from_iterable_iset_mixin.dart";

@@ -1,16 +1,17 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "../base/immutable_collection.dart";
+import "../iset/iset.dart";
 
 /// This mixin implements all [ISet] members (without config),
-/// but it does NOT implement [Iterable] nor [ISet].
+/// but it does **NOT** implement [Iterable] nor [ISet].
 ///
 /// It is meant to help you wrap an [ISet] into another class (composition).
 /// You must override the [iter] getter to return the inner [ISet].
 /// All other methods are efficiently implemented in terms of the [iter].
 ///
-///
 /// To use this mixin, your class must:
-/// 1) Override the [iter] getter to return the inner [ISet].
-/// 2) Override the [newInstance] method to return a new instance of the class.
+/// 
+/// 1. Override the [iter] getter to return the inner [ISet].
+/// 1. Override the [newInstance] method to return a new instance of the class.
 ///
 /// Example:
 ///
@@ -29,14 +30,13 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// ```
 ///
 /// See also: [FromIterableISetMixin].
-///
 mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   //
 
-  // Classes with `FromISetMixin` must override this.
+  /// Classes `with` [FromISetMixin] must override this.
   ISet<T> get iter;
 
-  // Classes with `FromISetMixin` must override this.
+  /// Classes `with` [FromISetMixin] must override this.
   I newInstance(ISet<T> iSet);
 
   bool any(bool Function(T) test) => iter.any(test);
