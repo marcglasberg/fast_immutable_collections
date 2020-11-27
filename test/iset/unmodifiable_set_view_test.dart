@@ -80,7 +80,6 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
-    final List<UnmodifiableSetView<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
     final Iterator<int> iterator = unmodifiableSetView.iterator,
         iteratorFromSet = unmodifiableSetViewFromSet.iterator;
     final List<Iterator<int>> iterators = [iterator, iteratorFromSet];
