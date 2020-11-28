@@ -8,6 +8,7 @@ Note that there are no tests (TDD), but the code is simple enough and just a sim
 
 
 [example]: example/
+[gif]: assets/demo.gif
 [fast_immutable_collections]: ../
 
 # 1. Resources and Documentation
@@ -21,7 +22,6 @@ Note that there are no tests (TDD), but the code is simple enough and just a sim
 
 [benchmarks_specifications]: docs/benchmarks_specifications.md
 [example]: example/
-[gif]: assets/demo.gif
 [how_to_create_a_benchmark]: docs/how_to_create_a_benchmark.md
 [plant_uml]: https://plantuml.com/
 [uml]: docs/uml.puml

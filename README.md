@@ -4,6 +4,8 @@
 [![codecov.io][codecov_badge]][codecov]
 [![Gitter][gitter_svg]][gitter_badge]
 
+[![GIF][gif]][example]
+
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
@@ -12,6 +14,8 @@
 
 [codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
 [codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
+[example]: example/
+[gif]: benchmark/assets/demo.gif
 [github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
 [github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
 [gitter_svg]: https://badges.gitter.im/Fast-Immutable-Collections/community.svg
