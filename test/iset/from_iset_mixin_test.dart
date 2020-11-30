@@ -572,7 +572,7 @@ class Ints with FromISetMixin<int, Ints> {
   Ints([Iterable<int> ints]) : _ints = ISet(ints);
 
   @override
-  Ints newInstance(ISet<int> iSet) => Ints(iSet);
+  Ints newInstance(ISet<int> iset) => Ints(iset);
 
   @override
   ISet<int> get iter => _ints;
@@ -585,7 +585,7 @@ class Students with FromISetMixin<Student, Students> {
   Students([Iterable<Student> students]) : _students = ISet(students);
 
   @override
-  Students newInstance(ISet<Student> iSet) => Students(iSet);
+  Students newInstance(ISet<Student> iset) => Students(iset);
 
   @override
   ISet<Student> get iter => _students;

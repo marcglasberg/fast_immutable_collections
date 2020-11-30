@@ -581,11 +581,11 @@ void main() {
       "a": {1, 2},
       "b": {1, 2, 3},
     });
-    final IMap<String, ISet<int>> iMap = IMap({
+    final IMap<String, ISet<int>> imap = IMap({
       "a": ISet({1, 2}),
       "b": ISet({1, 2, 3}),
     });
-    final IMapOfSets<String, int> iMapOfSets3 = IMapOfSets.from(iMap);
+    final IMapOfSets<String, int> iMapOfSets3 = IMapOfSets.from(imap);
     expect(iMapOfSets3["a"], ISet({1, 2}));
     expect(iMapOfSets3["b"], ISet({1, 2, 3}));
     expect(iMapOfSets3, iMapOfSets1);

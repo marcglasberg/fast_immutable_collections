@@ -25,7 +25,7 @@ import "ilist.dart";
 ///   Students([Iterable<Student> students]) : _students = IList(students);
 ///
 ///   @override
-///   Students newInstance(IList<Student> iList) => Students(iList);
+///   Students newInstance(IList<Student> ilist) => Students(ilist);
 ///
 ///   @override
 ///   IList<Student> get iter => _students;
@@ -74,7 +74,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   IList<T> get iter;
 
   /// Classes `with` [FromIListMixin] must override this.
-  I newInstance(IList<T> iList);
+  I newInstance(IList<T> ilist);
 
   Iterator<T> get iterator => iter.iterator;
 
