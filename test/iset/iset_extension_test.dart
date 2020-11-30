@@ -7,12 +7,12 @@ void main() {
 
   test("ISetExtension.lockUnsafe", () {
     final Set<int> set = {1, 2, 3};
-    final ISet<int> iSet = set.lockUnsafe;
+    final ISet<int> iset = set.lockUnsafe;
 
-    expect(set, iSet);
+    expect(set, iset);
 
     set.add(4);
 
-    expect(set, iSet);
+    expect(set, iset);
   });
 }

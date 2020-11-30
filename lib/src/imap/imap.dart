@@ -655,8 +655,8 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a new map containing the current map plus the given map.
   /// (if necessary, the given entries will override the current ones).
-  IMap<K, V> addAll(IMap<K, V> iMap) {
-    var result = IMap<K, V>._unsafe(_m.addAll(iMap), config: config);
+  IMap<K, V> addAll(IMap<K, V> imap) {
+    var result = IMap<K, V>._unsafe(_m.addAll(imap), config: config);
 
     // A map created with `addAll` has a larger counter than both its source
     // maps. This improves the order in which maps are flushed.
@@ -664,7 +664,7 @@ class IMap<K, V> // ignore: must_be_immutable
     // If the source maps are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
     result._counter =
-        max(_counter, ((iMap is IMap<K, V>) ? iMap._counter : 0)) + 1;
+        max(_counter, ((imap is IMap<K, V>) ? imap._counter : 0)) + 1;
 
     return result;
   }

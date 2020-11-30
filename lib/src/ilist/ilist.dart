@@ -72,11 +72,11 @@ class IList<T> // ignore: must_be_immutable
 
   /// Special IList constructor from ISet.
   factory IList.fromISet(
-    ISet<T> iSet, {
+    ISet<T> iset, {
     int Function(T a, T b) compare,
     @required ConfigList config,
   }) {
-    List<T> list = iSet.toList(growable: false, compare: compare);
+    List<T> list = iset.toList(growable: false, compare: compare);
     var l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
     return IList._unsafe(l, config: config ?? defaultConfig);
   }
@@ -804,9 +804,9 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// ```dart
   /// final IList<String> words = ['hel', 'lo', 'there'].lock;
-  /// final IMap<int, String> iMap = words.asMap();
-  /// print(iMap[0] + iMap[1]); // Prints 'hello';
-  /// iMap.keys.toList(); // [0, 1, 2, 3]
+  /// final IMap<int, String> imap = words.asMap();
+  /// print(imap[0] + imap[1]); // Prints 'hello';
+  /// imap.keys.toList(); // [0, 1, 2, 3]
   /// ```
   IMap<int, T> asMap() {
     _count();
@@ -1040,8 +1040,8 @@ class IList<T> // ignore: must_be_immutable
   /// and inserts the contents of [replacement] in its place.
   ///
   /// ```dart
-  /// final IList<int> iList = [1, 2, 3, 4, 5].lock;
-  /// iList.replaceRange(1, 4, [6, 7]).join(', '); // '1, 6, 7, 5'
+  /// final IList<int> ilist = [1, 2, 3, 4, 5].lock;
+  /// ilist.replaceRange(1, 4, [6, 7]).join(', '); // '1, 6, 7, 5'
   /// ```
   ///
   /// The provided range, given by [start] and [end], must be valid.
@@ -1079,9 +1079,9 @@ class IList<T> // ignore: must_be_immutable
   /// Example with [IList]:
   ///
   /// ```dart
-  /// final IList<int> iList = IList();
-  /// iList.fillRange(0, 2, 1);
-  /// print(iList); // [1, 1, null]
+  /// final IList<int> ilist = IList();
+  /// ilist.fillRange(0, 2, 1);
+  /// print(ilist); // [1, 1, null]
   /// ```
   ///
   /// If the element type is not nullable, omitting [fillValue] or passing `null`
@@ -1256,8 +1256,8 @@ class IList<T> // ignore: must_be_immutable
   /// at position [index] in this list.
   ///
   /// ```dart
-  /// final IList<String> iList = ['a', 'b', 'c'].lock;
-  /// iList.setAll(1, ['bee', 'sea']).join(', '); // 'a, bee, sea'
+  /// final IList<String> ilist = ['a', 'b', 'c'].lock;
+  /// ilist.setAll(1, ['bee', 'sea']).join(', '); // 'a, bee, sea'
   /// ```
   ///
   /// This operation does not increase the length of `this`.

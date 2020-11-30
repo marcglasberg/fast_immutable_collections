@@ -22,7 +22,7 @@ class "fast_immutable_collections_benchmarks::src::cases::add.dart::_ListAddBenc
 "fast_immutable_collections_benchmarks::src::utils::list_benchmark_base.dart::ListBenchmarkBase" <|-- "fast_immutable_collections_benchmarks::src::cases::add.dart::_ListAddBenchmark"
 
 class "fast_immutable_collections_benchmarks::src::cases::add.dart::_IListAddBenchmark" {
-  +IList<int> iList
+  +IList<int> ilist
   +IList<int> result
   +void setup()
   +void run()

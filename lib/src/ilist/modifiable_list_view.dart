@@ -17,9 +17,9 @@ class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   IList<T> _iList;
   List<T> _list;
 
-  ModifiableListView(IList<T> iList)
-      : _iList = iList,
-        _list = (iList == null) ? [] : null;
+  ModifiableListView(IList<T> ilist)
+      : _iList = ilist,
+        _list = (ilist == null) ? [] : null;
 
   @override
   T operator [](int index) => (_list != null) ? _list[index] : _iList[index];
