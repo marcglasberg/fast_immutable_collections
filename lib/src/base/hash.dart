@@ -1,5 +1,5 @@
-// The code in this file is copied and adapted from Quiver:
-// https://github.com/google/quiver-dart/blob/master/lib/src/core/hash.dart
+/// The code in this file is copied and adapted from the [Quiver](https://github.com/google/quiver-dart/blob/master/lib/src/core/hash.dart)
+/// package.
 
 /// Jenkins"s hash code for two objects.
 int hash2(Object a, Object b) => _finish(
