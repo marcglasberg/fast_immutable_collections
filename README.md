@@ -374,14 +374,17 @@ The above described configurations affects how the `== operator` works,
 but you can also choose how to compare lists by using the following `IList` methods:
 
 - `equalItems` will return true only if the IList items are equal to the iterable items,
-  and in the same order. This may be slow for very large lists, since it compares each item,
-  one by one. You can compare the list with ordered sets, but unordered sets will throw an error.
+and in the same order. This may be slow for very large lists, since it compares each item,
+one by one. You can compare the list with ordered sets, but unordered sets will throw an error.
+
 - `unorderedEqualItems` will return true only if the IList and the iterable items have the same number of elements,
 and the elements of the IList can be paired with the elements of the iterable, so that each
 pair is equal. This may be slow for very large lists, since it compares each item,
 one by one.
+
 - `equalItemsAndConfig` will return true only if the list items are equal and in the same order,
 and the list configurations are equal. This may be slow for very large lists, since it compares each item, one by one.
+
 - `same` will return true only if the lists internals are the same instances
 (comparing by identity). This will be fast even for very large lists,
 since it doesn't compare each item.
@@ -389,10 +392,42 @@ Note: This is not the same as `identical(list1, list2)` since it doesn't
 compare the lists themselves, but their internal state. Comparing the
 internal state is better, because it will return `true` more often.
   
+  
+## 2.1.1 Cached HashCode
+
+By default, the hashCode of `IList` and the other immutable collections is **cached** once calculated.
+
+This not only speeds up the use of these collections inside of sets and maps, 
+but it also speeds up their deep equals. 
+The reason is simple: Two equal objects always have the same hashCode. 
+So, if the cashed hashCode of two immutable collections are not the same, 
+we know the collections are different, and there is no need to check each collection item, one by one.
+
+However, this only works if the collections are really _immutable_, and not simply _unmodifiable_.
+If you put modifiable objects into an `IList` and then later modify those objects, 
+this breaks the immutability of the `IList`, which then becomes simply unmodifiable. 
+
+In other words, even if you can't change which objects the list contains, 
+if the objects themselves will be changed, then the hashCode must not be cached.
+Therefore, if you intend on using the `IList` to hold modifiable objects, 
+you should think about turning off the hashCode cache. For example:    
+
+```dart
+var ilist1 = [1, 2].lock.withConfig(ConfigList(cacheHashCode: false));
+var ilist2 = IList.withConfig([1, 2], ConfigList(cacheHashCode: false));
+```   
+
+Note: Modifying mutable objects in a collection could only make sense for lists anyway, 
+since list don't rely on the equality and hashCode of their items to structure themselves.
+If objects are modified after you put them into both mutable or immutable sets and maps,
+this most likely breaks the sets/maps they belong to.
+    
+  
 ## 2.2. Global IList Configuration
 
-As explained above, the **default** configuration of the `IList` is that it compares by 
-deep equality: They are equal if they have the same items in the same order.
+As explained above, the **default** configuration of the `IList` is that:
+* It compares by deep equality: They are equal if they have the same items in the same order.
+* The hashCode cache is turned on. 
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 
@@ -404,9 +439,9 @@ var ilistA1 = IList(list);
 var ilistA2 = IList(list);
 print(ilistA1 == ilistA2); // True!
 
-/// Now we change the default to identity-equals. 
+/// Now we change the default to identity-equals, and hashCode cache off. 
 /// This will affect lists created from now on.
-defaultConfig = ConfigList(isDeepEquals: false);
+defaultConfig = ConfigList(isDeepEquals: false, cacheHashCode: false);
 var ilistB1 = IList(list);
 var ilistB2 = IList(list);
 print(ilistB1 == ilistB2); // False!
@@ -715,12 +750,14 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
   
 ## 3.2. Global ISet Configuration
 
-The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true)`:
+The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true, cacheHashCode: true)`:
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
 
-1. `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
+2. `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
    will return sorted outputs.
+
+3. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off for sets.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigSet(isDeepEquals: false, sort: false);`
@@ -894,11 +931,13 @@ The **default** configuration of the `IMap` is
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
 
-1. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
+2. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
 `IMap.toKeyList`, `IMap.toEntrySet` and `IMap.toKeySet` will return sorted outputs.
 
-1. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
+3. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
 will return sorted outputs.
+
+4. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off for maps.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
