@@ -525,9 +525,19 @@ void main() {
     expect({3, 6, 4, 1, 2, 5}.lock.first, 1);
   });
 
+  test("ISet.first | without sorting", () {
+    final ISet<int> iSet = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
+    expect(iSet.first, 100);
+  });
+
   test("ISet.last method", () {
     expect({1, 2, 3, 4, 5, 6}.lock.last, 6);
     expect({3, 6, 4, 1, 2, 5}.lock.last, 6);
+  });
+
+  test("ISet.last | without sorting", () {
+    final ISet<int> iSet = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
+    expect(iSet.last, 5);
   });
 
   test("ISet.firstOrNull", () {
