@@ -262,8 +262,7 @@ class ConfigMapOfSets {
           cacheHashCode == other.cacheHashCode;
 
   @override
-  int get hashCode =>
-      hash5(isDeepEquals, sortKeys, sortValues, removeEmptySets, cacheHashCode);
+  int get hashCode => hash5(isDeepEquals, sortKeys, sortValues, removeEmptySets, cacheHashCode);
 
   @override
   String toString() => "ConfigMapOfSets{"

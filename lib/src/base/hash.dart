@@ -13,18 +13,13 @@ int hash3(Object a, Object b, Object c) => _finish(
 
 /// Jenkins"s hash code for four objects.
 int hash4(Object a, Object b, Object c, Object d) => _finish(
-      _combine(
-          _combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
-          d.hashCode),
+      _combine(_combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode), d.hashCode),
     );
 
 /// Jenkins"s hash code for five objects.
 int hash5(Object a, Object b, Object c, Object d, Object e) => _finish(
       _combine(
-          _combine(
-              _combine(
-                  _combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
-              d.hashCode),
+          _combine(_combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode), d.hashCode),
           e.hashCode),
     );
 
