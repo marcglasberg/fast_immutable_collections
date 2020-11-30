@@ -418,7 +418,7 @@ class IList<T> // ignore: must_be_immutable
   }
 
   /// Removes all nulls from this list.
-  IList<T> removeNulls() => removeAll(null);
+  IList<T> removeNulls() => removeAll([null]);
 
   /// Removes duplicates (but keeps items which appear only
   /// once, plus the first time other items appear).
