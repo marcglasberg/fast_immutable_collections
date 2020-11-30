@@ -513,6 +513,13 @@ void main() {
     expect(iSet.length, 6);
   });
 
+  test("ISet.length when the set is empty", () {
+    final ISet<int> iSet = ISet.empty();
+
+    expect(iSet.length, 0);
+    expect(iSet.isEmpty, isTrue);
+  });
+
   test("ISet.first", () {
     expect({1, 2, 3, 4, 5, 6}.lock.first, 1);
     expect({3, 6, 4, 1, 2, 5}.lock.first, 1);
