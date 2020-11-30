@@ -10,8 +10,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   //
   static ConfigMapOfSets get defaultConfig => _defaultConfig;
 
-  static ConfigMapOfSets _defaultConfig =
-      const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+  static ConfigMapOfSets _defaultConfig = const ConfigMapOfSets();
 
   /// Global configuration that specifies if, by default, the [IMapOfSet]s
   /// use equality or identity for their [operator ==].
@@ -19,9 +18,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
   static set defaultConfig(ConfigMapOfSets config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig =
-        config ?? const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
+    _defaultConfig = config ?? const ConfigMapOfSets();
   }
 
   final IMap<K, ISet<V>> _mapOfSets;

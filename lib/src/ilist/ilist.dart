@@ -129,8 +129,9 @@ class IList<T> // ignore: must_be_immutable
 
   static set defaultConfig(ConfigList config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig = config ?? const ConfigList(isDeepEquals: true);
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
+    _defaultConfig = config ?? const ConfigList();
   }
 
   static set flushFactor(int value) {
@@ -148,7 +149,7 @@ class IList<T> // ignore: must_be_immutable
     if (value != null) _asyncAutoflush = value;
   }
 
-  static ConfigList _defaultConfig = const ConfigList(isDeepEquals: true);
+  static ConfigList _defaultConfig = const ConfigList();
 
   static const _defaultFlushFactor = 200;
 

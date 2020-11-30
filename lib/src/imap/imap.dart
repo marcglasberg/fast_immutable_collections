@@ -202,9 +202,9 @@ class IMap<K, V> // ignore: must_be_immutable
 
   static set defaultConfig(ConfigMap config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig =
-        config ?? const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
+    _defaultConfig = config ?? const ConfigMap();
   }
 
   static set flushFactor(int value) {
@@ -222,8 +222,7 @@ class IMap<K, V> // ignore: must_be_immutable
     if (value != null) _asyncAutoflush = value;
   }
 
-  static ConfigMap _defaultConfig =
-      const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
+  static ConfigMap _defaultConfig = const ConfigMap();
 
   static const _defaultFlushFactor = 20;
 
