@@ -203,6 +203,9 @@ void main() {
 
   test("lockConfig", () {
     ImmutableCollection.lockConfig();
+    expect(() => IList.resetAllConfigurations(), throwsStateError);
+    expect(() => ISet.resetAllConfigurations(), throwsStateError);
+    expect(() => IMap.resetAllConfigurations(), throwsStateError);
     expect(() => ImmutableCollection.disallowUnsafeConstructors = true, throwsStateError);
     expect(() => ImmutableCollection.autoFlush = false, throwsStateError);
     expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);

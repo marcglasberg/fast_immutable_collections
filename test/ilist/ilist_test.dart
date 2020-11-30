@@ -879,7 +879,8 @@ void main() {
   test("Views | " "IList.unlockView", () {
     final List<int> unmodifiableListView = [1, 2, 3].lock.unlockView;
 
-    expect(unmodifiableListView, allOf(isA<List<int>>(), [1, 2, 3]));
+    expect(
+        unmodifiableListView, allOf(isA<List<int>>(), isA<UnmodifiableListView<int>>(), [1, 2, 3]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -887,7 +888,7 @@ void main() {
   test("Views | " "IList.unlockLazy", () {
     final List<int> modifiableListView = [1, 2, 3].lock.unlockLazy;
 
-    expect(modifiableListView, allOf(isA<List<int>>(), [1, 2, 3]));
+    expect(modifiableListView, allOf(isA<List<int>>(), isA<ModifiableListView<int>>(), [1, 2, 3]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -986,6 +987,12 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("IList.indexWhere() | Start can't be negative or bigger than the length", () {
+    final IList<String> iList = ["do", "re", "mi", "re"].lock;
+    expect(() => iList.indexWhere((String element) => true, -1), throwsArgumentError);
+    expect(() => iList.indexWhere((String element) => true, iList.length + 1), throwsArgumentError);
+  });
 
   test("IList.indexWhere()", () {
     var iList = ["do", "re", "mi", "re"].lock;
@@ -1155,6 +1162,14 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test(
+      "IList.process() | convert cannot be null",
+      () => expect(
+          () => ["do", "re", "mi", "re"]
+              .lock
+              .process(test: (IList<String> list, int index, String item) => true, convert: null),
+          throwsAssertionError));
 
   test("IList.process()", () {
     var original = ["do", "re", "mi", "re"].lock;

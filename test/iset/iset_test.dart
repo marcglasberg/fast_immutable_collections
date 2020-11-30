@@ -913,11 +913,15 @@ void main() {
     expect(iSet.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
   });
 
-  test("ISet.unlockView",
-      () => expect({1, 2, 3}.lock.unlockView, allOf(isA<UnmodifiableSetView>(), isA<Set>())));
+  test(
+      "ISet.unlockView",
+      () => expect({1, 2, 3}.lock.unlockView,
+          allOf(isA<UnmodifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3})));
 
-  test("ISet.unlockLazy",
-      () => expect({1, 2, 3}.lock.unlockLazy, allOf(isA<ModifiableSetView>(), isA<Set>())));
+  test(
+      "ISet.unlockLazy",
+      () => expect({1, 2, 3}.lock.unlockLazy,
+          allOf(isA<ModifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3})));
 
   test("ISet.+()", () => expect({1, 2, 3}.lock + [1, 2, 4], {1, 2, 3, 4}));
 }

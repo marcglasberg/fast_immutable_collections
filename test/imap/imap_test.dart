@@ -1,4 +1,6 @@
-import "package:test/test.dart";
+import 'dart:collection';
+
+import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
@@ -33,6 +35,13 @@ void main() {
     expect(identical(iMap.unlock, map), isFalse);
   });
 
+  test("IMap.unlockSorted", () {
+    final IMap<String, int> iMap =
+        {"c": 3, "a": 1, "b": 2}.lock.withConfig(ConfigMap(sortKeys: false));
+
+    expect(iMap.unlockSorted, allOf(isA<LinkedHashMap<String, int>>(), {"a": 1, "b": 2, "c": 3}));
+  });
+
   test("IMap.fromEntries() factory constructor", () {
     const List<MapEntry<String, int>> entries = [
       MapEntry<String, int>("a", 1),
@@ -51,6 +60,13 @@ void main() {
 
     expect(fromKeys["a"], "a".hashCode);
     expect(fromKeys["b"], "b".hashCode);
+  });
+
+  test("IMap.fromKeys() | Neither keys nor valueMapper can be null", () {
+    const List<String> keys = ["a", "b"];
+    expect(() => IMap.fromKeys(keys: null, valueMapper: (String key) => key.hashCode),
+        throwsAssertionError);
+    expect(() => IMap.fromKeys(keys: keys, valueMapper: null), throwsAssertionError);
   });
 
   test("IMap.fromValues() factory constructor", () {
@@ -99,6 +115,9 @@ void main() {
 
     expect(() => IMap.unsafe(map, config: ConfigMap()), throwsUnsupportedError);
   });
+
+  test("IMap.unsafe() constructor | config cannot be null",
+      () => expect(() => IMap.unsafe({}, config: null), throwsAssertionError));
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   test(
@@ -243,7 +262,7 @@ void main() {
         isNot(IMap({"b": 2}).add("a", 1).withIdentityEquals.hashCode));
   });
 
-  test("IMap.config()", () {
+  test("IMap.withConfig()", () {
     final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
 
     expect(iMap.isDeepEquals, isTrue);
@@ -258,6 +277,33 @@ void main() {
     expect(iMapWithCompare.isDeepEquals, isTrue);
     expect(iMapWithCompare.config.sortKeys, isFalse);
     expect(iMapWithCompare.config.sortValues, isFalse);
+  });
+
+  test("IMap.withConfig() | config cannot be null",
+      () => expect(() => IMap({"a": 1, "b": 2}).withConfig(null), throwsAssertionError));
+
+  test("IMap.withConfigFrom()", () {
+    final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2});
+    final IMap<String, int> iMap2 =
+        IMap.withConfig({"a": 1, "b": 2}, ConfigMap(isDeepEquals: false));
+
+    expect(iMap1.isDeepEquals, isTrue);
+    expect(iMap1.config.sortKeys, isTrue);
+    expect(iMap1.config.sortValues, isTrue);
+
+    expect(iMap2.isDeepEquals, isFalse);
+    expect(iMap2.config.sortKeys, isTrue);
+    expect(iMap2.config.sortValues, isTrue);
+
+    final IMap<String, int> iMap3 = iMap1.withConfigFrom(iMap2);
+
+    expect(iMap3.isDeepEquals, isFalse);
+    expect(iMap3.config.sortKeys, isTrue);
+    expect(iMap3.config.sortValues, isTrue);
+
+    expect(iMap1.unlock, {"a": 1, "b": 2});
+    expect(iMap2.unlock, {"a": 1, "b": 2});
+    expect(iMap3.unlock, {"a": 1, "b": 2});
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -647,14 +693,14 @@ void main() {
     final IMap<String, int> iMap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<String> keys = ["a", "b", "c", "d", "e", "f"];
-    expect(iMap.keys.toSet(), keys.toSet());
+    expect(iMap.keys, keys.toSet());
   });
 
   test("IMap.values", () {
     final IMap<String, int> iMap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<int> values = [1, 2, 3, 4, 5, 6];
-    expect(iMap.values.toSet(), values.toSet());
+    expect(iMap.values, values.toSet());
   });
 
   test("IMap.entryList", () {
@@ -710,11 +756,49 @@ void main() {
   });
 
   test("IMap.iterator", () {
+    final IMap<String, int> iMap = {"a": 1, "b": 2, "c": 3}
+        .lock
+        .add("d", 4)
+        .addAll(IMap({"e": 5, "f": 6}))
+        .withConfig(ConfigMap(sortKeys: false));
+    const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
+
+    final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
+    final Map<String, int> result = iterator.toMap();
+
+    expect(result, finalMap);
+  });
+
+  test("IMap.iterator | with sorted keys", () {
     final IMap<String, int> iMap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
+
+    expect(iterator.current, isNull);
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current.asEntry, Entry<String, int>("a", 1));
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current.asEntry, Entry<String, int>("b", 2));
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current.asEntry, Entry<String, int>("c", 3));
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current.asEntry, Entry<String, int>("d", 4));
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current.asEntry, Entry<String, int>("e", 5));
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current.asEntry, Entry<String, int>("f", 6));
+    expect(iterator.moveNext(), isFalse);
+    expect(iterator.current, isNull);
+  });
+
+  test("IMap.fastIterator", () {
+    final IMap<String, int> iMap =
+        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
-    Map<String, int> result = iterator.toMap();
+
+    final Iterator<MapEntry<String, int>> fastIterator = iMap.fastIterator;
+    final Map<String, int> result = fastIterator.toMap();
+
     expect(result, finalMap);
   });
 
@@ -741,6 +825,14 @@ void main() {
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(iMap.cast<String, num>(), isA<IMap<String, num>>());
   });
+
+  test("IMap.cast() | Assertion error when with non-supported type", () {
+    final IMap<String, int> iMap =
+        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+    // TODO: Marcelo, o erro sendo recebido é `_CastError` aparentemente, ou seja,
+    // nós não estamos chegando no `else` do IMap.cast().
+    expect(() => iMap.cast<String, List>(), throwsAssertionError);
+  }, skip: true);
 
   test("IMap.[] operator", () {
     final IMap<String, int> iMap =
@@ -848,6 +940,13 @@ void main() {
     final IMap<String, int> iMap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(iMap.length, 6);
+  });
+
+  test("IMap.length when with an empty IMap", () {
+    final IMap<String, int> iMap = IMap.empty();
+
+    expect(iMap.length, 0);
+    expect(iMap.isEmpty, isTrue);
   });
 
   test("IMap.toValueISet()", () {
@@ -963,6 +1062,41 @@ void main() {
     final IMap<String, int> updatedScores = scores.updateAll((String key, int value) => value * 2);
 
     expect(updatedScores.unlock, {"Bob": 72, "Joe": 200});
+  });
+
+  test("IMap.flushFactor", () => expect(IMap.flushFactor, 20));
+
+  test("IMap.flushFactor setter", () {
+    IMap.flushFactor = 200;
+    expect(IMap.flushFactor, 200);
+  });
+
+  test("IMap.flushFactor setter | can't be smaller than 0", () {
+    expect(() => IMap.flushFactor = 0, throwsStateError);
+    expect(() => IMap.flushFactor = -100, throwsStateError);
+  });
+
+  test("IMap.asyncAutoFlush", () => expect(IMap.asyncAutoflush, isTrue));
+
+  test("IMap.lockConfig()", () {
+    ImmutableCollection.lockConfig();
+
+    expect(() => IMap.flushFactor = 1000, throwsStateError);
+    expect(() => IMap.asyncAutoflush = false, throwsStateError);
+  });
+
+  test("IMap.unlockView", () {
+    final Map<String, int> unmodifiableMapView = {"a": 1, "b": 2}.lock.unlockView;
+
+    expect(unmodifiableMapView,
+        allOf(isA<Map<String, int>>(), isA<UnmodifiableMapView<String, int>>(), {"a": 1, "b": 2}));
+  });
+
+  test("IMap.unlockLazy", () {
+    final Map<String, int> modifiableMapView = {"a": 1, "b": 2}.lock.unlockLazy;
+
+    expect(modifiableMapView,
+        allOf(isA<Map<String, int>>(), isA<ModifiableMapView<String, int>>(), {"a": 1, "b": 2}));
   });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////////
