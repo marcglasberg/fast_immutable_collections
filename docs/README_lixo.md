@@ -493,9 +493,9 @@ class Students with FromIListMixin<Student, Students> {
 
    Students([Iterable<Student> students]) : _students = IList(students);
 
-   Students newInstance(IList<Student> iList) => Students(iList);
+   Students newInstance(IList<Student> ilist) => Students(ilist);
 
-   IList<Student> get iList => _students;   
+   IList<Student> get ilist => _students;   
                                                         
    /// And then you can add your own specific methods:
    String greetings() => "Hello ${_students.join(", ")}.";

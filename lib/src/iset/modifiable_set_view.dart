@@ -5,9 +5,9 @@ class ModifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   ISet<T> _iSet;
   Set<T> _set;
 
-  ModifiableSetView(ISet<T> iSet)
-      : _iSet = iSet,
-        _set = iSet == null ? {} : null;
+  ModifiableSetView(ISet<T> iset)
+      : _iSet = iset,
+        _set = iset == null ? {} : null;
 
   @override
   bool add(T value) {

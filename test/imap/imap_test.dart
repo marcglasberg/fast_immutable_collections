@@ -30,16 +30,16 @@ void main() {
 
   test("IMap.unlock", () {
     final Map<String, int> map = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = IMap(map);
-    expect(iMap.unlock, map);
-    expect(identical(iMap.unlock, map), isFalse);
+    final IMap<String, int> imap = IMap(map);
+    expect(imap.unlock, map);
+    expect(identical(imap.unlock, map), isFalse);
   });
 
   test("IMap.unlockSorted", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"c": 3, "a": 1, "b": 2}.lock.withConfig(ConfigMap(sortKeys: false));
 
-    expect(iMap.unlockSorted, allOf(isA<LinkedHashMap<String, int>>(), {"a": 1, "b": 2, "c": 3}));
+    expect(imap.unlockSorted, allOf(isA<LinkedHashMap<String, int>>(), {"a": 1, "b": 2, "c": 3}));
   });
 
   test("IMap.fromEntries() factory constructor", () {
@@ -98,15 +98,15 @@ void main() {
 
   test("IMap.unsafe constructor | Normal usage", () {
     final Map<String, int> map = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = IMap.unsafe(map, config: ConfigMap());
+    final IMap<String, int> imap = IMap.unsafe(map, config: ConfigMap());
 
     expect(map, {"a": 1, "b": 2});
-    expect(iMap.unlock, {"a": 1, "b": 2});
+    expect(imap.unlock, {"a": 1, "b": 2});
 
     map.addAll({"c": 3});
 
     expect(map, {"a": 1, "b": 2, "c": 3});
-    expect(iMap.unlock, {"a": 1, "b": 2, "c": 3});
+    expect(imap.unlock, {"a": 1, "b": 2, "c": 3});
   });
 
   test("IMap.unsafe constructor | Disallowing it", () {
@@ -147,7 +147,7 @@ void main() {
   test(
       "Equals Operator | "
       "IMap with deep-equals is always different "
-      "from iMap with identity-equals", () {
+      "from imap with identity-equals", () {
     expect(IMap({"a": 1, "b": 2}).withDeepEquals == IMap({"a": 1, "b": 2}).withIdentityEquals,
         isFalse);
     expect(IMap({"a": 1, "b": 2}).withIdentityEquals == IMap({"a": 1, "b": 2}).withDeepEquals,
@@ -214,19 +214,19 @@ void main() {
   });
 
   test("Equal Items To... | IMap.equalItemsToMap", () {
-    final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
-    expect(iMap.equalItemsToMap({"a": 1, "b": 2}), isTrue);
-    expect(iMap.equalItemsToMap({"a": 1, "b": 3}), isFalse);
-    expect(iMap.equalItemsToMap({"a": 1, "c": 2}), isFalse);
-    expect(iMap.equalItemsToMap({"a": 1, "b": 2, "c": 3}), isFalse);
+    final IMap<String, int> imap = IMap({"a": 1, "b": 2});
+    expect(imap.equalItemsToMap({"a": 1, "b": 2}), isTrue);
+    expect(imap.equalItemsToMap({"a": 1, "b": 3}), isFalse);
+    expect(imap.equalItemsToMap({"a": 1, "c": 2}), isFalse);
+    expect(imap.equalItemsToMap({"a": 1, "b": 2, "c": 3}), isFalse);
   });
 
   test("Equal Items To... | IMap.equalItemsToIMap", () {
-    final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
-    expect(iMap.equalItemsToIMap({"a": 1, "b": 2}.lock), isTrue);
-    expect(iMap.equalItemsToIMap({"a": 1, "b": 3}.lock), isFalse);
-    expect(iMap.equalItemsToIMap({"a": 1, "c": 2}.lock), isFalse);
-    expect(iMap.equalItemsToIMap({"a": 1, "b": 2, "c": 3}.lock), isFalse);
+    final IMap<String, int> imap = IMap({"a": 1, "b": 2});
+    expect(imap.equalItemsToIMap({"a": 1, "b": 2}.lock), isTrue);
+    expect(imap.equalItemsToIMap({"a": 1, "b": 3}.lock), isFalse);
+    expect(imap.equalItemsToIMap({"a": 1, "c": 2}.lock), isFalse);
+    expect(imap.equalItemsToIMap({"a": 1, "b": 2, "c": 3}.lock), isFalse);
   });
   test("IMap.hashCode() | deepEquals vs deepEquals", () {
     final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2});
@@ -263,13 +263,13 @@ void main() {
   });
 
   test("IMap.withConfig()", () {
-    final IMap<String, int> iMap = IMap({"a": 1, "b": 2});
+    final IMap<String, int> imap = IMap({"a": 1, "b": 2});
 
-    expect(iMap.isDeepEquals, isTrue);
-    expect(iMap.config.sortKeys, isTrue);
-    expect(iMap.config.sortValues, isTrue);
+    expect(imap.isDeepEquals, isTrue);
+    expect(imap.config.sortKeys, isTrue);
+    expect(imap.config.sortValues, isTrue);
 
-    final IMap<String, int> iMapWithCompare = iMap.withConfig(iMap.config.copyWith(
+    final IMap<String, int> iMapWithCompare = imap.withConfig(imap.config.copyWith(
       sortKeys: false,
       sortValues: false,
     ));
@@ -309,39 +309,39 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("Creating immutable maps with extensions | From an empty map", () {
-    final IMap iMap = {}.lock;
-    expect(iMap, isA<IMap>());
-    expect(iMap.isEmpty, isTrue);
-    expect(iMap.isNotEmpty, isFalse);
+    final IMap imap = {}.lock;
+    expect(imap, isA<IMap>());
+    expect(imap.isEmpty, isTrue);
+    expect(imap.isNotEmpty, isFalse);
   });
 
   test("Creating immutable maps with extensions | From a map with one item", () {
-    final IMap iMap = {"a": 1}.lock;
-    expect(iMap, isA<IMap<String, int>>());
-    expect(iMap.isEmpty, isFalse);
-    expect(iMap.isNotEmpty, isTrue);
+    final IMap imap = {"a": 1}.lock;
+    expect(imap, isA<IMap<String, int>>());
+    expect(imap.isEmpty, isFalse);
+    expect(imap.isNotEmpty, isTrue);
   });
 
   test("Creating immutable maps with extensions | From a map with null key, or value, or both", () {
-    IMap<String, int> iMap = {null: 1}.lock;
-    expect(iMap, isA<IMap<String, int>>());
-    expect(iMap.isEmpty, isFalse);
-    expect(iMap.isNotEmpty, isTrue);
+    IMap<String, int> imap = {null: 1}.lock;
+    expect(imap, isA<IMap<String, int>>());
+    expect(imap.isEmpty, isFalse);
+    expect(imap.isNotEmpty, isTrue);
 
-    iMap = {"a": null}.lock;
-    expect(iMap, isA<IMap<String, int>>());
-    expect(iMap.isEmpty, isFalse);
-    expect(iMap.isNotEmpty, isTrue);
+    imap = {"a": null}.lock;
+    expect(imap, isA<IMap<String, int>>());
+    expect(imap.isEmpty, isFalse);
+    expect(imap.isNotEmpty, isTrue);
 
-    iMap = {null: null}.lock;
-    expect(iMap, isA<IMap<String, int>>());
-    expect(iMap.isEmpty, isFalse);
-    expect(iMap.isNotEmpty, isTrue);
+    imap = {null: null}.lock;
+    expect(imap, isA<IMap<String, int>>());
+    expect(imap.isEmpty, isFalse);
+    expect(imap.isNotEmpty, isTrue);
   });
 
   test("Creating immutable maps with extensions | From an empty map typed with String", () {
-    final iMap = <String, int>{}.lock;
-    expect(iMap, isA<IMap<String, int>>());
+    final imap = <String, int>{}.lock;
+    expect(imap, isA<IMap<String, int>>());
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -357,10 +357,10 @@ void main() {
 
   test("Creating native mutable maps from immutable maps | From lock", () {
     final Map<String, int> map = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = map.lock;
+    final IMap<String, int> imap = map.lock;
 
-    expect(iMap.unlock, map);
-    expect(identical(iMap.unlock, map), isFalse);
+    expect(imap.unlock, map);
+    expect(identical(imap.unlock, map), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -385,51 +385,51 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("IMap.add()", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2}.lock;
-    final IMap<String, int> newIMap = iMap.add("c", 3);
+    final IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+    final IMap<String, int> newIMap = imap.add("c", 3);
 
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3});
   });
 
   test("IMap.addEntry()", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2}.lock;
-    final IMap<String, int> newIMap = iMap.addEntry(MapEntry<String, int>("c", 3));
+    final IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+    final IMap<String, int> newIMap = imap.addEntry(MapEntry<String, int>("c", 3));
 
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3});
   });
 
   test("IMap.addAll()", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2}.lock;
-    final IMap<String, int> newIMap = iMap.addAll({"c": 3, "d": 4}.lock);
+    final IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+    final IMap<String, int> newIMap = imap.addAll({"c": 3, "d": 4}.lock);
 
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
   });
 
   test("IMap.addMap()", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2}.lock;
-    final IMap<String, int> newIMap = iMap.addMap({"c": 3, "d": 4});
+    final IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+    final IMap<String, int> newIMap = imap.addMap({"c": 3, "d": 4});
 
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
   });
 
   test("IMap.addEntries()", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2}.lock;
+    final IMap<String, int> imap = {"a": 1, "b": 2}.lock;
     final IMap<String, int> newIMap =
-        iMap.addEntries([MapEntry<String, int>("c", 3), MapEntry<String, int>("d", 4)]);
+        imap.addEntries([MapEntry<String, int>("c", 3), MapEntry<String, int>("d", 4)]);
 
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
   });
 
   test("IMap.remove()", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2}.lock;
-    final IMap<String, int> newIMap = iMap.remove("b");
+    final IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+    final IMap<String, int> newIMap = imap.remove("b");
 
     expect(newIMap.unlock, {"a": 1});
   });
 
   test("IMap.removeWhere()", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2}.lock;
-    final IMap<String, int> newIMap = iMap.removeWhere((String key, int value) => key == "b");
+    final IMap<String, int> imap = {"a": 1, "b": 2}.lock;
+    final IMap<String, int> newIMap = imap.removeWhere((String key, int value) => key == "b");
 
     expect(newIMap.unlock, {"a": 1});
   });
@@ -473,15 +473,15 @@ void main() {
   });
 
   test("Making sure adding repeated elements doesn't repeat keys | " "Empty equals", () {
-    final IMap<String, int> iMap = IMap.empty<String, int>().withDeepEquals;
-    expect(iMap, IMap.empty<String, int>().withDeepEquals);
+    final IMap<String, int> imap = IMap.empty<String, int>().withDeepEquals;
+    expect(imap, IMap.empty<String, int>().withDeepEquals);
   });
 
   test(
       "Making sure adding repeated elements doesn't repeat keys | "
       "IMap.add the same key overwrites it", () {
-    final IMap<String, int> iMap = IMap.empty<String, int>().withDeepEquals;
-    IMap<String, int> newMap = iMap.add("a", 1);
+    final IMap<String, int> imap = IMap.empty<String, int>().withDeepEquals;
+    IMap<String, int> newMap = imap.add("a", 1);
     newMap = newMap.add("b", 2);
     newMap = newMap.add("a", 3);
     newMap = newMap.add("a", 4);
@@ -492,8 +492,8 @@ void main() {
   test(
       "Making sure adding repeated elements doesn't repeat keys | "
       "IMap.addEntry the same entry overwrites it", () {
-    final IMap<String, int> iMap = IMap.empty<String, int>().withDeepEquals;
-    IMap<String, int> newMap = iMap.addEntry(MapEntry<String, int>("a", 1));
+    final IMap<String, int> imap = IMap.empty<String, int>().withDeepEquals;
+    IMap<String, int> newMap = imap.addEntry(MapEntry<String, int>("a", 1));
     newMap = newMap.addEntry(MapEntry<String, int>("b", 2));
     newMap = newMap.addEntry(MapEntry<String, int>("a", 3));
     newMap = newMap.addEntry(MapEntry<String, int>("a", 4));
@@ -504,8 +504,8 @@ void main() {
   test(
       "Making sure adding repeated elements doesn't repeat keys | "
       "IMap.add the same key overwrites it", () {
-    final IMap<String, int> iMap = IMap.empty<String, int>().withDeepEquals;
-    IMap<String, int> newMap = iMap.addAll({"a": 1}.lock);
+    final IMap<String, int> imap = IMap.empty<String, int>().withDeepEquals;
+    IMap<String, int> newMap = imap.addAll({"a": 1}.lock);
     newMap = newMap.addAll({"b": 2}.lock);
     newMap = newMap.addAll({"a": 3}.lock);
     newMap = newMap.addAll({"a": 4}.lock);
@@ -516,8 +516,8 @@ void main() {
   test(
       "Making sure adding repeated elements doesn't repeat keys | "
       "IMap.add the same key overwrites it", () {
-    final IMap<String, int> iMap = IMap.empty<String, int>().withDeepEquals;
-    IMap<String, int> newMap = iMap.addMap({"a": 1});
+    final IMap<String, int> imap = IMap.empty<String, int>().withDeepEquals;
+    IMap<String, int> newMap = imap.addMap({"a": 1});
     newMap = newMap.addMap({"b": 2});
     newMap = newMap.addMap({"a": 3});
     newMap = newMap.addMap({"a": 4});
@@ -528,8 +528,8 @@ void main() {
   test(
       "Making sure adding repeated elements doesn't repeat keys | "
       "IMap.add the same key overwrites it", () {
-    final IMap<String, int> iMap = IMap.empty<String, int>().withDeepEquals;
-    IMap<String, int> newMap = iMap.addEntries([MapEntry<String, int>("a", 1)]);
+    final IMap<String, int> imap = IMap.empty<String, int>().withDeepEquals;
+    IMap<String, int> newMap = imap.addEntries([MapEntry<String, int>("a", 1)]);
     newMap = newMap.addEntries([MapEntry<String, int>("b", 2)]);
     newMap = newMap.addEntries([MapEntry<String, int>("a", 3)]);
     newMap = newMap.addEntries([MapEntry<String, int>("a", 4)]);
@@ -543,29 +543,29 @@ void main() {
       "Ensuring Immutability | IMap.add() | "
       "Changing the passed mutable map doesn't change the IMap", () {
     final Map<String, int> original = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = original.lock;
+    final IMap<String, int> imap = original.lock;
 
-    expect(iMap.unlock, original);
+    expect(imap.unlock, original);
 
     original.addEntries([MapEntry<String, int>("c", 3)]);
     original.addEntries([MapEntry<String, int>("d", 4)]);
 
     expect(original, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
-    expect(iMap.unlock, <String, int>{"a": 1, "b": 2});
+    expect(imap.unlock, <String, int>{"a": 1, "b": 2});
   });
 
   test(
       "Ensuring Immutability | IMap.add() | "
       "Changing the IMap also doesn't change the original map", () {
     final Map<String, int> original = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = original.lock;
+    final IMap<String, int> imap = original.lock;
 
-    expect(iMap.unlock, original);
+    expect(imap.unlock, original);
 
-    final IMap<String, int> iMapNew = iMap.add("c", 3);
+    final IMap<String, int> iMapNew = imap.add("c", 3);
 
     expect(original, <String, int>{"a": 1, "b": 2});
-    expect(iMap.unlock, <String, int>{"a": 1, "b": 2});
+    expect(imap.unlock, <String, int>{"a": 1, "b": 2});
     expect(iMapNew.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
   });
 
@@ -574,17 +574,17 @@ void main() {
       "If the item being passed is a variable, a pointer to it shouldn't exist inside the IMap",
       () {
     final Map<String, int> original = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = original.lock;
+    final IMap<String, int> imap = original.lock;
 
-    expect(iMap.unlock, original);
+    expect(imap.unlock, original);
 
     int willChange = 4;
-    final IMap<String, int> iMapNew = iMap.add("c", willChange);
+    final IMap<String, int> iMapNew = imap.add("c", willChange);
 
     willChange = 5;
 
     expect(original, <String, int>{"a": 1, "b": 2});
-    expect(iMap.unlock, <String, int>{"a": 1, "b": 2});
+    expect(imap.unlock, <String, int>{"a": 1, "b": 2});
     expect(willChange, 5);
     expect(iMapNew.unlock, <String, int>{"a": 1, "b": 2, "c": 4});
   });
@@ -593,28 +593,28 @@ void main() {
       "Ensuring Immutability | IMap.addAll() | "
       "Changing the passed mutable map doesn't change the IMap", () {
     final Map<String, int> original = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = original.lock;
+    final IMap<String, int> imap = original.lock;
 
-    expect(iMap.unlock, original);
+    expect(imap.unlock, original);
 
     original.addAll(<String, int>{"c": 3, "d": 4});
 
     expect(original, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
-    expect(iMap.unlock, <String, int>{"a": 1, "b": 2});
+    expect(imap.unlock, <String, int>{"a": 1, "b": 2});
   });
 
   test(
       "Ensuring Immutability | IMap.addAll() | "
       "Changing the passed immutable map doesn't change the IMap", () {
     final Map<String, int> original = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = original.lock;
+    final IMap<String, int> imap = original.lock;
 
-    expect(iMap.unlock, original);
+    expect(imap.unlock, original);
 
-    final IMap<String, int> iMapNew = iMap.addAll(IMap({"c": 3, "d": 4}));
+    final IMap<String, int> iMapNew = imap.addAll(IMap({"c": 3, "d": 4}));
 
     expect(original, <String, int>{"a": 1, "b": 2});
-    expect(iMap.unlock, <String, int>{"a": 1, "b": 2});
+    expect(imap.unlock, <String, int>{"a": 1, "b": 2});
     expect(iMapNew.unlock, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
   });
 
@@ -642,44 +642,44 @@ void main() {
       "Ensuring Immutability | IMap.remove() | "
       "Changing the passed mutable map doesn't change the IMap", () {
     final Map<String, int> original = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = original.lock;
+    final IMap<String, int> imap = original.lock;
 
-    expect(iMap.unlock, original);
+    expect(imap.unlock, original);
 
     original.remove("a");
 
     expect(original, <String, int>{"b": 2});
-    expect(iMap.unlock, <String, int>{"a": 1, "b": 2});
+    expect(imap.unlock, <String, int>{"a": 1, "b": 2});
   });
 
   test(
       "Ensuring Immutability | IMap.addAll() | "
       "Removing from the original IMap doesn't change it", () {
     final Map<String, int> original = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = original.lock;
+    final IMap<String, int> imap = original.lock;
 
-    expect(iMap.unlock, original);
+    expect(imap.unlock, original);
 
-    final IMap<String, int> iMapNew = iMap.remove("a");
+    final IMap<String, int> iMapNew = imap.remove("a");
 
     expect(original, <String, int>{"a": 1, "b": 2});
-    expect(iMap.unlock, <String, int>{"a": 1, "b": 2});
+    expect(imap.unlock, <String, int>{"a": 1, "b": 2});
     expect(iMapNew.unlock, <String, int>{"b": 2});
   });
 
   // //////////////////////////////////////////////////////////////////////////////
 
   test("IMap.entries", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
-    iMap.entries.forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
+    imap.entries.forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   test("IMap.comparableEntries", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.comparableEntries.toSet(), {
+    expect(imap.comparableEntries.toSet(), {
       Entry("a", 1),
       Entry("b", 2),
       Entry("c", 3),
@@ -690,89 +690,89 @@ void main() {
   });
 
   test("IMap.keys", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<String> keys = ["a", "b", "c", "d", "e", "f"];
-    expect(iMap.keys, keys.toSet());
+    expect(imap.keys, keys.toSet());
   });
 
   test("IMap.values", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<int> values = [1, 2, 3, 4, 5, 6];
-    expect(iMap.values, values.toSet());
+    expect(imap.values, values.toSet());
   });
 
   test("IMap.entryList", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
-    expect(iMap.entryList(), isA<IList<MapEntry<String, int>>>());
-    iMap
+    expect(imap.entryList(), isA<IList<MapEntry<String, int>>>());
+    imap
         .entryList()
         .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   test("IMap.entrySet", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
-    expect(iMap.entrySet(), isA<ISet<MapEntry<String, int>>>());
-    iMap
+    expect(imap.entrySet(), isA<ISet<MapEntry<String, int>>>());
+    imap
         .entrySet()
         .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   test("IMap.keyList", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<String> keys = ["a", "b", "c", "d", "e", "f"];
-    expect(iMap.keyList(), isA<IList<String>>());
-    iMap.keyList().forEach((String key) => expect(keys.contains(key), isTrue));
+    expect(imap.keyList(), isA<IList<String>>());
+    imap.keyList().forEach((String key) => expect(keys.contains(key), isTrue));
   });
 
   test("IMap.keySet", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<String> keys = ["a", "b", "c", "d", "e", "f"];
-    expect(iMap.keySet(), isA<ISet<String>>());
-    iMap.keySet().forEach((String key) => expect(keys.contains(key), isTrue));
+    expect(imap.keySet(), isA<ISet<String>>());
+    imap.keySet().forEach((String key) => expect(keys.contains(key), isTrue));
   });
 
   test("IMap.valueList", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<int> values = [1, 2, 3, 4, 5, 6];
-    expect(iMap.valueList(), isA<IList<int>>());
-    iMap.valueList().forEach((int value) => expect(values.contains(value), isTrue));
+    expect(imap.valueList(), isA<IList<int>>());
+    imap.valueList().forEach((int value) => expect(values.contains(value), isTrue));
   });
 
   test("IMap.valueSet", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<int> values = [1, 2, 3, 4, 5, 6];
-    expect(iMap.valueSet(), isA<ISet<int>>());
-    iMap.valueSet().forEach((int value) => expect(values.contains(value), isTrue));
+    expect(imap.valueSet(), isA<ISet<int>>());
+    imap.valueSet().forEach((int value) => expect(values.contains(value), isTrue));
   });
 
   test("IMap.iterator", () {
-    final IMap<String, int> iMap = {"a": 1, "b": 2, "c": 3}
+    final IMap<String, int> imap = {"a": 1, "b": 2, "c": 3}
         .lock
         .add("d", 4)
         .addAll(IMap({"e": 5, "f": 6}))
         .withConfig(ConfigMap(sortKeys: false));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
 
-    final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
+    final Iterator<MapEntry<String, int>> iterator = imap.iterator;
     final Map<String, int> result = iterator.toMap();
 
     expect(result, finalMap);
   });
 
   test("IMap.iterator | with sorted keys", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    final Iterator<MapEntry<String, int>> iterator = iMap.iterator;
+    final Iterator<MapEntry<String, int>> iterator = imap.iterator;
 
     expect(iterator.current, isNull);
     expect(iterator.moveNext(), isTrue);
@@ -792,176 +792,176 @@ void main() {
   });
 
   test("IMap.fastIterator", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
 
-    final Iterator<MapEntry<String, int>> fastIterator = iMap.fastIterator;
+    final Iterator<MapEntry<String, int>> fastIterator = imap.fastIterator;
     final Map<String, int> result = fastIterator.toMap();
 
     expect(result, finalMap);
   });
 
   test("IMap.any()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.any((String k, int v) => v == 4), isTrue);
-    expect(iMap.any((String k, int v) => k == "f"), isTrue);
-    expect(iMap.any((String k, int v) => v == 100), isFalse);
-    expect(iMap.any((String k, int v) => k == "z"), isFalse);
+    expect(imap.any((String k, int v) => v == 4), isTrue);
+    expect(imap.any((String k, int v) => k == "f"), isTrue);
+    expect(imap.any((String k, int v) => v == 100), isFalse);
+    expect(imap.any((String k, int v) => k == "z"), isFalse);
   });
 
   test("IMap.anyEntry()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.anyEntry((MapEntry<String, int> entry) => entry.value == 4), isTrue);
-    expect(iMap.anyEntry((MapEntry<String, int> entry) => entry.key == "f"), isTrue);
-    expect(iMap.anyEntry((MapEntry<String, int> entry) => entry.value == 100), isFalse);
-    expect(iMap.anyEntry((MapEntry<String, int> entry) => entry.key == "z"), isFalse);
+    expect(imap.anyEntry((MapEntry<String, int> entry) => entry.value == 4), isTrue);
+    expect(imap.anyEntry((MapEntry<String, int> entry) => entry.key == "f"), isTrue);
+    expect(imap.anyEntry((MapEntry<String, int> entry) => entry.value == 100), isFalse);
+    expect(imap.anyEntry((MapEntry<String, int> entry) => entry.key == "z"), isFalse);
   });
 
   test("IMap.cast()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.cast<String, num>(), isA<IMap<String, num>>());
+    expect(imap.cast<String, num>(), isA<IMap<String, num>>());
   });
 
   test("IMap.cast() | Assertion error when with non-supported type", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     // TODO: Marcelo, o erro sendo recebido é `_CastError` aparentemente, ou seja,
     // nós não estamos chegando no `else` do IMap.cast().
-    expect(() => iMap.cast<String, List>(), throwsAssertionError);
+    expect(() => imap.cast<String, List>(), throwsAssertionError);
   }, skip: true);
 
   test("IMap.[] operator", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap["a"], 1);
-    expect(iMap["z"], isNull);
+    expect(imap["a"], 1);
+    expect(imap["z"], isNull);
   });
 
   test("IMap.get()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.get("a"), 1);
-    expect(iMap.get("z"), isNull);
+    expect(imap.get("a"), 1);
+    expect(imap.get("z"), isNull);
   });
 
   test("IMap.contains()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.contains("a", 1), isTrue);
-    expect(iMap.contains("a", 2), isFalse);
-    expect(iMap.contains("b", 2), isTrue);
-    expect(iMap.contains("b", 3), isFalse);
-    expect(iMap.contains("c", 3), isTrue);
-    expect(iMap.contains("c", 4), isFalse);
-    expect(iMap.contains("z", 100), isFalse);
+    expect(imap.contains("a", 1), isTrue);
+    expect(imap.contains("a", 2), isFalse);
+    expect(imap.contains("b", 2), isTrue);
+    expect(imap.contains("b", 3), isFalse);
+    expect(imap.contains("c", 3), isTrue);
+    expect(imap.contains("c", 4), isFalse);
+    expect(imap.contains("z", 100), isFalse);
   });
 
   test("IMap.containsKey()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.containsKey("a"), isTrue);
-    expect(iMap.containsKey("z"), isFalse);
+    expect(imap.containsKey("a"), isTrue);
+    expect(imap.containsKey("z"), isFalse);
   });
 
   test("IMap.containsValue()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.containsValue(1), isTrue);
-    expect(iMap.containsValue(100), isFalse);
+    expect(imap.containsValue(1), isTrue);
+    expect(imap.containsValue(100), isFalse);
   });
 
   test("IMap.containsEntry()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.containsEntry(MapEntry<String, int>("a", 1)), isTrue);
-    expect(iMap.containsEntry(MapEntry<String, int>("a", 2)), isFalse);
-    expect(iMap.containsEntry(MapEntry<String, int>("b", 1)), isFalse);
-    expect(iMap.containsEntry(MapEntry<String, int>("z", 100)), isFalse);
+    expect(imap.containsEntry(MapEntry<String, int>("a", 1)), isTrue);
+    expect(imap.containsEntry(MapEntry<String, int>("a", 2)), isFalse);
+    expect(imap.containsEntry(MapEntry<String, int>("b", 1)), isFalse);
+    expect(imap.containsEntry(MapEntry<String, int>("z", 100)), isFalse);
   });
 
   test("IMap.containsEntry()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.containsEntry(MapEntry<String, int>("a", 1)), isTrue);
-    expect(iMap.containsEntry(MapEntry<String, int>("a", 2)), isFalse);
-    expect(iMap.containsEntry(MapEntry<String, int>("b", 1)), isFalse);
-    expect(iMap.containsEntry(MapEntry<String, int>("z", 100)), isFalse);
+    expect(imap.containsEntry(MapEntry<String, int>("a", 1)), isTrue);
+    expect(imap.containsEntry(MapEntry<String, int>("a", 2)), isFalse);
+    expect(imap.containsEntry(MapEntry<String, int>("b", 1)), isFalse);
+    expect(imap.containsEntry(MapEntry<String, int>("z", 100)), isFalse);
   });
 
   test("IMap.toList()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
-    expect(iMap.toEntryList(), isA<List<MapEntry<String, int>>>());
-    iMap
+    expect(imap.toEntryList(), isA<List<MapEntry<String, int>>>());
+    imap
         .toEntryList()
         .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   test("IMap.toISet()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
-    expect(iMap.toEntrySet(), isA<Set<MapEntry<String, int>>>());
-    iMap
+    expect(imap.toEntrySet(), isA<Set<MapEntry<String, int>>>());
+    imap
         .toEntrySet()
         .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   test("IMap.toKeySet()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<String> keys = ["a", "b", "c", "d", "e", "f"];
-    expect(iMap.toKeySet(), isA<Set<String>>());
-    expect(iMap.toKeySet(), keys.toSet());
+    expect(imap.toKeySet(), isA<Set<String>>());
+    expect(imap.toKeySet(), keys.toSet());
   });
 
   test("IMap.toValueSet()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<int> values = [1, 2, 3, 4, 5, 6];
-    expect(iMap.toValueSet(), isA<Set<int>>());
-    expect(iMap.toValueSet(), values.toSet());
+    expect(imap.toValueSet(), isA<Set<int>>());
+    expect(imap.toValueSet(), values.toSet());
   });
 
   test("IMap.toKeyISet()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<String> keys = ["a", "b", "c", "d", "e", "f"];
-    expect(iMap.keySet(), isA<ISet<String>>());
-    expect(iMap.keySet(), keys.toSet());
+    expect(imap.keySet(), isA<ISet<String>>());
+    expect(imap.keySet(), keys.toSet());
   });
 
   test("IMap.length()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.length, 6);
+    expect(imap.length, 6);
   });
 
   test("IMap.length when with an empty IMap", () {
-    final IMap<String, int> iMap = IMap.empty();
+    final IMap<String, int> imap = IMap.empty();
 
-    expect(iMap.length, 0);
-    expect(iMap.isEmpty, isTrue);
+    expect(imap.length, 0);
+    expect(imap.isEmpty, isTrue);
   });
 
   test("IMap.toValueISet()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     const List<int> values = [1, 2, 3, 4, 5, 6];
-    expect(iMap.valueSet(), isA<ISet<int>>());
-    expect(iMap.valueSet(), values.toSet());
+    expect(imap.valueSet(), isA<ISet<int>>());
+    expect(imap.valueSet(), values.toSet());
   });
 
   test("IMap.forEach()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     int result = 100;
-    iMap.forEach((String k, int v) => result *= 1 + v);
+    imap.forEach((String k, int v) => result *= 1 + v);
     expect(result, 504000);
   });
 
@@ -973,35 +973,35 @@ void main() {
   });
 
   test("IMap.map()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.map<String, int>((String k, int v) => MapEntry(k, v + 1)).unlock,
+    expect(imap.map<String, int>((String k, int v) => MapEntry(k, v + 1)).unlock,
         {"a": 2, "b": 3, "c": 4, "d": 5, "e": 6, "f": 7});
   });
 
   test("IMap.where()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.where((String k, int v) => v < 0).unlock, <String, int>{});
-    expect(iMap.where((String k, int v) => k == "a" || k == "b").unlock,
+    expect(imap.where((String k, int v) => v < 0).unlock, <String, int>{});
+    expect(imap.where((String k, int v) => k == "a" || k == "b").unlock,
         <String, int>{"a": 1, "b": 2});
-    expect(iMap.where((String k, int v) => v < 5).unlock,
+    expect(imap.where((String k, int v) => v < 5).unlock,
         <String, int>{"a": 1, "b": 2, "c": 3, "d": 4});
-    expect(iMap.where((String k, int v) => v < 100).unlock,
+    expect(imap.where((String k, int v) => v < 100).unlock,
         <String, int>{"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6});
   });
 
   test("IMap.toString()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(iMap.toString(), "{c: 3, a: 1, b: 2, d: 4, e: 5, f: 6}");
+    expect(imap.toString(), "{c: 3, a: 1, b: 2, d: 4, e: 5, f: 6}");
   });
 
   test("IMap.clear()", () {
-    final IMap<String, int> iMap =
+    final IMap<String, int> imap =
         IMap.withConfig({"a": 1, "b": 2}, ConfigMap(isDeepEquals: false));
 
-    final IMap<String, int> iMapCleared = iMap.clear();
+    final IMap<String, int> iMapCleared = imap.clear();
 
     // TODO: Marcelo, eu fiz com que o clear retornasse um `IMap` (estava com `void`).
     expect(iMapCleared.unlock, allOf(isA<Map<String, int>>(), {}));

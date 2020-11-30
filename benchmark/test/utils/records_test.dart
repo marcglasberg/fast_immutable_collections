@@ -47,8 +47,8 @@ void main() {
     test("== operator", () {
       const StopwatchRecord listRecord1 = StopwatchRecord(collectionName: "list", record: 10),
           listRecord3 = StopwatchRecord(collectionName: "list", record: 11),
-          iListRecord1 = StopwatchRecord(collectionName: "iList", record: 11),
-          iListRecord2 = StopwatchRecord(collectionName: "iList", record: 10);
+          iListRecord1 = StopwatchRecord(collectionName: "ilist", record: 11),
+          iListRecord2 = StopwatchRecord(collectionName: "ilist", record: 10);
       final StopwatchRecord listRecord2 = StopwatchRecord(collectionName: "list", record: 10);
 
       expect(listRecord1, listRecord2);
@@ -92,7 +92,7 @@ void main() {
       test("Extracting the column's maximum value", () {
         RecordsColumn recordsColumn = RecordsColumn.empty();
         recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
-        recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
+        recordsColumn += StopwatchRecord(collectionName: "ilist", record: 11);
         recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
         recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
 
@@ -102,7 +102,7 @@ void main() {
       test("Extracting the column's minimum value", () {
         RecordsColumn recordsColumn = RecordsColumn.empty();
         recordsColumn += StopwatchRecord(collectionName: "list", record: 10);
-        recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
+        recordsColumn += StopwatchRecord(collectionName: "ilist", record: 11);
         recordsColumn += StopwatchRecord(collectionName: "ktList", record: 100);
         recordsColumn += StopwatchRecord(collectionName: "builtList", record: 50);
 
@@ -113,7 +113,7 @@ void main() {
     test("Extracting the column's List's value", () {
       RecordsColumn recordsColumn = RecordsColumn.empty();
       recordsColumn += StopwatchRecord(collectionName: "list (mutable)", record: 10);
-      recordsColumn += StopwatchRecord(collectionName: "iList", record: 11);
+      recordsColumn += StopwatchRecord(collectionName: "ilist", record: 11);
 
       expect(recordsColumn.mutableRecord, 10);
     });

@@ -33,17 +33,21 @@ This package provides:
 Other valuable features are:
 
 - Extensions to the typical collections &mdash; `List`, `Set`, `Map` &mdash; so you can easily transform a mutable object into an immutable one (`.lock`).
-- Global configurations for altering, locking, etc. your immutable collections.
+- Global and local configurations that alter how your immutable collections behave.
 - Mixins for you to build your own immutable collections or objects.
 - Collection views so you can work with immutable objects as if they were the mutable ones.
-- Configurable native deep equalities, which let you treat your collections as value objects.
+- Deep equalities and cached hashCodes, which let you treat your collections as value objects.
+- Comparators and related helpers to be used with any collections.
+
+<br>
 
 **Fast Immutable Collections** is a competitor to the excellent
 [built_collection][built_collection] and [kt_dart][kt_dart] packages, 
 but it's much **easier** to use than the former, 
 and orders of magnitude **faster** than the latter.
 
-The reason it's **easier** than [built_collection][built_collection] is that there is no need for mutable/immutable cycles.
+The reason it's **easier** than [built_collection][built_collection] 
+is that there is no need for manual mutable/immutable cycles.
 You just create your immutable collections and use them directly. 
 
 The reason it's **faster** than [kt_dart][kt_dart] is that it creates immutable collections by 
@@ -494,9 +498,9 @@ class Students with FromIListMixin<Student, Students> {
 
    Students([Iterable<Student> students]) : _students = IList(students);
 
-   Students newInstance(IList<Student> iList) => Students(iList);
+   Students newInstance(IList<Student> ilist) => Students(ilist);
 
-   IList<Student> get iList => _students;   
+   IList<Student> get ilist => _students;   
                                                         
    /// And then you can add your own specific methods:
    String greetings() => "Hello ${_students.join(", ")}.";
@@ -1176,7 +1180,7 @@ list.sort(compareTo);
 expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
 ``` 
 
-## 6.6. Flushing 
+# 7. Flushing 
 
 As explained, `fast_immutable_collections` is fast because it creates a new collection 
 by internally "composing" the source collection with some other information, 
@@ -1214,7 +1218,7 @@ and no external difference will be visible.
 So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
 
-## 6.7. Auto-flush      
+## 7.1. Auto-flush      
 
 Usually you don't need to flush your collections manually.
 Depending on the global configuration, 
@@ -1235,7 +1239,7 @@ Auto-flush is an advanced topic,
 and you don't need to read the following detailed explanation at all to use the immutable collections.
 However, in case you want to tweak the auto-flush configuration, here it goes:
 
-### 6.7.1. Sync Auto-flush
+## 7.2. Sync Auto-flush
 
 If your auto-flush is set to occur synchronously:
 
@@ -1244,7 +1248,7 @@ and is incremented each time some collection methods are called.
 As soon as this counter reaches a certain value called the `flushFactor`, 
 the collection is flushed.
 
-### 6.7.2. Async Auto-flush
+## 7.3. Async Auto-flush
 
 If your auto-flush is set to occur asynchronously: 
 
@@ -1323,7 +1327,7 @@ IMap.flushFactor = 15;
 lockConfig();
 ```                                                    
     
-# 7. About the Benchmarks
+# 8. About the Benchmarks
 
 Having benchmarks for this project is essential to justifying its existence, after all, if it isn't faster or on par 
 with competitors, there would be no point in creating/publishing this package. Luckily, that isn't the case.
@@ -1346,7 +1350,7 @@ You can find more info on the benchmarks, by reading [its documentation][benchma
 [benchmark_docs]: benchmark/README.md
 [example]: benchmark/example/
 
-# 8. Other Resources & Documentation
+# 9. Other Resources & Documentation
 
 The [`docs`][docs] folder features information which might be useful for you either as an end user or a developer:
 
@@ -1363,9 +1367,9 @@ The [`docs`][docs] folder features information which might be useful for you eit
 [resources]: docs/resources.md
 [uml]: docs/uml.puml
 
-# 9. For the Developer or Contributor
+# 10. For the Developer or Contributor
 
-## 9.1. Formatting 
+## 10.1. Formatting 
 
 This project uses 100-character lines instead of the typical 80. If you're on VS Code, simply add this line to your `settings.json`:
 

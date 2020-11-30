@@ -28,9 +28,9 @@ class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   final IList<T> _iList;
   final List<T> _list;
 
-  /// Create an unmodifiable [List] view of type [UnmodifiableListView], from an [iList].
-  UnmodifiableListView(IList<T> iList)
-      : _iList = (iList != null) ? iList : IList.empty<T>(),
+  /// Create an unmodifiable [List] view of type [UnmodifiableListView], from an [ilist].
+  UnmodifiableListView(IList<T> ilist)
+      : _iList = (ilist != null) ? ilist : IList.empty<T>(),
         _list = null;
 
   /// Create an unmodifiable [List] view of type [UnmodifiableListView], from another [List].

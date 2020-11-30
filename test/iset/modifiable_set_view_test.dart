@@ -5,15 +5,15 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 void main() {
   test("Non-mutable operations | ModifiableSetView.length getter", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iSet = baseSet.lock;
-    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iSet);
+    final ISet<int> iset = baseSet.lock;
+    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iset);
     expect(modifiableSetView.length, baseSet.length);
   });
 
   test("Non-mutable operations | ModifiableSetView.lock getter", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iSet = baseSet.lock;
-    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iSet);
+    final ISet<int> iset = baseSet.lock;
+    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iset);
     expect(modifiableSetView.lock, allOf(isA<ISet<int>>(), baseSet));
   });
 
@@ -33,8 +33,8 @@ void main() {
 
   test("Non-mutable operations | ModifiableSetView.iterator getter", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iSet = baseSet.lock;
-    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iSet);
+    final ISet<int> iset = baseSet.lock;
+    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iset);
     final Iterator<int> iterator = modifiableSetView.iterator;
 
     int count = 0;
@@ -49,8 +49,8 @@ void main() {
 
   test("Non-mutable operations | ModifiableSetView.toSet()", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iSet = baseSet.lock;
-    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iSet);
+    final ISet<int> iset = baseSet.lock;
+    final ModifiableSetView<int> modifiableSetView = ModifiableSetView(iset);
     expect(modifiableSetView.toSet(), baseSet);
   });
 

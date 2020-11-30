@@ -7,8 +7,8 @@ class UnmodifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   final ISet<T> _iSet;
   final Set<T> _set;
 
-  UnmodifiableSetView(ISet<T> iSet)
-      : _iSet = iSet ?? ISet.empty<T>(),
+  UnmodifiableSetView(ISet<T> iset)
+      : _iSet = iset ?? ISet.empty<T>(),
         _set = null;
 
   UnmodifiableSetView.fromSet(Set<T> set)

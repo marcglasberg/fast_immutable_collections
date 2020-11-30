@@ -378,7 +378,7 @@ class Students with FromIListMixin<Student, Students> {
   Students([Iterable<Student> students]) : _students = IList(students);
 
   @override
-  Students newInstance(IList<Student> iList) => Students(iList);
+  Students newInstance(IList<Student> ilist) => Students(ilist);
 
   @override
   IList<Student> get iter => _students;

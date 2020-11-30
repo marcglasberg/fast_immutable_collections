@@ -7,13 +7,13 @@ void main() {
 
   test("IListExtension.lockUnsafe", () {
     final List<int> list = [1, 2, 3];
-    final IList<int> iList = list.lockUnsafe;
+    final IList<int> ilist = list.lockUnsafe;
 
-    expect(list, iList);
+    expect(list, ilist);
 
     list[1] = 4;
 
-    expect(list, iList);
+    expect(list, ilist);
   });
 
   test("IListExtension.sortOrdered()", () {

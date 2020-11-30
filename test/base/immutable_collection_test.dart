@@ -128,20 +128,20 @@ void main() {
 
   test("IterableToImmutableExtension.lockAsList", () {
     const List<int> list = [1, 2, 3, 3];
-    final IList<int> iList = list.lockAsList;
-    final ISet<int> iSet = list.lockAsSet;
+    final IList<int> ilist = list.lockAsList;
+    final ISet<int> iset = list.lockAsSet;
 
-    expect(iList, [1, 2, 3, 3]);
-    expect(iSet, {1, 2, 3});
+    expect(ilist, [1, 2, 3, 3]);
+    expect(iset, {1, 2, 3});
   });
 
   test("IterableToImmutableExtension.lockAsSet", () {
     const Set<int> set = {1, 2, 3};
-    final IList<int> iList = set.lockAsList;
-    final ISet<int> iSet = set.lockAsSet;
+    final IList<int> ilist = set.lockAsList;
+    final ISet<int> iset = set.lockAsSet;
 
-    expect(iList, [1, 2, 3]);
-    expect(iSet, [1, 2, 3]);
+    expect(ilist, [1, 2, 3]);
+    expect(iset, [1, 2, 3]);
   });
 
   test("BooleanExtension | Zero", () {
