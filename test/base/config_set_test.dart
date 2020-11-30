@@ -79,9 +79,9 @@ void main() {
   });
 
   test("ConfigSet.toString()", () {
-    expect(ConfigSet().toString(), "ConfigSet{isDeepEquals: true, sort: true}");
-    expect(ConfigSet(isDeepEquals: false).toString(), "ConfigSet{isDeepEquals: false, sort: true}");
-    expect(ConfigSet(sort: false).toString(), "ConfigSet{isDeepEquals: true, sort: false}");
+    expect(ConfigSet().toString(), "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: true}");
+    expect(ConfigSet(isDeepEquals: false).toString(), "ConfigSet{isDeepEquals: false, sort: true, cacheHashCode: true}");
+    expect(ConfigSet(sort: false).toString(), "ConfigSet{isDeepEquals: true, sort: false, cacheHashCode: true}");
   });
 
   test("defaultConfig | Is initially a ConfigSet with isDeepEquals = true and sort = true", () {

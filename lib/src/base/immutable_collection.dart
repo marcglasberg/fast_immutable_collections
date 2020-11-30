@@ -1,7 +1,7 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   //
@@ -41,7 +41,8 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _asyncCounter = 1;
     autoFlush = true;
     disallowUnsafeConstructors = false;
@@ -54,7 +55,8 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// automatically. The default is true.
   static set autoFlush(bool value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _autoFlush = value ?? true;
   }
 
@@ -62,13 +64,15 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// or not. The default is false.
   static set disallowUnsafeConstructors(bool value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _disallowUnsafeConstructors = value ?? false;
   }
 
   /// Internal use only.
   @visibleForTesting
-  static bool get asyncCounterMarkedForIncrement => _asyncCounterMarkedForIncrement;
+  static bool get asyncCounterMarkedForIncrement =>
+      _asyncCounterMarkedForIncrement;
 
   /// Internal use only.
   static int get asyncCounter => _asyncCounter;
@@ -183,13 +187,15 @@ class Output<T> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Output && runtimeType == other.runtimeType && _value == other._value;
+      other is Output &&
+          runtimeType == other.runtimeType &&
+          _value == other._value;
 
   @override
   int get hashCode => _value.hashCode;
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 extension IterableToImmutableExtension<T> on Iterable<T> {
   //
@@ -208,7 +214,8 @@ extension IteratorExtension<T> on Iterator<T> {
     while (moveNext()) yield current;
   }
 
-  List<T> toList({bool growable = true}) => List.of(toIterable(), growable: growable);
+  List<T> toList({bool growable = true}) =>
+      List.of(toIterable(), growable: growable);
 
   Set<T> toSet() => Set.of(toIterable());
 }

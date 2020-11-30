@@ -5,13 +5,13 @@ import "package:meta/meta.dart";
 
 /// An **immutable**, unordered, map of sets.
 @immutable
-class IMapOfSets<K, V> //
+class IMapOfSets<K, V> // ignore: must_be_immutable,
     extends ImmutableCollection<IMapOfSets<K, V>> {
   //
   static ConfigMapOfSets get defaultConfig => _defaultConfig;
 
-  static ConfigMapOfSets _defaultConfig =
-      const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+  static ConfigMapOfSets _defaultConfig = const ConfigMapOfSets(
+      isDeepEquals: true, sortKeys: true, sortValues: true);
 
   /// Global configuration that specifies if, by default, the [IMapOfSet]s
   /// use equality or identity for their [operator ==].
@@ -19,9 +19,11 @@ class IMapOfSets<K, V> //
   /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
   static set defaultConfig(ConfigMapOfSets config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig =
-        config ?? const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
+    _defaultConfig = config ??
+        const ConfigMapOfSets(
+            isDeepEquals: true, sortKeys: true, sortValues: true);
   }
 
   final IMap<K, ISet<V>> _mapOfSets;
@@ -42,7 +44,9 @@ class IMapOfSets<K, V> //
   /// Whether this collection is already flushed or not.
   /// Note: This will flush the map and all its internal sets.
   @override
-  bool get isFlushed => _mapOfSets.isFlushed && _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
+  bool get isFlushed =>
+      _mapOfSets.isFlushed &&
+      _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
 
   /// Returns an empty [IMapOfSets], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
@@ -67,7 +71,8 @@ class IMapOfSets<K, V> //
         : IMapOfSets._unsafe(
             IMap.fromIterables(
               mapOfSets.keys,
-              mapOfSets.values.map((value) => ISet.withConfig(value, configSet)),
+              mapOfSets.values
+                  .map((value) => ISet.withConfig(value, configSet)),
               config: configMap,
             ),
             config: config ?? defaultConfig,
@@ -79,7 +84,9 @@ class IMapOfSets<K, V> //
       : config = config ?? defaultConfig,
         _mapOfSets = (config == null)
             ? mapOfSets ?? IMap.empty<K, ISet<V>>()
-            : mapOfSets?.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
+            : mapOfSets?.map(
+                    (key, value) =>
+                        MapEntry(key, value.withConfig(config.asConfigSet)),
                     config: config.asConfigMap) ??
                 IMap.empty<K, ISet<V>>(config.asConfigMap);
 
@@ -111,7 +118,9 @@ class IMapOfSets<K, V> //
   ///
   IMapOfSets<K, V> withConfig(ConfigMapOfSets config) {
     assert(config != null);
-    return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
+    return (config == this.config)
+        ? this
+        : IMapOfSets._unsafe(_mapOfSets, config: config);
   }
 
   Map<K, Set<V>> get unlock {
@@ -283,7 +292,9 @@ class IMapOfSets<K, V> //
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0)
+        ? this
+        : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
   /// Remove, from all sets, all given [values] that satisfy the given [test].
@@ -327,7 +338,9 @@ class IMapOfSets<K, V> //
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0)
+        ? this
+        : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
   /// Removes the [value] from the [set] of the corresponding [key],
@@ -456,20 +469,23 @@ class IMapOfSets<K, V> //
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
-  bool equalItems(covariant Iterable<MapEntry<K, ISet<V>>> other) => _mapOfSets.equalItems(other);
+  bool equalItems(covariant Iterable<MapEntry<K, ISet<V>>> other) =>
+      _mapOfSets.equalItems(other);
 
   @override
-  bool equalItemsAndConfig(IMapOfSets<K, V> other) =>
-      identical(this, other) ||
-      (other != null &&
-          runtimeType == other.runtimeType &&
-          config == other.config &&
-          (identical(_mapOfSets, other._mapOfSets) ||
-              _mapOfSets.equalItemsToIMap(other._mapOfSets)));
+  bool equalItemsAndConfig(IMapOfSets<K, V> other) {
+    if (identical(this, other)) return true;
+
+    return runtimeType == other.runtimeType &&
+        config == other.config &&
+        (identical(_mapOfSets, other._mapOfSets) ||
+            _mapOfSets.equalItemsToIMap(other._mapOfSets));
+  }
 
   /// Will return true only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMap(IMap<K, ISet<V>> other) => _mapOfSets.equalItemsToIMap(other);
+  bool equalItemsToIMap(IMap<K, ISet<V>> other) =>
+      _mapOfSets.equalItemsToIMap(other);
 
   /// Will return true only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
@@ -487,9 +503,11 @@ class IMapOfSets<K, V> //
       identical(_mapOfSets, other._mapOfSets) && (config == other.config);
 
   @override
-  int get hashCode => isDeepEquals //
-      ? hash2(_mapOfSets, config)
-      : identityHashCode(_mapOfSets) ^ config.hashCode;
+  int get hashCode {
+    return isDeepEquals //
+        ? hash2(_mapOfSets, config)
+        : identityHashCode(_mapOfSets) ^ config.hashCode;
+  }
 
   /// Adds all set values to this map.
   ///
@@ -567,7 +585,8 @@ class IMapOfSets<K, V> //
     MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
     ConfigMapOfSets config,
   }) =>
-      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper), config: config ?? defaultConfig);
+      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper),
+          config: config ?? defaultConfig);
 
   /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
   IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>
@@ -585,7 +604,8 @@ class IMapOfSets<K, V> //
   ///
   IMapOfSets<K, V> update(K key, ISet<V> Function(ISet<V> set) update,
           {ISet<V> Function() ifAbsent}) =>
-      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent), config: config);
+      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent),
+          config: config);
 
   /// Updates all sets.
   ///

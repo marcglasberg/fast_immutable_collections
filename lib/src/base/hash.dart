@@ -2,15 +2,31 @@
 // https://github.com/google/quiver-dart/blob/master/lib/src/core/hash.dart
 
 /// Jenkins"s hash code for two objects.
-int hash2(Object a, Object b) => _finish(_combine(_combine(0, a.hashCode), b.hashCode));
+int hash2(Object a, Object b) => _finish(
+      _combine(_combine(0, a.hashCode), b.hashCode),
+    );
 
 /// Jenkins"s hash code for three objects.
-int hash3(Object a, Object b, Object c) =>
-    _finish(_combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode));
+int hash3(Object a, Object b, Object c) => _finish(
+      _combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
+    );
 
 /// Jenkins"s hash code for four objects.
 int hash4(Object a, Object b, Object c, Object d) => _finish(
-    _combine(_combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode), d.hashCode));
+      _combine(
+          _combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
+          d.hashCode),
+    );
+
+/// Jenkins"s hash code for five objects.
+int hash5(Object a, Object b, Object c, Object d, Object e) => _finish(
+      _combine(
+          _combine(
+              _combine(
+                  _combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
+              d.hashCode),
+          e.hashCode),
+    );
 
 int _combine(int hash, int value) {
   hash = 0x1fffffff & (hash + value);

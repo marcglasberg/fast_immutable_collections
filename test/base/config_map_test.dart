@@ -117,13 +117,13 @@ void main() {
 
   test("ConfigMap.toString()", () {
     expect(
-        ConfigMap().toString(), "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true}");
+        ConfigMap().toString(), "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true, cacheHashCode: true}");
     expect(ConfigMap(isDeepEquals: false).toString(),
-        "ConfigMap{isDeepEquals: false, sortKeys: true, sortValues: true}");
+        "ConfigMap{isDeepEquals: false, sortKeys: true, sortValues: true, cacheHashCode: true}");
     expect(ConfigMap(sortKeys: false).toString(),
-        "ConfigMap{isDeepEquals: true, sortKeys: false, sortValues: true}");
+        "ConfigMap{isDeepEquals: true, sortKeys: false, sortValues: true, cacheHashCode: true}");
     expect(ConfigMap(sortValues: false).toString(),
-        "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: false}");
+        "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: false, cacheHashCode: true}");
   });
 
   test("defaultConfig | Is initially a ConfigMap with all attributes true", () {

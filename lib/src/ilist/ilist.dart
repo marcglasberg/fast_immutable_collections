@@ -106,7 +106,8 @@ class IList<T> // ignore: must_be_immutable
 
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     IList.flushFactor = _defaultFlushFactor;
     IList.defaultConfig = _defaultConfig;
   }
@@ -129,13 +130,15 @@ class IList<T> // ignore: must_be_immutable
 
   static set defaultConfig(ConfigList config) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _defaultConfig = config ?? const ConfigList(isDeepEquals: true);
   }
 
   static set flushFactor(int value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     if (value > 0)
       _flushFactor = value;
     else
@@ -144,7 +147,8 @@ class IList<T> // ignore: must_be_immutable
 
   static set asyncAutoflush(bool value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     if (value != null) _asyncAutoflush = value;
   }
 
@@ -220,12 +224,14 @@ class IList<T> // ignore: must_be_immutable
         _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
 
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
-  IList<T> get withIdentityEquals =>
-      config.isDeepEquals ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false)) : this;
+  IList<T> get withIdentityEquals => config.isDeepEquals
+      ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false))
+      : this;
 
   /// Creates a list with `deepEquals` (compares all list items by equality).
-  IList<T> get withDeepEquals =>
-      config.isDeepEquals ? this : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
+  IList<T> get withDeepEquals => config.isDeepEquals
+      ? this
+      : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
 
   bool get isDeepEquals => config.isDeepEquals;
 
@@ -283,15 +289,25 @@ class IList<T> // ignore: must_be_immutable
       : false;
 
   /// Will return true only if the IList items are equal to the iterable items,
-  /// and in the same order. This may be slow for very large lists, since it compares each item,
-  /// one by one. You can compare the list with ordered sets, but unordered sets will throw a
-  /// `StateError`. To compare the IList with unordered sets, try method [unorderedEqualItems].
+  /// and in the same order. This may be slow for very large lists, since it
+  /// compares each item, one by one. You can compare the list with ordered
+  /// sets, but unordered sets will throw a `StateError`. To compare the IList
+  /// with unordered sets, try method [unorderedEqualItems].
   @override
   bool equalItems(covariant Iterable<T> other) {
     if (identical(this, other)) return true;
-    if (other is IList<T>) return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
-    if (other is List<T>) return const ListEquality().equals(UnmodifiableListView(this), other);
-    if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
+
+    if (other is IList<T>) {
+      if (_isUnequalByHashCode(other)) return false;
+      return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
+    }
+
+    if (other is List<T>)
+      return const ListEquality().equals(UnmodifiableListView(this), other);
+
+    if (other is HashSet || other is ISet)
+      throw StateError("Can't compare to unordered set.");
+
     return const IterableEquality().equals(_l, other);
   }
 
@@ -300,7 +316,8 @@ class IList<T> // ignore: must_be_immutable
   /// pair is equal. This may be slow for very large lists, since it compares each item,
   /// one by one.
   bool unorderedEqualItems(covariant Iterable<T> other) {
-    if (identical(this, other) || (other is IList<T> && same(other))) return true;
+    if (identical(this, other) || (other is IList<T> && same(other)))
+      return true;
     return const UnorderedIterableEquality().equals(_l, other);
   }
 
@@ -308,13 +325,30 @@ class IList<T> // ignore: must_be_immutable
   /// and the list configurations are equal. This may be slow for very
   /// large lists, since it compares each item, one by one.
   @override
-  bool equalItemsAndConfig(IList<T> other) =>
-      identical(this, other) ||
-      (other != null &&
-          runtimeType == other.runtimeType &&
-          config == other.config &&
-          (identical(_l, other._l) ||
-              (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>)));
+  bool equalItemsAndConfig(IList<T> other) {
+    if (identical(this, other)) return true;
+
+    // Objects with different hashCodes are not equal.
+    if (_isUnequalByHashCode(other)) return false;
+
+    return runtimeType == other.runtimeType &&
+        config == other.config &&
+        (identical(_l, other._l) ||
+            (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>));
+  }
+
+  /// Return true if other is null or the cached hashCodes proves the
+  /// collections are NOT equal.
+  /// Explanation: Objects with different hashCodes are not equal. However,
+  /// if the hashCodes are the same, then nothing can be said about the equality.
+  /// Note: We use the CACHED hashCodes. If any of the hashCodes is null it
+  /// means we don't have this information yet, and we don't calculate it.
+  bool _isUnequalByHashCode(IList<T> other) {
+    return (other == null) ||
+        (_hashCode != null &&
+            other._hashCode != null &&
+            _hashCode != other._hashCode);
+  }
 
   /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
@@ -323,12 +357,24 @@ class IList<T> // ignore: must_be_immutable
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
-  bool same(IList<T> other) => identical(_l, other._l) && (config == other.config);
+  bool same(IList<T> other) =>
+      identical(_l, other._l) && (config == other.config);
+
+  // HashCode cache. Must be null if hashCode is not cached.
+  int _hashCode;
 
   @override
-  int get hashCode => isDeepEquals
-      ? (flush._l as LFlat<T>).deepListHashcode() ^ config.hashCode
-      : identityHashCode(_l) ^ config.hashCode;
+  int get hashCode {
+    if (_hashCode != null) return _hashCode;
+
+    var hashCode = isDeepEquals
+        ? (flush._l as LFlat<T>).deepListHashcode() ^ config.hashCode
+        : identityHashCode(_l) ^ config.hashCode;
+
+    if (config.cacheHashCode) _hashCode = hashCode;
+
+    return hashCode;
+  }
 
   /// Flushes the list, if necessary. Chainable method.
   /// If the list is already flushed, don't do anything.
@@ -372,7 +418,8 @@ class IList<T> // ignore: must_be_immutable
     // If the outer list is used, it will be flushed before the source lists.
     // If the source lists are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((items is IList<T>) ? items._counter : 0)) + 1;
+    result._counter =
+        max(_counter, ((items is IList<T>) ? items._counter : 0)) + 1;
 
     return result;
   }
@@ -389,7 +436,9 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> remove(T item) {
     final L<T> result = _l.remove(item);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    return identical(result, _l)
+        ? this
+        : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of all [items] from this list.
@@ -399,7 +448,9 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> removeAll(Iterable<T> items) {
     final L<T> result = _l.removeAll(items);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    return identical(result, _l)
+        ? this
+        : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of [item] from this list.
@@ -414,7 +465,9 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> removeMany(T item) {
     final L<T> result = _l.removeMany(item);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    return identical(result, _l)
+        ? this
+        : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all nulls from this list.
@@ -437,7 +490,8 @@ class IList<T> // ignore: must_be_immutable
 
   /// Removes the element, if it exists in the list.
   /// Otherwise, adds it to the list.
-  IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
+  IList<T> toggle(T element) =>
+      contains(element) ? remove(element) : add(element);
 
   T operator [](int index) {
     _count();
@@ -454,8 +508,10 @@ class IList<T> // ignore: must_be_immutable
   IList<R> cast<R>() {
     var result = _l.cast<R>();
     return (result is L<R>)
-        ? IList._unsafe(result, config: ConfigList(isDeepEquals: config.isDeepEquals))
-        : IList._(result, config: ConfigList(isDeepEquals: config.isDeepEquals));
+        ? IList._unsafe(result,
+            config: ConfigList(isDeepEquals: config.isDeepEquals))
+        : IList._(result,
+            config: ConfigList(isDeepEquals: config.isDeepEquals));
   }
 
   @override
@@ -478,7 +534,8 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   IList<E> expand<E>(Iterable<E> Function(T) f, {ConfigList config}) =>
-      IList._(_l.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
+      IList._(_l.expand(f),
+          config: config ?? (T == E ? this.config : defaultConfig));
 
   @override
   int get length {
@@ -550,7 +607,8 @@ class IList<T> // ignore: must_be_immutable
   }
 
   @override
-  IList<T> followedBy(Iterable<T> other) => IList._(_l.followedBy(other), config: config);
+  IList<T> followedBy(Iterable<T> other) =>
+      IList._(_l.followedBy(other), config: config);
 
   @override
   void forEach(void Function(T element) f) {
@@ -570,7 +628,8 @@ class IList<T> // ignore: must_be_immutable
   @override
   IList<E> map<E>(E Function(T element) f, {ConfigList config}) {
     _count();
-    return IList._(_l.map(f), config: config ?? (T == E ? this.config : defaultConfig));
+    return IList._(_l.map(f),
+        config: config ?? (T == E ? this.config : defaultConfig));
   }
 
   @override
@@ -589,16 +648,19 @@ class IList<T> // ignore: must_be_immutable
   IList<T> skip(int count) => IList._(_l.skip(count), config: config);
 
   @override
-  IList<T> skipWhile(bool Function(T value) test) => IList._(_l.skipWhile(test), config: config);
+  IList<T> skipWhile(bool Function(T value) test) =>
+      IList._(_l.skipWhile(test), config: config);
 
   @override
   IList<T> take(int count) => IList._(_l.take(count), config: config);
 
   @override
-  IList<T> takeWhile(bool Function(T value) test) => IList._(_l.takeWhile(test), config: config);
+  IList<T> takeWhile(bool Function(T value) test) =>
+      IList._(_l.takeWhile(test), config: config);
 
   @override
-  IList<T> where(bool Function(T element) test) => IList._(_l.where(test), config: config);
+  IList<T> where(bool Function(T element) test) =>
+      IList._(_l.where(test), config: config);
 
   @override
   IList<E> whereType<E>() => IList._(_l.whereType<E>(), config: config);
@@ -679,7 +741,8 @@ class IList<T> // ignore: must_be_immutable
   /// Sorts this list according to the order specified by the [ordering] iterable.
   /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
   /// Note: This is not very efficient. Only use for a small number of elements.
-  IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
+  IList<T> sortLike(Iterable<T> ordering) =>
+      IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
   /// The first one contains all items which satisfy the provided [test].
@@ -809,7 +872,8 @@ class IList<T> // ignore: must_be_immutable
   /// return the unchanged list if no item satisfies the [test].
   /// If [addIfNotFound] is true, add the item to the end of the list
   /// if no item satisfies the [test].
-  IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false}) {
+  IList<T> replaceFirstWhere(bool Function(T item) test, T to,
+      {bool addIfNotFound = false}) {
     var index = indexWhere(test);
     return (index != -1)
         ? put(index, to)
@@ -936,8 +1000,10 @@ class IList<T> // ignore: must_be_immutable
     _count();
     var _length = length;
     start ??= _length;
-    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = min(start, _length - 1); i >= 0; i--) if (this[i] == element) return i;
+    if (start < 0)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--)
+      if (this[i] == element) return i;
     return -1;
   }
 
@@ -963,8 +1029,10 @@ class IList<T> // ignore: must_be_immutable
     _count();
     var _length = length;
     start ??= _length;
-    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = min(start, _length - 1); i >= 0; i--) if (test(this[i])) return i;
+    if (start < 0)
+      throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--)
+      if (test(this[i])) return i;
     return -1;
   }
 
@@ -987,7 +1055,8 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> replaceRange(int start, int end, Iterable<T> replacement) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: true)..replaceRange(start, end, replacement),
+    return IList._unsafeFromList(
+        toList(growable: true)..replaceRange(start, end, replacement),
         config: config);
   }
 
@@ -1020,7 +1089,8 @@ class IList<T> // ignore: must_be_immutable
   ///
   IList<T> fillRange(int start, int end, [T fillValue]) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: false)..fillRange(start, end, fillValue),
+    return IList._unsafeFromList(
+        toList(growable: false)..fillRange(start, end, fillValue),
         config: config);
   }
 
@@ -1071,7 +1141,8 @@ class IList<T> // ignore: must_be_immutable
   /// If `end` is equal to `start`, then the returned list is empty.
   IList<T> sublist(int start, [int end]) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
+    return IList._unsafeFromList(toList(growable: false).sublist(start, end),
+        config: config);
   }
 
   /// Inserts the object at position [index] in this list.
@@ -1083,7 +1154,8 @@ class IList<T> // ignore: must_be_immutable
   /// The [index] value must be non-negative and no greater than [length].
   IList<T> insert(int index, T element) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: true)..insert(index, element), config: config);
+    return IList._unsafeFromList(toList(growable: true)..insert(index, element),
+        config: config);
   }
 
   /// Inserts all objects of [iterable] at position [index] in this list.
@@ -1095,7 +1167,8 @@ class IList<T> // ignore: must_be_immutable
   /// The [index] value must be non-negative and no greater than [length].
   IList<T> insertAll(int index, Iterable<T> iterable) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: true)..insertAll(index, iterable),
+    return IList._unsafeFromList(
+        toList(growable: true)..insertAll(index, iterable),
         config: config);
   }
 
@@ -1228,7 +1301,8 @@ class IList<T> // ignore: must_be_immutable
   /// If `iterable` depends on this list in some other way, no guarantees are
   /// made.
   ///
-  IList<T> setRange(int start, int end, Iterable<T> iterable, [int skipCount = 0]) {
+  IList<T> setRange(int start, int end, Iterable<T> iterable,
+      [int skipCount = 0]) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
     list.setRange(start, end, iterable, skipCount);
@@ -1240,7 +1314,7 @@ class IList<T> // ignore: must_be_immutable
       IList._unsafeFromList(toList()..shuffle(random), config: config);
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 @visibleForOverriding
 abstract class L<T> implements Iterable<T> {
@@ -1276,7 +1350,8 @@ abstract class L<T> implements Iterable<T> {
       );
 
   // TODO: Still need to implement efficiently.
-  L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
+  L<T> remove(T element) =>
+      !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
   L<T> removeAll(Iterable<T> elements) {
     var list = unlock;
@@ -1288,8 +1363,9 @@ abstract class L<T> implements Iterable<T> {
   }
 
   // TODO: Still need to implement efficiently.
-  L<T> removeMany(T element) =>
-      !contains(element) ? this : LFlat<T>.unsafe(unlock..removeWhere((e) => e == element));
+  L<T> removeMany(T element) => !contains(element)
+      ? this
+      : LFlat<T>.unsafe(unlock..removeWhere((e) => e == element));
 
   // TODO: Still need to implement efficiently.
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
@@ -1328,7 +1404,8 @@ abstract class L<T> implements Iterable<T> {
     Set<T> newSet = Set.of(this);
     Set<T> intersection = orderingSet.intersection(newSet);
     Set<T> difference = newSet.difference(orderingSet);
-    List<T> result = ordering.where((element) => intersection.contains(element)).toList();
+    List<T> result =
+        ordering.where((element) => intersection.contains(element)).toList();
     result.addAll(difference);
     return LFlat<T>.unsafe(result);
   }
@@ -1396,7 +1473,8 @@ abstract class L<T> implements Iterable<T> {
   Iterable<E> map<E>(E Function(T element) f) => getFlushed.map(f);
 
   @override
-  T reduce(T Function(T value, T element) combine) => getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) =>
+      getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -1406,13 +1484,15 @@ abstract class L<T> implements Iterable<T> {
   Iterable<T> skip(int count) => getFlushed.skip(count);
 
   @override
-  Iterable<T> skipWhile(bool Function(T value) test) => getFlushed.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) =>
+      getFlushed.skipWhile(test);
 
   @override
   Iterable<T> take(int count) => getFlushed.take(count);
 
   @override
-  Iterable<T> takeWhile(bool Function(T value) test) => getFlushed.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) =>
+      getFlushed.takeWhile(test);
 
   @override
   Iterable<T> where(bool Function(T element) test) => getFlushed.where(test);
@@ -1433,7 +1513,7 @@ abstract class L<T> implements Iterable<T> {
   HashSet<T> toHashSet() => HashSet.of(this);
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 /// Don't use this class.
 @visibleForTesting
@@ -1452,4 +1532,4 @@ class InternalsForTestingPurposesIList {
   int get counter => ilist._counter;
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////

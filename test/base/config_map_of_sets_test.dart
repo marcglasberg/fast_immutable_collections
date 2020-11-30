@@ -177,15 +177,15 @@ void main() {
         configMapOfSets4 = ConfigMapOfSets(sortValues: false),
         configMapOfSets5 = ConfigMapOfSets(removeEmptySets: false);
     expect(configMapOfSets1.toString(),
-        "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: true, removeEmptySets: true}");
+        "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: true, removeEmptySets: true, cacheHashCode: true}");
     expect(configMapOfSets2.toString(),
-        "ConfigMapOfSets{isDeepEquals: false, sortKeys: true, sortValues: true, removeEmptySets: true}");
+        "ConfigMapOfSets{isDeepEquals: false, sortKeys: true, sortValues: true, removeEmptySets: true, cacheHashCode: true}");
     expect(configMapOfSets3.toString(),
-        "ConfigMapOfSets{isDeepEquals: true, sortKeys: false, sortValues: true, removeEmptySets: true}");
+        "ConfigMapOfSets{isDeepEquals: true, sortKeys: false, sortValues: true, removeEmptySets: true, cacheHashCode: true}");
     expect(configMapOfSets4.toString(),
-        "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: false, removeEmptySets: true}");
+        "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: false, removeEmptySets: true, cacheHashCode: true}");
     expect(configMapOfSets5.toString(),
-        "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: true, removeEmptySets: false}");
+        "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: true, removeEmptySets: false, cacheHashCode: true}");
   });
 
   test("defaultConfig | Is initially a ConfigMapOfSets with all attributes true", () {
