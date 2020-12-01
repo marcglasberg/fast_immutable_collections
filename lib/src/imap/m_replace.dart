@@ -1,6 +1,6 @@
 import "imap.dart";
 
-/// The [_m] already contains the key. But the value should be the new one.
+/// The [_m] already contains the [_key]. But the [_value] should be the new one.
 class MReplace<K, V> extends M<K, V> {
   final M<K, V> _m;
   final K _key;
