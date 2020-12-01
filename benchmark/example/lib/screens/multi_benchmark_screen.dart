@@ -39,7 +39,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
   }
 
   /// Be careful with the parameters. If they are too big, you might encounter a difficult-to-debug
-  /// error.
+  /// error, probably due to insufficient memory.
   List<Widget> get _benchmarks {
     switch (collectionType) {
       case List:
