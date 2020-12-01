@@ -1,5 +1,6 @@
 import "imap.dart";
 
+/// See also: [IMapOfSetsExtension]
 extension IMapExtension<K, V> on Map<K, V> {
   /// Locks the map, returning an *immutable* map ([IMap]).
   IMap<K, V> get lock => IMap<K, V>(this);
