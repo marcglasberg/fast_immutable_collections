@@ -1135,9 +1135,9 @@ class IList<T> // ignore: must_be_immutable
     return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
   }
 
-  /// Inserts the object at position [index] in this list.
+  /// Inserts the object at position [index] in this list and returns a new immutable list.
   ///
-  /// This increases the length of the list by one and shifts all objects
+  /// This increases the [length] of the list by one and shifts all objects
   /// at or after the index towards the end of the list.
   ///
   /// The list must be growable.
@@ -1149,7 +1149,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Inserts all objects of [iterable] at position [index] in this list.
   ///
-  /// This increases the length of the list by the length of [iterable] and
+  /// This increases the [length] of the list by the length of [iterable] and
   /// shifts all later objects towards the end of the list.
   ///
   /// The list must be growable.
@@ -1165,7 +1165,7 @@ class IList<T> // ignore: must_be_immutable
   /// This method reduces the length of `this` by one and moves all later objects
   /// down by one position.
   ///
-  /// Returns the removed object.
+  /// Returns the list without the removed object.
   ///
   /// The [index] must be in the range `0 ≤ index < length`.
   ///
@@ -1183,6 +1183,8 @@ class IList<T> // ignore: must_be_immutable
   /// The list must not be empty.
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
+  /// 
+  /// See also: [Output].
   IList<T> removeLast([Output<T> removedItem]) {
     return removeAt(length - 1, removedItem);
   }
@@ -1203,7 +1205,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Removes all objects from this list that satisfy [test].
   ///
-  /// An object [:o:] satisfies [test] if [:test(o):] is true.
+  /// An object [:o:] satisfies [test] if [:test(o):] is `true`.
   ///
   /// ```dart
   /// final IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
@@ -1248,14 +1250,14 @@ class IList<T> // ignore: must_be_immutable
   /// ilist.setAll(1, ['bee', 'sea']).join(', '); // 'a, bee, sea'
   /// ```
   ///
-  /// This operation does not increase the length of `this`.
+  /// This operation does not increase the [length] of `this`.
   ///
   /// The [index] must be non-negative and no greater than [length].
   ///
   /// The [iterable] must not have more elements than what can fit from [index]
   /// to [length].
   ///
-  /// If `iterable` is based on this list, its values may change /during/ the
+  /// If `iterable` is based on this list, its values may change *during* the
   /// `setAll` operation.
   IList<T> setAll(int index, Iterable<T> iterable) {
     // TODO: Still need to implement efficiently.
@@ -1282,11 +1284,11 @@ class IList<T> // ignore: must_be_immutable
   /// The [iterable] must have enough objects to fill the range from `start`
   /// to `end` after skipping [skipCount] objects.
   ///
-  /// If `iterable` is this list, the operation copies the elements
+  /// If [iterable] is `this` list, the operation copies the elements
   /// originally in the range from `skipCount` to `skipCount + (end - start)` to
   /// the range `start` to `end`, even if the two ranges overlap.
   ///
-  /// If `iterable` depends on this list in some other way, no guarantees are
+  /// If [iterable] depends on this list in some other way, no guarantees are
   /// made.
   ///
   IList<T> setRange(int start, int end, Iterable<T> iterable, [int skipCount = 0]) {
@@ -1309,18 +1311,19 @@ abstract class L<T> implements Iterable<T> {
 
   /// The [L] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
+  /// 
   /// Note these fallback methods need to calculate the flushed list, but
   /// because that's immutable, we cache it.
   List<T> _flushed;
 
   /// Returns the flushed list (flushes it only once).
-  /// It is an error to use the flushed list outside of the [L] class.
+  /// **It is an error to use the flushed list outside of the [L] class**.
   List<T> get getFlushed {
     _flushed ??= unlock;
     return _flushed;
   }
 
-  /// Returns a regular Dart (mutable, growable) List.
+  /// Returns a regular Dart (*mutable*, `growable`) List.
   List<T> get unlock => List<T>.of(this, growable: true);
 
   /// Returns a new `Iterator` that allows iterating the items of the [IList].
@@ -1382,6 +1385,7 @@ abstract class L<T> implements Iterable<T> {
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
   /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
+  /// 
   /// Note: This is not very efficient. Only use for a small number of elements.
   L<T> sortLike(Iterable<T> ordering) {
     assert(ordering != null);
@@ -1496,7 +1500,7 @@ abstract class L<T> implements Iterable<T> {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// Don't use this class.
+/// **Don't use this class**.
 @visibleForTesting
 class InternalsForTestingPurposesIList {
   IList ilist;
