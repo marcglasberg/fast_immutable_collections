@@ -152,7 +152,7 @@ void main() {
     expect(iMapOfSets1.same(iMapOfSets1.remove("a", 3)), isTrue);
   });
 
-  test("IMapOfSets.hashCode()", () {
+  test("IMapOfSets.hashCode", () {
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
           "a": {1, 2},
           "b": {1, 2, 3},

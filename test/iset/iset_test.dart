@@ -253,7 +253,7 @@ void main() {
   test("ISet.equalItems() | Different items yield false",
       () => expect(ISet({1, 2}).equalItems([1]), isFalse));
 
-  test("ISet.hashCode() | deepEquals vs deepEquals", () {
+  test("ISet.hashCode | deepEquals vs deepEquals", () {
     final ISet<int> iSet1 = ISet({1, 2});
     expect(iSet1 == ISet({1, 2}), isTrue);
     expect(iSet1 == ISet({1, 2, 3}), isFalse);
@@ -263,7 +263,7 @@ void main() {
     expect(iSet1.hashCode, ISet({2, 1}).hashCode);
   });
 
-  test("ISet.hashCode() | identityEquals vs identityEquals", () {
+  test("ISet.hashCode | identityEquals vs identityEquals", () {
     final ISet<int> iSet1WithIdentity = ISet({1, 2}).withIdentityEquals;
     expect(iSet1WithIdentity == ISet({1, 2}).withIdentityEquals, isFalse);
     expect(iSet1WithIdentity == ISet({1, 2, 3}).withIdentityEquals, isFalse);
@@ -276,7 +276,7 @@ void main() {
         isNot(ISet({2, 1}).withIdentityEquals.hashCode));
   });
 
-  test("ISet.hashCode() | deepEquals vs identityEquals", () {
+  test("ISet.hashCode | deepEquals vs identityEquals", () {
     final ISet<int> iSet1 = ISet({1, 2});
     final ISet<int> iSet1WithIdentity = iSet1.withIdentityEquals;
     expect(iSet1 == iSet1WithIdentity, isFalse);
@@ -290,6 +290,34 @@ void main() {
         isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
     expect(
         ISet({2, 1}).hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
+  });
+
+  test("ISet.hashCode | when cache is on", () {
+    final Set<int> set = {1, 2, 3};
+
+    final ISet<int> iSetWithCache = ISet.unsafe(set, config: ConfigSet(cacheHashCode: true));
+
+    final int hashBefore = iSetWithCache.hashCode;
+
+    set.add(4);
+
+    final int hashAfter = iSetWithCache.hashCode;
+
+    expect(hashAfter, hashBefore);
+  });
+
+  test("ISet.hashCode | when cache is off", () {
+    final Set<int> set = {1, 2, 3};
+
+    final ISet<int> iSetWithCache = ISet.unsafe(set, config: ConfigSet(cacheHashCode: false));
+
+    final int hashBefore = iSetWithCache.hashCode;
+
+    set.add(4);
+
+    final int hashAfter = iSetWithCache.hashCode;
+
+    expect(hashAfter, isNot(hashBefore));
   });
 
   test("ISet.config()", () {

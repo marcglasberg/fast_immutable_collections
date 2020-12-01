@@ -373,14 +373,14 @@ void main() {
   test("IList.hashCode cache | when cache is on", () {
     final List<int> list = [1, 2, 3];
 
-    final IList<int> iListWithoutCache =
+    final IList<int> iListWithCache =
         IList.unsafe(list, config: ConfigList(cacheHashCode: true));
 
-    final int hashBefore = iListWithoutCache.hashCode;
+    final int hashBefore = iListWithCache.hashCode;
 
     list.add(4);
 
-    final int hashAfter = iListWithoutCache.hashCode;
+    final int hashAfter = iListWithCache.hashCode;
 
     expect(hashAfter, hashBefore);
   });

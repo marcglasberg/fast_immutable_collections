@@ -293,6 +293,38 @@ void main() {
         isNot(IMap({"b": 2}).add("a", 1).withIdentityEquals.hashCode));
   });
 
+  test("IList.hashCode cache | when cache is on", () {
+    ImmutableCollection.disallowUnsafeConstructors = false; 
+    
+    final Map<String, int> map = {"a": 1, "b": 2};
+
+    final IMap<String, int> iMapWithCache = IMap.unsafe(map, config: ConfigMap(cacheHashCode: true));
+
+    final int hashBefore = iMapWithCache.hashCode;
+
+    map.addAll({"c": 3});
+
+    final int hashAfter = iMapWithCache.hashCode;
+
+    expect(hashAfter, hashBefore);
+  });
+
+  test("IMap.hashCode cache | when cache is off", () {
+    ImmutableCollection.disallowUnsafeConstructors = false;
+
+    final Map<String, int> map = {"a": 1, "b": 2};
+
+    final IMap<String, int> iMapWithCache = IMap.unsafe(map, config: ConfigMap(cacheHashCode: false));
+
+    final int hashBefore = iMapWithCache.hashCode;
+
+    map.addAll({"c": 3});
+
+    final int hashAfter = iMapWithCache.hashCode;
+
+    expect(hashAfter, isNot(hashBefore));
+  });
+
   test("IMap.withConfig()", () {
     final IMap<String, int> imap = IMap({"a": 1, "b": 2});
 
