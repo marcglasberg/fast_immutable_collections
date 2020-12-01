@@ -2,7 +2,8 @@ import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:test/test.dart";
 
 void main() {
-  test("Hash2 | Repeating the hash yields the same result", () => expect(hashObj2(1, 2), hashObj2(1, 2)));
+  test("Hash2 | Repeating the hash yields the same result",
+      () => expect(hashObj2(1, 2), hashObj2(1, 2)));
 
   test("Hash2 | Is asymmetric", () => expect(hashObj2(1, 2), isNot(hashObj2(2, 1))));
 
@@ -72,25 +73,25 @@ void main() {
   });
 
   test("Hash5 | Repeating the hash yields the same result",
-      () => expect(hash5(1, 2, 3, 4, 5), hash5(1, 2, 3, 4, 5)));
+      () => expect(hashObj5(1, 2, 3, 4, 5), hashObj5(1, 2, 3, 4, 5)));
 
   test("Hash5 | Is asymmetric", () {
-    expect(hash5(1, 2, 3, 4, 5), isNot(hash5(1, 2, 3, 5, 4)));
-    expect(hash5(1, 2, 3, 4, 5), isNot(hash5(1, 2, 5, 3, 4)));
-    expect(hash5(1, 2, 3, 4, 5), isNot(hash5(1, 5, 2, 3, 4)));
-    expect(hash5(1, 2, 3, 4, 5), isNot(hash5(5, 1, 2, 3, 4)));
+    expect(hashObj5(1, 2, 3, 4, 5), isNot(hashObj5(1, 2, 3, 5, 4)));
+    expect(hashObj5(1, 2, 3, 4, 5), isNot(hashObj5(1, 2, 5, 3, 4)));
+    expect(hashObj5(1, 2, 3, 4, 5), isNot(hashObj5(1, 5, 2, 3, 4)));
+    expect(hashObj5(1, 2, 3, 4, 5), isNot(hashObj5(5, 1, 2, 3, 4)));
   });
 
   test("Hash5 | Different values for different objects", () {
-    expect(hash5(1, 2, 3, 4, 5), isNot(hash5(11, 12, 13, 14, 15)));
-    expect(hash5(1, 2, 3, 4, 5), isNot(hash5(1, "a", [1, 2], ["a", "b"], {1, 2})));
-    expect(hash5(1, 2, 3, 4, 5), isNot(hash5(1, "a", [1, 2], {"a": 1, "b": 2}, {1, 2})));
+    expect(hashObj5(1, 2, 3, 4, 5), isNot(hashObj5(11, 12, 13, 14, 15)));
+    expect(hashObj5(1, 2, 3, 4, 5), isNot(hashObj5(1, "a", [1, 2], ["a", "b"], {1, 2})));
+    expect(hashObj5(1, 2, 3, 4, 5), isNot(hashObj5(1, "a", [1, 2], {"a": 1, "b": 2}, {1, 2})));
   });
 
   test("Hash5 | Trainsitiveness", () {
-    final int h1 = hash5(1, 2, 3, 4, 5);
-    final int h2 = hash5(1, 2, 3, 4, 5);
-    final int h3 = hash5(1, 2, 3, 5, 4);
+    final int h1 = hashObj5(1, 2, 3, 4, 5);
+    final int h2 = hashObj5(1, 2, 3, 4, 5);
+    final int h3 = hashObj5(1, 2, 3, 5, 4);
     expect(h1, h2);
     expect(h1, isNot(h3));
     expect(h2, isNot(h3));
