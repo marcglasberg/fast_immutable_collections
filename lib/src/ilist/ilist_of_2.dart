@@ -2,6 +2,7 @@ import "../base/hash.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// An *immutable* list of only 2 items.
 class IListOf2<T> {
   final T first, last;
 

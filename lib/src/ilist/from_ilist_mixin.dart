@@ -38,7 +38,7 @@ import "ilist.dart";
 /// }
 /// ```
 ///
-/// Note: Why this class does NOT implement [Iterable]? Unfortunately, the
+/// Note: Why does this class NOT implement [Iterable]? Unfortunately, the
 /// [expect] method in tests compares [Iterable]s by comparing its items. So if
 /// you create a class that implements [Iterable] and then, when you want to use the
 /// [expect] method, it will just compare its items, completely ignoring its
@@ -47,7 +47,7 @@ import "ilist.dart";
 /// If you need to iterate over this class, you can use the [iter] getter:
 ///
 /// ```dart
-/// class MyClass with FromIListMixin<T> { ... }
+/// class MyClass with FromIListMixin<T, I> { ... }
 ///
 /// MyClass obj = MyClass([1, 2, 3]);
 ///
@@ -59,7 +59,7 @@ import "ilist.dart";
 /// For example:
 ///
 /// ```dart
-/// class MyClass with FromIListMixin<T>, implements Iterable<T> { ... }
+/// class MyClass with FromIListMixin<T, I> implements Iterable<T> { ... }
 ///
 /// MyClass obj = MyClass([1, 2, 3]);
 ///
@@ -67,6 +67,7 @@ import "ilist.dart";
 /// ```
 ///
 /// See also: [FromIterableIListMixin].
+/// 
 mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   //
 

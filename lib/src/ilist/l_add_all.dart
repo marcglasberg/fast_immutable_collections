@@ -8,7 +8,7 @@ class LAddAll<T> extends L<T> {
   // Will always store this as `List` or [L].
   final Iterable<T> _listOrL;
 
-  /// Safe.
+  /// **Safe**.
   /// Note: If you need to pass an [IList], pass its [L] instead.
   LAddAll(this._l, Iterable<T> items)
       : assert(_l != null),
