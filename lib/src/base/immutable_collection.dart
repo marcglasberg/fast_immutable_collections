@@ -5,10 +5,11 @@ import "package:meta/meta.dart";
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   //
-  /// In your app initialization, call this if you want to lock the
+  /// In your app initialization, call [lockConfig] if you want to lock the
   /// configuration, so that no one can change it anymore.
   ///
-  /// These are the setters which you can use to configure and then lock:
+  /// These are setters which you can use to configure and then lock:
+  /// 
   /// 1. `ImmutableCollection.autoFlush`
   /// 2. `ImmutableCollection.disallowUnsafeConstructors`
   /// 3. `IList.defaultConfig`
@@ -51,7 +52,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   }
 
   /// Global configuration that specifies if the collections should flush
-  /// automatically. The default is true.
+  /// automatically. The default is `true`.
   static set autoFlush(bool value) {
     if (_autoFlush == value) return;
     if (ImmutableCollection.isConfigLocked)
@@ -59,8 +60,8 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
     _autoFlush = value ?? true;
   }
 
-  /// Global configuration that specifies if unsafe constructors can be used
-  /// or not. The default is false.
+  /// Global configuration that specifies if **unsafe constructors** can be used
+  /// or not. The default is `false`.
   static set disallowUnsafeConstructors(bool value) {
     if (_disallowUnsafeConstructors == value) return;
     if (ImmutableCollection.isConfigLocked)
@@ -95,25 +96,26 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// Whether this collection is already flushed or not.
   bool get isFlushed;
 
-  /// Will return true only if the collection items are equal to the iterable
+  /// Will return `true` only if the collection items are equal to the iterable
   /// items. If the collection is ordered, it will also check if the items are
   /// in the same order. This may be slow for very large collection, since it
-  /// compares each item, one by one. If you can compare ordered and unordered
-  /// collections, it will throw a `StateError`.
+  /// compares each item, one by one. If you can/try to compare ordered and unordered
+  /// collections, it will throw a [StateError].
   bool equalItems(Iterable other);
 
-  /// Will return true only if the collections items are equal, and the
+  /// Will return `true` only if the collections items are equal, and the
   /// collection configurations are equal. If the collection is ordered, it
   /// will also check if the items are in the same order. This may be slow for
   /// very large collections, since it compares each item, one by one.
   bool equalItemsAndConfig(C other);
 
-  /// Will return true only if the collections internals are the same instances
+  /// Will return `true` only if the collections internals are the same instances
   /// (comparing by identity). This will be fast even for very large
   /// collections, since it doesn't  compare each item.
+  /// 
   /// Note: This is not the same as `identical(col1, col2)` since it doesn't
   /// compare the collection instances themselves, but their internal state.
-  /// Comparing the internal state is better, because it will return true more
+  /// Comparing the internal state is better, because it will return `true` more
   /// often.
   bool same(C other);
 }
@@ -123,7 +125,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 /// While `identical(collection1, collection2)` will compare the identity of the
 /// collection itself, `same(collection1, collection2)` will compare its
 /// internal state by identity. Note `same` is practically as fast as
-/// `identical`, but will give less false negatives. So it is almost always
+/// `identical`, but will give **less false negatives**. So it is almost always
 /// recommended to use `same` instead of `identical`.
 ///
 bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
@@ -143,6 +145,7 @@ abstract class CanBeEmpty {
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// See also: [CanBeEmpty]
 extension CanBeEmptyExtension on CanBeEmpty {
   bool get isNullOrEmpty => (this == null) || isEmpty;
 
@@ -153,6 +156,7 @@ extension CanBeEmptyExtension on CanBeEmpty {
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// See also: [compareObject], [ComparableExtension], [ComparatorExtension], [sortBy], [sortLike]
 extension BooleanExtension on bool {
   /// true > false
   /// Zero: This instance and value are equal (both true or both false).
@@ -167,6 +171,10 @@ extension BooleanExtension on bool {
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// Meant to be used when you wish to save a value that's going to be tossed out of an immutable
+/// collection.
+///
+/// See also, for example: [IList] or the `IList.removeAt()` method.
 class Output<T> {
   T _value;
 
@@ -193,6 +201,7 @@ class Output<T> {
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// See also: [IListExtension], [ISetExtension]
 extension IterableToImmutableExtension<T> on Iterable<T> {
   //
   /// Locks the iterable, returning an *immutable* list ([IList]).
@@ -204,6 +213,7 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// See also: [IterableToImmutableExtension]
 extension IteratorExtension<T> on Iterator<T> {
   //
   Iterable<T> toIterable() sync* {
@@ -217,6 +227,7 @@ extension IteratorExtension<T> on Iterator<T> {
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// See also: [IterableToImmutableExtension], [IteratorExtension]
 extension MapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
   //
   Iterable<MapEntry<K, V>> toIterable() sync* {
