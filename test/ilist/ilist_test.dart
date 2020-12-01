@@ -1105,6 +1105,11 @@ void main() {
     expect(ilist.lastIndexOf("fa"), -1);
   });
 
+  test("IList.lastIndexWhere() | start cannot be smaller than zero", () {
+    final IList<String> ilist = ["do", "re", "mi", "re"].lock;
+    expect(() => ilist.lastIndexOf("do", -1), throwsArgumentError);
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("IList.lastIndexWhere()", () {
@@ -1112,6 +1117,11 @@ void main() {
     expect(ilist.lastIndexWhere((String note) => note.startsWith("r")), 3);
     expect(ilist.lastIndexWhere((String note) => note.startsWith("r"), 2), 1);
     expect(ilist.lastIndexWhere((String note) => note.startsWith("k")), -1);
+  });
+
+  test("IList.lastIndexWhere() | start cannot be smaller than zero", () {
+    final IList<String> ilist = ["do", "re", "mi", "re"].lock;
+    expect(() => ilist.lastIndexWhere((String element) => false, -1), throwsArgumentError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
