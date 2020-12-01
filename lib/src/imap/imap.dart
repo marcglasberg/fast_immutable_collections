@@ -1,9 +1,8 @@
 import "dart:collection";
 import "dart:math";
-
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-
 import "../base/immutable_collection.dart";
 import "../base/configs.dart";
 import "../base/sort.dart";
@@ -203,13 +202,15 @@ class IMap<K, V> // ignore: must_be_immutable
   static bool get asyncAutoflush => _asyncAutoflush;
 
   static set defaultConfig(ConfigMap config) {
+    if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig =
-        config ?? const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
+    _defaultConfig = config ?? const ConfigMap();
   }
 
   static set flushFactor(int value) {
+    if (_flushFactor == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     if (value > 0)
@@ -219,13 +220,13 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   static set asyncAutoflush(bool value) {
+    if (_asyncAutoflush == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     if (value != null) _asyncAutoflush = value;
   }
 
-  static ConfigMap _defaultConfig =
-      const ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true);
+  static ConfigMap _defaultConfig = const ConfigMap();
 
   static const _defaultFlushFactor = 20;
 
@@ -256,6 +257,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Note: _count is called in methods which read values. It's not called
   /// in methods which create new IMaps or flush the map.
   void _count() {
+    if (!ImmutableCollection.autoFlush) return;
     if (isFlushed) {
       _counter = 0;
     } else {
@@ -529,8 +531,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// since it compares each entry, one by one. To compare with a map, use
   /// method [equalItemsToMap] or [equalItemsToIMap].
   @override
-  bool equalItems(covariant Iterable<MapEntry<K, V>> other) =>
-      (other == null) ? false : (flush._m as MFlat<K, V>).deepMapEquals_toIterable(other);
+  bool equalItems(covariant Iterable<MapEntry<K, V>> other) {
+    return (other == null) ? false : (flush._m as MFlat<K, V>).deepMapEquals_toIterable(other);
+  }
 
   /// Will return true only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
@@ -539,17 +542,35 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Will return true only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMap(IMap<K, V> other) =>
-      (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
+  bool equalItemsToIMap(IMap<K, V> other) {
+    if (_isUnequalByHashCode(other)) return false;
+
+    return (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
+  }
 
   @override
-  bool equalItemsAndConfig(IMap<K, V> other) =>
-      identical(this, other) ||
-      (other != null &&
-          runtimeType == other.runtimeType &&
-          config == other.config &&
-          (identical(_m, other._m) ||
-              (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>)));
+  bool equalItemsAndConfig(IMap<K, V> other) {
+    if (identical(this, other)) return true;
+
+    // Objects with different hashCodes are not equal.
+    if (_isUnequalByHashCode(other)) return false;
+
+    return runtimeType == other.runtimeType &&
+        config == other.config &&
+        (identical(_m, other._m) ||
+            (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>));
+  }
+
+  /// Return true if other is null or the cached hashCodes proves the
+  /// collections are NOT equal.
+  /// Explanation: Objects with different hashCodes are not equal. However,
+  /// if the hashCodes are the same, then nothing can be said about the equality.
+  /// Note: We use the CACHED hashCodes. If any of the hashCodes is null it
+  /// means we don't have this information yet, and we don't calculate it.
+  bool _isUnequalByHashCode(IMap<K, V> other) {
+    return (other == null) ||
+        (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
+  }
 
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
@@ -560,10 +581,21 @@ class IMap<K, V> // ignore: must_be_immutable
   @override
   bool same(IMap<K, V> other) => identical(_m, other._m) && (config == other.config);
 
+  // HashCode cache. Must be null if hashCode is not cached.
+  int _hashCode;
+
   @override
-  int get hashCode => isDeepEquals //
-      ? (flush._m as MFlat<K, V>).deepMapHashcode() ^ config.hashCode
-      : identityHashCode(_m) ^ config.hashCode;
+  int get hashCode {
+    if (_hashCode != null) return _hashCode;
+
+    var hashCode = isDeepEquals //
+        ? hash2((flush._m as MFlat<K, V>).deepMapHashcode(), config.hashCode)
+        : hash2(identityHashCode(_m), config.hashCode);
+
+    if (config.cacheHashCode) _hashCode = hashCode;
+
+    return hashCode;
+  }
 
   /// Flushes the map, if necessary. Chainable method.
   /// If the map is already flushed, don't do anything.
@@ -603,15 +635,15 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a new map containing the current map plus the given map.
   /// (if necessary, the given entries will override the current ones).
-  IMap<K, V> addAll(IMap<K, V> iMap) {
-    var result = IMap<K, V>._unsafe(_m.addAll(iMap), config: config);
+  IMap<K, V> addAll(IMap<K, V> imap) {
+    var result = IMap<K, V>._unsafe(_m.addAll(imap), config: config);
 
     // A map created with `addAll` has a larger counter than both its source
     // maps. This improves the order in which maps are flushed.
     // If the outer map is used, it will be flushed before the source maps.
     // If the source maps are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((iMap is IMap<K, V>) ? iMap._counter : 0)) + 1;
+    result._counter = max(_counter, ((imap is IMap<K, V>) ? imap._counter : 0)) + 1;
 
     return result;
   }
@@ -673,7 +705,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If any operation exposes a non-[RK] key or non-[RV] value,
   /// the operation will throw instead.
   ///
-  /// Entries added to the map must be valid for both a `IMap<K, V>` and a
+  /// Entries added to the map must be valid for both an `IMap<K, V>` and an
   /// `IMap<RK, RV>`.
   IMap<RK, RV> cast<RK, RV>() {
     Object result = _m.cast<RK, RV>();
@@ -869,7 +901,7 @@ abstract class M<K, V> {
   M<K, V> addEntries(Iterable<MapEntry<K, V>> entries) =>
       MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.fromEntries(entries)));
 
-  /// TODO: FALTA FAZER!!!
+  // TODO: Still need to implement efficiently.
   M<K, V> remove(K key) {
     return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(getFlushed)..remove(key));
   }
@@ -922,14 +954,13 @@ abstract class M<K, V> {
 
   bool everyEntry(bool Function(MapEntry<K, V>) test) => getFlushed.entries.every(test);
 
-  // TODO: Marcelo, por favor, verifique a implementação.
-  void forEach(void Function(K key, V value) f) => getFlushed.forEach(f);
+  void forEach(void Function(K key, V value) f) =>
+      entries.forEach((entry) => f(entry.key, entry.value));
 
-  // TODO: Is this optimal?
   Map<K, V> where(bool Function(K key, V value) test) {
     final Map<K, V> matches = {};
-    getFlushed.forEach((K key, V value) {
-      if (test(key, value)) matches[key] = value;
+    entries.forEach((entry) {
+      if (test(entry.key, entry.value)) matches[entry.key] = entry.value;
     });
     return matches;
   }

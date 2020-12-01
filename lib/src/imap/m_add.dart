@@ -1,6 +1,5 @@
 import "imap.dart";
 
-// TODO: Marcelo, não seria interessante adicionar `@immutable` a esses objetos de backend?
 class MAdd<K, V> extends M<K, V> {
   final M<K, V> _m;
   final K _key;
@@ -44,7 +43,7 @@ class MAdd<K, V> extends M<K, V> {
   Iterator<MapEntry<K, V>> get iterator => IteratorMAdd(_m.iterator, MapEntry(_key, _value));
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 class IteratorMAdd<K, V> implements Iterator<MapEntry<K, V>> {
   Iterator<MapEntry<K, V>> iterator;
@@ -71,4 +70,4 @@ class IteratorMAdd<K, V> implements Iterator<MapEntry<K, V>> {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////

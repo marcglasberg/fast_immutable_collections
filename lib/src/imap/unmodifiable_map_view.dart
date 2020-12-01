@@ -7,8 +7,8 @@ class UnmodifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeE
   final IMap<K, V> _iMap;
   final Map<K, V> _map;
 
-  UnmodifiableMapView(IMap<K, V> iMap)
-      : _iMap = iMap ?? IMap.empty<K, V>(),
+  UnmodifiableMapView(IMap<K, V> imap)
+      : _iMap = imap ?? IMap.empty<K, V>(),
         _map = null;
 
   UnmodifiableMapView.fromMap(Map<K, V> map)

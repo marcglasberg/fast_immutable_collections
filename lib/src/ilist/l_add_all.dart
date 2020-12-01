@@ -1,6 +1,6 @@
 import "ilist.dart";
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 class LAddAll<T> extends L<T> {
   final L<T> _l;
@@ -8,7 +8,7 @@ class LAddAll<T> extends L<T> {
   // Will always store this as `List` or [L].
   final Iterable<T> _listOrL;
 
-  /// Safe.
+  /// **Safe**.
   /// Note: If you need to pass an [IList], pass its [L] instead.
   LAddAll(this._l, Iterable<T> items)
       : assert(_l != null),
@@ -22,7 +22,7 @@ class LAddAll<T> extends L<T> {
   @override
   Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _listOrL);
 
-  /// TODO: FALTA FAZER DE FORMA EFICIENTE:
+  // TODO: Still need to implement efficiently.
   @override
   T operator [](int index) => index < 0 || index >= length
       ? throw RangeError.range(index, 0, length - 1, "index")
@@ -32,7 +32,7 @@ class LAddAll<T> extends L<T> {
   int get length => _l.length + _listOrL.length;
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 class IteratorLAddAll<T> implements Iterator<T> {
   Iterator<T> iterator, iteratorItems;
@@ -65,4 +65,4 @@ class IteratorLAddAll<T> implements Iterator<T> {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////

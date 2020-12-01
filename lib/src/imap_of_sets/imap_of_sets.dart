@@ -5,23 +5,23 @@ import "package:meta/meta.dart";
 
 /// An **immutable**, unordered, map of sets.
 @immutable
-class IMapOfSets<K, V> //
+class IMapOfSets<K, V> // ignore: must_be_immutable,
     extends ImmutableCollection<IMapOfSets<K, V>> {
   //
   static ConfigMapOfSets get defaultConfig => _defaultConfig;
 
-  static ConfigMapOfSets _defaultConfig =
-      const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+  static ConfigMapOfSets _defaultConfig = const ConfigMapOfSets();
 
   /// Global configuration that specifies if, by default, the [IMapOfSet]s
   /// use equality or identity for their [operator ==].
   /// By default `isDeepEquals: true` (maps of sets are compared by equality),
   /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
   static set defaultConfig(ConfigMapOfSets config) {
+    if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig =
-        config ?? const ConfigMapOfSets(isDeepEquals: true, sortKeys: true, sortValues: true);
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
+    _defaultConfig = config ?? const ConfigMapOfSets();
   }
 
   final IMap<K, ISet<V>> _mapOfSets;
@@ -459,13 +459,13 @@ class IMapOfSets<K, V> //
   bool equalItems(covariant Iterable<MapEntry<K, ISet<V>>> other) => _mapOfSets.equalItems(other);
 
   @override
-  bool equalItemsAndConfig(IMapOfSets<K, V> other) =>
-      identical(this, other) ||
-      (other != null &&
-          runtimeType == other.runtimeType &&
-          config == other.config &&
-          (identical(_mapOfSets, other._mapOfSets) ||
-              _mapOfSets.equalItemsToIMap(other._mapOfSets)));
+  bool equalItemsAndConfig(IMapOfSets<K, V> other) {
+    if (identical(this, other)) return true;
+
+    return runtimeType == other.runtimeType &&
+        config == other.config &&
+        (identical(_mapOfSets, other._mapOfSets) || _mapOfSets.equalItemsToIMap(other._mapOfSets));
+  }
 
   /// Will return true only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
@@ -487,9 +487,11 @@ class IMapOfSets<K, V> //
       identical(_mapOfSets, other._mapOfSets) && (config == other.config);
 
   @override
-  int get hashCode => isDeepEquals //
-      ? hash2(_mapOfSets, config)
-      : identityHashCode(_mapOfSets) ^ config.hashCode;
+  int get hashCode {
+    return isDeepEquals //
+        ? hashObj2(_mapOfSets, config)
+        : hash2(identityHashCode(_mapOfSets), config.hashCode);
+  }
 
   /// Adds all set values to this map.
   ///

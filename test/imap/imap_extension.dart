@@ -10,13 +10,13 @@ void main() {
 
   test("IMapExtension.lockUnsafe", () {
     final Map<String, int> map = {"a": 1, "b": 2};
-    final IMap<String, int> iMap = map.lockUnsafe;
+    final IMap<String, int> imap = map.lockUnsafe;
 
-    expect(map, iMap.unlock);
+    expect(map, imap.unlock);
 
     map["c"] = 3;
     map["a"] = 10;
 
-    expect(map, iMap.unlock);
+    expect(map, imap.unlock);
   });
 }

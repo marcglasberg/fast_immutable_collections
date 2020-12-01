@@ -2,6 +2,9 @@
 
 [![Dart || Tests | Formatting | Analyzer][github_ci_badge]][github_actions]
 [![codecov.io][codecov_badge]][codecov]
+[![Gitter][gitter_svg]][gitter_badge]
+
+[![GIF][gif]][example]
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
 
@@ -11,8 +14,12 @@
 
 [codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
 [codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
+[example]: example/
+[gif]: benchmark/assets/demo.gif
 [github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
 [github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
+[gitter_svg]: https://badges.gitter.im/Fast-Immutable-Collections/community.svg
+[gitter_badge]: https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 ## 1.1. Introduction
 
@@ -26,17 +33,21 @@ This package provides:
 Other valuable features are:
 
 - Extensions to the typical collections &mdash; `List`, `Set`, `Map` &mdash; so you can easily transform a mutable object into an immutable one (`.lock`).
-- Global configurations for altering, locking, etc. your immutable collections.
+- Global and local configurations that alter how your immutable collections behave.
 - Mixins for you to build your own immutable collections or objects.
 - Collection views so you can work with immutable objects as if they were the mutable ones.
-- Configurable native deep equalities, which let you treat your collections as value objects.
+- Deep equalities and cached hashCodes, which let you treat your collections as value objects.
+- Comparators and related helpers to be used with any collections.
+
+<br>
 
 **Fast Immutable Collections** is a competitor to the excellent
 [built_collection][built_collection] and [kt_dart][kt_dart] packages, 
 but it's much **easier** to use than the former, 
 and orders of magnitude **faster** than the latter.
 
-The reason it's **easier** than [built_collection][built_collection] is that there is no need for mutable/immutable cycles.
+The reason it's **easier** than [built_collection][built_collection] 
+is that there is no need for manual mutable/immutable cycles.
 You just create your immutable collections and use them directly. 
 
 The reason it's **faster** than [kt_dart][kt_dart] is that it creates immutable collections by 
@@ -363,14 +374,17 @@ The above described configurations affects how the `== operator` works,
 but you can also choose how to compare lists by using the following `IList` methods:
 
 - `equalItems` will return true only if the IList items are equal to the iterable items,
-  and in the same order. This may be slow for very large lists, since it compares each item,
-  one by one. You can compare the list with ordered sets, but unordered sets will throw an error.
+and in the same order. This may be slow for very large lists, since it compares each item,
+one by one. You can compare the list with ordered sets, but unordered sets will throw an error.
+
 - `unorderedEqualItems` will return true only if the IList and the iterable items have the same number of elements,
 and the elements of the IList can be paired with the elements of the iterable, so that each
 pair is equal. This may be slow for very large lists, since it compares each item,
 one by one.
+
 - `equalItemsAndConfig` will return true only if the list items are equal and in the same order,
 and the list configurations are equal. This may be slow for very large lists, since it compares each item, one by one.
+
 - `same` will return true only if the lists internals are the same instances
 (comparing by identity). This will be fast even for very large lists,
 since it doesn't compare each item.
@@ -378,10 +392,42 @@ Note: This is not the same as `identical(list1, list2)` since it doesn't
 compare the lists themselves, but their internal state. Comparing the
 internal state is better, because it will return `true` more often.
   
+  
+## 2.1.1 Cached HashCode
+
+By default, the hashCode of `IList` and the other immutable collections is **cached** once calculated.
+
+This not only speeds up the use of these collections inside of sets and maps, 
+but it also speeds up their deep equals. 
+The reason is simple: Two equal objects always have the same hashCode. 
+So, if the cashed hashCode of two immutable collections are not the same, 
+we know the collections are different, and there is no need to check each collection item, one by one.
+
+However, this only works if the collections are really _immutable_, and not simply _unmodifiable_.
+If you put modifiable objects into an `IList` and then later modify those objects, 
+this breaks the immutability of the `IList`, which then becomes simply unmodifiable. 
+
+In other words, even if you can't change which objects the list contains, 
+if the objects themselves will be changed, then the hashCode must not be cached.
+Therefore, if you intend on using the `IList` to hold modifiable objects, 
+you should think about turning off the hashCode cache. For example:    
+
+```dart
+var ilist1 = [1, 2].lock.withConfig(ConfigList(cacheHashCode: false));
+var ilist2 = IList.withConfig([1, 2], ConfigList(cacheHashCode: false));
+```   
+
+Note: Modifying mutable objects in a collection could only make sense for lists anyway, 
+since list don't rely on the equality and hashCode of their items to structure themselves.
+If objects are modified after you put them into both mutable or immutable sets and maps,
+this most likely breaks the sets/maps they belong to.
+    
+  
 ## 2.2. Global IList Configuration
 
-As explained above, the **default** configuration of the `IList` is that it compares by 
-deep equality: They are equal if they have the same items in the same order.
+As explained above, the **default** configuration of the `IList` is that:
+* It compares by deep equality: They are equal if they have the same items in the same order.
+* The hashCode cache is turned on. 
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 
@@ -393,9 +439,9 @@ var ilistA1 = IList(list);
 var ilistA2 = IList(list);
 print(ilistA1 == ilistA2); // True!
 
-/// Now we change the default to identity-equals. 
+/// Now we change the default to identity-equals, and hashCode cache off. 
 /// This will affect lists created from now on.
-defaultConfig = ConfigList(isDeepEquals: false);
+defaultConfig = ConfigList(isDeepEquals: false, cacheHashCode: false);
 var ilistB1 = IList(list);
 var ilistB2 = IList(list);
 print(ilistB1 == ilistB2); // False!
@@ -407,7 +453,7 @@ print(ilistA1 == ilistA2); // True!
 **Important note:** 
 
 The global configuration is meant to be decided during your app's initialization, and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
+We strongly suggest that you prohibit further changes to the global configuration by calling `ImmutableCollection.lockConfig();`
 after you set your desired configuration.
 
 
@@ -487,9 +533,9 @@ class Students with FromIListMixin<Student, Students> {
 
    Students([Iterable<Student> students]) : _students = IList(students);
 
-   Students newInstance(IList<Student> iList) => Students(iList);
+   Students newInstance(IList<Student> ilist) => Students(ilist);
 
-   IList<Student> get iList => _students;   
+   IList<Student> get ilist => _students;   
                                                         
    /// And then you can add your own specific methods:
    String greetings() => "Hello ${_students.join(", ")}.";
@@ -574,7 +620,7 @@ it will break the `IList` and any other derived lists in unpredictable ways.
 Use this at your own peril. This is the same doing: `IList.unsafe(list)`.
 Note you can optionally disallow unsafe constructors in the global configuration 
 by doing: `disallowUnsafeConstructors = true` (and then optionally prevent 
-further configuration changes by calling `lockConfig()`).                  
+further configuration changes by calling `ImmutableCollection.lockConfig()`).                  
 
 These are your options to obtain a regular `List` back from an `IList`:
 
@@ -704,12 +750,14 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
   
 ## 3.2. Global ISet Configuration
 
-The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true)`:
+The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true, cacheHashCode: true)`:
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
 
-1. `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
+2. `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
    will return sorted outputs.
+
+3. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off for sets.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigSet(isDeepEquals: false, sort: false);`
@@ -728,7 +776,7 @@ print(iset.join(","));
   
 As previously discussed with the `IList`, 
 the global configuration is meant to be decided during your app's initialization, and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
+We strongly suggest that you prohibit further changes to the global configuration by calling `ImmutableCollection.lockConfig();`
 after you set your desired configuration.
 
 
@@ -883,11 +931,13 @@ The **default** configuration of the `IMap` is
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
 
-1. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
+2. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
 `IMap.toKeyList`, `IMap.toEntrySet` and `IMap.toKeySet` will return sorted outputs.
 
-1. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
+3. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
 will return sorted outputs.
+
+4. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off for maps.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
@@ -909,7 +959,7 @@ As previously discussed with `IList` and `ISet`,
 the global configuration is meant to be decided during your app's initialization, 
 and then not changed again.
 We strongly suggest that you prohibit further changes to the global configuration 
-by calling `lockConfig();` after you set your desired configuration.
+by calling `ImmutableCollection.lockConfig();` after you set your desired configuration.
 
 
 # 5. IMapOfSets
@@ -952,9 +1002,9 @@ class StudentsPerCourse {
   final IMapOfSets<Course, Student> imap;
 
   StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
-      : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+      : imap = (studentsPerCourse ?? {}).lock;
 
-  StudentsPerCourse._(this._studentsPerCourse);
+  StudentsPerCourse._(this.imap);
 
   ISet<Course> courses() => imap.keysAsSet;
 
@@ -962,10 +1012,10 @@ class StudentsPerCourse {
 
   IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
 
-  ISet<Student> studentsInAlphabeticOrder() =>
+  IList<Student> studentsInAlphabeticOrder() =>
       imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
 
-  ISet<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
+  IList<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
 
   StudentsPerCourse addStudentToCourse(Student student, Course course) =>
       StudentsPerCourse._(imap.add(course, student));
@@ -986,27 +1036,28 @@ class StudentsPerCourse {
       StudentsPerCourse._(imap.removeValues([student]));
 
   StudentsPerCourse removeCourse(Course course) => StudentsPerCourse._(imap.removeSet(course));
+
   Map<Course, Set<Student>> toMap() => imap.unlock;
 
   int get numberOfCourses => imap.lengthOfKeys;
-  
+
   int get numberOfStudents => imap.lengthOfNonRepeatingValues;
-}     
+}
 ```
 
-Note: The `IMapOfSets` configuration (`ConfigMapOfSets.removeEmptySets`) 
+Note: The `IMapOfSets` configuration `ConfigMapOfSets.removeEmptySets` 
 lets you choose if empty sets should be automatically removed or not.
 In the above example, this would mean removing the course automatically when the last student leaves,
 or else allowing courses with no students.
 
 ```dart
 /// Using the default configuration: Empty sets are removed.
-StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) 
-   : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
+   : imap = (studentsPerCourse ?? {}).lock;   
 
 /// Specifying that a course can be empty (have no students).
-StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) 
-   : _studentsPerCourse = (studentsPerCourse ?? {}).lock
+StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
+   : imap = (studentsPerCourse ?? {}).lock   
        .withConfig(ConfigMapOfSets(removeEmptySets: false));
 ```  
   
@@ -1169,7 +1220,7 @@ list.sort(compareTo);
 expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
 ``` 
 
-## 6.6. Flushing 
+# 7. Flushing 
 
 As explained, `fast_immutable_collections` is fast because it creates a new collection 
 by internally "composing" the source collection with some other information, 
@@ -1207,7 +1258,7 @@ and no external difference will be visible.
 So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
 
-## 6.7. Auto-flush      
+## 7.1. Auto-flush      
 
 Usually you don't need to flush your collections manually.
 Depending on the global configuration, 
@@ -1215,10 +1266,10 @@ the collections will flush automatically for you.
 The global configuration default is to have auto-flush on. It's easy to disable it:
 
 ```dart
-autoFlush = false;
+ImmutableCollection.autoFlush = false;
 
 // You can also lock further changes to the global configuration, if desired:                                              
-lockConfig();
+ImmutableCollection.lockConfig();
 ```                                                    
 
 If you leave it on, you can configure auto-flush to happen after you use a collection a few times.
@@ -1228,7 +1279,7 @@ Auto-flush is an advanced topic,
 and you don't need to read the following detailed explanation at all to use the immutable collections.
 However, in case you want to tweak the auto-flush configuration, here it goes:
 
-### 6.7.1. Sync Auto-flush
+## 7.2. Sync Auto-flush
 
 If your auto-flush is set to occur synchronously:
 
@@ -1237,7 +1288,7 @@ and is incremented each time some collection methods are called.
 As soon as this counter reaches a certain value called the `flushFactor`, 
 the collection is flushed.
 
-### 6.7.2. Async Auto-flush
+## 7.3. Async Auto-flush
 
 If your auto-flush is set to occur asynchronously: 
 
@@ -1313,10 +1364,10 @@ ISet.flushFactor = 15;
 IMap.flushFactor = 15;
 
 // Lock further changes, if desired:                                              
-lockConfig();
+ImmutableCollection.lockConfig();
 ```                                                    
     
-# 7. About the Benchmarks
+# 8. About the Benchmarks
 
 Having benchmarks for this project is essential to justifying its existence, after all, if it isn't faster or on par 
 with competitors, there would be no point in creating/publishing this package. Luckily, that isn't the case.
@@ -1339,7 +1390,7 @@ You can find more info on the benchmarks, by reading [its documentation][benchma
 [benchmark_docs]: benchmark/README.md
 [example]: benchmark/example/
 
-# 8. Other Resources & Documentation
+# 9. Other Resources & Documentation
 
 The [`docs`][docs] folder features information which might be useful for you either as an end user or a developer:
 
@@ -1356,9 +1407,9 @@ The [`docs`][docs] folder features information which might be useful for you eit
 [resources]: docs/resources.md
 [uml]: docs/uml.puml
 
-# 9. For the Developer or Contributor
+# 10. For the Developer or Contributor
 
-## 9.1. Formatting 
+## 10.1. Formatting 
 
 This project uses 100-character lines instead of the typical 80. If you're on VS Code, simply add this line to your `settings.json`:
 

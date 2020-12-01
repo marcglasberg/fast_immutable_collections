@@ -4,9 +4,6 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  // TODO: Marcelo, apesar de que a documentação esclarece isso, eu tenho certeza que quem ler
-  // esse nome (`sameCollection`) vai certamente pensar que ela checa se ambos os objetos são
-  // `IList`, `ISet`, etc. Ainda acho que algo como `sameCollectionInternals` seria mais claro.
   test("sameCollection() | If both are null, then true",
       () => expect(sameCollection(null, null), isTrue));
 
@@ -128,20 +125,20 @@ void main() {
 
   test("IterableToImmutableExtension.lockAsList", () {
     const List<int> list = [1, 2, 3, 3];
-    final IList<int> iList = list.lockAsList;
-    final ISet<int> iSet = list.lockAsSet;
+    final IList<int> ilist = list.lockAsList;
+    final ISet<int> iset = list.lockAsSet;
 
-    expect(iList, [1, 2, 3, 3]);
-    expect(iSet, {1, 2, 3});
+    expect(ilist, [1, 2, 3, 3]);
+    expect(iset, {1, 2, 3});
   });
 
   test("IterableToImmutableExtension.lockAsSet", () {
     const Set<int> set = {1, 2, 3};
-    final IList<int> iList = set.lockAsList;
-    final ISet<int> iSet = set.lockAsSet;
+    final IList<int> ilist = set.lockAsList;
+    final ISet<int> iset = set.lockAsSet;
 
-    expect(iList, [1, 2, 3]);
-    expect(iSet, [1, 2, 3]);
+    expect(ilist, [1, 2, 3]);
+    expect(iset, [1, 2, 3]);
   });
 
   test("BooleanExtension | Zero", () {
@@ -203,8 +200,11 @@ void main() {
 
   test("lockConfig", () {
     ImmutableCollection.lockConfig();
-    expect(() => ImmutableCollection.disallowUnsafeConstructors = true, throwsStateError);
-    expect(() => ImmutableCollection.autoFlush = false, throwsStateError);
+    expect(() => IList.resetAllConfigurations(), throwsStateError);
+    expect(() => ISet.resetAllConfigurations(), throwsStateError);
+    expect(() => IMap.resetAllConfigurations(), throwsStateError);
+    expect(() => ImmutableCollection.disallowUnsafeConstructors = !ImmutableCollection.disallowUnsafeConstructors, throwsStateError);
+    expect(() => ImmutableCollection.autoFlush = !ImmutableCollection.autoFlush, throwsStateError);
     expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);
   });
 }

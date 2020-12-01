@@ -10,8 +10,8 @@ void main() {
 
   test("ModifiableMapView.[] operator", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(iMap);
+    final IMap<String, int> imap = baseMap.lock;
+    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(imap);
     expect(modifiableMapView["a"], 1);
     expect(modifiableMapView["b"], 2);
     expect(modifiableMapView["c"], 3);
@@ -20,22 +20,22 @@ void main() {
 
   test("Non-mutable methods | ModifiableMapView.lock getter", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(iMap);
+    final IMap<String, int> imap = baseMap.lock;
+    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(imap);
     modifiableMapView.lock.forEach((String key, int value) => expect(baseMap[key], value));
   });
 
   test("Non-mutable methods | ModifiableMapView.keys", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(iMap);
+    final IMap<String, int> imap = baseMap.lock;
+    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(imap);
     modifiableMapView.keys.forEach((String key) => expect(baseMap.containsKey(key), isTrue));
   });
 
   test("Mutations are allowed | ModifiableMapView.[]= operator", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(iMap);
+    final IMap<String, int> imap = baseMap.lock;
+    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(imap);
 
     expect(modifiableMapView["a"], 1);
     modifiableMapView["a"] = 2;
@@ -48,8 +48,8 @@ void main() {
 
   test("Mutations are allowed | ModifiableMapView.clear()", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(iMap);
+    final IMap<String, int> imap = baseMap.lock;
+    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(imap);
 
     modifiableMapView.clear();
 
@@ -61,8 +61,8 @@ void main() {
 
   test("Mutations are allowed | ModifiableMapView.remove()", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> iMap = baseMap.lock;
-    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(iMap);
+    final IMap<String, int> imap = baseMap.lock;
+    final ModifiableMapView<String, int> modifiableMapView = ModifiableMapView(imap);
 
     expect(modifiableMapView["a"], 1);
     modifiableMapView.remove("a");

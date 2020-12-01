@@ -1,5 +1,3 @@
-import "dart:collection";
-
 import "package:meta/meta.dart";
 import "package:test/test.dart";
 
@@ -15,7 +13,7 @@ void main() {
     expect(students.iter, {james, sara, lucy});
   });
 
-  test("FromISetMixin.any()", () {
+  test("FromIterableISetMixin.any()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -25,13 +23,13 @@ void main() {
     expect(students.any((Student student) => student.name == "John"), isFalse);
   });
 
-  test("FromISetMixin.cast()", () {
+  test("FromIterableISetMixin.cast()", () {
     final Students students = Students([Student("James")]);
 
-    expect(students.cast<ProtoStudent>(), isA<ISet<ProtoStudent>>());
+    expect(() => students.cast<ProtoStudent>(), throwsUnsupportedError);
   });
 
-  test("FromISetMixin.contains()", () {
+  test("FromIterableISetMixin.contains()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -41,23 +39,10 @@ void main() {
     expect(students.contains(const Student("John")), isFalse);
   });
 
-  test("FromISetMixin.containsAll()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.containsAll([james]), isTrue);
-    expect(students.containsAll([james, sara]), isTrue);
-    expect(students.containsAll([james, sara, lucy]), isTrue);
-    expect(students.containsAll([james, sara, lucy, const Student("Bob")]),
-        isFalse);
-  });
-
-  test("FromISetMixin.elementAt()",
+  test("FromIterableISetMixin.elementAt()",
       () => expect(() => Students([]).elementAt(0), throwsUnsupportedError));
 
-  test("FromISetMixin.every()", () {
+  test("FromIterableISetMixin.every()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -69,7 +54,7 @@ void main() {
         students.every((Student student) => student.name.length > 4), isFalse);
   });
 
-  test("FromISetMixin.expand()", () {
+  test("FromIterableISetMixin.expand()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -98,23 +83,15 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    print('XXstudents = ${students}');
-
     // TODO: Marcelo, o último elemento não deveria ser Lucy? Não me parece claro o ordenamento.
     // Há algum `compareTo` implícito que eu não soube reconhecer?
     expect(students.length, 3);
     expect(students.first, Student("James"));
     expect(students.last, Student("Lucy"));
     expect(() => students.single, throwsStateError);
-
   });
 
-  test(
-      "FromISetMixin.single | Access",
-      () => expect(
-          Students([const Student("James")]).single, const Student("James")));
-
-  test("FromISetMixin.firstWhere()", () {
+  test("FromIterableISetMixin.firstWhere()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -135,7 +112,7 @@ void main() {
         const Student("John"));
   });
 
-  test("FromISetMixin.fold()", () {
+  test("FromIterableISetMixin.fold()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -149,17 +126,17 @@ void main() {
         const Student("Class : James : Sara : Lucy"));
   });
 
-  test("FromISetMixin.followedBy()", () {
+  test("FromIterableISetMixin.followedBy()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.followedBy([const Student("Bob")]).unlock,
+    expect(students.followedBy([const Student("Bob")]),
         {james, sara, lucy, const Student("Bob")});
   });
 
-  test("FromISetMixin.forEach()", () {
+  test("FromIterableISetMixin.forEach()", () {
     String concatenated = "";
 
     const Student james = Student("James");
@@ -172,7 +149,7 @@ void main() {
     expect(concatenated, "James, Sara, Lucy, ");
   });
 
-  test("FromISetMixin.join()", () {
+  test("FromIterableISetMixin.join()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -182,7 +159,7 @@ void main() {
     expect(Students([]).join(", "), "");
   });
 
-  test("FromISetMixin.lastWhere()", () {
+  test("FromIterableISetMixin.lastWhere()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -202,7 +179,7 @@ void main() {
         const Student("John"));
   });
 
-  test("FromISetMixin.map()", () {
+  test("FromIterableISetMixin.map()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     final Students students = Students([james, sara]);
@@ -212,7 +189,7 @@ void main() {
         {const Student("JamesJames"), const Student("SaraSara")});
   });
 
-  test("FromISetMixin.reduce()", () {
+  test("FromIterableISetMixin.reduce()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -224,7 +201,7 @@ void main() {
         Student("James Sara Lucy"));
   });
 
-  test("FromISetMixin.singleWhere()", () {
+  test("FromIterableISetMixin.singleWhere()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -240,7 +217,7 @@ void main() {
         const Student("Bob"));
   });
 
-  test("FromISetMixin.skip()", () {
+  test("FromIterableISetMixin.skip()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -250,7 +227,7 @@ void main() {
     expect(students.skip(10), <Student>{});
   });
 
-  test("FromISetMixin.skipWhile()", () {
+  test("FromIterableISetMixin.skipWhile()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -260,7 +237,7 @@ void main() {
         {const Student("Sara"), const Student("Lucy")});
   });
 
-  test("FromISetMixin.take()", () {
+  test("FromIterableISetMixin.take()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -282,7 +259,7 @@ void main() {
     });
   });
 
-  test("FromISetMixin.takeWhile()", () {
+  test("FromIterableISetMixin.takeWhile()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -292,7 +269,7 @@ void main() {
         {const Student("James")});
   });
 
-  test("FromISetMixin.where()", () {
+  test("FromIterableISetMixin.where()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -304,7 +281,7 @@ void main() {
         <Student>{});
   });
 
-  test("FromISetMixin.whereType()", () {
+  test("FromIterableISetMixin.whereType()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -315,17 +292,17 @@ void main() {
     expect(students.whereType<String>(), <Student>{});
   });
 
-  test("FromISetMixin.isEmpty", () {
+  test("FromIterableISetMixin.isEmpty", () {
     expect(Students([]).isEmpty, isTrue);
     expect(Students([Student("James")]).isEmpty, isFalse);
   });
 
-  test("FromISetMixin.isNotEmpty", () {
+  test("FromIterableISetMixin.isNotEmpty", () {
     expect(Students([]).isNotEmpty, isFalse);
     expect(Students([Student("James")]).isNotEmpty, isTrue);
   });
 
-  test("FromISetMixin.iterator", () {
+  test("FromIterableISetMixin.iterator", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -344,7 +321,7 @@ void main() {
     expect(iterator.current, isNull);
   });
 
-  test("FromISetMixin.toList()", () {
+  test("FromIterableISetMixin.toList()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -354,7 +331,7 @@ void main() {
         [const Student("James"), const Student("Sara"), const Student("Lucy")]);
   });
 
-  test("FromISetMixin.toSet()", () {
+  test("FromIterableISetMixin.toSet()", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -363,239 +340,13 @@ void main() {
     expect(students.toSet(),
         {const Student("James"), const Student("Sara"), const Student("Lucy")});
   });
-
-  test("FromISetMixin.+()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    final Students studentsResult = students + [james, const Student("Bob")];
-
-    expect(studentsResult.unlock, {
-      const Student("James"),
-      const Student("Sara"),
-      const Student("Lucy"),
-      const Student("Bob"),
-    });
-  });
-
-  test("FromISetMixin.add()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    final Students studentsResult = students.add(const Student("Bob"));
-
-    expect(studentsResult.unlock, {james, sara, lucy, const Student("Bob")});
-  });
-
-  test("FromISetMixin.addAll()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    final Students studentsResult = students.addAll(
-        {const Student("James"), const Student("Bob"), const Student("John")});
-
-    expect(studentsResult.unlock,
-        {james, sara, lucy, const Student("Bob"), const Student("John")});
-  });
-
-  test("FromISetMixin.clear()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    final Students studentsResult = students.clear();
-
-    expect(studentsResult.iter.unlock, <Student>{});
-  });
-
-  test("FromISetMixin.equalItems()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.equalItems({james, sara, lucy}), isTrue);
-    expect(students.equalItems({sara, lucy, james}), isTrue);
-    expect(students.equalItems({james}), isFalse);
-  });
-
-  test("FromISetMixin.same()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.same(students), isTrue);
-    expect(students.same(Students([james, sara, lucy])), isFalse);
-  });
-
-  test("FromISetMixin.remove()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.remove(const Student("James")).iter, {sara, lucy});
-  });
-
-  test("FromISetMixin.removeWhere()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(
-        students
-            .removeWhere((Student student) => student.name.length == 4)
-            .iter,
-        [james]);
-  });
-
-  test("FromISetMixin.retainWhere()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(
-        students
-            .retainWhere((Student student) => student.name.length == 4)
-            .iter,
-        {sara, lucy});
-  });
-
-  test("FromISetMixin.toggle()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.toggle(const Student("Sara")).iter, {james, lucy});
-    expect(students.toggle(const Student("Bob")).iter,
-        {james, sara, lucy, const Student("Bob")});
-  });
-
-  test("FromISetMixin.unlock", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.unlock, allOf(isA<Set<Student>>(), {james, sara, lucy}));
-  });
-
-  test("FromISetMixin.unlockSorted", () {
-    final Ints students = Ints([3, 2, 1, 3]);
-
-    expect(students.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3}));
-    expect(students.unlockSorted.toList(), [1, 2, 3]);
-  });
-
-  test("FromISetMixin.unlockView", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.unlockView,
-        allOf(isA<Set<Student>>(), isA<UnmodifiableSetView<Student>>()));
-  });
-
-  test("FromISetMixin.difference()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.difference({james, sara, lucy}), <Student>{});
-    expect(students.difference({james}), <Student>{sara, lucy});
-    expect(students.difference({const Student("Bob")}),
-        <Student>{james, sara, lucy});
-  });
-
-  test("FromISetMixin.intersection()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.intersection({const Student("Bob")}), <Student>{});
-    expect(students.intersection({james}), <Student>{james});
-    expect(
-        students.intersection({james, const Student("Bob")}), <Student>{james});
-    expect(students.intersection({james, sara, lucy}),
-        <Student>{james, sara, lucy});
-  });
-
-  test("FromISetMixin.lookup()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.lookup(james), james);
-    expect(students.lookup(sara), sara);
-    expect(students.lookup(lucy), lucy);
-    expect(students.lookup(const Student("Bob")), isNull);
-  });
-
-  test("FromISetMixin.removeAll()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.removeAll([sara, lucy]), <Student>{james});
-  });
-
-  test("FromISetMixin.retainAll()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.retainAll([sara, lucy]), <Student>{sara, lucy});
-  });
-
-  test("FromISetMixin.union()", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.union({james, const Student("Bob")}),
-        <Student>{james, sara, lucy, const Student("Bob")});
-  });
 }
 
 @immutable
-class Ints with FromISetMixin<int, Ints> {
-  final ISet<int> _ints;
-
-  Ints([Iterable<int> ints]) : _ints = ISet(ints);
-
-  @override
-  Ints newInstance(ISet<int> iset) => Ints(iset);
-
-  @override
-  ISet<int> get iter => _ints;
-}
-
-@immutable
-class Students with FromISetMixin<Student, Students> {
+class Students with FromIterableISetMixin<Student> {
   final ISet<Student> _students;
 
   Students([Iterable<Student> students]) : _students = ISet(students);
-
-  @override
-  Students newInstance(ISet<Student> iset) => Students(iset);
 
   @override
   ISet<Student> get iter => _students;

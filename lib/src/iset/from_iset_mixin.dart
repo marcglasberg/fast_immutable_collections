@@ -22,7 +22,7 @@ import "../iset/iset.dart";
 ///   Students([Iterable<Student> students]) : _students = ISet(students);
 ///
 ///   @override
-///   Students newInstance(ISet<Student> iSet) => Students(iSet);
+///   Students newInstance(ISet<Student> iset) => Students(iset);
 ///
 ///   @override
 ///   ISet<Student> get iter => _students;
@@ -37,7 +37,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   ISet<T> get iter;
 
   /// Classes `with` [FromISetMixin] must override this.
-  I newInstance(ISet<T> iSet);
+  I newInstance(ISet<T> iset);
 
   bool any(bool Function(T) test) => iter.any(test);
 
@@ -146,4 +146,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   ISet<T> retainAll(Iterable<Object> elements) => iter.retainAll(elements);
 
   ISet<T> union(Set<T> other) => iter.union(other);
+
+  @override
+  String toString() => "$runtimeType$iter";
 }

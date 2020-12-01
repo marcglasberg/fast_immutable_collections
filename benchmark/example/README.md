@@ -1,4 +1,6 @@
-# Fast Immutable Collections" Example
+# Fast Immutable Collections' Example
+
+[![GIF][gif]][example]
 
 The example project for the [`fast_immutable_collections_benchmarks`][fast_immutable_collections_benchmarks] package.
 
@@ -13,6 +15,8 @@ flutter run -d <device_id> --release
 ```
 
 
+[example]: example/
 [fast_immutable_collections]: ../../
 [fast_immutable_collections_benchmarks]: ../
+[gif]: ../assets/demo.gif
 [vscode_launch]: .vscode/launch.json

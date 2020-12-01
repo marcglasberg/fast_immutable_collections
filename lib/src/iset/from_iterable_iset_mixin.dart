@@ -1,4 +1,5 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "../base/immutable_collection.dart";
+import "../iset/iset.dart";
 
 /// This mixin implements all [Iterable] methods,
 /// but it does NOT implement [Iterable] nor [ISet].
@@ -15,22 +16,28 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 ///
 /// If you need to iterate over this class, you can use the [iter] getter:
 ///
-///     class MyClass with IterableLikeISetMixin<T> { ... }
-///     MyClass obj = MyClass({1, 2, 3});
-///     for (int value in obj.iter) print(value);
+/// ```dart
+/// class MyClass with IterableLikeISetMixin<T> { ... }
+///
+/// MyClass obj = MyClass({1, 2, 3});
+///
+/// for (int value in obj.iter) print(value);
+/// ```
 ///
 /// Please note, if you really want to make your class [Iterable], you can
 /// just add the `implements Iterable<T>` to its declaration. For example:
 ///
-///     class MyClass with IterableLikeISetMixin<T>,
-///                   implements Iterable<T> { ... }
-///     MyClass obj = MyClass({1, 2, 3});
-///     for (int value in obj) print(value);
+/// ```dart
+/// class MyClass with IterableLikeISetMixin<T>, implements Iterable<T> { ... }
 ///
+/// MyClass obj = MyClass({1, 2, 3});
+///
+/// for (int value in obj) print(value);
+/// ```
 ///
 /// See also: [FromISetMixin].
-///
 mixin FromIterableISetMixin<T> implements CanBeEmpty {
+  /// Classes `with` [FromIterableISetMixin] must override this.
   ISet<T> get iter;
 
   bool any(bool Function(T) test) => iter.any(test);
@@ -39,7 +46,8 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   bool contains(Object element) => iter.contains(element);
 
-  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) =>
+      throw UnsupportedError("elementAt in ISet is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 
@@ -98,4 +106,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
   List<T> toList({bool growable = true}) => List.of(iter, growable: growable);
 
   Set<T> toSet() => Set.of(iter);
+
+  @override
+  String toString() => "$runtimeType$iter";
 }

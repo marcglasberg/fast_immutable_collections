@@ -73,8 +73,7 @@ class KtListAddAllBenchmark extends ListBenchmarkBase {
   @override
   void setup() => _ktList = KtList<int>.from(ListAddAllBenchmark.baseList);
 
-  /// If the added list were already of type `KtList`, then it would be much
-  /// faster.
+  /// If the added list were already of type `KtList`, then it would be much faster.
   @override
   void run() => _result = _ktList.plus(KtList<int>.from(ListAddAllBenchmark.listToAdd));
 }

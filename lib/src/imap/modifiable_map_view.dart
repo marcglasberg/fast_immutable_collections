@@ -5,9 +5,9 @@ class ModifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeEmp
   IMap<K, V> _iMap;
   Map<K, V> _map;
 
-  ModifiableMapView(IMap<K, V> iMap)
-      : _iMap = iMap,
-        _map = iMap == null ? {} : null;
+  ModifiableMapView(IMap<K, V> imap)
+      : _iMap = imap,
+        _map = imap == null ? {} : null;
 
   @override
   void operator []=(K key, V value) {
