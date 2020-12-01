@@ -24,7 +24,7 @@ class IList<T> // ignore: must_be_immutable
   //
   L<T> _l;
 
-  /// The list configuration.
+  /// The list configuration ([ConfigList]).
   final ConfigList config;
 
   /// Create an [IList] from any [Iterable].
@@ -53,10 +53,16 @@ class IList<T> // ignore: must_be_immutable
   /// Creates a new list with the given [config].
   ///
   /// To copy the config from another [IList]:
-  ///    `list = list.withConfig(other.config)`.
+  /// 
+  /// ```dart
+  /// list = list.withConfig(other.config);
+  /// ```
   ///
   /// To change the current config:
-  ///    `list = list.withConfig(list.config.copyWith(isDeepEquals: isDeepEquals))`.
+  /// 
+  /// ```dart
+  /// list = list.withConfig(list.config.copyWith(isDeepEquals: isDeepEquals));
+  /// ```
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
@@ -69,7 +75,7 @@ class IList<T> // ignore: must_be_immutable
   /// but the config of [other].
   IList<T> withConfigFrom(IList<T> other) => withConfig(other.config);
 
-  /// Special IList constructor from ISet.
+  /// Special [IList] constructor from [ISet].
   factory IList.fromISet(
     ISet<T> iset, {
     int Function(T a, T b) compare,
@@ -80,14 +86,16 @@ class IList<T> // ignore: must_be_immutable
     return IList._unsafe(l, config: config ?? defaultConfig);
   }
 
-  /// Unsafe constructor. Use this at your own peril.
+  /// **Unsafe constructor. Use this at your own peril.**
+  /// 
   /// This constructor is fast, since it makes no defensive copies of the list.
-  /// However, you should only use this with a new list you've created yourself,
+  /// However, you should only use this with a new list you've created it yourself,
   /// when you are sure no external copies exist. If the original list is modified,
-  /// it will break the IList and any other derived lists in unpredictable ways.
-  /// Note you can optionally disallow unsafe constructors in the global configuration
-  /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
-  /// further configuration changes by calling `lockConfig()`).
+  /// it will break the [IList] and any other derived lists in unpredictable ways.
+  /// 
+  /// Note you can optionally disallow unsafe constructors ([ImmutableCollection]) in the global 
+  /// configuration by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then 
+  /// optionally preventing further configuration changes by calling `lockConfig()`).
   IList.unsafe(List<T> list, {@required this.config})
       : assert(config != null),
         _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list) {
@@ -97,9 +105,10 @@ class IList<T> // ignore: must_be_immutable
 
   /// Returns an empty [IList], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
+  /// 
   /// Note: If you want to create an empty immutable collection of the same
   /// type and same configuration as a source collection, simply call [clear]
-  /// in the source collection.
+  /// on the source collection.
   static IList<T> empty<T>([ConfigList config]) =>
       IList._unsafe(LFlat.empty<T>(), config: config ?? defaultConfig);
 
@@ -112,17 +121,17 @@ class IList<T> // ignore: must_be_immutable
 
   /// Global configuration that specifies if, by default, the [IList]s
   /// use equality or identity for their [operator ==].
-  /// By default `isDeepEquals: true` (lists are compared by equality).
+  /// By default `isDeepEquals: true` (lists are compared by equality) and `cacheHashCode = true`.
   static ConfigList get defaultConfig => _defaultConfig;
 
   /// Indicates the number of operations an [IList] may perform
-  /// before it is eligible for auto-flush. Must be larger than 0.
+  /// before it is eligible for auto-flush. Must be larger than `0`.
   static int get flushFactor => _flushFactor;
 
   /// Global configuration that specifies if auto-flush of [IList]s should be
-  /// async. The default is true. When the autoflush is async, it will only
+  /// async. The default is `true`. When the autoflush is *async*, it will only
   /// happen after the async gap, no matter how many operations a collection
-  /// undergoes. When the autoflush is sync, it may flush one or more times
+  /// undergoes. When the autoflush is *sync*, it may flush one or more times
   /// during the same task.
   static bool get asyncAutoflush => _asyncAutoflush;
 
@@ -161,15 +170,19 @@ class IList<T> // ignore: must_be_immutable
 
   int _counter = 0;
 
-  /// Sync Auto-flush:
+  /// ## Sync Auto-flush:
+  /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
-  /// time some collection methods are used.
+  /// time collection methods are used.
+  /// 
   /// As soon as counter reaches the refresh-factor, the collection is flushed
   /// and `counter` returns to `0`.
   ///
-  /// Async Auto-flush:
+  /// ## Async Auto-flush:
+  /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
-  /// time some collection methods are used, as long as `counter >= 0`.
+  /// time collection methods are used, as long as `counter >= 0`.
+  /// 
   /// As soon as counter reaches the refresh-factor, the collection is marked
   /// for flushing. There is also a global counter called an `asyncCounter`
   /// which starts at `1`. When a collection is marked for flushing, it first
@@ -179,8 +192,8 @@ class IList<T> // ignore: must_be_immutable
   /// `counter` is negative and different from `-asyncCounter` it means we are
   /// one async gap after the collection was marked for flushing.
   /// At this point, the collection will flush and `counter` returns to zero.
-  /// Note: _count is called in methods which read values. It's not called
-  /// in methods which create new ILists or flush the list.
+  /// Note: [_count] is called in methods which read values. It's not called
+  /// in methods which create new [ILists] or flush the list.
   void _count() {
     if (!ImmutableCollection.autoFlush) return;
     if (isFlushed) {
@@ -206,7 +219,7 @@ class IList<T> // ignore: must_be_immutable
     }
   }
 
-  /// Safe. Fast if the iterable is an IList.
+  /// **Safe**. Fast if the [Iterable] is an [IList].
   IList._(Iterable<T> iterable, {@required this.config})
       : assert(config != null),
         _l = iterable is IList<T>
@@ -215,10 +228,10 @@ class IList<T> // ignore: must_be_immutable
                 ? LFlat.empty<T>()
                 : LFlat<T>(iterable);
 
-  /// Unsafe.
+  /// **Unsafe**.
   IList._unsafe(this._l, {@required this.config}) : assert(config != null);
 
-  /// Unsafe.
+  /// **Unsafe**.
   IList._unsafeFromList(List<T> list, {@required this.config})
       : assert(config != null),
         _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
@@ -239,7 +252,7 @@ class IList<T> // ignore: must_be_immutable
   /// list is "safe", in the sense that is independent from the original [IList].
   List<T> get unlock => _l.unlock;
 
-  /// Unlocks the list, returning a safe, unmodifiable (immutable) [List] view.
+  /// Unlocks the list, returning a **safe**, unmodifiable (immutable) [List] view.
   /// The word "view" means the list is backed by the original [IList].
   /// Using this is very fast, since it makes no copies of the [IList] items.
   /// However, if you try to use methods that modify the list, like [add],
@@ -247,12 +260,12 @@ class IList<T> // ignore: must_be_immutable
   /// It is also very fast to lock this list back into an [IList].
   List<T> get unlockView => UnmodifiableListView(this);
 
-  /// Unlocks the list, returning a safe, modifiable (mutable) [List].
+  /// Unlocks the list, returning a **safe**, modifiable (mutable) [List].
   /// Using this is very fast at first, since it makes no copies of the [IList]
   /// items. However, if and only if you use a method that mutates the list,
-  /// like [add], it will unlock internally (make a copy of all IList items). This is
+  /// like [add], it will unlock internally (make a copy of all [IList] items). This is
   /// transparent to you, and will happen at most only once. In other words,
-  /// it will unlock the IList, lazily, only if necessary.
+  /// it will unlock the [IList], lazily, only if necessary.
   /// If you never mutate the list, it will be very fast to lock this list
   /// back into an [IList].
   List<T> get unlockLazy => ModifiableListView(this);
@@ -266,18 +279,18 @@ class IList<T> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => !isEmpty;
 
-  /// If [isDeepEquals] configuration is true:
-  /// Will return true only if the list items are equal (and in the same order),
+  /// If [isDeepEquals] configuration is `true`:
+  /// Will return `true` only if the list items are equal (and in the same order),
   /// and the list configurations are equal. This may be slow for very
   /// large lists, since it compares each item, one by one.
   ///
-  /// If [isDeepEquals] configuration is false:
-  /// Will return true only if the lists internals are the same instances
+  /// If [isDeepEquals] configuration is `false`:
+  /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
   /// since it doesn't compare each item.
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
-  /// internal state is better, because it will return true more often.
+  /// internal state is better, because it will return `true` more often.
   ///
   @override
   bool operator ==(Object other) => (other is IList<T>)
@@ -286,11 +299,11 @@ class IList<T> // ignore: must_be_immutable
           : same(other)
       : false;
 
-  /// Will return true only if the IList items are equal to the iterable items,
+  /// Will return `true` only if the [IList] items are equal to the iterable items,
   /// and in the same order. This may be slow for very large lists, since it
   /// compares each item, one by one. You can compare the list with ordered
-  /// sets, but unordered sets will throw a `StateError`. To compare the IList
-  /// with unordered sets, try method [unorderedEqualItems].
+  /// sets, but unordered sets will throw a `StateError`. To compare the [IList]
+  /// with unordered sets, try the [unorderedEqualItems] method.
   @override
   bool equalItems(covariant Iterable<T> other) {
     if (identical(this, other)) return true;
@@ -307,8 +320,8 @@ class IList<T> // ignore: must_be_immutable
     return const IterableEquality().equals(_l, other);
   }
 
-  /// Will return true only if the IList and the iterable items have the same number of elements,
-  /// and the elements of the IList can be paired with the elements of the iterable, so that each
+  /// Will return `true` only if the [IList] and the iterable items have the same number of elements,
+  /// and the elements of the [IList] can be paired with the elements of the iterable, so that each
   /// pair is equal. This may be slow for very large lists, since it compares each item,
   /// one by one.
   bool unorderedEqualItems(covariant Iterable<T> other) {
@@ -316,7 +329,7 @@ class IList<T> // ignore: must_be_immutable
     return const UnorderedIterableEquality().equals(_l, other);
   }
 
-  /// Will return true only if the list items are equal and in the same order,
+  /// Will return `true` only if the list items are equal and in the same order,
   /// and the list configurations are equal. This may be slow for very
   /// large lists, since it compares each item, one by one.
   @override
@@ -332,11 +345,11 @@ class IList<T> // ignore: must_be_immutable
             (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>));
   }
 
-  /// Return true if other is null or the cached hashCodes proves the
-  /// collections are NOT equal.
-  /// Explanation: Objects with different hashCodes are not equal. However,
-  /// if the hashCodes are the same, then nothing can be said about the equality.
-  /// Note: We use the CACHED hashCodes. If any of the hashCodes is null it
+  /// Return `true` if other is `null` or the cached [hashCodes] proves the
+  /// collections are **NOT** equal.
+  /// Explanation: Objects with different [hashCode]s are not equal. However,
+  /// if the [hashCode]s are the same, then nothing can be said about the equality.
+  /// Note: We use the CACHED [hashCode]. If any of the [hashCode] is `null` it
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(IList<T> other) {
     return (other == null) ||
@@ -346,6 +359,7 @@ class IList<T> // ignore: must_be_immutable
   /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
   /// since it doesn't compare each item.
+  /// 
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
@@ -368,8 +382,8 @@ class IList<T> // ignore: must_be_immutable
     return hashCode;
   }
 
-  /// Flushes the list, if necessary. Chainable method.
-  /// If the list is already flushed, don't do anything.
+  /// Flushes the list, if necessary. Chainable method/getter.
+  /// If the list is already flushed, it doesn't do anything.
   @override
   IList<T> get flush {
     if (!isFlushed) {
@@ -381,12 +395,12 @@ class IList<T> // ignore: must_be_immutable
     return this;
   }
 
-  /// Whether this list is already flushed or not.
+  /// Whether this list is already [flush]ed or not.
   @override
   bool get isFlushed => _l is LFlat;
 
   /// Return a new list with [item] added to the end of the current list,
-  /// (thus extending the length by one).
+  /// (thus extending the [length] by one).
   IList<T> add(T item) {
     var result = IList<T>._unsafe(_l.add(item), config: config);
 
@@ -401,7 +415,7 @@ class IList<T> // ignore: must_be_immutable
   }
 
   /// Returns a new list with all [items] added to the end of the current list,
-  /// (thus extending the length by the length of items).
+  /// (thus extending the [length] by the [length] of items).
   IList<T> addAll(Iterable<T> items) {
     var result = IList<T>._unsafe(_l.addAll(items), config: config);
 
@@ -415,7 +429,7 @@ class IList<T> // ignore: must_be_immutable
     return result;
   }
 
-  /// Removes the first occurrence of [item] from this list.
+  /// Removes the **first** occurrence of [item] from this [IList].
   ///
   /// ```dart
   /// IList<String> parts = ["head", "shoulders", "knees", "toes"].lock;
@@ -522,7 +536,7 @@ class IList<T> // ignore: must_be_immutable
   int get length {
     final int length = _l.length;
 
-    /// Optimization: Flushes the list, if free.
+    // Optimization: Flushes the list, if free.
     if (length == 0 && _l is! LFlat)
       _l = LFlat.empty<T>();
     else
@@ -531,7 +545,7 @@ class IList<T> // ignore: must_be_immutable
     return length;
   }
 
-  /// Returns `true` if the given index is valid (between 0 and length-1).
+  /// Returns `true` if the given [index] is valid (between `0` and `length - 1`).
   bool inRange(int index) => index >= 0 && index < length;
 
   /// Returns the first element.
@@ -675,26 +689,32 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// The [compare] function must act as a [Comparator].
   ///
-  ///     IList<String> numbers = ['two', 'three', 'four'].lock;
-  ///     // Sort from shortest to longest.
-  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
-  ///     print(numbers);  // [two, four, three]
+  /// ```dart
+  /// IList<String> numbers = ['two', 'three', 'four'].lock;
+  /// // Sort from shortest to longest.
+  /// numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  /// print(numbers);  // [two, four, three]
+  /// ```
   ///
-  /// The default List implementations use [Comparable.compare] if
+  /// The default list implementation use [Comparable.compare] if
   /// [compare] is omitted.
   ///
-  ///     IList<int> nums = [13, 2, -11].lock;
-  ///     nums = nums.sort();
-  ///     print(nums);  // [-11, 2, 13]
+  /// ```dart
+  /// IList<int> nums = [13, 2, -11].lock;
+  /// nums = nums.sort();
+  /// print(nums);  // [-11, 2, 13]
+  /// ```
   ///
   /// A [Comparator] may compare objects as equal (return zero), even if they
   /// are distinct objects.
-  /// The sort function is not guaranteed to be stable, so distinct objects
+  /// The sort function is **not** guaranteed to be stable, so distinct objects
   /// that compare as equal may occur in any order in the result:
   ///
-  ///     IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
-  ///     numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
-  ///     print(numbers);  // [one, two, four, three] OR [two, one, four, three]
+  /// ```dart
+  /// IList<String> numbers = ['one', 'two', 'three', 'four'].lock;
+  /// numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
+  /// print(numbers);  // [one, two, four, three] OR [two, one, four, three]
+  /// ```
   ///
   IList<T> sort([int Function(T a, T b) compare]) =>
       IList._unsafe(_l.sort(compare), config: config);
@@ -716,6 +736,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
   /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
+  /// 
   /// Note: This is not very efficient. Only use for a small number of elements.
   IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
@@ -723,6 +744,8 @@ class IList<T> // ignore: must_be_immutable
   /// The first one contains all items which satisfy the provided [test].
   /// The last one contains all the other items.
   /// The relative order of the items will be maintained.
+  /// 
+  /// See also: [IListOf2]
   IListOf2<IList<T>> divideIn2(bool Function(T item) test) {
     List<T> first = [];
     List<T> last = [];
@@ -805,7 +828,7 @@ class IList<T> // ignore: must_be_immutable
   /// notes.indexOf('re', 2); // 3
   /// ```
   ///
-  /// Returns -1 if [element] is not found.
+  /// Returns `-1` if [element] is not found.
   ///
   /// ```dart
   /// notes.indexOf('fa');    // -1
@@ -843,9 +866,9 @@ class IList<T> // ignore: must_be_immutable
       map((element) => (element == from) ? to : element);
 
   /// Finds the first item that satisfies the provided [test],
-  /// and replace it with [to]. If [addIfNotFound] is false,
+  /// and replace it with [to]. If [addIfNotFound] is `false`,
   /// return the unchanged list if no item satisfies the [test].
-  /// If [addIfNotFound] is true, add the item to the end of the list
+  /// If [addIfNotFound] is `true`, add the item to the end of the list
   /// if no item satisfies the [test].
   IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false}) {
     var index = indexWhere(test);
@@ -863,19 +886,19 @@ class IList<T> // ignore: must_be_immutable
 
   /// Allows for complex processing of a list.
   ///
-  /// Iterates through each item. If the item satisfies the provided [test],
+  /// Iterates through each [item]. If the item satisfies the provided [test],
   /// replace it with applying [convert]. Otherwise, keep the item unchanged.
   /// If [test] is not provided, it will apply [convert] to all items.
   ///
   /// Function [convert] can:
   ///
-  /// - Keep the item unchanged by returning `null`.
-  /// - Remove an item by returning an empty iterable.
-  /// - Convert an item to a single item by returning an iterable with an item.
-  /// - Convert an item to many items, by returning an iterable with multiple
+  /// - Keep the [item] unchanged by returning `null`.
+  /// - Remove an [item] by returning an empty iterable.
+  /// - Convert an [item] to a single item by returning an iterable with an item.
+  /// - Convert an [item] to many items, by returning an iterable with multiple
   /// items.
   ///
-  /// If no items satisfy the [test], or if [convert] kept items unchanged,
+  /// If no [item]s satisfy the [test], or if [convert] kept items unchanged,
   /// [process] will return the same list instance.
   ///
   IList<T> process({
@@ -923,8 +946,8 @@ class IList<T> // ignore: must_be_immutable
   /// Returns the first index in the list that satisfies the provided [test].
   ///
   /// Searches the list from index [start] to the end of the list.
-  /// The first time an object `o` is encountered so that `test(o)` is true,
-  /// the index of `o` is returned.
+  /// The first time an object `obj` is encountered so that `test(obj)` is true,
+  /// the index of `obj` is returned.
   ///
   /// ```dart
   /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
@@ -932,7 +955,7 @@ class IList<T> // ignore: must_be_immutable
   /// notes.indexWhere((note) => note.startsWith('r'), 2);    // 3
   /// ```
   ///
-  /// Returns -1 if [element] is not found.
+  /// Returns `-1` if [element] is not found.
   ///
   /// ```dart
   /// notes.indexWhere((note) => note.startsWith('k'));       // -1
@@ -949,9 +972,9 @@ class IList<T> // ignore: must_be_immutable
 
   /// Returns the last index of [element] in this list.
   ///
-  /// Searches the list backwards from index [start] to 0.
+  /// Searches the list backwards from index [start] to `0`.
   ///
-  /// The first time an object [:o:] is encountered so that [:o == element:],
+  /// The first time an object [:o:] is encountered such that [:o == element:],
   /// the index of [:o:] is returned.
   ///
   /// ```dart
@@ -965,7 +988,7 @@ class IList<T> // ignore: must_be_immutable
   /// notes.lastIndexOf('re');    // 3
   /// ```
   ///
-  /// Returns -1 if [element] is not found.
+  /// Returns `-1` if [element] is not found.
   ///
   /// ```dart
   /// notes.lastIndexOf('fa');    // -1
@@ -981,9 +1004,9 @@ class IList<T> // ignore: must_be_immutable
 
   /// Returns the last index in the list that satisfies the provided [test].
   ///
-  /// Searches the list from index [start] to 0.
-  /// The first time an object `o` is encountered so that `test(o)` is true,
-  /// the index of `o` is returned.
+  /// Searches the list from index [start] to `0`.
+  /// The first time an object `obj` is encountered such that `test(obj)` is `true`,
+  /// the index of `obj` is returned.
   /// If [start] is omitted, it defaults to the [length] of the list.
   ///
   /// ```dart
@@ -992,7 +1015,7 @@ class IList<T> // ignore: must_be_immutable
   /// notes.lastIndexWhere((note) => note.startsWith('r'), 2);    // 1
   /// ```
   ///
-  /// Returns -1 if [element] is not found.
+  /// Returns `-1` if [element] is not found.
   ///
   /// ```dart
   /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
