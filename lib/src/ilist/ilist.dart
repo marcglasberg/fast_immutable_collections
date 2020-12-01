@@ -53,13 +53,13 @@ class IList<T> // ignore: must_be_immutable
   /// Creates a new list with the given [config].
   ///
   /// To copy the config from another [IList]:
-  /// 
+  ///
   /// ```dart
   /// list = list.withConfig(other.config);
   /// ```
   ///
   /// To change the current config:
-  /// 
+  ///
   /// ```dart
   /// list = list.withConfig(list.config.copyWith(isDeepEquals: isDeepEquals));
   /// ```
@@ -87,14 +87,14 @@ class IList<T> // ignore: must_be_immutable
   }
 
   /// **Unsafe constructor. Use this at your own peril.**
-  /// 
+  ///
   /// This constructor is fast, since it makes no defensive copies of the list.
   /// However, you should only use this with a new list you've created it yourself,
   /// when you are sure no external copies exist. If the original list is modified,
   /// it will break the [IList] and any other derived lists in unpredictable ways.
-  /// 
-  /// Note you can optionally disallow unsafe constructors ([ImmutableCollection]) in the global 
-  /// configuration by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then 
+  ///
+  /// Note you can optionally disallow unsafe constructors ([ImmutableCollection]) in the global
+  /// configuration by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then
   /// optionally preventing further configuration changes by calling `lockConfig()`).
   IList.unsafe(List<T> list, {@required this.config})
       : assert(config != null),
@@ -105,7 +105,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Returns an empty [IList], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
-  /// 
+  ///
   /// Note: If you want to create an empty immutable collection of the same
   /// type and same configuration as a source collection, simply call [clear]
   /// on the source collection.
@@ -138,8 +138,7 @@ class IList<T> // ignore: must_be_immutable
   static set defaultConfig(ConfigList config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration of immutable collections.");
     _defaultConfig = config ?? const ConfigList();
   }
 
@@ -171,18 +170,18 @@ class IList<T> // ignore: must_be_immutable
   int _counter = 0;
 
   /// ## Sync Auto-flush:
-  /// 
+  ///
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time collection methods are used.
-  /// 
+  ///
   /// As soon as counter reaches the refresh-factor, the collection is flushed
   /// and `counter` returns to `0`.
   ///
   /// ## Async Auto-flush:
-  /// 
+  ///
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time collection methods are used, as long as `counter >= 0`.
-  /// 
+  ///
   /// As soon as counter reaches the refresh-factor, the collection is marked
   /// for flushing. There is also a global counter called an `asyncCounter`
   /// which starts at `1`. When a collection is marked for flushing, it first
@@ -359,7 +358,7 @@ class IList<T> // ignore: must_be_immutable
   /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
   /// since it doesn't compare each item.
-  /// 
+  ///
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
@@ -589,6 +588,11 @@ class IList<T> // ignore: must_be_immutable
   /// Return `null` if the list is empty or has more than one element.
   T singleOr(T orElse) => (length != 1) ? orElse : single;
 
+  /// Iterates through elements and returns the first to satisfy [test].
+  ///
+  /// If no element satisfies [test], the result of invoking the [orElse]
+  /// function is returned.
+  /// If [orElse] is omitted, it defaults to throwing a [StateError].
   @override
   T firstWhere(bool Function(T) test, {T Function() orElse}) {
     _count();
@@ -736,7 +740,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
   /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
-  /// 
+  ///
   /// Note: This is not very efficient. Only use for a small number of elements.
   IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
@@ -744,7 +748,7 @@ class IList<T> // ignore: must_be_immutable
   /// The first one contains all items which satisfy the provided [test].
   /// The last one contains all the other items.
   /// The relative order of the items will be maintained.
-  /// 
+  ///
   /// See also: [IListOf2]
   IListOf2<IList<T>> divideIn2(bool Function(T item) test) {
     List<T> first = [];
@@ -1183,7 +1187,7 @@ class IList<T> // ignore: must_be_immutable
   /// The list must not be empty.
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
-  /// 
+  ///
   /// See also: [Output].
   IList<T> removeLast([Output<T> removedItem]) {
     return removeAt(length - 1, removedItem);
@@ -1311,7 +1315,7 @@ abstract class L<T> implements Iterable<T> {
 
   /// The [L] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
-  /// 
+  ///
   /// Note these fallback methods need to calculate the flushed list, but
   /// because that's immutable, we cache it.
   List<T> _flushed;
@@ -1385,7 +1389,7 @@ abstract class L<T> implements Iterable<T> {
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
   /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
-  /// 
+  ///
   /// Note: This is not very efficient. Only use for a small number of elements.
   L<T> sortLike(Iterable<T> ordering) {
     assert(ordering != null);

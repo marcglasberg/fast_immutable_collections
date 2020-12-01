@@ -638,6 +638,20 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return IMapOfSets<V, K>.withConfig(result, config);
   }
 
+  /// Iterates through all values of all sets, and returns the first value
+  /// it finds that satisfies [test].
+  ///
+  /// If no element satisfies [test], the result of invoking the [orElse]
+  /// function is returned, or if [orElse] is omitted, it returns null.
+  ///
+  V firstValueWhere(bool Function(V) test, {V Function() orElse}) {
+    for (ISet<V> values in _mapOfSets.values) {
+      V value = values.firstWhere(test, orElse: () => null);
+      if (value != null) return value;
+    }
+    return orElse?.call();
+  }
+
   static Map<K, Set<V>> _mutableMapOfSets<K, V, I>(
     Iterable<I> iterable, {
     K Function(I) keyMapper,
