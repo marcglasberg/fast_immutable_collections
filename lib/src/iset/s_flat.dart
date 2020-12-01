@@ -135,7 +135,7 @@ class MapEntryEquality<E> implements Equality<E> {
   @override
   int hash(Object obj) => //
       (obj is MapEntry) //
-          ? hash2(obj.key, obj.value)
+          ? hashObj2(obj.key, obj.value)
           : obj.hashCode;
 
   @override

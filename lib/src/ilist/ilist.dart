@@ -1,9 +1,8 @@
 import "dart:collection";
 import "dart:math";
-
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-
 import "../base/immutable_collection.dart";
 import "../base/configs.dart";
 import "../base/sort.dart";
@@ -128,6 +127,7 @@ class IList<T> // ignore: must_be_immutable
   static bool get asyncAutoflush => _asyncAutoflush;
 
   static set defaultConfig(ConfigList config) {
+    if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError(
           "Can't change the configuration of immutable collections.");
@@ -135,6 +135,7 @@ class IList<T> // ignore: must_be_immutable
   }
 
   static set flushFactor(int value) {
+    if (_flushFactor == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     if (value > 0)
@@ -144,6 +145,7 @@ class IList<T> // ignore: must_be_immutable
   }
 
   static set asyncAutoflush(bool value) {
+    if (_asyncAutoflush == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     if (value != null) _asyncAutoflush = value;
@@ -180,6 +182,7 @@ class IList<T> // ignore: must_be_immutable
   /// Note: _count is called in methods which read values. It's not called
   /// in methods which create new ILists or flush the list.
   void _count() {
+    if (!ImmutableCollection.autoFlush) return;
     if (isFlushed) {
       _counter = 0;
     } else {
@@ -357,8 +360,8 @@ class IList<T> // ignore: must_be_immutable
     if (_hashCode != null) return _hashCode;
 
     var hashCode = isDeepEquals
-        ? (flush._l as LFlat<T>).deepListHashcode() ^ config.hashCode
-        : identityHashCode(_l) ^ config.hashCode;
+        ? hash2((flush._l as LFlat<T>).deepListHashcode(), config.hashCode)
+        : hash2(identityHashCode(_l), config.hashCode);
 
     if (config.cacheHashCode) _hashCode = hashCode;
 
@@ -487,7 +490,7 @@ class IList<T> // ignore: must_be_immutable
 
   @override
   IList<R> cast<R>() {
-    var result = _l.cast<R>();
+    Iterable<R> result = _l.cast<R>();
     return (result is L<R>)
         ? IList._unsafe(result, config: ConfigList(isDeepEquals: config.isDeepEquals))
         : IList._(result, config: ConfigList(isDeepEquals: config.isDeepEquals));
@@ -1062,23 +1065,23 @@ class IList<T> // ignore: must_be_immutable
   /// Returns an [Iterable] that iterates over the objects in the range
   /// [start] inclusive to [end] exclusive.
   ///
-  /// The provided range, given by [start] and [end], must be valid at the time
-  /// of the call.
-  ///
-  /// A range from [start] to [end] is valid if `0 <= start <= end <= len`, where
-  /// `len` is this list's `length`. The range starts at `start` and has length
-  /// `end - start`. An empty range (with `end == start`) is valid.
+  /// The provided range, given by [start] and [end], must be valid, which
+  /// means `0 <= start <= end <= len`, where `len` is this list's `length`.
+  /// The range starts at `start` and has length `end - start`.
+  /// An empty range (with `end == start`) is valid.
   ///
   /// The returned [Iterable] behaves like `skip(start).take(end - start)`.
-  /// That is, it does *not* throw if this list changes size.
   ///
   /// ```dart
   /// final IList<String> colors = ['red', 'green', 'blue', 'orange', 'pink'].lock;
   /// final Iterable<String> range = colors.getRange(1, 4);
   /// range.join(', ');  // 'green, blue, orange'
-  /// colors.length = 3;
-  /// range.join(', ');  // 'green, blue'
   /// ```
+  ///
+  /// This method exists just to make the `IList` API more similar to that of
+  /// the `List`, but to get a range here you should probably use the
+  /// `IList.sublist()` method instead.
+  ///
   Iterable<T> getRange(int start, int end) {
     // TODO: Still need to implement efficiently.
     return toList(growable: false).getRange(start, end);

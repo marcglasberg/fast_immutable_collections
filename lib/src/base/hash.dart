@@ -1,26 +1,51 @@
-/// The code in this file is copied and adapted from the [Quiver](https://github.com/google/quiver-dart/blob/master/lib/src/core/hash.dart)
-/// package.
+// The code in this file is copied and adapted from Quiver:
+// https://github.com/google/quiver-dart/blob/master/lib/src/core/hash.dart
 
 /// Jenkins"s hash code for two objects.
-int hash2(Object a, Object b) => _finish(
+int hashObj2(Object a, Object b) => _finish(
       _combine(_combine(0, a.hashCode), b.hashCode),
     );
 
 /// Jenkins"s hash code for three objects.
-int hash3(Object a, Object b, Object c) => _finish(
+int hashObj3(Object a, Object b, Object c) => _finish(
       _combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
     );
 
 /// Jenkins"s hash code for four objects.
-int hash4(Object a, Object b, Object c, Object d) => _finish(
-      _combine(_combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode), d.hashCode),
+int hashObj4(Object a, Object b, Object c, Object d) => _finish(
+      _combine(
+          _combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
+          d.hashCode),
     );
 
 /// Jenkins"s hash code for five objects.
-int hash5(Object a, Object b, Object c, Object d, Object e) => _finish(
+int hashObj5(Object a, Object b, Object c, Object d, Object e) => _finish(
       _combine(
-          _combine(_combine(_combine(_combine(0, a.hashCode), b.hashCode), c.hashCode), d.hashCode),
+          _combine(
+              _combine(
+                  _combine(_combine(0, a.hashCode), b.hashCode), c.hashCode),
+              d.hashCode),
           e.hashCode),
+    );
+
+/// Jenkins"s hash code for two hashes.
+int hash2(int a, int b) => _finish(
+      _combine(_combine(0, a), b),
+    );
+
+/// Jenkins"s hash code for three hashes.
+int hash3(int a, int b, int c) => _finish(
+      _combine(_combine(_combine(0, a), b), c),
+    );
+
+/// Jenkins"s hash code for four hashes.
+int hash4(int a, int b, int c, int d) => _finish(
+      _combine(_combine(_combine(_combine(0, a), b), c), d),
+    );
+
+/// Jenkins"s hash code for five hashes.
+int hash5(int a, int b, int c, int d, int e) => _finish(
+      _combine(_combine(_combine(_combine(_combine(0, a), b), c), d), e),
     );
 
 int _combine(int hash, int value) {

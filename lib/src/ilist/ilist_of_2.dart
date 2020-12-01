@@ -19,7 +19,7 @@ class IListOf2<T> {
           last == other.last;
 
   @override
-  int get hashCode => hash2(first, last);
+  int get hashCode => hashObj2(first, last);
 }
 
 // /////////////////////////////////////////////////////////////////////////////

@@ -59,8 +59,6 @@ void main() {
   test("LFlat.cast()", () {
     final List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat<int>(original);
-    // TODO: Marcelo, When casting a `List`, we get back another `List`. Should our `IList` really
-    // give back an `Iterable`?
     final lFlatAsNum = lFlat.cast<num>();
     expect(lFlatAsNum, isA<Iterable<num>>());
   });

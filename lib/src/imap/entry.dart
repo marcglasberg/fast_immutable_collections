@@ -64,7 +64,7 @@ class Entry<K, V> implements Comparable<Entry<K, V>> {
           value == other.value;
 
   @override
-  int get hashCode => hash2(key, value);
+  int get hashCode => hashObj2(key, value);
 
   @override
   int compareTo(Entry<K, V> other) {

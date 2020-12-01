@@ -1,6 +1,7 @@
 import "dart:collection";
 import "dart:math";
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 import "../base/immutable_collection.dart";
 import "../base/configs.dart";
@@ -201,6 +202,7 @@ class IMap<K, V> // ignore: must_be_immutable
   static bool get asyncAutoflush => _asyncAutoflush;
 
   static set defaultConfig(ConfigMap config) {
+    if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError(
           "Can't change the configuration of immutable collections.");
@@ -208,6 +210,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   static set flushFactor(int value) {
+    if (_flushFactor == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     if (value > 0)
@@ -217,6 +220,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   static set asyncAutoflush(bool value) {
+    if (_asyncAutoflush == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     if (value != null) _asyncAutoflush = value;
@@ -253,6 +257,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Note: _count is called in methods which read values. It's not called
   /// in methods which create new IMaps or flush the map.
   void _count() {
+    if (!ImmutableCollection.autoFlush) return;
     if (isFlushed) {
       _counter = 0;
     } else {
@@ -584,8 +589,8 @@ class IMap<K, V> // ignore: must_be_immutable
     if (_hashCode != null) return _hashCode;
 
     var hashCode = isDeepEquals //
-        ? (flush._m as MFlat<K, V>).deepMapHashcode() ^ config.hashCode
-        : identityHashCode(_m) ^ config.hashCode;
+        ? hash2((flush._m as MFlat<K, V>).deepMapHashcode(), config.hashCode)
+        : hash2(identityHashCode(_m), config.hashCode);
 
     if (config.cacheHashCode) _hashCode = hashCode;
 
@@ -700,7 +705,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If any operation exposes a non-[RK] key or non-[RV] value,
   /// the operation will throw instead.
   ///
-  /// Entries added to the map must be valid for both a `IMap<K, V>` and a
+  /// Entries added to the map must be valid for both an `IMap<K, V>` and an
   /// `IMap<RK, RV>`.
   IMap<RK, RV> cast<RK, RV>() {
     Object result = _m.cast<RK, RV>();
@@ -896,7 +901,7 @@ abstract class M<K, V> {
   M<K, V> addEntries(Iterable<MapEntry<K, V>> entries) =>
       MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.fromEntries(entries)));
 
-  /// TODO: FALTA FAZER!!!
+  // TODO: Still need to implement efficiently.
   M<K, V> remove(K key) {
     return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(getFlushed)..remove(key));
   }
@@ -949,14 +954,13 @@ abstract class M<K, V> {
 
   bool everyEntry(bool Function(MapEntry<K, V>) test) => getFlushed.entries.every(test);
 
-  // TODO: Marcelo, por favor, verifique a implementação.
-  void forEach(void Function(K key, V value) f) => getFlushed.forEach(f);
+  void forEach(void Function(K key, V value) f) =>
+      entries.forEach((entry) => f(entry.key, entry.value));
 
-  // TODO: Is this optimal?
   Map<K, V> where(bool Function(K key, V value) test) {
     final Map<K, V> matches = {};
-    getFlushed.forEach((K key, V value) {
-      if (test(key, value)) matches[key] = value;
+    entries.forEach((entry) {
+      if (test(entry.key, entry.value)) matches[entry.key] = entry.value;
     });
     return matches;
   }

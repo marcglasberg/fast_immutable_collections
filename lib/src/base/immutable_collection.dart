@@ -53,6 +53,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// Global configuration that specifies if the collections should flush
   /// automatically. The default is true.
   static set autoFlush(bool value) {
+    if (_autoFlush == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     _autoFlush = value ?? true;
@@ -61,6 +62,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// Global configuration that specifies if unsafe constructors can be used
   /// or not. The default is false.
   static set disallowUnsafeConstructors(bool value) {
+    if (_disallowUnsafeConstructors == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     _disallowUnsafeConstructors = value ?? false;
@@ -127,7 +129,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
   if (c1 == null && c2 == null) return true;
   if (c1 == null || c2 == null) return false;
-  return c1.same(c2);
+  return identical(c1, c2) || c1.same(c2);
 }
 
 // /////////////////////////////////////////////////////////////////////////////

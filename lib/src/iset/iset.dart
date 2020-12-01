@@ -1,6 +1,7 @@
 import "dart:collection";
 import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 import "s_flat.dart";
 import "s_add.dart";
@@ -81,7 +82,8 @@ class ISet<T> // ignore: must_be_immutable
 
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     ISet.flushFactor = _defaultFlushFactor;
     ISet.defaultConfig = _defaultConfig;
   }
@@ -104,6 +106,7 @@ class ISet<T> // ignore: must_be_immutable
   static bool get asyncAutoflush => _asyncAutoflush;
 
   static set defaultConfig(ConfigSet config) {
+    if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError(
           "Can't change the configuration of immutable collections.");
@@ -112,7 +115,8 @@ class ISet<T> // ignore: must_be_immutable
 
   static set flushFactor(int value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     if (value > 0)
       _flushFactor = value;
     else
@@ -121,7 +125,8 @@ class ISet<T> // ignore: must_be_immutable
 
   static set asyncAutoflush(bool value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     if (value != null) _asyncAutoflush = value;
   }
 
@@ -156,6 +161,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Note: _count is called in methods which read values. It's not called
   /// in methods which create new ISets or flush the set.
   void _count() {
+    if (!ImmutableCollection.autoFlush) return;
     if (isFlushed) {
       _counter = 0;
     } else {
@@ -197,12 +203,14 @@ class ISet<T> // ignore: must_be_immutable
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
-  ISet<T> get withIdentityEquals =>
-      config.isDeepEquals ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false)) : this;
+  ISet<T> get withIdentityEquals => config.isDeepEquals
+      ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false))
+      : this;
 
   /// Creates a set with `deepEquals` (compares all set items by equality).
-  ISet<T> get withDeepEquals =>
-      config.isDeepEquals ? this : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
+  ISet<T> get withDeepEquals => config.isDeepEquals
+      ? this
+      : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
 
   bool get isDeepEquals => config.isDeepEquals;
 
@@ -302,7 +310,9 @@ class ISet<T> // ignore: must_be_immutable
       return (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
     }
 
-    return (other == null) ? false : (flush._s as SFlat<T>).deepSetEquals_toIterable(other);
+    return (other == null)
+        ? false
+        : (flush._s as SFlat<T>).deepSetEquals_toIterable(other);
   }
 
   @override
@@ -326,7 +336,9 @@ class ISet<T> // ignore: must_be_immutable
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(ISet<T> other) {
     return (other == null) ||
-        (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
+        (_hashCode != null &&
+            other._hashCode != null &&
+            _hashCode != other._hashCode);
   }
 
   /// Will return true only if the sets internals are the same instances
@@ -336,7 +348,8 @@ class ISet<T> // ignore: must_be_immutable
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   @override
-  bool same(ISet<T> other) => identical(_s, other._s) && (config == other.config);
+  bool same(ISet<T> other) =>
+      identical(_s, other._s) && (config == other.config);
 
   // HashCode cache. Must be null if hashCode is not cached.
   int _hashCode;
@@ -346,8 +359,8 @@ class ISet<T> // ignore: must_be_immutable
     if (_hashCode != null) return _hashCode;
 
     var hashCode = isDeepEquals //
-        ? (flush._s as SFlat<T>).deepSetHashcode() ^ config.hashCode
-        : identityHashCode(_s) ^ config.hashCode;
+        ? hash2((flush._s as SFlat<T>).deepSetHashcode(), config.hashCode)
+        : hash2(identityHashCode(_s), config.hashCode);
 
     if (config.cacheHashCode) _hashCode = hashCode;
 
@@ -394,7 +407,8 @@ class ISet<T> // ignore: must_be_immutable
     // If the outer set is used, it will be flushed before the source sets.
     // If the source sets are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((items is ISet<T>) ? items._counter : 0)) + 1;
+    result._counter =
+        max(_counter, ((items is ISet<T>) ? items._counter : 0)) + 1;
 
     return result;
   }
@@ -438,7 +452,9 @@ class ISet<T> // ignore: must_be_immutable
   @override
   ISet<R> cast<R>() {
     var result = _s.cast<R>();
-    return (result is S<R>) ? ISet._unsafe(result, config: config) : ISet._(result, config: config);
+    return (result is S<R>)
+        ? ISet._unsafe(result, config: config)
+        : ISet._(result, config: config);
   }
 
   @override
@@ -448,7 +464,8 @@ class ISet<T> // ignore: must_be_immutable
   }
 
   @override
-  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) =>
+      throw UnsupportedError("elementAt in ISet is not allowed");
 
   @override
   bool every(bool Function(T) test) {
@@ -458,7 +475,8 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   ISet<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet config}) =>
-      ISet._(_s.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
+      ISet._(_s.expand(f),
+          config: config ?? (T == E ? this.config : defaultConfig));
 
   @override
   int get length {
@@ -477,6 +495,7 @@ class ISet<T> // ignore: must_be_immutable
   /// will return the first element in the natural order of items.
   /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], any item may be returned.
+  /// Note: This method is not efficient, as `ISets` are not naturally sorted.
   @override
   T get first {
     _count();
@@ -499,6 +518,7 @@ class ISet<T> // ignore: must_be_immutable
   /// will return the last element in the natural order of items.
   /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], any item may be returned.
+  /// Note: This method is not efficient, as `ISets` are not naturally sorted.
   @override
   T get last {
     _count();
@@ -555,7 +575,8 @@ class ISet<T> // ignore: must_be_immutable
   }
 
   @override
-  ISet<T> followedBy(Iterable<T> other) => ISet._(_s.followedBy(other), config: config);
+  ISet<T> followedBy(Iterable<T> other) =>
+      ISet._(_s.followedBy(other), config: config);
 
   @override
   void forEach(void Function(T element) f) {
@@ -576,7 +597,8 @@ class ISet<T> // ignore: must_be_immutable
   @override
   ISet<E> map<E>(E Function(T element) f, {ConfigSet config}) {
     _count();
-    return ISet._(_s.map(f), config: config ?? (T == E ? this.config : defaultConfig));
+    return ISet._(_s.map(f),
+        config: config ?? (T == E ? this.config : defaultConfig));
   }
 
   @override
@@ -595,16 +617,19 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> skip(int count) => ISet._(_s.skip(count), config: config);
 
   @override
-  ISet<T> skipWhile(bool Function(T value) test) => ISet._(_s.skipWhile(test), config: config);
+  ISet<T> skipWhile(bool Function(T value) test) =>
+      ISet._(_s.skipWhile(test), config: config);
 
   @override
   ISet<T> take(int count) => ISet._(_s.take(count), config: config);
 
   @override
-  ISet<T> takeWhile(bool Function(T value) test) => ISet._(_s.takeWhile(test), config: config);
+  ISet<T> takeWhile(bool Function(T value) test) =>
+      ISet._(_s.takeWhile(test), config: config);
 
   @override
-  ISet<T> where(bool Function(T element) test) => ISet._(_s.where(test), config: config);
+  ISet<T> where(bool Function(T element) test) =>
+      ISet._(_s.where(test), config: config);
 
   @override
   ISet<E> whereType<E>() => ISet._(_s.whereType<E>(), config: config);
@@ -822,8 +847,9 @@ abstract class S<T> implements Iterable<T> {
     return setToBeAdded.isEmpty ? this : SAddAll(this, setToBeAdded);
   }
 
-  /// TODO: FALTA FAZER!!!
-  S<T> remove(T element) => !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
+  // TODO: Still need to implement efficiently.
+  S<T> remove(T element) =>
+      !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 
   @override
   bool get isEmpty => getFlushed.isEmpty;
@@ -883,7 +909,8 @@ abstract class S<T> implements Iterable<T> {
   Iterable<E> map<E>(E Function(T element) f) => getFlushed.map(f);
 
   @override
-  T reduce(T Function(T value, T element) combine) => getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) =>
+      getFlushed.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
@@ -893,13 +920,15 @@ abstract class S<T> implements Iterable<T> {
   Iterable<T> skip(int count) => getFlushed.skip(count);
 
   @override
-  Iterable<T> skipWhile(bool Function(T value) test) => getFlushed.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) =>
+      getFlushed.skipWhile(test);
 
   @override
   Iterable<T> take(int count) => getFlushed.take(count);
 
   @override
-  Iterable<T> takeWhile(bool Function(T value) test) => getFlushed.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) =>
+      getFlushed.takeWhile(test);
 
   @override
   Iterable<T> where(bool Function(T element) test) => getFlushed.where(test);
@@ -914,7 +943,8 @@ abstract class S<T> implements Iterable<T> {
   Set<T> toSet() => HashSet.of(this);
 
   @override
-  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) =>
+      throw UnsupportedError("elementAt in ISet is not allowed");
 }
 
 // /////////////////////////////////////////////////////////////////////////////
