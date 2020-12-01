@@ -152,7 +152,7 @@ void main() {
     expect(iMapOfSets1.same(iMapOfSets1.remove("a", 3)), isTrue);
   });
 
-  test("IMapOfSets.hashCode", () {
+  test("IMapOfSets.hashCode()", () {
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
           "a": {1, 2},
           "b": {1, 2, 3},
@@ -183,10 +183,9 @@ void main() {
     expect(iMapOfSets1.hashCode, isNot(iMapOfSets5.hashCode));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("IMapOfSets.flush and IMapOfSets.isFlushed", () {
-    //
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
       "a": {1, 2},
       "b": {1, 2, 3},
@@ -196,21 +195,28 @@ void main() {
     final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets({
       "a": {1, 2},
       "b": {1, 2, 3},
-    }).add("a", 4);
-    expect(iMapOfSets2, {
-      "a": {1, 2, 4},
-      "b": {1, 2, 3},
-    });
+    }).addValues("a", {4, 5, 6});
+
+    expect(iMapOfSets1.isFlushed, isTrue);
     expect(iMapOfSets2.isFlushed, isFalse);
 
-    expect(iMapOfSets1.unlock, {
+    // Unlocking does not flush the collection.
+    var mapOfSets1 = iMapOfSets1.unlock;
+    var mapOfSets2 = iMapOfSets2.unlock;
+    expect(iMapOfSets1.isFlushed, isTrue);
+    expect(iMapOfSets2.isFlushed, isTrue);
+
+    // ---
+
+    // The equals is flushing the collection (this may change in the future).
+    expect(mapOfSets1, {
       "a": {1, 2},
-      "b": {1, 2, 3},
+      "b": {1, 2, 3}
     });
 
-    expect(iMapOfSets2.unlock, {
+    expect(mapOfSets2, {
       "a": {1, 2, 4, 5, 6},
-      "b": {1, 2, 3},
+      "b": {1, 2, 3}
     });
 
     expect(iMapOfSets1.isFlushed, isTrue);
@@ -223,7 +229,7 @@ void main() {
     expect(iMapOfSets2.isFlushed, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test(
       "Ensuring Immutability | IMapOfSets.add() | "
