@@ -17,7 +17,8 @@ class Config {
 class StopwatchRecord {
   final String collectionName;
 
-  /// The amount of time it took for the benchmark to run, typically in microseconds.
+  /// The amount of time it took for the benchmark to run, typically in microseconds 
+  /// (µs).
   final double record;
 
   const StopwatchRecord({@required this.collectionName, @required this.record})
@@ -38,7 +39,7 @@ class StopwatchRecord {
 
 @immutable
 class RecordsColumn {
-  /// Not that the records are of type [IList] already.
+  /// Note that the records are of type [IList] already.
   final IList<StopwatchRecord> records;
   final String title;
 
@@ -65,7 +66,8 @@ class RecordsColumn {
     return min;
   }
 
-  /// Finding the mutable record is linked to having the word *mutable* somewhere on the row's name.
+  /// Finding the mutable record is linked to having the word *mutable* &mdash; it doesn't really 
+  /// matter if it's uppercase or not &mdash; somewhere on the row's name.
   double get mutableRecord => records
       .where((StopwatchRecord record) => record.collectionName.toLowerCase().contains("mutable"))
       .first
