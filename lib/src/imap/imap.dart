@@ -41,13 +41,13 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Creates a new map with the given [config].
   ///
   /// To copy the config from another [IMap]:
-  /// 
+  ///
   /// ```dart
   /// map = map.withConfig(other.config)
   /// ```
   ///
   /// To change the current config:
-  /// 
+  ///
   /// ```dart
   /// map = map.withConfig(map.config.copyWith(isDeepEquals: isDeepEquals))
   /// ```
@@ -152,13 +152,15 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The keys computed by the source [iterable] do not need to be unique. The
   /// last occurrence of a key will simply overwrite any previous value.
   ///
-  factory IMap.fromIterable(
-    Iterable iterable, {
-    K Function(dynamic) keyMapper,
-    V Function(dynamic) valueMapper,
+  static IMap<K, V> fromIterable<K, V, I>(
+    Iterable<I> iterable, {
+    K Function(I) keyMapper,
+    V Function(I) valueMapper,
     ConfigMap config,
   }) {
-    Map<K, V> map = Map.fromIterable(iterable, key: keyMapper, value: valueMapper);
+    Map<K, V> map = {
+      for (var item in iterable) keyMapper(item): valueMapper(item),
+    };
     return IMap._(map, config: config ?? defaultConfig);
   }
 
@@ -169,7 +171,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// **Unsafe constructor**. Use this at your own peril.
-  /// 
+  ///
   /// This constructor is fast, since it makes no defensive copies of the map.
   /// However, you should only use this with a new map you've created yourself,
   /// when you are sure no external copies exist. If the original map is modified,
@@ -183,7 +185,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns an empty [IMap], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
-  /// 
+  ///
   /// Note: If you want to create an empty immutable collection of the same
   /// type and same configuration as a source collection, simply call [clear]
   /// in the source collection.
@@ -217,8 +219,7 @@ class IMap<K, V> // ignore: must_be_immutable
   static set defaultConfig(ConfigMap config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration of immutable collections.");
     _defaultConfig = config ?? const ConfigMap();
   }
 
@@ -253,7 +254,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used.
-  /// 
+  ///
   /// As soon as counter reaches the refresh-factor, the collection is flushed
   /// and `counter` returns to `0`.
   ///
@@ -261,7 +262,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used, as long as `counter >= 0`.
-  /// 
+  ///
   /// As soon as counter reaches the refresh-factor, the collection is marked
   /// for flushing. There is also a global counter called an `asyncCounter`
   /// which starts at `1`. When a collection is marked for flushing, it first
@@ -347,9 +348,9 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns an [IList] of the map entries.
-  /// 
+  ///
   /// Optionally, you may provide a [config] for the list.
-  /// 
+  ///
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
@@ -364,9 +365,9 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns an [IList] of the map keys.
-  /// 
+  ///
   /// Optionally, you may provide a [config] for the list.
-  /// 
+  ///
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
@@ -381,9 +382,9 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns an [IList] of the map values.
-  /// 
+  ///
   /// Optionally, you may provide a [config] for the list.
-  /// 
+  ///
   /// The list will be sorted if the map's [sortValues] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
@@ -423,7 +424,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns a [List] of the map entries.
-  /// 
+  ///
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
@@ -435,7 +436,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns a [List] of the map keys.
-  /// 
+  ///
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
@@ -447,7 +448,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns a [List] of the map values.
-  /// 
+  ///
   /// The list will be sorted if the map's [sortValues] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
@@ -485,12 +486,12 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns a new `Iterator` that allows iterating the entries of the [IMap].
-  /// 
+  ///
   /// 1. If the map's [config] has [ConfigMap.sortKeys] `true` (the default),
   /// it will iterate in the natural order of entries. In other words, if the
   /// keys/values are [Comparable], they will be sorted first by
   /// `keyA.compareTo(keyB)` and then by `valueA.compareTo(valueB)`.
-  /// 
+  ///
   /// 2. If the map's [config] has [ConfigMap.sortKeys] `false`, or if the
   /// keys/values are not [Comparable], the iterator order is **undefined**.
   ///
@@ -512,17 +513,17 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Unlocks the map, returning a safe, unmodifiable (immutable) [Map] view.
   /// The word "view" means the set is backed by the original [IMap].
-  /// 
+  ///
   /// Using this is very fast, since it makes no copies of the [IMap] entries.
   /// However, if you try to use methods that modify the map, like [add],
   /// it will throw an [UnsupportedError].
   /// It is also very fast to lock this map back into an [IMap].
-  /// 
+  ///
   /// See also: [UnmodifiableMapView]
   Map<K, V> get unlockView => UnmodifiableMapView(this);
 
   /// Unlocks the map, returning a safe, modifiable (mutable) [Map].
-  /// 
+  ///
   /// Using this is very fast at first, since it makes no copies of the [IMap]
   /// entries. However, if and only if you use a method that mutates the map,
   /// like [add], it will unlock internally (make a copy of all [IMap] entries).
@@ -530,7 +531,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// words, it will unlock the [IMap], lazily, only if necessary.
   /// If you never mutate the map, it will be very fast to lock this map
   /// back into an [IMap].
-  /// 
+  ///
   /// See also: [ModifiableMapView]
   Map<K, V> get unlockLazy => ModifiableMapView(this);
 
@@ -549,7 +550,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
   /// since it doesn't compare each entry.
-  /// 
+  ///
   /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
@@ -598,10 +599,10 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Return `true` if other is `null` or the cached [hashCode]s proves the
   /// collections are **NOT** equal.
-  /// 
+  ///
   /// **Explanation**: Objects with different [hashCode]s are not equal. However,
   /// if the hashCodes are the same, then nothing can be said about the equality.
-  /// 
+  ///
   /// Note: We use the **CACHED** hashCodes. If any of the hashCodes is `null` it
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(IMap<K, V> other) {
@@ -612,7 +613,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
   /// since it doesn't  compare each entry.
-  /// 
+  ///
   /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
@@ -885,7 +886,7 @@ abstract class M<K, V> {
 
   /// The [M] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
-  /// 
+  ///
   /// Note these fallback methods need to calculate the flushed map, but
   /// because that"s immutable, we cache it.
   Map<K, V> _flushed;
