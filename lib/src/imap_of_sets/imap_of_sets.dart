@@ -17,6 +17,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// By default `isDeepEquals: true` (maps of sets are compared by equality),
   /// and `sortKeys: true` and `sortValues: true` (certain map outputs are sorted).
   static set defaultConfig(ConfigMapOfSets config) {
+    if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError(
           "Can't change the configuration of immutable collections.");
@@ -502,8 +503,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   @override
   int get hashCode {
     return isDeepEquals //
-        ? hash2(_mapOfSets, config)
-        : identityHashCode(_mapOfSets) ^ config.hashCode;
+        ? hashObj2(_mapOfSets, config)
+        : hash2(identityHashCode(_mapOfSets), config.hashCode);
   }
 
   /// Adds all set values to this map.

@@ -243,4 +243,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   List<T> get unlock => iter.unlock;
 
   List<T> get unlockView => iter.unlockView;
+
+  @override
+  String toString() => "$runtimeType$iter";
 }

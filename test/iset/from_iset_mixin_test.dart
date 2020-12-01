@@ -50,7 +50,8 @@ void main() {
     expect(students.containsAll([james]), isTrue);
     expect(students.containsAll([james, sara]), isTrue);
     expect(students.containsAll([james, sara, lucy]), isTrue);
-    expect(students.containsAll([james, sara, lucy, const Student("Bob")]), isFalse);
+    expect(students.containsAll([james, sara, lucy, const Student("Bob")]),
+        isFalse);
   });
 
   test("FromISetMixin.elementAt()",
@@ -62,8 +63,10 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.every((Student student) => student.name.length > 1), isTrue);
-    expect(students.every((Student student) => student.name.length > 4), isFalse);
+    expect(
+        students.every((Student student) => student.name.length > 1), isTrue);
+    expect(
+        students.every((Student student) => student.name.length > 4), isFalse);
   });
 
   test("FromISetMixin.expand()", () {
@@ -75,7 +78,8 @@ void main() {
     expect(students.expand((Student student) => [student, student]),
         allOf(isA<ISet<Student>>(), <Student>{james, sara, lucy}.lock));
     expect(
-        students.expand((Student student) => [student, Student(student.name + "2")]),
+        students.expand(
+            (Student student) => [student, Student(student.name + "2")]),
         allOf(
             isA<ISet<Student>>(),
             <Student>{
@@ -88,46 +92,27 @@ void main() {
             }.lock));
   });
 
-  test("FromISetMixin.length", () {
+  test("FromISetMixin.length, first, last and single", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.length, 3);
-  });
-
-  test("FromISetMixin.first", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
-    expect(students.first, Student("James"));
-  });
-
-  test("FromISetMixin.last", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
+    print('XXstudents = ${students}');
 
     // TODO: Marcelo, o último elemento não deveria ser Lucy? Não me parece claro o ordenamento.
     // Há algum `compareTo` implícito que eu não soube reconhecer?
+    expect(students.length, 3);
+    expect(students.first, Student("James"));
     expect(students.last, Student("Lucy"));
-  }, skip: true);
-
-  test("FromISetMixin.single | State exception", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
-
     expect(() => students.single, throwsStateError);
+
   });
 
-  test("FromISetMixin.single | Access",
-      () => expect(Students([const Student("James")]).single, const Student("James")));
+  test(
+      "FromISetMixin.single | Access",
+      () => expect(
+          Students([const Student("James")]).single, const Student("James")));
 
   test("FromISetMixin.firstWhere()", () {
     const Student james = Student("James");
@@ -144,7 +129,8 @@ void main() {
             orElse: () => const Student("John")),
         const Student("Sara"));
     expect(
-        students.firstWhere((Student student) => student == const Student("Bob"),
+        students.firstWhere(
+            (Student student) => student == const Student("Bob"),
             orElse: () => const Student("John")),
         const Student("John"));
   });
@@ -221,7 +207,8 @@ void main() {
     const Student sara = Student("Sara");
     final Students students = Students([james, sara]);
 
-    expect(students.map((Student student) => Student(student.name + student.name)),
+    expect(
+        students.map((Student student) => Student(student.name + student.name)),
         {const Student("JamesJames"), const Student("SaraSara")});
   });
 
@@ -281,11 +268,18 @@ void main() {
 
     expect(students.take(0), <Student>{});
     expect(students.take(1), <Student>{const Student("James")});
-    expect(students.take(2), <Student>{const Student("James"), const Student("Sara")});
-    expect(students.take(3),
-        <Student>{const Student("James"), const Student("Sara"), const Student("Lucy")});
-    expect(students.take(10),
-        <Student>{const Student("James"), const Student("Sara"), const Student("Lucy")});
+    expect(students.take(2),
+        <Student>{const Student("James"), const Student("Sara")});
+    expect(students.take(3), <Student>{
+      const Student("James"),
+      const Student("Sara"),
+      const Student("Lucy")
+    });
+    expect(students.take(10), <Student>{
+      const Student("James"),
+      const Student("Sara"),
+      const Student("Lucy")
+    });
   });
 
   test("FromISetMixin.takeWhile()", () {
@@ -304,8 +298,10 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.where((Student student) => student.name.length == 5), {const Student("James")});
-    expect(students.where((Student student) => student.name.length == 100), <Student>{});
+    expect(students.where((Student student) => student.name.length == 5),
+        {const Student("James")});
+    expect(students.where((Student student) => student.name.length == 100),
+        <Student>{});
   });
 
   test("FromISetMixin.whereType()", () {
@@ -354,8 +350,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(
-        students.toList(), [const Student("James"), const Student("Sara"), const Student("Lucy")]);
+    expect(students.toList(),
+        [const Student("James"), const Student("Sara"), const Student("Lucy")]);
   });
 
   test("FromISetMixin.toSet()", () {
@@ -364,8 +360,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(
-        students.toSet(), {const Student("James"), const Student("Sara"), const Student("Lucy")});
+    expect(students.toSet(),
+        {const Student("James"), const Student("Sara"), const Student("Lucy")});
   });
 
   test("FromISetMixin.+()", () {
@@ -401,10 +397,11 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    final Students studentsResult =
-        students.addAll({const Student("James"), const Student("Bob"), const Student("John")});
+    final Students studentsResult = students.addAll(
+        {const Student("James"), const Student("Bob"), const Student("John")});
 
-    expect(studentsResult.unlock, {james, sara, lucy, const Student("Bob"), const Student("John")});
+    expect(studentsResult.unlock,
+        {james, sara, lucy, const Student("Bob"), const Student("John")});
   });
 
   test("FromISetMixin.clear()", () {
@@ -454,7 +451,11 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.removeWhere((Student student) => student.name.length == 4).iter, [james]);
+    expect(
+        students
+            .removeWhere((Student student) => student.name.length == 4)
+            .iter,
+        [james]);
   });
 
   test("FromISetMixin.retainWhere()", () {
@@ -463,7 +464,11 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.retainWhere((Student student) => student.name.length == 4).iter, {sara, lucy});
+    expect(
+        students
+            .retainWhere((Student student) => student.name.length == 4)
+            .iter,
+        {sara, lucy});
   });
 
   test("FromISetMixin.toggle()", () {
@@ -473,7 +478,8 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     expect(students.toggle(const Student("Sara")).iter, {james, lucy});
-    expect(students.toggle(const Student("Bob")).iter, {james, sara, lucy, const Student("Bob")});
+    expect(students.toggle(const Student("Bob")).iter,
+        {james, sara, lucy, const Student("Bob")});
   });
 
   test("FromISetMixin.unlock", () {
@@ -498,7 +504,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.unlockView, allOf(isA<Set<Student>>(), isA<UnmodifiableSetView<Student>>()));
+    expect(students.unlockView,
+        allOf(isA<Set<Student>>(), isA<UnmodifiableSetView<Student>>()));
   });
 
   test("FromISetMixin.difference()", () {
@@ -509,7 +516,8 @@ void main() {
 
     expect(students.difference({james, sara, lucy}), <Student>{});
     expect(students.difference({james}), <Student>{sara, lucy});
-    expect(students.difference({const Student("Bob")}), <Student>{james, sara, lucy});
+    expect(students.difference({const Student("Bob")}),
+        <Student>{james, sara, lucy});
   });
 
   test("FromISetMixin.intersection()", () {
@@ -520,8 +528,10 @@ void main() {
 
     expect(students.intersection({const Student("Bob")}), <Student>{});
     expect(students.intersection({james}), <Student>{james});
-    expect(students.intersection({james, const Student("Bob")}), <Student>{james});
-    expect(students.intersection({james, sara, lucy}), <Student>{james, sara, lucy});
+    expect(
+        students.intersection({james, const Student("Bob")}), <Student>{james});
+    expect(students.intersection({james, sara, lucy}),
+        <Student>{james, sara, lucy});
   });
 
   test("FromISetMixin.lookup()", () {
@@ -608,7 +618,9 @@ class Student extends ProtoStudent {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Student && runtimeType == other.runtimeType && name == other.name;
+      other is Student &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
 
   @override
   int get hashCode => name.hashCode;

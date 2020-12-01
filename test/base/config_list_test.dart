@@ -72,7 +72,9 @@ void main() {
       "defaultConfig | Changing the default ConfigList will throw an exception if lockConfig",
       () {
     ImmutableCollection.lockConfig();
-    expect(() => IList.defaultConfig = ConfigList(isDeepEquals: false),
+    expect(
+        () => IList.defaultConfig =
+            ConfigList(isDeepEquals: !IList.defaultConfig.isDeepEquals),
         throwsStateError);
   });
 }

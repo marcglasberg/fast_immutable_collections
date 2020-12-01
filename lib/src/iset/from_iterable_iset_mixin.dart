@@ -46,7 +46,8 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   bool contains(Object element) => iter.contains(element);
 
-  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) =>
+      throw UnsupportedError("elementAt in ISet is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 
@@ -105,4 +106,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
   List<T> toList({bool growable = true}) => List.of(iter, growable: growable);
 
   Set<T> toSet() => Set.of(iter);
+
+  @override
+  String toString() => "$runtimeType$iter";
 }

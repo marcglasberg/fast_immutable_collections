@@ -1,6 +1,7 @@
 import "dart:collection";
 import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 import "s_flat.dart";
 import "s_add.dart";
@@ -105,6 +106,7 @@ class ISet<T> // ignore: must_be_immutable
   static bool get asyncAutoflush => _asyncAutoflush;
 
   static set defaultConfig(ConfigSet config) {
+    if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError(
           "Can't change the configuration of immutable collections.");
@@ -159,6 +161,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Note: _count is called in methods which read values. It's not called
   /// in methods which create new ISets or flush the set.
   void _count() {
+    if (!ImmutableCollection.autoFlush) return;
     if (isFlushed) {
       _counter = 0;
     } else {
@@ -356,8 +359,8 @@ class ISet<T> // ignore: must_be_immutable
     if (_hashCode != null) return _hashCode;
 
     var hashCode = isDeepEquals //
-        ? (flush._s as SFlat<T>).deepSetHashcode() ^ config.hashCode
-        : identityHashCode(_s) ^ config.hashCode;
+        ? hash2((flush._s as SFlat<T>).deepSetHashcode(), config.hashCode)
+        : hash2(identityHashCode(_s), config.hashCode);
 
     if (config.cacheHashCode) _hashCode = hashCode;
 
@@ -492,6 +495,7 @@ class ISet<T> // ignore: must_be_immutable
   /// will return the first element in the natural order of items.
   /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], any item may be returned.
+  /// Note: This method is not efficient, as `ISets` are not naturally sorted.
   @override
   T get first {
     _count();
@@ -514,6 +518,7 @@ class ISet<T> // ignore: must_be_immutable
   /// will return the last element in the natural order of items.
   /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], any item may be returned.
+  /// Note: This method is not efficient, as `ISets` are not naturally sorted.
   @override
   T get last {
     _count();
@@ -842,7 +847,7 @@ abstract class S<T> implements Iterable<T> {
     return setToBeAdded.isEmpty ? this : SAddAll(this, setToBeAdded);
   }
 
-  /// TODO: FALTA FAZER!!!
+  // TODO: Still need to implement efficiently.
   S<T> remove(T element) =>
       !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 

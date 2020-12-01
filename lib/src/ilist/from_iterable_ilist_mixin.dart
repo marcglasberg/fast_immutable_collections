@@ -108,4 +108,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
   List<T> toList({bool growable = true}) => List.of(iter, growable: growable);
 
   Set<T> toSet() => Set.of(iter);
+
+  @override
+  String toString() => "$runtimeType$iter";
 }

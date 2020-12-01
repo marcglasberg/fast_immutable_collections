@@ -453,7 +453,7 @@ print(ilistA1 == ilistA2); // True!
 **Important note:** 
 
 The global configuration is meant to be decided during your app's initialization, and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
+We strongly suggest that you prohibit further changes to the global configuration by calling `ImmutableCollection.lockConfig();`
 after you set your desired configuration.
 
 
@@ -620,7 +620,7 @@ it will break the `IList` and any other derived lists in unpredictable ways.
 Use this at your own peril. This is the same doing: `IList.unsafe(list)`.
 Note you can optionally disallow unsafe constructors in the global configuration 
 by doing: `disallowUnsafeConstructors = true` (and then optionally prevent 
-further configuration changes by calling `lockConfig()`).                  
+further configuration changes by calling `ImmutableCollection.lockConfig()`).                  
 
 These are your options to obtain a regular `List` back from an `IList`:
 
@@ -776,7 +776,7 @@ print(iset.join(","));
   
 As previously discussed with the `IList`, 
 the global configuration is meant to be decided during your app's initialization, and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration by calling `lockConfig();`
+We strongly suggest that you prohibit further changes to the global configuration by calling `ImmutableCollection.lockConfig();`
 after you set your desired configuration.
 
 
@@ -959,7 +959,7 @@ As previously discussed with `IList` and `ISet`,
 the global configuration is meant to be decided during your app's initialization, 
 and then not changed again.
 We strongly suggest that you prohibit further changes to the global configuration 
-by calling `lockConfig();` after you set your desired configuration.
+by calling `ImmutableCollection.lockConfig();` after you set your desired configuration.
 
 
 # 5. IMapOfSets
@@ -1002,9 +1002,9 @@ class StudentsPerCourse {
   final IMapOfSets<Course, Student> imap;
 
   StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
-      : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+      : imap = (studentsPerCourse ?? {}).lock;
 
-  StudentsPerCourse._(this._studentsPerCourse);
+  StudentsPerCourse._(this.imap);
 
   ISet<Course> courses() => imap.keysAsSet;
 
@@ -1012,10 +1012,10 @@ class StudentsPerCourse {
 
   IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
 
-  ISet<Student> studentsInAlphabeticOrder() =>
+  IList<Student> studentsInAlphabeticOrder() =>
       imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
 
-  ISet<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
+  IList<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
 
   StudentsPerCourse addStudentToCourse(Student student, Course course) =>
       StudentsPerCourse._(imap.add(course, student));
@@ -1036,27 +1036,28 @@ class StudentsPerCourse {
       StudentsPerCourse._(imap.removeValues([student]));
 
   StudentsPerCourse removeCourse(Course course) => StudentsPerCourse._(imap.removeSet(course));
+
   Map<Course, Set<Student>> toMap() => imap.unlock;
 
   int get numberOfCourses => imap.lengthOfKeys;
-  
+
   int get numberOfStudents => imap.lengthOfNonRepeatingValues;
-}     
+}
 ```
 
-Note: The `IMapOfSets` configuration (`ConfigMapOfSets.removeEmptySets`) 
+Note: The `IMapOfSets` configuration `ConfigMapOfSets.removeEmptySets` 
 lets you choose if empty sets should be automatically removed or not.
 In the above example, this would mean removing the course automatically when the last student leaves,
 or else allowing courses with no students.
 
 ```dart
 /// Using the default configuration: Empty sets are removed.
-StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) 
-   : _studentsPerCourse = (studentsPerCourse ?? {}).lock;
+StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
+   : imap = (studentsPerCourse ?? {}).lock;   
 
 /// Specifying that a course can be empty (have no students).
-StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse]) 
-   : _studentsPerCourse = (studentsPerCourse ?? {}).lock
+StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
+   : imap = (studentsPerCourse ?? {}).lock   
        .withConfig(ConfigMapOfSets(removeEmptySets: false));
 ```  
   
@@ -1265,10 +1266,10 @@ the collections will flush automatically for you.
 The global configuration default is to have auto-flush on. It's easy to disable it:
 
 ```dart
-autoFlush = false;
+ImmutableCollection.autoFlush = false;
 
 // You can also lock further changes to the global configuration, if desired:                                              
-lockConfig();
+ImmutableCollection.lockConfig();
 ```                                                    
 
 If you leave it on, you can configure auto-flush to happen after you use a collection a few times.
@@ -1363,7 +1364,7 @@ ISet.flushFactor = 15;
 IMap.flushFactor = 15;
 
 // Lock further changes, if desired:                                              
-lockConfig();
+ImmutableCollection.lockConfig();
 ```                                                    
     
 # 8. About the Benchmarks

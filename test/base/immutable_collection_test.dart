@@ -4,9 +4,6 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  // TODO: Marcelo, apesar de que a documentação esclarece isso, eu tenho certeza que quem ler
-  // esse nome (`sameCollection`) vai certamente pensar que ela checa se ambos os objetos são
-  // `IList`, `ISet`, etc. Ainda acho que algo como `sameCollectionInternals` seria mais claro.
   test("sameCollection() | If both are null, then true",
       () => expect(sameCollection(null, null), isTrue));
 
@@ -206,8 +203,8 @@ void main() {
     expect(() => IList.resetAllConfigurations(), throwsStateError);
     expect(() => ISet.resetAllConfigurations(), throwsStateError);
     expect(() => IMap.resetAllConfigurations(), throwsStateError);
-    expect(() => ImmutableCollection.disallowUnsafeConstructors = true, throwsStateError);
-    expect(() => ImmutableCollection.autoFlush = false, throwsStateError);
+    expect(() => ImmutableCollection.disallowUnsafeConstructors = !ImmutableCollection.disallowUnsafeConstructors, throwsStateError);
+    expect(() => ImmutableCollection.autoFlush = !ImmutableCollection.autoFlush, throwsStateError);
     expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);
   });
 }

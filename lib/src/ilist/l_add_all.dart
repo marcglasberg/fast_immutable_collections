@@ -22,7 +22,7 @@ class LAddAll<T> extends L<T> {
   @override
   Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _listOrL);
 
-  /// TODO: FALTA FAZER DE FORMA EFICIENTE:
+  // TODO: Still need to implement efficiently.
   @override
   T operator [](int index) => index < 0 || index >= length
       ? throw RangeError.range(index, 0, length - 1, "index")

@@ -5,7 +5,11 @@ import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
+  setUp(() {
+    ImmutableCollection.autoFlush = false;
+  });
+
+//////////////////////////////////////////////////////////////////////////////
   test("Runtime Type", () {
     expect(ISet(), isA<ISet>());
     expect(ISet({}), isA<ISet>());
@@ -65,7 +69,8 @@ void main() {
 
   test(
       "Ensuring Immutability | ISet.add() | "
-      "If the item being passed is a variable, a pointer to it shouldn't exist inside ISet", () {
+      "If the item being passed is a variable, a pointer to it shouldn't exist inside ISet",
+      () {
     final Set<int> original = {1, 2};
     final ISet<int> iset = original.lock;
 
@@ -162,7 +167,9 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Equals Operator | " "ISet with identity-equals compares the set instance, not the items.",
+  test(
+      "Equals Operator | "
+      "ISet with identity-equals compares the set instance, not the items.",
       () {
     final ISet<int> mySet = ISet({1, 2}).withIdentityEquals;
     expect(mySet == mySet, isTrue);
@@ -174,7 +181,8 @@ void main() {
 
   test(
       "Equals Operator | "
-      "ISet with deep-equals compares the items, not necessarily the list instance", () {
+      "ISet with deep-equals compares the items, not necessarily the list instance",
+      () {
     final ISet<int> mySet = ISet({1, 2});
     expect(mySet == mySet, isTrue);
     expect(mySet == ISet({1, 2}), isTrue);
@@ -185,15 +193,19 @@ void main() {
 
   test(
       "Equals Operator | "
-      "ISet with deep-equals is always different from iset with identity-equals", () {
-    expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}).withIdentityEquals, isFalse);
-    expect(ISet({1, 2}).withIdentityEquals == ISet({1, 2}).withDeepEquals, isFalse);
+      "ISet with deep-equals is always different from iset with identity-equals",
+      () {
+    expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}).withIdentityEquals,
+        isFalse);
+    expect(ISet({1, 2}).withIdentityEquals == ISet({1, 2}).withDeepEquals,
+        isFalse);
     expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}), isTrue);
     expect(ISet({1, 2}) == ISet({1, 2}).withDeepEquals, isTrue);
   });
 
   test("ISet.isIdentityEquals and ISet.isDeepEquals properties", () {
-    final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2}).withIdentityEquals;
+    final ISet<int> iSet1 = ISet({1, 2}),
+        iSet2 = ISet({1, 2}).withIdentityEquals;
 
     expect(iSet1.isIdentityEquals, isFalse);
     expect(iSet1.isDeepEquals, isTrue);
@@ -229,9 +241,11 @@ void main() {
     expect(iSet1 == ISet({2, 1}), isTrue);
     expect(iSet1 == ISet({1, 2}).withIdentityEquals, isFalse);
   });
-  test("ISet.equalItems() | Null", () => expect(ISet({1, 2}).equalItems(null), isFalse));
+  test("ISet.equalItems() | Null",
+      () => expect(ISet({1, 2}).equalItems(null), isFalse));
 
-  test("ISet.equalItems() | Identity", () => expect(ISet({1, 2}).equalItems([1, 2]), isTrue));
+  test("ISet.equalItems() | Identity",
+      () => expect(ISet({1, 2}).equalItems([1, 2]), isTrue));
 
   test("ISet.equalItems() | The order doesn't matter",
       () => expect(ISet({1, 2}).equalItems([2, 1]), isTrue));
@@ -254,9 +268,12 @@ void main() {
     expect(iSet1WithIdentity == ISet({1, 2}).withIdentityEquals, isFalse);
     expect(iSet1WithIdentity == ISet({1, 2, 3}).withIdentityEquals, isFalse);
     expect(iSet1WithIdentity == ISet({2, 1}).withIdentityEquals, isFalse);
-    expect(iSet1WithIdentity.hashCode, isNot(ISet({1, 2}).withIdentityEquals.hashCode));
-    expect(iSet1WithIdentity.hashCode, isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
-    expect(iSet1WithIdentity.hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
+    expect(iSet1WithIdentity.hashCode,
+        isNot(ISet({1, 2}).withIdentityEquals.hashCode));
+    expect(iSet1WithIdentity.hashCode,
+        isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
+    expect(iSet1WithIdentity.hashCode,
+        isNot(ISet({2, 1}).withIdentityEquals.hashCode));
   });
 
   test("ISet.hashCode() | deepEquals vs identityEquals", () {
@@ -267,9 +284,12 @@ void main() {
     expect(ISet({1, 2, 3}) == ISet({1, 2, 3}).withIdentityEquals, isFalse);
     expect(ISet({2, 1}) == ISet({2, 1}).withIdentityEquals, isFalse);
     expect(iSet1.hashCode, isNot(iSet1WithIdentity.hashCode));
-    expect(ISet({1, 2}).hashCode, isNot(ISet({1, 2}).withIdentityEquals.hashCode));
-    expect(ISet({1, 2, 3}).hashCode, isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
-    expect(ISet({2, 1}).hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
+    expect(
+        ISet({1, 2}).hashCode, isNot(ISet({1, 2}).withIdentityEquals.hashCode));
+    expect(ISet({1, 2, 3}).hashCode,
+        isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
+    expect(
+        ISet({2, 1}).hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
   });
 
   test("ISet.config()", () {
@@ -287,7 +307,8 @@ void main() {
   });
 
   test("ISet.withConfig() factory | different configs", () {
-    final ISet<int> iSet1 = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
+    final ISet<int> iSet1 =
+        ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
     final ISet<int> iSet2 = ISet.withConfig({}, ConfigSet(isDeepEquals: false));
 
     expect(iSet1, {1, 2, 3});
@@ -297,16 +318,18 @@ void main() {
     expect(iSet2.isDeepEquals, isFalse);
   });
 
-  test("ISet.withConfig() | Assertion error",
-      () => expect(() => {1, 2, 3}.lock.withConfig(null), throwsAssertionError));
+  test(
+      "ISet.withConfig() | Assertion error",
+      () =>
+          expect(() => {1, 2, 3}.lock.withConfig(null), throwsAssertionError));
 
   test("ISet.withConfigFrom()", () {
     final ISet<int> iset = {1, 2, 3}.lock;
     final ISet<int> iSetWithIdentityEquals =
         ISet.withConfig({1, 2, 3}, const ConfigSet(isDeepEquals: false));
 
-    expect(
-        iset.withConfigFrom(iSetWithIdentityEquals).config, const ConfigSet(isDeepEquals: false));
+    expect(iset.withConfigFrom(iSetWithIdentityEquals).config,
+        const ConfigSet(isDeepEquals: false));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -342,8 +365,9 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Creating native mutable sets from immutable sets | " "From the default factory constructor",
-      () {
+  test(
+      "Creating native mutable sets from immutable sets | "
+      "From the default factory constructor", () {
     const Set<int> exampleSet = {1, 2, 3};
     final ISet<int> iset = ISet(exampleSet);
 
@@ -384,7 +408,8 @@ void main() {
   });
 
   test("ISet.flush()", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6}).add(7).addAll({}).addAll({8, 9});
+    final ISet<int> iset =
+        {1, 2, 3}.lock.add(4).addAll({5, 6}).add(7).addAll({}).addAll({8, 9});
 
     expect(iset.isFlushed, isFalse);
 
@@ -437,14 +462,17 @@ void main() {
     expect(iset.unlock, {1, 2, 3});
   });
 
-  test("Adding repeated elements | Adding some repeated elements and another, new one", () {
+  test(
+      "Adding repeated elements | Adding some repeated elements and another, new one",
+      () {
     final ISet<int> iset = ISet<int>({1, 2, 3}).addAll({1, 2, 5, 7});
 
     expect(iset.length, 5);
     expect(iset.unlock, {1, 2, 3, 5, 7});
   });
 
-  test("Adding repeated elements | Adding some repeated elements and new ones", () {
+  test("Adding repeated elements | Adding some repeated elements and new ones",
+      () {
     final ISet<int> iset = ISet<int>({1, 2, 3}).addAll({1, 2, 5, 7, 11, 13});
 
     expect(iset.length, 7);
@@ -526,7 +554,8 @@ void main() {
   });
 
   test("ISet.first | without sorting", () {
-    final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
+    final ISet<int> iset =
+        {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
     expect(iset.first, 100);
   });
 
@@ -536,7 +565,8 @@ void main() {
   });
 
   test("ISet.last | without sorting", () {
-    final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
+    final ISet<int> iset =
+        {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
     expect(iset.last, 5);
   });
 
@@ -595,7 +625,8 @@ void main() {
   test("ISet.followedBy()", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.followedBy({7, 8}).unlock, {1, 2, 3, 4, 5, 6, 7, 8});
-    expect(iset.followedBy(<int>{}.lock.add(7).addAll({8, 9})).unlock, {1, 2, 3, 4, 5, 6, 7, 8, 9});
+    expect(iset.followedBy(<int>{}.lock.add(7).addAll({8, 9})).unlock,
+        {1, 2, 3, 4, 5, 6, 7, 8, 9});
   });
 
   test("ISet.forEach()", () {
@@ -636,7 +667,8 @@ void main() {
   test(
       "ISet.reduce() | State exception",
       () => expect(
-          () => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError));
+          () => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))),
+          throwsStateError));
 
   test("ISet.singleWhere() | Regular usage", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
@@ -646,7 +678,8 @@ void main() {
 
   test("ISet.singleWhere() | State exception", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(() => iset.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError);
+    expect(() => iset.singleWhere((int v) => v < 4, orElse: () => 100),
+        throwsStateError);
   });
 
   test("ISet.skip()", () {
@@ -690,7 +723,12 @@ void main() {
 
   test(
       "ISet.toList() | with compare",
-      () => expect({1, 2, 3}.lock.add(10).add(5).toList(compare: (int a, int b) => -a.compareTo(b)),
+      () => expect(
+          {1, 2, 3}
+              .lock
+              .add(10)
+              .add(5)
+              .toList(compare: (int a, int b) => -a.compareTo(b)),
           [10, 5, 3, 2, 1]));
 
   test("ISet.toList() | Unsupported exception", () {
@@ -710,7 +748,8 @@ void main() {
   });
 
   test("ISet.toSet() | with compare", () {
-    final Set<int> set = {1, 2, 3, 10, 5}.lock.toSet(compare: (int a, int b) => -a.compareTo(b));
+    final Set<int> set =
+        {1, 2, 3, 10, 5}.lock.toSet(compare: (int a, int b) => -a.compareTo(b));
     expect(set, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
     expect(set.toList(), [10, 5, 3, 2, 1]);
   });
@@ -723,7 +762,8 @@ void main() {
     expect(iset.where((int v) => v < 100).unlock, {1, 2, 3, 4, 5, 6});
   });
 
-  test("ISet.whereType()", () => expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
+  test("ISet.whereType()",
+      () => expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
 
   test("ISet.toString()", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
@@ -759,7 +799,8 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("ISet of MapEntry gets special treatment | Equals", () {
-    final ISet<MapEntry<String, int>> iSet1 = ISet([MapEntry("a", 1)]).withDeepEquals,
+    final ISet<MapEntry<String, int>> iSet1 =
+            ISet([MapEntry("a", 1)]).withDeepEquals,
         iSet2 = ISet([MapEntry("a", 1)]).withDeepEquals;
 
     expect(iSet1, iSet2);
@@ -801,7 +842,8 @@ void main() {
   });
 
   test("ISet.clear()", () {
-    final ISet<int> iset = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
+    final ISet<int> iset =
+        ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
 
     final ISet<int> iSetCleared = iset.clear();
 
