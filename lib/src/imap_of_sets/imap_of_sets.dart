@@ -28,6 +28,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// The map-of-sets configuration.
   final ConfigMapOfSets config;
 
+  /// Returns this `IMapOfSets<K, V>` as an `IMap<K, ISet<V>>`.
+  IMap<K, ISet<V>> asIMap() => _mapOfSets;
+
   /// Flushes this collection, if necessary. Chainable method.
   /// If collection list is already flushed, don't do anything.
   /// Note: This will flush the map and all its internal sets.
