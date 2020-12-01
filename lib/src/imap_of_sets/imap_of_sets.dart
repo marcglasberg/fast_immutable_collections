@@ -313,9 +313,22 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
 
+  /// Remove, from the given [key] set, all values that satisfy the given [test].
+  /// If the set becomes empty, the [key] will be removed entirely.
+  ///
+  /// See also: [removeValuesWhere] that lets you remove values from many keys.
+  ///
+  IMapOfSets<K, V> removeValueWhere(
+    K key,
+    bool Function(V value) test,
+  ) =>
+      update(key, (ISet<V> set) => set.removeWhere(test));
+
   /// Remove, from all sets, all given [values] that satisfy the given [test].
   /// If some [set] becomes empty, the [key] will be removed entirely.
   /// If you want, you can pass [numberOfRemovedValues] to get the number of removed values.
+  ///
+  /// See also: [removeValueWhere] that lets you remove values from a single key.
   ///
   IMapOfSets<K, V> removeValuesWhere(
     bool Function(K key, V value) test, {
