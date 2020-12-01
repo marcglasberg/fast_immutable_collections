@@ -344,6 +344,38 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("IList.hashCode cache | when cache is on", () {
+    final List<int> list = [1, 2, 3];
+
+    final IList<int> iListWithoutCache =
+        IList.unsafe(list, config: ConfigList(cacheHashCode: true));
+
+    final int hashBefore = iListWithoutCache.hashCode;
+
+    list.add(4);
+
+    final int hashAfter = iListWithoutCache.hashCode;
+
+    expect(hashAfter, hashBefore);
+  });
+
+  test("IList.hashCode cache | when cache is off", () {
+    final List<int> list = [1, 2, 3];
+
+    final IList<int> iListWithoutCache =
+        IList.unsafe(list, config: ConfigList(cacheHashCode: false));
+
+    final int hashBefore = iListWithoutCache.hashCode;
+
+    list.add(4);
+
+    final int hashAfter = iListWithoutCache.hashCode;
+
+    expect(hashAfter, isNot(hashBefore));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("IList.withConfig()", () {
     final IList<int> ilist = IList([1, 2]);
 
