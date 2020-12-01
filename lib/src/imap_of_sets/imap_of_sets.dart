@@ -84,13 +84,13 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If [keyMapper] and [valueMapper] are not specified, the default is the
   /// identity function.
   ///
-  factory IMapOfSets.fromIterable(
-    Iterable iterable, {
-    K Function(dynamic) keyMapper,
-    V Function(dynamic) valueMapper,
+  static IMapOfSets<K, V> fromIterable<K, V, I>(
+    Iterable<I> iterable, {
+    K Function(I) keyMapper,
+    V Function(I) valueMapper,
     ConfigMapOfSets config,
   }) {
-    Map<K, Set<V>> map = _createMutableMapOfSets<K, V>(
+    Map<K, Set<V>> map = _mutableMapOfSets<K, V, I>(
       iterable,
       keyMapper: keyMapper,
       valueMapper: valueMapper,
@@ -638,13 +638,13 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return IMapOfSets<V, K>.withConfig(result, config);
   }
 
-  static Map<K, Set<V>> _createMutableMapOfSets<K, V>(
-    Iterable iterable, {
-    K Function(dynamic) keyMapper,
-    V Function(dynamic) valueMapper,
+  static Map<K, Set<V>> _mutableMapOfSets<K, V, I>(
+    Iterable<I> iterable, {
+    K Function(I) keyMapper,
+    V Function(I) valueMapper,
   }) {
     Map<K, Set<V>> map = {};
-    for (dynamic item in iterable) {
+    for (I item in iterable) {
       K key = keyMapper == null ? (item as K) : keyMapper(item);
       V value = valueMapper == null ? (item as V) : valueMapper(item);
       Set<V> set = map[key];
