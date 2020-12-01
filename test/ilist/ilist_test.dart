@@ -1130,8 +1130,10 @@ void main() {
       () => expect(["head", "shoulders", "knees", "head", "toes"].lock.removeMany("head"),
           ["shoulders", "knees", "toes"]));
 
-  test("IList.removeNulls()", () => expect([1, 2, null, 4, null].lock.removeNulls(), [1, 2, 4]),
-      skip: true);
+  test(
+    "IList.removeNulls()",
+    () => expect([1, 2, null, 4, null].lock.removeNulls(), [1, 2, 4]),
+  );
 
   test("IList.removeDuplicates()",
       () => expect([1, 2, 3, 3, 4, 5, 5].lock.removeDuplicates(), [1, 2, 3, 4, 5]));
