@@ -169,16 +169,16 @@ class IList<T> // ignore: must_be_immutable
 
   int _counter = 0;
 
-  /// ## Sync Auto-flush:
-  ///
+  /// ## Sync Auto-flush
+  /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time collection methods are used.
   ///
   /// As soon as counter reaches the refresh-factor, the collection is flushed
   /// and `counter` returns to `0`.
   ///
-  /// ## Async Auto-flush:
-  ///
+  /// ## Async Auto-flush
+  /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time collection methods are used, as long as `counter >= 0`.
   ///
@@ -191,6 +191,7 @@ class IList<T> // ignore: must_be_immutable
   /// `counter` is negative and different from `-asyncCounter` it means we are
   /// one async gap after the collection was marked for flushing.
   /// At this point, the collection will flush and `counter` returns to zero.
+  /// 
   /// Note: [_count] is called in methods which read values. It's not called
   /// in methods which create new [ILists] or flush the list.
   void _count() {
@@ -257,6 +258,8 @@ class IList<T> // ignore: must_be_immutable
   /// However, if you try to use methods that modify the list, like [add],
   /// it will throw an [UnsupportedError].
   /// It is also very fast to lock this list back into an [IList].
+  /// 
+  /// See also: [UnmodifiableListView]
   List<T> get unlockView => UnmodifiableListView(this);
 
   /// Unlocks the list, returning a **safe**, modifiable (mutable) [List].
@@ -267,6 +270,8 @@ class IList<T> // ignore: must_be_immutable
   /// it will unlock the [IList], lazily, only if necessary.
   /// If you never mutate the list, it will be very fast to lock this list
   /// back into an [IList].
+  /// 
+  /// See also: [ModifiableListView]
   List<T> get unlockLazy => ModifiableListView(this);
 
   @override
@@ -278,15 +283,16 @@ class IList<T> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => !isEmpty;
 
-  /// If [isDeepEquals] configuration is `true`:
+  /// - If [isDeepEquals] configuration is `true`:
   /// Will return `true` only if the list items are equal (and in the same order),
   /// and the list configurations are equal. This may be slow for very
   /// large lists, since it compares each item, one by one.
   ///
-  /// If [isDeepEquals] configuration is `false`:
+  /// - If [isDeepEquals] configuration is `false`:
   /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
   /// since it doesn't compare each item.
+  /// 
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
@@ -501,6 +507,7 @@ class IList<T> // ignore: must_be_immutable
     return _l.any(test);
   }
 
+  // TODO: Marcelo, por favor, adicione a documentação sobre views e cast.
   @override
   IList<R> cast<R>() {
     Iterable<R> result = _l.cast<R>();
