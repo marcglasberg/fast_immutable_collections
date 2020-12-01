@@ -16,8 +16,10 @@ extension IListExtension<T> on List<T> {
   /// it will break the [IList] and any other derived lists in unpredictable ways.
   /// 
   /// Note you can optionally disallow unsafe constructors in the global configuration
-  /// by doing: `disallowUnsafeConstructors = true` (and then optionally preventing
-  /// further configuration changes by calling `lockConfig()`).
+  /// by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then optionally preventing
+  /// further configuration changes by calling `ImmutableCollection.lockConfig()`).
+  /// 
+  /// See also: [ImmutableCollection]
   IList<T> get lockUnsafe => IList<T>.unsafe(this, config: IList.defaultConfig);
 
   /// Sorts this list according to the order specified by the [compare] function.

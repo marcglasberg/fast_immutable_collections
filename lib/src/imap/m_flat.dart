@@ -56,7 +56,7 @@ class MFlat<K, V> extends M<K, V> {
   int get length => _map.length;
 
   /// Map equality but with an [Iterable] of [MapEntry].
-  /// Like the other Map equalities, it doesn't  take order into consideration.
+  /// Like the other [Map] equalities, it doesn't  take order into consideration.
   bool deepMapEquals_toIterable(Iterable<MapEntry<K, V>> entries) {
     if (entries == null) return false;
     Map<K, V> map = Map<K, V>.fromEntries(entries);

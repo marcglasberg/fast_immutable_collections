@@ -13,6 +13,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// If you never mutate the list, it will be very fast to lock this list
 /// back into an [IList].
 ///
+/// See also: [UnmodifiableListView]
 class ModifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   IList<T> _iList;
   List<T> _list;

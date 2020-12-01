@@ -1,20 +1,20 @@
 import "../ilist/ilist.dart";
 import "immutable_collection.dart";
 
-/// 1. If [a] and [b] are both null, they don't have order. If one of them
-/// is null, it will come later, unless the [nullsBefore] is true, in which
-/// case the null will come before.
+/// 1. If [a] and [b] are both `null`, they don't have order. If one of them
+/// is `null`, it will come later, unless the [nullsBefore] is `true`, in which
+/// case the `null` will come before.
 ///
 /// 2. Otherwise, if [a] and [b] are both of type [Comparable], compare them
 /// with their natural comparator.
 ///
-/// 3. Otherwise, if [a] and [b] are map-entries, compare their keys. If their
-/// keys compare as the same, then compare their values.
+/// 3. Otherwise, if [a] and [b] are map-entries (`MapEntry`), compare their `key`s. If their
+/// `key`s compare as the same, then compare their `value`s.
 ///
-/// 4. Otherwise, if [a] and [b] are booleans, compare them such as `true`
+/// 4. Otherwise, if [a] and [b] are `bool`eans, compare them such as `true`
 /// comes after `false`.
 ///
-/// 5. Otherwise, return 0 (which means unordered).
+/// 5. Otherwise, return `0`, which means **unordered**.
 ///
 /// Example:
 ///
@@ -22,7 +22,7 @@ import "immutable_collection.dart";
 /// [2, null, 1]..sort(compareObject);
 /// ```
 ///
-/// Example with nulls coming before:
+/// Example with `null`s coming before:
 ///
 /// ```dart
 /// [2, null, 1]..sort((a, b) => compareObject(a, b, nullsBefore: true));
@@ -46,31 +46,34 @@ int compareObject<T extends Object>(
 // /////////////////////////////////////////////////////////////////////////////
 
 extension ComparableExtension on Object {
-  /// 1) If this object and [other] are both null, they don't have order. If
-  /// one of them is null, it will come later, unless the [nullsBefore] is true,
-  /// in which case the null will come before.
+  /// 1. If this object and [other] are both `null`, they don't have order. If
+  /// one of them is `null`, it will come later, unless the [nullsBefore] is `true`,
+  /// in which case the `null` will come before.
   ///
-  /// 1) Otherwise, if this object and [other] are both of type [Comparable],
+  /// 2. Otherwise, if this object and [other] are both of type [Comparable],
   /// compare them with their natural comparator.
   ///
-  /// 2) Otherwise, if this object and [other] are map-entries, compare their
-  /// keys. If their keys compare as the same, then compare their values.
+  /// 3. Otherwise, if this object and [other] are map-entries (`MapEntry`), compare their
+  /// `key`s. If their `key`s compare as the same, then compare their `value`s.
   ///
-  /// 3) Otherwise, if this object and [other] are booleans, compare them such
+  /// 4. Otherwise, if this object and [other] are booleans, compare them such
   /// as `true` comes after `false`.
   ///
-  /// 4) Otherwise, return 0 (which means unordered).
+  /// 5. Otherwise, return `0`, which means **unordered**.
   ///
   /// Examples:
   ///
-  ///      5.compareObjectTo(2);
-  ///      true.compareObjectTo(false);
-  ///      MapEntry('a', 5).compareObjectTo(MapEntry('b', 3));
+  /// ```dart
+  /// 5.compareObjectTo(2);
+  /// true.compareObjectTo(false);
+  /// MapEntry('a', 5).compareObjectTo(MapEntry('b', 3));
+  /// ```
   ///
-  /// Example with nulls coming before:
+  /// Example with `null`s coming before:
   ///
-  ///      5.compareObjectTo(2, nullsBefore: true);
-  ///
+  /// ```dart
+  /// 5.compareObjectTo(2, nullsBefore: true);
+  /// ```
   int compareObjectTo(
     Object other, {
     bool nullsBefore = false,
@@ -81,14 +84,14 @@ extension ComparableExtension on Object {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// The [if0] extension lets you nest comparators. For example:
+/// The [if0] `extension` lets you nest comparators. For example:
 ///
-///     // 1) Strings are ordered according to their length.
-///     // 2) Otherwise, they come in their natural order.
-///     compareTo = (String a, String b) =>
-///                    a.length.compareTo(b.length)
-///                      .if0(a.compareTo(b));
-///
+/// ```dart
+/// // 1) Strings are ordered according to their length.
+/// // 2) Otherwise, they come in their natural order.
+/// compareTo = (String a, String b) =>
+///     a.length.compareTo(b.length).if0(a.compareTo(b));
+/// ```
 extension ComparatorExtension on int {
   int if0(int then) => this == 0 ? then : this;
 }
@@ -115,21 +118,24 @@ extension ComparatorExtension on int {
 /// have a list of numbers which you want to sort according to
 /// the following rules:
 ///
-///      1) If present, number 14 is always the first, followed by number 15.
-///      2) Otherwise, odd numbers come before even ones.
-///      3) Otherwise, come numbers which are multiples of 3,
-///      4) Otherwise, come numbers which are multiples of 5,
-///      5) Otherwise, numbers come in their natural order.
-///      int Function(int, int) compareTo = sortBy((x) => x == 14,
-///         then: sortBy((x) => x == 15,
-///             then: sortBy((x) => x % 2 == 1,
-///                 then: sortBy((x) => x % 3 == 0,
-///                     then: sortBy((x) => x % 5 == 0,
-///                         then: (int a, int b) => a.compareTo(b),
-///                     )))));
+/// ```dart
+/// 1) If present, number 14 is always the first, followed by number 15.
+/// 2) Otherwise, odd numbers come before even ones.
+/// 3) Otherwise, numbers which are multiples of 3,
+/// 4) Otherwise, numbers which are multiples of 5,
+/// 5) Otherwise, numbers come in their natural order.
+/// 
+/// int Function(int, int) compareTo = sortBy((x) => x == 14,
+///     then: sortBy((x) => x == 15,
+///     then: sortBy((x) => x % 2 == 1,
+///         then: sortBy((x) => x % 3 == 0,
+///         then: sortBy((x) => x % 5 == 0,
+///             then: (int a, int b) => a.compareTo(b),
+/// )))));
+/// ```
 ///
-/// Important: When a cascade of [sortBy] is used, make sure you don't create
-/// inconsistencies. For example, this is inconsistent: `a<b` and `a>c` and `b<c`.
+/// **Important**: When a cascade of [sortBy] is used, make sure you don't create
+/// inconsistencies. For example, this is inconsistent: `a < b` and `a > c` and `b < c`.
 /// Sorts with inconsistent rules may result in different orders for the same
 /// items depending on their initial position, and the rules may not be followed
 /// precisely.
@@ -168,7 +174,7 @@ int Function(T, T) sortBy<T>(
 /// Optionally, you can provide a [mapper] function, to convert [a] and [b]
 /// into the type of values in [order].
 ///
-/// Notes:
+/// ## Notes
 ///
 /// - [order] should be [List] or [IList], otherwise it will be converted
 /// to a list in every use, which will hurt performance.
@@ -180,16 +186,19 @@ int Function(T, T) sortBy<T>(
 /// have a list of numbers which you want to sort according to
 /// a certain order:
 ///
-///      1) Order should be [7, 3, 4, 21, 2] when these values appear.
-///      2) Otherwise, odd numbers come before even ones.
-///      3) Otherwise, numbers come in their natural order.
-///      int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
-///         then: sortBy((x) => x % 2 == 1,
-///             then: (int a, int b) => a.compareTo(b),
-///                 ));
+/// ```dart
+/// 1) Order should be [7, 3, 4, 21, 2] when these values appear.
+/// 2) Otherwise, odd numbers come before even ones.
+/// 3) Otherwise, numbers come in their natural order.
+/// 
+/// int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
+///     then: sortBy((x) => x % 2 == 1,
+///         then: (int a, int b) => a.compareTo(b),
+/// ));
+/// ```
 ///
-/// Important: When a cascade of [sortLike] is used, make sure you don't create
-/// inconsistencies. For example, this is inconsistent: `a<b` and `a>c` and `b<c`.
+/// **Important**: When a cascade of [sortLike] is used, make sure you don't create
+/// inconsistencies. For example, this is inconsistent: `a < b` and `a > c` and `b < c`.
 /// Sorts with inconsistent rules may result in different orders for the same
 /// items depending on their initial position, and the rules may not be followed
 /// precisely.
