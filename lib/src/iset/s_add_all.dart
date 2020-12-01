@@ -2,7 +2,7 @@ import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// Note that adding repeated members won't work as the expected behavior for regular `Set`s,
+/// Note that adding repeated members won't work as the expected behavior for regular [Set]s,
 /// because that behavior is implemented elsewhere ([S]).
 class SAddAll<T> extends S<T> {
   final S<T> _s;
@@ -10,8 +10,8 @@ class SAddAll<T> extends S<T> {
   // Will always store this as `Set` or [S].
   final Iterable<T> _setOrS;
 
-  /// Safe.
-  /// Note: If you need to pass an ISet, pass its [S] instead.
+  /// **Safe**.
+  /// Note: If you need to pass an [ISet], pass its [S] instead.
   SAddAll(this._s, Iterable<T> items)
       : assert(_s != null),
         assert(items != null),

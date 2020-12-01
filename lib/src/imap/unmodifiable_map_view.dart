@@ -33,10 +33,12 @@ class UnmodifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeE
   final IMap<K, V> _iMap;
   final Map<K, V> _map;
 
+  /// Create an unmodifiable [Set] view of type [UnmodifiableSetView], from an [iset].
   UnmodifiableMapView(IMap<K, V> imap)
       : _iMap = imap ?? IMap.empty<K, V>(),
         _map = null;
 
+  /// Create an unmodifiable [Set] view of type [UnmodifiableSetView], from another [Set].
   UnmodifiableMapView.fromMap(Map<K, V> map)
       : _iMap = null,
         _map = map;

@@ -1,6 +1,10 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "dart:collection";
+
 import "package:meta/meta.dart";
+
+import "../base/immutable_collection.dart";
+import "ilist.dart";
+import "ilist_extension.dart";
 
 /// The [UnmodifiableListView] is a relatively safe, unmodifiable [List] that is built from an
 /// [IList] or another [List]. The construction of the [UnmodifiableListView] is very fast,

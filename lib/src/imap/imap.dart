@@ -249,7 +249,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   int _counter = 0;
 
-  /// ## Sync Auto-flush:
+  /// ## Sync Auto-flush
   /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used.
@@ -257,7 +257,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// As soon as counter reaches the refresh-factor, the collection is flushed
   /// and `counter` returns to `0`.
   ///
-  /// ## Async Auto-flush:
+  /// ## Async Auto-flush
   /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used, as long as `counter >= 0`.
@@ -271,7 +271,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// `counter` is negative and different from `-asyncCounter` it means we are
   /// one async gap after the collection was marked for flushing.
   /// At this point, the collection will flush and `counter` returns to zero.
-  /// Note: _count is called in methods which read values. It's not called
+  /// 
+  /// Note: [_count] is called in methods which read values. It's not called
   /// in methods which create new IMaps or flush the map.
   void _count() {
     if (!ImmutableCollection.autoFlush) return;
@@ -732,7 +733,7 @@ class IMap<K, V> // ignore: must_be_immutable
     return _m.any(test);
   }
 
-  /// Provides a view of this map as having [RK] keys and [RV] instances,
+  /// Provides a **view** of this map as having [RK] keys and [RV] instances,
   /// if necessary.
   ///
   /// If this map is already an `IMap<RK, RV>`, it is returned unchanged.

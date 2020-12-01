@@ -15,8 +15,8 @@ extension IMapExtension<K, V> on Map<K, V> {
   /// it will break the [IMap] and any other derived map in unpredictable ways.
   /// 
   /// Note you can optionally disallow unsafe constructors in the global configuration
-  /// by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then optionally preventing
-  /// further configuration changes by calling `ImmutableCollection.lockConfig()`).
+  /// by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then optionally 
+  /// preventing further configuration changes by calling `ImmutableCollection.lockConfig()`).
   /// 
   /// See also: [ImmutableCollection]
   IMap<K, V> get lockUnsafe => IMap<K, V>.unsafe(this, config: IMap.defaultConfig);

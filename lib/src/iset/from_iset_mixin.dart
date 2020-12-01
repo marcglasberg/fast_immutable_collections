@@ -27,6 +27,25 @@ import "../iset/iset.dart";
 ///   @override
 ///   ISet<Student> get iter => _students;
 /// }
+/// 
+/// class Student extends ProtoStudent {
+///   final String name;
+///
+///   const Student(this.name);
+///
+///   @override
+///   String toString() => "Student: $name";
+///
+///   @override
+///   bool operator ==(Object other) =>
+///      identical(this, other) ||
+///      other is Student &&
+///          runtimeType == other.runtimeType &&
+///          name == other.name;
+///
+///   @override
+///   int get hashCode => name.hashCode;
+/// }
 /// ```
 ///
 /// See also: [FromIterableISetMixin].

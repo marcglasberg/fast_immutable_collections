@@ -1,5 +1,7 @@
 import "dart:collection";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
+import "../base/immutable_collection.dart";
+import "ilist.dart";
 
 /// The [ModifiableListView] is a safe, modifiable [List] that is built from an [IList].
 /// The construction of the list is fast at first, since it makes no copies of the

@@ -1,13 +1,20 @@
 import "dart:collection";
 import "dart:math";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:fast_immutable_collections/src/base/hash.dart";
+
 import "package:meta/meta.dart";
+
+import "../base/configs.dart";
+import "../base/hash.dart";
+import "../base/immutable_collection.dart";
+import "../base/sort.dart";
+import "../ilist/ilist.dart";
+import "modifiable_set_view.dart";
 import "s_flat.dart";
 import "s_add.dart";
 import "s_add_all.dart";
+import "unmodifiable_set_view.dart";
 
-/// An **immutable**, unordered set.
+/// An **immutable**, **unordered** set.
 @immutable
 class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
@@ -18,7 +25,7 @@ class ISet<T> // ignore: must_be_immutable
   final ConfigSet config;
 
   /// Create an [ISet] from any [Iterable].
-  /// Fast, if the Iterable is another [ISet].
+  /// Fast, if the [Iterable] is another [ISet].
   factory ISet([Iterable<T> iterable]) => //
       ISet.withConfig(iterable, defaultConfig);
 
@@ -43,10 +50,16 @@ class ISet<T> // ignore: must_be_immutable
   /// Creates a new set with the given [config].
   ///
   /// To copy the config from another [ISet]:
-  ///    `set = set.withConfig(other.config)`.
+  /// 
+  /// ```dart
+  /// set = set.withConfig(other.config)
+  /// ```
   ///
   /// To change the current config:
-  ///    `set = set.withConfig(set.config.copyWith(isDeepEquals: isDeepEquals))`.
+  /// 
+  /// ```dart
+  /// set = set.withConfig(set.config.copyWith(isDeepEquals: isDeepEquals))
+  /// ```
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
@@ -59,9 +72,10 @@ class ISet<T> // ignore: must_be_immutable
   /// but the config of [other].
   ISet<T> withConfigFrom(ISet<T> other) => withConfig(other.config);
 
-  /// Unsafe constructor. Use this at your own peril.
+  /// **Unsafe constructor**. Use this at your own peril.
+  /// 
   /// This constructor is fast, since it makes no defensive copies of the set.
-  /// However, you should only use this with a new set you"ve created yourself,
+  /// However, you should only use this with a new set you've created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
   /// it will break the [ISet] and any other derived sets in unpredictable ways.
   ISet.unsafe(Set<T> set, {@required this.config})
@@ -71,10 +85,10 @@ class ISet<T> // ignore: must_be_immutable
   }
 
   /// Returns an empty [ISet], with the given configuration. If a configuration
-  /// is not provided, it will use the default configuration. Note: If you want
-  /// to create an empty immutable collection of the same type and same
-  /// configuration as a source collection, simply call [clear] in the source
-  /// collection.
+  /// is not provided, it will use the default configuration. 
+  /// 
+  /// Note: If you want to create an empty immutable collection of the same type
+  /// and same configuration as a source collection, simply call [clear] in the source collection.
   static ISet<T> empty<T>([ConfigSet config]) => ISet._unsafe(
         SFlat.empty<T>(),
         config: config ?? defaultConfig,
@@ -90,6 +104,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Global configuration that specifies if, by default, the [ISet]s
   /// use equality or identity for their [operator ==].
+  /// 
   /// By default `isDeepEquals: true` (sets are compared by equality)
   /// and `sort: true` (certain sets outputs are sorted).
   static ConfigSet get defaultConfig => _defaultConfig;
@@ -99,7 +114,7 @@ class ISet<T> // ignore: must_be_immutable
   static int get flushFactor => _flushFactor;
 
   /// Global configuration that specifies if auto-flush of [ISet]s should be
-  /// async. The default is true. When the autoflush is async, it will only
+  /// async. The default is `true`. When the autoflush is async, it will only
   /// happen after the async gap, no matter how many operations a collection
   /// undergoes. When the autoflush is sync, it may flush one or more times
   /// during the same task.
@@ -140,15 +155,19 @@ class ISet<T> // ignore: must_be_immutable
 
   int _counter = 0;
 
-  /// Sync Auto-flush:
+  /// ## Sync Auto-flush
+  /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used.
+  /// 
   /// As soon as counter reaches the refresh-factor, the collection is flushed
   /// and `counter` returns to `0`.
   ///
-  /// Async Auto-flush:
+  /// ## Async Auto-flush
+  /// 
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used, as long as `counter >= 0`.
+  /// 
   /// As soon as counter reaches the refresh-factor, the collection is marked
   /// for flushing. There is also a global counter called an `asyncCounter`
   /// which starts at `1`. When a collection is marked for flushing, it first
@@ -158,7 +177,8 @@ class ISet<T> // ignore: must_be_immutable
   /// `counter` is negative and different from `-asyncCounter` it means we are
   /// one async gap after the collection was marked for flushing.
   /// At this point, the collection will flush and `counter` returns to zero.
-  /// Note: _count is called in methods which read values. It's not called
+  /// 
+  /// Note: [_count] is called in methods which read values. It's not called
   /// in methods which create new ISets or flush the set.
   void _count() {
     if (!ImmutableCollection.autoFlush) return;
@@ -185,7 +205,7 @@ class ISet<T> // ignore: must_be_immutable
     }
   }
 
-  /// Safe. Fast if the iterable is an ISet.
+  /// **Safe**. Fast if the iterable is an [ISet].
   ISet._(
     Iterable<T> iterable, {
     @required this.config,
@@ -195,10 +215,10 @@ class ISet<T> // ignore: must_be_immutable
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable);
 
-  /// Unsafe.
+  /// **Unsafe**.
   ISet._unsafe(this._s, {@required this.config});
 
-  /// Unsafe.
+  /// **Unsafe**.
   ISet._unsafeFromSet(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
@@ -216,12 +236,12 @@ class ISet<T> // ignore: must_be_immutable
 
   bool get isIdentityEquals => !config.isDeepEquals;
 
-  /// Unlocks the set, returning a regular (mutable, unordered) [Set]
+  /// Unlocks the set, returning a regular (*mutable, unordered*) [Set]
   /// of type [HashSet]. This set is "safe", in the sense that is independent
   /// from the original [ISet].
   Set<T> get unlock => _s.unlock;
 
-  /// Unlocks the map, returning a regular (mutable, ordered, sorted) [Set]
+  /// Unlocks the map, returning a regular (*mutable, ordered, sorted*) [Set]
   /// of type [LinkedHashSet]. This map is "safe", in the sense that is independent
   /// from the original [ISet].
   Set<T> get unlockSorted {
@@ -235,6 +255,8 @@ class ISet<T> // ignore: must_be_immutable
   /// However, if you try to use methods that modify the set, like [add],
   /// it will throw an [UnsupportedError].
   /// It is also very fast to lock this set back into an [ISet].
+  /// 
+  /// See also: [UnmodifiableSetView]
   Set<T> get unlockView => UnmodifiableSetView(this);
 
   /// Unlocks the set, returning a safe, modifiable (mutable) [Set].
@@ -245,13 +267,15 @@ class ISet<T> // ignore: must_be_immutable
   /// words, it will unlock the [ISet], lazily, only if necessary.
   /// If you never mutate the set, it will be very fast to lock this set
   /// back into an [ISet].
+  /// 
+  /// See also: [ModifiableSetView]
   Set<T> get unlockLazy => ModifiableSetView(this);
 
-  /// 1) If the set's [config] has [ConfigSet.sort] `true` (the default),
+  /// 1. If the set's [config] has [ConfigSet.sort] `true` (the default),
   /// it will iterate in the natural order of items. In other words, if the
   /// items are [Comparable], they will be sorted by `a.compareTo(b)`.
-  /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
-  /// are not [Comparable], the iterator order is undefined.
+  /// 2. If the set's [config] has [ConfigSet.sort] `false`, or if the items
+  /// are not [Comparable], the [iterator] order is undefined.
   ///
   @override
   Iterator<T> get iterator {
@@ -262,7 +286,7 @@ class ISet<T> // ignore: must_be_immutable
       return _s.iterator;
   }
 
-  /// This iterator is very fast to create, but won't iterate in any particular
+  /// This [iterator] is very fast to create, but won't iterate in any particular
   /// order, no matter what the set configuration is.
   Iterator<T> get fastIterator => _s.iterator;
 
@@ -272,15 +296,16 @@ class ISet<T> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => !isEmpty;
 
-  /// If [isDeepEquals] configuration is true:
-  /// Will return true only if the set items are equal (and in the same order),
+  /// - If [isDeepEquals] configuration is `true`:
+  /// Will return `true` only if the set items are equal (and in the same order),
   /// and the set configurations are equal. This may be slow for very
   /// large sets, since it compares each item, one by one.
   ///
-  /// If [isDeepEquals] configuration is false:
-  /// Will return true only if the sets internals are the same instances
+  /// - If [isDeepEquals] configuration is `false`:
+  /// Will return `true` only if the sets internals are the same instances
   /// (comparing by identity). This will be fast even for very large sets,
   /// since it doesn't  compare each item.
+  /// 
   /// Note: This is not the same as `identical(set1, set2)` since it doesn't
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
@@ -297,8 +322,8 @@ class ISet<T> // ignore: must_be_immutable
   /// the elements of [other].
   ISet<T> operator +(Iterable<T> other) => addAll(other);
 
-  /// Will return true only if the ISet has the same number of items as the
-  /// iterable, and the ISet items are equal to the iterable items, in whatever
+  /// Will return `true` only if the [ISet] has the same number of items as the
+  /// iterable, and the [ISet] items are equal to the iterable items, in whatever
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
@@ -328,11 +353,13 @@ class ISet<T> // ignore: must_be_immutable
             (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>));
   }
 
-  /// Return true if other is null or the cached hashCodes proves the
-  /// collections are NOT equal.
-  /// Explanation: Objects with different hashCodes are not equal. However,
+  /// Return `true` if other is `null` or the cached [hashCode]s proves the
+  /// collections are **NOT** equal.
+  /// 
+  /// Explanation: Objects with different [hashCode]s are not equal. However,
   /// if the hashCodes are the same, then nothing can be said about the equality.
-  /// Note: We use the CACHED hashCodes. If any of the hashCodes is null it
+  /// 
+  /// Note: We use the **CACHED** hashCodes. If any of the hashCodes is null it
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(ISet<T> other) {
     return (other == null) ||
@@ -341,9 +368,10 @@ class ISet<T> // ignore: must_be_immutable
             _hashCode != other._hashCode);
   }
 
-  /// Will return true only if the sets internals are the same instances
+  /// Will return `true` only if the sets internals are the same instances
   /// (comparing by identity). This will be fast even for very large sets,
   /// since it doesn't  compare each item.
+  /// 
   /// Note: This is not the same as `identical(set1, set2)` since it doesn't
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
@@ -439,7 +467,7 @@ class ISet<T> // ignore: must_be_immutable
     return _s.any(test);
   }
 
-  /// Provides a view of this set as a set of [R] instances.
+  /// Provides a **view** of this set as a set of [R] instances.
   ///
   /// If this set contains only instances of [R], all read operations
   /// will work correctly. If any operation tries to access an element
@@ -491,11 +519,12 @@ class ISet<T> // ignore: must_be_immutable
     return length;
   }
 
-  /// 1) If the set's [config] has [ConfigSet.sort] `true` (the default),
+  /// 1. If the set's [config] has [ConfigSet.sort] `true` (the default),
   /// will return the first element in the natural order of items.
-  /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
+  /// 2. If the set's [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], any item may be returned.
-  /// Note: This method is not efficient, as `ISets` are not naturally sorted.
+  /// 
+  /// Note: This method is not efficient, as [ISet]s are not naturally sorted.
   @override
   T get first {
     _count();
@@ -514,10 +543,11 @@ class ISet<T> // ignore: must_be_immutable
       return _s.first;
   }
 
-  /// 1) If the set's [config] has [ConfigSet.sort] `true` (the default),
+  /// 1. If the set's [config] has [ConfigSet.sort] `true` (the default),
   /// will return the last element in the natural order of items.
-  /// 2) If the set's [config] has [ConfigSet.sort] `false`, or if the items
+  /// 2. If the set's [config] has [ConfigSet.sort] `false`, or if the items
   /// are not [Comparable], any item may be returned.
+  /// 
   /// Note: This method is not efficient, as `ISets` are not naturally sorted.
   @override
   T get last {
@@ -636,14 +666,14 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a [List] with all items from the set.
   ///
-  /// 1) If you provide a [compare] function, the list will be sorted with it.
+  /// 1. If you provide a [compare] function, the list will be sorted with it.
   ///
-  /// 2) If no [compare] function is provided, the list will be sorted according to the
+  /// 2. If no [compare] function is provided, the list will be sorted according to the
   /// set's [config] field:
-  /// - If [ConfigSet.sort] is `true` (the default), the list will be sorted with
-  /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
-  /// items implement [Comparable]. Otherwise, the list order is undefined.
-  /// - If [ConfigSet.sort] is `false`, the list order is undefined.
+  ///     - If [ConfigSet.sort] is `true` (the default), the list will be sorted with
+  ///     `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
+  ///     items implement [Comparable]. Otherwise, the list order is undefined.
+  ///     - If [ConfigSet.sort] is `false`, the list order is undefined.
   ///
   @override
   List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
@@ -661,15 +691,15 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a [IList] with all items from the set.
   ///
-  /// 1) If you provide a [compare] function, the list will be sorted with it.
+  /// 1. If you provide a [compare] function, the list will be sorted with it.
   ///
-  /// 2) If no [compare] function is provided, the list will be sorted
+  /// 2. If no [compare] function is provided, the list will be sorted
   /// according to the set's [ISet.config] field:
-  /// - If [ConfigSet.sort] is `true` (the default), the list will be sorted
-  /// with `a.compareTo(b)`, in other words, with the natural order of items.
-  /// This assumes the items implement [Comparable]. Otherwise, the list order
-  /// is undefined.
-  /// - If [ConfigSet.sort] is `false`, the list order is undefined.
+  ///     - If [ConfigSet.sort] is `true` (the default), the list will be sorted
+  ///     with `a.compareTo(b)`, in other words, with the natural order of items.
+  ///     This assumes the items implement [Comparable]. Otherwise, the list order
+  ///     is undefined.
+  ///     - If [ConfigSet.sort] is `false`, the list order is undefined.
   ///
   /// You can also provide a [config] for the [IList].
   ///
@@ -680,20 +710,20 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a [Set] with all items from the [ISet].
   ///
-  /// 1) If you provide a [compare] function, the resulting set will be sorted with it,
-  /// and it will be a [LinkedHashSet], which is ORDERED, meaning further iteration of
+  /// 1. If you provide a [compare] function, the resulting set will be sorted with it,
+  /// and it will be a [LinkedHashSet], which is **ORDERED**, meaning further iteration of
   /// its items will maintain insertion order.
   ///
-  /// 2) If no [compare] function is provided, the list will be sorted according to the
+  /// 2. If no [compare] function is provided, the list will be sorted according to the
   /// set's [ISet.config] field:
-  /// - If [ConfigSet.sort] is `true` (the default), the set will be sorted with
-  /// `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
-  /// items implement [Comparable]. Otherwise, the set order is undefined.
-  /// The set will be a [LinkedHashSet], which is ORDERED, meaning further iteration of
-  /// its items will maintain insertion order.
-  /// - If [ConfigSet.sort] is `false`, the set order is undefined. The set will
-  /// be a [HashSet], which is NOT ordered. Note this is the same as unlocking the
-  /// set with [ISet.unlock].
+  ///     - If [ConfigSet.sort] is `true` (the default), the set will be sorted with
+  ///     `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
+  ///     items implement [Comparable]. Otherwise, the set order is undefined.
+  ///     The set will be a [LinkedHashSet], which is ORDERED, meaning further iteration of
+  ///     its items will maintain insertion order.
+  ///     - If [ConfigSet.sort] is `false`, the set order is undefined. The set will
+  ///     be a [HashSet], which is NOT ordered. Note this is the same as unlocking the
+  ///     set with [ISet.unlock].
   ///
   @override
   Set<T> toSet({int Function(T a, T b) compare}) {
@@ -763,6 +793,7 @@ class ISet<T> // ignore: must_be_immutable
   /// If the equality relation used by the set is not identity,
   /// then the returned object may not be *identical* to [object].
   /// Some set implementations may not be able to implement this method.
+  /// 
   /// If the [contains] method is computed,
   /// rather than being based on an actual object instance,
   /// then there may not be a specific object instance representing the
@@ -811,8 +842,9 @@ abstract class S<T> implements Iterable<T> {
 
   /// The [S] class provides the default fallback methods of `Iterable`, but
   /// ideally all of its methods are implemented in all of its subclasses.
+  /// 
   /// Note these fallback methods need to calculate the flushed set, but
-  /// because that"s immutable, we **cache** it.
+  /// because that's immutable, we **cache** it.
   Set<T> _flushed;
 
   /// Returns the flushed set (flushes it only once).
@@ -824,10 +856,10 @@ abstract class S<T> implements Iterable<T> {
     return _flushed;
   }
 
-  /// Returns a Dart [Set] (mutable, unordered, of type [HashSet]).
+  /// Returns a Dart [Set] (*mutable, unordered, of type [HashSet]*).
   HashSet<T> get unlock => HashSet.of(this);
 
-  /// Returns a new `Iterator` that allows iterating the items of the [IList].
+  /// Returns a new [Iterator] that allows iterating the items of the [IList].
   @override
   Iterator<T> get iterator;
 
@@ -949,7 +981,7 @@ abstract class S<T> implements Iterable<T> {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// Don't use this class.
+/// **Don't use this class**.
 @visibleForTesting
 class InternalsForTestingPurposesISet {
   ISet iset;
