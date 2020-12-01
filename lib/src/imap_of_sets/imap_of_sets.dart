@@ -19,8 +19,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   static set defaultConfig(ConfigMapOfSets config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration of immutable collections.");
     _defaultConfig = config ?? const ConfigMapOfSets();
   }
 
@@ -72,6 +71,31 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
             ),
             config: config ?? defaultConfig,
           );
+  }
+
+  /// Creates a map of sets instance in which the keys and values are
+  /// computed from the [iterable].
+  ///
+  /// For each element of the [iterable] this constructor computes a key/value
+  /// pair, by applying [keyMapper] and [valueMapper] respectively. When the key
+  /// is new, it will be created with a set containing the value. When the key
+  /// already exists, each following value will be added to the existing set.
+  ///
+  /// If [keyMapper] and [valueMapper] are not specified, the default is the
+  /// identity function.
+  ///
+  factory IMapOfSets.fromIterable(
+    Iterable iterable, {
+    K Function(dynamic) keyMapper,
+    V Function(dynamic) valueMapper,
+    ConfigMapOfSets config,
+  }) {
+    Map<K, Set<V>> map = _createMutableMapOfSets<K, V>(
+      iterable,
+      keyMapper: keyMapper,
+      valueMapper: valueMapper,
+    );
+    return IMapOfSets.withConfig(map, config);
   }
 
   /// If you provide [config], the map and all sets will use it.
@@ -612,5 +636,24 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
       }
     }
     return IMapOfSets<V, K>.withConfig(result, config);
+  }
+
+  static Map<K, Set<V>> _createMutableMapOfSets<K, V>(
+    Iterable iterable, {
+    K Function(dynamic) keyMapper,
+    V Function(dynamic) valueMapper,
+  }) {
+    Map<K, Set<V>> map = {};
+    for (dynamic item in iterable) {
+      K key = keyMapper == null ? (item as K) : keyMapper(item);
+      V value = valueMapper == null ? (item as V) : valueMapper(item);
+      Set<V> set = map[key];
+      if (set == null) {
+        set = <V>{};
+        map[key] = set;
+      }
+      set.add(value);
+    }
+    return map;
   }
 }
