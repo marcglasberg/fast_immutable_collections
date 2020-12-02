@@ -158,6 +158,8 @@ class IMap<K, V> // ignore: must_be_immutable
     V Function(I) valueMapper,
     ConfigMap config,
   }) {
+    keyMapper ??= (I i) => i as K;
+    valueMapper ??= (I i) => i as V;
     Map<K, V> map = {
       for (var item in iterable) keyMapper(item): valueMapper(item),
     };
@@ -251,7 +253,7 @@ class IMap<K, V> // ignore: must_be_immutable
   int _counter = 0;
 
   /// ## Sync Auto-flush
-  /// 
+  ///
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used.
   ///
@@ -259,7 +261,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// and `counter` returns to `0`.
   ///
   /// ## Async Auto-flush
-  /// 
+  ///
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time some collection methods are used, as long as `counter >= 0`.
   ///
@@ -272,7 +274,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// `counter` is negative and different from `-asyncCounter` it means we are
   /// one async gap after the collection was marked for flushing.
   /// At this point, the collection will flush and `counter` returns to zero.
-  /// 
+  ///
   /// Note: [_count] is called in methods which read values. It's not called
   /// in methods which create new IMaps or flush the map.
   void _count() {
