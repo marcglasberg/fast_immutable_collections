@@ -33,6 +33,9 @@ class SAddAll<T> extends S<T> {
 
   @override
   int get length => _s.length + _setOrS.length;
+
+  @override
+  T get anyItem => _s.first;
 }
 
 // /////////////////////////////////////////////////////////////////////////////

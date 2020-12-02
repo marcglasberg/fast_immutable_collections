@@ -20,6 +20,9 @@ class SFlat<T> extends S<T> {
   Set<T> get getFlushed => _set;
 
   @override
+  T get anyItem => _set.first;
+
+  @override
   bool contains(Object element) => _set.contains(element);
 
   @override

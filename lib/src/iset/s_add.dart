@@ -23,6 +23,9 @@ class SAdd<T> extends S<T> {
 
   @override
   int get length => _s.length + 1;
+
+  @override
+  T get anyItem => _item;
 }
 
 // /////////////////////////////////////////////////////////////////////////////
