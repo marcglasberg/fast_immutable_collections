@@ -1187,7 +1187,7 @@ class IList<T> // ignore: must_be_immutable
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
     var value = list.removeAt(index);
-    removedItem?.set(value);
+    removedItem?.save(value);
     return IList._unsafeFromList(list, config: config);
   }
 

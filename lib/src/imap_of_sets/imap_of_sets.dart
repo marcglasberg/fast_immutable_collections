@@ -321,7 +321,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
       }
     }
 
-    if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
+    if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
     return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
@@ -378,7 +378,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
       }
     }
 
-    if (numberOfRemovedValues != null) numberOfRemovedValues.set(countRemoved);
+    if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
     return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
   }
@@ -638,11 +638,22 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned [set] to the map.
   ///
-  /// It's an error if the key is not present and [ifAbsent] is not provided.
+  /// If the key is not present and [ifAbsent] is not provided, return the original map
+  /// without modification. Note: If you want [ifAbsent] to throw an error, pass it like
+  /// this: `ifAbsent: () => throw ArgumentError();`.
   ///
-  IMapOfSets<K, V> update(K key, ISet<V> Function(ISet<V> set) update,
-          {ISet<V> Function() ifAbsent}) =>
-      IMapOfSets<K, V>.from(_mapOfSets.update(key, update, ifAbsent: ifAbsent), config: config);
+  IMapOfSets<K, V> update(
+    K key,
+    ISet<V> Function(ISet<V> set) update, {
+    ISet<V> Function() ifAbsent,
+  }) {
+    bool Function(ISet<V> set) ifRemove;
+    if (config.removeEmptySets) ifRemove = (ISet<V> set) => set.isEmpty;
+
+    return IMapOfSets<K, V>.from(
+        _mapOfSets.update(key, update, ifAbsent: ifAbsent, ifRemove: ifRemove),
+        config: config);
+  }
 
   /// Updates all sets.
   ///

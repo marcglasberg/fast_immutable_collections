@@ -1117,11 +1117,20 @@ void main() {
     expect(item.value, 1);
   });
 
-  test("IMap.update() | Error if update a nonexistent key without the ifAbsent parameter", () {
+  test(
+      "IMap.update() | Return the original map if update a nonexistent key without the ifAbsent parameter",
+      () {
     final IMap<String, int> scores = {"Bob": 36}.lock;
 
-    final Output<int> item = Output();
-    expect(() => scores.update("Joe", (int value) => value * 2, value: item), throwsArgumentError);
+    Output<int> item = Output();
+    expect(
+        () => scores.update("Joe", (int value) => value * 2,
+            value: item, ifAbsent: () => throw ArgumentError()),
+        throwsArgumentError);
+
+    item = Output();
+    expect(scores.update("Joe", (int value) => value * 2, value: item), scores);
+    expect(item.value, null);
   });
 
   test("IMap.updateAll()", () {

@@ -845,7 +845,7 @@ class IMap<K, V> // ignore: must_be_immutable
     // TODO: Still need to implement efficiently.
     Map<K, V> map = unlock;
     var result = map.putIfAbsent(key, ifAbsent);
-    if (value != null) value.set(result);
+    if (value != null) value.save(result);
     return IMap._unsafeFromMap(map, config: config);
   }
 
@@ -859,20 +859,49 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned value to the map.
   ///
-  /// It's an error if the key is not present and [ifAbsent] is not provided.
+  /// If the key is not present and [ifAbsent] is not provided, return the original map
+  /// without modification. Note: If you want [ifAbsent] to throw an error, pass it like
+  /// this: `ifAbsent: () => throw ArgumentError();`.
   ///
   /// See also: [Output]
   IMap<K, V> update(
     K key,
     V Function(V value) update, {
+    bool Function(V value) ifRemove,
     V Function() ifAbsent,
     Output<V> value,
   }) {
+    assert(update != null);
+    // ---
+
     // TODO: Still need to implement efficiently.
     Map<K, V> map = unlock;
-    var result = map.update(key, update, ifAbsent: ifAbsent);
-    if (value != null) value.set(result);
-    return IMap._unsafeFromMap(map, config: config);
+
+    if (map.containsKey(key)) {
+      var originalValue = map[key];
+      var updatedValue = update(originalValue);
+      if (ifRemove != null && ifRemove(updatedValue)) {
+        map.remove(key);
+      } else {
+        map[key] = updatedValue;
+      }
+
+      if (value != null) value.save(updatedValue);
+      return IMap._unsafeFromMap(map, config: config);
+    }
+    //
+    // Does not contain key.
+    else {
+      if (ifAbsent != null) {
+        var updatedValue = ifAbsent();
+        if (value != null) value.save(updatedValue);
+        map[key] = updatedValue;
+        return IMap._unsafeFromMap(map, config: config);
+      } else {
+        if (value != null) value.save(null);
+        return this;
+      }
+    }
   }
 
   /// Updates all values.
