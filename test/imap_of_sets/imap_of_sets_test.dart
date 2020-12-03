@@ -1515,4 +1515,31 @@ void main() {
       "b": {11, 12},
     });
   });
+
+  // //////////////////////////////////////////////////////////////////////////////
+
+  // TODO: Marcelo, sugiro mudarmos o nome deste método para algo no plural, como
+  // removeValuesFromKeyWhere.
+  test("IMapOfSets.removeValueWhere()", () {
+    final IMapOfSets<String, int> mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12, 13},
+    }.lock;
+
+    expect(mapOfSets.removeValueWhere("b", (int value) => value > 11).unlock, {
+      "a": {1, 2},
+      "b": {11},
+    });
+  });
+
+  test("IMapOfSets.removeValueWhere() | removes empty sets", () {
+    final IMapOfSets<String, int> mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12, 13},
+    }.lock;
+
+    expect(mapOfSets.removeValueWhere("b", (int value) => value > 10).unlock, {
+      "a": {1, 2},
+    });
+  });
 }
