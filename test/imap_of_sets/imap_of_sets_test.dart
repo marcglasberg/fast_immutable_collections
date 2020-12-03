@@ -629,6 +629,28 @@ void main() {
 
 //////////////////////////////////////////////////////////////////////////////
 
+  test("IMapOfSets.fromIterable", () {
+    final IMapOfSets<String, int> fromIterable = IMapOfSets.fromIterable(
+      [1, 2, 2, 3],
+      keyMapper: (int n) => n.toString(),
+      valueMapper: (int n) => 2 * n,
+      config: ConfigMapOfSets(cacheHashCode: false),
+    );
+
+    expect(fromIterable.unlock, {"1": {2}, "2": {4}, "3": {6}});
+    expect(fromIterable.config, const ConfigMapOfSets(cacheHashCode: false));
+  });
+
+  test("IMapOfSets.fromIterable | no functions means the identity function", () {
+    final IMapOfSets<int, int> fromIterable = IMapOfSets.fromIterable(
+      [1, 2, 2, 3],
+      config: ConfigMapOfSets(cacheHashCode: false),
+    );
+
+    expect(fromIterable.unlock, {1: {1}, 2: {2}, 3: {3}});
+    expect(fromIterable.config, const ConfigMapOfSets(cacheHashCode: false));
+  });
+
   test("Empty Initialization from .withConfig() factory", () {
     expect(IMapOfSets.withConfig(null, null), isA<IMapOfSets>());
     expect(IMapOfSets.withConfig(null, null), IMapOfSets());
