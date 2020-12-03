@@ -554,6 +554,12 @@ void main() {
     expect(iset.isEmpty, isTrue);
   });
 
+  test("ISet.anyItem", () {
+    final ISet<List<int>> iset = <List<int>>{[1, 2, 3], [11, 12]}.lock.add([100, 101]);
+
+    expect(iset.anyItem.isEmpty, isFalse);
+  });
+
   test("ISet.first", () {
     expect({1, 2, 3, 4, 5, 6}.lock.first, 1);
     expect({3, 6, 4, 1, 2, 5}.lock.first, 1);

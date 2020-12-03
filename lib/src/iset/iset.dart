@@ -505,6 +505,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns any item from the set. This is useful if you need to read
   /// some property that you know all items in the set have.
+  /// 
   /// Note: getting [anyItem] is faster that getting [first] or [last].
   T get anyItem {
     return _s.anyItem;
