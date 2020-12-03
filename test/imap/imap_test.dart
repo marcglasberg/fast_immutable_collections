@@ -1055,7 +1055,7 @@ void main() {
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(imap.toString(false), "{c: 3, a: 1, b: 2, d: 4, e: 5, f: 6}");
   });
-  
+
   test("IMap.toString() | ImmutableCollection.prettyPrint is Off", () {
     final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
@@ -1083,6 +1083,9 @@ void main() {
   test("IMap.toString() | ImmutableCollection.prettyPrint is On", () {
     final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+    
+    ImmutableCollection.prettyPrint = true;
+
     expect(
         imap.toString(),
         "{\n"
@@ -1162,6 +1165,21 @@ void main() {
     item = Output();
     expect(scores.update("Joe", (int value) => value * 2, value: item), scores);
     expect(item.value, null);
+  });
+
+  test("IMap.update() | ifRemove", () {
+    final IMap<String, int> scores = {"Bob": 36, "Joe": 10}.lock;
+
+    Output<int> item = Output();
+    final IMap<String, int> newScores = scores.update("Joe", (int value) => 2 * value,
+        ifRemove: (int value) => value == 10, value: item);
+    // TODO: Marcelo, duas coisas:
+    //   1. Como não há documentação e há bastante coisa nesse método já, fica difícil saber 100%
+    //      qual é a intenção atual.
+    //   2. Ao que me parece, há um problema de ordem de operações. Primeiro estamos fazendo update
+    //      e depois verificando se removemos, é isso mesmo ou a verificação deveria ocorrer anteriormente?
+    expect(newScores, {"Bob": 36});
+    expect(item, 10);
   });
 
   test("IMap.updateAll()", () {

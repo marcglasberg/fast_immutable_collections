@@ -1582,7 +1582,7 @@ void main() {
           "1": {1, 2, 3},
           "2": <int>{},
           "3": {10, 11},
-        }.lock);
+        }.lock.withConfig(const ConfigMapOfSets(removeEmptySets: false)));
   });
 
   test("IMapOfSets.updateAll()", () {
