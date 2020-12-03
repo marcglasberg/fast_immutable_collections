@@ -770,18 +770,40 @@ void main() {
     expect(iset.toString(false), "{1, 2, 3, 4, 5, 6}");
   });
 
+  test("ISet.toString() | ImmutableCollection.prettyPrint is Off", () {
+    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+
+    ImmutableCollection.prettyPrint = false;
+
+    expect(iset.toString(), "{1, 2, 3, 4, 5, 6}");
+  });
+
   test("ISet.toString(true)", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(
         iset.toString(true),
-        '{\n'
-        '   1,\n'
-        '   2,\n'
-        '   3,\n'
-        '   4,\n'
-        '   5,\n'
-        '   6\n'
-        '}');
+        "{\n"
+        "   1,\n"
+        "   2,\n"
+        "   3,\n"
+        "   4,\n"
+        "   5,\n"
+        "   6\n"
+        "}");
+  });
+
+  test("ISet.toString() | ImmutableCollection.prettyPrint is On", () {
+    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+    expect(
+        iset.toString(),
+        "{\n"
+        "   1,\n"
+        "   2,\n"
+        "   3,\n"
+        "   4,\n"
+        "   5,\n"
+        "   6\n"
+        "}");
   });
 
   //////////////////////////////////////////////////////////////////////////////

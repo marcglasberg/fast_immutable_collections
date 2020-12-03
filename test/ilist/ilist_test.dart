@@ -910,18 +910,37 @@ void main() {
   test("IList.toString(false)",
       () => expect([1, 2, 3, 4, 5, 6].lock.toString(false), "[1, 2, 3, 4, 5, 6]"));
 
+  test("IList.toString() | ImmutableCollection.prettyPrint is Off", () {
+    ImmutableCollection.prettyPrint = false;
+
+    expect([1, 2, 3, 4, 5, 6].lock.toString(), "[1, 2, 3, 4, 5, 6]");
+  });
+
   test(
       "IList.toString(true)",
       () => expect(
           [1, 2, 3, 4, 5, 6].lock.toString(true),
-          '[\n'
-          '   1,\n'
-          '   2,\n'
-          '   3,\n'
-          '   4,\n'
-          '   5,\n'
-          '   6\n'
-          ']'));
+          "[\n"
+          "   1,\n"
+          "   2,\n"
+          "   3,\n"
+          "   4,\n"
+          "   5,\n"
+          "   6\n"
+          "]"));
+
+  test("IList.toString() | ImmutableCollection.prettyPrint is On", () {
+    expect(
+        [1, 2, 3, 4, 5, 6].lock.toString(),
+        "[\n"
+        "   1,\n"
+        "   2,\n"
+        "   3,\n"
+        "   4,\n"
+        "   5,\n"
+        "   6\n"
+        "]");
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 

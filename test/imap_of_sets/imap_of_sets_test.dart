@@ -1102,10 +1102,63 @@ void main() {
     expect(iMapOfSets.allKeysWithValue(3), {"b"});
   });
 
-  test("IMapOfSets.toString()", () {
+  test("IMapOfSets.toString(false)", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    expect(iMapOfSets.toString(false), "{a: {1, 2}, b: {3}}");
+  });
+
+  test("IMapOfSets.toString() | ImmutableCollection.prettyPrint is Off", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+
+    ImmutableCollection.prettyPrint = false;
+
     expect(iMapOfSets.toString(), "{a: {1, 2}, b: {3}}");
+  });
+
+  test("IMapOfSets.toString(true)", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    expect(
+        iMapOfSets.toString(true),
+        "{\n"
+        "   MapEntry(a: {\n"
+        "   1,\n"
+        "   2\n"
+        "}),\n"
+        "   MapEntry(b: {\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
+        "}),\n"
+        "   MapEntry(c: {\n"
+        "   1,\n"
+        "   2\n"
+        "})\n"
+        "}");
+  });
+
+  test("IMapOfSets.toString() | ImmutableCollection.prettyPrint is On", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    expect(
+        iMapOfSets.toString(),
+        "{\n"
+        "   MapEntry(a: {\n"
+        "   1,\n"
+        "   2\n"
+        "}),\n"
+        "   MapEntry(b: {\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
+        "}),\n"
+        "   MapEntry(c: {\n"
+        "   1,\n"
+        "   2\n"
+        "})\n"
+        "}");
   });
 
   test("IMapOfSets.flatten method", () {

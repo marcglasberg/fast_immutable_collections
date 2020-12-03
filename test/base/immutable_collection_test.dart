@@ -189,6 +189,8 @@ void main() {
   test("ImmutableCollection.autoFlush", () => expect(ImmutableCollection.autoFlush, isTrue));
 
   test("ImmutableCollection.autoFlush setter", () {
+    expect(ImmutableCollection.autoFlush, isTrue);
+
     ImmutableCollection.autoFlush = false;
 
     expect(ImmutableCollection.autoFlush, isFalse);
@@ -196,6 +198,20 @@ void main() {
     ImmutableCollection.autoFlush = true;
 
     expect(ImmutableCollection.autoFlush, isTrue);
+  });
+
+  test("ImmutableCollection.prettyPrint", () => expect(ImmutableCollection.prettyPrint, isTrue));
+
+  test("ImmutableCollection.prettyPrint setter", () {
+    expect(ImmutableCollection.prettyPrint, isTrue);
+
+    ImmutableCollection.prettyPrint = false;
+
+    expect(ImmutableCollection.prettyPrint, isFalse);
+
+    ImmutableCollection.prettyPrint = true;
+
+    expect(ImmutableCollection.prettyPrint, isTrue);
   });
 
   test("lockConfig", () {
@@ -208,6 +224,8 @@ void main() {
             !ImmutableCollection.disallowUnsafeConstructors,
         throwsStateError);
     expect(() => ImmutableCollection.autoFlush = !ImmutableCollection.autoFlush, throwsStateError);
+    expect(
+        () => ImmutableCollection.prettyPrint = !ImmutableCollection.prettyPrint, throwsStateError);
     expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);
   });
 }

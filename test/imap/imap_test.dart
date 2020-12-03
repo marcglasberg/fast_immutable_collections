@@ -1055,20 +1055,44 @@ void main() {
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(imap.toString(false), "{c: 3, a: 1, b: 2, d: 4, e: 5, f: 6}");
   });
+  
+  test("IMap.toString() | ImmutableCollection.prettyPrint is Off", () {
+    final IMap<String, int> imap =
+        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+
+    ImmutableCollection.prettyPrint = false;
+
+    expect(imap.toString(), "{c: 3, a: 1, b: 2, d: 4, e: 5, f: 6}");
+  });
 
   test("IMap.toString(true)", () {
     final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(
         imap.toString(true),
-        '{\n'
-        '   c: 3,   \n'
-        'a: 1,   \n'
-        'b: 2,   \n'
-        'd: 4,   \n'
-        'e: 5,   \n'
-        'f: 6\n'
-        '}');
+        "{\n"
+        "   c: 3,   \n"
+        "a: 1,   \n"
+        "b: 2,   \n"
+        "d: 4,   \n"
+        "e: 5,   \n"
+        "f: 6\n"
+        "}");
+  });
+
+  test("IMap.toString() | ImmutableCollection.prettyPrint is On", () {
+    final IMap<String, int> imap =
+        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+    expect(
+        imap.toString(),
+        "{\n"
+        "   c: 3,   \n"
+        "a: 1,   \n"
+        "b: 2,   \n"
+        "d: 4,   \n"
+        "e: 5,   \n"
+        "f: 6\n"
+        "}");
   });
 
   test("IMap.clear()", () {

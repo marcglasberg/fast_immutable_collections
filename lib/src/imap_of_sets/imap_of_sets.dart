@@ -482,7 +482,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   bool contains(K key, V value) => get(key).contains(value);
 
   @override
-  String toString() => _mapOfSets.toString();
+  String toString([bool prettyPrint]) => _mapOfSets.toString();
 
   /// - If [isDeepEquals] configuration is `true`:
   /// Will return `true` only if the map entries are equal (not necessarily in the same order),

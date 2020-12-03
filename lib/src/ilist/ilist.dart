@@ -1,10 +1,10 @@
 import "dart:collection";
 import "dart:math";
 import "package:collection/collection.dart";
-import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-import "../base/immutable_collection.dart";
 import "../base/configs.dart";
+import "../base/hash.dart";
+import "../base/immutable_collection.dart";
 import "../base/sort.dart";
 import "../imap/entry.dart";
 import "../imap/imap.dart";
