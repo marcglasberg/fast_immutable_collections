@@ -94,7 +94,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    print('XXstudents = ${students}');
+    print("XXstudents = ${students}");
 
     // TODO: Marcelo, o último elemento não deveria ser Lucy? Não me parece claro o ordenamento.
     // Há algum `compareTo` implícito que eu não soube reconhecer?

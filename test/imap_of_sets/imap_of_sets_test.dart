@@ -1102,6 +1102,7 @@ void main() {
     expect(iMapOfSets.allKeysWithValue(3), {"b"});
   });
 
+  // TODO: Marcelo, por favor, verifique se é este o formato que você prefere.
   test("IMapOfSets.toString(false)", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
@@ -1117,6 +1118,7 @@ void main() {
     expect(iMapOfSets.toString(), "{a: {1, 2}, b: {3}}");
   });
 
+  // TODO: Marcelo, por favor, verifique se é este o formato que você prefere.
   test("IMapOfSets.toString(true)", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
