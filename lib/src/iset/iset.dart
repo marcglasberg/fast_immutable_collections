@@ -730,7 +730,7 @@ class ISet<T> // ignore: must_be_immutable
 
   @override
   String toString([bool prettyPrint]) => (prettyPrint ?? ImmutableCollection.prettyPrint)
-      ? "{\n   ${_s.join(",\n   ")}\n}"
+      ? (_s.isEmpty ? "{}" : "{\n   ${_s.join(",\n   ")}\n}")
       : "{${_s.join(", ")}}";
 
   /// Returns an empty set with the same configuration.

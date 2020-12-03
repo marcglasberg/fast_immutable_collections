@@ -194,7 +194,7 @@ class Output<T> {
 
   Output();
 
-  void set(T value) {
+  void save(T value) {
     if (_value != null) throw StateError("Value can't be set.");
     _value = value;
   }
