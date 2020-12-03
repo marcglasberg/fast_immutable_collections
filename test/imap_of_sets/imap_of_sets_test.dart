@@ -620,7 +620,11 @@ void main() {
       config: ConfigMapOfSets(cacheHashCode: false),
     );
 
-    expect(fromIterable.unlock, {"1": {2}, "2": {4}, "3": {6}});
+    expect(fromIterable.unlock, {
+      "1": {2},
+      "2": {4},
+      "3": {6}
+    });
     expect(fromIterable.config, const ConfigMapOfSets(cacheHashCode: false));
   });
 
@@ -630,7 +634,11 @@ void main() {
       config: ConfigMapOfSets(cacheHashCode: false),
     );
 
-    expect(fromIterable.unlock, {1: {1}, 2: {2}, 3: {3}});
+    expect(fromIterable.unlock, {
+      1: {1},
+      2: {2},
+      3: {3}
+    });
     expect(fromIterable.config, const ConfigMapOfSets(cacheHashCode: false));
   });
 
@@ -1454,6 +1462,35 @@ void main() {
 
     // Invert twice return to normal.
     expect(invertedIMapOfSets.invertKeysAndValues(), iMapOfSets);
+  });
+
+  // //////////////////////////////////////////////////////////////////////////////
+
+  test("IMapOfSets.firstValueWhere()", () {
+    final IMapOfSets<String, int> mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12},
+    }.lock;
+
+    expect(mapOfSets.firstValueWhere((int value) => value > 10, orElse: () => 1000), 11);
+  });
+
+  test("IMapOfSets.firstValueWhere() | orElse", () {
+    final IMapOfSets<String, int> mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12},
+    }.lock;
+
+    expect(mapOfSets.firstValueWhere((int value) => value > 100, orElse: () => 1000), 1000);
+  });
+
+  test("IMapOfSets.firstValueWhere() | if orElse is not specified", () {
+    final IMapOfSets<String, int> mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12},
+    }.lock;
+
+    expect(mapOfSets.firstValueWhere((int value) => value > 100), isNull);
   });
 
   // //////////////////////////////////////////////////////////////////////////////
