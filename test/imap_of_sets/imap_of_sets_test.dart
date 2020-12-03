@@ -662,9 +662,8 @@ void main() {
     expect(iMapOfSets2.config.sortValues, isFalse);
   });
 
-  test("IMapOfSets.withConfig() | config cannot be null", () {
-    expect(() => IMapOfSets().withConfig(null), throwsAssertionError);
-  });
+  test("IMapOfSets.withConfig() | config cannot be null",
+      () => expect(() => IMapOfSets().withConfig(null), throwsAssertionError));
 
   test("Config | IMapOfSets.withConfig()", () {
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
@@ -1494,4 +1493,26 @@ void main() {
   });
 
   // //////////////////////////////////////////////////////////////////////////////
+
+  test("IMapOfSets.asIMap()", () {
+    final IMapOfSets<String, int> mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12},
+    }.lock;
+
+    expect(mapOfSets.asIMap(), isA<IMap<String, ISet<int>>>());
+    expect(mapOfSets.asIMap().unlock, {
+      "a": {1, 2},
+      "b": {11, 12},
+    });
+
+    mapOfSets.asIMap().addAll(IMap<String, ISet<int>>({
+          "a": {100, 101}.lock
+        }));
+
+    expect(mapOfSets.asIMap().unlock, {
+      "a": {1, 2},
+      "b": {11, 12},
+    });
+  });
 }
