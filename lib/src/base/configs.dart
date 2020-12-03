@@ -7,10 +7,10 @@ import "hash.dart";
 // /////////////////////////////////////////////////////////////////////////////
 
 /// - If [isDeepEquals] is `false`, the [IList] equals operator (`==`) compares by identity.
-/// - If [isDeepEquals] is `true` (the default), the [IList] equals operator (`==`) compares all 
+/// - If [isDeepEquals] is `true` (the default), the [IList] equals operator (`==`) compares all
 /// items, ordered.
-/// - If [cacheHashCode] is `true` (the default), the [IList] will only calculate the [hashCode] 
-/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always 
+/// - If [cacheHashCode] is `true` (the default), the [IList] will only calculate the [hashCode]
+/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always
 /// recalculate it.
 @immutable
 class ConfigList {
@@ -64,8 +64,8 @@ class ConfigList {
 /// - If [isDeepEquals] is `false`, the [ISet] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [ISet] equals operator (`==`) compares all items, unordered.
 /// - If the [compare] function is defined, sorted outputs will use it as a comparator.
-/// - If [cacheHashCode] is `true` (the default), the [ISet] will only calculate the [hashCode] 
-/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always 
+/// - If [cacheHashCode] is `true` (the default), the [ISet] will only calculate the [hashCode]
+/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always
 /// recalculate it.
 @immutable
 class ConfigSet {
@@ -127,8 +127,8 @@ class ConfigSet {
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
 /// - If [sortKeys] is `true` (the default), will sort the list output of keys.
 /// - If [sortValues] is `true` (the default), will sort the list output of values.
-/// - If [cacheHashCode] is `true` (the default), the [IMap] will only calculate the [hashCode] 
-/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always 
+/// - If [cacheHashCode] is `true` (the default), the [IMap] will only calculate the [hashCode]
+/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always
 /// recalculate it.
 @immutable
 class ConfigMap {
@@ -198,8 +198,8 @@ class ConfigMap {
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
 /// - If [sortKeys] is `true` (the default), will sort the list output of keys.
 /// - If [sortValues] is `true` (the default), will sort the list output of values.
-/// - If [cacheHashCode] is `true` (the default), the [IMapOfSets] will only calculate the 
-/// [hashCode] once, when it is asked &mdash; initially, internally `null`. Otherwise, it will 
+/// - If [cacheHashCode] is `true` (the default), the [IMapOfSets] will only calculate the
+/// [hashCode] once, when it is asked &mdash; initially, internally `null`. Otherwise, it will
 /// always recalculate it.
 @immutable
 class ConfigMapOfSets {
@@ -275,8 +275,7 @@ class ConfigMapOfSets {
           cacheHashCode == other.cacheHashCode;
 
   @override
-  int get hashCode =>
-      hashObj5(isDeepEquals, sortKeys, sortValues, removeEmptySets, cacheHashCode);
+  int get hashCode => hashObj5(isDeepEquals, sortKeys, sortValues, removeEmptySets, cacheHashCode);
 
   @override
   String toString() => "ConfigMapOfSets{"

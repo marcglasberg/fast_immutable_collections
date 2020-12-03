@@ -27,7 +27,7 @@ import "../iset/iset.dart";
 ///   @override
 ///   ISet<Student> get iter => _students;
 /// }
-/// 
+///
 /// class Student extends ProtoStudent {
 ///   final String name;
 ///

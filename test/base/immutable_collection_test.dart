@@ -203,7 +203,10 @@ void main() {
     expect(() => IList.resetAllConfigurations(), throwsStateError);
     expect(() => ISet.resetAllConfigurations(), throwsStateError);
     expect(() => IMap.resetAllConfigurations(), throwsStateError);
-    expect(() => ImmutableCollection.disallowUnsafeConstructors = !ImmutableCollection.disallowUnsafeConstructors, throwsStateError);
+    expect(
+        () => ImmutableCollection.disallowUnsafeConstructors =
+            !ImmutableCollection.disallowUnsafeConstructors,
+        throwsStateError);
     expect(() => ImmutableCollection.autoFlush = !ImmutableCollection.autoFlush, throwsStateError);
     expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);
   });

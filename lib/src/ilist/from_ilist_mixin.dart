@@ -67,7 +67,7 @@ import "ilist.dart";
 /// ```
 ///
 /// See also: [FromIterableIListMixin].
-/// 
+///
 mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   //
 

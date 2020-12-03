@@ -9,10 +9,8 @@ void main() {
   });
 
   test("ConfigList.== operator", () {
-    const ConfigList configList1 = ConfigList(),
-        configList2 = ConfigList(isDeepEquals: false);
-    final ConfigList configList3 = ConfigList(),
-        configList4 = ConfigList(isDeepEquals: false);
+    const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
+    final ConfigList configList3 = ConfigList(), configList4 = ConfigList(isDeepEquals: false);
 
     expect(configList1 == configList1, isTrue);
     expect(configList1 == configList2, isFalse);
@@ -23,10 +21,8 @@ void main() {
   });
 
   test("ConfigList.copyWith()", () {
-    const ConfigList configList1 = ConfigList(),
-        configList2 = ConfigList(isDeepEquals: false);
-    final ConfigList configList1WithTrue =
-            configList1.copyWith(isDeepEquals: true),
+    const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
+    final ConfigList configList1WithTrue = configList1.copyWith(isDeepEquals: true),
         configList1WithFalse = configList1.copyWith(isDeepEquals: false),
         configList2WithTrue = configList2.copyWith(isDeepEquals: true),
         configList2WithFalse = configList2.copyWith(isDeepEquals: false);
@@ -41,24 +37,19 @@ void main() {
   });
 
   test("ConfigList.hashCode getter", () {
-    const ConfigList configList1 = ConfigList(),
-        configList2 = ConfigList(isDeepEquals: false);
+    const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     expect(configList1.hashCode, ConfigList().hashCode);
     expect(configList2.hashCode, ConfigList(isDeepEquals: false).hashCode);
     expect(configList1.hashCode, isNot(configList2.hashCode));
   });
 
   test("ConfigList.toString()", () {
-    const ConfigList configList1 = ConfigList(),
-        configList2 = ConfigList(isDeepEquals: false);
-    expect(configList1.toString(),
-        "ConfigList{isDeepEquals: true, cacheHashCode: true}");
-    expect(configList2.toString(),
-        "ConfigList{isDeepEquals: false, cacheHashCode: true}");
+    const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
+    expect(configList1.toString(), "ConfigList{isDeepEquals: true, cacheHashCode: true}");
+    expect(configList2.toString(), "ConfigList{isDeepEquals: false, cacheHashCode: true}");
   });
 
-  test("defaultConfig | Is initially a ConfigList with isDeepEquals = true",
-      () {
+  test("defaultConfig | Is initially a ConfigList with isDeepEquals = true", () {
     expect(IList.defaultConfig, const ConfigList());
     expect(IList.defaultConfig.isDeepEquals, isTrue);
   });
@@ -68,13 +59,9 @@ void main() {
     expect(IList.defaultConfig, const ConfigList(isDeepEquals: false));
   });
 
-  test(
-      "defaultConfig | Changing the default ConfigList will throw an exception if lockConfig",
-      () {
+  test("defaultConfig | Changing the default ConfigList will throw an exception if lockConfig", () {
     ImmutableCollection.lockConfig();
-    expect(
-        () => IList.defaultConfig =
-            ConfigList(isDeepEquals: !IList.defaultConfig.isDeepEquals),
+    expect(() => IList.defaultConfig = ConfigList(isDeepEquals: !IList.defaultConfig.isDeepEquals),
         throwsStateError);
   });
 }

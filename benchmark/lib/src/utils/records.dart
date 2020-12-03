@@ -17,7 +17,7 @@ class Config {
 class StopwatchRecord {
   final String collectionName;
 
-  /// The amount of time it took for the benchmark to run, typically in microseconds 
+  /// The amount of time it took for the benchmark to run, typically in microseconds
   /// (µs).
   final double record;
 
@@ -66,7 +66,7 @@ class RecordsColumn {
     return min;
   }
 
-  /// Finding the mutable record is linked to having the word *mutable* &mdash; it doesn't really 
+  /// Finding the mutable record is linked to having the word *mutable* &mdash; it doesn't really
   /// matter if it's uppercase or not &mdash; somewhere on the row's name.
   double get mutableRecord => records
       .where((StopwatchRecord record) => record.collectionName.toLowerCase().contains("mutable"))

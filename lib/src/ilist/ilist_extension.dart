@@ -7,18 +7,18 @@ extension IListExtension<T> on List<T> {
   IList<T> get lock => IList<T>(this);
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  /// 
+  ///
   /// This is **unsafe**: Use it at your own peril.
-  /// 
+  ///
   /// This constructor is fast, since it makes no defensive copies of the list.
   /// However, you should only use this with a new list you've created yourself,
   /// when you are sure no external copies exist. If the original list is modified,
   /// it will break the [IList] and any other derived lists in unpredictable ways.
-  /// 
+  ///
   /// Note you can optionally disallow unsafe constructors in the global configuration
   /// by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then optionally
   /// preventing further configuration changes by calling `ImmutableCollection.lockConfig()`).
-  /// 
+  ///
   /// See also: [ImmutableCollection]
   IList<T> get lockUnsafe => IList<T>.unsafe(this, config: IList.defaultConfig);
 

@@ -124,7 +124,7 @@ extension ComparatorExtension on int {
 /// 3) Otherwise, numbers which are multiples of 3,
 /// 4) Otherwise, numbers which are multiples of 5,
 /// 5) Otherwise, numbers come in their natural order.
-/// 
+///
 /// int Function(int, int) compareTo = sortBy((x) => x == 14,
 ///     then: sortBy((x) => x == 15,
 ///     then: sortBy((x) => x % 2 == 1,
@@ -190,7 +190,7 @@ int Function(T, T) sortBy<T>(
 /// 1) Order should be [7, 3, 4, 21, 2] when these values appear.
 /// 2) Otherwise, odd numbers come before even ones.
 /// 3) Otherwise, numbers come in their natural order.
-/// 
+///
 /// int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
 ///     then: sortBy((x) => x % 2 == 1,
 ///         then: (int a, int b) => a.compareTo(b),
