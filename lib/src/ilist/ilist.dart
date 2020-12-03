@@ -170,7 +170,7 @@ class IList<T> // ignore: must_be_immutable
   int _counter = 0;
 
   /// ## Sync Auto-flush
-  /// 
+  ///
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time collection methods are used.
   ///
@@ -178,7 +178,7 @@ class IList<T> // ignore: must_be_immutable
   /// and `counter` returns to `0`.
   ///
   /// ## Async Auto-flush
-  /// 
+  ///
   /// Keeps a counter variable which starts at `0` and is incremented each
   /// time collection methods are used, as long as `counter >= 0`.
   ///
@@ -191,7 +191,7 @@ class IList<T> // ignore: must_be_immutable
   /// `counter` is negative and different from `-asyncCounter` it means we are
   /// one async gap after the collection was marked for flushing.
   /// At this point, the collection will flush and `counter` returns to zero.
-  /// 
+  ///
   /// Note: [_count] is called in methods which read values. It's not called
   /// in methods which create new [ILists] or flush the list.
   void _count() {
@@ -258,7 +258,7 @@ class IList<T> // ignore: must_be_immutable
   /// However, if you try to use methods that modify the list, like [add],
   /// it will throw an [UnsupportedError].
   /// It is also very fast to lock this list back into an [IList].
-  /// 
+  ///
   /// See also: [UnmodifiableListView]
   List<T> get unlockView => UnmodifiableListView(this);
 
@@ -270,7 +270,7 @@ class IList<T> // ignore: must_be_immutable
   /// it will unlock the [IList], lazily, only if necessary.
   /// If you never mutate the list, it will be very fast to lock this list
   /// back into an [IList].
-  /// 
+  ///
   /// See also: [ModifiableListView]
   List<T> get unlockLazy => ModifiableListView(this);
 
@@ -292,7 +292,7 @@ class IList<T> // ignore: must_be_immutable
   /// Will return `true` only if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
   /// since it doesn't compare each item.
-  /// 
+  ///
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
@@ -799,7 +799,8 @@ class IList<T> // ignore: must_be_immutable
   }
 
   @override
-  String toString() => "[${_l.join(", ")}]";
+  String toString([bool prettyPrint]) =>
+      (prettyPrint ?? ImmutableCollection.prettyPrint) ? "[\n   ${_l.join(",\n   ")}\n]" : "[${_l.join(", ")}]";
 
   /// Returns the concatenation of this list and [other].
   /// Returns a new list containing the elements of this list followed by

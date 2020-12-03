@@ -808,7 +808,9 @@ class IMap<K, V> // ignore: must_be_immutable
           config: config ?? ((RK == K && RV == V) ? this.config : defaultConfig));
 
   @override
-  String toString() => "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
+  String toString([bool prettyPrint]) => (prettyPrint ?? ImmutableCollection.prettyPrint)
+      ? "{\n   ${entries.map((entry) => "${entry.key}: ${entry.value}").join(",   \n")}\n}"
+      : "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
 
   /// Returns an empty map with the same configuration.
   IMap<K, V> clear() => empty<K, V>(config);
