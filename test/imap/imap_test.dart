@@ -82,13 +82,20 @@ void main() {
     expect(fromKeys["2"], 2);
   });
 
-  test("IMap.fromIterable() factory constructor", () {
+  test("IMap.fromIterable()", () {
     const Iterable<int> iterable = [1, 2];
     final IMap fromIterable = IMap.fromIterable(iterable,
         keyMapper: (key) => (key + 1).toString(), valueMapper: (value) => value + 2);
 
     expect(fromIterable["2"], 3);
     expect(fromIterable["3"], 4);
+  });
+
+  test("IMap.fromIterable() | if no mappers are passed, the identity function is used", () {
+    final IMap fromIterable = IMap.fromIterable([1, 2]);
+
+    expect(fromIterable[1], 1);
+    expect(fromIterable[2], 2);
   });
 
   test("IMap.fromIterables() factory constructor", () {

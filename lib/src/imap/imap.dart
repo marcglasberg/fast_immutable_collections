@@ -141,9 +141,17 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// ```dart
   /// List<int> list = [1, 2, 3];
-  /// IMap<String, int> map = new IMap.fromIterable(list,
-  ///     keyMapper: (item) => item.toString(),
-  ///     valueMapper: (item) => item * item);
+  /// IMap<String, int> map = IMap.fromIterable(
+  ///   list,
+  ///   keyMapper: (item) => item.toString(),
+  ///   valueMapper: (item) => item * item),
+  /// );
+  /// // The code above will yield:
+  /// // {
+  /// //   "1": 1,
+  /// //   "2": 4,
+  /// //   "3": 9,
+  /// // }
   /// ```
   ///
   /// If no values are specified for [keyMapper] and [valueMapper],
