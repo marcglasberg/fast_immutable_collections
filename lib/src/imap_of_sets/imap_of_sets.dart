@@ -385,6 +385,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Removes the [value] from the set of the corresponding [key],
   /// if it exists in the set. Otherwise, adds it to the set.
+  /// If the [key] doesn't exist, it will be created and then have the new value
+  /// added to the new, corresponding set.
   IMapOfSets<K, V> toggle(K key, V value) =>
       contains(key, value) ? remove(key, value) : add(key, value);
 
