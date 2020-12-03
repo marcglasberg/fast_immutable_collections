@@ -799,8 +799,9 @@ class IList<T> // ignore: must_be_immutable
   }
 
   @override
-  String toString([bool prettyPrint]) =>
-      (prettyPrint ?? ImmutableCollection.prettyPrint) ? "[\n   ${_l.join(",\n   ")}\n]" : "[${_l.join(", ")}]";
+  String toString([bool prettyPrint]) => (prettyPrint ?? ImmutableCollection.prettyPrint)
+      ? (_l.isEmpty ? "[]" : "[\n   ${_l.join(",\n   ")}\n]")
+      : "[${_l.join(", ")}]";
 
   /// Returns the concatenation of this list and [other].
   /// Returns a new list containing the elements of this list followed by

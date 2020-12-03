@@ -809,7 +809,9 @@ class IMap<K, V> // ignore: must_be_immutable
 
   @override
   String toString([bool prettyPrint]) => (prettyPrint ?? ImmutableCollection.prettyPrint)
-      ? "{\n   ${entries.map((entry) => "${entry.key}: ${entry.value}").join(",   \n")}\n}"
+      ? (_m.isEmpty
+          ? "{}"
+          : "{\n   ${entries.map((entry) => "${entry.key}: ${entry.value}").join(",   \n")}\n}")
       : "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
 
   /// Returns an empty map with the same configuration.
