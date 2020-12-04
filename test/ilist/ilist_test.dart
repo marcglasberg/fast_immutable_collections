@@ -7,6 +7,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   setUp(() {
+    ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = false;
   });
 
@@ -907,40 +908,37 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.toString(false)",
-      () => expect([1, 2, 3, 4, 5, 6].lock.toString(false), "[1, 2, 3, 4, 5, 6]"));
+  test("IList.toString(false)", () {
+    expect([].lock.toString(true), "[]");
+    expect([1].lock.toString(true), "[1]");
+    expect([1, 2, 3].lock.toString(false), "[1, 2, 3]");
+  });
 
   test("IList.toString() | ImmutableCollection.prettyPrint is Off", () {
     ImmutableCollection.prettyPrint = false;
-
-    expect([1, 2, 3, 4, 5, 6].lock.toString(), "[1, 2, 3, 4, 5, 6]");
+    expect([1, 2, 3].lock.toString(), "[1, 2, 3]");
   });
 
-  test(
-      "IList.toString(true)",
-      () => expect(
-          [1, 2, 3, 4, 5, 6].lock.toString(true),
-          "[\n"
-          "   1,\n"
-          "   2,\n"
-          "   3,\n"
-          "   4,\n"
-          "   5,\n"
-          "   6\n"
-          "]"));
-
-  test("IList.toString() | ImmutableCollection.prettyPrint is On", () {
-    ImmutableCollection.prettyPrint = true;
-
+  test("IList.toString(true)", () {
+    expect([].lock.toString(true), "[]");
+    expect([1].lock.toString(true), "[1]");
     expect(
-        [1, 2, 3, 4, 5, 6].lock.toString(),
+        [1, 2, 3].lock.toString(true),
         "[\n"
         "   1,\n"
         "   2,\n"
-        "   3,\n"
-        "   4,\n"
-        "   5,\n"
-        "   6\n"
+        "   3\n"
+        "]");
+  });
+
+  test("IList.toString() | ImmutableCollection.prettyPrint is On", () {
+    ImmutableCollection.prettyPrint = true;
+    expect(
+        [1, 2, 3].lock.toString(),
+        "[\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
         "]");
   });
 
@@ -1385,5 +1383,5 @@ void main() {
 
     expect(() => IList.flushFactor = 1000, throwsStateError);
     expect(() => IList.asyncAutoflush = false, throwsStateError);
-  });
+  }, skip:true);
 }

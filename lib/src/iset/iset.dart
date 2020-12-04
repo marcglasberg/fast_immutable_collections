@@ -505,7 +505,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns any item from the set. This is useful if you need to read
   /// some property that you know all items in the set have.
-  /// 
+  ///
   /// Note: getting [anyItem] is faster that getting [first] or [last].
   T get anyItem {
     return _s.anyItem;
@@ -730,9 +730,20 @@ class ISet<T> // ignore: must_be_immutable
   }
 
   @override
-  String toString([bool prettyPrint]) => (prettyPrint ?? ImmutableCollection.prettyPrint)
-      ? (_s.isEmpty ? "{}" : "{\n   ${_s.join(",\n   ")}\n}")
-      : "{${_s.join(", ")}}";
+  String toString([bool prettyPrint]) {
+    if ((prettyPrint ?? ImmutableCollection.prettyPrint)) {
+      int length = _s.length;
+      if (length == 0) {
+        return "{}";
+      } else if (length == 1) {
+        return "{${_s.single}}";
+      } else {
+        return "{\n   ${_s.join(",\n   ")}\n}";
+      }
+    } else {
+      return "{${_s.join(", ")}}";
+    }
+  }
 
   /// Returns an empty set with the same configuration.
   ISet<T> clear() => empty<T>(config);

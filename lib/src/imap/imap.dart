@@ -816,11 +816,27 @@ class IMap<K, V> // ignore: must_be_immutable
           config: config ?? ((RK == K && RV == V) ? this.config : defaultConfig));
 
   @override
-  String toString([bool prettyPrint]) => (prettyPrint ?? ImmutableCollection.prettyPrint)
-      ? (_m.isEmpty
-          ? "{}"
-          : "{\n   ${entries.map((entry) => "${entry.key}: ${entry.value}").join(",   \n")}\n}")
-      : "{${entries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
+  String toString([bool prettyPrint]) {
+    if ((prettyPrint ?? ImmutableCollection.prettyPrint)) {
+      int length = _m.length;
+      if (length == 0) {
+        return "{}";
+      } else if (length == 1) {
+        var entry = entries.single;
+        return "{${entry.key}: ${entry.value}}";
+      } else {
+        Iterable<MapEntry<K, V>> sortedEntries = config.sortKeys
+            ? (entries.toList()..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
+            : entries;
+        return "{\n   ${sortedEntries.map((entry) => "${entry.key}: ${entry.value}").join(",\n   ")}\n}";
+      }
+    } else {
+      Iterable<MapEntry<K, V>> sortedEntries = config.sortKeys
+          ? (entries.toList()..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
+          : entries;
+      return "{${sortedEntries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
+    }
+  }
 
   /// Returns an empty map with the same configuration.
   IMap<K, V> clear() => empty<K, V>(config);

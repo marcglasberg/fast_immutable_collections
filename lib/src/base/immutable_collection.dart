@@ -34,9 +34,9 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 
   static bool _autoFlush = true;
 
-  static int _asyncCounter = 1;
-
   static bool _disallowUnsafeConstructors = false;
+
+  static int _asyncCounter = 1;
 
   static bool _asyncCounterMarkedForIncrement = false;
 
@@ -45,9 +45,11 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
+    _autoFlush = true;
+    _disallowUnsafeConstructors = false;
     _asyncCounter = 1;
-    autoFlush = true;
-    disallowUnsafeConstructors = false;
+    _asyncCounterMarkedForIncrement = false;
+    _prettyPrint = true;
     IList.resetAllConfigurations();
     ISet.resetAllConfigurations();
     IMap.resetAllConfigurations();
