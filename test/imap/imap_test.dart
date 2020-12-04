@@ -1083,7 +1083,7 @@ void main() {
   test("IMap.toString() | ImmutableCollection.prettyPrint is On", () {
     final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    
+
     ImmutableCollection.prettyPrint = true;
 
     expect(
@@ -1176,6 +1176,9 @@ void main() {
     expect(newScores.unlock, {"Bob": 36});
     expect(item.value, 20);
   });
+
+  test("IMap.update() | update can't be null",
+      () => expect(() => {"Bob": 36, "Joe": 10}.lock.update("Bob", null), throwsAssertionError));
 
   test("IMap.updateAll()", () {
     final IMap<String, int> scores = {"Bob": 36, "Joe": 100}.lock;
