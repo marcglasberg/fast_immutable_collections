@@ -132,6 +132,9 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// Comparing the internal state is better, because it will return `true` more
   /// often.
   bool same(C other);
+
+  @override
+  String toString([bool prettyPrint]);
 }
 
 // /////////////////////////////////////////////////////////////////////////////

@@ -828,13 +828,13 @@ class IMap<K, V> // ignore: must_be_immutable
         Iterable<MapEntry<K, V>> sortedEntries = config.sortKeys
             ? (entries.toList()..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
             : entries;
-        return "{\n   ${sortedEntries.map((entry) => "${entry.key}: ${entry.value}").join(",\n   ")}\n}";
+        return "{\n   ${sortedEntries.map((entry) => entry.print(prettyPrint)).join(",\n   ")}\n}";
       }
     } else {
       Iterable<MapEntry<K, V>> sortedEntries = config.sortKeys
           ? (entries.toList()..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
           : entries;
-      return "{${sortedEntries.map((entry) => "${entry.key}: ${entry.value}").join(", ")}}";
+      return "{${sortedEntries.map((entry) => entry.print(prettyPrint)).join(", ")}}";
     }
   }
 

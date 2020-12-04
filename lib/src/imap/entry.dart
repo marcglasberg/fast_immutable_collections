@@ -1,3 +1,5 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 import "../base/hash.dart";
 import "../base/sort.dart";
 
@@ -38,6 +40,17 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   /// and [Issue #100 of Dart's Matchers](https://github.com/dart-lang/matcher/issues/100).
   ///
   int compareKeyAndValue(MapEntry other) => compareObject(this, other);
+
+  String print(bool prettyPrint) {
+    String keyStr = (key is ImmutableCollection)
+        ? (key as ImmutableCollection).toString(prettyPrint)
+        : key.toString();
+    String valueStr = (value is ImmutableCollection)
+        ? (value as ImmutableCollection).toString(prettyPrint)
+        : value.toString();
+
+    return "$keyStr: $valueStr";
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////

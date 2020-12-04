@@ -1163,6 +1163,7 @@ void main() {
   });
 
   test("IMapOfSets.withValue family | IMapOfSets.allEntriesWithValue()", () {
+    ImmutableCollection.prettyPrint = false;
     final iMapOfSets = {
       "a": {1, 2},
       "b": {3},
@@ -1200,27 +1201,18 @@ void main() {
     expect(iMapOfSets.toString(), "{a: {1, 2}, b: {3}}");
   });
 
-  // TODO: Marcelo, por favor, verifique se é este o formato que você prefere.
   test("IMapOfSets.toString(true)", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(
         iMapOfSets.toString(true),
-        "{\n"
-        "   MapEntry(a: {\n"
-        "   1,\n"
-        "   2\n"
-        "}),\n"
-        "   MapEntry(b: {\n"
-        "   1,\n"
-        "   2,\n"
-        "   3\n"
-        "}),\n"
-        "   MapEntry(c: {\n"
-        "   1,\n"
-        "   2\n"
-        "})\n"
-        "}");
+        '{\n'
+        '   a: {\n'
+        '   1,\n'
+        '   2\n'
+        '},\n'
+        '   b: {3}\n'
+        '}');
   });
 
   test("IMapOfSets.toString() | ImmutableCollection.prettyPrint is On", () {
@@ -1231,21 +1223,13 @@ void main() {
 
     expect(
         iMapOfSets.toString(),
-        "{\n"
-        "   MapEntry(a: {\n"
-        "   1,\n"
-        "   2\n"
-        "}),\n"
-        "   MapEntry(b: {\n"
-        "   1,\n"
-        "   2,\n"
-        "   3\n"
-        "}),\n"
-        "   MapEntry(c: {\n"
-        "   1,\n"
-        "   2\n"
-        "})\n"
-        "}");
+        '{\n'
+        '   a: {\n'
+        '   1,\n'
+        '   2\n'
+        '},\n'
+        '   b: {3}\n'
+        '}');
   });
 
   test("IMapOfSets.flatten method", () {
@@ -1270,6 +1254,7 @@ void main() {
   });
 
   test("IMapOfSets.entriesAsSet()", () {
+    ImmutableCollection.prettyPrint = false;
     final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
       "a": {1, 2},
       "b": {1, 2, 3},
@@ -1277,7 +1262,7 @@ void main() {
     });
     expect(iMapOfSets.entriesAsSet.isDeepEquals, isTrue);
     expect(iMapOfSets.entriesAsSet, isA<ISet<MapEntry<String, ISet<int>>>>());
-    expect(iMapOfSets.entriesAsSet.toString(),
+    expect(iMapOfSets.entriesAsSet.toString(false),
         "{MapEntry(a: {1, 2}), MapEntry(b: {1, 2, 3}), MapEntry(c: {1, 2})}");
   });
 
@@ -1645,6 +1630,15 @@ void main() {
   // //////////////////////////////////////////////////////////////////////////////
 
   test("IMapOfSets.invertKeysAndValues()", () {
+    //
+    expect(
+        {
+          1: {"a"}
+        }.lock.invertKeysAndValues().unlock,
+        {
+          "a": {1}
+        });
+
     IMapOfSets<String, int> iMapOfSets = {
       "a": {1, 2},
       "b": {1, 2, 3},
@@ -1653,8 +1647,7 @@ void main() {
       "e": {12, 5},
     }.lock;
 
-    var invertedIMapOfSets = iMapOfSets.invertKeysAndValues();
-    expect(invertedIMapOfSets.unlock, {
+    expect(iMapOfSets.invertKeysAndValues().unlock, {
       1: {"a", "b", "c"},
       2: {"a", "b"},
       3: {"b"},
@@ -1664,7 +1657,7 @@ void main() {
     });
 
     // Invert twice return to normal.
-    expect(invertedIMapOfSets.invertKeysAndValues(), iMapOfSets);
+    expect(iMapOfSets.invertKeysAndValues().invertKeysAndValues(), iMapOfSets);
   });
 
   test("IMapOfSets.invertKeysAndValues() | with empty sets", () {
