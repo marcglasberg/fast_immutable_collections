@@ -1170,16 +1170,11 @@ void main() {
   test("IMap.update() | ifRemove", () {
     final IMap<String, int> scores = {"Bob": 36, "Joe": 10}.lock;
 
-    Output<int> item = Output();
+    final Output<int> item = Output();
     final IMap<String, int> newScores = scores.update("Joe", (int value) => 2 * value,
-        ifRemove: (int value) => value == 10, value: item);
-    // TODO: Marcelo, duas coisas:
-    //   1. Como não há documentação e há bastante coisa nesse método já, fica difícil saber 100%
-    //      qual é a intenção atual.
-    //   2. Ao que me parece, há um problema de ordem de operações. Primeiro estamos fazendo update
-    //      e depois verificando se removemos, é isso mesmo ou a verificação deveria ocorrer anteriormente?
-    expect(newScores, {"Bob": 36});
-    expect(item, 10);
+        ifRemove: (int value) => value == 20, value: item);
+    expect(newScores.unlock, {"Bob": 36});
+    expect(item.value, 20);
   });
 
   test("IMap.updateAll()", () {

@@ -930,6 +930,8 @@ void main() {
           "]"));
 
   test("IList.toString() | ImmutableCollection.prettyPrint is On", () {
+    ImmutableCollection.prettyPrint = true;
+
     expect(
         [1, 2, 3, 4, 5, 6].lock.toString(),
         "[\n"

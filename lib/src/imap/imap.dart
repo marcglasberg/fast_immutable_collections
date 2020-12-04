@@ -857,6 +857,7 @@ class IMap<K, V> // ignore: must_be_immutable
     return IMap._unsafeFromMap(map, config: config);
   }
 
+  // TODO: Marcelo, por favor, adicione documentação sobre `ifRemove`.
   /// Updates the value for the provided [key].
   ///
   /// Returns the modified map and sets the new [value] of the key.

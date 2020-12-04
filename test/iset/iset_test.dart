@@ -555,7 +555,10 @@ void main() {
   });
 
   test("ISet.anyItem", () {
-    final ISet<List<int>> iset = <List<int>>{[1, 2, 3], [11, 12]}.lock.add([100, 101]);
+    final ISet<List<int>> iset = <List<int>>{
+      [1, 2, 3],
+      [11, 12]
+    }.lock.add([100, 101]);
 
     expect(iset.anyItem.isEmpty, isFalse);
   });
@@ -780,6 +783,9 @@ void main() {
 
   test("ISet.toString(true)", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+
+    ImmutableCollection.prettyPrint = true;
+
     expect(
         iset.toString(true),
         "{\n"

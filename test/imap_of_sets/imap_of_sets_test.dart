@@ -1207,6 +1207,9 @@ void main() {
   test("IMapOfSets.toString() | ImmutableCollection.prettyPrint is On", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+
+    ImmutableCollection.prettyPrint = true;
+
     expect(
         iMapOfSets.toString(),
         "{\n"
