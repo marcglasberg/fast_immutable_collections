@@ -1017,6 +1017,24 @@ void main() {
     expect(newSet["a"], ISet({1, 2}));
   });
 
+  test("IMapOfSets.remove() | removeEmptySets", () {
+    final IMapOfSets<String, int> iMapOfSets1 =
+        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.empty<String, int>()
+        .add("a", 1)
+        .add("a", 2)
+        .add("b", 3)
+        .withConfig(ConfigMapOfSets(removeEmptySets: false));
+
+    expect(iMapOfSets1.remove("b", 3).unlock, {
+      "a": {1, 2},
+    });
+    expect(iMapOfSets2.remove("b", 3).unlock, {
+      "a": {1, 2},
+      "b": <int>{}
+    });
+  });
+
   test("IMapOfSets.replaceSet() | replacement set cannot be null",
       () => expect(() => IMapOfSets().replaceSet("a", null), throwsAssertionError));
 
@@ -1612,7 +1630,8 @@ void main() {
       "2": {4},
       "3": {10, 11},
     });
-    final IMapOfSets<String, int> iMapOfSets2 = iMapOfSets1.withConfig(ConfigMapOfSets(removeEmptySets: false));
+    final IMapOfSets<String, int> iMapOfSets2 =
+        iMapOfSets1.withConfig(ConfigMapOfSets(removeEmptySets: false));
 
     expect(iMapOfSets1.updateAll((String key, ISet<int> set) => <int>{}.lock), {});
     expect(iMapOfSets2.updateAll((String key, ISet<int> set) => <int>{}.lock), {
@@ -1624,7 +1643,7 @@ void main() {
 
   // //////////////////////////////////////////////////////////////////////////////
 
-  test("IMapOfSetsExtension.invertKeysAndValues", () {
+  test("IMapOfSets.invertKeysAndValues()", () {
     IMapOfSets<String, int> iMapOfSets = {
       "a": {1, 2},
       "b": {1, 2, 3},
@@ -1645,6 +1664,15 @@ void main() {
 
     // Invert twice return to normal.
     expect(invertedIMapOfSets.invertKeysAndValues(), iMapOfSets);
+  });
+
+  test("IMapOfSets.invertKeysAndValues() | with empty sets", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.withConfig({"a": {}}, ConfigMapOfSets(removeEmptySets: false));
+
+    expect(iMapOfSets.unlock, {"a": <int>{}});
+
+    // TODO: Marcelo, como definir isso?
   });
 
   // //////////////////////////////////////////////////////////////////////////////
@@ -1716,14 +1744,22 @@ void main() {
     });
   });
 
-  test("IMapOfSets.removeValueWhere() | removes empty sets", () {
-    final IMapOfSets<String, int> mapOfSets = {
+  test("IMapOfSets.removeValueWhere() | removeEmptySets", () {
+    final IMapOfSets<String, int> mapOfSets1 = {
       "a": {1, 2},
       "b": {11, 12, 13},
     }.lock;
-
-    expect(mapOfSets.removeValueWhere("b", (int value) => value > 10).unlock, {
+    final IMapOfSets<String, int> mapOfSets2 = {
       "a": {1, 2},
+      "b": {11, 12, 13},
+    }.lock.withConfig(ConfigMapOfSets(removeEmptySets: false));
+
+    expect(mapOfSets1.removeValueWhere("b", (int value) => value > 10).unlock, {
+      "a": {1, 2},
+    });
+    expect(mapOfSets2.removeValueWhere("b", (int value) => value > 10).unlock, {
+      "a": {1, 2},
+      "b": <int>{}
     });
   });
 }
