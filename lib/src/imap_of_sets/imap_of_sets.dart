@@ -618,7 +618,17 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return IMapOfSets.from(result, config: config);
   }
 
-  IMapOfSets<K, V> clear() => empty<K, V>(config);
+  /// If [removeEmptySets] is `true`, returns an empty map of sets with the same
+  /// configuration. However, if [removeEmptySets] is `false`, keep the keys,
+  /// but make their sets empty.
+  IMapOfSets<K, V> clear() {
+    if (config.removeEmptySets)
+      return empty<K, V>(config);
+    else {
+      var emptySet = ISet.empty<V>(config.asConfigSet);
+      return updateAll((K key, ISet<V> set) => emptySet);
+    }
+  }
 
   void forEach(void Function(K key, ISet<V> set) f) => _mapOfSets.forEach(f);
 
