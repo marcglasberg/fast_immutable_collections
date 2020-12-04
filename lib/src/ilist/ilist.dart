@@ -977,6 +977,7 @@ class IList<T> // ignore: must_be_immutable
     _count();
     start ??= 0;
     var _length = length;
+    if (_length == 0) return -1;
     if (start < 0 || start >= _length)
       throw ArgumentError.value(start, "index", "Index out of range");
     for (int i = start; i <= _length - 1; i++) if (test(this[i])) return i;

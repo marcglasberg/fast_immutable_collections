@@ -1070,6 +1070,15 @@ void main() {
     expect(ilist.indexWhere((String element) => element == "fa"), -1);
   });
 
+  test("IList.indexWhere() of empty list or list with a single item", () {
+    var ilist = IList.empty<String>();
+    expect(ilist.indexWhere((String element) => element == "x"), -1);
+
+    ilist = ["do"].lock;
+    expect(ilist.indexWhere((String element) => element == "x"), -1);
+    expect(ilist.indexWhere((String element) => element == "do"), 0);
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("IList.lastIndexOf()", () {
