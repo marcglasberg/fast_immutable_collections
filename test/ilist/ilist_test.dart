@@ -709,15 +709,16 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("elementAt", () {
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(0), "a");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(1), "b");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(2), "c");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(3), "d");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(4), "e");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(5), "f");
+    var iList = ["a", "b", "c", "d", "e", "f"].lock;
+    expect(iList.elementAt(0), "a");
+    expect(iList.elementAt(1), "b");
+    expect(iList.elementAt(2), "c");
+    expect(iList.elementAt(3), "d");
+    expect(iList.elementAt(4), "e");
+    expect(iList.elementAt(5), "f");
 
-    expect(() => ["a", "b", "c", "d", "e", "f"].lock.elementAt(6), throwsRangeError);
-    expect(() => ["a", "b", "c", "d", "e", "f"].lock.elementAt(-1), throwsRangeError);
+    expect(() => iList.elementAt(6), throwsRangeError);
+    expect(() => iList.elementAt(-1), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
