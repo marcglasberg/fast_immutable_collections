@@ -637,33 +637,21 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.toggle method | " "Toggling an existing element", () {
+  test("toggle", () {
     IList<int> ilist = [1, 2, 3, 4, 5].lock;
 
+    // 1) Toggle existing item
     expect(ilist.contains(4), isTrue);
-
     ilist = ilist.toggle(4);
-
     expect(ilist.contains(4), isFalse);
-
     ilist = ilist.toggle(4);
-
     expect(ilist.contains(4), isTrue);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.toggle method | " "Toggling a nonexistent element", () {
-    IList<int> ilist = [1, 2, 3, 4, 5].lock;
-
+    // 2) Toggle NON-existing item
     expect(ilist.contains(6), isFalse);
-
     ilist = ilist.toggle(6);
-
     expect(ilist.contains(6), isTrue);
-
     ilist = ilist.toggle(6);
-
     expect(ilist.contains(6), isFalse);
   });
 
