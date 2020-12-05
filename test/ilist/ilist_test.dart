@@ -708,18 +708,14 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.elementAt method | " "Regular element access", () {
+  test("elementAt", () {
     expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(0), "a");
     expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(1), "b");
     expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(2), "c");
     expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(3), "d");
     expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(4), "e");
     expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(5), "f");
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.elementAt method | " "Range exceptions", () {
     expect(() => ["a", "b", "c", "d", "e", "f"].lock.elementAt(6), throwsRangeError);
     expect(() => ["a", "b", "c", "d", "e", "f"].lock.elementAt(-1), throwsRangeError);
   });
