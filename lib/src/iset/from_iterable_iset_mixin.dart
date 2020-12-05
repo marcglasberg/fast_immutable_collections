@@ -2,7 +2,7 @@ import "../base/immutable_collection.dart";
 import "../iset/iset.dart";
 
 /// This mixin implements all [Iterable] methods,
-/// but it does NOT implement [Iterable] nor [ISet].
+/// but it does **NOT** implement [Iterable] nor [ISet].
 ///
 /// It is meant to help you wrap an [ISet] into another class (composition).
 /// You must override the [iter] getter to return the inner [ISet].
@@ -28,7 +28,7 @@ import "../iset/iset.dart";
 /// just add the `implements Iterable<T>` to its declaration. For example:
 ///
 /// ```dart
-/// class MyClass with IterableLikeISetMixin<T>, implements Iterable<T> { ... }
+/// class MyClass with IterableLikeISetMixin<T> implements Iterable<T> { ... }
 ///
 /// MyClass obj = MyClass({1, 2, 3});
 ///
@@ -46,8 +46,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   bool contains(Object element) => iter.contains(element);
 
-  T elementAt(int index) =>
-      throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 

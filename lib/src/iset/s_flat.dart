@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:fast_immutable_collections/src/base/hash.dart";
+
+import "../base/hash.dart";
+import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -17,6 +18,9 @@ class SFlat<T> extends S<T> {
 
   @override
   Set<T> get getFlushed => _set;
+
+  @override
+  T get anyItem => _set.first;
 
   @override
   bool contains(Object element) => _set.contains(element);

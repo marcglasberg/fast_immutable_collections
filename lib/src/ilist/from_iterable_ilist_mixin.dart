@@ -8,9 +8,9 @@ import "ilist.dart";
 /// You must override the [iter] getter to return the inner [IList].
 /// All other methods are efficiently implemented in terms of the [iter].
 ///
-/// Note: This class does NOT implement [Iterable]. Unfortunately, the [expect]
+/// Note: This class does **NOT** implement [Iterable]. Unfortunately, the [expect]
 /// method in tests compares [Iterable]s by comparing its items. So if you
-/// create a class that implement [Iterable] and then you want to use the
+/// create a class that implements [Iterable] and then, when you want to use the
 /// [expect] method, it will just compare its items, completing ignoring its
 /// `operator ==`.
 ///
@@ -28,7 +28,7 @@ import "ilist.dart";
 /// just add the `implements Iterable<T>` to its declaration. For example:
 ///
 /// ```dart
-/// class MyClass with IterableLikeIListMixin<T>, implements Iterable<T> { ... }
+/// class MyClass with IterableLikeIListMixin<T> implements Iterable<T> { ... }
 ///
 /// MyClass obj = MyClass([1, 2, 3]);
 ///

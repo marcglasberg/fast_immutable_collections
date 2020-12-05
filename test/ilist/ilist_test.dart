@@ -7,6 +7,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   setUp(() {
+    ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = false;
   });
 
@@ -384,6 +385,37 @@ void main() {
     expect(IList([1, 2]).hashCode, isNot(IList([1, 2]).withIdentityEquals.hashCode));
     expect(IList([1, 2, 3]).hashCode, isNot(IList([1, 2, 3]).withIdentityEquals.hashCode));
     expect(IList([2, 1]).hashCode, isNot(IList([2, 1]).withIdentityEquals.hashCode));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("IList.hashCode cache | when cache is on", () {
+    final List<int> list = [1, 2, 3];
+
+    final IList<int> iListWithCache = IList.unsafe(list, config: ConfigList(cacheHashCode: true));
+
+    final int hashBefore = iListWithCache.hashCode;
+
+    list.add(4);
+
+    final int hashAfter = iListWithCache.hashCode;
+
+    expect(hashAfter, hashBefore);
+  });
+
+  test("IList.hashCode cache | when cache is off", () {
+    final List<int> list = [1, 2, 3];
+
+    final IList<int> iListWithoutCache =
+        IList.unsafe(list, config: ConfigList(cacheHashCode: false));
+
+    final int hashBefore = iListWithoutCache.hashCode;
+
+    list.add(4);
+
+    final int hashAfter = iListWithoutCache.hashCode;
+
+    expect(hashAfter, isNot(hashBefore));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -924,6 +956,40 @@ void main() {
 
   test("IList.toString()", () => expect([1, 2, 3, 4, 5, 6].lock.toString(), "[1, 2, 3, 4, 5, 6]"));
 
+  test("IList.toString(false)", () {
+    expect([].lock.toString(true), "[]");
+    expect([1].lock.toString(true), "[1]");
+    expect([1, 2, 3].lock.toString(false), "[1, 2, 3]");
+  });
+
+  test("IList.toString() | ImmutableCollection.prettyPrint is Off", () {
+    ImmutableCollection.prettyPrint = false;
+    expect([1, 2, 3].lock.toString(), "[1, 2, 3]");
+  });
+
+  test("IList.toString(true)", () {
+    expect([].lock.toString(true), "[]");
+    expect([1].lock.toString(true), "[1]");
+    expect(
+        [1, 2, 3].lock.toString(true),
+        "[\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
+        "]");
+  });
+
+  test("IList.toString() | ImmutableCollection.prettyPrint is On", () {
+    ImmutableCollection.prettyPrint = true;
+    expect(
+        [1, 2, 3].lock.toString(),
+        "[\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
+        "]");
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("Views | " "IList.unlockView", () {
@@ -1055,6 +1121,15 @@ void main() {
     expect(ilist.indexWhere((String element) => element == "re"), 1);
     expect(ilist.indexWhere((String element) => element == "re", 2), 3);
     expect(ilist.indexWhere((String element) => element == "fa"), -1);
+  });
+
+  test("IList.indexWhere() of empty list or list with a single item", () {
+    var ilist = IList.empty<String>();
+    expect(ilist.indexWhere((String element) => element == "x"), -1);
+
+    ilist = ["do"].lock;
+    expect(ilist.indexWhere((String element) => element == "x"), -1);
+    expect(ilist.indexWhere((String element) => element == "do"), 0);
   });
 
   //////////////////////////////////////////////////////////////////////////////

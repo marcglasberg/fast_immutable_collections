@@ -1,3 +1,5 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 import "../base/hash.dart";
 import "../base/sort.dart";
 
@@ -5,9 +7,9 @@ import "../base/sort.dart";
 
 extension MapEntryExtension<K, V> on MapEntry<K, V> {
   //
-  /// [MapEntry] is not [Comparable].
+  /// [MapEntry] is **not** [Comparable].
   /// If you need it to be comparable, you can use this getter to turn
-  /// it into an [Entry]. This makes testing easier. For example:
+  /// it into an [Entry]. Using [Entry] makes testing easier. For example:
   ///
   /// ```dart
   /// MapEntry mapEntry = map.entries.first;
@@ -22,22 +24,33 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   /// Note another alternative is to use [containsPair] matcher in the map:
   ///
   /// ```dart
-  /// // See https://pub.dev/documentation/matcher/latest/matcher/containsPair.html
+  /// // See [`containsPair` Matcher](https://pub.dev/documentation/matcher/latest/matcher/containsPair.html)
   /// expect(map, containsPair("a", 1));
   /// ```
   Entry<K, V> get asEntry => Entry.from<K, V>(this);
 
-  /// Compare the keys of the map entries, if they are [Comparable].
-  /// If the keys are the same or not [Comparable], then compare the values,
+  /// Compare the `key`s of the map entries, if they are [Comparable].
+  /// If the `key`s are the same or not [Comparable], then compare the values,
   /// if they are [Comparable].
-  /// If keys and values are the same or not [Comparable], return 0.
+  /// If `key`s and values are the same or not [Comparable], return `0`.
   ///
-  /// Note: This is not called "compareTo" as to not mislead people into thinking
+  /// Note: This is not called "`compareTo`" as to not mislead people into thinking
   /// [MapEntry] is [Comparable].
   /// See: [Issue #32559 of the Dart SDK](https://github.com/dart-lang/sdk/issues/32559)
   /// and [Issue #100 of Dart's Matchers](https://github.com/dart-lang/matcher/issues/100).
   ///
   int compareKeyAndValue(MapEntry other) => compareObject(this, other);
+
+  String print(bool prettyPrint) {
+    String keyStr = (key is ImmutableCollection)
+        ? (key as ImmutableCollection).toString(prettyPrint)
+        : key.toString();
+    String valueStr = (value is ImmutableCollection)
+        ? (value as ImmutableCollection).toString(prettyPrint)
+        : value.toString();
+
+    return "$keyStr: $valueStr";
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////

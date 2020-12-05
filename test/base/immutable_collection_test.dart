@@ -87,16 +87,16 @@ void main() {
 
     expect(output.value, isNull);
 
-    output.set(10);
+    output.save(10);
 
     expect(output.value, 10);
-    expect(() => output.set(1), throwsStateError);
+    expect(() => output.save(1), throwsStateError);
   });
 
   test("Output | Output.toString()", () {
     Output<int> output = Output();
     expect(output.toString(), "null");
-    output.set(10);
+    output.save(10);
     expect(output.toString(), "10");
   });
 
@@ -104,9 +104,9 @@ void main() {
     final Output<int> output1 = Output();
     final Output<int> output2 = Output();
     final Output<int> output3 = Output();
-    output1.set(10);
-    output2.set(10);
-    output3.set(1);
+    output1.save(10);
+    output2.save(10);
+    output3.save(1);
     expect(output1 == output1, isTrue);
     expect(output1 == output2, isTrue);
     expect(output2 == output1, isTrue);
@@ -117,9 +117,9 @@ void main() {
     final Output<int> output1 = Output();
     final Output<int> output2 = Output();
     final Output<int> output3 = Output();
-    output1.set(10);
-    output2.set(10);
-    output3.set(1);
+    output1.save(10);
+    output2.save(10);
+    output3.save(1);
     expect(output1.hashCode, allOf(output1.hashCode, output2.hashCode, isNot(output3.hashCode)));
   });
 
@@ -189,6 +189,8 @@ void main() {
   test("ImmutableCollection.autoFlush", () => expect(ImmutableCollection.autoFlush, isTrue));
 
   test("ImmutableCollection.autoFlush setter", () {
+    expect(ImmutableCollection.autoFlush, isTrue);
+
     ImmutableCollection.autoFlush = false;
 
     expect(ImmutableCollection.autoFlush, isFalse);
@@ -198,15 +200,34 @@ void main() {
     expect(ImmutableCollection.autoFlush, isTrue);
   });
 
+  test("ImmutableCollection.prettyPrint", () => expect(ImmutableCollection.prettyPrint, isTrue));
+
+  test("ImmutableCollection.prettyPrint setter", () {
+    expect(ImmutableCollection.prettyPrint, isTrue);
+
+    ImmutableCollection.prettyPrint = false;
+
+    expect(ImmutableCollection.prettyPrint, isFalse);
+
+    ImmutableCollection.prettyPrint = true;
+
+    expect(ImmutableCollection.prettyPrint, isTrue);
+  });
+
   test("lockConfig", () {
     ImmutableCollection.lockConfig();
     expect(() => IList.resetAllConfigurations(), throwsStateError);
     expect(() => ISet.resetAllConfigurations(), throwsStateError);
     expect(() => IMap.resetAllConfigurations(), throwsStateError);
-    expect(() => ImmutableCollection.disallowUnsafeConstructors = !ImmutableCollection.disallowUnsafeConstructors, throwsStateError);
+    expect(
+        () => ImmutableCollection.disallowUnsafeConstructors =
+            !ImmutableCollection.disallowUnsafeConstructors,
+        throwsStateError);
     expect(() => ImmutableCollection.autoFlush = !ImmutableCollection.autoFlush, throwsStateError);
+    expect(
+        () => ImmutableCollection.prettyPrint = !ImmutableCollection.prettyPrint, throwsStateError);
     expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);
-  });
+  }, skip:true);
 }
 
 @immutable

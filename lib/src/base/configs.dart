@@ -7,7 +7,11 @@ import "hash.dart";
 // /////////////////////////////////////////////////////////////////////////////
 
 /// - If [isDeepEquals] is `false`, the [IList] equals operator (`==`) compares by identity.
-/// - If [isDeepEquals] is `true` (the default), the [IList] equals operator (`==`) compares all items, ordered.
+/// - If [isDeepEquals] is `true` (the default), the [IList] equals operator (`==`) compares all
+/// items, ordered.
+/// - If [cacheHashCode] is `true` (the default), the [IList] will only calculate the [hashCode]
+/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always
+/// recalculate it.
 @immutable
 class ConfigList {
   //
@@ -15,8 +19,8 @@ class ConfigList {
   /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
-  /// If `false`, the hashCode will be calculated each time it's used.
-  /// If `true` (the default), the hashCode will be cached.
+  /// If `false`, the [hashCode] will be calculated each time it's used.
+  /// If `true` (the default), the [hashCode] will be cached.
   /// You should turn the cache off only if may use the immutable list
   /// with mutable data.
   final bool cacheHashCode;
@@ -60,6 +64,9 @@ class ConfigList {
 /// - If [isDeepEquals] is `false`, the [ISet] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [ISet] equals operator (`==`) compares all items, unordered.
 /// - If the [compare] function is defined, sorted outputs will use it as a comparator.
+/// - If [cacheHashCode] is `true` (the default), the [ISet] will only calculate the [hashCode]
+/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always
+/// recalculate it.
 @immutable
 class ConfigSet {
   //
@@ -67,11 +74,11 @@ class ConfigSet {
   /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
-  /// If true, will sort the list output of items.
+  /// If `true`, will sort the list output of items.
   final bool sort;
 
-  /// If `false`, the hashCode will be calculated each time it's used.
-  /// If `true` (the default), the hashCode will be cached.
+  /// If `false`, the [hashCode] will be calculated each time it's used.
+  /// If `true` (the default), the [hashCode] will be cached.
   /// You should turn the cache off only if may use the immutable set
   /// with mutable data.
   final bool cacheHashCode;
@@ -120,6 +127,9 @@ class ConfigSet {
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
 /// - If [sortKeys] is `true` (the default), will sort the list output of keys.
 /// - If [sortValues] is `true` (the default), will sort the list output of values.
+/// - If [cacheHashCode] is `true` (the default), the [IMap] will only calculate the [hashCode]
+/// once, when it is asked &mdash; initially, internally `null`. Otherwise, it will always
+/// recalculate it.
 @immutable
 class ConfigMap {
   //
@@ -133,8 +143,8 @@ class ConfigMap {
   /// If `true` (the default), will sort the list output of values.
   final bool sortValues;
 
-  /// If `false`, the hashCode will be calculated each time it's used.
-  /// If `true` (the default), the hashCode will be cached.
+  /// If `false`, the [hashCode] will be calculated each time it's used.
+  /// If `true` (the default), the [hashCode] will be cached.
   /// You should turn the cache off only if may use the immutable map
   /// with mutable data.
   final bool cacheHashCode;
@@ -188,6 +198,9 @@ class ConfigMap {
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
 /// - If [sortKeys] is `true` (the default), will sort the list output of keys.
 /// - If [sortValues] is `true` (the default), will sort the list output of values.
+/// - If [cacheHashCode] is `true` (the default), the [IMapOfSets] will only calculate the
+/// [hashCode] once, when it is asked &mdash; initially, internally `null`. Otherwise, it will
+/// always recalculate it.
 @immutable
 class ConfigMapOfSets {
   //
@@ -206,8 +219,8 @@ class ConfigMapOfSets {
   /// If `false`, empty sets and their keys are kept.
   final bool removeEmptySets;
 
-  /// If `false`, the hashCode will be calculated each time it's used.
-  /// If `true` (the default), the hashCode will be cached.
+  /// If `false`, the [hashCode] will be calculated each time it's used.
+  /// If `true` (the default), the [hashCode] will be cached.
   /// You should turn the cache off only if may use the immutable map
   /// of sets with mutable data.
   final bool cacheHashCode;

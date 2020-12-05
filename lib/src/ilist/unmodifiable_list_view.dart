@@ -1,6 +1,10 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "dart:collection";
+
 import "package:meta/meta.dart";
+
+import "../base/immutable_collection.dart";
+import "ilist.dart";
+import "ilist_extension.dart";
 
 /// The [UnmodifiableListView] is a relatively safe, unmodifiable [List] that is built from an
 /// [IList] or another [List]. The construction of the [UnmodifiableListView] is very fast,
@@ -16,13 +20,14 @@ import "package:meta/meta.dart";
 ///
 /// ## How does it compare to [List.unmodifiable]?
 ///
-/// [List.unmodifiable] is slow, but It's always safe, because it is not a view, and
+/// [List.unmodifiable] is slow, but it's always safe, because *it is not a view*, and
 /// actually creates a new list. On the other hand, [UnmodifiableListView] is fast, but if
 /// you create it from a regular [List] and then modify that original [List], you will also
-/// be modifying the view. Also note, if you create an [UnmodifiableListView] from a [IList],
-/// then It's totally safe because the original [IList] can't be modified (unless of course,
-/// again, you"ve created it from a [IList.unsafe] constructor.
+/// be modifying the view. Also note, if you create an [UnmodifiableListView] from an [IList],
+/// then it's totally safe because the original [IList] can't be modified &mdash; unless of course,
+/// again, you've created it from a [IList.unsafe] constructor.
 ///
+/// See also: [ModifiableListView]
 @immutable
 class UnmodifiableListView<T> with ListMixin<T> implements List<T>, CanBeEmpty {
   final IList<T> _iList;

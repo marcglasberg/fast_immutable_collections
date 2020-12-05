@@ -191,5 +191,5 @@ void main() {
   test("defaultConfig | Changing the default ConfigMap will throw an exception if lockConfig", () {
     ImmutableCollection.lockConfig();
     expect(() => IMap.defaultConfig = ConfigMap(isDeepEquals: false), throwsStateError);
-  });
+  }, skip:true);
 }
