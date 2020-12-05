@@ -937,10 +937,10 @@ void main() {
 
     // 2) Global configuration prettyPrint == true.
     ImmutableCollection.prettyPrint = true;
-    expect([].lock.toString(true), "[]");
-    expect([1].lock.toString(true), "[1]");
+    expect([].lock.toString(), "[]");
+    expect([1].lock.toString(), "[1]");
     expect(
-        [1, 2, 3].lock.toString(true),
+        [1, 2, 3].lock.toString(),
         "[\n"
         "   1,\n"
         "   2,\n"
