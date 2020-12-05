@@ -743,10 +743,6 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.length", () => expect([1, 2, 3, 4, 5, 6].lock.length, 6));
-
-  //////////////////////////////////////////////////////////////////////////////
-
   test("IList.inRange()", () {
     expect([1, 2, 3].lock.inRange(-1), isFalse);
     expect([1, 2, 3].lock.inRange(1), isTrue);
@@ -755,20 +751,15 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.first", () => expect(["a", "b", "c", "d", "e", "f"].lock.first, "a"));
+  test("length, first, last, single", () {
+    var ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.length, 6);
+    expect(ilist.first, 1);
+    expect(ilist.last, 6);
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.last", () => expect(["a", "b", "c", "d", "e", "f"].lock.last, "f"));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.single() | State exception",
-      () => expect(() => [1, 2, 3, 4, 5, 6].lock.single, throwsStateError));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.single() | Access", () => expect([10].lock.single, 10));
+    expect([10].lock.single, 10);
+    expect(() => ilist.single, throwsStateError);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
