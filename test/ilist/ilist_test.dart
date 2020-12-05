@@ -926,20 +926,17 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.toString()", () => expect([1, 2, 3, 4, 5, 6].lock.toString(), "[1, 2, 3, 4, 5, 6]"));
-
-  test("IList.toString(false)", () {
-    expect([].lock.toString(true), "[]");
-    expect([1].lock.toString(true), "[1]");
-    expect([1, 2, 3].lock.toString(false), "[1, 2, 3]");
-  });
-
-  test("IList.toString() | ImmutableCollection.prettyPrint is Off", () {
+  test("toString", () {
+    // 1) Global configuration prettyPrint == false.
     ImmutableCollection.prettyPrint = false;
+    expect([].lock.toString(), "[]");
+    expect([1].lock.toString(), "[1]");
     expect([1, 2, 3].lock.toString(), "[1, 2, 3]");
-  });
 
-  test("IList.toString(true)", () {
+    // ---
+
+    // 2) Global configuration prettyPrint == true.
+    ImmutableCollection.prettyPrint = true;
     expect([].lock.toString(true), "[]");
     expect([1].lock.toString(true), "[1]");
     expect(
@@ -949,12 +946,23 @@ void main() {
         "   2,\n"
         "   3\n"
         "]");
-  });
 
-  test("IList.toString() | ImmutableCollection.prettyPrint is On", () {
+    // ---
+
+    // 3) Local prettyPrint == false.
     ImmutableCollection.prettyPrint = true;
+    expect([].lock.toString(false), "[]");
+    expect([1].lock.toString(false), "[1]");
+    expect([1, 2, 3].lock.toString(false), "[1, 2, 3]");
+
+    // ---
+
+    // 4) Local prettyPrint == true.
+    ImmutableCollection.prettyPrint = false;
+    expect([].lock.toString(true), "[]");
+    expect([1].lock.toString(true), "[1]");
     expect(
-        [1, 2, 3].lock.toString(),
+        [1, 2, 3].lock.toString(true),
         "[\n"
         "   1,\n"
         "   2,\n"
