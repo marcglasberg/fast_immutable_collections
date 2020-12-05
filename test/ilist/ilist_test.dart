@@ -669,21 +669,15 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Index Access |" "ilist[index]", () {
-    final IList<String> ilist = ["a", "b", "c", "d", "e"].lock;
+  test("Operator []", () {
+    final IList<String> ilist = ["a", "b", "c"].lock;
     expect(ilist[0], "a");
     expect(ilist[1], "b");
     expect(ilist[2], "c");
-    expect(ilist[3], "d");
-    expect(ilist[4], "e");
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("Index Access |" "Range Errors", () {
-    final IList<String> ilist = ["a", "b", "c", "d", "e"].lock;
-    expect(() => ilist[5], throwsA(isA<RangeError>()));
+    expect(() => ilist[3], throwsA(isA<RangeError>()));
+    expect(() => ilist[100], throwsA(isA<RangeError>()));
     expect(() => ilist[-1], throwsA(isA<RangeError>()));
+    expect(() => ilist[-100], throwsA(isA<RangeError>()));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -695,7 +689,9 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.cast()", () => expect([1, 2, 3, 4, 5, 6].lock.cast<num>(), isA<IList<num>>()));
+  test("IList.cast()", () {
+    expect([1, 2, 3, 4, 5, 6].lock.cast<num>(), isA<IList<num>>());
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -709,16 +705,16 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("elementAt", () {
-    var iList = ["a", "b", "c", "d", "e", "f"].lock;
-    expect(iList.elementAt(0), "a");
-    expect(iList.elementAt(1), "b");
-    expect(iList.elementAt(2), "c");
-    expect(iList.elementAt(3), "d");
-    expect(iList.elementAt(4), "e");
-    expect(iList.elementAt(5), "f");
+    var ilist = ["a", "b", "c", "d", "e", "f"].lock;
+    expect(ilist.elementAt(0), "a");
+    expect(ilist.elementAt(1), "b");
+    expect(ilist.elementAt(2), "c");
+    expect(ilist.elementAt(3), "d");
+    expect(ilist.elementAt(4), "e");
+    expect(ilist.elementAt(5), "f");
 
-    expect(() => iList.elementAt(6), throwsRangeError);
-    expect(() => iList.elementAt(-1), throwsRangeError);
+    expect(() => ilist.elementAt(6), throwsRangeError);
+    expect(() => ilist.elementAt(-1), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
