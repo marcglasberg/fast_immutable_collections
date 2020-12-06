@@ -666,12 +666,13 @@ class IList<T> // ignore: must_be_immutable
   @override
   IList<E> whereType<E>() => IList._(_l.whereType<E>(), config: config);
 
-  /// If the list has more than `maxLength` elements, remove the last elements
-  /// so it remains with only `maxLength` elements. If the list has `maxLength`
-  /// or less elements, doesn't change anything. If you want, you can provide a
-  /// [priority] comparator, such as the elements to be removed are the ones
-  /// that would be in the end of a list sorted with this comparator (the order
-  /// of the remaining elements won't change).
+  /// If the list has more than [maxLength] elements, remove the last elements
+  /// so it remains with only [maxLength] elements. If the list has [maxLength]
+  /// or less elements, doesn't change anything.
+  ///
+  /// If you want, you can provide a [priority] comparator, such as the elements to be removed are
+  /// the ones that would be in the end of a list sorted with this comparator (the order of the
+  /// remaining elements won't change).
   IList<T> maxLength(
     int maxLength, {
     int Function(T a, T b) priority,
@@ -1543,5 +1544,3 @@ class InternalsForTestingPurposesIList {
 }
 
 // /////////////////////////////////////////////////////////////////////////////
-
-

@@ -560,11 +560,71 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.add()", () => expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]));
+  test("add", () {
+    // Regular usage
+    expect(() {
+      IList<int> ilist;
+      ilist.add(1);
+    }, throwsNoSuchMethodError);
+    expect(<int>[].lock.add(1), [1]);
+    expect(<int>[null].lock.add(1), [null, 1]);
+    expect(<int>[1].lock.add(10), [1, 10]);
+    expect(<int>[null, null, null].lock.add(10), [null, null, null, 10]);
+    expect(<int>[null, 1, null, 3].lock.add(10), [null, 1, null, 3, 10]);
+    expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]);
+
+    // Adding null
+    expect(() {
+      IList<int> ilist;
+      ilist.add(1);
+    }, throwsNoSuchMethodError);
+    expect(<int>[].lock.add(null), [null]);
+    expect(<int>[null].lock.add(null), [null, null]);
+    expect(<int>[1].lock.add(null), [1, null]);
+    expect(<int>[null, null, null].lock.add(null), [null, null, null, null]);
+    expect(<int>[null, 1, null, 3].lock.add(null), [null, 1, null, 3, null]);
+    expect([1, 2, 3].lock.add(null), [1, 2, 3, null]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.addAll()", () => expect([1, 2, 3, 4].lock.addAll([5, 6]), [1, 2, 3, 4, 5, 6]));
+  test("addAll", () {
+    // Regular Usage
+    expect(() {
+      IList<int> ilist;
+      ilist.addAll([1, 2]);
+    }, throwsNoSuchMethodError);
+    expect(<int>[].lock.addAll([1, 2]), [1, 2]);
+    expect(<int>[null].lock.addAll([1, 2]), [null, 1]);
+    expect(<int>[1].lock.addAll([2, 3]), [1, 2, 3]);
+    expect(<int>[null, null, null].lock.addAll([1, 2]), [null, null, null, 1, 2]);
+    expect(<int>[null, 1, null, 3].lock.addAll([10, 11]), [null, 1, null, 3, 10, 11]);
+    expect([1, 2, 3, 4].lock.addAll([5, 6]), [1, 2, 3, 4, 5, 6]);
+
+    // Adding nulls
+    expect(() {
+      IList<int> ilist;
+      ilist.addAll([1, 2]);
+    }, throwsNoSuchMethodError);
+    expect(() => <int>[].lock.addAll([null, null]), [null, null]);
+    expect(<int>[null].lock.addAll([null, null]), [null, null, null]);
+    expect(<int>[1].lock.addAll([null, null]), [1, null, null]);
+    expect(<int>[null, null, null].lock.addAll([null, null]), [null, null, null, null, null]);
+    expect(<int>[null, 1, null, 3].lock.addAll([null, null]), [null, 1, null, 3, null, null]);
+    expect([1, 2, 3, 4].lock.addAll([null, null]), [1, 2, 3, 4, null, null]);
+
+    // Adding null and an item
+    expect(() {
+      IList<int> ilist;
+      ilist.addAll([1, 2]);
+    }, throwsNoSuchMethodError);
+    expect(<int>[].lock.addAll([null, 1]), [null, 1]);
+    expect(<int>[null].lock.addAll([null, 1]), [null, null, 1]);
+    expect(<int>[1].lock.addAll([null, 2]), [1, null, 2]);
+    expect(<int>[null, null, null].lock.addAll([null, 1]), [null, null, null, null, 1]);
+    expect(<int>[null, 1, null, 3].lock.addAll([null, 1]), [null, 1, null, 3, null, 1]);
+    expect([1, 2, 3, 4].lock.addAll([null, 1]), [1, 2, 3, 4, null, 1]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -606,33 +666,30 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.maxLength method |" "Cutting the list off", () {
-    expect([1, 2, 3, 4, 5].lock.maxLength(2), [1, 2]);
-    expect([1, 2, 3, 4, 5].lock.maxLength(3), [1, 2, 3]);
-    expect([1, 2, 3, 4, 5].lock.maxLength(1), [1]);
-    expect([1, 2, 3, 4, 5].lock.maxLength(0), []);
-  });
+  test("maxLength", () {
+    final IList<int> ilist1 = [1, 2, 3, 4, 5].lock;
+    final IList<int> ilist2 = [5, 3, 5, 8, 12, 18, 32, 2, 1, 9].lock;
 
-  //////////////////////////////////////////////////////////////////////////////
+    // Regular Usage
+    expect(ilist1.maxLength(2), [1, 2]);
+    expect(ilist1.maxLength(3), [1, 2, 3]);
+    expect(ilist1.maxLength(1), [1]);
+    expect(ilist1.maxLength(0), []);
+    expect(ilist1.maxLength(ilist1.length), [1, 2, 3, 4, 5]);
 
-  test("IList.maxLength method |" "Invalid argument",
-      () => expect(() => [1, 2, 3, 4, 5].lock.maxLength(-1), throwsArgumentError));
+    // Invalid Argument
+    expect(() => ilist1.maxLength(-1), throwsArgumentError);
+    expect(() => ilist1.maxLength(-100), throwsArgumentError);
+    expect(ilist1.maxLength(100), [1, 2, 3, 4, 5]);
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.maxLength method |" "Priority", () {
-    final IList<int> ilist = [5, 3, 5, 8, 12, 18, 32, 2, 1, 9].lock;
-    expect(ilist.maxLength(3), [5, 3, 5]); // No priority.
-    expect(ilist.maxLength(100, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 5, 8, 12, 18, 32, 2, 1, 9]); // No priority.
-    expect(
-        ilist.maxLength(3, priority: (int a, int b) => a.compareTo(b)), [3, 2, 1]); // No priority.
-    expect(ilist.maxLength(4, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 2, 1]); // No priority.
-    expect(ilist.maxLength(5, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 5, 2, 1]); // No priority.
-    expect(ilist.maxLength(6, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 5, 8, 2, 1]); // No priority.
+    // Priority
+    expect(ilist2.maxLength(3), [5, 3, 5]);
+    expect(ilist2.maxLength(100, priority: (int a, int b) => a.compareTo(b)),
+        [5, 3, 5, 8, 12, 18, 32, 2, 1, 9]);
+    expect(ilist2.maxLength(3, priority: (int a, int b) => a.compareTo(b)), [3, 2, 1]);
+    expect(ilist2.maxLength(4, priority: (int a, int b) => a.compareTo(b)), [5, 3, 2, 1]);
+    expect(ilist2.maxLength(5, priority: (int a, int b) => a.compareTo(b)), [5, 3, 5, 2, 1]);
+    expect(ilist2.maxLength(6, priority: (int a, int b) => a.compareTo(b)), [5, 3, 5, 8, 2, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
