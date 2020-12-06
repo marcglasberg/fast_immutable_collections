@@ -7,8 +7,7 @@ class LAdd<T> extends L<T> {
   final T _item;
 
   LAdd(this._l, this._item)
-      : assert(_l != null),
-        assert(_item != null);
+      : assert(_l != null);
 
   @override
   bool get isEmpty => false;

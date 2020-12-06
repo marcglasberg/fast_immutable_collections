@@ -562,10 +562,6 @@ void main() {
 
   test("add", () {
     // Regular usage
-    expect(() {
-      IList<int> ilist;
-      ilist.add(1);
-    }, throwsNoSuchMethodError);
     expect(<int>[].lock.add(1), [1]);
     expect(<int>[null].lock.add(1), [null, 1]);
     expect(<int>[1].lock.add(10), [1, 10]);
@@ -574,10 +570,6 @@ void main() {
     expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]);
 
     // Adding null
-    expect(() {
-      IList<int> ilist;
-      ilist.add(1);
-    }, throwsNoSuchMethodError);
     expect(<int>[].lock.add(null), [null]);
     expect(<int>[null].lock.add(null), [null, null]);
     expect(<int>[1].lock.add(null), [1, null]);
@@ -590,23 +582,15 @@ void main() {
 
   test("addAll", () {
     // Regular Usage
-    expect(() {
-      IList<int> ilist;
-      ilist.addAll([1, 2]);
-    }, throwsNoSuchMethodError);
     expect(<int>[].lock.addAll([1, 2]), [1, 2]);
-    expect(<int>[null].lock.addAll([1, 2]), [null, 1]);
+    expect(<int>[null].lock.addAll([1, 2]), [null, 1, 2]);
     expect(<int>[1].lock.addAll([2, 3]), [1, 2, 3]);
     expect(<int>[null, null, null].lock.addAll([1, 2]), [null, null, null, 1, 2]);
     expect(<int>[null, 1, null, 3].lock.addAll([10, 11]), [null, 1, null, 3, 10, 11]);
     expect([1, 2, 3, 4].lock.addAll([5, 6]), [1, 2, 3, 4, 5, 6]);
 
     // Adding nulls
-    expect(() {
-      IList<int> ilist;
-      ilist.addAll([1, 2]);
-    }, throwsNoSuchMethodError);
-    expect(() => <int>[].lock.addAll([null, null]), [null, null]);
+    expect(<int>[].lock.addAll([null, null]), [null, null]);
     expect(<int>[null].lock.addAll([null, null]), [null, null, null]);
     expect(<int>[1].lock.addAll([null, null]), [1, null, null]);
     expect(<int>[null, null, null].lock.addAll([null, null]), [null, null, null, null, null]);
@@ -614,10 +598,6 @@ void main() {
     expect([1, 2, 3, 4].lock.addAll([null, null]), [1, 2, 3, 4, null, null]);
 
     // Adding null and an item
-    expect(() {
-      IList<int> ilist;
-      ilist.addAll([1, 2]);
-    }, throwsNoSuchMethodError);
     expect(<int>[].lock.addAll([null, 1]), [null, 1]);
     expect(<int>[null].lock.addAll([null, 1]), [null, null, 1]);
     expect(<int>[1].lock.addAll([null, 2]), [1, null, 2]);
@@ -635,23 +615,15 @@ void main() {
 
   test("+", () {
     // Regular Usage
-    expect(() {
-      IList<int> ilist;
-      ilist + [1, 2];
-    }, throwsNoSuchMethodError);
     expect(<int>[].lock + [1, 2], [1, 2]);
-    expect(<int>[null].lock + [1, 2], [null, 1]);
+    expect(<int>[null].lock + [1, 2], [null, 1, 2]);
     expect(<int>[1].lock + [2, 3], [1, 2, 3]);
     expect(<int>[null, null, null].lock + [1, 2], [null, null, null, 1, 2]);
     expect(<int>[null, 1, null, 3].lock + [10, 11], [null, 1, null, 3, 10, 11]);
     expect([1, 2, 3, 4].lock + [5, 6], [1, 2, 3, 4, 5, 6]);
 
     // Adding nulls
-    expect(() {
-      IList<int> ilist;
-      ilist + [1, 2];
-    }, throwsNoSuchMethodError);
-    expect(() => <int>[].lock + [null, null], [null, null]);
+    expect(<int>[].lock + [null, null], [null, null]);
     expect(<int>[null].lock + [null, null], [null, null, null]);
     expect(<int>[1].lock + [null, null], [1, null, null]);
     expect(<int>[null, null, null].lock + [null, null], [null, null, null, null, null]);
@@ -659,10 +631,6 @@ void main() {
     expect([1, 2, 3, 4].lock + [null, null], [1, 2, 3, 4, null, null]);
 
     // Adding null and an item
-    expect(() {
-      IList<int> ilist;
-      ilist + [1, 2];
-    }, throwsNoSuchMethodError);
     expect(<int>[].lock + [null, 1], [null, 1]);
     expect(<int>[null].lock + [null, 1], [null, null, 1]);
     expect(<int>[1].lock + [null, 2], [1, null, 2]);
@@ -769,10 +737,11 @@ void main() {
     expect(<int>[].lock.toggle(null), [null]);
 
     expect(<int>[null].lock.toggle(1), [null, 1]);
-    expect(<int>[null].lock.toggle(null), [null, null]);
+    expect(<int>[null].lock.toggle(null), []);
+    expect(<int>[].lock.toggle(null), [null]);
 
     expect(<int>[1].lock.toggle(1), <int>[]);
-    expect(<int>[1].lock.toggle(null), <int>[1]);
+    expect(<int>[1].lock.toggle(null), <int>[1, null]);
 
     expect(<int>[null, null, null].lock.toggle(1), <int>[null, null, null, 1]);
     expect(<int>[null, null, null].lock.toggle(null), <int>[null, null]);
