@@ -633,11 +633,48 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.+ operator", () => expect([1, 2, 3].lock + [4, 5, 6].lock, [1, 2, 3, 4, 5, 6]));
+  test("+", () {
+    // Regular Usage
+    expect(() {
+      IList<int> ilist;
+      ilist + [1, 2];
+    }, throwsNoSuchMethodError);
+    expect(<int>[].lock + [1, 2], [1, 2]);
+    expect(<int>[null].lock + [1, 2], [null, 1]);
+    expect(<int>[1].lock + [2, 3], [1, 2, 3]);
+    expect(<int>[null, null, null].lock + [1, 2], [null, null, null, 1, 2]);
+    expect(<int>[null, 1, null, 3].lock + [10, 11], [null, 1, null, 3, 10, 11]);
+    expect([1, 2, 3, 4].lock + [5, 6], [1, 2, 3, 4, 5, 6]);
+
+    // Adding nulls
+    expect(() {
+      IList<int> ilist;
+      ilist + [1, 2];
+    }, throwsNoSuchMethodError);
+    expect(() => <int>[].lock + [null, null], [null, null]);
+    expect(<int>[null].lock + [null, null], [null, null, null]);
+    expect(<int>[1].lock + [null, null], [1, null, null]);
+    expect(<int>[null, null, null].lock + [null, null], [null, null, null, null, null]);
+    expect(<int>[null, 1, null, 3].lock + [null, null], [null, 1, null, 3, null, null]);
+    expect([1, 2, 3, 4].lock + [null, null], [1, 2, 3, 4, null, null]);
+
+    // Adding null and an item
+    expect(() {
+      IList<int> ilist;
+      ilist + [1, 2];
+    }, throwsNoSuchMethodError);
+    expect(<int>[].lock + [null, 1], [null, 1]);
+    expect(<int>[null].lock + [null, 1], [null, null, 1]);
+    expect(<int>[1].lock + [null, 2], [1, null, 2]);
+    expect(<int>[null, null, null].lock + [null, 1], [null, null, null, null, 1]);
+    expect(<int>[null, 1, null, 3].lock + [null, 1], [null, 1, null, 3, null, 1]);
+    expect([1, 2, 3, 4].lock + [null, 1], [1, 2, 3, 4, null, 1]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.remove()", () {
+  test("remove", () {
+    // Regular Usage
     final IList<int> ilist1 = [1, 2, 3].lock;
 
     final IList<int> ilist2 = ilist1.remove(2);
@@ -662,6 +699,22 @@ void main() {
     expect(ilist5, []);
     expect(ilist6, []);
     expect(identical(ilist1, ilist2), isFalse);
+
+    // Poking around with nulls
+    expect(<int>[].lock.remove(1), <int>[]);
+    expect(<int>[].lock.remove(null), <int>[]);
+
+    expect(<int>[null].lock.remove(null), <int>[]);
+    expect(<int>[null].lock.remove(1), <int>[null]);
+
+    expect(<int>[1].lock.remove(null), <int>[1]);
+    expect(<int>[1].lock.remove(1), <int>[]);
+
+    expect(<int>[null, null, null].lock.remove(null), <int>[null, null]);
+    expect(<int>[null, null, null].lock.remove(1), <int>[null, null, null]);
+
+    expect(<int>[null, 1, null, 1].lock.remove(null), <int>[1, null, 1]);
+    expect(<int>[null, 1, null, 1].lock.remove(1), <int>[null, null, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -710,11 +763,27 @@ void main() {
     expect(ilist.contains(6), isTrue);
     ilist = ilist.toggle(6);
     expect(ilist.contains(6), isFalse);
+
+    // 3) Nulls and other checks
+    expect(<int>[].lock.toggle(1), [1]);
+    expect(<int>[].lock.toggle(null), [null]);
+
+    expect(<int>[null].lock.toggle(1), [null, 1]);
+    expect(<int>[null].lock.toggle(null), [null, null]);
+
+    expect(<int>[1].lock.toggle(1), <int>[]);
+    expect(<int>[1].lock.toggle(null), <int>[1]);
+
+    expect(<int>[null, null, null].lock.toggle(1), <int>[null, null, null, 1]);
+    expect(<int>[null, null, null].lock.toggle(null), <int>[null, null]);
+
+    expect(<int>[null, 1, null, 1].lock.toggle(1), <int>[null, null, 1]);
+    expect(<int>[null, 1, null, 1].lock.toggle(null), <int>[1, null, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Operator []", () {
+  test("[]", () {
     final IList<String> ilist = ["a", "b", "c"].lock;
     expect(ilist[0], "a");
     expect(ilist[1], "b");

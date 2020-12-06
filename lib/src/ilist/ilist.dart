@@ -492,7 +492,7 @@ class IList<T> // ignore: must_be_immutable
     return IList<T>.withConfig(set, config);
   }
 
-  /// Removes the element, if it exists in the list.
+  /// Removes the first instance of the element, if it exists in the list.
   /// Otherwise, adds it to the list.
   IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
 
@@ -1366,6 +1366,7 @@ abstract class L<T> implements Iterable<T> {
       );
 
   // TODO: Still need to implement efficiently.
+  /// Removes the first occurrence of [element] from this list.
   L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
   L<T> removeAll(Iterable<T> elements) {
