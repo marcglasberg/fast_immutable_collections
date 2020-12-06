@@ -811,6 +811,10 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> where(bool Function(K key, V value) test) =>
       IMap<K, V>._(_m.where(test), config: config);
 
+  /// Returns a new map where all entries of this map are transformed by
+  /// the given [mapper] function. However, if [ifRemove] is provided,
+  /// the mapped value will first be tested with it and, if [ifRemove]
+  /// returns true, the value will be removed from the result map.
   IMap<RK, RV> map<RK, RV>(
     MapEntry<RK, RV> Function(K key, V value) mapper, {
     bool Function(RK key, RV value) ifRemove,
@@ -942,8 +946,13 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Iterates over all entries in the map and updates them with the result
   /// of invoking [update].
-  IMap<K, V> updateAll(V Function(K key, V value) update) {
-    return IMap._unsafeFromMap(unlock..updateAll(update), config: config);
+  IMap<K, V> updateAll(
+    V Function(K key, V value) update, {
+    bool Function(K key, V value) ifRemove,
+  }) {
+    Map<K, V> map = unlock..updateAll(update);
+    if (ifRemove != null) map.removeWhere(ifRemove);
+    return IMap._unsafeFromMap(map, config: config);
   }
 }
 

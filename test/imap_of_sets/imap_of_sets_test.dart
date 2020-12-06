@@ -1659,7 +1659,6 @@ void main() {
     var mapper =
         (String key, ISet<int> set) => MapEntry<num, ISet<num>>(num.parse(key), <int>{}.lock);
 
-
     var doRemoveEmptySets = ConfigMapOfSets(removeEmptySets: true);
     var dontRemoveEmptySets = ConfigMapOfSets(removeEmptySets: false);
 
@@ -1667,8 +1666,6 @@ void main() {
       iMapOfSets.map<num, num>(mapper, config: doRemoveEmptySets).unlock,
       {},
     );
-
-
 
     expect(
       iMapOfSets.map<num, num>(mapper, config: dontRemoveEmptySets).unlock,
@@ -1749,8 +1746,6 @@ void main() {
       "2": {4},
       "3": {10, 11},
     });
-    expect(() => iMapOfSets.update("4", (ISet<int> set) => {100}.lock), throwsArgumentError);
-
     expect(
         () => iMapOfSets.update("4", (ISet<int> set) => {100}.lock,
             ifAbsent: () => throw ArgumentError()),
@@ -1808,20 +1803,31 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("IMapOfSets.updateAll() | emptying sets vs ConfigMapOfSets.removeEmptySets", () {
-    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
-      "1": {1, 2, 3},
-      "2": {4},
-      "3": {10, 11},
-    });
-    final IMapOfSets<String, int> iMapOfSets2 =
-        iMapOfSets1.withConfig(ConfigMapOfSets(removeEmptySets: false));
+    // All sets are updated to empty sets. But empty sets are removed.
+    expect(
+        IMapOfSets({
+          "1": {1, 2, 3},
+          "2": {4},
+          "3": {10, 11},
+        })
+            .withConfig(ConfigMapOfSets(removeEmptySets: true))
+            .updateAll((String key, ISet<int> set) => <int>{}.lock),
+        IMapOfSets.empty<String, int>());
 
-    expect(iMapOfSets1.updateAll((String key, ISet<int> set) => <int>{}.lock), {});
-    expect(iMapOfSets2.updateAll((String key, ISet<int> set) => <int>{}.lock), {
-      "1": <int>{},
-      "2": <int>{},
-      "3": <int>{},
-    });
+    // All sets are updated to empty sets. But empty sets are kept.
+    expect(
+        IMapOfSets({
+          "1": {1, 2, 3},
+          "2": {4},
+          "3": {10, 11},
+        })
+            .withConfig(ConfigMapOfSets(removeEmptySets: false))
+            .updateAll((String key, ISet<int> set) => <int>{}.lock).unlock,
+        {
+          "1": <int>{},
+          "2": <int>{},
+          "3": <int>{},
+        });
   });
 
   //////////////////////////////////////////////////////////////////////////////

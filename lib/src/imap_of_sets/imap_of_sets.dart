@@ -688,8 +688,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// Iterates over all key:set entries in the map and updates them with the result
   /// of invoking [update].
-  IMapOfSets<K, V> updateAll(ISet<V> Function(K key, ISet<V> set) update) =>
-      IMapOfSets<K, V>.from(_mapOfSets.updateAll(update), config: config);
+  IMapOfSets<K, V> updateAll(ISet<V> Function(K key, ISet<V> set) update) {
+    bool Function(K key, ISet<V> set) ifRemove;
+    if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
+
+    return IMapOfSets<K, V>.from(_mapOfSets.updateAll(update, ifRemove: ifRemove), config: config);
+  }
 
   /// Return a map where the keys are the values, and the values are the keys.
   IMapOfSets<V, K> invertKeysAndValues([ConfigMapOfSets config]) {
