@@ -368,7 +368,7 @@ abstract class ProtoStudent {
 }
 
 @immutable
-class Student extends ProtoStudent {
+class Student extends ProtoStudent implements Comparable<Student> {
   final String name;
 
   const Student(this.name);
@@ -383,4 +383,7 @@ class Student extends ProtoStudent {
 
   @override
   int get hashCode => name.hashCode;
+
+  @override
+  int compareTo(Student other) => name.compareTo(other.name);
 }

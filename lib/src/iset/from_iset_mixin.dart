@@ -21,30 +21,27 @@ import "../iset/iset.dart";
 ///
 ///   Students([Iterable<Student> students]) : _students = ISet(students);
 ///
-///   @override
 ///   Students newInstance(ISet<Student> iset) => Students(iset);
 ///
-///   @override
 ///   ISet<Student> get iter => _students;
 /// }
 ///
-/// class Student extends ProtoStudent {
+/// class Student implements Comparable<Student> {
 ///   final String name;
 ///
 ///   const Student(this.name);
 ///
-///   @override
 ///   String toString() => "Student: $name";
 ///
-///   @override
 ///   bool operator ==(Object other) =>
 ///      identical(this, other) ||
 ///      other is Student &&
 ///          runtimeType == other.runtimeType &&
 ///          name == other.name;
 ///
-///   @override
 ///   int get hashCode => name.hashCode;
+///
+///   int compareTo(Student other) => name.compareTo(other.name);
 /// }
 /// ```
 ///

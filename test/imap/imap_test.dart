@@ -1175,7 +1175,7 @@ void main() {
     expect(updatedScores.unlock, {"Bob": 72, "Joe": 200});
   });
 
-  test("IMap.flushFactor", () => expect(IMap.flushFactor, 20));
+  test("IMap.flushFactor", () => expect(IMap.flushFactor, 30));
 
   test("IMap.flushFactor setter", () {
     IMap.flushFactor = 200;

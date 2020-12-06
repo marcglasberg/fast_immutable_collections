@@ -507,7 +507,7 @@ and add your own methods to them.
 For example, suppose you have some `Student` class:
 
 ```dart
-class Student {
+class Student implements Comparable<Student>{
    final String name;
 
    Student(this.name);
@@ -517,6 +517,9 @@ class Student {
    bool operator ==(Object other) => identical(this, other) || other is Student && runtimeType == other.runtimeType && name == other.name;  
 
    int get hashCode => name.hashCode;
+
+   @override
+   int compareTo(Student other) => name.compareTo(other.name);
 }
 ```
 
