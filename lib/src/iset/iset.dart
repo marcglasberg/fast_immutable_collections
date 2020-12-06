@@ -143,7 +143,7 @@ class ISet<T> // ignore: must_be_immutable
 
   static ConfigSet _defaultConfig = const ConfigSet();
 
-  static const _defaultFlushFactor = 20;
+  static const _defaultFlushFactor = 30;
 
   static int _flushFactor = _defaultFlushFactor;
 
@@ -417,7 +417,8 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a new set containing the current set plus all the given items.
   ISet<T> addAll(Iterable<T> items) {
-    var result = ISet<T>._unsafe(_s.addAll(items), config: config);
+    var added = _s.addAll(items);
+    var result = ISet<T>._unsafe(added, config: config);
 
     // A set created with `addAll` has a larger counter than both its source
     // sets. This improves the order in which sets are flushed.
@@ -879,7 +880,7 @@ abstract class S<T> implements Iterable<T> {
     for (T item in items) {
       if (!contains(item)) setToBeAdded.add(item);
     }
-    return setToBeAdded.isEmpty ? this : SAddAll(this, setToBeAdded);
+    return setToBeAdded.isEmpty ? this : SAddAll.unsafe(this, setToBeAdded);
   }
 
   // TODO: Still need to implement efficiently.

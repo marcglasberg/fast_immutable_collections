@@ -18,6 +18,12 @@ class SAddAll<T> extends S<T> {
         assert(items is! ISet),
         _setOrS = (items is S) ? items : Set.of(items);
 
+  /// **Unsafe**.
+  SAddAll.unsafe(this._s, Set<T> items)
+      : assert(_s != null),
+        assert(items != null),
+        _setOrS = items;
+
   @override
   bool get isEmpty => false;
 

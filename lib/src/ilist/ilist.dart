@@ -114,7 +114,7 @@ class IList<T> // ignore: must_be_immutable
 
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration  of immutable collections.");
     IList.flushFactor = _defaultFlushFactor;
     IList.defaultConfig = _defaultConfig;
   }
@@ -161,7 +161,7 @@ class IList<T> // ignore: must_be_immutable
 
   static ConfigList _defaultConfig = const ConfigList();
 
-  static const _defaultFlushFactor = 200;
+  static const _defaultFlushFactor = 300;
 
   static int _flushFactor = _defaultFlushFactor;
 

@@ -9,8 +9,7 @@ class SAdd<T> extends S<T> {
   final T _item;
 
   SAdd(this._s, this._item)
-      : assert(_s != null),
-        assert(_item != null);
+      : assert(_s != null);
 
   @override
   bool contains(Object element) => _item == element ? true : _s.contains(element);

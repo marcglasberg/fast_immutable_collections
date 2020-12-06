@@ -221,7 +221,7 @@ void main() {
     var mapOfSets1 = iMapOfSets1.unlock;
     var mapOfSets2 = iMapOfSets2.unlock;
     expect(iMapOfSets1.isFlushed, isTrue);
-    expect(iMapOfSets2.isFlushed, isTrue);
+    expect(iMapOfSets2.isFlushed, isFalse);
 
     // ---
 
@@ -1656,14 +1656,24 @@ void main() {
       "1": {1, 2, 3}
     });
 
-    final IMapOfSets<num, num> mappedIMapOfSets1 = iMapOfSets.map<num, num>(
-        (String key, ISet<int> set) => MapEntry<num, ISet<num>>(num.parse(key), <int>{}.lock));
-    final IMapOfSets<num, num> mappedIMapOfSets2 = iMapOfSets.map<num, num>(
-        (String key, ISet<int> set) => MapEntry<num, ISet<num>>(num.parse(key), <int>{}.lock),
-        config: ConfigMapOfSets(removeEmptySets: false));
+    var mapper =
+        (String key, ISet<int> set) => MapEntry<num, ISet<num>>(num.parse(key), <int>{}.lock);
 
-    expect(mappedIMapOfSets1.unlock, {});
-    expect(mappedIMapOfSets2.unlock, {1: <int>{}});
+
+    var doRemoveEmptySets = ConfigMapOfSets(removeEmptySets: true);
+    var dontRemoveEmptySets = ConfigMapOfSets(removeEmptySets: false);
+
+    expect(
+      iMapOfSets.map<num, num>(mapper, config: doRemoveEmptySets).unlock,
+      {},
+    );
+
+
+
+    expect(
+      iMapOfSets.map<num, num>(mapper, config: dontRemoveEmptySets).unlock,
+      {1: <int>{}},
+    );
   });
 
   //////////////////////////////////////////////////////////////////////////////
