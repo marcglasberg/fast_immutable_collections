@@ -46,11 +46,12 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "Ensuring Immutability | IList.add method | "
-      "Changing the passed mutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+  test("Ensuring Immutability", () {
+    // 1. add
+
+    // 1.1. Changing the passed mutable list doesn't change the IList
+    List<int> original = [1, 2];
+    IList<int> ilist = original.lock;
 
     expect(ilist, original);
 
@@ -59,37 +60,27 @@ void main() {
 
     expect(original, <int>[1, 2, 3, 4]);
     expect(ilist.unlock, <int>[1, 2]);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | IList.add method | "
-      "Changing the IList also doesn't change the original list", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 1.2. Changing the IList also doesn't change the original list
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, original);
 
-    final IList<int> iListNew = ilist.add(3);
+    IList<int> iListNew = ilist.add(3);
 
     expect(original, <int>[1, 2]);
     expect(ilist, <int>[1, 2]);
     expect(iListNew, <int>[1, 2, 3]);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | IList.add method | "
-      "If the item being passed is a variable, a pointer to it shouldn't exist inside IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 1.3. If the item being passed is a variable, a pointer to it shouldn't exist inside IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, original);
 
     int willChange = 4;
-    final IList<int> iListNew = ilist.add(willChange);
+    iListNew = ilist.add(willChange);
 
     willChange = 5;
 
@@ -97,15 +88,12 @@ void main() {
     expect(ilist, <int>[1, 2]);
     expect(willChange, 5);
     expect(iListNew, <int>[1, 2, 4]);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
+    // 2. addAll
 
-  test(
-      "Ensuring Immutability | IList.addAll method | "
-      "Changing the passed mutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 2.1. Changing the passed mutable list doesn't change the IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, <int>[1, 2]);
 
@@ -113,54 +101,41 @@ void main() {
 
     expect(original, <int>[1, 2, 3, 4]);
     expect(ilist, <int>[1, 2]);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | IList.addAll method | "
-      "Changing the passed immutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 2.2. Changing the passed immutable list doesn't change the IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, <int>[1, 2]);
 
-    final IList<int> iListNew = ilist.addAll(<int>[3, 4]);
+    iListNew = ilist.addAll(<int>[3, 4]);
 
     expect(original, <int>[1, 2]);
     expect(ilist, <int>[1, 2]);
     expect(iListNew, <int>[1, 2, 3, 4]);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | IList.addAll method | "
-      "If the items being passed are from a variable, "
-      "it shouldn't have a pointer to the variable", () {
-    final List<int> original = [1, 2];
+    // 2.3. If the items being passed are from a variable, it shouldn't have a pointer to the
+    // variable
+    original = [1, 2];
     final IList<int> iList1 = original.lock;
     final IList<int> iList2 = original.lock;
 
     expect(iList1, original);
     expect(iList2, original);
 
-    final IList<int> iListNew = iList1.addAll(iList2);
+    iListNew = iList1.addAll(iList2);
     original.add(3);
 
     expect(original, <int>[1, 2, 3]);
     expect(iList1, <int>[1, 2]);
     expect(iList2, <int>[1, 2]);
     expect(iListNew, <int>[1, 2, 1, 2]);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
+    // 3. remove
 
-  test(
-      "Ensuring Immutability | IList.remove method | "
-      "Changing the passed mutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 3.1. Changing the passed mutable list doesn't change the IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, [1, 2]);
 
@@ -168,19 +143,14 @@ void main() {
 
     expect(original, <int>[1]);
     expect(ilist, <int>[1, 2]);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | IList.remove method | "
-      "Removing from the original IList doesn't change it", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 3.2. Removing from the original IList doesn't change it
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, <int>[1, 2]);
 
-    final IList<int> iListNew = ilist.remove(1);
+    iListNew = ilist.remove(1);
 
     expect(original, <int>[1, 2]);
     expect(ilist, <int>[1, 2]);
