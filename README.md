@@ -5,6 +5,7 @@
 [![Gitter][gitter_svg]][gitter_badge]
 
 [![Logo][logo]][github_home]
+\
 [![GIF][gif]][example]
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
