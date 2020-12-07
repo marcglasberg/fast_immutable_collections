@@ -9,6 +9,6 @@ void main() {
     expect(() => IList.flushFactor = 1000, throwsStateError);
     expect(() => IList.asyncAutoflush = false, throwsStateError);
     expect(() => IList.resetAllConfigurations(), throwsStateError);
-    expect(() => IList.defaultConfig = ConfigList(), throwsStateError);
+    expect(() => IList.defaultConfig = ConfigList(cacheHashCode: false), throwsStateError);
   });
 }
