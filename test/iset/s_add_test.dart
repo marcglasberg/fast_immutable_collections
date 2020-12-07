@@ -5,16 +5,21 @@ import "package:fast_immutable_collections/src/iset/s_add.dart";
 import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Initialization assertion errors", () {
     expect(() => SAdd<int>(null, 2), throwsAssertionError);
-    expect(() => SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), null), throwsAssertionError);
     expect(() => SAdd<int>(null, null), throwsAssertionError);
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd, isA<SAdd<int>>());
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("SAdd.unlock()", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
@@ -22,22 +27,30 @@ void main() {
     expect(sAdd.unlock, isA<Set<int>>());
   });
 
+  /////////////////////////////////////////////////////////////////////////////
+
   test("isEmpty | isNotEmpty", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.isEmpty, isFalse);
     expect(sAdd.isNotEmpty, isTrue);
   });
 
+  /////////////////////////////////////////////////////////////////////////////
+
   test("SAdd.length getter", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.length, 4);
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("SAdd.contains()", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.contains(1), isTrue);
     expect(sAdd.contains(5), isFalse);
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("IteratorSAdd Class | Iterating on the underlying iterator", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
@@ -71,6 +84,8 @@ void main() {
     expect(original, <int>{1, 2, 3});
     expect(sAdd, <int>{1, 2, 3});
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability | SAdd.add() | " "Adding to the original SAdd doesn't change it", () {
     final Set<int> original = {1, 2};

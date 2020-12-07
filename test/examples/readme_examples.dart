@@ -355,7 +355,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 }
 
-class Student {
+class Student implements Comparable<Student> {
   final String name;
 
   Student(this.name);
@@ -370,6 +370,9 @@ class Student {
 
   @override
   int get hashCode => name.hashCode;
+
+  @override
+  int compareTo(Student other) => name.compareTo(other.name);
 }
 
 class Students with FromIListMixin<Student, Students> {

@@ -31,10 +31,12 @@ import "ilist.dart";
 ///   IList<Student> get iter => _students;
 /// }
 ///
-/// class Student {
+/// class Student implements Comparable<Student>{
 ///   final String name;
 ///
 ///   const Student(this.name);
+///
+///   int compareTo(Student other) => name.compareTo(other.name);
 /// }
 /// ```
 ///

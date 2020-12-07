@@ -118,9 +118,21 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
       : config = config ?? defaultConfig,
         _mapOfSets = (config == null)
             ? mapOfSets ?? IMap.empty<K, ISet<V>>()
-            : mapOfSets?.map((key, value) => MapEntry(key, value.withConfig(config.asConfigSet)),
-                    config: config.asConfigMap) ??
-                IMap.empty<K, ISet<V>>(config.asConfigMap);
+            : _setsWithConfig(mapOfSets, config) ?? IMap.empty<K, ISet<V>>(config.asConfigMap);
+
+  static IMap<K, ISet<V>> _setsWithConfig<K, V>(
+    IMap<K, ISet<V>> mapOfSets,
+    ConfigMapOfSets config,
+  ) {
+    if (mapOfSets == null)
+      return null;
+    else {
+      var configSet = config.asConfigSet;
+      if (mapOfSets.values.every((set) => set.config == configSet)) return mapOfSets;
+      return mapOfSets?.map((key, value) => MapEntry(key, value.withConfig(configSet)),
+          config: config.asConfigMap);
+    }
+  }
 
   IMapOfSets._unsafe(this._mapOfSets, {@required this.config});
 
@@ -640,8 +652,13 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   IMapOfSets<RK, RV> map<RK, RV>(
     MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
     ConfigMapOfSets config,
-  }) =>
-      IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper), config: config ?? defaultConfig);
+  }) {
+    bool Function(RK key, ISet<RV> set) ifRemove;
+    if ((config ?? defaultConfig).removeEmptySets) ifRemove = (RK key, ISet<RV> set) => set.isEmpty;
+
+    return IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper, ifRemove: ifRemove),
+        config: config ?? defaultConfig);
+  }
 
   /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
   IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>
@@ -664,8 +681,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     ISet<V> Function(ISet<V> set) update, {
     ISet<V> Function() ifAbsent,
   }) {
-    bool Function(ISet<V> set) ifRemove;
-    if (config.removeEmptySets) ifRemove = (ISet<V> set) => set.isEmpty;
+    bool Function(K key, ISet<V> set) ifRemove;
+    if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
 
     return IMapOfSets<K, V>.from(
         _mapOfSets.update(key, update, ifAbsent: ifAbsent, ifRemove: ifRemove),
@@ -676,8 +693,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// Iterates over all key:set entries in the map and updates them with the result
   /// of invoking [update].
-  IMapOfSets<K, V> updateAll(ISet<V> Function(K key, ISet<V> set) update) =>
-      IMapOfSets<K, V>.from(_mapOfSets.updateAll(update), config: config);
+  IMapOfSets<K, V> updateAll(ISet<V> Function(K key, ISet<V> set) update) {
+    bool Function(K key, ISet<V> set) ifRemove;
+    if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
+
+    return IMapOfSets<K, V>.from(_mapOfSets.updateAll(update, ifRemove: ifRemove), config: config);
+  }
 
   /// Return a map where the keys are the values, and the values are the keys.
   IMapOfSets<V, K> invertKeysAndValues([ConfigMapOfSets config]) {

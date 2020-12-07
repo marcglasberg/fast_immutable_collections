@@ -3,9 +3,29 @@ import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("IListExtension.lock", () => expect([1, 2, 3].lock, allOf(isA<IList<int>>(), [1, 2, 3])));
+  test("lock", () {
+    // 1) From an empty list
+    expect([].lock, isA<IList>());
+    expect([].lock.isEmpty, isTrue);
+    expect([].lock.isNotEmpty, isFalse);
 
-  test("IListExtension.lockUnsafe", () {
+    // 2) Type Check: from an empty list typed with String
+    final typedList = <String>[].lock;
+    expect(typedList, isA<IList<String>>());
+
+    // 3) From a list with one item
+    expect([1].lock, isA<IList<int>>());
+    expect([1].lock.isEmpty, isFalse);
+    expect([1].lock.isNotEmpty, isTrue);
+
+    // 4) Nulls
+    expect([null].lock, allOf(isA<IList<String>>(), [null]));
+
+    // 5) Typical usage
+    expect([1, 2, 3].lock, allOf(isA<IList<int>>(), [1, 2, 3]));
+  });
+
+  test("lockUnsafe", () {
     final List<int> list = [1, 2, 3];
     final IList<int> ilist = list.lockUnsafe;
 
@@ -16,7 +36,7 @@ void main() {
     expect(list, ilist);
   });
 
-  test("IListExtension.sortOrdered()", () {
+  test("sortOrdered", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
 
     list.sortOrdered((int a, int b) => a.compareTo(b));
@@ -24,7 +44,7 @@ void main() {
     expect(list, [1, 2, 3, 4, 5, 10]);
   });
 
-  test("IListExtension.sortLike()", () {
+  test("sortLike", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
 
     list.sortLike([1, 2, 3]);
@@ -32,10 +52,10 @@ void main() {
     expect(list, [1, 2, 3, 4, 10, 5]);
   });
 
-  test("IListExtension sortLike() | the ordering can't be null",
+  test("sortLike | the ordering can't be null",
       () => expect(() => [1, 2, 3, 4, 10, 5].sortLike(null), throwsAssertionError));
 
-  test("IListExtension.whereMoveToTheEnd()", () {
+  test("whereMoveToTheEnd", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
 
     list.whereMoveToTheEnd((int item) => item > 4);
@@ -43,7 +63,7 @@ void main() {
     expect(list, [1, 2, 4, 3, 10, 5]);
   });
 
-  test("IListExtension.whereMoveToTheFront()", () {
+  test("whereMoveToTheFront", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
 
     list.whereMoveToTheFront((int item) => item > 4);

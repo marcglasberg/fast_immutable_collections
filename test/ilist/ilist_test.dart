@@ -2,6 +2,7 @@ import "dart:collection";
 import "dart:math";
 
 import "package:flutter_test/flutter_test.dart";
+import "package:matcher/matcher.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -11,7 +12,7 @@ void main() {
     ImmutableCollection.autoFlush = false;
   });
 
-//////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
     expect(IList(), isA<IList>());
@@ -46,11 +47,12 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "Ensuring Immutability | IList.add method | "
-      "Changing the passed mutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+  test("Ensuring Immutability", () {
+    // 1) add
+
+    // 1.1) Changing the passed mutable list doesn't change the IList
+    List<int> original = [1, 2];
+    IList<int> ilist = original.lock;
 
     expect(ilist, original);
 
@@ -59,33 +61,27 @@ void main() {
 
     expect(original, <int>[1, 2, 3, 4]);
     expect(ilist.unlock, <int>[1, 2]);
-  });
 
-  test(
-      "Ensuring Immutability | IList.add method | "
-      "Changing the IList also doesn't change the original list", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 1.2) Changing the IList also doesn't change the original list
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, original);
 
-    final IList<int> iListNew = ilist.add(3);
+    IList<int> iListNew = ilist.add(3);
 
     expect(original, <int>[1, 2]);
     expect(ilist, <int>[1, 2]);
     expect(iListNew, <int>[1, 2, 3]);
-  });
 
-  test(
-      "Ensuring Immutability | IList.add method | "
-      "If the item being passed is a variable, a pointer to it shouldn't exist inside IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 1.3) If the item being passed is a variable, a pointer to it shouldn't exist inside IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, original);
 
     int willChange = 4;
-    final IList<int> iListNew = ilist.add(willChange);
+    iListNew = ilist.add(willChange);
 
     willChange = 5;
 
@@ -93,13 +89,12 @@ void main() {
     expect(ilist, <int>[1, 2]);
     expect(willChange, 5);
     expect(iListNew, <int>[1, 2, 4]);
-  });
 
-  test(
-      "Ensuring Immutability | IList.addAll method | "
-      "Changing the passed mutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 2) addAll
+
+    // 2.1) Changing the passed mutable list doesn't change the IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, <int>[1, 2]);
 
@@ -107,48 +102,41 @@ void main() {
 
     expect(original, <int>[1, 2, 3, 4]);
     expect(ilist, <int>[1, 2]);
-  });
 
-  test(
-      "Ensuring Immutability | IList.addAll method | "
-      "Changing the passed immutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 2.2) Changing the passed immutable list doesn't change the IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, <int>[1, 2]);
 
-    final IList<int> iListNew = ilist.addAll(<int>[3, 4]);
+    iListNew = ilist.addAll(<int>[3, 4]);
 
     expect(original, <int>[1, 2]);
     expect(ilist, <int>[1, 2]);
     expect(iListNew, <int>[1, 2, 3, 4]);
-  });
 
-  test(
-      "Ensuring Immutability | IList.addAll method | "
-      "If the items being passed are from a variable, "
-      "it shouldn't have a pointer to the variable", () {
-    final List<int> original = [1, 2];
+    // 2.3) If the items being passed are from a variable, it shouldn't have a pointer to the
+    // variable
+    original = [1, 2];
     final IList<int> iList1 = original.lock;
     final IList<int> iList2 = original.lock;
 
     expect(iList1, original);
     expect(iList2, original);
 
-    final IList<int> iListNew = iList1.addAll(iList2);
+    iListNew = iList1.addAll(iList2);
     original.add(3);
 
     expect(original, <int>[1, 2, 3]);
     expect(iList1, <int>[1, 2]);
     expect(iList2, <int>[1, 2]);
     expect(iListNew, <int>[1, 2, 1, 2]);
-  });
 
-  test(
-      "Ensuring Immutability | IList.remove method | "
-      "Changing the passed mutable list doesn't change the IList", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 3) remove
+
+    // 3.1) Changing the passed mutable list doesn't change the IList
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, [1, 2]);
 
@@ -156,175 +144,210 @@ void main() {
 
     expect(original, <int>[1]);
     expect(ilist, <int>[1, 2]);
-  });
 
-  test(
-      "Ensuring Immutability | IList.remove method | "
-      "Removing from the original IList doesn't change it", () {
-    final List<int> original = [1, 2];
-    final IList<int> ilist = original.lock;
+    // 3.2) Removing from the original IList doesn't change it
+    original = [1, 2];
+    ilist = original.lock;
 
     expect(ilist, <int>[1, 2]);
 
-    final IList<int> iListNew = ilist.remove(1);
+    iListNew = ilist.remove(1);
 
     expect(original, <int>[1, 2]);
     expect(ilist, <int>[1, 2]);
     expect(iListNew, <int>[2]);
   });
 
-  ///////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "IList with identity-equals compares the list instance, not the items", () {
-    final IList<int> myList1 = IList([1, 2]).withIdentityEquals;
-    expect(myList1 == myList1, isTrue);
-    expect(IList([1, 2]).withIdentityEquals == IList([1, 2]).withIdentityEquals, isFalse);
-    expect(IList([1, 2]).withIdentityEquals == IList([2, 1]).withIdentityEquals, isFalse);
-    expect(IList([1, 2]).withIdentityEquals == [1, 2].lock, isFalse);
-    expect(IList([1, 2]).withIdentityEquals == IList([1, 2, 3]).withIdentityEquals, isFalse);
-  });
+  test("equals (==)", () {
+    // 1) Simple usage
+    IList<int> ilist = IList([1, 2]);
+    expect(ilist == ilist, isTrue);
+    expect(ilist == IList([1, 2]), isTrue);
+    expect(ilist == IList([1]), isFalse);
+    expect(ilist == IList(([2, 1])), isFalse);
+    expect(ilist == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "IList with deep-equals compares the items, not necessarily the list instance", () {
-    final IList<int> myList = IList([1, 2]);
-    expect(myList == myList, isTrue);
-    expect(IList([1, 2]) == IList([1, 2]), isTrue);
-    expect(IList([1, 2]) == IList([2, 1]), isFalse);
-    expect(IList([1, 2]) == [1, 2].lock.withDeepEquals, isTrue);
-    expect(IList([1, 2]) == IList([1, 2, 3]), isFalse);
-  });
+    // 2) identity-equals compares the list instance, not the items
+    ilist = IList([1, 2]).withIdentityEquals;
+    expect(ilist == ilist, isTrue);
+    expect(ilist == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(ilist == IList([2, 1]).withIdentityEquals, isFalse);
+    expect(ilist == [1, 2].lock, isFalse);
+    expect(ilist == IList([1, 2, 3]).withIdentityEquals, isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "IList with deep-equals is always different from ilist with identity-equals", () {
-    expect(IList([1, 2]).withDeepEquals == IList([1, 2]).withIdentityEquals, isFalse);
-    expect(IList([1, 2]).withIdentityEquals == IList([1, 2]).withDeepEquals, isFalse);
-    expect(IList([1, 2]).withDeepEquals == IList([1, 2]), isTrue);
-    expect(IList([1, 2]) == IList([1, 2]).withDeepEquals, isTrue);
-  });
+    // 3) deep-equals compares the items, not necessarily the list instance
+    ilist = IList([1, 2]);
+    expect(ilist == IList([1, 2]), isTrue);
+    expect(ilist == IList([2, 1]), isFalse);
+    expect(ilist == [1, 2].lock.withDeepEquals, isTrue);
+    expect(ilist == IList([1, 2, 3]), isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "IList.isIdentityEquals and IList.isDeepEquals properties", () {
-    expect(IList([1, 2]).isIdentityEquals, isFalse);
-    expect(IList([1, 2]).isDeepEquals, isTrue);
-    expect(IList([1, 2]).withIdentityEquals.isIdentityEquals, isTrue);
-    expect(IList([1, 2]).withIdentityEquals.isDeepEquals, isFalse);
-  });
+    // 4) deep-equals is always different from ilist with identity-equals
+    ilist = IList([1, 2]);
+    expect(ilist.withDeepEquals == ilist.withIdentityEquals, isFalse);
+    expect(ilist.withIdentityEquals == ilist.withDeepEquals, isFalse);
+    expect(ilist.withDeepEquals == ilist, isTrue);
+    expect(ilist == ilist.withDeepEquals, isTrue);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | Same, Equals and the == Operator | "
-      "IList.same()", () {
-    final IList<int> iList1 = IList([1, 2]);
-    expect(iList1.same(iList1), isTrue);
-    expect(iList1.same(IList([1, 2])), isFalse);
-    expect(iList1.same(IList([1])), isFalse);
-    expect(iList1.same(IList(([2, 1]))), isFalse);
-    expect(iList1.same(IList([1, 2]).withIdentityEquals), isFalse);
-    expect(iList1.same(iList1.remove(3)), isTrue);
-  });
+    // 5) isIdentityEquals and isDeepEquals properties
+    ilist = IList([1, 2]);
+    expect(ilist.isIdentityEquals, isFalse);
+    expect(ilist.isDeepEquals, isTrue);
+    expect(ilist.withIdentityEquals.isIdentityEquals, isTrue);
+    expect(ilist.withIdentityEquals.isDeepEquals, isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | Same, Equals and the == Operator | "
-      "IList.equalItemsAndConfig()", () {
-    final IList<int> iList1 = IList([1, 2]);
-    expect(iList1.equalItemsAndConfig(iList1), isTrue);
-    expect(iList1.equalItemsAndConfig(IList([1, 2])), isTrue);
-    expect(iList1.equalItemsAndConfig(IList([1])), isFalse);
-    expect(iList1.equalItemsAndConfig(IList(([2, 1]))), isFalse);
-    expect(iList1.equalItemsAndConfig(IList([1, 2]).withIdentityEquals), isFalse);
-    expect(iList1.equalItemsAndConfig(iList1.remove(3)), isTrue);
-  });
+    // 6) Additional null checks
+    ilist = IList<int>([]);
+    expect(ilist == IList<int>([]), isTrue);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | Same, Equals and the == Operator | "
-      "IList.== operator", () {
-    final IList<int> iList1 = IList([1, 2]);
-    expect(iList1 == iList1, isTrue);
-    expect(iList1 == IList([1, 2]), isTrue);
-    expect(iList1 == IList([1]), isFalse);
-    expect(iList1 == IList(([2, 1])), isFalse);
-    expect(iList1 == IList([1, 2]).withIdentityEquals, isFalse);
-  });
+    ilist = IList<int>([null]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isTrue);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "Same, Equals and the == Operator | IList.equalItems method | "
-      "Passing a set", () {
-    expect(() => IList([1, 2]).equalItems(ISet([1, 2])), throwsStateError);
-    expect(() => IList([1, 2]).equalItems(HashSet()..add(1)..add(2)), throwsStateError);
-  });
+    ilist = IList<int>([1]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isTrue);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "Same, Equals and the == Operator | IList.equalItems method | "
-      "Identity", () {
-    final IList<int> iList1 = IList([1, 2]);
-    expect(iList1.equalItems(iList1), isTrue);
-  });
+    ilist = IList<int>([null, null, null]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isTrue);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "Same, Equals and the == Operator | IList.equalItems method | "
-      "If IList, will only be equal if in order and the same items", () {
-    expect(IList([1, 2]).equalItems(IList([2, 1])), isFalse);
-    expect(IList([1, 2]).equalItems(IList([1, 2])), isTrue);
-  });
-
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "Same, Equals and the == Operator | IList.equalItems method | "
-      "Other checks", () {
-    expect(IList([1, 2]).equalItems(IList([1])), isFalse);
-    expect(IList([1, 2]).equalItems(IList([1, 2, 3])), isFalse);
-    expect(IList([1, 2]).equalItems(IList([])), isFalse);
-  });
-
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "Same, Equals and the == Operator | IList.equalItems method | "
-      "If Iterable, will only be equal if in order and the same items", () {
-    expect(IList([1, 2]).equalItems({"a": 1}.values), isFalse);
-    expect(IList([1, 2]).equalItems({"a": 2, "b": 1}.values), isFalse);
-    expect(IList([1, 2]).equalItems({"a": 1, "b": 2}.values), isTrue);
-  });
-
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "Same, Equals and the == Operator | IList.unorderedEqualItems method | "
-      "Identity", () {
-    final IList<int> iList1 = IList([1, 2]);
-    expect(iList1.unorderedEqualItems(iList1), isTrue);
-  });
-
-  test(
-      "Equals and Other Comparisons | Equals Operator | "
-      "Same, Equals and the == Operator | IList.unorderedEqualItems method | "
-      "If Iterable, then compares each item with no specific order", () {
-    expect(IList([1, 2]).unorderedEqualItems(IList([1])), isFalse);
-    expect(IList([1, 2]).unorderedEqualItems(IList([2, 1])), isTrue);
-    expect(IList([1, 2]).unorderedEqualItems(IList([1, 2])), isTrue);
-    expect(IList([1, 2]).unorderedEqualItems({1}), isFalse);
-    expect(IList([1, 2]).unorderedEqualItems({1, 2}), isTrue);
+    ilist = IList<int>([null, 1, null, 2]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.hashCode method | " "deepEquals vs deepEquals", () {
-    expect(IList([1, 2]) == IList([1, 2]), isTrue);
-    expect(IList([1, 2]) == IList([1, 2, 3]), isFalse);
-    expect(IList([1, 2]) == IList([2, 1]), isFalse);
-    expect(IList([1, 2]).hashCode, IList([1, 2]).hashCode);
-    expect(IList([1, 2]).hashCode, isNot(IList([1, 2, 3]).hashCode));
-    expect(IList([1, 2]).hashCode, isNot(IList([2, 1]).hashCode));
+  test("same", () {
+    // 1) Regular usage
+    IList<int> ilist = IList([1, 2]);
+    expect(ilist.same(ilist), isTrue);
+    expect(ilist.same(IList([1, 2])), isFalse);
+    expect(ilist.same(IList([1])), isFalse);
+    expect(ilist.same(IList(([2, 1]))), isFalse);
+    expect(ilist.same(IList([1, 2]).withIdentityEquals), isFalse);
+    expect(ilist.same(IList([1, 2]).withConfig(ConfigList(cacheHashCode: false))), isFalse);
+    expect(ilist.same(ilist.remove(3)), isTrue);
+    expect(ilist.same(IList<int>([])), isFalse);
+    expect(ilist.same(IList<int>([null])), isFalse);
+    expect(ilist.same(IList<int>([1])), isFalse);
+    expect(ilist.same(IList<int>([null, null, null])), isFalse);
+    expect(ilist.same(IList<int>([null, 1, null, 2])), isFalse);
+
+    // 2) Nulls and other checks
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.hashCode method | " "identityEquals vs identityEquals", () {
+  test("equalItemsAndConfig", () {
+    final IList<int> ilist = IList([1, 2]);
+    expect(ilist.equalItemsAndConfig(ilist), isTrue);
+    expect(ilist.equalItemsAndConfig(IList([1, 2])), isTrue);
+    expect(ilist.equalItemsAndConfig(IList([1])), isFalse);
+    expect(ilist.equalItemsAndConfig(IList(([2, 1]))), isFalse);
+    expect(ilist.equalItemsAndConfig(IList([1, 2]).withIdentityEquals), isFalse);
+    expect(ilist.equalItemsAndConfig(ilist.remove(3)), isTrue);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("equalItems", () {
+    final IList<int> ilist = IList([1, 2]);
+
+    // 1) Regular usage
+    expect(() => ilist.equalItems(ISet([1, 2])), throwsStateError);
+    expect(() => ilist.equalItems(HashSet()..add(1)..add(2)), throwsStateError);
+
+    // 2) Identity
+    expect(ilist.equalItems(ilist), isTrue);
+
+    // 3) If IList, will only be equal if in order and the same items
+    expect(ilist.equalItems(IList([2, 1])), isFalse);
+    expect(ilist.equalItems(IList([1, 2])), isTrue);
+
+    // 4) Other Checks
+    expect(ilist.equalItems(IList([1])), isFalse);
+    expect(ilist.equalItems(IList([1, 2, 3])), isFalse);
+    expect(ilist.equalItems(IList([])), isFalse);
+
+    // 5) If Iterable, will only be equal if in order and the same items
+    expect(ilist.equalItems({"a": 1}.values), isFalse);
+    expect(ilist.equalItems({"a": 2, "b": 1}.values), isFalse);
+    expect(ilist.equalItems({"a": 1, "b": 2}.values), isTrue);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("unorderedEqualItems", () {
+    final IList<int> ilist = IList([1, 2]);
+
+    // 1) Identity
+    expect(ilist.unorderedEqualItems(ilist), isTrue);
+
+    // 2) If Iterable, then compares each item with no specific order
+    expect(ilist.unorderedEqualItems(IList([1])), isFalse);
+    expect(ilist.unorderedEqualItems(IList([2, 1])), isTrue);
+    expect(ilist.unorderedEqualItems(ilist), isTrue);
+    expect(ilist.unorderedEqualItems({1}), isFalse);
+    expect(ilist.unorderedEqualItems({1, 2}), isTrue);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("hashCode", () {
+    // 1) deepEquals vs deepEquals
+    final IList<int> ilist = IList([1, 2]);
+    expect(ilist == IList([1, 2]), isTrue);
+    expect(ilist == IList([1, 2, 3]), isFalse);
+    expect(ilist == IList([2, 1]), isFalse);
+    expect(ilist.hashCode, IList([1, 2]).hashCode);
+    expect(ilist.hashCode, isNot(IList([1, 2, 3]).hashCode));
+    expect(ilist.hashCode, isNot(IList([2, 1]).hashCode));
+
+    // 2) identityEquals vs identityEquals
     final IList<int> iListWithIdentityEquals = IList([1, 2]).withIdentityEquals;
     expect(iListWithIdentityEquals == IList([1, 2]).withIdentityEquals, isFalse);
     expect(iListWithIdentityEquals == IList([1, 2, 3]).withIdentityEquals, isFalse);
@@ -332,11 +355,8 @@ void main() {
     expect(iListWithIdentityEquals.hashCode, isNot(IList([1, 2]).withIdentityEquals.hashCode));
     expect(iListWithIdentityEquals.hashCode, isNot(IList([1, 2, 3]).withIdentityEquals.hashCode));
     expect(iListWithIdentityEquals.hashCode, isNot(IList([2, 1]).withIdentityEquals.hashCode));
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.hashCode method | " "deepEquals vs identityEquals", () {
+    // 3) deepEquals vs identityEquals
     expect(IList([1, 2]) == IList([1, 2]).withIdentityEquals, isFalse);
     expect(IList([1, 2]) == IList([1, 2]).withIdentityEquals, isFalse);
     expect(IList([1, 2, 3]) == IList([1, 2, 3]).withIdentityEquals, isFalse);
@@ -345,42 +365,39 @@ void main() {
     expect(IList([1, 2]).hashCode, isNot(IList([1, 2]).withIdentityEquals.hashCode));
     expect(IList([1, 2, 3]).hashCode, isNot(IList([1, 2, 3]).withIdentityEquals.hashCode));
     expect(IList([2, 1]).hashCode, isNot(IList([2, 1]).withIdentityEquals.hashCode));
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.hashCode cache | when cache is on", () {
-    final List<int> list = [1, 2, 3];
+    // 4) When cache is on
+    List<int> list = [1, 2, 3];
 
     final IList<int> iListWithCache = IList.unsafe(list, config: ConfigList(cacheHashCode: true));
 
-    final int hashBefore = iListWithCache.hashCode;
+    int hashBefore = iListWithCache.hashCode;
 
     list.add(4);
 
-    final int hashAfter = iListWithCache.hashCode;
+    int hashAfter = iListWithCache.hashCode;
 
     expect(hashAfter, hashBefore);
-  });
 
-  test("IList.hashCode cache | when cache is off", () {
-    final List<int> list = [1, 2, 3];
+    // 5) When cache is off
+    list = [1, 2, 3];
 
     final IList<int> iListWithoutCache =
         IList.unsafe(list, config: ConfigList(cacheHashCode: false));
 
-    final int hashBefore = iListWithoutCache.hashCode;
+    hashBefore = iListWithoutCache.hashCode;
 
     list.add(4);
 
-    final int hashAfter = iListWithoutCache.hashCode;
+    hashAfter = iListWithoutCache.hashCode;
 
     expect(hashAfter, isNot(hashBefore));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.withConfig()", () {
+  test("withConfig", () {
+    // 1) Regular usage
     final IList<int> ilist = IList([1, 2]);
 
     expect(ilist.isDeepEquals, isTrue);
@@ -392,20 +409,19 @@ void main() {
 
     expect(iListNewConfig.isDeepEquals, isTrue);
     expect(iListNewConfigIdentity.isDeepEquals, isFalse);
-  });
 
-  test("IList.withConfig() with empty IList", () {
+    // 2) With empty list
     final IList<int> emptyIList = <int>[].lock;
 
     expect(IList.withConfig(emptyIList, emptyIList.config), []);
-  });
 
-  test("IList.withConfig() method | Assertion",
-      () => expect(() => [].lock.withConfig(null), throwsAssertionError));
+    // 3) Assertion error
+    expect(() => [].lock.withConfig(null), throwsAssertionError);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.withConfigFrom()", () {
+  test("withConfigFrom", () {
     final IList<int> ilist = IList([1, 2]);
 
     expect(ilist.isDeepEquals, isTrue);
@@ -421,62 +437,28 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Creating immutable lists with extensions |" "From an empty list", () {
-    expect([].lock, isA<IList>());
-    expect([].lock.isEmpty, isTrue);
-    expect([].lock.isNotEmpty, isFalse);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Creating immutable lists with extensions |"
-      "From a list with one int item", () {
-    expect([1].lock, isA<IList<int>>());
-    expect([1].lock.isEmpty, isFalse);
-    expect([1].lock.isNotEmpty, isTrue);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Creating immutable lists with extensions |"
-      "From a list with one null string",
-      () => expect([null].lock, isA<IList<String>>()));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Creating immutable lists with extensions |"
-      "From an empty list typed with String", () {
-    final typedList = <String>[].lock;
-    expect(typedList, isA<IList<String>>());
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Creating native mutable lists from immutable lists | "
-      "From the default factory constructor", () {
+  test("default factory constructor", () {
     expect(IList([1, 2, 3]).unlock, [1, 2, 3]);
     expect(identical(IList([1, 2, 3]).unlock, [1, 2, 3]), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Creating native mutable lists from immutable lists | " "From lock", () {
+  test("unlock", () {
     expect([1, 2, 3].lock.unlock, [1, 2, 3]);
     expect(identical([1, 2, 3].lock.unlock, [1, 2, 3]), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Other Constructors | " "IList.fromISet constructor",
-      () => expect(IList.fromISet({1, 2, 3}.lock, config: null), [1, 2, 3]));
+  test("fromISet", () {
+    expect(IList.fromISet({1, 2, 3}.lock, config: null), [1, 2, 3]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.unsafe constructor | " "Normal usage", () {
+  test("unsafe", () {
+    // 1) Regular usage
     final List<int> list = [1, 2, 3];
     final IList<int> ilist = IList.unsafe(list, config: ConfigList());
 
@@ -487,21 +469,18 @@ void main() {
 
     expect(list, [1, 2, 3, 4]);
     expect(ilist, [1, 2, 3, 4]);
-  });
 
-  test("IList.unsafe() constructor | Assertion Error",
-      () => expect(() => IList.unsafe([], config: null), throwsAssertionError));
+    // 2) Assertion error
+    expect(() => IList.unsafe([], config: null), throwsAssertionError);
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.unsafe constructor | " "Disallowing it", () {
+    // 3) Disallowing it
     ImmutableCollection.disallowUnsafeConstructors = true;
     expect(() => IList.unsafe([1, 2, 3], config: ConfigList()), throwsUnsupportedError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.flush()", () {
+  test("flush", () {
     final IList<int> ilist = [1, 2, 3].lock.add(4).addAll([5, 6]).add(7).addAll([]).addAll([8, 9]);
 
     expect(ilist.isFlushed, isFalse);
@@ -514,24 +493,89 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.add()", () => expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]));
+  test("add", () {
+    // 1) Regular usage
+    expect(<int>[].lock.add(1), [1]);
+    expect(<int>[null].lock.add(1), [null, 1]);
+    expect(<int>[1].lock.add(10), [1, 10]);
+    expect(<int>[null, null, null].lock.add(10), [null, null, null, 10]);
+    expect(<int>[null, 1, null, 3].lock.add(10), [null, 1, null, 3, 10]);
+    expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]);
+
+    // 2) Adding null
+    expect(<int>[].lock.add(null), [null]);
+    expect(<int>[null].lock.add(null), [null, null]);
+    expect(<int>[1].lock.add(null), [1, null]);
+    expect(<int>[null, null, null].lock.add(null), [null, null, null, null]);
+    expect(<int>[null, 1, null, 3].lock.add(null), [null, 1, null, 3, null]);
+    expect([1, 2, 3].lock.add(null), [1, 2, 3, null]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.addAll()", () => expect([1, 2, 3, 4].lock.addAll([5, 6]), [1, 2, 3, 4, 5, 6]));
+  test("addAll", () {
+    // 1) Regular Usage
+    expect(<int>[].lock.addAll([1, 2]), [1, 2]);
+    expect(<int>[null].lock.addAll([1, 2]), [null, 1, 2]);
+    expect(<int>[1].lock.addAll([2, 3]), [1, 2, 3]);
+    expect(<int>[null, null, null].lock.addAll([1, 2]), [null, null, null, 1, 2]);
+    expect(<int>[null, 1, null, 3].lock.addAll([10, 11]), [null, 1, null, 3, 10, 11]);
+    expect([1, 2, 3, 4].lock.addAll([5, 6]), [1, 2, 3, 4, 5, 6]);
+
+    // 2) Adding nulls
+    expect(<int>[].lock.addAll([null, null]), [null, null]);
+    expect(<int>[null].lock.addAll([null, null]), [null, null, null]);
+    expect(<int>[1].lock.addAll([null, null]), [1, null, null]);
+    expect(<int>[null, null, null].lock.addAll([null, null]), [null, null, null, null, null]);
+    expect(<int>[null, 1, null, 3].lock.addAll([null, null]), [null, 1, null, 3, null, null]);
+    expect([1, 2, 3, 4].lock.addAll([null, null]), [1, 2, 3, 4, null, null]);
+
+    // 3) Adding null and an item
+    expect(<int>[].lock.addAll([null, 1]), [null, 1]);
+    expect(<int>[null].lock.addAll([null, 1]), [null, null, 1]);
+    expect(<int>[1].lock.addAll([null, 2]), [1, null, 2]);
+    expect(<int>[null, null, null].lock.addAll([null, 1]), [null, null, null, null, 1]);
+    expect(<int>[null, 1, null, 3].lock.addAll([null, 1]), [null, 1, null, 3, null, 1]);
+    expect([1, 2, 3, 4].lock.addAll([null, 1]), [1, 2, 3, 4, null, 1]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.add and IList.addAll methods at the same time",
+  test("add and addAll at the same time",
       () => expect([1, 2, 3].lock.add(10).addAll([20, 30]).unlock, [1, 2, 3, 10, 20, 30]));
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.+ operator", () => expect([1, 2, 3].lock + [4, 5, 6].lock, [1, 2, 3, 4, 5, 6]));
+  test("+", () {
+    // 1) Regular Usage
+    expect(<int>[].lock + [1, 2], [1, 2]);
+    expect(<int>[null].lock + [1, 2], [null, 1, 2]);
+    expect(<int>[1].lock + [2, 3], [1, 2, 3]);
+    expect(<int>[null, null, null].lock + [1, 2], [null, null, null, 1, 2]);
+    expect(<int>[null, 1, null, 3].lock + [10, 11], [null, 1, null, 3, 10, 11]);
+    expect([1, 2, 3, 4].lock + [5, 6], [1, 2, 3, 4, 5, 6]);
+
+    // 2) Adding nulls
+    expect(<int>[].lock + [null, null], [null, null]);
+    expect(<int>[null].lock + [null, null], [null, null, null]);
+    expect(<int>[1].lock + [null, null], [1, null, null]);
+    expect(<int>[null, null, null].lock + [null, null], [null, null, null, null, null]);
+    expect(<int>[null, 1, null, 3].lock + [null, null], [null, 1, null, 3, null, null]);
+    expect([1, 2, 3, 4].lock + [null, null], [1, 2, 3, 4, null, null]);
+
+    // 3) Adding null and an item
+    expect(<int>[].lock + [null, 1], [null, 1]);
+    expect(<int>[null].lock + [null, 1], [null, null, 1]);
+    expect(<int>[1].lock + [null, 2], [1, null, 2]);
+    expect(<int>[null, null, null].lock + [null, 1], [null, null, null, null, 1]);
+    expect(<int>[null, 1, null, 3].lock + [null, 1], [null, 1, null, 3, null, 1]);
+    expect([1, 2, 3, 4].lock + [null, 1], [1, 2, 3, 4, null, 1]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.remove()", () {
+  test("remove", () {
+    // 1) Regular Usage
     final IList<int> ilist1 = [1, 2, 3].lock;
 
     final IList<int> ilist2 = ilist1.remove(2);
@@ -556,199 +600,219 @@ void main() {
     expect(ilist5, []);
     expect(ilist6, []);
     expect(identical(ilist1, ilist2), isFalse);
+
+    // 2) Poking around with nulls
+    expect(<int>[].lock.remove(1), <int>[]);
+    expect(<int>[].lock.remove(null), <int>[]);
+
+    expect(<int>[null].lock.remove(null), <int>[]);
+    expect(<int>[null].lock.remove(1), <int>[null]);
+
+    expect(<int>[1].lock.remove(null), <int>[1]);
+    expect(<int>[1].lock.remove(1), <int>[]);
+
+    expect(<int>[null, null, null].lock.remove(null), <int>[null, null]);
+    expect(<int>[null, null, null].lock.remove(1), <int>[null, null, null]);
+
+    expect(<int>[null, 1, null, 1].lock.remove(null), <int>[1, null, 1]);
+    expect(<int>[null, 1, null, 1].lock.remove(1), <int>[null, null, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.maxLength method |" "Cutting the list off", () {
-    expect([1, 2, 3, 4, 5].lock.maxLength(2), [1, 2]);
-    expect([1, 2, 3, 4, 5].lock.maxLength(3), [1, 2, 3]);
-    expect([1, 2, 3, 4, 5].lock.maxLength(1), [1]);
-    expect([1, 2, 3, 4, 5].lock.maxLength(0), []);
+  test("maxLength", () {
+    final IList<int> ilist1 = [1, 2, 3, 4, 5].lock;
+    final IList<int> ilist2 = [5, 3, 5, 8, 12, 18, 32, 2, 1, 9].lock;
+
+    // 1) Regular Usage
+    expect(ilist1.maxLength(2), [1, 2]);
+    expect(ilist1.maxLength(3), [1, 2, 3]);
+    expect(ilist1.maxLength(1), [1]);
+    expect(ilist1.maxLength(0), []);
+    expect(ilist1.maxLength(ilist1.length), [1, 2, 3, 4, 5]);
+
+    // 2) Invalid Argument
+    expect(() => ilist1.maxLength(-1), throwsArgumentError);
+    expect(() => ilist1.maxLength(-100), throwsArgumentError);
+    expect(ilist1.maxLength(100), [1, 2, 3, 4, 5]);
+
+    // 3) Priority
+    expect(ilist2.maxLength(3), [5, 3, 5]);
+    expect(ilist2.maxLength(100, priority: (int a, int b) => a.compareTo(b)),
+        [5, 3, 5, 8, 12, 18, 32, 2, 1, 9]);
+    expect(ilist2.maxLength(3, priority: (int a, int b) => a.compareTo(b)), [3, 2, 1]);
+    expect(ilist2.maxLength(4, priority: (int a, int b) => a.compareTo(b)), [5, 3, 2, 1]);
+    expect(ilist2.maxLength(5, priority: (int a, int b) => a.compareTo(b)), [5, 3, 5, 2, 1]);
+    expect(ilist2.maxLength(6, priority: (int a, int b) => a.compareTo(b)), [5, 3, 5, 8, 2, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.maxLength method |" "Invalid argument",
-      () => expect(() => [1, 2, 3, 4, 5].lock.maxLength(-1), throwsArgumentError));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.maxLength method |" "Priority", () {
-    final IList<int> ilist = [5, 3, 5, 8, 12, 18, 32, 2, 1, 9].lock;
-    expect(ilist.maxLength(3), [5, 3, 5]); // No priority.
-    expect(ilist.maxLength(100, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 5, 8, 12, 18, 32, 2, 1, 9]); // No priority.
-    expect(
-        ilist.maxLength(3, priority: (int a, int b) => a.compareTo(b)), [3, 2, 1]); // No priority.
-    expect(ilist.maxLength(4, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 2, 1]); // No priority.
-    expect(ilist.maxLength(5, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 5, 2, 1]); // No priority.
-    expect(ilist.maxLength(6, priority: (int a, int b) => a.compareTo(b)),
-        [5, 3, 5, 8, 2, 1]); // No priority.
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.toggle method | " "Toggling an existing element", () {
+  test("toggle", () {
     IList<int> ilist = [1, 2, 3, 4, 5].lock;
 
+    // 1) Toggle existing item
     expect(ilist.contains(4), isTrue);
-
     ilist = ilist.toggle(4);
-
     expect(ilist.contains(4), isFalse);
-
     ilist = ilist.toggle(4);
-
     expect(ilist.contains(4), isTrue);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.toggle method | " "Toggling a nonexistent element", () {
-    IList<int> ilist = [1, 2, 3, 4, 5].lock;
-
+    // 2) Toggle NON-existing item
     expect(ilist.contains(6), isFalse);
-
     ilist = ilist.toggle(6);
-
     expect(ilist.contains(6), isTrue);
-
     ilist = ilist.toggle(6);
-
     expect(ilist.contains(6), isFalse);
+
+    // 3) Nulls and other checks
+    expect(<int>[].lock.toggle(1), [1]);
+    expect(<int>[].lock.toggle(null), [null]);
+
+    expect(<int>[null].lock.toggle(1), [null, 1]);
+    expect(<int>[null].lock.toggle(null), []);
+    expect(<int>[].lock.toggle(null), [null]);
+
+    expect(<int>[1].lock.toggle(1), <int>[]);
+    expect(<int>[1].lock.toggle(null), <int>[1, null]);
+
+    expect(<int>[null, null, null].lock.toggle(1), <int>[null, null, null, 1]);
+    expect(<int>[null, null, null].lock.toggle(null), <int>[null, null]);
+
+    expect(<int>[null, 1, null, 1].lock.toggle(1), <int>[null, null, 1]);
+    expect(<int>[null, 1, null, 1].lock.toggle(null), <int>[1, null, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Index Access |" "ilist[index]", () {
-    final IList<String> ilist = ["a", "b", "c", "d", "e"].lock;
+  test("[]", () {
+    final IList<String> ilist = ["a", "b", "c"].lock;
     expect(ilist[0], "a");
     expect(ilist[1], "b");
     expect(ilist[2], "c");
-    expect(ilist[3], "d");
-    expect(ilist[4], "e");
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("Index Access |" "Range Errors", () {
-    final IList<String> ilist = ["a", "b", "c", "d", "e"].lock;
-    expect(() => ilist[5], throwsA(isA<RangeError>()));
+    expect(() => ilist[3], throwsA(isA<RangeError>()));
+    expect(() => ilist[100], throwsA(isA<RangeError>()));
     expect(() => ilist[-1], throwsA(isA<RangeError>()));
+    expect(() => ilist[-100], throwsA(isA<RangeError>()));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.any()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.any((int v) => v == 4), isTrue);
-    expect([1, 2, 3, 4, 5, 6].lock.any((int v) => v == 100), isFalse);
+  test("any", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.any((int v) => v == 4), isTrue);
+    expect(ilist.any((int v) => v == 100), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.cast()", () => expect([1, 2, 3, 4, 5, 6].lock.cast<num>(), isA<IList<num>>()));
+  test("cast", () {
+    const TypeMatcher<TypeError> isTypeError = TypeMatcher<TypeError>();
+    final Matcher throwsTypeError = throwsA(isTypeError);
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.contains()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.contains(2), isTrue);
-    expect([1, 2, 3, 4, 5, 6].lock.contains(4), isTrue);
-    expect([1, 2, 3, 4, 5, 6].lock.contains(5), isTrue);
-    expect([1, 2, 3, 4, 5, 6].lock.contains(100), isFalse);
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.cast<num>(), isA<IList<num>>());
+    expect(() => ilist.cast<String>(), throwsTypeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.elementAt method | " "Regular element access", () {
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(0), "a");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(1), "b");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(2), "c");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(3), "d");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(4), "e");
-    expect(["a", "b", "c", "d", "e", "f"].lock.elementAt(5), "f");
+  test("contains", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.contains(2), isTrue);
+    expect(ilist.contains(4), isTrue);
+    expect(ilist.contains(5), isTrue);
+    expect(ilist.contains(100), isFalse);
+    expect(ilist.contains(-1), isFalse);
+    expect(ilist.contains(-100), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.elementAt method | " "Range exceptions", () {
-    expect(() => ["a", "b", "c", "d", "e", "f"].lock.elementAt(6), throwsRangeError);
-    expect(() => ["a", "b", "c", "d", "e", "f"].lock.elementAt(-1), throwsRangeError);
+  test("elementAt", () {
+    var ilist = ["a", "b", "c", "d", "e", "f"].lock;
+    expect(ilist.elementAt(0), "a");
+    expect(ilist.elementAt(1), "b");
+    expect(ilist.elementAt(2), "c");
+    expect(ilist.elementAt(3), "d");
+    expect(ilist.elementAt(4), "e");
+    expect(ilist.elementAt(5), "f");
+
+    expect(() => ilist.elementAt(6), throwsRangeError);
+    expect(() => ilist.elementAt(-1), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.every()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.every((int v) => v > 0), isTrue);
-    expect([1, 2, 3, 4, 5, 6].lock.every((int v) => v < 0), isFalse);
-    expect([1, 2, 3, 4, 5, 6].lock.every((int v) => v != 4), isFalse);
+  test("every", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.every((int v) => v > 0), isTrue);
+    expect(ilist.every((int v) => v < 0), isFalse);
+    expect(ilist.every((int v) => v != 4), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.expand()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.expand((int v) => [v, v]),
+  test("expand", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.expand((int v) => [v, v]),
         allOf(isA<IList<int>>(), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6].lock));
+    expect(ilist.expand((int v) => <int>[]), allOf(isA<IList<int>>(), <int>[].lock));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("inRange", () {
+    final IList<int> ilist = [1, 2, 3].lock;
+    expect(ilist.inRange(-100), isFalse);
+    expect(ilist.inRange(-1), isFalse);
+    expect(ilist.inRange(0), isTrue);
+    expect(ilist.inRange(1), isTrue);
+    expect(ilist.inRange(2), isTrue);
+    expect(ilist.inRange(3), isFalse);
+    expect(ilist.inRange(100), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("length, first, last, single", () {
+    var ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.length, 6);
+    expect(ilist.first, 1);
+    expect(ilist.last, 6);
+
+    expect([10].lock.single, 10);
+    expect(() => ilist.single, throwsStateError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("firstWhere", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.firstWhere((int v) => v > 1, orElse: () => 100), 2);
+    expect(ilist.firstWhere((int v) => v > 4, orElse: () => 100), 5);
+    expect(ilist.firstWhere((int v) => v > 5, orElse: () => 100), 6);
+    expect(ilist.firstWhere((int v) => v > 6, orElse: () => 100), 100);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("fold", () {
+    expect([1, 2, 3, 4, 5, 6].lock.fold(100, (int p, int e) => p * (1 + e)), 504000);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("followedBy", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
     expect(
-        [1, 2, 3, 4, 5, 6].lock.expand((int v) => <int>[]), allOf(isA<IList<int>>(), <int>[].lock));
+        ilist.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.length", () => expect([1, 2, 3, 4, 5, 6].lock.length, 6));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.inRange()", () {
-    expect([1, 2, 3].lock.inRange(-1), isFalse);
-    expect([1, 2, 3].lock.inRange(1), isTrue);
-    expect([1, 2, 3].lock.inRange(3), isFalse);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.first", () => expect(["a", "b", "c", "d", "e", "f"].lock.first, "a"));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.last", () => expect(["a", "b", "c", "d", "e", "f"].lock.last, "f"));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.single() | State exception",
-      () => expect(() => [1, 2, 3, 4, 5, 6].lock.single, throwsStateError));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.single() | Access", () => expect([10].lock.single, 10));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.firstWhere()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.firstWhere((int v) => v > 1, orElse: () => 100), 2);
-    expect([1, 2, 3, 4, 5, 6].lock.firstWhere((int v) => v > 4, orElse: () => 100), 5);
-    expect([1, 2, 3, 4, 5, 6].lock.firstWhere((int v) => v > 5, orElse: () => 100), 6);
-    expect([1, 2, 3, 4, 5, 6].lock.firstWhere((int v) => v > 6, orElse: () => 100), 100);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.fold()",
-      () => expect([1, 2, 3, 4, 5, 6].lock.fold(100, (int p, int e) => p * (1 + e)), 504000));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.followedBy()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    expect([1, 2, 3, 4, 5, 6].lock.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock,
-        [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.forEach()", () {
+  test("forEach", () {
     int result = 100;
     [1, 2, 3, 4, 5, 6].lock.forEach((int v) => result *= 1 + v);
     expect(result, 504000);
@@ -756,121 +820,124 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.join()", () {
+  test("join", () {
     expect([1, 2, 3, 4, 5, 6].lock.join(","), "1,2,3,4,5,6");
     expect([].lock.join(","), "");
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.lastWhere()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.lastWhere((int v) => v < 2, orElse: () => 100), 1);
-    expect([1, 2, 3, 4, 5, 6].lock.lastWhere((int v) => v < 5, orElse: () => 100), 4);
-    expect([1, 2, 3, 4, 5, 6].lock.lastWhere((int v) => v < 6, orElse: () => 100), 5);
-    expect([1, 2, 3, 4, 5, 6].lock.lastWhere((int v) => v < 7, orElse: () => 100), 6);
-    expect([1, 2, 3, 4, 5, 6].lock.lastWhere((int v) => v < 50, orElse: () => 100), 6);
-    expect([1, 2, 3, 4, 5, 6].lock.lastWhere((int v) => v < 1, orElse: () => 100), 100);
+  test("lastWhere", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.lastWhere((int v) => v < 2, orElse: () => 100), 1);
+    expect(ilist.lastWhere((int v) => v < 5, orElse: () => 100), 4);
+    expect(ilist.lastWhere((int v) => v < 6, orElse: () => 100), 5);
+    expect(ilist.lastWhere((int v) => v < 7, orElse: () => 100), 6);
+    expect(ilist.lastWhere((int v) => v < 50, orElse: () => 100), 6);
+    expect(ilist.lastWhere((int v) => v < 1, orElse: () => 100), 100);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.map()", () {
+  test("map", () {
     expect([1, 2, 3].lock.map((int v) => v + 1).unlock, [2, 3, 4]);
     expect([1, 2, 3, 4, 5, 6].lock.map((int v) => v + 1).unlock, [2, 3, 4, 5, 6, 7]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.reduce() | " "Regular usage", () {
+  test("reduce", () {
+    // 1) Regular usage
     expect([1, 2, 3, 4, 5, 6].lock.reduce((int p, int e) => p * (1 + e)), 2520);
     expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
+
+    // 2) State Exception
+    expect(() => IList().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "IList.reduce() | " "State exception",
-      () => expect(
-          () => IList().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError));
+  test("singleWhere", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
 
-  //////////////////////////////////////////////////////////////////////////////
+    // 1) Regular usage
+    expect(ilist.singleWhere((int v) => v == 4, orElse: () => 100), 4);
+    expect(ilist.singleWhere((int v) => v == 50, orElse: () => 100), 100);
 
-  test("IList.singleWhere() | " "Regular usage", () {
-    expect([1, 2, 3, 4, 5, 6].lock.singleWhere((int v) => v == 4, orElse: () => 100), 4);
-    expect([1, 2, 3, 4, 5, 6].lock.singleWhere((int v) => v == 50, orElse: () => 100), 100);
+    // 2) State Exception
+    expect(() => ilist.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "IList.singleWhere() | " "State exception",
-      () => expect(() => [1, 2, 3, 4, 5, 6].lock.singleWhere((int v) => v < 4, orElse: () => 100),
-          throwsStateError));
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("IList.skip()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.skip(1).unlock, [2, 3, 4, 5, 6]);
-    expect([1, 2, 3, 4, 5, 6].lock.skip(3).unlock, [4, 5, 6]);
-    expect([1, 2, 3, 4, 5, 6].lock.skip(5).unlock, [6]);
-    expect([1, 2, 3, 4, 5, 6].lock.skip(10).unlock, <int>[]);
+  test("skip", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.skip(1).unlock, [2, 3, 4, 5, 6]);
+    expect(ilist.skip(3).unlock, [4, 5, 6]);
+    expect(ilist.skip(5).unlock, [6]);
+    expect(ilist.skip(10).unlock, <int>[]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.skipWhile()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.skipWhile((int v) => v < 3).unlock, [3, 4, 5, 6]);
-    expect([1, 2, 3, 4, 5, 6].lock.skipWhile((int v) => v < 5).unlock, [5, 6]);
-    expect([1, 2, 3, 4, 5, 6].lock.skipWhile((int v) => v < 6).unlock, [6]);
-    expect([1, 2, 3, 4, 5, 6].lock.skipWhile((int v) => v < 100).unlock, []);
+  test("skipWhile", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.skipWhile((int v) => v < 3).unlock, [3, 4, 5, 6]);
+    expect(ilist.skipWhile((int v) => v < 5).unlock, [5, 6]);
+    expect(ilist.skipWhile((int v) => v < 6).unlock, [6]);
+    expect(ilist.skipWhile((int v) => v < 100).unlock, []);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.take()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.take(0).unlock, []);
-    expect([1, 2, 3, 4, 5, 6].lock.take(1).unlock, [1]);
-    expect([1, 2, 3, 4, 5, 6].lock.take(3).unlock, [1, 2, 3]);
-    expect([1, 2, 3, 4, 5, 6].lock.take(5).unlock, [1, 2, 3, 4, 5]);
-    expect([1, 2, 3, 4, 5, 6].lock.take(10).unlock, [1, 2, 3, 4, 5, 6]);
+  test("take", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.take(0).unlock, []);
+    expect(ilist.take(1).unlock, [1]);
+    expect(ilist.take(3).unlock, [1, 2, 3]);
+    expect(ilist.take(5).unlock, [1, 2, 3, 4, 5]);
+    expect(ilist.take(10).unlock, [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.takeWhile()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.takeWhile((int v) => v < 3).unlock, [1, 2]);
-    expect([1, 2, 3, 4, 5, 6].lock.takeWhile((int v) => v < 5).unlock, [1, 2, 3, 4]);
-    expect([1, 2, 3, 4, 5, 6].lock.takeWhile((int v) => v < 6).unlock, [1, 2, 3, 4, 5]);
-    expect([1, 2, 3, 4, 5, 6].lock.takeWhile((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
+  test("takeWhile", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.takeWhile((int v) => v < 3).unlock, [1, 2]);
+    expect(ilist.takeWhile((int v) => v < 5).unlock, [1, 2, 3, 4]);
+    expect(ilist.takeWhile((int v) => v < 6).unlock, [1, 2, 3, 4, 5]);
+    expect(ilist.takeWhile((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.toList() | " "Regular usage", () {
-    expect([1, 2, 3, 4, 5, 6].lock.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
-    expect([1, 2, 3, 4, 5, 6].lock.unlock, [1, 2, 3, 4, 5, 6]);
-  });
+  test("toList", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
 
-  test(
-      "IList.toList () | " "Unsupported exception",
-      () => expect(
-          () => [1, 2, 3, 4, 5, 6].lock.toList(growable: false)..add(7), throwsUnsupportedError));
+    // 1) Regular usage
+    expect(ilist.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
+    expect(ilist.unlock, [1, 2, 3, 4, 5, 6]);
+
+    // 2) Unsupported Exception
+    expect(() => ilist.toList(growable: false)..add(7), throwsUnsupportedError);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.toSet()", () {
-    expect([1, 2, 3, 4, 5, 6].lock.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
+  test("toSet", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+    expect(ilist.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
     expect(
-        [1, 2, 3, 4, 5, 6].lock
+        ilist
           ..add(6)
           ..toSet(),
         {1, 2, 3, 4, 5, 6});
-    expect([1, 2, 3, 4, 5, 6].lock.unlock, [1, 2, 3, 4, 5, 6]);
+    expect(ilist.unlock, [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.where()", () {
+  test("where", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
 
     expect(ilist.where((int v) => v < 0), []);
@@ -881,12 +948,11 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "IList.whereType()", () => expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]));
+  test("whereType", () => expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]));
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.iterator", () {
+  test("iterator", () {
     final Iterator<int> iterator = [1, 2, 3, 4, 5, 6].lock.iterator;
 
     expect(iterator.current, isNull);
@@ -908,18 +974,39 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.toString(false)", () {
-    expect([].lock.toString(true), "[]");
-    expect([1].lock.toString(true), "[1]");
-    expect([1, 2, 3].lock.toString(false), "[1, 2, 3]");
-  });
-
-  test("IList.toString() | ImmutableCollection.prettyPrint is Off", () {
+  test("toString", () {
+    // 1) Global configuration prettyPrint == false.
     ImmutableCollection.prettyPrint = false;
+    expect([].lock.toString(), "[]");
+    expect([1].lock.toString(), "[1]");
     expect([1, 2, 3].lock.toString(), "[1, 2, 3]");
-  });
 
-  test("IList.toString(true)", () {
+    // ---
+
+    // 2) Global configuration prettyPrint == true.
+    ImmutableCollection.prettyPrint = true;
+    expect([].lock.toString(), "[]");
+    expect([1].lock.toString(), "[1]");
+    expect(
+        [1, 2, 3].lock.toString(),
+        "[\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
+        "]");
+
+    // ---
+
+    // 3) Local prettyPrint == false.
+    ImmutableCollection.prettyPrint = true;
+    expect([].lock.toString(false), "[]");
+    expect([1].lock.toString(false), "[1]");
+    expect([1, 2, 3].lock.toString(false), "[1, 2, 3]");
+
+    // ---
+
+    // 4) Local prettyPrint == true.
+    ImmutableCollection.prettyPrint = false;
     expect([].lock.toString(true), "[]");
     expect([1].lock.toString(true), "[1]");
     expect(
@@ -931,20 +1018,9 @@ void main() {
         "]");
   });
 
-  test("IList.toString() | ImmutableCollection.prettyPrint is On", () {
-    ImmutableCollection.prettyPrint = true;
-    expect(
-        [1, 2, 3].lock.toString(),
-        "[\n"
-        "   1,\n"
-        "   2,\n"
-        "   3\n"
-        "]");
-  });
-
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Views | " "IList.unlockView", () {
+  test("unlockView", () {
     final List<int> unmodifiableListView = [1, 2, 3].lock.unlockView;
 
     expect(
@@ -953,7 +1029,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Views | " "IList.unlockLazy", () {
+  test("unlockLazy", () {
     final List<int> modifiableListView = [1, 2, 3].lock.unlockLazy;
 
     expect(modifiableListView, allOf(isA<List<int>>(), isA<ModifiableListView<int>>(), [1, 2, 3]));
@@ -961,21 +1037,21 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Or Null Getters | " "IList.firstOrNull", () {
+  test("firstOrNull", () {
     expect(<int>[].lock.firstOrNull, isNull);
     expect(<int>[1, 2].lock.firstOrNull, 1);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Or Null Getters | " "IList.lastOrNull", () {
+  test("lastOrNull", () {
     expect(<int>[].lock.lastOrNull, isNull);
     expect(<int>[1, 2].lock.lastOrNull, 2);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Or Null Getters | " "IList.singleOrNull", () {
+  test("singleOrNull", () {
     expect(<int>[].lock.singleOrNull, isNull);
     expect(<int>[1, 2].lock.singleOrNull, isNull);
     expect(<int>[1].lock.singleOrNull, 1);
@@ -983,21 +1059,21 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Or (else) Methods | " "IList.firstOr()", () {
+  test("firstOr", () {
     expect(<int>[].lock.firstOr(10), 10);
     expect(<int>[1, 2].lock.firstOr(10), 1);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Or (else) Methods | " "IList.lastOr()", () {
+  test("lastOr()", () {
     expect(<int>[].lock.lastOr(10), 10);
     expect(<int>[1, 2].lock.lastOr(10), 2);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Or (else) Methods | " "IList.singleOr()", () {
+  test("singleOr", () {
     expect(<int>[].lock.singleOr(10), 10);
     expect(<int>[1, 2].lock.singleOr(10), 10);
     expect(<int>[1].lock.singleOr(10), 1);
@@ -1005,30 +1081,32 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.sort()", () {
+  test("sort", () {
     expect([10, 2, 4, 6, 5].lock.sort(), [2, 4, 5, 6, 10]);
     expect([10, 2, 4, 6, 5].lock.sort((int a, int b) => -a.compareTo(b)), [10, 6, 5, 4, 2]);
   });
+  //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "IList.sortOrdered()",
-      () => expect(
-          [10, 2, 4, 6, 5].lock.sortOrdered((int a, int b) => a.compareTo(b)), [2, 4, 5, 6, 10]));
+  test("sortOrdered", () {
+    expect([10, 2, 4, 6, 5].lock.sortOrdered((int a, int b) => a.compareTo(b)), [2, 4, 5, 6, 10]);
+  });
 
-  test("IList.sortLike()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("sortLike", () {
     expect([10, 2, 4, 6, 5].lock.sortLike(const [4, 2]), [4, 2, 10, 6, 5]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.asMap()", () {
+  test("asMap", () {
     expect(["hel", "lo", "there"].lock.asMap(), isA<IMap<int, String>>());
     expect(["hel", "lo", "there"].lock.asMap().unlock, {0: "hel", 1: "lo", 2: "there"});
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.clear()", () {
+  test("clear", () {
     final IList<int> ilist = IList.withConfig([1, 2, 3], ConfigList(isDeepEquals: false));
 
     final IList<int> iListCleared = ilist.clear();
@@ -1039,75 +1117,73 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.indexOf()", () {
+  test("indexOf", () {
     var ilist = ["do", "re", "mi", "re"].lock;
+
+    // 1) Regular usage
     expect(ilist.indexOf("re"), 1);
     expect(ilist.indexOf("re", 2), 3);
     expect(ilist.indexOf("fa"), -1);
-  });
 
-  test("IList.indexOf() | Argument Error", () {
-    final IList<String> ilist = ["do", "re", "mi", "re"].lock;
-
+    // 2) Argument error
     expect(() => ilist.indexOf("re", -1), throwsArgumentError);
     expect(() => ilist.indexOf("re", 4), throwsArgumentError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.indexWhere() | Start can't be negative or bigger than the length", () {
+  test("indexWhere", () {
     final IList<String> ilist = ["do", "re", "mi", "re"].lock;
+
+    // 1) Start can't be negative or bigger than the length
     expect(() => ilist.indexWhere((String element) => true, -1), throwsArgumentError);
     expect(() => ilist.indexWhere((String element) => true, ilist.length + 1), throwsArgumentError);
-  });
 
-  test("IList.indexWhere()", () {
-    var ilist = ["do", "re", "mi", "re"].lock;
+    // 2) Regular usage
     expect(ilist.indexWhere((String element) => element == "re"), 1);
     expect(ilist.indexWhere((String element) => element == "re", 2), 3);
     expect(ilist.indexWhere((String element) => element == "fa"), -1);
-  });
 
-  test("IList.indexWhere() of empty list or list with a single item", () {
-    var ilist = IList.empty<String>();
-    expect(ilist.indexWhere((String element) => element == "x"), -1);
+    // 3) Empty list or list with a single item
+    var emptyIlist = IList.empty<String>();
+    expect(emptyIlist.indexWhere((String element) => element == "x"), -1);
 
-    ilist = ["do"].lock;
-    expect(ilist.indexWhere((String element) => element == "x"), -1);
-    expect(ilist.indexWhere((String element) => element == "do"), 0);
+    emptyIlist = ["do"].lock;
+    expect(emptyIlist.indexWhere((String element) => element == "x"), -1);
+    expect(emptyIlist.indexWhere((String element) => element == "do"), 0);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.lastIndexOf()", () {
-    var ilist = ["do", "re", "mi", "re"].lock;
+  test("lastIndexOf", () {
+    // 1) Regular Usage
+    IList<String> ilist = ["do", "re", "mi", "re"].lock;
     expect(ilist.lastIndexOf("re", 2), 1);
     expect(ilist.lastIndexOf("re"), 3);
     expect(ilist.lastIndexOf("fa"), -1);
-  });
 
-  test("IList.lastIndexWhere() | start cannot be smaller than zero", () {
-    final IList<String> ilist = ["do", "re", "mi", "re"].lock;
+    // 2) Start cannot be smaller than zero
+    ilist = ["do", "re", "mi", "re"].lock;
     expect(() => ilist.lastIndexOf("do", -1), throwsArgumentError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.lastIndexWhere()", () {
-    var ilist = ["do", "re", "mi", "re"].lock;
+  test("lastIndexWhere", () {
+    // 1) Regular usage
+    IList<String> ilist = ["do", "re", "mi", "re"].lock;
     expect(ilist.lastIndexWhere((String note) => note.startsWith("r")), 3);
     expect(ilist.lastIndexWhere((String note) => note.startsWith("r"), 2), 1);
     expect(ilist.lastIndexWhere((String note) => note.startsWith("k")), -1);
-  });
 
-  test("IList.lastIndexWhere() | start cannot be smaller than zero", () {
-    final IList<String> ilist = ["do", "re", "mi", "re"].lock;
+    // 2) Start cannot be smaller than zero
+    ilist = ["do", "re", "mi", "re"].lock;
     expect(() => ilist.lastIndexWhere((String element) => false, -1), throwsArgumentError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.replaceFirst()", () {
+  test("replaceFirst", () {
     var ilist = ["do", "re", "mi", "re"].lock;
     expect(ilist.replaceFirst(from: "re", to: "x"), ["do", "x", "mi", "re"]);
     expect(ilist.replaceFirst(from: "fa", to: "x"), ["do", "re", "mi", "re"]);
@@ -1115,7 +1191,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.replaceAll()", () {
+  test("replaceAll", () {
     var ilist = ["do", "re", "mi", "re"].lock;
     expect(ilist.replaceAll(from: "re", to: "x"), ["do", "x", "mi", "x"]);
     expect(ilist.replaceAll(from: "fa", to: "x"), ["do", "re", "mi", "re"]);
@@ -1123,7 +1199,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.replaceFirstWhere()", () {
+  test("replaceFirstWhere", () {
     var ilist = ["do", "re", "mi", "re"].lock;
 
     expect(ilist.replaceFirstWhere((String item) => item == "re", "x"), ["do", "x", "mi", "re"]);
@@ -1133,7 +1209,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.replaceAllWhere()", () {
+  test("replaceAllWhere", () {
     var ilist = ["do", "re", "mi", "re"].lock;
 
     expect(ilist.replaceAllWhere((String item) => item == "re", "x"), ["do", "x", "mi", "x"]);
@@ -1143,21 +1219,20 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "IList.replaceRange()",
-      () => expect(
-          ["a", "b", "c", "d", "e"].lock.replaceRange(1, 4, ["f", "g"]), ["a", "f", "g", "e"]));
+  test("replaceRange", () {
+    expect(["a", "b", "c", "d", "e"].lock.replaceRange(1, 4, ["f", "g"]), ["a", "f", "g", "e"]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.fillRange()", () {
+  test("fillRange", () {
     expect(List<int>(3).lock.fillRange(0, 2, 1), [1, 1, null]);
     expect(List<int>(3).lock, [null, null, null]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.getRange()", () {
+  test("getRange", () {
     final IList<String> colors = ["red", "green", "blue", "orange", "pink"].lock;
     final Iterable<String> range = colors.getRange(1, 4);
     expect(range, ["green", "blue", "orange"]);
@@ -1166,24 +1241,26 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.setRange()",
-      () => expect([1, 2, 3, 4].lock.setRange(1, 3, [5, 6, 7, 8, 9].lock, 3), [1, 8, 9, 4]));
+  test("setRange", () {
+    expect([1, 2, 3, 4].lock.setRange(1, 3, [5, 6, 7, 8, 9].lock, 3), [1, 8, 9, 4]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.insert()",
-      () => expect(["do", "re", "mi", "re"].lock.insert(2, "fa"), ["do", "re", "fa", "mi", "re"]));
+  test("insert", () {
+    expect(["do", "re", "mi", "re"].lock.insert(2, "fa"), ["do", "re", "fa", "mi", "re"]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test(
-      "IList.insertAll()",
+      "insertAll",
       () => expect(["do", "re", "mi", "re"].lock.insertAll(3, ["fa", "fo", "fu"]),
           ["do", "re", "mi", "fa", "fo", "fu", "re"]));
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.removeAt()", () {
+  test("removeAt", () {
     expect(["do", "re", "mi", "re"].lock.removeAt(2), ["do", "re", "re"]);
     final Output<String> item = Output();
     expect(["do", "re", "mi", "re"].lock.removeAt(1, item), ["do", "mi", "re"]);
@@ -1192,51 +1269,63 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.removeLast()", () {
-    expect(["do", "re", "mi", "re"].lock.removeLast(), ["do", "re", "mi"]);
+  test("removeLast", () {
+    final IList<String> ilist = ["do", "re", "mi", "re"].lock;
+    expect(ilist.removeLast(), ["do", "re", "mi"]);
     final Output<String> item = Output();
-    expect(["do", "re", "mi", "re"].lock.removeLast(item), ["do", "re", "mi"]);
+    expect(ilist.removeLast(item), ["do", "re", "mi"]);
     expect(item.value, "re");
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.removeRange()",
-      () => expect(["do", "re", "mi", "re"].lock.removeRange(1, 3), ["do", "re"]));
+  test("removeRange", () {
+    expect(["do", "re", "mi", "re"].lock.removeRange(1, 3), ["do", "re"]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test(
-      "IList.removeWhere()",
+      "removeWhere",
       () => expect(
           ["one", "two", "three", "four"].lock.removeWhere((String item) => item.length == 3),
           ["three", "four"]));
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.removeAll()", () => expect([1, 2, 3, 3, 4, 5, 5].lock.removeAll([3, 5]), [1, 2, 4]));
-
-  test(
-      "IList.removeMany()",
-      () => expect(["head", "shoulders", "knees", "head", "toes"].lock.removeMany("head"),
-          ["shoulders", "knees", "toes"]));
-
-  test(
-    "IList.removeNulls()",
-    () => expect([1, 2, null, 4, null].lock.removeNulls(), [1, 2, 4]),
-  );
-
-  test("IList.removeDuplicates()",
-      () => expect([1, 2, 3, 3, 4, 5, 5].lock.removeDuplicates(), [1, 2, 3, 4, 5]));
-
-  test(
-      "IList.removeNullsAndDuplicates()",
-      () => expect(
-          [1, 2, 3, null, 3, 4, null, 5, 5].lock.removeNullsAndDuplicates(), [1, 2, 3, 4, 5]));
+  test("removeAll", () => expect([1, 2, 3, 3, 4, 5, 5].lock.removeAll([3, 5]), [1, 2, 4]));
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.put()", () {
+  test(
+      "removeMany",
+      () => expect(["head", "shoulders", "knees", "head", "toes"].lock.removeMany("head"),
+          ["shoulders", "knees", "toes"]));
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test(
+    "removeNulls",
+    () {
+      expect([1, 2, null, 4, null].lock.removeNulls(), [1, 2, 4]);
+    },
+  );
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("removeDuplicates", () {
+    expect([1, 2, 3, 3, 4, 5, 5].lock.removeDuplicates(), [1, 2, 3, 4, 5]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("removeNullsAndDuplicates", () {
+    expect([1, 2, 3, null, 3, 4, null, 5, 5].lock.removeNullsAndDuplicates(), [1, 2, 3, 4, 5]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("put", () {
     final IList<int> ilist = [1, 2, 4, 5].lock;
 
     final IList<int> completeIList = ilist.put(2, 3);
@@ -1247,18 +1336,16 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "IList.process() | convert cannot be null",
-      () => expect(
-          () => ["do", "re", "mi", "re"]
-              .lock
-              .process(test: (IList<String> list, int index, String item) => true, convert: null),
-          throwsAssertionError));
-
   test("IList.process()", () {
     var original = ["do", "re", "mi", "re"].lock;
 
-    // Check all items are tested.
+    // 1) [convert] cannot be null
+    expect(
+        () => original.process(
+            test: (IList<String> list, int index, String item) => true, convert: null),
+        throwsAssertionError);
+
+    // 2) Check all items are tested.
     // Check convert is called for all items that test true.
     int testCount = 0;
     int convertCount = 0;
@@ -1275,45 +1362,45 @@ void main() {
     expect(testCount, 4);
     expect(convertCount, 4);
 
-    // Convert only items which tested true.
+    // 3) Convert only items which tested true.
     converted = original.process(
         test: (_, __, String item) => item == "re", convert: (_, __, String item) => [item + item]);
     expect(converted, ["do", "rere", "mi", "rere"]);
 
-    // No items satisfy the test.
+    // 4) No items satisfy the test.
     converted = original.process(
         test: (_, __, String item) => item == "fa", convert: (_, __, String item) => [item + item]);
     expect(identical(converted, original), isTrue);
 
-    // Items satisfy the test, but convert returns null.
+    // 5) Items satisfy the test, but convert returns null.
     converted =
         original.process(test: (_, __, String item) => true, convert: (_, __, String item) => null);
     expect(identical(converted, original), isTrue);
 
-    // Items satisfy the test, but convert returns the item in a list.
+    // 6) Items satisfy the test, but convert returns the item in a list.
     converted = original.process(
         test: (_, __, String item) => true, convert: (_, __, String item) => [item]);
     expect(identical(converted, original), isTrue);
 
-    // Convert returns empty.
+    // 7) Convert returns empty.
     converted = original.process(
         test: (_, __, String item) => item == "re", convert: (_, __, String item) => const []);
     expect(converted, ["do", "mi"]);
 
-    // Convert returns multiple items.
+    // 8) Convert returns multiple items.
     converted = original.process(
         test: (_, __, String item) => item == "re",
         convert: (_, __, String item) => ["re1", "re1", "re3"]);
     expect(converted, ["do", "re1", "re1", "re3", "mi", "re1", "re1", "re3"]);
 
-    // If no test is provided, apply to all items.
+    // 9) If no test is provided, apply to all items.
     converted = original.process(convert: (_, __, String item) => [item + item]);
     expect(converted, ["dodo", "rere", "mimi", "rere"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.sublist()", () {
+  test("sublist", () {
     final IList<String> colors = ["red", "green", "blue", "orange", "pink"].lock;
     expect(colors.sublist(1, 3), ["green", "blue"]);
     expect(colors.sublist(1), ["green", "blue", "orange", "pink"]);
@@ -1322,7 +1409,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.retainWhere()", () {
+  test("retainWhere", () {
     final IList<String> numbers = ["one", "two", "three", "four"].lock;
     expect(numbers.retainWhere((String item) => item.length == 3), ["one", "two"]);
     expect(numbers, ["one", "two", "three", "four"]);
@@ -1330,12 +1417,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.reversed getter",
-      () => expect(["do", "re", "mi", "re"].lock.reversed, ["re", "mi", "re", "do"]));
+  test("reversed", () {
+    expect(["do", "re", "mi", "re"].lock.reversed, ["re", "mi", "re", "do"]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.setAll()", () {
+  test("setAll", () {
     final IList<String> ilist = ["a", "b", "c"].lock;
     expect(ilist.setAll(1, ["bee", "sea"]), ["a", "bee", "sea"]);
     expect(ilist, ["a", "b", "c"]);
@@ -1343,7 +1431,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.shuffle()", () {
+  test("shuffle", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6, 7, 8, 9].lock;
     expect(ilist.shuffle(Random(0)), [1, 5, 3, 9, 6, 8, 7, 2, 4]);
     expect(ilist.shuffle(Random(1)), [5, 6, 3, 9, 1, 8, 2, 4, 7]);
@@ -1352,36 +1440,38 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.whereMoveToTheEnd and whereMoveToTheFront methods", () {
+  test("whereMoveToTheEnd and whereMoveToTheFront", () {
     final IList<int> numbs = [1, 5, 20, 21, 19, 16, 54, 50, 23, 55, 18, 20, 15].lock;
 
-    /// Even numbers to the end.
+    // 1) Even numbers to the end.
     expect(numbs.whereMoveToTheEnd((int n) => n % 2 == 0),
         [1, 5, 21, 19, 23, 55, 15, 20, 16, 54, 50, 18, 20]);
 
-    /// Even numbers to the start.
+    // 2) Even numbers to the start.
     expect(numbs.whereMoveToTheStart((int n) => n % 2 == 0),
         [20, 16, 54, 50, 18, 20, 1, 5, 21, 19, 23, 55, 15]);
   });
 
-  test("IList.flushFactor", () => expect(IList.flushFactor, 200));
+  //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.flushFactor setter", () {
+  test("flushFactor", () {
+    // 1) Default value
+    expect(IList.flushFactor, 300);
+
+    // 2) Setter
     IList.flushFactor = 100;
     expect(IList.flushFactor, 100);
-  });
 
-  test("IList.flushFactor setter | can't be smaller than or equal to 0", () {
+    // 3) Can't be smaller than or equal to 0
     expect(() => IList.flushFactor = 0, throwsStateError);
     expect(() => IList.flushFactor = -100, throwsStateError);
   });
 
-  test("IList.asyncAutoFlush", () => expect(IList.asyncAutoflush, isTrue));
+  //////////////////////////////////////////////////////////////////////////////
 
-  test("lockConfig()", () {
-    ImmutableCollection.lockConfig();
+  test("asyncAutoFlush", () {
+    expect(IList.asyncAutoflush, isTrue);
+  });
 
-    expect(() => IList.flushFactor = 1000, throwsStateError);
-    expect(() => IList.asyncAutoflush = false, throwsStateError);
-  }, skip:true);
+  //////////////////////////////////////////////////////////////////////////////
 }

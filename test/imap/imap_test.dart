@@ -1160,7 +1160,7 @@ void main() {
 
     final Output<int> item = Output();
     final IMap<String, int> newScores = scores.update("Joe", (int value) => 2 * value,
-        ifRemove: (int value) => value == 20, value: item);
+        ifRemove: (String key, int value) => value == 20, value: item);
     expect(newScores.unlock, {"Bob": 36});
     expect(item.value, 20);
   });
@@ -1175,7 +1175,7 @@ void main() {
     expect(updatedScores.unlock, {"Bob": 72, "Joe": 200});
   });
 
-  test("IMap.flushFactor", () => expect(IMap.flushFactor, 20));
+  test("IMap.flushFactor", () => expect(IMap.flushFactor, 30));
 
   test("IMap.flushFactor setter", () {
     IMap.flushFactor = 200;

@@ -252,7 +252,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   static ConfigMap _defaultConfig = const ConfigMap();
 
-  static const _defaultFlushFactor = 20;
+  static const _defaultFlushFactor = 30;
 
   static int _flushFactor = _defaultFlushFactor;
 
@@ -811,9 +811,20 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> where(bool Function(K key, V value) test) =>
       IMap<K, V>._(_m.where(test), config: config);
 
-  IMap<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper, {ConfigMap config}) =>
-      IMap<RK, RV>._(_m.map(mapper),
-          config: config ?? ((RK == K && RV == V) ? this.config : defaultConfig));
+  /// Returns a new map where all entries of this map are transformed by
+  /// the given [mapper] function. However, if [ifRemove] is provided,
+  /// the mapped value will first be tested with it and, if [ifRemove]
+  /// returns true, the value will be removed from the result map.
+  IMap<RK, RV> map<RK, RV>(
+    MapEntry<RK, RV> Function(K key, V value) mapper, {
+    bool Function(RK key, RV value) ifRemove,
+    ConfigMap config,
+  }) {
+    Map<RK, RV> map = _m.map(mapper);
+    if (ifRemove != null) map.removeWhere(ifRemove);
+    return IMap<RK, RV>._(map,
+        config: config ?? ((RK == K && RV == V) ? this.config : defaultConfig));
+  }
 
   @override
   String toString([bool prettyPrint]) {
@@ -879,7 +890,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns the modified map and sets the new [value] of the key.
   ///
   /// If the key is present, invokes [update] with the current value and stores
-  /// the new value in the map.
+  /// the new value in the map. However, if [ifRemove] is provided, the updated value will
+  /// first be tested with it and, if [ifRemove] returns true, the value will be
+  /// removed from the map, instead of updated.
   ///
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned value to the map.
@@ -892,7 +905,7 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> update(
     K key,
     V Function(V value) update, {
-    bool Function(V value) ifRemove,
+    bool Function(K key, V value) ifRemove,
     V Function() ifAbsent,
     Output<V> value,
   }) {
@@ -905,7 +918,7 @@ class IMap<K, V> // ignore: must_be_immutable
     if (map.containsKey(key)) {
       var originalValue = map[key];
       var updatedValue = update(originalValue);
-      if (ifRemove != null && ifRemove(updatedValue)) {
+      if (ifRemove != null && ifRemove(key, updatedValue)) {
         map.remove(key);
       } else {
         map[key] = updatedValue;
@@ -933,8 +946,13 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Iterates over all entries in the map and updates them with the result
   /// of invoking [update].
-  IMap<K, V> updateAll(V Function(K key, V value) update) {
-    return IMap._unsafeFromMap(unlock..updateAll(update), config: config);
+  IMap<K, V> updateAll(
+    V Function(K key, V value) update, {
+    bool Function(K key, V value) ifRemove,
+  }) {
+    Map<K, V> map = unlock..updateAll(update);
+    if (ifRemove != null) map.removeWhere(ifRemove);
+    return IMap._unsafeFromMap(map, config: config);
   }
 }
 
