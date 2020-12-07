@@ -411,10 +411,4 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
-
-  test("lockConfig() disables resetting", () {
-    ImmutableCollection.lockConfig();
-
-    expect(() => IList.resetAllConfigurations(), throwsStateError);
-  }, skip:true);
 }
