@@ -112,6 +112,8 @@ class IList<T> // ignore: must_be_immutable
   static IList<T> empty<T>([ConfigList config]) =>
       IList._unsafe(LFlat.empty<T>(), config: config ?? defaultConfig);
 
+  /// See also: [ImmutableCollection], [ImmutableCollection.lockConfig],
+  /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration  of immutable collections.");
@@ -135,6 +137,7 @@ class IList<T> // ignore: must_be_immutable
   /// during the same task.
   static bool get asyncAutoflush => _asyncAutoflush;
 
+  /// See also: [ConfigList], [ImmutableCollection]
   static set defaultConfig(ConfigList config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
@@ -142,6 +145,7 @@ class IList<T> // ignore: must_be_immutable
     _defaultConfig = config ?? const ConfigList();
   }
 
+  /// See also: [ImmutableCollection]
   static set flushFactor(int value) {
     if (_flushFactor == value) return;
     if (ImmutableCollection.isConfigLocked)
@@ -152,6 +156,7 @@ class IList<T> // ignore: must_be_immutable
       throw StateError("flushFactor can't be $value.");
   }
 
+  /// See also: [ImmutableCollection]
   static set asyncAutoflush(bool value) {
     if (_asyncAutoflush == value) return;
     if (ImmutableCollection.isConfigLocked)
@@ -244,8 +249,10 @@ class IList<T> // ignore: must_be_immutable
   IList<T> get withDeepEquals =>
       config.isDeepEquals ? this : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
 
+  /// See also: [ConfigList]
   bool get isDeepEquals => config.isDeepEquals;
 
+  /// See also: [ConfigList]
   bool get isIdentityEquals => !config.isDeepEquals;
 
   /// Unlocks the list, returning a regular (mutable, growable) [List]. This
@@ -274,12 +281,15 @@ class IList<T> // ignore: must_be_immutable
   /// See also: [ModifiableListView]
   List<T> get unlockLazy => ModifiableListView(this);
 
+  /// Returns a new `Iterator` that allows iterating the elements of this [IList].
   @override
   Iterator<T> get iterator => _l.iterator;
 
+  /// Returns `true` if there are no elements in this collection.
   @override
   bool get isEmpty => _l.isEmpty;
 
+  /// Returns `true` if there is at least one element in this collection.
   @override
   bool get isNotEmpty => !isEmpty;
 
@@ -496,11 +506,17 @@ class IList<T> // ignore: must_be_immutable
   /// Otherwise, adds it to the list.
   IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
 
+  /// Returns the object at the given [index] in the list or throws a [RangeError] if [index] is out
+  /// of bounds.
   T operator [](int index) {
     _count();
     return _l[index];
   }
 
+  /// Checks whether any element of this iterable satisfies [test].
+  ///
+  /// Checks every element in iteration order, and returns `true` if
+  /// any of them make [test] return `true`, otherwise returns `false`.
   @override
   bool any(bool Function(T) test) {
     _count();
@@ -508,6 +524,7 @@ class IList<T> // ignore: must_be_immutable
   }
 
   // TODO: Marcelo, por favor, adicione a documentação sobre views e cast.
+  /// Provides a view of this iterable as an iterable of [R] instances.
   @override
   IList<R> cast<R>() {
     Iterable<R> result = _l.cast<R>();
@@ -516,28 +533,34 @@ class IList<T> // ignore: must_be_immutable
         : IList._(result, config: ConfigList(isDeepEquals: config.isDeepEquals));
   }
 
+  /// Returns `true` if the collection contains an element equal to [element], `false` otherwise.
   @override
   bool contains(Object element) {
     _count();
     return _l.contains(element);
   }
 
+  /// Returns the [index]th element.
   @override
   T elementAt(int index) {
     _count();
     return _l[index];
   }
 
+  /// Checks whether every element of this iterable satisfies [test].
   @override
   bool every(bool Function(T) test) {
     _count();
     return _l.every(test);
   }
 
+  /// Expands each element of this [Iterable] into zero or more elements.
   @override
   IList<E> expand<E>(Iterable<E> Function(T) f, {ConfigList config}) =>
       IList._(_l.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
 
+  /// The number of objects in this list.
+  /// The valid indices for a list are `0` through `length - 1`.
   @override
   int get length {
     final int length = _l.length;
@@ -597,72 +620,90 @@ class IList<T> // ignore: must_be_immutable
 
   /// Iterates through elements and returns the first to satisfy [test].
   ///
-  /// If no element satisfies [test], the result of invoking the [orElse]
+  /// - If no element satisfies [test], the result of invoking the [orElse]
   /// function is returned.
-  /// If [orElse] is omitted, it defaults to throwing a [StateError].
+  /// - If [orElse] is omitted, it defaults to throwing a [StateError].
   @override
   T firstWhere(bool Function(T) test, {T Function() orElse}) {
     _count();
     return _l.firstWhere(test, orElse: orElse);
   }
 
+  /// Reduces a collection to a single value by iteratively combining eac element of the collection
+  /// with an existing value.
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) {
     _count();
     return _l.fold(initialValue, combine);
   }
 
+  /// Returns the lazy concatentation of this iterable and [other].
   @override
   IList<T> followedBy(Iterable<T> other) => IList._(_l.followedBy(other), config: config);
 
+  /// Applies the function [f] to each element of this collection in iteration order.
   @override
   void forEach(void Function(T element) f) {
     _count();
     _l.forEach(f);
   }
 
+  /// Converts each element to a [String] and concatenates the strings with the [separator]
+  /// in-between each concatenation.
   @override
   String join([String separator = ""]) => _l.join(separator);
 
+  /// Returns the last element that satisfies the given predicate [test].
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) {
     _count();
     return _l.lastWhere(test, orElse: orElse);
   }
 
+  /// Returns a new lazy [IList] with elements that are created by calling [f] on each element of
+  /// this [IList] in iteration order.
   @override
   IList<E> map<E>(E Function(T element) f, {ConfigList config}) {
     _count();
     return IList._(_l.map(f), config: config ?? (T == E ? this.config : defaultConfig));
   }
 
+  /// Reduces a collection to a single value by iteratively combining elements of the collection
+  /// using the provided function.
   @override
   T reduce(T Function(T value, T element) combine) {
     _count();
     return _l.reduce(combine);
   }
 
+  /// Returns the single element that satisfies [test].
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) {
     _count();
     return _l.singleWhere(test, orElse: orElse);
   }
 
+  /// Returns an [IList] that provides all but the first [count] elements.
   @override
   IList<T> skip(int count) => IList._(_l.skip(count), config: config);
 
+  /// Returns an [IList] that skips leading elements while [test] is satisfied.
   @override
   IList<T> skipWhile(bool Function(T value) test) => IList._(_l.skipWhile(test), config: config);
 
+  /// Returns an [IList] of the [count] first elements of this iterable.
   @override
   IList<T> take(int count) => IList._(_l.take(count), config: config);
 
+  /// Returns an [IList] of the leading elements satisfying [test].
   @override
   IList<T> takeWhile(bool Function(T value) test) => IList._(_l.takeWhile(test), config: config);
 
+  /// Returns an [IList] with all elements that satisfy the predicate [test].
   @override
   IList<T> where(bool Function(T element) test) => IList._(_l.where(test), config: config);
 
+  /// Returns an [IList] with all elements that have type [E].
   @override
   IList<E> whereType<E>() => IList._(_l.whereType<E>(), config: config);
 
@@ -787,18 +828,26 @@ class IList<T> // ignore: must_be_immutable
     return lists.first + lists.last;
   }
 
+  /// Creates a [List] containing the elements of this [IList].
   @override
   List<T> toList({bool growable = true}) {
     _count();
     return _l.toList(growable: growable);
   }
 
+  /// Creates a [Set] containing the same elements as this [IList].
   @override
   Set<T> toSet() {
     _count();
     return _l.toSet();
   }
 
+  /// Returns a string representation of (some of) the elements of `this`.
+  ///
+  /// Use either the [prettyPrint] or the [ImmutableCollection.prettyPrint] parameters to get a
+  /// prettier print.
+  ///
+  /// See also: [ImmutableCollection]
   @override
   String toString([bool prettyPrint]) {
     if (prettyPrint ?? ImmutableCollection.prettyPrint) {
