@@ -168,6 +168,10 @@ void main() {
     expect(ilist == IList([1]), isFalse);
     expect(ilist == IList(([2, 1])), isFalse);
     expect(ilist == IList([1, 2]).withIdentityEquals, isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
 
     // 2) identity-equals compares the list instance, not the items
     ilist = IList([1, 2]).withIdentityEquals;
@@ -176,6 +180,11 @@ void main() {
     expect(ilist == IList([2, 1]).withIdentityEquals, isFalse);
     expect(ilist == [1, 2].lock, isFalse);
     expect(ilist == IList([1, 2, 3]).withIdentityEquals, isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
     // 3) deep-equals compares the items, not necessarily the list instance
     ilist = IList([1, 2]);
@@ -183,6 +192,11 @@ void main() {
     expect(ilist == IList([2, 1]), isFalse);
     expect(ilist == [1, 2].lock.withDeepEquals, isTrue);
     expect(ilist == IList([1, 2, 3]), isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
     // 4) deep-equals is always different from ilist with identity-equals
     ilist = IList([1, 2]);
@@ -190,6 +204,11 @@ void main() {
     expect(ilist.withIdentityEquals == ilist.withDeepEquals, isFalse);
     expect(ilist.withDeepEquals == ilist, isTrue);
     expect(ilist == ilist.withDeepEquals, isTrue);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
 
     // 5) isIdentityEquals and isDeepEquals properties
     ilist = IList([1, 2]);
@@ -197,18 +216,68 @@ void main() {
     expect(ilist.isDeepEquals, isTrue);
     expect(ilist.withIdentityEquals.isIdentityEquals, isTrue);
     expect(ilist.withIdentityEquals.isDeepEquals, isFalse);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
+
+    // 6) Additional null checks
+    ilist = IList<int>([]);
+    expect(ilist == IList<int>([]), isTrue);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
+
+    ilist = IList<int>([null]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isTrue);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
+
+    ilist = IList<int>([1]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isTrue);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
+
+    ilist = IList<int>([null, null, null]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isTrue);
+    expect(ilist == IList<int>([null, 1, null, 2]), isFalse);
+
+    ilist = IList<int>([null, 1, null, 2]);
+    expect(ilist == IList<int>([]), isFalse);
+    expect(ilist == IList<int>([null]), isFalse);
+    expect(ilist == IList<int>([1]), isFalse);
+    expect(ilist == IList<int>([null, null, null]), isFalse);
+    expect(ilist == IList<int>([null, 1, null, 2]), isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("same", () {
-    final IList<int> ilist = IList([1, 2]);
+    // 1) Regular usage
+    IList<int> ilist = IList([1, 2]);
     expect(ilist.same(ilist), isTrue);
     expect(ilist.same(IList([1, 2])), isFalse);
     expect(ilist.same(IList([1])), isFalse);
     expect(ilist.same(IList(([2, 1]))), isFalse);
     expect(ilist.same(IList([1, 2]).withIdentityEquals), isFalse);
+    expect(ilist.same(IList([1, 2]).withConfig(ConfigList(cacheHashCode: false))), isFalse);
     expect(ilist.same(ilist.remove(3)), isTrue);
+    expect(ilist.same(IList<int>([])), isFalse);
+    expect(ilist.same(IList<int>([null])), isFalse);
+    expect(ilist.same(IList<int>([1])), isFalse);
+    expect(ilist.same(IList<int>([null, null, null])), isFalse);
+    expect(ilist.same(IList<int>([null, 1, null, 2])), isFalse);
+
+    // 2) Nulls and other checks
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1371,7 +1440,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IList.whereMoveToTheEnd and whereMoveToTheFront methods", () {
+  test("whereMoveToTheEnd and whereMoveToTheFront", () {
     final IList<int> numbs = [1, 5, 20, 21, 19, 16, 54, 50, 23, 55, 18, 20, 15].lock;
 
     // 1) Even numbers to the end.

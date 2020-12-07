@@ -137,7 +137,7 @@ class IList<T> // ignore: must_be_immutable
   /// during the same task.
   static bool get asyncAutoflush => _asyncAutoflush;
 
-  /// See also: [ConfigList], [ImmutableCollection]
+  /// See also: [ConfigList], [ImmutableCollection], [resetAllConfigurations]
   static set defaultConfig(ConfigList config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
@@ -362,6 +362,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Return `true` if other is `null` or the cached [hashCodes] proves the
   /// collections are **NOT** equal.
+  ///
   /// Explanation: Objects with different [hashCode]s are not equal. However,
   /// if the [hashCode]s are the same, then nothing can be said about the equality.
   /// Note: We use the CACHED [hashCode]. If any of the [hashCode] is `null` it
@@ -554,13 +555,12 @@ class IList<T> // ignore: must_be_immutable
     return _l.every(test);
   }
 
-  /// Expands each element of this [Iterable] into zero or more elements.
+  /// Expands each element of this [IList] into zero or more elements.
   @override
   IList<E> expand<E>(Iterable<E> Function(T) f, {ConfigList config}) =>
       IList._(_l.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
 
   /// The number of objects in this list.
-  /// The valid indices for a list are `0` through `length - 1`.
   @override
   int get length {
     final int length = _l.length;

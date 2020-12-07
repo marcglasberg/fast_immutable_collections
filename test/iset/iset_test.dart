@@ -39,11 +39,12 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "Ensuring Immutability | ISet.add() | "
-      "Changing the passed mutable list doesn't change the IList", () {
-    final Set<int> original = {1, 2};
-    final ISet<int> iset = original.lock;
+  test("Ensuring Immutability", () {
+    // 1) add
+
+    // 1.1) Changing the passed mutable list doesn't change the ISet
+    Set<int> original = {1, 2};
+    ISet<int> iset = original.lock;
 
     expect(iset, original);
 
@@ -52,37 +53,27 @@ void main() {
 
     expect(original, <int>{1, 2, 3, 4});
     expect(iset, <int>{1, 2});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | ISet.add() | "
-      "Changing the ISet also doesn't change the original set", () {
-    final Set<int> original = {1, 2};
-    final ISet<int> iset = original.lock;
+    // 1.2) Changing the ISet also doesn't change the original set
+    original = {1, 2};
+    iset = original.lock;
 
     expect(iset, original);
 
-    final ISet<int> iSetNew = iset.add(3);
+    ISet<int> iSetNew = iset.add(3);
 
     expect(original, <int>{1, 2});
     expect(iset, <int>{1, 2});
     expect(iSetNew, <int>{1, 2, 3});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | ISet.add() | "
-      "If the item being passed is a variable, a pointer to it shouldn't exist inside ISet", () {
-    final Set<int> original = {1, 2};
-    final ISet<int> iset = original.lock;
+    // 1.3) If the item being passed is a variable, a pointer to it shouldn't exist inside ISet
+    original = {1, 2};
+    iset = original.lock;
 
     expect(iset, original);
 
     int willChange = 4;
-    final ISet<int> iSetNew = iset.add(willChange);
+    iSetNew = iset.add(willChange);
 
     willChange = 5;
 
@@ -90,15 +81,12 @@ void main() {
     expect(iset, <int>{1, 2});
     expect(willChange, 5);
     expect(iSetNew, <int>{1, 2, 4});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
+    // 2) addAll
 
-  test(
-      "Ensuring Immutability | ISet.addAll() | "
-      "Changing the passed mutable list doesn't change the ISet", () {
-    final Set<int> original = {1, 2};
-    final ISet<int> iset = original.lock;
+    // 2.1) Changing the passed mutable list doesn't change the ISet
+    original = {1, 2};
+    iset = original.lock;
 
     expect(iset, <int>{1, 2});
 
@@ -106,54 +94,41 @@ void main() {
 
     expect(original, <int>{1, 2, 3, 4});
     expect(iset, <int>{1, 2});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | ISet.addAll() | "
-      "Changing the passed immutable set doesn't change the ISet", () {
-    final Set<int> original = {1, 2};
-    final ISet<int> iset = original.lock;
+    // 2.2) Changing the passed immutable set doesn't change the ISet
+    original = {1, 2};
+    iset = original.lock;
 
     expect(iset, <int>{1, 2});
 
-    final ISet<int> iSetNew = iset.addAll(<int>{2, 3, 4});
+    iSetNew = iset.addAll(<int>{2, 3, 4});
 
     expect(original, <int>{1, 2});
     expect(iset, <int>{1, 2});
     expect(iSetNew, <int>{1, 2, 3, 4});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | ISet.addAll() | "
-      "If the items being passed are from a variable, "
-      "it shouldn't have a pointer to the variable", () {
-    final Set<int> original = {1, 2};
+    // 2.3) If the items being passed are from a variable, it shouldn't have a pointer to the
+    // variable
+    original = {1, 2};
     final ISet<int> iSet1 = original.lock;
     final ISet<int> iSet2 = original.lock;
 
     expect(iSet1, original);
     expect(iSet2, original);
 
-    final ISet<int> iSetNew = iSet1.addAll(iSet2.addAll({3, 4}));
+    iSetNew = iSet1.addAll(iSet2.addAll({3, 4}));
     original.add(3);
 
     expect(original, <int>{1, 2, 3});
     expect(iSet1, <int>{1, 2});
     expect(iSet2, <int>{1, 2});
     expect(iSetNew, <int>{1, 2, 3, 4});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
+    // 3) remove
 
-  test(
-      "Ensuring Immutability | ISet.remove() | "
-      "Changing the passed mutable set doesn't change the ISet", () {
-    final Set<int> original = {1, 2};
-    final ISet<int> iset = original.lock;
+    // 3.1) Changing the passed mutable set doesn't change the ISet
+    original = {1, 2};
+    iset = original.lock;
 
     expect(iset, {1, 2});
 
@@ -161,19 +136,14 @@ void main() {
 
     expect(original, <int>{1});
     expect(iset, <int>{1, 2});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Ensuring Immutability | ISet.remove() | "
-      "Removing from the original ISet doesn't change it", () {
-    final Set<int> original = {1, 2};
-    final ISet<int> iset = original.lock;
+    // 3.2) Removing from the original ISet doesn't change it
+    original = {1, 2};
+    iset = original.lock;
 
     expect(iset, <int>{1, 2});
 
-    final ISet<int> iSetNew = iset.remove(1);
+    iSetNew = iset.remove(1);
 
     expect(original, <int>{1, 2});
     expect(iset, <int>{1, 2});
@@ -182,35 +152,24 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "Equals Operator | "
-      "ISet with identity-equals compares the set instance, not the items.", () {
-    final ISet<int> mySet = ISet({1, 2}).withIdentityEquals;
-    expect(mySet == mySet, isTrue);
-    expect(mySet == ISet({1, 2}).withIdentityEquals, isFalse);
-    expect(mySet == ISet({2, 1}).withIdentityEquals, isFalse);
-    expect(mySet == {1, 2}.lock, isFalse);
-    expect(mySet == ISet({1, 2, 3}).withIdentityEquals, isFalse);
-  });
+  test("equals (==)", () {
+    // 1) ISet with identity-equals compares the set instance, not the items
+    ISet<int> iset = ISet({1, 2}).withIdentityEquals;
+    expect(iset == iset, isTrue);
+    expect(iset == ISet({1, 2}).withIdentityEquals, isFalse);
+    expect(iset == ISet({2, 1}).withIdentityEquals, isFalse);
+    expect(iset == {1, 2}.lock, isFalse);
+    expect(iset == ISet({1, 2, 3}).withIdentityEquals, isFalse);
 
-  /////////////////////////////////////////////////////////////////////////////
+    // 2) ISet with deep-equals compares the items, not necessarily the list instance
+    iset = ISet({1, 2});
+    expect(iset == iset, isTrue);
+    expect(iset == ISet({1, 2}), isTrue);
+    expect(iset == ISet({2, 1}), isTrue);
+    expect(iset == {1, 2}.lock.withDeepEquals, isTrue);
+    expect(iset == ISet({1, 2, 3}), isFalse);
 
-  test(
-      "Equals Operator | "
-      "ISet with deep-equals compares the items, not necessarily the list instance", () {
-    final ISet<int> mySet = ISet({1, 2});
-    expect(mySet == mySet, isTrue);
-    expect(mySet == ISet({1, 2}), isTrue);
-    expect(mySet == ISet({2, 1}), isTrue);
-    expect(mySet == {1, 2}.lock.withDeepEquals, isTrue);
-    expect(mySet == ISet({1, 2, 3}), isFalse);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Equals Operator | "
-      "ISet with deep-equals is always different from iset with identity-equals", () {
+    // 3) ISet with deep-equals is always different from iset with identity-equals
     expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}).withIdentityEquals, isFalse);
     expect(ISet({1, 2}).withIdentityEquals == ISet({1, 2}).withDeepEquals, isFalse);
     expect(ISet({1, 2}).withDeepEquals == ISet({1, 2}), isTrue);
@@ -219,8 +178,9 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.isIdentityEquals and ISet.isDeepEquals properties", () {
-    final ISet<int> iSet1 = ISet({1, 2}), iSet2 = ISet({1, 2}).withIdentityEquals;
+  test("isIdentityEquals and isDeepEquals properties", () {
+    final ISet<int> iSet1 = ISet({1, 2});
+    final ISet<int> iSet2 = ISet({1, 2}).withIdentityEquals;
 
     expect(iSet1.isIdentityEquals, isFalse);
     expect(iSet1.isDeepEquals, isTrue);
@@ -230,19 +190,19 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.same()", () {
-    final ISet<int> iSet1 = ISet({1, 2});
-    expect(iSet1.same(iSet1), isTrue);
-    expect(iSet1.same(ISet({1, 2})), isFalse);
-    expect(iSet1.same(ISet({1})), isFalse);
-    expect(iSet1.same(ISet({2, 1})), isFalse);
-    expect(iSet1.same(ISet({1, 2}).withIdentityEquals), isFalse);
-    expect(iSet1.same(iSet1.add(2)), isTrue);
+  test("same", () {
+    final ISet<int> iset = ISet({1, 2});
+    expect(iset.same(iset), isTrue);
+    expect(iset.same(ISet({1, 2})), isFalse);
+    expect(iset.same(ISet({1})), isFalse);
+    expect(iset.same(ISet({2, 1})), isFalse);
+    expect(iset.same(ISet({1, 2}).withIdentityEquals), isFalse);
+    expect(iset.same(iset.add(2)), isTrue);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.equalItemsAndConfig method", () {
+  test("equalItemsAndConfig", () {
     final ISet<int> iSet1 = ISet({1, 2});
     expect(iSet1.equalItemsAndConfig(iSet1), isTrue);
     expect(iSet1.equalItemsAndConfig(ISet({1, 2})), isTrue);
@@ -254,7 +214,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.== operator", () {
+  test("==", () {
     final ISet<int> iSet1 = ISet({1, 2});
     expect(iSet1 == iSet1, isTrue);
     expect(iSet1 == ISet({1, 2}), isTrue);
@@ -265,51 +225,37 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.equalItems() | Null", () => expect(ISet({1, 2}).equalItems(null), isFalse));
+  test("equalItems", () {
+    expect(ISet({1, 2}).equalItems(null), isFalse);
+    expect(ISet({1, 2}).equalItems([1, 2]), isTrue);
+    expect(ISet({1, 2}).equalItems([2, 1]), isTrue);
+    expect(ISet({1, 2}).equalItems([1]), isFalse);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.equalItems() | Identity", () => expect(ISet({1, 2}).equalItems([1, 2]), isTrue));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.equalItems() | The order doesn't matter",
-      () => expect(ISet({1, 2}).equalItems([2, 1]), isTrue));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.equalItems() | Different items yield false",
-      () => expect(ISet({1, 2}).equalItems([1]), isFalse));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.hashCode | deepEquals vs deepEquals", () {
-    final ISet<int> iSet1 = ISet({1, 2});
+  test("hashCode", () {
+    // 1) deepEquals vs deepEquals
+    ISet<int> iSet1 = ISet({1, 2});
     expect(iSet1 == ISet({1, 2}), isTrue);
     expect(iSet1 == ISet({1, 2, 3}), isFalse);
     expect(iSet1 == ISet({2, 1}), isTrue);
     expect(iSet1.hashCode, ISet({1, 2}).hashCode);
     expect(iSet1.hashCode, isNot(ISet({1, 2, 3}).hashCode));
     expect(iSet1.hashCode, ISet({2, 1}).hashCode);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.hashCode | identityEquals vs identityEquals", () {
-    final ISet<int> iSet1WithIdentity = ISet({1, 2}).withIdentityEquals;
+    // 2) identityEquals vs identityEquals
+    ISet<int> iSet1WithIdentity = ISet({1, 2}).withIdentityEquals;
     expect(iSet1WithIdentity == ISet({1, 2}).withIdentityEquals, isFalse);
     expect(iSet1WithIdentity == ISet({1, 2, 3}).withIdentityEquals, isFalse);
     expect(iSet1WithIdentity == ISet({2, 1}).withIdentityEquals, isFalse);
     expect(iSet1WithIdentity.hashCode, isNot(ISet({1, 2}).withIdentityEquals.hashCode));
     expect(iSet1WithIdentity.hashCode, isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
     expect(iSet1WithIdentity.hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.hashCode | deepEquals vs identityEquals", () {
-    final ISet<int> iSet1 = ISet({1, 2});
-    final ISet<int> iSet1WithIdentity = iSet1.withIdentityEquals;
+    // 3) deepEquals vs identityEquals
+    iSet1 = ISet({1, 2});
+    iSet1WithIdentity = iSet1.withIdentityEquals;
     expect(iSet1 == iSet1WithIdentity, isFalse);
     expect(ISet({1, 2}) == ISet({1, 2}).withIdentityEquals, isFalse);
     expect(ISet({1, 2, 3}) == ISet({1, 2, 3}).withIdentityEquals, isFalse);
@@ -318,43 +264,37 @@ void main() {
     expect(ISet({1, 2}).hashCode, isNot(ISet({1, 2}).withIdentityEquals.hashCode));
     expect(ISet({1, 2, 3}).hashCode, isNot(ISet({1, 2, 3}).withIdentityEquals.hashCode));
     expect(ISet({2, 1}).hashCode, isNot(ISet({2, 1}).withIdentityEquals.hashCode));
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.hashCode | when cache is on", () {
-    final Set<int> set = {1, 2, 3};
+    // 4) when cache is on
+    Set<int> set = {1, 2, 3};
 
     final ISet<int> iSetWithCache = ISet.unsafe(set, config: ConfigSet(cacheHashCode: true));
 
-    final int hashBefore = iSetWithCache.hashCode;
+    int hashBefore = iSetWithCache.hashCode;
 
     set.add(4);
 
-    final int hashAfter = iSetWithCache.hashCode;
+    int hashAfter = iSetWithCache.hashCode;
 
     expect(hashAfter, hashBefore);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
+    // 5) when cache is off
+    set = {1, 2, 3};
 
-  test("ISet.hashCode | when cache is off", () {
-    final Set<int> set = {1, 2, 3};
+    final ISet<int> iSetWithoutCache = ISet.unsafe(set, config: ConfigSet(cacheHashCode: false));
 
-    final ISet<int> iSetWithCache = ISet.unsafe(set, config: ConfigSet(cacheHashCode: false));
-
-    final int hashBefore = iSetWithCache.hashCode;
+    hashBefore = iSetWithoutCache.hashCode;
 
     set.add(4);
 
-    final int hashAfter = iSetWithCache.hashCode;
+    hashAfter = iSetWithoutCache.hashCode;
 
     expect(hashAfter, isNot(hashBefore));
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.config()", () {
+  test("config", () {
     final ISet<int> iset = ISet({1, 2});
 
     expect(iset.isDeepEquals, isTrue);
@@ -370,7 +310,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.withConfig() factory | different configs", () {
+  test("withConfig", () {
     final ISet<int> iSet1 = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
     final ISet<int> iSet2 = ISet.withConfig({}, ConfigSet(isDeepEquals: false));
 
@@ -379,16 +319,13 @@ void main() {
 
     expect(iSet2, <int>{});
     expect(iSet2.isDeepEquals, isFalse);
+
+    expect(() => {1, 2, 3}.lock.withConfig(null), throwsAssertionError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.withConfig() | Assertion error",
-      () => expect(() => {1, 2, 3}.lock.withConfig(null), throwsAssertionError));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.withConfigFrom()", () {
+  test("withConfigFrom", () {
     final ISet<int> iset = {1, 2, 3}.lock;
     final ISet<int> iSetWithIdentityEquals =
         ISet.withConfig({1, 2, 3}, const ConfigSet(isDeepEquals: false));
@@ -399,46 +336,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("From an empty set", () {
-    final ISet iset = <int>{}.lock;
-
-    expect(iset, isA<ISet>());
-    expect(iset.isEmpty, isTrue);
-    expect(iset.isNotEmpty, isFalse);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("From a set with one int item", () {
-    final ISet iset = {1}.lock;
-
-    expect(iset, isA<ISet<int>>());
-    expect(iset.isEmpty, isFalse);
-    expect(iset.isNotEmpty, isTrue);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("From a set with one null string", () {
-    final String text = null;
-    final ISet<String> typedSet = {text}.lock;
-
-    expect(typedSet, isA<ISet<String>>());
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("From an empty set typed with String", () {
-    final typedSet = <String>{}.lock;
-
-    expect(typedSet, isA<ISet<String>>());
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Creating native mutable sets from immutable sets | "
-      "From the default factory constructor", () {
+  test("default constructor", () {
     const Set<int> exampleSet = {1, 2, 3};
     final ISet<int> iset = ISet(exampleSet);
 
@@ -448,20 +346,9 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("Creating native mutable sets from immutable sets | " "From lock", () {
-    const Set<int> exampleSet = {1, 2, 3};
-    final ISet<int> iset = exampleSet.lock;
-
-    expect(iset.unlock, exampleSet);
-    expect(identical(iset.unlock, exampleSet), isFalse);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "Creating native mutable sets from immutable sets | ISet.unsafe constructor | "
-      "Normal usage", () {
-    final Set<int> set = {1, 2, 3};
+  test("unsafe", () {
+    // 1) Regular Usage
+    Set<int> set = {1, 2, 3};
     final ISet<int> iset = ISet.unsafe(set, config: ConfigSet());
 
     expect(set, {1, 2, 3});
@@ -471,20 +358,17 @@ void main() {
 
     expect(set, {1, 2, 3, 4});
     expect(iset, {1, 2, 3, 4});
-  });
 
-  test(
-      "Creating native mutable sets from immutable sets | ISet.unsafe constructor | "
-      "Disallowing it", () {
+    // 2) Disallowing it
     ImmutableCollection.disallowUnsafeConstructors = true;
-    final Set<int> set = {1, 2, 3};
+    set = {1, 2, 3};
 
     expect(() => ISet.unsafe(set, config: ConfigSet()), throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.flush()", () {
+  test("flush", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6}).add(7).addAll({}).addAll({8, 9});
 
     expect(iset.isFlushed, isFalse);
@@ -497,25 +381,29 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.add()", () {
-    final ISet<int> baseSet = ISet<int>([1]);
+  test("add", () {
+    // 1) Adding a new element
+    ISet<int> baseSet = ISet<int>([1]);
     ISet<int> iset = baseSet.add(2);
 
     expect(iset.unlock, <int>{1, 2});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.add() with a repeated element", () {
-    final ISet<int> baseSet = ISet<int>([1]);
-    ISet<int> iset = baseSet.add(1);
+    // 2) Adding a repeated element
+    baseSet = ISet<int>([1]);
+    iset = baseSet.add(1);
 
     expect(iset.unlock, <int>{1});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.add() and ISet.addAll()", () {
+  test("+", () {
+    expect({1, 2, 3}.lock + [1, 2, 4], {1, 2, 3, 4});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("add and addAll", () {
     final ISet<int> iSet1 = {1, 2, 3}.lock;
     final ISet<int> iSet2 = iSet1.add(4);
     final ISet<int> iSet3 = iSet2.addAll({5, 6});
@@ -530,35 +418,21 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("Adding repeated elements | Adding a repeated element", () {
-    final ISet<int> iset = ISet<int>({1, 2, 3}).add(1);
+  test("addAll", () {
+    // 1) Adding a repeated element
+    ISet<int> iset = ISet<int>({1, 2, 3}).addAll({1});
 
     expect(iset.length, 3);
     expect(iset.unlock, {1, 2, 3});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Adding repeated elements | Adding multiple repeated elements", () {
-    final ISet<int> iset = ISet<int>({1, 2, 3}).addAll({1, 2});
+    // 2) Adding a repeated and a new element
+    iset = ISet<int>({1, 2, 3}).addAll({1, 2});
 
     expect(iset.length, 3);
     expect(iset.unlock, {1, 2, 3});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Adding repeated elements | Adding some repeated elements and another, new one", () {
-    final ISet<int> iset = ISet<int>({1, 2, 3}).addAll({1, 2, 5, 7});
-
-    expect(iset.length, 5);
-    expect(iset.unlock, {1, 2, 3, 5, 7});
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Adding repeated elements | Adding some repeated elements and new ones", () {
-    final ISet<int> iset = ISet<int>({1, 2, 3}).addAll({1, 2, 5, 7, 11, 13});
+    // 3) Adding some repeated and some new elements
+    iset = ISet<int>({1, 2, 3}).addAll({1, 2, 5, 7, 11, 13});
 
     expect(iset.length, 7);
     expect(iset.unlock, {1, 2, 3, 5, 7, 11, 13});
@@ -566,7 +440,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.remove()", () {
+  test("remove", () {
     final ISet<int> iSet1 = {1, 2, 3}.lock;
 
     final ISet<int> iSet2 = iSet1.remove(2);
@@ -589,7 +463,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.any()", () {
+  test("any", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.any((int v) => v == 4), isTrue);
     expect(iset.any((int v) => v == 100), isFalse);
@@ -597,14 +471,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.cast()", () {
+  test("cast", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.cast<num>(), isA<ISet<num>>());
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.contains()", () {
+  test("contains", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.contains(2), isTrue);
     expect(iset.contains(4), isTrue);
@@ -614,7 +488,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.every()", () {
+  test("every", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.every((int v) => v > 0), isTrue);
     expect(iset.every((int v) => v < 0), isFalse);
@@ -623,7 +497,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.expand()", () {
+  test("expand", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.expand((int v) => {v, v}),
         // ignore: equal_elements_in_set
@@ -633,15 +507,13 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.length", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+  test("length", () {
+    // 1) Regular usage
+    ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.length, 6);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.length when the set is empty", () {
-    final ISet<int> iset = ISet.empty();
+    // 2) When the set is empty
+    iset = ISet.empty();
 
     expect(iset.length, 0);
     expect(iset.isEmpty, isTrue);
@@ -649,7 +521,31 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.anyItem", () {
+  test("first", () {
+    // 1) Regular usage
+    expect({1, 2, 3, 4, 5, 6}.lock.first, 1);
+    expect({3, 6, 4, 1, 2, 5}.lock.first, 1);
+
+    // 2) Without sorting
+    final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
+    expect(iset.first, 100);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("last", () {
+    // 1) Regular usage
+    expect({1, 2, 3, 4, 5, 6}.lock.last, 6);
+    expect({3, 6, 4, 1, 2, 5}.lock.last, 6);
+
+    // 2) Without sorting
+    final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
+    expect(iset.last, 5);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("anyItem", () {
     final ISet<List<int>> iset = <List<int>>{
       [1, 2, 3],
       [11, 12]
@@ -660,49 +556,21 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.first", () {
-    expect({1, 2, 3, 4, 5, 6}.lock.first, 1);
-    expect({3, 6, 4, 1, 2, 5}.lock.first, 1);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.first | without sorting", () {
-    final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
-    expect(iset.first, 100);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.last method", () {
-    expect({1, 2, 3, 4, 5, 6}.lock.last, 6);
-    expect({3, 6, 4, 1, 2, 5}.lock.last, 6);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.last | without sorting", () {
-    final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
-    expect(iset.last, 5);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.firstOrNull", () {
+  test("firstOrNull", () {
     expect(<int>{}.lock.firstOrNull, isNull);
     expect({1, 2, 3}.lock.firstOrNull, 1);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.lastOrNull", () {
+  test("lastOrNull", () {
     expect(<int>{}.lock.lastOrNull, isNull);
     expect({1, 2, 3}.lock.lastOrNull, 3);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.singleOrNull", () {
+  test("singleOrNull", () {
     expect(<int>{}.lock.singleOrNull, isNull);
     expect(<int>{1}.lock.singleOrNull, 1);
     expect({1, 2, 3}.lock.singleOrNull, isNull);
@@ -710,21 +578,21 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.firstOr()", () {
+  test("firstOr", () {
     expect(<int>{}.lock.firstOr(10), 10);
     expect(<int>{1, 2, 3}.lock.firstOr(10), 1);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.lastOr()", () {
+  test("lastOr", () {
     expect(<int>{}.lock.lastOr(10), 10);
     expect(<int>{1, 2, 3}.lock.lastOr(10), 3);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.singleOr()", () {
+  test("singleOr", () {
     expect(<int>{}.lock.singleOr(10), 10);
     expect(<int>{1}.lock.singleOr(10), 1);
     expect(<int>{1, 2, 3}.lock.singleOr(10), 10);
@@ -732,18 +600,18 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.single() | State exception", () {
+  test("single", () {
+    // 1) Regular usage
+    expect({10}.lock.single, 10);
+
+    // 2) Exception when more than 1 item
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(() => iset.single, throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.single() | Access", () => expect({10}.lock.single, 10));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.firstWhere()", () {
+  test("firstWhere", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.firstWhere((int v) => v > 1, orElse: () => 100), 2);
     expect(iset.firstWhere((int v) => v > 4, orElse: () => 100), 5);
@@ -753,14 +621,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.fold()", () {
+  test("fold", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.fold(100, (int p, int e) => p * (1 + e)), 504000);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.followedBy()", () {
+  test("followedBy", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.followedBy({7, 8}).unlock, {1, 2, 3, 4, 5, 6, 7, 8});
     expect(iset.followedBy(<int>{}.lock.add(7).addAll({8, 9})).unlock, {1, 2, 3, 4, 5, 6, 7, 8, 9});
@@ -768,7 +636,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.forEach()", () {
+  test("forEach", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     int result = 100;
     iset.forEach((int v) => result *= 1 + v);
@@ -777,7 +645,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.join()", () {
+  test("join", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.join(","), "1,2,3,4,5,6");
     expect(<int>{}.lock.join(","), "");
@@ -785,7 +653,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.lastWhere()", () {
+  test("lastWhere", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.lastWhere((int v) => v < 2, orElse: () => 100), 1);
     expect(iset.lastWhere((int v) => v < 5, orElse: () => 100), 4);
@@ -797,7 +665,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.map()", () {
+  test("map", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect({1, 2, 3}.lock.map((int v) => v + 1).unlock, {2, 3, 4});
     expect(iset.map((int v) => v + 1).unlock, {2, 3, 4, 5, 6, 7});
@@ -805,37 +673,32 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.reduce() | Regular usage", () {
+  test("reduce", () {
+    // 1) Regular usage
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.reduce((int p, int e) => p * (1 + e)), 2520);
     expect({5}.lock.reduce((int p, int e) => p * (1 + e)), 5);
+
+    // 2) Exception
+    expect(() => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "ISet.reduce() | State exception",
-      () => expect(
-          () => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.singleWhere() | Regular usage", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+  test("singleWhere", () {
+    // 1) Regular usage
+    ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.singleWhere((int v) => v == 4, orElse: () => 100), 4);
     expect(iset.singleWhere((int v) => v == 50, orElse: () => 100), 100);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.singleWhere() | State exception", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+    // 2) Exception
+    iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(() => iset.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.skip()", () {
+  test("skip", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.skip(1).unlock, {2, 3, 4, 5, 6});
     expect(iset.skip(3).unlock, {4, 5, 6});
@@ -845,7 +708,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.skipWhile()", () {
+  test("skipWhile", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.skipWhile((int v) => v < 3).unlock, {3, 4, 5, 6});
     expect(iset.skipWhile((int v) => v < 5).unlock, {5, 6});
@@ -855,7 +718,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.take()", () {
+  test("take", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.take(0).unlock, <int>{});
     expect(iset.take(1).unlock, {1});
@@ -866,7 +729,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.takeWhile()", () {
+  test("takeWhile", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.takeWhile((int v) => v < 3).unlock, {1, 2});
     expect(iset.takeWhile((int v) => v < 5).unlock, {1, 2, 3, 4});
@@ -876,42 +739,36 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.toList() | Regular usage", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+  test("toList", () {
+    // 1) Regular usage
+    ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
     expect(iset.unlock, [1, 2, 3, 4, 5, 6]);
-  });
 
-  test(
-      "ISet.toList() | with compare",
-      () => expect({1, 2, 3}.lock.add(10).add(5).toList(compare: (int a, int b) => -a.compareTo(b)),
-          [10, 5, 3, 2, 1]));
+    // 2) With compare
+    expect({1, 2, 3}.lock.add(10).add(5).toList(compare: (int a, int b) => -a.compareTo(b)),
+        [10, 5, 3, 2, 1]);
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.toList() | Unsupported exception", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+    // 3) Unsupported operation
+    iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(() => iset.toList(growable: false)..add(7), throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.toIList()", () {
+  test("toIList", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.toIList(), IList([1, 2, 3, 4, 5, 6]));
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.toSet()", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+  test("toSet", () {
+    ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
     expect(iset.unlock, [1, 2, 3, 4, 5, 6]);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.toSet() | with compare", () {
+    // 2) With compare
     final Set<int> set = {1, 2, 3, 10, 5}.lock.toSet(compare: (int a, int b) => -a.compareTo(b));
     expect(set, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
     expect(set.toList(), [10, 5, 3, 2, 1]);
@@ -919,7 +776,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.where()", () {
+  test("where", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.where((int v) => v < 0).unlock, <int>{});
     expect(iset.where((int v) => v < 3).unlock, {1, 2});
@@ -929,31 +786,41 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.whereType()", () => expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5}));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.toString(false)", () {
-    expect({}.lock.toString(false), "{}");
-    expect({1}.lock.toString(false), "{1}");
-    expect({1, 2, 3}.lock.toString(false), "{1, 2, 3}");
+  test("whereType", () {
+    expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.toString() | ImmutableCollection.prettyPrint is Off", () {
+  test("toString", () {
+    // 1) Global configuration prettyPrint == false
     ImmutableCollection.prettyPrint = false;
-    expect({}.lock.toString(false), "{}");
-    expect({1}.lock.toString(false), "{1}");
+    expect({}.lock.toString(), "{}");
+    expect({1}.lock.toString(), "{1}");
     expect({1, 2, 3}.lock.toString(), "{1, 2, 3}");
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
+    // 2) Global configuration prettyPrint == true
+    ImmutableCollection.prettyPrint = true;
+    expect({}.lock.toString(), "{}");
+    expect({1}.lock.toString(), "{1}");
+    expect(
+        {1, 2, 3}.lock.toString(),
+        "{\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
+        "}");
 
-  test("ISet.toString(true)", () {
+    // 3) Local prettyPrint = false
     ImmutableCollection.prettyPrint = true;
     expect({}.lock.toString(false), "{}");
     expect({1}.lock.toString(false), "{1}");
+    expect({1, 2, 3}.lock.toString(false), "{1, 2, 3}");
+
+    // 4) Local prettyPrint = true
+    ImmutableCollection.prettyPrint = false;
+    expect({}.lock.toString(true), "{}");
+    expect({1}.lock.toString(true), "{1}");
     expect(
         {1, 2, 3}.lock.toString(true),
         "{\n"
@@ -963,23 +830,31 @@ void main() {
         "}");
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("unlockSorted", () {
+    final ISet<int> iset = {1, 2, 3}.lock.add(10).add(5);
+
+    expect(iset.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
+  });
+
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.toString() | ImmutableCollection.prettyPrint is On", () {
-    expect({}.lock.toString(false), "{}");
-    expect({1}.lock.toString(false), "{1}");
-    expect(
-        {1, 2, 3}.lock.toString(),
-        "{\n"
-        "   1,\n"
-        "   2,\n"
-        "   3\n"
-        "}");
+  test("unlockView", () {
+    expect({1, 2, 3}.lock.unlockView,
+        allOf(isA<UnmodifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3}));
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("unlockLazy", () {
+    expect({1, 2, 3}.lock.unlockLazy,
+        allOf(isA<ModifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3}));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.iterator getter", () {
+  test("iterator", () {
     ISet<int> iset = {2, 5, 3, 7, 9, 6, 1}.lock;
     expect(iset.config.sort, isTrue);
 
@@ -1005,7 +880,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet of MapEntry gets special treatment | Equals", () {
+  test("ISet of MapEntry gets special treatment", () {
     final ISet<MapEntry<String, int>> iSet1 = ISet([MapEntry("a", 1)]).withDeepEquals,
         iSet2 = ISet([MapEntry("a", 1)]).withDeepEquals;
 
@@ -1014,7 +889,8 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.toggle() | Toggling an existing element", () {
+  test("toggle", () {
+    // 1) Toggling an existing element
     ISet<int> iset = {1, 2, 3}.lock;
     expect(iset.contains(3), isTrue);
 
@@ -1023,12 +899,9 @@ void main() {
 
     iset = iset.toggle(3);
     expect(iset.contains(3), isTrue);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.toggle() | Toggling a nonexistent element", () {
-    ISet<int> iset = {1, 2, 3}.lock;
+    // 2) Toggling an nonexistent element
+    iset = {1, 2, 3}.lock;
     expect(iset.contains(4), isFalse);
 
     iset = iset.toggle(4);
@@ -1040,14 +913,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.elementAt()", () {
+  test("elementAt", () {
     final ISet<int> iset = {1, 2, 3}.lock;
     expect(() => iset.elementAt(0), throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.clear()", () {
+  test("clear", () {
     final ISet<int> iset = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
 
     final ISet<int> iSetCleared = iset.clear();
@@ -1058,33 +931,33 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.containsAll()", () {
-    final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
+  test("containsAll", () {
+    final ISet<int> iset = {1, 2, 3, 4}.lock;
     // TODO: Marcelo, o argumento desses métodos não deveria ser `Iterable` ou `ISet`?
-    expect(iSet1.containsAll([2, 2, 3]), isTrue);
-    expect(iSet1.containsAll({1, 2, 3, 4}), isTrue);
-    expect(iSet1.containsAll({10, 20, 30, 40}), isFalse);
+    expect(iset.containsAll([2, 2, 3]), isTrue);
+    expect(iset.containsAll({1, 2, 3, 4}), isTrue);
+    expect(iset.containsAll({10, 20, 30, 40}), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.difference()", () {
-    final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
-    expect(iSet1.difference({1, 2, 5}), {3, 4});
-    expect(iSet1.difference({1, 2, 3, 4}), <int>{});
+  test("difference", () {
+    final ISet<int> iset = {1, 2, 3, 4}.lock;
+    expect(iset.difference({1, 2, 5}), {3, 4});
+    expect(iset.difference({1, 2, 3, 4}), <int>{});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.intersection()", () {
-    final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
-    expect(iSet1.intersection({1, 2, 5}), {1, 2});
-    expect(iSet1.intersection({10, 20, 50}), <int>{});
+  test("intersection", () {
+    final ISet<int> iset = {1, 2, 3, 4}.lock;
+    expect(iset.intersection({1, 2, 5}), {1, 2});
+    expect(iset.intersection({10, 20, 50}), <int>{});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.union()", () {
+  test("union", () {
     final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
     expect(iSet1.union({1}), {1, 2, 3, 4});
     expect(iSet1.union({1, 2, 5}), {1, 2, 3, 4, 5});
@@ -1092,7 +965,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.lookup()", () {
+  test("lookup", () {
     final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
     expect(iSet1.lookup(1), 1);
     expect(iSet1.lookup(10), isNull);
@@ -1100,7 +973,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.removeAll()", () {
+  test("removeAll", () {
     final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
     expect(iSet1.removeAll({}), {1, 2, 3, 4});
     expect(iSet1.removeAll({2, 3}), {1, 4});
@@ -1108,7 +981,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.removeWhere()", () {
+  test("removeWhere", () {
     final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
     expect(iSet1.removeWhere((int element) => element > 10), {1, 2, 3, 4});
     expect(iSet1.removeWhere((int element) => element > 2), {1, 2});
@@ -1116,7 +989,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.retainAll()", () {
+  test("retainAll", () {
     final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
     expect(iSet1.retainAll({}), <int>{});
     expect(iSet1.retainAll({2, 3}), {2, 3});
@@ -1124,7 +997,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.retainWhere()", () {
+  test("retainWhere", () {
     final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
     expect(iSet1.retainWhere((int element) => element > 10), <int>{});
     expect(iSet1.retainWhere((int element) => element < 2), <int>{1});
@@ -1168,58 +1041,22 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.flushFactor", () => expect(ISet.flushFactor, 30));
+  test("flushFactor", () {
+    // 1) Default value
+    expect(ISet.flushFactor, 30);
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.flushFactor setter", () {
+    // 2) Setter
     ISet.flushFactor = 200;
     expect(ISet.flushFactor, 200);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.flushFactor setter | can't be smaller than or equal to 0", () {
+    // 3) Can't be smaller than or equal to 0
     expect(() => ISet.flushFactor = 0, throwsStateError);
     expect(() => ISet.flushFactor = -100, throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("ISet.asyncAutoFlush", () => expect(ISet.asyncAutoflush, isTrue));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("lockConfig()", () {
-    ImmutableCollection.lockConfig();
-
-    expect(() => ISet.flushFactor = 1000, throwsStateError);
-    expect(() => ISet.asyncAutoflush = false, throwsStateError);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.unlockSorted", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(10).add(5);
-
-    expect(iset.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
+  test("asyncAutoFlush", () {
+    expect(ISet.asyncAutoflush, isTrue);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "ISet.unlockView",
-      () => expect({1, 2, 3}.lock.unlockView,
-          allOf(isA<UnmodifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3})));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test(
-      "ISet.unlockLazy",
-      () => expect({1, 2, 3}.lock.unlockLazy,
-          allOf(isA<ModifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3})));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("ISet.+()", () => expect({1, 2, 3}.lock + [1, 2, 4], {1, 2, 3, 4}));
 }
