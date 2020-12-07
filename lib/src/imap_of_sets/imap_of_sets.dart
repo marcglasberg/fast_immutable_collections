@@ -230,7 +230,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Find the [key]/[set] entry, and add the [value] to the [set].
   /// If the [key] doesn't exist, will first create it with an empty [set],
-  /// and then add the [value] to it.
+  /// and then add the [value] to it. If the [value] already exists in the
+  /// [set], nothing happens.
   ///
   IMapOfSets<K, V> add(K key, V value) {
     ISet<V> set = _mapOfSets[key] ?? ISet<V>();
@@ -387,8 +388,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// if it exists in the set. Otherwise, adds it to the set.
   /// If the [key] doesn't exist, it will be created and then have the new value
   /// added to the new, corresponding set.
-  IMapOfSets<K, V> toggle(K key, V value) =>
-      contains(key, value) ? remove(key, value) : add(key, value);
+  ///
+  /// However, if can force the [value] to be added or removed by providing
+  /// [state] true or false.
+  ///
+  IMapOfSets<K, V> toggle(K key, V value, {bool state}) =>
+      (state ?? !contains(key, value)) ? add(key, value) : remove(key, value);
 
   /// - When [removeEmptySets] is `true`:
   /// If the given [set] is not empty, add the [key]/[set] entry.
