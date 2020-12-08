@@ -69,6 +69,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   factory IMapOfSets([Map<K, Iterable<V>> mapOfSets]) => //
       IMapOfSets.withConfig(mapOfSets, defaultConfig);
 
+  /// Create an [IMapOfSets] from a map of sets and a [ConfigMapOfSets].
   factory IMapOfSets.withConfig(
     Map<K, Iterable<V>> mapOfSets,
     ConfigMapOfSets config,
@@ -136,12 +137,16 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   IMapOfSets._unsafe(this._mapOfSets, {@required this.config});
 
+  /// The internal [ISet] configuration.
   ConfigSet get configSet => config.asConfigSet;
 
+  /// The internal [IMap] configuration.
   ConfigMap get configMap => config.asConfigMap;
 
+  /// See also: [ConfigMapOfSets]
   bool get isDeepEquals => config.isDeepEquals;
 
+  /// See also: [ConfigMapOfSets]
   bool get isIdentityEquals => !config.isDeepEquals;
 
   /// Creates a new map-of-sets with the given [config] ([ConfigMapOfSets]).
@@ -165,6 +170,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
   }
 
+  /// Unlocks the map, returning a regular (mutable, unordered) `Map<K, Set<V>` of type
+  /// [HashMap]. This map is "safe", in the sense that is independent from
+  /// the original [IMap].
   Map<K, Set<V>> get unlock {
     Map<K, Set<V>> result = {};
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
@@ -188,8 +196,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// it will return [(1:{a,b}), 2:{x, y}].
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
+  /// Returns an [Iterable] of the map keys. Note this is always fast
+  /// and **UNORDERED**. If you need order, please use [keyList].
   Iterable<K> get keys => _mapOfSets.keys;
 
+  /// Returns an [Iterable] of the map values. Note this is always fast
+  /// and **UNORDERED**. If you need order, please use [valueList].
   Iterable<ISet<V>> get sets => _mapOfSets.values;
 
   /// Return all values of all sets, including duplicates.
@@ -213,10 +225,13 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     }
   }
 
+  /// Returns an [ISet] of the [MapEntry]'s.
   ISet<MapEntry<K, ISet<V>>> get entriesAsSet => ISet(entries).withDeepEquals;
 
+  /// Returns an [ISet] of the keys.
   ISet<K> get keysAsSet => ISet(keys).withDeepEquals;
 
+  /// Returns an [ISet] of the internal sets.
   ISet<ISet<V>> get setsAsSet => ISet(sets).withDeepEquals;
 
   /// Return all [values] of all [sets], removing duplicates.
@@ -232,11 +247,14 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Order is undefined.
   IList<K> get keysAsList => IList(keys).withDeepEquals;
 
+  /// Returns a list of the internal sets.
   IList<ISet<V>> get setsAsList => IList(sets).withDeepEquals;
 
+  /// Returns `true` if there are no elements in this collection.
   @override
   bool get isEmpty => _mapOfSets.isEmpty;
 
+  /// Returns `true` if there is at least one element in this collection.
   @override
   bool get isNotEmpty => _mapOfSets.isNotEmpty;
 
@@ -485,6 +503,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return entriesWithValue;
   }
 
+  /// Returns a [Set] of the keys which contain [value].
   Set<K> allKeysWithValue(V value) {
     Set<K> keysWithValue = {};
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
@@ -500,6 +519,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return `true` if the given [key] entry exists, and its set contains the given [value].
   bool contains(K key, V value) => get(key).contains(value);
 
+  /// Returns a string representation of (some of) the elements of `this`.
+  ///
+  /// Use either the [prettyPrint] or the [ImmutableCollection.prettyPrint] parameters to get a
+  /// prettier print.
+  ///
+  /// See also: [ImmutableCollection]
   @override
   String toString([bool prettyPrint]) => _mapOfSets.toString(prettyPrint);
 
@@ -531,6 +556,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   @override
   bool equalItems(covariant Iterable<MapEntry<K, ISet<V>>> other) => _mapOfSets.equalItems(other);
 
+  /// Will return `true` only if the list items are equal, and the map of sets configurations
+  /// ([ConfigMapOfSets]) are equal. This may be slow for very large maps, since it compares each
+  /// item, one by one.
   @override
   bool equalItemsAndConfig(IMapOfSets<K, V> other) {
     if (identical(this, other)) return true;
@@ -647,8 +675,11 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     }
   }
 
+  /// Applies the function [f] to each element.
   void forEach(void Function(K key, ISet<V> set) f) => _mapOfSets.forEach(f);
 
+  /// Returns a new map where all entries of this map are transformed by the given [mapper]
+  /// function.
   IMapOfSets<RK, RV> map<RK, RV>(
     MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
     ConfigMapOfSets config,
