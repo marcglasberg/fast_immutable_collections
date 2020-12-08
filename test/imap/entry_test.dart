@@ -10,7 +10,9 @@ void main() {
     expect(entry.value, 1);
   });
 
-  test("MapEntryExtension.compareKeyAndValue()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("MapEntryExtension.compareKeyAndValue", () {
     expect(
         MapEntry<String, int>(null, null).compareKeyAndValue(MapEntry<String, int>(null, null)), 0);
     expect(MapEntry<String, int>(null, null).compareKeyAndValue(null), -1);
@@ -20,21 +22,27 @@ void main() {
     expect(MapEntry<String, int>("a", 2).compareKeyAndValue(MapEntry<String, int>("b", 1)), -1);
   });
 
-  test("Normal constructor", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Default constructor", () {
     const Entry<String, int> entry = Entry("a", 1);
 
     expect(entry.key, "a");
     expect(entry.value, 1);
   });
 
-  test("Entry.from() static method", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("from", () {
     final Entry<String, int> entry = Entry.from<String, int>(MapEntry<String, int>("a", 1));
 
     expect(entry.key, "a");
     expect(entry.value, 1);
   });
 
-  test("Entry.== operator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("==", () {
     final Entry<String, int> entry1 = Entry("a", 1);
     expect(entry1, entry1);
     expect(entry1, Entry("a", 1));
@@ -42,7 +50,9 @@ void main() {
     expect(entry1 == Entry("a", 2), isFalse);
   });
 
-  test("Entry.hashCode()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("hashCode", () {
     final Entry<String, int> entry1 = Entry("a", 1);
     expect(entry1 == Entry("a", 1), isTrue);
     expect(entry1 == Entry("b", 1), isFalse);
@@ -50,13 +60,17 @@ void main() {
     expect(entry1.hashCode, isNot(Entry("b", 1).hashCode));
   });
 
-  test("Entry.toString()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("toString", () {
     const Entry<String, int> entry = Entry("a", 1);
 
     expect(entry.toString(), "Entry(a: 1)");
   });
 
-  test("Entry.compareTo()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("compareTo", () {
     expect(Entry<String, int>(null, null).compareTo(Entry<String, int>(null, null)), 0);
     expect(Entry<String, int>("a", 1).compareTo(Entry<String, int>("a", 1)), 0);
     expect(Entry<String, int>("a", 1).compareTo(Entry<String, int>("b", 1)), -1);
@@ -64,4 +78,6 @@ void main() {
     expect(Entry<String, int>("a", 1).compareTo(Entry<String, int>("b", 2)), -1);
     expect(Entry<String, int>("a", 2).compareTo(Entry<String, int>("b", 1)), -1);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

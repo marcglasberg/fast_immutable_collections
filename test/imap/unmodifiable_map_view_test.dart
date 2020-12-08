@@ -8,7 +8,9 @@ void main() {
     expect(UnmodifiableMapView(null).isEmpty, isTrue);
   });
 
-  test("Non-mutable operations | UnmodifiableMapView.[] operator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("[]", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
@@ -25,7 +27,9 @@ void main() {
     });
   });
 
-  test("Non-mutable operations | UnmodifiableMapView.keys getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("keys", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
@@ -40,7 +44,9 @@ void main() {
     });
   });
 
-  test("Non-mutable operations | UnmodifiableMapView.lock getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("lock", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
@@ -52,7 +58,9 @@ void main() {
     views.forEach((UnmodifiableMapView<String, int> view) => expect(view.lock, baseMap.lock));
   });
 
-  test("Mutations are not allowed | UnmodifiableMapView.[]= operator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("[]=", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
@@ -65,7 +73,9 @@ void main() {
         expect(() => view["a"] = 10, throwsUnsupportedError));
   });
 
-  test("Mutations are not allowed | UnmodifiableMapView.clear()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("clear", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
@@ -78,7 +88,9 @@ void main() {
         expect(() => view.clear(), throwsUnsupportedError));
   });
 
-  test("Mutations are not allowed | UnmodifiableMapView.remove()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("remove", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);

@@ -6,7 +6,7 @@ import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:fast_immutable_collections/src/imap/m_replace.dart";
 
 void main() {
-  test("Emptiness Properties", () {
+  test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -14,23 +14,27 @@ void main() {
     expect(mReplace.isNotEmpty, isTrue);
   });
 
-  test("MReplace.contains()", () {
-    const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
-    final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("contains", () {
+    // 1) Regular usage
+    Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
+    MFlat<String, int> mFlat = MFlat(originalMap);
+    MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
     expect(mReplace.contains("a", 2), isTrue);
     expect(mReplace.contains("a", 1), isFalse);
-  });
 
-  test("MReplace.contains() | On the the content that's not been replaced", () {
-    const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
-    final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    // 2) On the the content that's not been replaced
+    originalMap = {"a": 1, "b": 2, "c": 3};
+    mFlat = MFlat(originalMap);
+    mReplace = MReplace(mFlat, "a", 2);
     expect(mReplace.contains("b", 2), isTrue);
     expect(mReplace.contains("c", 3), isTrue);
   });
 
-  test("MReplace.containsKey()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("containsKey", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -38,12 +42,14 @@ void main() {
     mReplace.keys.forEach((String key) => expect(finalMap.containsKey(key), isTrue));
   });
 
-  test("MReplace.containsValue() | simple usage", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("containsValue", () {
+    // 1) simple usage
     expect(MReplace(MFlat({"a": 1, "b": 2, "c": 3}), "a", 2).containsValue(2), isTrue);
     expect(MReplace(MFlat({"a": 1, "b": 2, "c": 3}), "a", 2).containsValue(10), isFalse);
-  });
 
-  test("MReplace.containsValue()", () {
+    // 2)
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -51,7 +57,9 @@ void main() {
     mReplace.values.forEach((int value) => expect(finalMap.containsValue(value), isTrue));
   });
 
-  test("MReplace.entries getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("entries", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -60,7 +68,9 @@ void main() {
         .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
-  test("MReplace.keys getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("keys", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -68,7 +78,9 @@ void main() {
     mReplace.keys.forEach((String key) => expect(finalMap.containsKey(key), isTrue));
   });
 
-  test("MReplace.values getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("values", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -76,7 +88,9 @@ void main() {
     mReplace.values.forEach((int value) => expect(finalMap.containsValue(value), isTrue));
   });
 
-  test("MReplace.[] Operator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("[]", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -84,14 +98,18 @@ void main() {
     mReplace.forEach((String key, int value) => expect(value, finalMap[key]));
   });
 
-  test("MReplace.length getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("length", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
     expect(mReplace.length, 3);
   });
 
-  test("Iterator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("iterator", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
@@ -101,12 +119,15 @@ void main() {
     expect(result, finalMap);
   });
 
-  test(
-      "Ensuring Immutability | MReplace.add() | "
-      "Changing the passed mutable map doesn't change the MReplace", () {
-    final Map<String, int> original = {"a": 1, "b": 2};
-    final MFlat<String, int> mFlat = MFlat(original);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Ensuring Immutability", () {
+    // 1) add
+
+    // 1.1) Changing the passed mutable map doesn't change the MReplace
+    Map<String, int> original = {"a": 1, "b": 2};
+    MFlat<String, int> mFlat = MFlat(original);
+    MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
@@ -114,36 +135,29 @@ void main() {
 
     expect(original, <String, int>{"a": 1, "b": 2, "c": 3, "d": 4, "e": 5});
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
-  });
 
-  test(
-      "Ensuring Immutability | MReplace.add() | "
-      "Adding to the original MReplace doesn't change it", () {
-    const Map<String, int> original = {"a": 1, "b": 2};
-    final MFlat<String, int> mFlat = MFlat(original);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
+    // 1.2) Adding to the original MReplace doesn't change it
+    original = {"a": 1, "b": 2};
+    mFlat = MFlat(original);
+    mReplace = MReplace(mFlat, "b", 4);
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
-    final M<String, int> m = mReplace.add(key: "c", value: 3);
+    M<String, int> m = mReplace.add(key: "c", value: 3);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
     expect(m.unlock, <String, int>{"a": 1, "b": 4, "c": 3});
-  });
 
-  test(
-      "Ensuring Immutability | MReplace.add() | "
-      "If the item being passed is a variable, a pointer to it shouldn't exist inside MReplace",
-      () {
-    const Map<String, int> original = {"a": 1, "b": 2};
-    final MFlat<String, int> mFlat = MFlat(original);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
+    // 1.3) If the item being passed is a variable, a pointer to it shouldn't exist inside MReplace
+    original = {"a": 1, "b": 2};
+    mFlat = MFlat(original);
+    mReplace = MReplace(mFlat, "b", 4);
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
     int willChange = 4;
-    final M<String, int> m = mReplace.add(key: "c", value: willChange);
+    m = mReplace.add(key: "c", value: willChange);
 
     willChange = 5;
 
@@ -151,51 +165,46 @@ void main() {
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
     expect(willChange, 5);
     expect(m.unlock, <String, int>{"a": 1, "b": 4, "c": 4});
-  });
 
-  test(
-      "Ensuring Immutability | MReplace.addAll() | "
-      "Changing the passed immutable map doesn't change the original MReplace", () {
-    const Map<String, int> original = {"a": 1, "b": 2};
-    final MFlat<String, int> mFlat = MFlat(original);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
+    // 2) addAll
+
+    // 2.1) Changing the passed immutable map doesn't change the original MReplace
+    original = {"a": 1, "b": 2};
+    mFlat = MFlat(original);
+    mReplace = MReplace(mFlat, "b", 4);
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
-    final M<String, int> m = mReplace.addAll(<String, int>{"c": 3, "d": 4}.lock);
+    m = mReplace.addAll(<String, int>{"c": 3, "d": 4}.lock);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
     expect(m.unlock, <String, int>{"a": 1, "b": 4, "c": 3, "d": 4});
-  });
 
-  test(
-      "Ensuring Immutability | MReplace.addAll() | "
-      "If the items being passed are from a variable, "
-      "it shouldn't have a pointer to the variable", () {
-    final Map<String, int> original = {"a": 1, "b": 2};
-    final MFlat<String, int> mFlat = MFlat(original);
+    // 2.2) If the items being passed are from a variable, it shouldn't have a pointer to the
+    // variable
+    original = {"a": 1, "b": 2};
+    mFlat = MFlat(original);
     final MReplace<String, int> mReplace1 = MReplace(mFlat, "b", 4),
         mReplace2 = MReplace(mFlat, "b", 5);
 
     expect(mReplace1.unlock, <String, int>{"a": 1, "b": 4});
     expect(mReplace2.unlock, <String, int>{"a": 1, "b": 5});
 
-    final M<String, int> m = mReplace1.addAll(IMap(mReplace2.unlock));
+    m = mReplace1.addAll(IMap(mReplace2.unlock));
     original.addAll({"z": 5});
 
     expect(original, <String, int>{"a": 1, "b": 2, "z": 5});
     expect(mReplace1.unlock, <String, int>{"a": 1, "b": 4});
     expect(mReplace2.unlock, <String, int>{"a": 1, "b": 5});
     expect(m.unlock, <String, int>{"a": 1, "b": 5});
-  });
 
-  test(
-      "Ensuring Immutability | MReplace.remove() | "
-      "Changing the passed mutable map doesn't change the MReplace", () {
-    final Map<String, int> original = {"a": 1, "b": 2};
-    final MFlat<String, int> mFlat = MFlat(original);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
+    // 3) remove
+
+    // 3.1) Changing the passed mutable map doesn't change the MReplace
+    original = {"a": 1, "b": 2};
+    mFlat = MFlat(original);
+    mReplace = MReplace(mFlat, "b", 4);
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
@@ -203,18 +212,15 @@ void main() {
 
     expect(original, <String, int>{"a": 1});
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
-  });
 
-  test(
-      "Ensuring Immutability | MReplace.remove() | "
-      "Removing from the original MReplace doesn't change it", () {
-    final Map<String, int> original = {"a": 1, "b": 2};
-    final MFlat<String, int> mFlat = MFlat(original);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
+    // 3.2) Removing from the original MReplace doesn't change it
+    original = {"a": 1, "b": 2};
+    mFlat = MFlat(original);
+    mReplace = MReplace(mFlat, "b", 4);
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
-    final M<String, int> m = mReplace.remove("b");
+    m = mReplace.remove("b");
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});

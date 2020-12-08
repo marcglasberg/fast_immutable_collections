@@ -36,6 +36,8 @@ void main() {
     expect(imap, isA<IMap<String, int>>());
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("lockUnsafe", () {
     final Map<String, int> map = {"a": 1, "b": 2};
     final IMap<String, int> imap = map.lockUnsafe;
@@ -47,4 +49,6 @@ void main() {
 
     expect(map, imap.unlock);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
