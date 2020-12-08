@@ -1538,6 +1538,38 @@ void main() {
     });
   });
 
+  test("IMapOfSets.toggle() | force toggle", () {
+    final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
+      "a": {1},
+      "b": {1, 2, 3},
+    });
+
+    expect(iMapOfSets.toggle("a", 10, state: true).unlock, {
+      "a": {1, 10},
+      "b": {1, 2, 3},
+    });
+
+    expect(iMapOfSets.toggle("a", 10, state: false).unlock, {
+      "a": {1},
+      "b": {1, 2, 3},
+    });
+
+    expect(iMapOfSets.toggle("a", 1, state: false).unlock, {
+      "b": {1, 2, 3},
+    });
+
+    expect(iMapOfSets.toggle("c", 10, state: false).unlock, {
+      "a": {1},
+      "b": {1, 2, 3},
+    });
+
+    expect(iMapOfSets.toggle("c", 10, state: true).unlock, {
+      "a": {1},
+      "b": {1, 2, 3},
+      "c": {10},
+    });
+  });
+
   test(
       "IMapOfSets.toggle() | "
       "nullifying or emptying the set depending on ConfigMapOfSets.removeEmptySets", () {
