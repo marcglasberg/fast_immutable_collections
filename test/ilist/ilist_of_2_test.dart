@@ -10,13 +10,17 @@ void main() {
     expect(iListOf2.last, 1);
   });
 
-  test("IListOf2.toString()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("toString", () {
     const IListOf2 iListOf2 = IListOf2(2, 1);
 
     expect(iListOf2.toString(), "[2, 1]");
   });
 
-  test("IListOf2.==()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("==", () {
     final IListOf2<int> iListOf2 = IListOf2(2, 1);
 
     expect(iListOf2 == iListOf2, isTrue);
@@ -24,7 +28,9 @@ void main() {
     expect(iListOf2 == IListOf2<int>(1, 2), isFalse);
   });
 
-  test("IListOf2.hashCode", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("hashCode", () {
     expect(IListOf2(2, 1) == IListOf2(2, 1), isTrue);
     expect(IListOf2(2, 1).hashCode, IListOf2(2, 1).hashCode);
 

@@ -8,15 +8,21 @@ void main() {
     expect(ConfigSet(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("sort", () {
     expect(ConfigSet().sort, isTrue);
     expect(ConfigSet(sort: false).sort, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("cacheHashCode", () {
     expect(ConfigSet().cacheHashCode, isTrue);
     expect(ConfigSet(cacheHashCode: false).cacheHashCode, isFalse);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("==", () {
     const ConfigSet configSet1 = ConfigSet(),
@@ -65,6 +71,8 @@ void main() {
     expect(configSet4 == configSet8, isTrue);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("copyWith", () {
     const ConfigSet configSet1 = ConfigSet();
     final ConfigSet configSetIdentical = configSet1.copyWith(),
@@ -97,6 +105,8 @@ void main() {
     expect(configSet1.cacheHashCode, !configSet1WithDeepAndSortFalse.cacheHashCode);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("hashCode", () {
     const ConfigSet configSet1 = ConfigSet(),
         configSet2 = ConfigSet(isDeepEquals: false),
@@ -113,6 +123,8 @@ void main() {
     expect(configSet3.hashCode, isNot(configSet4.hashCode));
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("toString", () {
     expect(
         ConfigSet().toString(), "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: true}");
@@ -123,6 +135,8 @@ void main() {
     expect(ConfigSet(cacheHashCode: false).toString(),
         "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: false}");
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigSet with isDeepEquals = true and sort = true
@@ -136,4 +150,6 @@ void main() {
     expect(ISet.defaultConfig,
         const ConfigSet(isDeepEquals: false, sort: false, cacheHashCode: false));
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

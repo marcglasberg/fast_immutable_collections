@@ -8,20 +8,28 @@ void main() {
     expect(ConfigMap(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("sortKeys", () {
     expect(ConfigMap().sortKeys, isTrue);
     expect(ConfigMap(sortKeys: false).sortKeys, isFalse);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("sortValues", () {
     expect(ConfigMap().sortValues, isTrue);
     expect(ConfigMap(sortValues: false).sortValues, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("cacheHashCode", () {
     expect(ConfigMap().cacheHashCode, isTrue);
     expect(ConfigMap(cacheHashCode: false).cacheHashCode, isFalse);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("==", () {
     const ConfigMap configMap1 = ConfigMap(),
@@ -91,6 +99,8 @@ void main() {
     expect(configMap5 == configMap10, isTrue);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("copyWith", () {
     const ConfigMap configMap1 = ConfigMap();
     final ConfigMap configMapIdentical = configMap1.copyWith(),
@@ -134,6 +144,8 @@ void main() {
     expect(configMap1.sortValues, !configMap1WithAllFalse.cacheHashCode);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("hashCode", () {
     const ConfigMap configMap1 = ConfigMap(),
         configMap2 = ConfigMap(isDeepEquals: false),
@@ -158,6 +170,8 @@ void main() {
     expect(configMap4.hashCode, isNot(configMap5.hashCode));
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("toString", () {
     expect(ConfigMap().toString(),
         "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true, cacheHashCode: true}");
@@ -170,6 +184,8 @@ void main() {
     expect(ConfigMap(cacheHashCode: false).toString(),
         "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true, cacheHashCode: false}");
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigMap with all attributes true
@@ -187,4 +203,6 @@ void main() {
         const ConfigMap(
             isDeepEquals: false, sortKeys: false, sortValues: false, cacheHashCode: false));
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

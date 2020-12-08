@@ -8,7 +8,7 @@ void main() {
     expect(UnmodifiableListView(null).isEmpty, isTrue);
   });
 
-  test("Non-mutable operations | UnmodifiableListView.[] operator", () {
+  test("[]", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -24,7 +24,7 @@ void main() {
     });
   });
 
-  test("Non-mutable operations | UnmodifiableListView.length getter", () {
+  test("length", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -36,7 +36,7 @@ void main() {
     views.forEach((UnmodifiableListView<int> view) => expect(view.length, baseList.length));
   });
 
-  test("Non-mutable operations | UnmodifiableListView.lock getter", () {
+  test("lock", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -49,7 +49,7 @@ void main() {
         (UnmodifiableListView<int> view) => expect(view.lock, allOf(isA<IList<int>>(), baseList)));
   });
 
-  test("Non-mutable operations | Emptiness properties", () {
+  test("isEmpty | isNotEmpty", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -64,7 +64,7 @@ void main() {
     });
   });
 
-  test("Mutations are not allowed | UnmodifiableListView.[]= operator", () {
+  test("[]=", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -77,7 +77,7 @@ void main() {
         (UnmodifiableListView<int> view) => expect(() => view[0] = 10, throwsUnsupportedError));
   });
 
-  test("Mutations are not allowed | UnmodifiableListView.length setter", () {
+  test("length", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -90,7 +90,7 @@ void main() {
         (UnmodifiableListView<int> view) => expect(() => view.length = 10, throwsUnsupportedError));
   });
 
-  test("Mutations are not allowed | UnmodifiableListView.add method", () {
+  test("add", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -103,7 +103,7 @@ void main() {
         (UnmodifiableListView<int> view) => expect(() => view.add(4), throwsUnsupportedError));
   });
 
-  test("Mutations are not allowed | UnmodifiableListView.addAll method", () {
+  test("addAll", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);
@@ -116,7 +116,7 @@ void main() {
         expect(() => view.addAll([4, 5]), throwsUnsupportedError));
   });
 
-  test("Mutations are not allowed | UnmodifiableListView.remove method", () {
+  test("remove", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListView<int> unmodifiableListView = UnmodifiableListView(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListView.fromList(baseList);

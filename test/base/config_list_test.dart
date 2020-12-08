@@ -8,6 +8,8 @@ void main() {
     expect(ConfigList(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("==", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     final ConfigList configList3 = ConfigList(), configList4 = ConfigList(isDeepEquals: false);
@@ -19,6 +21,8 @@ void main() {
     expect(configList2 == configList3, isFalse);
     expect(configList2 == configList4, isTrue);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("copyWith", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
@@ -36,6 +40,8 @@ void main() {
     expect(configList2.isDeepEquals, !configList2WithTrue.isDeepEquals);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("hashCode", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     expect(configList1.hashCode, ConfigList().hashCode);
@@ -43,11 +49,15 @@ void main() {
     expect(configList1.hashCode, isNot(configList2.hashCode));
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("toString", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     expect(configList1.toString(), "ConfigList{isDeepEquals: true, cacheHashCode: true}");
     expect(configList2.toString(), "ConfigList{isDeepEquals: false, cacheHashCode: true}");
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigList with isDeepEquals = true
@@ -58,4 +68,6 @@ void main() {
     IList.defaultConfig = ConfigList(isDeepEquals: false);
     expect(IList.defaultConfig, const ConfigList(isDeepEquals: false));
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

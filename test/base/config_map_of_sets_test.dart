@@ -8,25 +8,35 @@ void main() {
     expect(ConfigMapOfSets(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("sortKeys", () {
     expect(ConfigMapOfSets().sortKeys, isTrue);
     expect(ConfigMapOfSets(sortKeys: false).sortKeys, isFalse);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("sortValues", () {
     expect(ConfigMapOfSets().sortValues, isTrue);
     expect(ConfigMapOfSets(sortValues: false).sortValues, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("removeEmptySets", () {
     expect(ConfigMapOfSets().removeEmptySets, isTrue);
     expect(ConfigMapOfSets(removeEmptySets: false).removeEmptySets, isFalse);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("cacheHashCode", () {
     expect(ConfigMapOfSets().cacheHashCode, isTrue);
     expect(ConfigMapOfSets(cacheHashCode: false).cacheHashCode, isFalse);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("asConfigSet", () {
     expect(ConfigMapOfSets().asConfigSet, const ConfigSet());
@@ -37,6 +47,8 @@ void main() {
         ConfigMapOfSets(cacheHashCode: false).asConfigSet, const ConfigSet(cacheHashCode: false));
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("asConfigMap", () {
     expect(ConfigMapOfSets().asConfigMap, const ConfigMap());
     expect(ConfigMapOfSets(isDeepEquals: false).asConfigMap, const ConfigMap(isDeepEquals: false));
@@ -46,6 +58,8 @@ void main() {
     expect(
         ConfigMapOfSets(cacheHashCode: false).asConfigMap, const ConfigMap(cacheHashCode: false));
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("==", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
@@ -140,6 +154,8 @@ void main() {
     expect(configMapOfSets6 == configMapOfSets12, isTrue);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("copyWith", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets();
     final ConfigMapOfSets configMapOfSetsIdentical = configMapOfSets1.copyWith(),
@@ -201,6 +217,8 @@ void main() {
     expect(configMapOfSets1.cacheHashCode, !configMapOfSets1WithAllFalse.cacheHashCode);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("hashCode", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
@@ -227,6 +245,8 @@ void main() {
     expect(configMapOfSets5.hashCode, isNot(configMapOfSets6.hashCode));
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("toString", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
@@ -247,6 +267,8 @@ void main() {
     expect(configMapOfSets6.toString(),
         "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: true, removeEmptySets: true, cacheHashCode: false}");
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigMapOfSets with all attributes true
@@ -273,4 +295,6 @@ void main() {
             removeEmptySets: false,
             cacheHashCode: false));
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

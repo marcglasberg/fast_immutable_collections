@@ -11,16 +11,22 @@ void main() {
     expect(() => LAdd<int>(null, null), throwsAssertionError);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Runtime Type", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd, isA<LAdd<int>>());
   });
 
-  test("LAdd.unlock", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("unlock", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd.unlock, <int>[1, 2, 3, 4]);
     expect(lAdd.unlock, isA<List<int>>());
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
@@ -28,32 +34,39 @@ void main() {
     expect(lAdd.isNotEmpty, isTrue);
   });
 
-  test("LAdd.length method", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("length", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd.length, 4);
   });
 
-  test("Index Access | LAdd[index]", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("[]", () {
+    // 1. Regular usage
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd[0], 1);
     expect(lAdd[1], 2);
     expect(lAdd[2], 3);
     expect(lAdd[3], 4);
-  });
 
-  test("Index Access | Range Errors", () {
-    final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
+    // 2. Range errors
     expect(() => lAdd[4], throwsA(isA<RangeError>()));
     expect(() => lAdd[-1], throwsA(isA<RangeError>()));
   });
 
-  test("LAdd.contains() method", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("contains", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd.contains(1), isTrue);
     expect(lAdd.contains(5), isFalse);
   });
 
-  test("IteratorLAdd Class | Iterating on the underlying iterator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("iterator", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     final Iterator<int> iter = lAdd.iterator;
 
@@ -70,12 +83,15 @@ void main() {
     expect(iter.current, isNull);
   });
 
-  test(
-      "Ensuring Immutability | LAdd.add() | "
-      "Changing the passed mutable list doesn't change the LAdd", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
-    final LAdd<int> lAdd = LAdd(lFlat, 3);
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Ensuring Immutability", () {
+    // 1) add
+
+    // 1.1) Changing the passed mutable list doesn't change the LAdd
+    List<int> original = [1, 2];
+    LFlat<int> lFlat = LFlat(original);
+    LAdd<int> lAdd = LAdd(lFlat, 3);
 
     expect(lAdd, <int>[1, 2, 3]);
 
@@ -84,35 +100,29 @@ void main() {
 
     expect(original, <int>[1, 2, 3, 4]);
     expect(lAdd, <int>[1, 2, 3]);
-  });
 
-  test(
-      "Ensuring Immutability | LAdd.add() | "
-      "Adding to the original LAdd doesn't change it", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
-    final LAdd<int> lAdd = LAdd<int>(lFlat, 3);
+    // 1.2) Adding to the original LAdd doesn't change it
+    original = [1, 2];
+    lFlat = LFlat(original);
+    lAdd = LAdd<int>(lFlat, 3);
 
     expect(lAdd, <int>[1, 2, 3]);
 
-    final L<int> l = lAdd.add(4);
+    L<int> l = lAdd.add(4);
 
     expect(original, <int>[1, 2]);
     expect(lAdd, <int>[1, 2, 3]);
     expect(l, <int>[1, 2, 3, 4]);
-  });
 
-  test(
-      "Ensuring Immutability | LAdd.add() | "
-      "If the item being passed is a variable, a pointer to it shouldn't exist inside LAdd", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
-    final LAdd<int> lAdd = LAdd(lFlat, 3);
+    // 1.3) If the item being passed is a variable, a pointer to it shouldn't exist inside LAdd
+    original = [1, 2];
+    lFlat = LFlat(original);
+    lAdd = LAdd(lFlat, 3);
 
     expect(lAdd, <int>[1, 2, 3]);
 
     int willChange = 4;
-    final L<int> l = lAdd.add(willChange);
+    l = lAdd.add(willChange);
 
     willChange = 5;
 
@@ -120,14 +130,13 @@ void main() {
     expect(lAdd, <int>[1, 2, 3]);
     expect(willChange, 5);
     expect(l, <int>[1, 2, 3, 4]);
-  });
 
-  test(
-      "Ensuring Immutability | LAdd.addAll() | "
-      "Changing the passed mutable list doesn't change the LAdd", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
-    final LAdd<int> lAdd = LAdd(lFlat, 3);
+    // 2) addAll
+
+    // 2.1) Changing the passed mutable list doesn't change the LAdd
+    original = [1, 2];
+    lFlat = LFlat(original);
+    lAdd = LAdd(lFlat, 3);
 
     expect(lAdd, <int>[1, 2, 3]);
 
@@ -135,50 +144,44 @@ void main() {
 
     expect(original, <int>[1, 2, 3, 4]);
     expect(lAdd, <int>[1, 2, 3]);
-  });
 
-  test(
-      "Ensuring Immutability | LAdd.addAll() | "
-      "Changing the passed immutable list doesn't change the original LAdd", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
-    final LAdd<int> lAdd = LAdd<int>(lFlat, 3);
+    // 2.2) Changing the passed immutable list doesn't change the original LAdd
+
+    original = [1, 2];
+    lFlat = LFlat(original);
+    lAdd = LAdd<int>(lFlat, 3);
 
     expect(lAdd, <int>[1, 2, 3]);
 
-    final L<int> l = lAdd.addAll([4, 5]);
+    l = lAdd.addAll([4, 5]);
 
     expect(original, <int>[1, 2]);
     expect(lAdd, <int>[1, 2, 3]);
     expect(l, <int>[1, 2, 3, 4, 5]);
-  });
 
-  test(
-      "Ensuring Immutability | LAdd.addAll() | "
-      "If the items being passed are from a variable, "
-      "it shouldn't have a pointer to the variable", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
+    // 2.3) If the items being passed are from a variable, it shouldn't have a pointer to the
+    // variable
+    original = [1, 2];
+    lFlat = LFlat(original);
     final LAdd<int> lAdd1 = LAdd<int>(lFlat, 3), lAdd2 = LAdd<int>(lFlat, 4);
 
     expect(lAdd1, <int>[1, 2, 3]);
     expect(lAdd2, <int>[1, 2, 4]);
 
-    final L<int> l = lAdd1.addAll(lAdd2);
+    l = lAdd1.addAll(lAdd2);
     original.add(5);
 
     expect(original, <int>[1, 2, 5]);
     expect(lAdd1, <int>[1, 2, 3]);
     expect(lAdd2, <int>[1, 2, 4]);
     expect(l, <int>[1, 2, 3, 1, 2, 4]);
-  });
 
-  test(
-      "Ensuring Immutability | LAdd.remove() | "
-      "Changing the passed mutable list doesn't change the LAdd", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
-    final LAdd<int> lAdd = LAdd(lFlat, 3);
+    // 3) remove
+
+    // 3.1) Changing the passed mutable list doesn't change the LAdd
+    original = [1, 2];
+    lFlat = LFlat(original);
+    lAdd = LAdd(lFlat, 3);
 
     expect(lAdd, <int>[1, 2, 3]);
 
@@ -186,21 +189,20 @@ void main() {
 
     expect(original, <int>[1]);
     expect(lAdd, <int>[1, 2, 3]);
-  });
 
-  test(
-      "Ensuring Immutability | LAdd.remove() | "
-      "Removing from the original LAdd doesn't change it", () {
-    final List<int> original = [1, 2];
-    final LFlat<int> lFlat = LFlat(original);
-    final LAdd<int> lAdd = LAdd(lFlat, 3);
+    // 3.2) Removing from the original LAdd doesn't change it
+    original = [1, 2];
+    lFlat = LFlat(original);
+    lAdd = LAdd(lFlat, 3);
 
     expect(lAdd, <int>[1, 2, 3]);
 
-    final L<int> l = lAdd.remove(1);
+    l = lAdd.remove(1);
 
     expect(original, <int>[1, 2]);
     expect(lAdd, <int>[1, 2, 3]);
     expect(l, <int>[2, 3]);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

@@ -4,7 +4,7 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("FromIterableIListMixin.iterator", () {
+  test("iterator", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -23,7 +23,9 @@ void main() {
     expect(iterator.current, isNull);
   });
 
-  test("FromIterableIListMixin.any()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("any", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -33,13 +35,17 @@ void main() {
     expect(students.any((Student student) => student.name == "John"), isFalse);
   });
 
-  test("FromIterableIListMixin.cast()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("cast", () {
     final Students students = Students([Student("James")]);
 
     expect(() => students.cast<ProtoStudent>(), throwsUnsupportedError);
   });
 
-  test("FromIterableIListMixin.contains()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("contains", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -49,7 +55,9 @@ void main() {
     expect(students.contains(const Student("John")), isFalse);
   });
 
-  test("FromIterableIListMixin.[]", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("[]", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -60,7 +68,9 @@ void main() {
     expect(students[2], const Student("Lucy"));
   });
 
-  test("FromIterableIListMixin.elementAt()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("elementAt", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -71,7 +81,9 @@ void main() {
     expect(students.elementAt(2), const Student("Lucy"));
   });
 
-  test("FromIterableIListMixin.every()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("every", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -81,7 +93,9 @@ void main() {
     expect(students.every((Student student) => student.name.length > 10), isFalse);
   });
 
-  test("FromIterableIListMixin.expand()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("expand", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -93,7 +107,9 @@ void main() {
         allOf(<Student>[].lock, isA<IList<Student>>()));
   });
 
-  test("FromIterableIListMixin.length", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("length", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -102,7 +118,9 @@ void main() {
     expect(students.length, 3);
   });
 
-  test("FromIterableIListMixin.first", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("first", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -111,7 +129,9 @@ void main() {
     expect(students.first, const Student("James"));
   });
 
-  test("FromIterableIListMixin.last", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("last", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -120,19 +140,24 @@ void main() {
     expect(students.last, const Student("Lucy"));
   });
 
-  test("FromIterableIListMixin.single | State Exception", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("single", () {
+    // 1) State Exception
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
 
     expect(() => students.single, throwsStateError);
+
+    // 2) Access
+    expect(Students([const Student("James")]).single, const Student("James"));
   });
 
-  test("FromIterableIListMixin.single | Access",
-      () => expect(Students([const Student("James")]).single, const Student("James")));
+  //////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableIListMixin.firstWhere()", () {
+  test("firstWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -152,7 +177,9 @@ void main() {
         const Student("John"));
   });
 
-  test("FromIterableIListMixin.fold()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("fold", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -166,7 +193,9 @@ void main() {
         const Student("Class : James : Sara : Lucy"));
   });
 
-  test("FromIterableIListMixin.followedBy()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("followedBy", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -175,7 +204,9 @@ void main() {
     expect(students.followedBy([const Student("Bob")]), [james, sara, lucy, const Student("Bob")]);
   });
 
-  test("FromIterableIListMixin.forEach()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("forEach", () {
     String concatenated = "";
 
     const Student james = Student("James");
@@ -188,7 +219,9 @@ void main() {
     expect(concatenated, "James, Sara, Lucy, ");
   });
 
-  test("FromIterableIListMixin.join()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("join", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -198,7 +231,9 @@ void main() {
     expect(Students([]).join(", "), "");
   });
 
-  test("FromIterableIListMixin.lastWhere()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("lastWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -218,7 +253,9 @@ void main() {
         const Student("John"));
   });
 
-  test("FromIterableIListMixin.map()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("map", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     final Students students = Students([james, sara]);
@@ -227,7 +264,9 @@ void main() {
         [const Student("JamesJames"), const Student("SaraSara")]);
   });
 
-  test("FromIterableIListMixin.reduce()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reduce", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -239,7 +278,9 @@ void main() {
         Student("James Sara Lucy"));
   });
 
-  test("FromIterableIListMixin.singleWhere()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("singleWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -255,7 +296,9 @@ void main() {
         const Student("Bob"));
   });
 
-  test("FromIterableIListMixin.skip()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("skip", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -265,7 +308,9 @@ void main() {
     expect(students.skip(10), <Student>[]);
   });
 
-  test("FromIterableIListMixin.skipWhile()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("skipWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -275,7 +320,9 @@ void main() {
         [const Student("Sara"), const Student("Lucy")]);
   });
 
-  test("FromIterableIListMixin.take()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("take", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -290,7 +337,9 @@ void main() {
         <Student>[const Student("James"), const Student("Sara"), const Student("Lucy")]);
   });
 
-  test("FromIterableIListMixin.takeWhile()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("takeWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -300,7 +349,9 @@ void main() {
         [const Student("James")]);
   });
 
-  test("FromIterableIListMixin.where()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("where", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -310,7 +361,9 @@ void main() {
     expect(students.where((Student student) => student.name.length == 100), <Student>[]);
   });
 
-  test("FromIterableIListMixin.whereType()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("whereType", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -321,17 +374,23 @@ void main() {
     expect(students.whereType<String>(), []);
   });
 
-  test("FromIterableIListMixin.isEmpty", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("isEmpty", () {
     expect(Students([]).isEmpty, isTrue);
     expect(Students([Student("James")]).isEmpty, isFalse);
   });
 
-  test("FromIterableIListMixin.isNotEmpty", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("isNotEmpty", () {
     expect(Students([]).isNotEmpty, isFalse);
     expect(Students([Student("James")]).isNotEmpty, isTrue);
   });
 
-  test("FromIterableIListMixin.toList()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("toList", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -341,7 +400,9 @@ void main() {
         students.toList(), [const Student("James"), const Student("Sara"), const Student("Lucy")]);
   });
 
-  test("FromIterableIListMixin.toSet()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("toSet", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -350,6 +411,8 @@ void main() {
     expect(
         students.toSet(), [const Student("James"), const Student("Sara"), const Student("Lucy")]);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
 
 @immutable
