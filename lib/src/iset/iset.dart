@@ -342,7 +342,7 @@ class ISet<T> // ignore: must_be_immutable
   }
 
   /// Will return `true` only if the list items are equal and the list configurations are equal.
-  /// This may be slow for very large lists, since it compares each item, one by one.
+  /// This may be slow for very large sets, since it compares each item, one by one.
   @override
   bool equalItemsAndConfig(ISet<T> other) {
     if (identical(this, other)) return true;

@@ -202,6 +202,8 @@ class IMap<K, V> // ignore: must_be_immutable
   static IMap<K, V> empty<K, V>([ConfigMap config]) =>
       IMap._unsafe(MFlat.empty<K, V>(), config: config ?? defaultConfig);
 
+  /// See also: [ImmutableCollection], [ImmutableCollection.lockConfig],
+  /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
@@ -226,6 +228,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// during the same task.
   static bool get asyncAutoflush => _asyncAutoflush;
 
+  /// See also: [ConfigList], [ImmutableCollection], [resetAllConfigurations]
   static set defaultConfig(ConfigMap config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
@@ -233,6 +236,7 @@ class IMap<K, V> // ignore: must_be_immutable
     _defaultConfig = config ?? const ConfigMap();
   }
 
+  /// See also: [ImmutableCollection]
   static set flushFactor(int value) {
     if (_flushFactor == value) return;
     if (ImmutableCollection.isConfigLocked)
@@ -243,6 +247,7 @@ class IMap<K, V> // ignore: must_be_immutable
       throw StateError("flushFactor can't be $value.");
   }
 
+  /// See also: [ImmutableCollection]
   static set asyncAutoflush(bool value) {
     if (_asyncAutoflush == value) return;
     if (ImmutableCollection.isConfigLocked)
@@ -329,8 +334,10 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> get withDeepEquals =>
       config.isDeepEquals ? this : IMap._unsafe(_m, config: config.copyWith(isDeepEquals: true));
 
+  /// See also: [ConfigList]
   bool get isDeepEquals => config.isDeepEquals;
 
+  /// See also: [ConfigList]
   bool get isIdentityEquals => !config.isDeepEquals;
 
   /// Returns an [Iterable] of the map entries of type [MapEntry].
@@ -545,9 +552,11 @@ class IMap<K, V> // ignore: must_be_immutable
   /// See also: [ModifiableMapView]
   Map<K, V> get unlockLazy => ModifiableMapView(this);
 
+  /// Returns `true` if there are no elements in this collection.
   @override
   bool get isEmpty => _m.isEmpty;
 
+  /// Returns `true` if there is at least one element in this collection.
   @override
   bool get isNotEmpty => !isEmpty;
 
@@ -594,6 +603,8 @@ class IMap<K, V> // ignore: must_be_immutable
     return (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
   }
 
+  /// Will return `true` only if the list items are equal, and the map configurations are equal.
+  /// This may be slow for very large maps, since it compares each item, one by one.
   @override
   bool equalItemsAndConfig(IMap<K, V> other) {
     if (identical(this, other)) return true;
@@ -729,16 +740,19 @@ class IMap<K, V> // ignore: must_be_immutable
     return identical(result, _m) ? this : IMap<K, V>._unsafe(result, config: config);
   }
 
+  /// Returns the value for the given [key] or null if [key] is not in the map.
   V operator [](K k) {
     _count();
     return _m[k];
   }
 
+  /// Returns the value for the given [key] or null if [key] is not in the map.
   V get(K k) {
     _count();
     return _m[k];
   }
 
+  /// Checks whether any key-value pair of this map satisfies [test].
   bool any(bool Function(K key, V value) test) {
     _count();
     return _m.any(test);
@@ -766,31 +780,38 @@ class IMap<K, V> // ignore: must_be_immutable
       throw AssertionError(result.runtimeType);
   }
 
+  /// Checks whether any entry of this iterable satisfies [test].
   bool anyEntry(bool Function(MapEntry<K, V>) test) {
     _count();
     return _m.anyEntry(test);
   }
 
+  /// Returns `true` if the map contains an element equal to the [key]-[value] pair, `false`
+  /// otherwise.
   bool contains(K key, V value) {
     _count();
     return _m.contains(key, value);
   }
 
+  /// Returns `true` if the map contains the [key], `false` otherwise.
   bool containsKey(K key) {
     _count();
     return _m.containsKey(key);
   }
 
+  /// Returns `true` if the map contains the [value], `false` otherwise.
   bool containsValue(V value) {
     _count();
     return _m.containsValue(value);
   }
 
+  /// Returns `true` if the map contains the [entry], `false` otherwise.
   bool containsEntry(MapEntry<K, V> entry) {
     _count();
     return _m.contains(entry.key, entry.value);
   }
 
+  /// The number of objects in this list.
   int get length {
     final int length = _m.length;
 
@@ -803,11 +824,13 @@ class IMap<K, V> // ignore: must_be_immutable
     return length;
   }
 
+  /// Applies the function [f] to each element.
   void forEach(void Function(K key, V value) f) {
     _count();
     _m.forEach(f);
   }
 
+  /// Returns an [IMap] with all elements that satisfy the predicate [test].
   IMap<K, V> where(bool Function(K key, V value) test) =>
       IMap<K, V>._(_m.where(test), config: config);
 
@@ -826,6 +849,12 @@ class IMap<K, V> // ignore: must_be_immutable
         config: config ?? ((RK == K && RV == V) ? this.config : defaultConfig));
   }
 
+  /// Returns a string representation of (some of) the elements of `this`.
+  ///
+  /// Use either the [prettyPrint] or the [ImmutableCollection.prettyPrint] parameters to get a
+  /// prettier print.
+  ///
+  /// See also: [ImmutableCollection]
   @override
   String toString([bool prettyPrint]) {
     if ((prettyPrint ?? ImmutableCollection.prettyPrint)) {
