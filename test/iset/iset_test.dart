@@ -152,7 +152,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("equals (==)", () {
+  test("==", () {
     // 1) ISet with identity-equals compares the set instance, not the items
     ISet<int> iset = ISet({1, 2}).withIdentityEquals;
     expect(iset == iset, isTrue);

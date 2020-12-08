@@ -181,7 +181,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("equals (==)", () {
+  test("==", () {
     // 1) IMap with identity-equals compares the map instance, not the items
     var myMap = IMap({"a": 1, "b": 2}).withIdentityEquals;
     expect(myMap == myMap, isTrue);

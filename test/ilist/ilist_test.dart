@@ -160,7 +160,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("equals (==)", () {
+  test("==", () {
     // 1) Simple usage
     IList<int> ilist = IList([1, 2]);
     expect(ilist == ilist, isTrue);

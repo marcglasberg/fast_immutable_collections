@@ -108,7 +108,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("equals (==)", () {
+  test("==", () {
     // 1) Default
     IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
           "a": {1, 2},

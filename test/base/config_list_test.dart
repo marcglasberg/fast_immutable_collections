@@ -3,12 +3,12 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("ConfigList.isDeepEquals getter", () {
+  test("isDeepEquals", () {
     expect(ConfigList().isDeepEquals, isTrue);
     expect(ConfigList(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
-  test("ConfigList.== operator", () {
+  test("==", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     final ConfigList configList3 = ConfigList(), configList4 = ConfigList(isDeepEquals: false);
 
@@ -20,7 +20,7 @@ void main() {
     expect(configList2 == configList4, isTrue);
   });
 
-  test("ConfigList.copyWith()", () {
+  test("copyWith", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     final ConfigList configList1WithTrue = configList1.copyWith(isDeepEquals: true),
         configList1WithFalse = configList1.copyWith(isDeepEquals: false),
@@ -36,32 +36,26 @@ void main() {
     expect(configList2.isDeepEquals, !configList2WithTrue.isDeepEquals);
   });
 
-  test("ConfigList.hashCode getter", () {
+  test("hashCode", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     expect(configList1.hashCode, ConfigList().hashCode);
     expect(configList2.hashCode, ConfigList(isDeepEquals: false).hashCode);
     expect(configList1.hashCode, isNot(configList2.hashCode));
   });
 
-  test("ConfigList.toString()", () {
+  test("toString", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     expect(configList1.toString(), "ConfigList{isDeepEquals: true, cacheHashCode: true}");
     expect(configList2.toString(), "ConfigList{isDeepEquals: false, cacheHashCode: true}");
   });
 
-  test("defaultConfig | Is initially a ConfigList with isDeepEquals = true", () {
+  test("defaultConfig", () {
+    // 1) Is initially a ConfigList with isDeepEquals = true
     expect(IList.defaultConfig, const ConfigList());
     expect(IList.defaultConfig.isDeepEquals, isTrue);
-  });
 
-  test("defaultConfig | Can modify the default", () {
+    // 2) Can modify the default
     IList.defaultConfig = ConfigList(isDeepEquals: false);
     expect(IList.defaultConfig, const ConfigList(isDeepEquals: false));
   });
-
-  test("defaultConfig | Changing the default ConfigList will throw an exception if lockConfig", () {
-    ImmutableCollection.lockConfig();
-    expect(() => IList.defaultConfig = ConfigList(isDeepEquals: !IList.defaultConfig.isDeepEquals),
-        throwsStateError);
-  }, skip: true);
 }

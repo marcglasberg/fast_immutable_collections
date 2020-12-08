@@ -3,27 +3,27 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("ConfiMap.isDeepEquals getter", () {
+  test("isDeepEquals", () {
     expect(ConfigMap().isDeepEquals, isTrue);
     expect(ConfigMap(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
-  test("ConfigMap.sortKeys getter", () {
+  test("sortKeys", () {
     expect(ConfigMap().sortKeys, isTrue);
     expect(ConfigMap(sortKeys: false).sortKeys, isFalse);
   });
 
-  test("ConfigMap.sortValues getter", () {
+  test("sortValues", () {
     expect(ConfigMap().sortValues, isTrue);
     expect(ConfigMap(sortValues: false).sortValues, isFalse);
   });
 
-  test("ConfigMap.cacheHashCode getter", () {
+  test("cacheHashCode", () {
     expect(ConfigMap().cacheHashCode, isTrue);
     expect(ConfigMap(cacheHashCode: false).cacheHashCode, isFalse);
   });
 
-  test("ConfigMap.== operator", () {
+  test("==", () {
     const ConfigMap configMap1 = ConfigMap(),
         configMap2 = ConfigMap(isDeepEquals: false),
         configMap3 = ConfigMap(sortKeys: false),
@@ -91,7 +91,7 @@ void main() {
     expect(configMap5 == configMap10, isTrue);
   });
 
-  test("ConfigMap.copyWith()", () {
+  test("copyWith", () {
     const ConfigMap configMap1 = ConfigMap();
     final ConfigMap configMapIdentical = configMap1.copyWith(),
         configMap1WithDeepFalse = configMap1.copyWith(isDeepEquals: false),
@@ -134,7 +134,7 @@ void main() {
     expect(configMap1.sortValues, !configMap1WithAllFalse.cacheHashCode);
   });
 
-  test("ConfigMap.hashCode getter", () {
+  test("hashCode", () {
     const ConfigMap configMap1 = ConfigMap(),
         configMap2 = ConfigMap(isDeepEquals: false),
         configMap3 = ConfigMap(sortKeys: false),
@@ -158,7 +158,7 @@ void main() {
     expect(configMap4.hashCode, isNot(configMap5.hashCode));
   });
 
-  test("ConfigMap.toString()", () {
+  test("toString", () {
     expect(ConfigMap().toString(),
         "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true, cacheHashCode: true}");
     expect(ConfigMap(isDeepEquals: false).toString(),
@@ -171,15 +171,15 @@ void main() {
         "ConfigMap{isDeepEquals: true, sortKeys: true, sortValues: true, cacheHashCode: false}");
   });
 
-  test("defaultConfig | Is initially a ConfigMap with all attributes true", () {
+  test("defaultConfig", () {
+    // 1) Is initially a ConfigMap with all attributes true
     expect(IMap.defaultConfig, const ConfigMap());
     expect(IMap.defaultConfig.isDeepEquals, isTrue);
     expect(IMap.defaultConfig.sortKeys, isTrue);
     expect(IMap.defaultConfig.sortValues, isTrue);
     expect(IMap.defaultConfig.cacheHashCode, isTrue);
-  });
 
-  test("defaultConfig | Can modify the default", () {
+    // 2) Can modify the default
     IMap.defaultConfig =
         ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false, cacheHashCode: false);
     expect(
@@ -187,9 +187,4 @@ void main() {
         const ConfigMap(
             isDeepEquals: false, sortKeys: false, sortValues: false, cacheHashCode: false));
   });
-
-  test("defaultConfig | Changing the default ConfigMap will throw an exception if lockConfig", () {
-    ImmutableCollection.lockConfig();
-    expect(() => IMap.defaultConfig = ConfigMap(isDeepEquals: false), throwsStateError);
-  }, skip: true);
 }

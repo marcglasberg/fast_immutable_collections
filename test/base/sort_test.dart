@@ -7,35 +7,35 @@ void main() {
 
   test("compareObject", () {
     //
-    // Natural order between "a" and "b".
+    // 1) Natural order between "a" and "b".
     expect(
         ["a", "b"]
           ..shuffle()
           ..sort(compareObject),
         ["a", "b"]);
 
-    // Natural order between 1 and 2. Nulls come after.
+    // 2) Natural order between 1 and 2. Nulls come after.
     expect(
         [1, 2, null]
           ..shuffle()
           ..sort(compareObject),
         [1, 2, null]);
 
-    // Natural order between 1 and 2. Nulls come before.
+    // 3) Natural order between 1 and 2. Nulls come before.
     expect(
         [1, 2, null]
           ..shuffle()
           ..sort((a, b) => compareObject(a, b, nullsBefore: true)),
         [null, 1, 2]);
 
-    // True comes after false.
+    // 4) True comes after false.
     expect(
         [true, false]
           ..shuffle()
           ..sort(compareObject),
         [false, true]);
 
-    // Natural order of keys.
+    // 5) Natural order of keys.
     var entryA20 = MapEntry("a", 20);
     var entryB10 = MapEntry("b", 10);
     expect(
@@ -44,7 +44,7 @@ void main() {
           ..sort(compareObject),
         [entryA20, entryB10]);
 
-    // Natural order of values (since keys are the same).
+    // 6) Natural order of values (since keys are the same).
     var entryA10 = MapEntry("a", 10);
     expect(
         [entryA20, entryA10]

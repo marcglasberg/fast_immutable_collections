@@ -4,15 +4,21 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("sameCollection() | If both are null, then true",
-      () => expect(sameCollection(null, null), isTrue));
-
-  test("sameCollection() | If one of them is not null, then false", () {
-    expect(sameCollection(IList(), null), isFalse);
-    expect(sameCollection(null, IList()), isFalse);
+  setUp(() {
+    ImmutableCollection.resetAllConfigurations();
+    ImmutableCollection.autoFlush = true;
+    ImmutableCollection.prettyPrint = true;
   });
 
-  test("sameCollection() | If none of them is null, then use .same()", () {
+  test("sameCollection()", () {
+    // 1) If both are null, then true
+    expect(sameCollection(null, null), isTrue);
+
+    // 2) If one of them is not null, then false
+    expect(sameCollection(IList(), null), isFalse);
+    expect(sameCollection(null, IList()), isFalse);
+
+    // 3) If none of them is null, then use .same()
     final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]);
     final IList<int> iList3 = iList1.remove(3);
 
@@ -20,22 +26,17 @@ void main() {
     expect(sameCollection(iList1, iList3), isTrue);
   });
 
-  test("disallowUnsafeConstructors | Is initially false",
-      () => expect(ImmutableCollection.disallowUnsafeConstructors, isFalse));
+  // /////////////////////////////////////////////////////////////////////////////
 
-  test("disallowUnsafeConstructors | Changing the default to true", () {
-    expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);
-    ImmutableCollection.disallowUnsafeConstructors = true;
-    expect(ImmutableCollection.disallowUnsafeConstructors, isTrue);
-  });
-
-  test("IteratorExtension | IteratorExtension.toIterable method/generator", () {
+  test("IteratorExtension.toIterable", () {
     const List<int> list = [1, 2, 3];
     final Iterable<int> iterable = list.iterator.toIterable();
     expect(iterable, [1, 2, 3]);
   });
 
-  test("IteratorExtension | IteratorExtension.toList()", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("IteratorExtension.toList", () {
     const List<int> list = [1, 2, 3];
     final List<int> mutableList = list.iterator.toList();
     final List<int> unmodifiableList = list.iterator.toList(growable: false);
@@ -47,14 +48,18 @@ void main() {
     expect(() => unmodifiableList.add(4), throwsUnsupportedError);
   });
 
-  test("IteratorExtension | IteratorExtension.toSet method", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("IteratorExtension.toSet", () {
     const List<int> list = [1, 2, 3];
     final Set<int> mutableSet = list.iterator.toSet();
 
     expect(mutableSet, {1, 2, 3});
   });
 
-  test("MapIteratorExtension | MapIteratorExtension.toIterable()", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("MapIteratorExtension.toIterable", () {
     const List<MapEntry<String, int>> entryList = [
       MapEntry("a", 1),
       MapEntry("b", 2),
@@ -69,7 +74,9 @@ void main() {
     expect(iterable.contains(const MapEntry("d", 4)), isFalse);
   });
 
-  test("MapIteratorExtension | MapIteratorExtension.toMap()", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("MapIteratorExtension.toMap", () {
     const List<MapEntry<String, int>> entryList = [
       MapEntry("a", 1),
       MapEntry("b", 2),
@@ -80,9 +87,13 @@ void main() {
     expect(map, {"a": 1, "b": 2, "c": 3});
   });
 
-  test("Output | Output.value is initially null", () => expect(Output().value, isNull));
+  // /////////////////////////////////////////////////////////////////////////////
 
-  test("Output | Output.value won't change after it's set", () {
+  test("Output.value", () {
+    // 1) is initially null
+    expect(Output().value, isNull);
+
+    // 2) won't change after it's set
     Output<int> output = Output();
 
     expect(output.value, isNull);
@@ -93,14 +104,18 @@ void main() {
     expect(() => output.save(1), throwsStateError);
   });
 
-  test("Output | Output.toString()", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("Output.toString", () {
     Output<int> output = Output();
     expect(output.toString(), "null");
     output.save(10);
     expect(output.toString(), "10");
   });
 
-  test("Output | Output.== operator", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("Output.==", () {
     final Output<int> output1 = Output();
     final Output<int> output2 = Output();
     final Output<int> output3 = Output();
@@ -113,7 +128,9 @@ void main() {
     expect(output1 == output3, isFalse);
   });
 
-  test("Output | Output.hashCode getter", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("Output.hashCode", () {
     final Output<int> output1 = Output();
     final Output<int> output2 = Output();
     final Output<int> output3 = Output();
@@ -122,6 +139,8 @@ void main() {
     output3.save(1);
     expect(output1.hashCode, allOf(output1.hashCode, output2.hashCode, isNot(output3.hashCode)));
   });
+
+  // /////////////////////////////////////////////////////////////////////////////
 
   test("IterableToImmutableExtension.lockAsList", () {
     const List<int> list = [1, 2, 3, 3];
@@ -132,6 +151,8 @@ void main() {
     expect(iset, {1, 2, 3});
   });
 
+  // /////////////////////////////////////////////////////////////////////////////
+
   test("IterableToImmutableExtension.lockAsSet", () {
     const Set<int> set = {1, 2, 3};
     final IList<int> ilist = set.lockAsList;
@@ -141,22 +162,25 @@ void main() {
     expect(iset, [1, 2, 3]);
   });
 
-  test("BooleanExtension | Zero", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("BooleanExtension.compareTo", () {
+    // 1) Zero
     expect(true.compareTo(true), 0);
     expect(false.compareTo(false), 0);
-  });
 
-  test("BooleanExtension | Greater than zero", () {
+    // 2) Greater than zero
     expect(true.compareTo(false), greaterThan(0));
     expect(true.compareTo(false), 1);
-  });
 
-  test("BooleanExtension | Less than zero", () {
+    // 3) Less than zero
     expect(false.compareTo(true), lessThan(0));
     expect(false.compareTo(true), -1);
   });
 
-  test("CanBeEmptyExtension | isNullOrEmpty", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("CanBeEmptyExtension.isNullOrEmpty", () {
     const CanBeEmptyExample exampleNull = null;
     const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(true, null);
     const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(false, null);
@@ -166,7 +190,9 @@ void main() {
     expect(exampleIsNotEmpty.isNullOrEmpty, isFalse);
   });
 
-  test("CanBeEmptyExtension | isNotNullOrEmpty", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("CanBeEmptyExtension.isNotNullOrEmpty", () {
     const CanBeEmptyExample exampleNull = null;
     const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(null, true);
     const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(null, false);
@@ -176,7 +202,9 @@ void main() {
     expect(exampleIsEmpty.isNotNullOrEmpty, isFalse);
   });
 
-  test("CanBeEmptyExtension | isEmptyButNotNull", () {
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("CanBeEmptyExtension.isEmptyButNotNull", () {
     const CanBeEmptyExample exampleNull = null;
     const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(true, null);
     const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(false, null);
@@ -186,9 +214,25 @@ void main() {
     expect(exampleIsNotEmpty.isEmptyButNotNull, isFalse);
   });
 
-  test("ImmutableCollection.autoFlush", () => expect(ImmutableCollection.autoFlush, isTrue));
+  // /////////////////////////////////////////////////////////////////////////////
 
-  test("ImmutableCollection.autoFlush setter", () {
+  test("ImmutableCollection.disallowUnsafeConstructors", () {
+    // 1) Is initially false
+    expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);
+
+    // 2) Changing the default to true
+    expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);
+    ImmutableCollection.disallowUnsafeConstructors = true;
+    expect(ImmutableCollection.disallowUnsafeConstructors, isTrue);
+  });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("ImmutableCollection.autoFlush", () {
+    // 1) default
+    expect(ImmutableCollection.autoFlush, isTrue);
+
+    // 2) setter
     expect(ImmutableCollection.autoFlush, isTrue);
 
     ImmutableCollection.autoFlush = false;
@@ -200,9 +244,13 @@ void main() {
     expect(ImmutableCollection.autoFlush, isTrue);
   });
 
-  test("ImmutableCollection.prettyPrint", () => expect(ImmutableCollection.prettyPrint, isTrue));
+  // /////////////////////////////////////////////////////////////////////////////
 
-  test("ImmutableCollection.prettyPrint setter", () {
+  test("ImmutableCollection.prettyPrint", () {
+    // 1) default
+    expect(ImmutableCollection.prettyPrint, isTrue);
+
+    // 2) setter
     expect(ImmutableCollection.prettyPrint, isTrue);
 
     ImmutableCollection.prettyPrint = false;
@@ -214,20 +262,7 @@ void main() {
     expect(ImmutableCollection.prettyPrint, isTrue);
   });
 
-  test("lockConfig", () {
-    ImmutableCollection.lockConfig();
-    expect(() => IList.resetAllConfigurations(), throwsStateError);
-    expect(() => ISet.resetAllConfigurations(), throwsStateError);
-    expect(() => IMap.resetAllConfigurations(), throwsStateError);
-    expect(
-        () => ImmutableCollection.disallowUnsafeConstructors =
-            !ImmutableCollection.disallowUnsafeConstructors,
-        throwsStateError);
-    expect(() => ImmutableCollection.autoFlush = !ImmutableCollection.autoFlush, throwsStateError);
-    expect(
-        () => ImmutableCollection.prettyPrint = !ImmutableCollection.prettyPrint, throwsStateError);
-    expect(() => ImmutableCollection.resetAllConfigurations(), throwsStateError);
-  }, skip: true);
+  // /////////////////////////////////////////////////////////////////////////////
 }
 
 @immutable

@@ -3,32 +3,32 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("ConfigMapOfSets.isDeepEquals getter", () {
+  test("isDeepEquals", () {
     expect(ConfigMapOfSets().isDeepEquals, isTrue);
     expect(ConfigMapOfSets(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
-  test("ConfigMapOfSets.sortKeys getter", () {
+  test("sortKeys", () {
     expect(ConfigMapOfSets().sortKeys, isTrue);
     expect(ConfigMapOfSets(sortKeys: false).sortKeys, isFalse);
   });
 
-  test("ConfigMapOfSets.sortValues getter", () {
+  test("sortValues", () {
     expect(ConfigMapOfSets().sortValues, isTrue);
     expect(ConfigMapOfSets(sortValues: false).sortValues, isFalse);
   });
 
-  test("ConfigMapOfSets.removeEmptySets getter", () {
+  test("removeEmptySets", () {
     expect(ConfigMapOfSets().removeEmptySets, isTrue);
     expect(ConfigMapOfSets(removeEmptySets: false).removeEmptySets, isFalse);
   });
 
-  test("ConfigMapOfSets.cacheHashCode getter", () {
+  test("cacheHashCode", () {
     expect(ConfigMapOfSets().cacheHashCode, isTrue);
     expect(ConfigMapOfSets(cacheHashCode: false).cacheHashCode, isFalse);
   });
 
-  test("ConfigMapOfSets.asConfigSet getter", () {
+  test("asConfigSet", () {
     expect(ConfigMapOfSets().asConfigSet, const ConfigSet());
     expect(ConfigMapOfSets(isDeepEquals: false).asConfigSet, const ConfigSet(isDeepEquals: false));
     expect(ConfigMapOfSets(sortKeys: false).asConfigSet, const ConfigSet());
@@ -37,7 +37,7 @@ void main() {
         ConfigMapOfSets(cacheHashCode: false).asConfigSet, const ConfigSet(cacheHashCode: false));
   });
 
-  test("ConfigMapOfSets.asConfigMap getter", () {
+  test("asConfigMap", () {
     expect(ConfigMapOfSets().asConfigMap, const ConfigMap());
     expect(ConfigMapOfSets(isDeepEquals: false).asConfigMap, const ConfigMap(isDeepEquals: false));
     expect(ConfigMapOfSets(sortKeys: false).asConfigMap, const ConfigMap());
@@ -47,7 +47,7 @@ void main() {
         ConfigMapOfSets(cacheHashCode: false).asConfigMap, const ConfigMap(cacheHashCode: false));
   });
 
-  test("ConfigMapOfSets.== operator", () {
+  test("==", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
         configMapOfSets3 = ConfigMapOfSets(sortKeys: false),
@@ -140,7 +140,7 @@ void main() {
     expect(configMapOfSets6 == configMapOfSets12, isTrue);
   });
 
-  test("ConfigMapOfSets.copyWith()", () {
+  test("copyWith", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets();
     final ConfigMapOfSets configMapOfSetsIdentical = configMapOfSets1.copyWith(),
         configMapOfSets1WithDeepFalse = configMapOfSets1.copyWith(isDeepEquals: false),
@@ -201,7 +201,7 @@ void main() {
     expect(configMapOfSets1.cacheHashCode, !configMapOfSets1WithAllFalse.cacheHashCode);
   });
 
-  test("ConfigMapOfSets.hashCode getter", () {
+  test("hashCode", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
         configMapOfSets3 = ConfigMapOfSets(sortKeys: false),
@@ -227,7 +227,7 @@ void main() {
     expect(configMapOfSets5.hashCode, isNot(configMapOfSets6.hashCode));
   });
 
-  test("ConfigMapOfSets.toString method", () {
+  test("toString", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
         configMapOfSets3 = ConfigMapOfSets(sortKeys: false),
@@ -248,16 +248,16 @@ void main() {
         "ConfigMapOfSets{isDeepEquals: true, sortKeys: true, sortValues: true, removeEmptySets: true, cacheHashCode: false}");
   });
 
-  test("defaultConfig | Is initially a ConfigMapOfSets with all attributes true", () {
+  test("defaultConfig", () {
+    // 1) Is initially a ConfigMapOfSets with all attributes true
     expect(IMapOfSets.defaultConfig, const ConfigMapOfSets());
     expect(IMapOfSets.defaultConfig.isDeepEquals, isTrue);
     expect(IMapOfSets.defaultConfig.sortKeys, isTrue);
     expect(IMapOfSets.defaultConfig.sortValues, isTrue);
     expect(IMapOfSets.defaultConfig.removeEmptySets, isTrue);
     expect(IMapOfSets.defaultConfig.cacheHashCode, isTrue);
-  });
 
-  test("defaultConfig | Can modify the default", () {
+    // 2) Can modify the default
     IMapOfSets.defaultConfig = ConfigMapOfSets(
         isDeepEquals: false,
         sortKeys: false,
@@ -273,11 +273,4 @@ void main() {
             removeEmptySets: false,
             cacheHashCode: false));
   });
-
-  test(
-      "defaultConfig | "
-      "Changing the default ConfigMapOfSets will throw an exception if lockConfig", () {
-    ImmutableCollection.lockConfig();
-    expect(() => IMapOfSets.defaultConfig = ConfigMapOfSets(isDeepEquals: false), throwsStateError);
-  }, skip: true);
 }

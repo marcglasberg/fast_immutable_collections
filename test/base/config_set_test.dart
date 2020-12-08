@@ -3,22 +3,22 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("ConfigSet.isDeepEquals getter", () {
+  test("isDeepEquals", () {
     expect(ConfigSet().isDeepEquals, isTrue);
     expect(ConfigSet(isDeepEquals: false).isDeepEquals, isFalse);
   });
 
-  test("ConfigSet.sort getter", () {
+  test("sort", () {
     expect(ConfigSet().sort, isTrue);
     expect(ConfigSet(sort: false).sort, isFalse);
   });
 
-  test("ConfigSet.cacheHashCode getter", () {
+  test("cacheHashCode", () {
     expect(ConfigSet().cacheHashCode, isTrue);
     expect(ConfigSet(cacheHashCode: false).cacheHashCode, isFalse);
   });
 
-  test("ConfigSet.== operator", () {
+  test("==", () {
     const ConfigSet configSet1 = ConfigSet(),
         configSet2 = ConfigSet(isDeepEquals: false),
         configSet3 = ConfigSet(sort: false),
@@ -65,7 +65,7 @@ void main() {
     expect(configSet4 == configSet8, isTrue);
   });
 
-  test("ConfigSet.copyWith()", () {
+  test("copyWith", () {
     const ConfigSet configSet1 = ConfigSet();
     final ConfigSet configSetIdentical = configSet1.copyWith(),
         configSet1WithDeepFalse = configSet1.copyWith(isDeepEquals: false),
@@ -97,7 +97,7 @@ void main() {
     expect(configSet1.cacheHashCode, !configSet1WithDeepAndSortFalse.cacheHashCode);
   });
 
-  test("ConfigSet.hashCode getter", () {
+  test("hashCode", () {
     const ConfigSet configSet1 = ConfigSet(),
         configSet2 = ConfigSet(isDeepEquals: false),
         configSet3 = ConfigSet(sort: false),
@@ -113,7 +113,7 @@ void main() {
     expect(configSet3.hashCode, isNot(configSet4.hashCode));
   });
 
-  test("ConfigSet.toString()", () {
+  test("toString", () {
     expect(
         ConfigSet().toString(), "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: true}");
     expect(ConfigSet(isDeepEquals: false).toString(),
@@ -124,21 +124,16 @@ void main() {
         "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: false}");
   });
 
-  test("defaultConfig | Is initially a ConfigSet with isDeepEquals = true and sort = true", () {
+  test("defaultConfig", () {
+    // 1) Is initially a ConfigSet with isDeepEquals = true and sort = true
     expect(ISet.defaultConfig, const ConfigSet());
     expect(ISet.defaultConfig.isDeepEquals, isTrue);
     expect(ISet.defaultConfig.sort, isTrue);
     expect(ISet.defaultConfig.cacheHashCode, isTrue);
-  });
 
-  test("defaultConfig | Can modify the default", () {
+    // 2) Can modify the default
     ISet.defaultConfig = ConfigSet(isDeepEquals: false, sort: false, cacheHashCode: false);
     expect(ISet.defaultConfig,
         const ConfigSet(isDeepEquals: false, sort: false, cacheHashCode: false));
   });
-
-  test("defaultConfig | Changing the default ConfigSet will throw an exception if lockConfig", () {
-    ImmutableCollection.lockConfig();
-    expect(() => ISet.defaultConfig = ConfigSet(isDeepEquals: false), throwsStateError);
-  }, skip: true);
 }
