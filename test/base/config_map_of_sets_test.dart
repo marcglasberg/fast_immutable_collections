@@ -279,5 +279,5 @@ void main() {
       "Changing the default ConfigMapOfSets will throw an exception if lockConfig", () {
     ImmutableCollection.lockConfig();
     expect(() => IMapOfSets.defaultConfig = ConfigMapOfSets(isDeepEquals: false), throwsStateError);
-  }, skip:true);
+  }, skip: true);
 }

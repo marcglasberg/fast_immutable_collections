@@ -862,7 +862,7 @@ abstract class ProtoStudent {
 }
 
 @immutable
-class Student extends ProtoStudent implements Comparable<Student>{
+class Student extends ProtoStudent implements Comparable<Student> {
   final String name;
 
   const Student(this.name);
