@@ -19,7 +19,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.any()", () {
+  test("any", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -31,7 +31,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.cast()", () {
+  test("cast", () {
     final Students students = Students([Student("James")]);
 
     expect(students.cast<ProtoStudent>(), isA<ISet<ProtoStudent>>());
@@ -39,7 +39,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.contains()", () {
+  test("contains", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -51,7 +51,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.containsAll()", () {
+  test("containsAll", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -65,12 +65,13 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.elementAt()",
-      () => expect(() => Students([]).elementAt(0), throwsUnsupportedError));
+  test("elementAt", () {
+    expect(() => Students([]).elementAt(0), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.every()", () {
+  test("every", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -82,7 +83,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.expand()", () {
+  test("expand", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -106,7 +107,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.length, first, last and single", () {
+  test("length, first, last and single", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -118,16 +119,14 @@ void main() {
     expect(students.first, Student("James"));
     expect(students.last, Student("Sara"));
     expect(() => students.single, throwsStateError);
+
+    // single
+    expect(Students([const Student("James")]).single, const Student("James"));
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.single | Access",
-      () => expect(Students([const Student("James")]).single, const Student("James")));
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("FromISetMixin.firstWhere()", () {
+  test("firstWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -149,7 +148,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.fold()", () {
+  test("fold", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -165,7 +164,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.followedBy()", () {
+  test("followedBy", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -177,7 +176,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.forEach()", () {
+  test("forEach", () {
     String concatenated = "";
 
     const Student james = Student("James");
@@ -192,7 +191,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.join()", () {
+  test("join", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -205,7 +204,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.lastWhere()", () {
+  test("lastWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -227,7 +226,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.map()", () {
+  test("map", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     final Students students = Students([james, sara]);
@@ -238,7 +237,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.reduce()", () {
+  test("reduce", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -252,7 +251,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.singleWhere()", () {
+  test("singleWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -270,7 +269,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.skip()", () {
+  test("skip", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -282,7 +281,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.skipWhile()", () {
+  test("skipWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -294,7 +293,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.take()", () {
+  test("take", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -311,7 +310,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.takeWhile()", () {
+  test("takeWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -323,7 +322,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.where()", () {
+  test("where", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -335,7 +334,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.whereType()", () {
+  test("whereType", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -348,21 +347,19 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.isEmpty", () {
+  test("isEmpty | isNotEmpty", () {
+    // isEmpty
     expect(Students([]).isEmpty, isTrue);
     expect(Students([Student("James")]).isEmpty, isFalse);
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("FromISetMixin.isNotEmpty", () {
+    // isNotEmpty
     expect(Students([]).isNotEmpty, isFalse);
     expect(Students([Student("James")]).isNotEmpty, isTrue);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.iterator", () {
+  test("iterator", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -384,7 +381,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.toList()", () {
+  test("toList", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -401,7 +398,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.toSet()", () {
+  test("toSet", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -416,7 +413,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.+()", () {
+  test("+", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -434,7 +431,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.add()", () {
+  test("add", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -447,7 +444,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.addAll()", () {
+  test("addAll", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -461,7 +458,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.clear()", () {
+  test("clear", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -474,7 +471,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.equalItems()", () {
+  test("equalItems", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -487,7 +484,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.same()", () {
+  test("same", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -499,7 +496,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.remove()", () {
+  test("remove", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -510,7 +507,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.removeWhere()", () {
+  test("removeWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -521,7 +518,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.retainWhere()", () {
+  test("retainWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -532,7 +529,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.toggle()", () {
+  test("toggle", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -544,7 +541,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.unlock", () {
+  test("unlock", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -555,7 +552,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.unlockSorted", () {
+  test("unlockSorted", () {
     final Ints students = Ints([3, 2, 1, 3]);
 
     expect(students.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3}));
@@ -564,7 +561,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.unlockView", () {
+  test("unlockView", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -575,7 +572,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.difference()", () {
+  test("difference", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -588,7 +585,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.intersection()", () {
+  test("intersection", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -602,7 +599,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.lookup()", () {
+  test("lookup", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -616,7 +613,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.removeAll()", () {
+  test("removeAll", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -627,7 +624,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.retainAll()", () {
+  test("retainAll", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -638,7 +635,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.union()", () {
+  test("union", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");

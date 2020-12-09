@@ -21,7 +21,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("SAdd.unlock()", () {
+  test("unlock", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.unlock, <int>[1, 2, 3, 4]);
     expect(sAdd.unlock, isA<Set<int>>());
@@ -37,14 +37,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("SAdd.length getter", () {
+  test("length", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.length, 4);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("SAdd.contains()", () {
+  test("contains", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.contains(1), isTrue);
     expect(sAdd.contains(5), isFalse);
@@ -52,7 +52,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("IteratorSAdd Class | Iterating on the underlying iterator", () {
+  test("iterator (IteratorSAdd)", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     final Iterator<int> iter = sAdd.iterator;
 
@@ -69,12 +69,15 @@ void main() {
     expect(iter.current, isNull);
   });
 
-  test(
-      "Ensuring Immutability | SAdd.add() | "
-      "Changing the passed mutable set doesn't change the LAdd", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
-    final SAdd<int> sAdd = SAdd(sFlat, 3);
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("Ensuring Immutability", () {
+    // 1) add
+
+    // 1.1) Changing the passed mutable set doesn't change the LAdd
+    Set<int> original = {1, 2};
+    SFlat<int> sFlat = SFlat(original);
+    SAdd<int> sAdd = SAdd(sFlat, 3);
 
     expect(sAdd, <int>{1, 2, 3});
 
@@ -83,14 +86,11 @@ void main() {
 
     expect(original, <int>{1, 2, 3});
     expect(sAdd, <int>{1, 2, 3});
-  });
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Ensuring Immutability | SAdd.add() | " "Adding to the original SAdd doesn't change it", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
-    final SAdd<int> sAdd = SAdd(sFlat, 3);
+    // 1.2) Adding to the original SAdd doesn't change it
+    original = {1, 2};
+    sFlat = SFlat(original);
+    sAdd = SAdd(sFlat, 3);
 
     expect(sAdd, <int>{1, 2, 3});
 
@@ -101,19 +101,16 @@ void main() {
     expect(sAdd, <int>{1, 2, 3});
     expect(s1, <int>{1, 2, 3, 4});
     expect(s2, <int>{1, 2, 3});
-  });
 
-  test(
-      "Ensuring Immutability | SAdd.add() | "
-      "If the item being passed is a variable, a pointer to it shouldn't exist inside SAdd", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
-    final SAdd<int> sAdd = SAdd(sFlat, 3);
+    // 1.3) If the item being passed is a variable, a pointer to it shouldn't exist inside SAdd
+    original = {1, 2};
+    sFlat = SFlat(original);
+    sAdd = SAdd(sFlat, 3);
 
     expect(sAdd, <int>{1, 2, 3});
 
     int willChange = 4;
-    final S<int> s = sAdd.add(willChange);
+    S<int> s = sAdd.add(willChange);
 
     willChange = 5;
 
@@ -121,14 +118,13 @@ void main() {
     expect(sAdd, <int>{1, 2, 3});
     expect(willChange, 5);
     expect(s, <int>{1, 2, 3, 4});
-  });
 
-  test(
-      "Ensuring Immutability | SAdd.addAll() | "
-      "Changing the passed mutable set doesn't change the SAdd", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
-    final SAdd<int> sAdd = SAdd(sFlat, 3);
+    // 2) addAll
+
+    // 2.1) Changing the passed mutable set doesn't change the SAdd
+    original = {1, 2};
+    sFlat = SFlat(original);
+    sAdd = SAdd(sFlat, 3);
 
     expect(sAdd, <int>{1, 2, 3});
 
@@ -136,50 +132,43 @@ void main() {
 
     expect(original, <int>{1, 2, 3, 4});
     expect(sAdd, <int>{1, 2, 3});
-  });
 
-  test(
-      "Ensuring Immutability | SAdd.addAll() | "
-      "Changing the passed immutable set doesn't change the original SAdd", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
-    final SAdd<int> sAdd = SAdd(sFlat, 3);
+    // 2.2) Changing the passed immutable set doesn't change the original SAdd
+    original = {1, 2};
+    sFlat = SFlat(original);
+    sAdd = SAdd(sFlat, 3);
 
     expect(sAdd, <int>{1, 2, 3});
 
-    final S<int> s = sAdd.addAll({3, 4, 5});
+    s = sAdd.addAll({3, 4, 5});
 
     expect(original, <int>{1, 2});
     expect(sAdd, <int>{1, 2, 3});
     expect(s, <int>{1, 2, 3, 4, 5});
-  });
 
-  test(
-      "Ensuring Immutability | SAdd.addAll() | "
-      "If the items being passed are from a variable, "
-      "it shouldn't have a pointer to the variable", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
+    // 2.3) If the items being passed are from a variable, it shouldn't have a pointer to the
+    // variable
+    original = {1, 2};
+    sFlat = SFlat(original);
     final SAdd<int> sAdd1 = SAdd(sFlat, 3), sAdd2 = SAdd(sFlat, 4);
 
     expect(sAdd1, <int>{1, 2, 3});
     expect(sAdd2, <int>{1, 2, 4});
 
-    final S<int> s = sAdd1.addAll(sAdd2);
+    s = sAdd1.addAll(sAdd2);
     original.add(5);
 
     expect(original, <int>{1, 2, 5});
     expect(sAdd1, <int>{1, 2, 3});
     expect(sAdd2, <int>{1, 2, 4});
     expect(s, <int>{1, 2, 3, 4});
-  });
 
-  test(
-      "Ensuring Immutability | SAdd.remove() | "
-      "Changing the passed mutable set doesn't change the SAdd", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
-    final SAdd<int> sAdd = SAdd(sFlat, 3);
+    // 3) remove
+
+    // 3.1) Changing the passed mutable set doesn't change the SAdd
+    original = {1, 2};
+    sFlat = SFlat(original);
+    sAdd = SAdd(sFlat, 3);
 
     expect(sAdd, <int>{1, 2, 3});
 
@@ -187,21 +176,20 @@ void main() {
 
     expect(original, <int>{1});
     expect(sAdd, <int>{1, 2, 3});
-  });
 
-  test(
-      "Ensuring Immutability | SAdd.remove() | "
-      "Removing from the original SAdd doesn't change it", () {
-    final Set<int> original = {1, 2};
-    final SFlat<int> sFlat = SFlat(original);
-    final SAdd<int> sAdd = SAdd(sFlat, 3);
+    // 3.2) Removing from the original SAdd doesn't change it
+    original = {1, 2};
+    sFlat = SFlat(original);
+    sAdd = SAdd(sFlat, 3);
 
     expect(sAdd, <int>{1, 2, 3});
 
-    final S<int> s = sAdd.remove(1);
+    s = sAdd.remove(1);
 
     expect(original, <int>{1, 2});
     expect(sAdd, <int>{1, 2, 3});
     expect(s, <int>{2, 3});
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

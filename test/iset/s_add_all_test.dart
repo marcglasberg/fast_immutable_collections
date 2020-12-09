@@ -6,22 +6,30 @@ import "package:fast_immutable_collections/src/iset/s_add.dart";
 import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 void main() {
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Initialization assertion errors", () {
     expect(() => SAddAll(null, {3, 4, 5}), throwsAssertionError);
     expect(() => SAddAll(SFlat<int>.unsafe({1, 2}), null), throwsAssertionError);
     expect(() => SAddAll(null, null), throwsAssertionError);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Runtime Type", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll, isA<SAddAll<int>>());
   });
 
-  test("SAddAll.unlock()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("unlock", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.unlock, [1, 2, 3, 4, 5]);
     expect(sAddAll.unlock, isA<Set<int>>());
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
@@ -29,18 +37,24 @@ void main() {
     expect(sAddAll.isNotEmpty, isTrue);
   });
 
-  test("SAddAll.length", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("length", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.length, 5);
   });
 
-  test("SAddAll.contains()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("contains", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.contains(1), isTrue);
     expect(sAddAll.contains(6), isFalse);
   });
 
-  test("IteratorSAddAll Class | Iterating on the underlying iterator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("iterator (IteratorSAddAll)", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     final Iterator<int> iter = sAddAll.iterator;
 
@@ -59,18 +73,24 @@ void main() {
     expect(iter.current, isNull);
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Combining various SAddAlls and SAdds | Runtime Type", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     expect(sAddAll, isA<SAddAll<int>>());
   });
 
-  test("Combining various SAddAlls and SAdds | SAddAll.unlock", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Combining various SAddAlls and SAdds | unlock", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     expect(sAddAll.unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
     expect(sAddAll.unlock, isA<Set<int>>());
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   test("Combining various SAddAlls and SAdds | isEmpty | isNotEmpty", () {
     final sAddAll = SAddAll(
@@ -79,22 +99,26 @@ void main() {
     expect(sAddAll.isNotEmpty, isTrue);
   });
 
-  test("Combining various SAddAlls and SAdds | SAddAll.length", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Combining various SAddAlls and SAdds | length", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     expect(sAddAll.length, 8);
   });
 
-  test("Combining various SAddAlls and SAdds | SAddAll.contains()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Combining various SAddAlls and SAdds | contains", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     expect(sAddAll.contains(1), isTrue);
     expect(sAddAll.contains(9), isFalse);
   });
 
-  test(
-      "Combining various SAddAlls and SAdds | IteratorSAddAll Class | "
-      "Iterating on the underlying iterator", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Combining various SAddAlls and SAdds | iterator (IteratorSAddAll)", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     final Iterator<int> iter = sAddAll.iterator;
@@ -120,11 +144,14 @@ void main() {
     expect(iter.current, isNull);
   });
 
-  test(
-      "Ensuring Immutability | SAddAll.add() | "
-      "Changing the passed mutable set doesn't change the SAddAll", () {
-    final Set<int> original = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Ensuring Immutability", () {
+    // 1) add
+
+    // 1.1) Changing the passed mutable set doesn't change the SAddAll
+    Set<int> original = {3, 4, 5};
+    SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
@@ -133,13 +160,10 @@ void main() {
 
     expect(original, <int>{3, 4, 5, 6});
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
-  });
 
-  test(
-      "Ensuring Immutability | SAddAll.add() | "
-      "Adding to the original SAddAll doesn't change it", () {
-    final Set<int> original = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+    // 1.2) Adding to the original SAddAll doesn't change it
+    original = {3, 4, 5};
+    sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
@@ -150,19 +174,15 @@ void main() {
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
     expect(s1, <int>{1, 2, 3, 4, 5, 6});
     expect(s2, <int>{1, 2, 3, 4, 5});
-  });
 
-  test(
-      "Ensuring Immutability | SAddAll.add() | "
-      "If the item being passed is a variable, "
-      "a pointer to it shouldn't exist inside SAddAll", () {
-    final Set<int> original = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+    // 1.3) If the item being passed is a variable, a pointer to it shouldn't exist inside SAddAll
+    original = {3, 4, 5};
+    sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
     int willChange = 6;
-    final S<int> s = sAddAll.add(willChange);
+    S<int> s = sAddAll.add(willChange);
 
     willChange = 7;
 
@@ -170,13 +190,12 @@ void main() {
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
     expect(willChange, 7);
     expect(s, <int>{1, 2, 3, 4, 5, 6});
-  });
 
-  test(
-      "Ensuring Immutability | SAddAll.addAll() | "
-      "Changing the passed mutable set doesn't change the SAddAll", () {
-    final Set<int> original = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+    // 2) addAll
+
+    // 2.1) Changing the passed mutable set doesn't change the SAddAll
+    original = {3, 4, 5};
+    sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
@@ -184,48 +203,41 @@ void main() {
 
     expect(original, <int>{3, 4, 5, 6, 7});
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
-  });
 
-  test(
-      "Ensuring Immutability | SAddAll.addAll() | "
-      "Changing the passed immutable set doesn't change the original SAddAll", () {
-    final Set<int> original = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+    // 2.2) Changing the passed immutable set doesn't change the original SAddAll
+    original = {3, 4, 5};
+    sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
-    final S<int> s = sAddAll.addAll({6, 7});
+    s = sAddAll.addAll({6, 7});
 
     expect(original, <int>{3, 4, 5});
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
     expect(s, <int>{1, 2, 3, 4, 5, 6, 7});
-  });
 
-  test(
-      "Ensuring Immutability | SAddAll.addAll() | "
-      "If the items being passed are from a variable, "
-      "it shouldn't have a pointer to the variable", () {
-    final Set<int> original = {3, 4, 5};
+    // 2.3) If the items being passed are from a variable, it shouldn't have a pointer to the
+    // variable
+    original = {3, 4, 5};
     final SAddAll<int> sAddAll1 = SAddAll(SFlat<int>({1, 2}), original),
         sAddAll2 = SAddAll(SFlat<int>({8, 9}), original);
 
     expect(sAddAll1, <int>{1, 2, 3, 4, 5});
     expect(sAddAll2, <int>{8, 9, 3, 4, 5});
 
-    final S<int> s = sAddAll1.addAll(sAddAll2);
+    s = sAddAll1.addAll(sAddAll2);
     original.add(6);
 
     expect(original, <int>{3, 4, 5, 6});
     expect(sAddAll1, <int>{1, 2, 3, 4, 5});
     expect(sAddAll2, <int>{8, 9, 3, 4, 5});
     expect(s, <int>{1, 2, 3, 4, 5, 8, 9});
-  });
 
-  test(
-      "Ensuring Immutability | SAddAll.remove() | "
-      "Changing the passed mutable set doesn't change SAddAll", () {
-    final Set<int> original = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+    // 3) remove
+
+    // 3.1) Changing the passed mutable set doesn't change SAddAll
+    original = {3, 4, 5};
+    sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
@@ -233,20 +245,19 @@ void main() {
 
     expect(original, <int>{4, 5});
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
-  });
 
-  test(
-      "Ensuring Immutability | SAddAll.remove() | "
-      "Removing from the original SAddAll doesn't change it", () {
-    final Set<int> original = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+    // 3.2) Removing from the original SAddAll doesn't change it
+    original = {3, 4, 5};
+    sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
-    final S<int> s = sAddAll.remove(1);
+    s = sAddAll.remove(1);
 
     expect(original, <int>{3, 4, 5});
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
     expect(s, <int>{2, 3, 4, 5});
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

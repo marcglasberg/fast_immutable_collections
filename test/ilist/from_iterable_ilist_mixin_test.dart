@@ -377,13 +377,11 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty", () {
+    // isEmpty
     expect(Students([]).isEmpty, isTrue);
     expect(Students([Student("James")]).isEmpty, isFalse);
-  });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("isNotEmpty", () {
+    // isNotEmpty
     expect(Students([]).isNotEmpty, isFalse);
     expect(Students([Student("James")]).isNotEmpty, isTrue);
   });

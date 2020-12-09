@@ -3,12 +3,14 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
-  test("Empty Inialization", () {
+  test("Empty Initialization", () {
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(null);
     expect(unmodifiableSetView.lock, allOf(isA<ISet<int>>(), <int>{}));
   });
 
-  test("Non-mutable operations | UnmodifiableSetView.length getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("length", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -17,7 +19,9 @@ void main() {
     views.forEach((UnmodifiableSetView<int> view) => expect(view.length, 3));
   });
 
-  test("Non-mutable operations | UnmodifiableSetView.lock getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("lock", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -27,7 +31,9 @@ void main() {
         (UnmodifiableSetView<int> view) => expect(view.lock, allOf(isA<ISet<int>>(), baseSet)));
   });
 
-  test("Non-mutable operations | isEmpty | isNotEmpty", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("isEmpty | isNotEmpty", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -39,7 +45,9 @@ void main() {
     });
   });
 
-  test("Non-mutable operations | UnmodifiableSetView.toSet()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("toSet", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -48,7 +56,9 @@ void main() {
     views.forEach((UnmodifiableSetView<int> view) => expect(view.toSet(), baseSet));
   });
 
-  test("Non-mutable operations | UnmodifiableSetView.contains method", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("contains", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -62,7 +72,9 @@ void main() {
     });
   });
 
-  test("Non-mutable operations | UnmodifiableSetView.lookup()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("lookup", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -76,7 +88,9 @@ void main() {
     });
   });
 
-  test("Non-mutable operations | UnmodifiableSetView.iterator getter", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("iterator", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -96,7 +110,9 @@ void main() {
     });
   });
 
-  test("UnmodifiableSetView.add()", () {
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("add", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -106,7 +122,7 @@ void main() {
         (UnmodifiableSetView<int> view) => expect(() => view.add(4), throwsUnsupportedError));
   });
 
-  test("UnmodifiableSetView.remove()", () {
+  test("remove", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetView<int> unmodifiableSetView = UnmodifiableSetView(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetView.fromSet(baseSet);
@@ -115,4 +131,6 @@ void main() {
     views.forEach(
         (UnmodifiableSetView<int> view) => expect(() => view.remove(2), throwsUnsupportedError));
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

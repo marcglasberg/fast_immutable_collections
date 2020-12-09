@@ -10,6 +10,8 @@ void main() {
     expect({1, 2, 3}.lock, allOf(isA<ISet<int>>(), {1, 2, 3}));
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   test("lockUnsafe", () {
     final Set<int> set = {1, 2, 3};
     final ISet<int> iset = set.lockUnsafe;
@@ -20,4 +22,6 @@ void main() {
 
     expect(set, iset);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
