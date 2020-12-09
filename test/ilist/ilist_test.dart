@@ -1204,9 +1204,15 @@ void main() {
   test("replaceFirstWhere", () {
     var ilist = ["do", "re", "mi", "re"].lock;
 
+    // 1) Regular usage
     expect(ilist.replaceFirstWhere((String item) => item == "re", "x"), ["do", "x", "mi", "re"]);
-
     expect(ilist.replaceFirstWhere((String item) => item == "fa", "x"), ["do", "re", "mi", "re"]);
+
+    // 2) addIfNotFound
+    expect(ilist.replaceFirstWhere((String item) => item == "y", "x", addIfNotFound: true),
+        ["do", "re", "mi", "re", "x"]);
+    expect(ilist.replaceFirstWhere((String item) => item == "y", "x", addIfNotFound: false),
+        ["do", "re", "mi", "re"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1215,7 +1221,6 @@ void main() {
     var ilist = ["do", "re", "mi", "re"].lock;
 
     expect(ilist.replaceAllWhere((String item) => item == "re", "x"), ["do", "x", "mi", "x"]);
-
     expect(ilist.replaceAllWhere((String item) => item == "fa", "x"), ["do", "re", "mi", "re"]);
   });
 

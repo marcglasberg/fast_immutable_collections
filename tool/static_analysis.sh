@@ -1,9 +1,9 @@
 #!/bin/bash
 
-cd benchmark
+cd benchmark || exit
 flutter pub get
 
-cd example
+cd example || exit
 flutter pub get
 
 cd ../..

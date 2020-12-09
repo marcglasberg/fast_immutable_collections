@@ -940,9 +940,11 @@ class IList<T> // ignore: must_be_immutable
       map((element) => (element == from) ? to : element);
 
   /// Finds the first item that satisfies the provided [test],
-  /// and replace it with [to]. If [addIfNotFound] is `false`,
+  /// and replace it with [to].
+  ///
+  /// - If [addIfNotFound] is `false`,
   /// return the unchanged list if no item satisfies the [test].
-  /// If [addIfNotFound] is `true`, add the item to the end of the list
+  /// - If [addIfNotFound] is `true`, add the item to the end of the list
   /// if no item satisfies the [test].
   IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false}) {
     var index = indexWhere(test);
