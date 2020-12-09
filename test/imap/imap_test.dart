@@ -107,12 +107,19 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("fromValues", () {
+    // 1) Regular usage
     const List<int> values = [1, 2];
     final IMap<String, int> fromKeys =
         IMap.fromValues(values: values, keyMapper: (int value) => value.toString());
 
     expect(fromKeys["1"], 1);
     expect(fromKeys["2"], 2);
+
+    // 2) Neither keyMapper nor values can be null
+    expect(() => IMap.fromValues(keyMapper: null, values: null), throwsAssertionError);
+    expect(() => IMap.fromValues(keyMapper: null, values: values), throwsAssertionError);
+    expect(() => IMap.fromValues(keyMapper: (int value) => value.toString(), values: null),
+        throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////

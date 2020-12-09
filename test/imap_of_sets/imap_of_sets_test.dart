@@ -1482,6 +1482,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("clear", () {
+    // 1) If removeEmptySets == true
     final IMapOfSets<String, int> iMapOfSets = IMapOfSets({
       "1": {1, 2, 3},
       "2": {4},
@@ -1491,8 +1492,22 @@ void main() {
 
     // TODO: Marcelo, Ao que parece `.empty` leva a uma chamada sobre em `IMapOfSets.from` com
     // `mapOfSets` como `null`. Para resolver isso, eu adicionei um `?.` no `mapOfSets.map`.
-    expect(iMapOfSetsCleared, IMapOfSets.empty<String, int>());
     expect(iMapOfSetsCleared.unlock, <String, Set<int>>{});
+
+    // 2) If removeEmptySets == false
+    final IMapOfSets<String, int> iMapOfSetsWithoutRemoveEmptySets = IMapOfSets({
+      "1": {1, 2, 3},
+      "2": {4},
+      "3": {10, 11},
+    }).withConfig(const ConfigMapOfSets(removeEmptySets: false));
+    final IMapOfSets<String, int> iMapOfSetsClearedButNotRemoved =
+        iMapOfSetsWithoutRemoveEmptySets.clear();
+
+    expect(iMapOfSetsClearedButNotRemoved.unlock, {
+      "1": <int>{},
+      "2": <int>{},
+      "3": <int>{},
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////

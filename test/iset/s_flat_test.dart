@@ -475,6 +475,13 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("anyItem", () {
+    final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
+    expect(sFlat.anyItem, isA<int>());
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("MapEntryEquality.equals", () {
     const MapEntry<String, int> mapEntry1 = MapEntry("a", 1);
     const MapEntry<String, int> mapEntry2 = MapEntry("a", 2);

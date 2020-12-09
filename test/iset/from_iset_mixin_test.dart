@@ -646,6 +646,29 @@ void main() {
   });
 
   /////////////////////////////////////////////////////////////////////////////
+
+  test("toString", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, Student("James")]);
+
+    // 1) Global configuration prettyPrint == false
+    ImmutableCollection.prettyPrint = false;
+    expect(students.toString(), "Students{Student: James, Student: Sara, Student: Lucy}");
+
+    // 2) Global configuration prettyPrint == true
+    ImmutableCollection.prettyPrint = true;
+    expect(
+        students.toString(),
+        "Students{\n"
+        "   Student: James,\n"
+        "   Student: Sara,\n"
+        "   Student: Lucy\n"
+        "}");
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -75,6 +75,32 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("anyItem", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    expect(sAddAll.anyItem, isA<int>());
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("unsafe", () {
+    // 1) Parameters cannot be null
+    expect(() => SAddAll.unsafe(null, null), throwsAssertionError);
+    expect(() => SAddAll.unsafe(SFlat<int>.unsafe({1, 2}), null), throwsAssertionError);
+    expect(() => SAddAll.unsafe(null, {3, 4, 5}), throwsAssertionError);
+
+    // 2) Regular usage
+    final Set<int> set = {3, 4, 5};
+    final SAddAll<int> sAddAll = SAddAll.unsafe(SFlat<int>.unsafe({1, 2}), set);
+
+    expect(sAddAll, {1, 2, 3, 4, 5});
+
+    set.add(10);
+
+    expect(sAddAll, {1, 2, 3, 4, 5, 10});
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Combining various SAddAlls and SAdds | Runtime Type", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
