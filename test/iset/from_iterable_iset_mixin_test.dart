@@ -6,6 +6,12 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 void main() {
   /////////////////////////////////////////////////////////////////////////////
 
+  setUp(() {
+    ImmutableCollection.resetAllConfigurations();
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Repeating elements doesn't include the copies in the set", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
