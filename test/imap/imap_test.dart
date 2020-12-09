@@ -444,6 +444,29 @@ void main() {
     newMap = newMap.add("a", 4);
     expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
     expect(newMap.unlock, {"a": 4, "b": 2});
+
+    // 3) Null checks
+
+    // 3.1) Regular usage
+    expect(<String, int>{}.lock.add("a", 1).unlock, {"a": 1});
+    expect(<String, int>{"a": null}.lock.add("b", 1).unlock, {"a": null, "b": 1});
+    expect(<String, int>{"a": 1}.lock.add("b", 10).unlock, {"a": 1, "b": 10});
+    expect(<String, int>{"a": null, "b": null, "c": null}.lock.add("z", 10).unlock,
+        {"a": null, "b": null, "c": null, "z": 10});
+    expect(<String, int>{"a": null, "b": 1, "c": null, "d": 3}.lock.add("z", 10).unlock,
+        {"a": null, "b": 1, "c": null, "d": 3, "z": 10});
+    expect({"a": 1, "b": 2, "c": 3}.lock.add("d", 4).unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
+
+    // 3.2) Adding null
+    expect(<String, int>{}.lock.add("a", null).unlock, {"a": null});
+    expect(<String, int>{"a": null}.lock.add("b", null).unlock, {"a": null, "b": null});
+    expect(<String, int>{"a": 1}.lock.add("b", null).unlock, {"a": 1, "b": null});
+    expect(<String, int>{"a": null, "b": null, "c": null}.lock.add("d", null).unlock,
+        {"a": null, "b": null, "c": null, "d": null});
+    expect(<String, int>{"a": null, "b": 1, "c": null, "d": 3}.lock.add("z", null).unlock,
+        {"a": null, "b": 1, "c": null, "d": 3, "z": null});
+    expect(<String, int>{"a": 1, "b": 2, "c": 3}.lock.add("d", null).unlock,
+        {"a": 1, "b": 2, "c": 3, "d": null});
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -482,6 +505,64 @@ void main() {
     newMap = newMap.addAll({"a": 4}.lock);
     expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
     expect(newMap.unlock, {"a": 4, "b": 2});
+
+    // 3) Null checks
+
+    // 3.1) Regular usage
+    expect(<String, int>{}.lock.addAll({"a": 1, "b": 2}.lock).unlock, {"a": 1, "b": 2});
+    expect(<String, int>{"a": null}.lock.addAll({"b": 1, "c": 2}.lock).unlock,
+        {"a": null, "b": 1, "c": 2});
+    expect(
+        <String, int>{"a": 1}.lock.addAll({"b": 2, "c": 3}.lock).unlock, {"a": 1, "b": 2, "c": 3});
+    expect(<String, int>{"a": null, "b": null, "c": null}.lock.addAll({"d": 1, "e": 2}.lock).unlock,
+        {"a": null, "b": null, "c": null, "d": 1, "e": 2});
+    expect(
+        <String, int>{"a": null, "b": 1, "c": null, "d": 3}
+            .lock
+            .addAll({"e": 10, "f": 11}.lock)
+            .unlock,
+        {"a": null, "b": 1, "c": null, "d": 3, "e": 10, "f": 11});
+    expect({"a": 1, "b": 2, "c": 3, "d": 4}.lock.addAll({"e": 5, "f": 6}.lock).unlock,
+        {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6});
+
+    // 3.2) Adding nulls
+    expect(<String, int>{}.lock.addAll({"a": null, "b": null}.lock).unlock, {"a": null, "b": null});
+    expect(<String, int>{"a": null}.lock.addAll({"b": null, "c": null}.lock).unlock,
+        {"a": null, "b": null, "c": null});
+    expect(<String, int>{"a": 1}.lock.addAll({"b": null, "c": null}.lock).unlock,
+        {"a": 1, "b": null, "c": null});
+    expect(
+        <String, int>{"a": null, "b": null, "c": null}
+            .lock
+            .addAll({"d": null, "e": null}.lock)
+            .unlock,
+        {"a": null, "b": null, "c": null, "d": null, "e": null});
+    expect(
+        <String, int>{"a": null, "b": 1, "c": null, "d": 3}
+            .lock
+            .addAll({"e": null, "f": null}.lock)
+            .unlock,
+        {"a": null, "b": 1, "c": null, "d": 3, "e": null, "f": null});
+    expect({"a": 1, "b": 2, "c": 3, "d": 4}.lock.addAll({"e": null, "f": null}.lock).unlock,
+        {"a": 1, "b": 2, "c": 3, "d": 4, "e": null, "f": null});
+
+    // 3.3) Adding null and an item
+    expect(<String, int>{}.lock.addAll({"a": null, "b": 1}.lock).unlock, {"a": null, "b": 1});
+    expect(<String, int>{"a": null}.lock.addAll({"b": null, "c": 1}.lock).unlock,
+        {"a": null, "b": null, "c": 1});
+    expect(<String, int>{"a": 1}.lock.addAll({"b": null, "c": 2}.lock).unlock,
+        {"a": 1, "b": null, "c": 2});
+    expect(
+        <String, int>{"a": null, "b": null, "c": null}.lock.addAll({"d": null, "e": 1}.lock).unlock,
+        {"a": null, "b": null, "c": null, "d": null, "e": 1});
+    expect(
+        <String, int>{"a": null, "b": 1, "c": null, "d": 3}
+            .lock
+            .addAll({"e": null, "f": 1}.lock)
+            .unlock,
+        {"a": null, "b": 1, "c": null, "d": 3, "e": null, "f": 1});
+    expect({"a": 1, "b": 2, "c": 3, "d": 4}.lock.addAll({"e": null, "f": 1}.lock).unlock,
+        {"a": 1, "b": 2, "c": 3, "d": 4, "e": null, "f": 1});
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -552,6 +633,26 @@ void main() {
     expect(imap3.same(imap4), isFalse);
     expect(imap4.same(imap5), isFalse);
     expect(imap5.same(imap6), isTrue);
+
+    // 3) Poking around with nulls
+    expect(<String, int>{}.lock.remove("a").unlock, <String, int>{});
+    expect(<String, int>{}.lock.remove(null).unlock, <String, int>{});
+
+    expect(<String, int>{"a": null}.lock.remove(null).unlock, <String, int>{"a": null});
+    expect(<String, int>{"a": null}.lock.remove("b").unlock, <String, int>{"a": null});
+
+    expect(<String, int>{"a": 1}.lock.remove(null).unlock, <String, int>{"a": 1});
+    expect(<String, int>{"a": 1}.lock.remove("a").unlock, <String, int>{});
+
+    expect(<String, int>{"a": null, "b": null, "c": null}.lock.remove("a").unlock,
+        <String, int>{"b": null, "c": null});
+    expect(<String, int>{"a": null, "b": null, "c": null}.lock.remove("z").unlock,
+        <String, int>{"a": null, "b": null, "c": null});
+
+    expect(<String, int>{"a": null, "b": 1, "c": null, "d": 1}.lock.remove("a").unlock,
+        <String, int>{"b": 1, "c": null, "d": 1});
+    expect(<String, int>{"a": null, "b": 1, "c": null, "d": 1}.lock.remove("b").unlock,
+        <String, int>{"a": null, "c": null, "d": 1});
   });
 
   //////////////////////////////////////////////////////////////////////////////
