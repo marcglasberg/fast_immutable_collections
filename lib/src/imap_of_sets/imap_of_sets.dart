@@ -763,6 +763,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return orElse?.call();
   }
 
+  // TODO: Marcelo, por favor, adicione documentação sobre o que este método faz e por que ele
+  // existe.
   static Map<K, Set<V>> _mutableMapOfSets<K, V, I>(
     Iterable<I> iterable, {
     K Function(I) keyMapper,

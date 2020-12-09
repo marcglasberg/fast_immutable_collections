@@ -415,7 +415,7 @@ void main() {
     // 2) With empty list
     final IList<int> emptyIList = <int>[].lock;
 
-    expect(IList.withConfig(emptyIList, emptyIList.config), []);
+    expect(IList.withConfig(emptyIList, const ConfigList(cacheHashCode: false)), []);
 
     // 3) Assertion error
     expect(() => [].lock.withConfig(null), throwsAssertionError);
@@ -779,6 +779,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("length, first, last, single", () {
+    // 1) Regular usage
     var ilist = [1, 2, 3, 4, 5, 6].lock;
     expect(ilist.length, 6);
     expect(ilist.first, 1);
@@ -786,6 +787,11 @@ void main() {
 
     expect([10].lock.single, 10);
     expect(() => ilist.single, throwsStateError);
+
+    // 2) Flush optimization for length: When length is zero and the underlying _l is not LFlat
+    ilist = [1, 2, 3].lock.addAll([4, 5]).removeAll([1, 2, 3, 4, 5]);
+
+    expect(ilist.length, 0);
   });
 
   //////////////////////////////////////////////////////////////////////////////

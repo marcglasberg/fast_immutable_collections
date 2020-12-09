@@ -26,6 +26,38 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("MapEntryExtension.print", () {
+    // 1) Simple usage
+    final MapEntry<String, int> simpleEntry = MapEntry("a", 1);
+
+    expect(simpleEntry.print(true), "a: 1");
+    expect(simpleEntry.print(false), "a: 1");
+
+    // 2) The key is one of the immutable collections
+    final MapEntry<IList<String>, int> entryWithCollectionKeys = MapEntry(["a", "b"].lock, 1);
+
+    expect(entryWithCollectionKeys.print(false), "[a, b]: 1");
+    expect(
+        entryWithCollectionKeys.print(true),
+        "[\n"
+        "   a,\n"
+        "   b\n"
+        "]: 1");
+    // 3) The value is one of the immutable collections
+    final MapEntry<int, ISet<int>> entryWithCollectionValues = MapEntry(1, {1, 2, 3}.lock);
+
+    expect(entryWithCollectionValues.print(false), "1: {1, 2, 3}");
+    expect(
+        entryWithCollectionValues.print(true),
+        "1: {\n"
+        "   1,\n"
+        "   2,\n"
+        "   3\n"
+        "}");
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Default constructor", () {
     const Entry<String, int> entry = Entry("a", 1);
 

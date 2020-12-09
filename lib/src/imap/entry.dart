@@ -41,6 +41,9 @@ extension MapEntryExtension<K, V> on MapEntry<K, V> {
   ///
   int compareKeyAndValue(MapEntry other) => compareObject(this, other);
 
+  // TODO: Marcelo, por favor, seria possível completar a documentação e explicitar por que você
+  // preferiu que [prettyPrint] fosse um parâmetro obrigatório desta vez?
+  /// See also: [ImmutableCollection]
   String print(bool prettyPrint) {
     String keyStr = (key is ImmutableCollection)
         ? (key as ImmutableCollection).toString(prettyPrint)
