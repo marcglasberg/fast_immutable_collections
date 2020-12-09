@@ -374,6 +374,20 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("withConfig factory", () {
+    // 1) Config is null
+    IMap<String, int> imap = IMap.withConfig({"a": 1, "b": 2}, null);
+    expect(imap.unlock, {"a": 1, "b": 2});
+    expect(imap.config, const ConfigMap());
+
+    // 2) Regular usage
+    imap = IMap.withConfig({"a": 1, "b": 2}, ConfigMap(isDeepEquals: false));
+    expect(imap.unlock, {"a": 1, "b": 2});
+    expect(imap.config, const ConfigMap(isDeepEquals: false));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("withConfigFrom", () {
     final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2});
     final IMap<String, int> iMap2 =

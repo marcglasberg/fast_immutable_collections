@@ -412,12 +412,15 @@ void main() {
     expect(iListNewConfig.isDeepEquals, isTrue);
     expect(iListNewConfigIdentity.isDeepEquals, isFalse);
 
-    // 2) With empty list
+    // 2) With empty list and different configs
     final IList<int> emptyIList = <int>[].lock;
-
     expect(IList.withConfig(emptyIList, const ConfigList(cacheHashCode: false)), []);
 
-    // 3) Assertion error
+    // 3) With non-empty list and different configs
+    final IList<int> nonemptyIList = <int>[1, 2, 3].lock;
+    expect(IList.withConfig(nonemptyIList, const ConfigList(cacheHashCode: false)), [1, 2, 3]);
+
+    // 4) Assertion error
     expect(() => [].lock.withConfig(null), throwsAssertionError);
   });
 
