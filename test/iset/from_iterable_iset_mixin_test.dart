@@ -17,7 +17,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.any()", () {
+  test("any", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -29,7 +29,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.cast()", () {
+  test("cast", () {
     final Students students = Students([Student("James")]);
 
     expect(() => students.cast<ProtoStudent>(), throwsUnsupportedError);
@@ -37,7 +37,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.contains()", () {
+  test("contains", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -49,12 +49,11 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.elementAt()",
-      () => expect(() => Students([]).elementAt(0), throwsUnsupportedError));
+  test("elementAt", () => expect(() => Students([]).elementAt(0), throwsUnsupportedError));
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.every()", () {
+  test("every", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -66,7 +65,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.expand()", () {
+  test("expand", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -90,7 +89,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromISetMixin.length, first, last and single", () {
+  test("length, first, last and single", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -106,7 +105,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.firstWhere()", () {
+  test("firstWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -128,7 +127,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.fold()", () {
+  test("fold", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -144,7 +143,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.followedBy()", () {
+  test("followedBy", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -155,7 +154,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.forEach()", () {
+  test("forEach", () {
     String concatenated = "";
 
     const Student james = Student("James");
@@ -170,7 +169,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.join()", () {
+  test("join", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -183,7 +182,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.lastWhere()", () {
+  test("lastWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -205,7 +204,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.map()", () {
+  test("map", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     final Students students = Students([james, sara]);
@@ -216,7 +215,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.reduce()", () {
+  test("reduce", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -230,7 +229,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.singleWhere()", () {
+  test("singleWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -248,7 +247,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.skip()", () {
+  test("skip", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -260,7 +259,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.skipWhile()", () {
+  test("skipWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -272,7 +271,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.take()", () {
+  test("take", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -289,7 +288,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.takeWhile()", () {
+  test("takeWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -301,7 +300,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.where()", () {
+  test("where", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -313,7 +312,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.whereType()", () {
+  test("whereType", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -326,21 +325,21 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.isEmpty", () {
+  test("isEmpty", () {
     expect(Students([]).isEmpty, isTrue);
     expect(Students([Student("James")]).isEmpty, isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.isNotEmpty", () {
+  test("isNotEmpty", () {
     expect(Students([]).isNotEmpty, isFalse);
     expect(Students([Student("James")]).isNotEmpty, isTrue);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.iterator", () {
+  test("iterator", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -362,7 +361,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.toList()", () {
+  test("toList", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
@@ -377,11 +376,11 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("FromIterableISetMixin.toSet()", () {
+  test("toSet", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy, Student("James")]);
+    final Students students = Students([james, sara, sara, lucy, Student("James")]);
 
     expect(students.toSet(), {
       const Student("James"),
@@ -389,6 +388,31 @@ void main() {
       const Student("Lucy"),
     });
   });
+
+  ///////////////////////////////////////////////////////////////////////////////
+
+  test("toString", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy, Student("James")]);
+
+    // 1) Global configuration prettyPrint == false
+    ImmutableCollection.prettyPrint = false;
+    expect(students.toString(), "Students{Student: James, Student: Sara, Student: Lucy}");
+
+    // 2) Global configuration prettyPrint == true
+    ImmutableCollection.prettyPrint = true;
+    expect(
+        students.toString(),
+        "Students{\n"
+        "   Student: James,\n"
+        "   Student: Sara,\n"
+        "   Student: Lucy\n"
+        "}");
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////
 }
 
 ///////////////////////////////////////////////////////////////////////////////
