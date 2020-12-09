@@ -4,6 +4,8 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("iterator", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -413,6 +415,8 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 @immutable
 class Students with FromIterableIListMixin<Student> {
   final IList<Student> _students;
@@ -423,10 +427,14 @@ class Students with FromIterableIListMixin<Student> {
   IList<Student> get iter => _students;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 @immutable
 abstract class ProtoStudent {
   const ProtoStudent();
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class Student extends ProtoStudent implements Comparable<Student> {
@@ -448,3 +456,5 @@ class Student extends ProtoStudent implements Comparable<Student> {
   @override
   int compareTo(Student other) => name.compareTo(other.name);
 }
+
+/////////////////////////////////////////////////////////////////////////////

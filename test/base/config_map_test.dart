@@ -3,6 +3,8 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("isDeepEquals", () {
     expect(ConfigMap().isDeepEquals, isTrue);
     expect(ConfigMap(isDeepEquals: false).isDeepEquals, isFalse);

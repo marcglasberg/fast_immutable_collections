@@ -3,6 +3,7 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
   test("Empty Initialization", () {
     expect(ModifiableMapView({}.lock).isEmpty, isTrue);
     expect(ModifiableMapView(null).isEmpty, isTrue);
@@ -84,4 +85,6 @@ void main() {
     modifiableMapView.remove("d");
     expect(modifiableMapView["d"], isNull);
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

@@ -3,6 +3,8 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("lock", () {
     // 1) Typical example
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;

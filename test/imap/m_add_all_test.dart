@@ -6,6 +6,8 @@ import "package:fast_immutable_collections/src/imap/m_add_all.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Initialization Assertion Errors", () {
     expect(() => MAddAll.unsafe(null, MFlat({"b": 2, "c": 3})), throwsAssertionError);
     expect(() => MAddAll.unsafe(MFlat({"a": 1}), null), throwsAssertionError);

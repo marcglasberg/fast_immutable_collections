@@ -5,6 +5,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Initialization Assertion Errors", () {
     expect(() => LFlat(null), throwsAssertionError);
   });

@@ -6,6 +6,8 @@ import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:fast_immutable_collections/src/imap/m_replace.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -228,4 +230,6 @@ void main() {
       "a": 1,
     });
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

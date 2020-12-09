@@ -3,6 +3,8 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("lock", () {
     const Map<String, Set<int>> map = {
       "a": {1, 2},
@@ -15,4 +17,6 @@ void main() {
       "b": {1, 2, 3}
     });
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

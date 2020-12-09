@@ -5,6 +5,8 @@ import "package:fast_immutable_collections/src/imap/m_add.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -214,4 +216,6 @@ void main() {
     expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
     expect(m.unlock, <String, int>{"a": 1, "b": 2});
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

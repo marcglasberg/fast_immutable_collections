@@ -3,6 +3,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("lock", () {
     expect(<int>{}.lock, allOf(isA<ISet<int>>(), <int>{}));
     expect(<int>{1}.lock, allOf(isA<ISet<int>>(), {1}));

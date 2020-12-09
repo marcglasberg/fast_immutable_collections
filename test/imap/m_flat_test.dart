@@ -5,6 +5,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Initialization assertion error", () {
     expect(() => MFlat(null), throwsAssertionError);
   });
@@ -288,4 +290,6 @@ void main() {
     expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
     expect(m.unlock, <String, int>{"a": 1});
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

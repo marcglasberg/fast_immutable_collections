@@ -3,6 +3,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("lock", () {
     // 1) From an empty list
     expect([].lock, isA<IList>());
@@ -25,6 +27,8 @@ void main() {
     expect([1, 2, 3].lock, allOf(isA<IList<int>>(), [1, 2, 3]));
   });
 
+  /////////////////////////////////////////////////////////////////////////////
+
   test("lockUnsafe", () {
     final List<int> list = [1, 2, 3];
     final IList<int> ilist = list.lockUnsafe;
@@ -36,6 +40,8 @@ void main() {
     expect(list, ilist);
   });
 
+  /////////////////////////////////////////////////////////////////////////////
+
   test("sortOrdered", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
 
@@ -43,6 +49,8 @@ void main() {
 
     expect(list, [1, 2, 3, 4, 5, 10]);
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("sortLike", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
@@ -52,8 +60,13 @@ void main() {
     expect(list, [1, 2, 3, 4, 10, 5]);
   });
 
-  test("sortLike | the ordering can't be null",
-      () => expect(() => [1, 2, 3, 4, 10, 5].sortLike(null), throwsAssertionError));
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("sortLike | the ordering can't be null", () {
+    expect(() => [1, 2, 3, 4, 10, 5].sortLike(null), throwsAssertionError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("whereMoveToTheEnd", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
@@ -63,6 +76,8 @@ void main() {
     expect(list, [1, 2, 4, 3, 10, 5]);
   });
 
+  /////////////////////////////////////////////////////////////////////////////
+
   test("whereMoveToTheFront", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
 
@@ -70,4 +85,6 @@ void main() {
 
     expect(list, [10, 5, 1, 2, 4, 3]);
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

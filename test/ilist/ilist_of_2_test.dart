@@ -3,6 +3,8 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Simple Initialization", () {
     const IListOf2 iListOf2 = IListOf2(2, 1);
 
@@ -37,4 +39,6 @@ void main() {
     expect(IListOf2(1, 2) == IListOf2(2, 1), isFalse);
     expect(IListOf2(1, 2).hashCode, isNot(IListOf2(2, 1).hashCode));
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

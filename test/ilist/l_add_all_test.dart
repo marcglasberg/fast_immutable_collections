@@ -6,6 +6,8 @@ import "package:fast_immutable_collections/src/ilist/l_add_all.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Initialization Assertion Errors", () {
     expect(() => LAddAll<int>(null, [1, 2]), throwsAssertionError);
     expect(() => LAddAll<int>(LFlat<int>([1, 2]), null), throwsAssertionError);

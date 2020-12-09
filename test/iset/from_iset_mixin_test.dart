@@ -644,7 +644,11 @@ void main() {
     expect(students.union({james, const Student("Bob")}),
         <Student>{james, sara, lucy, const Student("Bob")});
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class Ints with FromISetMixin<int, Ints> {
@@ -659,6 +663,8 @@ class Ints with FromISetMixin<int, Ints> {
   ISet<int> get iter => _ints;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 @immutable
 class Students with FromISetMixin<Student, Students> {
   final ISet<Student> _students;
@@ -672,10 +678,14 @@ class Students with FromISetMixin<Student, Students> {
   ISet<Student> get iter => _students;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 @immutable
 abstract class ProtoStudent {
   const ProtoStudent();
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class Student extends ProtoStudent implements Comparable<Student> {
@@ -697,3 +707,5 @@ class Student extends ProtoStudent implements Comparable<Student> {
   @override
   int compareTo(Student other) => name.compareTo(other.name);
 }
+
+/////////////////////////////////////////////////////////////////////////////

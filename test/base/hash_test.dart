@@ -2,6 +2,8 @@ import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:test/test.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("hash2Obj", () {
     // 1) Repeating the hash yields the same result
     expect(hashObj2(1, 2), hashObj2(1, 2));

@@ -4,11 +4,15 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = true;
     ImmutableCollection.prettyPrint = true;
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("sameCollection()", () {
     // 1) If both are null, then true

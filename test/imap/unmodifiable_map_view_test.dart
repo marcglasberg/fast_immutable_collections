@@ -3,6 +3,8 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Empty Initialization", () {
     expect(UnmodifiableMapView({}.lock).isEmpty, isTrue);
     expect(UnmodifiableMapView(null).isEmpty, isTrue);
@@ -102,4 +104,6 @@ void main() {
     views.forEach((UnmodifiableMapView<String, int> view) =>
         expect(() => view.remove("a"), throwsUnsupportedError));
   });
+
+  /////////////////////////////////////////////////////////////////////////////
 }
