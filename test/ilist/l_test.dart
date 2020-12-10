@@ -9,6 +9,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// These tests are mainly for coverage purposes, it tests methods inside the [L] class which were
 /// not reached by its implementations.
 void main() {
+  //////////////////////////////////////////////////////////////////////////////
+
   test("sort", () {
     final L sorted = LExample<MapEntry<String, int>>(
         [const MapEntry<String, int>("c", 3), const MapEntry<String, int>("b", 2)]).sort();
@@ -106,6 +108,7 @@ void main() {
     expect(lExample.length, 6);
     expect(lExample.first, 1);
     expect(lExample.last, 6);
+    expect([10].lock.single, 10);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -281,3 +284,5 @@ class LExample<T> extends L<T> {
   @override
   Iterator<T> get iterator => _ilist.iterator;
 }
+
+//////////////////////////////////////////////////////////////////////////////

@@ -1091,7 +1091,7 @@ abstract class M<K, V> {
   ///
   /// Returns `true` if any of the values in the map are equal to `value`
   /// according to the `==` operator.
-  bool containsValue(V value) => getFlushed.containsKey(value);
+  bool containsValue(V value) => getFlushed.containsValue(value);
 
   bool containsEntry(MapEntry<K, V> entry) => contains(entry.key, entry.value);
 
