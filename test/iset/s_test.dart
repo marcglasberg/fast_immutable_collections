@@ -38,6 +38,8 @@ void main() {
     final SExample<int> sExample = SExample({1, 2, 3});
     expect(() => sExample.elementAt(0), throwsUnsupportedError);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -52,7 +54,7 @@ class SExample<T> extends S<T> {
   Iterator<T> get iterator => _iset.iterator;
 
   @override
-  bool contains(covariant T element) => _iset.contains(element);
+  bool contains(covariant Object element) => _iset.contains(element);
 
   @override
   T get anyItem => _iset.anyItem;

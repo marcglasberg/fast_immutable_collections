@@ -228,10 +228,17 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("equalItems", () {
+    // 1) Regular usage
     expect(ISet({1, 2}).equalItems(null), isFalse);
     expect(ISet({1, 2}).equalItems([1, 2]), isTrue);
     expect(ISet({1, 2}).equalItems([2, 1]), isTrue);
     expect(ISet({1, 2}).equalItems([1]), isFalse);
+
+    // 2) if other is ISet<T> (we only take into account the items, not the configs)
+    expect(ISet({1, 2}).equalItems({1, 2}.lock), isTrue);
+    expect(ISet({1, 2}).equalItems({1, 2}.lock.withIdentityEquals), isTrue);
+    expect(ISet({1, 2}).equalItems({1, 3}.lock), isFalse);
+    expect(ISet({1, 2}).equalItems({1, 3}.lock.withIdentityEquals), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -313,6 +320,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("withConfig", () {
+    // 1) Regular usage
     final ISet<int> iSet1 = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
     final ISet<int> iSet2 = ISet.withConfig({}, ConfigSet(isDeepEquals: false));
 
@@ -322,6 +330,15 @@ void main() {
     expect(iSet2, <int>{});
     expect(iSet2.isDeepEquals, isFalse);
 
+    // 2) With empty set and different configs
+    final ISet<int> emptyIList = <int>{}.lock;
+    expect(ISet.withConfig(emptyIList, const ConfigSet(cacheHashCode: false)), []);
+
+    // 3) With non-empty set and different configs
+    final ISet<int> nonemptyIList = <int>{1, 2, 3}.lock;
+    expect(ISet.withConfig(nonemptyIList, const ConfigSet(cacheHashCode: false)), [1, 2, 3]);
+
+    // 4) Assertion error
     expect(() => {1, 2, 3}.lock.withConfig(null), throwsAssertionError);
   });
 

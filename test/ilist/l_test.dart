@@ -42,6 +42,9 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
+    expect(LExample().isEmpty, isTrue);
+    expect(LExample().isNotEmpty, isFalse);
+
     expect(LExample([]).isEmpty, isTrue);
     expect(LExample([]).isNotEmpty, isFalse);
 
@@ -108,7 +111,7 @@ void main() {
     expect(lExample.length, 6);
     expect(lExample.first, 1);
     expect(lExample.last, 6);
-    expect([10].lock.single, 10);
+    expect(LExample([10]).single, 10);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -279,7 +282,7 @@ void main() {
 class LExample<T> extends L<T> {
   final IList<T> _ilist;
 
-  LExample(Iterable<T> iterable) : _ilist = IList(iterable);
+  LExample([Iterable<T> iterable]) : _ilist = IList(iterable);
 
   @override
   Iterator<T> get iterator => _ilist.iterator;
