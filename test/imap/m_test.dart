@@ -3,7 +3,7 @@ import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-/// These tests are mainly for coverage purposes, it tests methods inside the [L] class which were
+/// These tests are mainly for coverage purposes, it tests methods inside the [M] class which were
 /// not reached by its implementations.
 void main() {
   //////////////////////////////////////////////////////////////////////////////
@@ -84,6 +84,8 @@ void main() {
     expect(mExample.everyEntry((MapEntry<String, int> entry) => entry.value > 10), isFalse);
     expect(mExample.everyEntry((MapEntry<String, int> entry) => entry.key.length == 2), isFalse);
   });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
 
 //////////////////////////////////////////////////////////////////////////////

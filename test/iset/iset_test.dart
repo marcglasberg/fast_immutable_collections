@@ -23,7 +23,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("Emptiness Properties", () {
+  test("isEmpty | isNotEmpty", () {
     expect(ISet().isEmpty, isTrue);
     expect(ISet({}).isEmpty, isTrue);
     expect(ISet<String>({}).isEmpty, isTrue);
