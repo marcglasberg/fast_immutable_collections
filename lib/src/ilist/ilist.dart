@@ -1458,7 +1458,7 @@ abstract class L<T> implements Iterable<T> {
     if (compare == null && T == MapEntry)
       compare = (T a, T b) => (a as MapEntry).compareKeyAndValue(b as MapEntry);
 
-    return LFlat<T>.unsafe(unlock..sortOrdered(compare));
+    return LFlat<T>.unsafe(unlock..sortOrdered(compare ?? compareObject));
   }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
