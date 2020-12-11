@@ -7,6 +7,8 @@
 [![Logo][logo]][github_home]
 \
 [![GIF][gif]][example]
+\
+<sub>The [benchmark app][example] for comparing this package's collections to others.</sub>
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
 

@@ -792,6 +792,7 @@ void main() {
     expect(() => ilist.single, throwsStateError);
 
     // 2) Flush optimization for length: When length is zero and the underlying _l is not LFlat
+    ImmutableCollection.autoFlush = false;
     ilist = [1, 2, 3].lock.addAll([4, 5]).removeAll([1, 2, 3, 4, 5]);
 
     expect(ilist.length, 0);
