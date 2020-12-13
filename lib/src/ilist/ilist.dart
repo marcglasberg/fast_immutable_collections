@@ -1447,7 +1447,7 @@ abstract class L<T> implements Iterable<T> {
   /// If [compare] is not provided, it will use the natural ordering of the type [T].
   L<T> sort([int Function(T a, T b) compare]) {
     // Explicitly sorts MapEntry (since MapEntry is not Comparable).
-    if (compare == null && T == MapEntry)
+    if ((compare == null) && (T == MapEntry))
       compare = (T a, T b) => (a as MapEntry).compareKeyAndValue(b as MapEntry);
 
     return LFlat<T>.unsafe(unlock..sort(compare ?? compareObject));
@@ -1455,7 +1455,7 @@ abstract class L<T> implements Iterable<T> {
 
   L<T> sortOrdered([int Function(T a, T b) compare]) {
     // Explicitly sorts MapEntry (since MapEntry is not Comparable).
-    if (compare == null && T == MapEntry)
+    if ((compare == null) && (T == MapEntry))
       compare = (T a, T b) => (a as MapEntry).compareKeyAndValue(b as MapEntry);
 
     return LFlat<T>.unsafe(unlock..sortOrdered(compare ?? compareObject));

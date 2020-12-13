@@ -786,6 +786,12 @@ class IMap<K, V> // ignore: must_be_immutable
     return _m.anyEntry(test);
   }
 
+  /// Checks whether every entry of this iterable satisfies [test].
+  bool everyEntry(bool Function(MapEntry<K, V>) test) {
+    _count();
+    return _m.everyEntry(test);
+  }
+
   /// Returns `true` if the map contains an element equal to the [key]-[value] pair, `false`
   /// otherwise.
   bool contains(K key, V value) {
