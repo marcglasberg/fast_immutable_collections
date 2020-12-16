@@ -1,3 +1,4 @@
+import "dart:collection";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
@@ -226,6 +227,93 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
 
   /// Locks the iterable, returning an *immutable* set ([ISet]).
   ISet<T> get lockAsSet => ISet<T>(this);
+
+  bool get isNullOrEmpty => this == null || isEmpty;
+
+  bool get isNotNullOrEmpty => this != null && isNotEmpty;
+
+  /// Compare all iterable items, in order, using [identical].
+  /// Return true if they are the same, in the same order.
+  ///
+  /// Note: since this is an extension, it works with nulls:
+  /// ```dart
+  /// Iterable iterable1 = null;
+  /// Iterable iterable2 = null;
+  /// iterable1.deepIdenticalEquals(iterable2) == true;
+  /// ```
+  ///
+  bool deepIdenticalEquals(Iterable other) {
+    if (identical(this, other)) return true;
+    if (this == null || other == null) return false;
+
+    if ((this is List) && (other is List) && (length != other.length)) return false;
+
+    var iterator1 = iterator;
+    var iterator2 = other.iterator;
+    while (iterator1.moveNext() && iterator2.moveNext()) {
+      if (!identical(iterator1.current, iterator2.current)) return false;
+    }
+
+    return (iterator1.moveNext() || iterator2.moveNext()) ? false : true;
+  }
+
+  Set<T> findDuplicates() {
+    final Set<T> duplicates = HashSet<T>();
+    final Set<T> auxSet = HashSet<T>();
+    for (T elements in this) {
+      if (!auxSet.add(elements)) duplicates.add(elements);
+    }
+    return duplicates;
+  }
+
+  Iterable<T> removeNulls() sync* {
+    for (T item in this) {
+      if (item != null) yield item;
+    }
+  }
+
+  /// Removes all duplicates, leaving only the distinct items.
+  /// Optionally, you can provide a [id] function to compare the items.
+  Iterable<T> removeDuplicates([dynamic Function(T item) id]) sync* {
+    if (id != null) {
+      Set<dynamic> ids = {};
+      for (T item in this) {
+        var _id = id(item);
+        if (!ids.contains(_id)) yield item;
+        ids.add(_id);
+      }
+    } else {
+      Set<T> items = {};
+      for (T item in this) {
+        if (!items.contains(item)) yield item;
+        items.add(item);
+      }
+    }
+  }
+
+  Iterable<T> removeNullAndDuplicates() sync* {
+    Set<T> items = {};
+    for (T item in this) {
+      if (item != null && !items.contains(item)) yield item;
+      items.add(item);
+    }
+  }
+
+  /// Return a list with the same items as this [Iterable], where the list items appear
+  /// in the same order as [order]. The items which don't exist in [order] will be put
+  /// in the end, in any order.
+  ///
+  /// Note: Not very efficient at the moment. Please use for a small number of items.
+  ///
+  List<T> orderAs(List<T> order) {
+    Set<T> originalSet = Set.of(order);
+    Set<T> newSet = (this is Set<T>) ? (this as Set<T>) : Set.of(this);
+    Set<T> intersection = originalSet.intersection(newSet);
+    Set<T> difference = newSet.difference(originalSet);
+    List<T> result = order.where((element) => intersection.contains(element)).toList();
+    result.addAll(difference);
+    return result;
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////

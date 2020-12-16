@@ -1,6 +1,5 @@
 import "package:meta/meta.dart";
 import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
@@ -264,6 +263,42 @@ void main() {
     ImmutableCollection.prettyPrint = true;
 
     expect(ImmutableCollection.prettyPrint, isTrue);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("removeDuplicates", () {
+    expect(([].removeDuplicates()), []);
+    expect(([5, 5, 5].removeDuplicates()), [5]);
+    expect(([1, 2, 3, 4].removeDuplicates()), [1, 2, 3, 4]);
+    expect(([1, 2, 3, 4, 3, 5, 3].removeDuplicates()), [1, 2, 3, 4, 5]);
+    expect(([1, 2, 3, 4, 3, 5, 1].removeDuplicates()), [1, 2, 3, 4, 5]);
+    expect((["abc", "abc", "def"].removeDuplicates()), ["abc", "def"]);
+    expect((["abc", "abc", "def"].removeDuplicates()).take(1), ["abc"]);
+
+    expect((["a", "b", "abc", "ab", "def"].removeDuplicates((item) => item.length)),
+        ["a", "abc", "ab"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("orderAs", () {
+    expect([1, 2, 3].orderAs([1, 2, 3]), [1, 2, 3]);
+    expect([1, 2, 3].orderAs(<int>[]), [1, 2, 3]);
+    expect(<int>[].orderAs([1, 2, 3]), isEmpty);
+    expect([2, 3].orderAs([1, 2]), [2, 3]);
+    expect([3, 4, 5, 6, 7].orderAs([5, 4, 3, 2, 1]), [5, 4, 3, 6, 7]);
+    expect([7, 3, 4, 6].orderAs([5, 4, 3, 2, 1]), [4, 3, 7, 6]);
+    expect([2, 3, 1].orderAs([1, 2, 2, 1]), [1, 2, 2, 1, 3]);
+    expect([3, 2].orderAs([1, 2, 3, 2, 1]), [2, 3, 2]);
+  });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("findDuplicates", () {
+    expect(["A", "B", "C", "C", "A", "E"].findDuplicates(), ["A", "C"]);
+    expect(["A", "B", "C", "E"].findDuplicates(), []);
+    expect(["A", "B", "B", "B"].findDuplicates(), ["B"]);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
