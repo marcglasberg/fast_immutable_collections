@@ -283,20 +283,34 @@ extension IListExtension<T> on List<T> {
     }
   }
 
-  /// Return an efficient concatenation of up to 4 lists.
-  /// The resulting list has fixed size, buy is not unmodifiable/immutable.
-  /// Passing null is the same as passing empty lists.
-  /// You should only use this if you need to concatenate lists as efficient as possible.
-  List<T> concat(List<T> list2, [List<T> list3, List<T> list4]) {
-    List<T> list1 = this ?? <T>[];
-    list2 ??= <T>[];
-    list3 ??= <T>[];
-    list4 ??= <T>[];
-    return List<T>(list1.length + list2.length + list3.length + list4.length)
+  /// Return an efficient concatenation of up to 5 lists:
+  ///
+  /// ```
+  /// list = list1.concat(list2, list3, list4, list5);
+  /// ```
+  ///
+  /// The resulting list has fixed size, but is not unmodifiable/immutable.
+  /// Passing null is the same as passing empty lists (they will be ignored).
+  /// You should only use this if you need to concatenate lists as efficient as possible,
+  /// or if your lists may be null. Otherwise, just add the lists like this:
+  ///
+  /// ```
+  /// list = list1 + list2 + list3 + list4 + list5;
+  /// ```
+  List<T> concat(List<T> list2, [List<T> list3, List<T> list4, List<T> list5]) {
+    List<T> list1 = this ?? const [];
+    list2 ??= const [];
+    list3 ??= const [];
+    list4 ??= const [];
+    list5 ??= const [];
+
+    /// Preallocate the necessary number of items, and then copy directly into place.
+    return List<T>(list1.length + list2.length + list3.length + list4.length + list5.length)
       ..setAll(0, list1)
       ..setAll(list1.length, list2)
       ..setAll(list1.length + list2.length, list3)
-      ..setAll(list1.length + list2.length + list3.length, list4);
+      ..setAll(list1.length + list2.length + list3.length, list4)
+      ..setAll(list1.length + list2.length + list3.length + list4.length, list5);
   }
 
   /// Cut the original list into one or more lists with at most [length] items.

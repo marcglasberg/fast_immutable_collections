@@ -310,9 +310,12 @@ void main() {
     expect([1, 2].concat([7, 8, 9]), [1, 2, 7, 8, 9]);
     expect([1, 2].concat([], [7, 8, 9]), [1, 2, 7, 8, 9]);
     expect([1, 2].concat([2, 3], [3, 4]), [1, 2, 2, 3, 3, 4]);
+    expect([1, 2].concat([2, 3], null, [3, 4]), [1, 2, 2, 3, 3, 4]);
+    expect(null.concat([2, 3], null, [3, 4]), [2, 3, 3, 4]);
     expect([10, 2].concat([20, 3], [30]), [10, 2, 20, 3, 30]);
     expect(["10", 2].concat([20, "3"], [30]), ["10", 2, 20, "3", 30]);
     expect(["10", 2].concat([20, "3"], [30], ["a", "b"]), ["10", 2, 20, "3", 30, "a", "b"]);
+    expect([1].concat([2], [3], [4], [5]), [1, 2, 3, 4, 5]);
 
     // The resulting list is not unmodifiable/immutable.
     var list = [1, 2].concat([3, 4]);
