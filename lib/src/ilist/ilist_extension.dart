@@ -398,7 +398,7 @@ extension IListExtension<T> on List<T> {
   /// Important: At the moment, some of the list methods return `UnimplementedError`.
   /// All methods will be completed in the future.
   ///
-  List get reversedListView => _ReversedListView(this);
+  List<T> get reversedListView => _ReversedListView<T>(this);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
