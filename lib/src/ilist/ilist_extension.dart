@@ -49,18 +49,22 @@ extension IListExtension<T> on List<T> {
     addAll(result);
   }
 
-  /// Moves all items that satisfy the provided [test] to the end of the list.
-  /// Keeps the relative order of the moved items.
-  void whereMoveToTheEnd(bool Function(T item) test) {
-    var compare = (T f1, T f2) {
-      bool test1 = test(f1);
-      return (test1 == test(f2))
-          ? 0
-          : test1
-              ? 1
-              : -1;
-    };
-    sortOrdered(compare);
+  /// Moves the first occurrence of the [item] to the start of the list.
+  void moveToTheFront(T item) {
+    int pos = indexOf(item);
+    if (pos != -1 && pos != 0) {
+      removeAt(pos);
+      insert(0, item);
+    }
+  }
+
+  /// Moves the first occurrence of the [item] to the end of the list.
+  void moveToTheEnd(T item) {
+    int pos = indexOf(item);
+    if (pos != -1 && pos != length - 1) {
+      removeAt(pos);
+      add(item);
+    }
   }
 
   /// Moves all items that satisfy the provided [test] to the start of the list.
@@ -73,6 +77,20 @@ extension IListExtension<T> on List<T> {
           : test1
               ? -1
               : 1;
+    };
+    sortOrdered(compare);
+  }
+
+  /// Moves all items that satisfy the provided [test] to the end of the list.
+  /// Keeps the relative order of the moved items.
+  void whereMoveToTheEnd(bool Function(T item) test) {
+    var compare = (T f1, T f2) {
+      bool test1 = test(f1);
+      return (test1 == test(f2))
+          ? 0
+          : test1
+              ? 1
+              : -1;
     };
     sortOrdered(compare);
   }

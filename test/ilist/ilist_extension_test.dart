@@ -68,11 +68,25 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("moveToTheEnd", () {
+    final List<int> list = [1, 2, 4, 10, 3, 5];
+    list.moveToTheEnd(4);
+    expect(list, [1, 2, 10, 3, 5, 4]);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("moveToTheFront", () {
+    final List<int> list = [1, 2, 4, 10, 3, 5];
+    list.moveToTheFront(4);
+    expect(list, [4, 1, 2, 10, 3, 5]);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("whereMoveToTheEnd", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
-
     list.whereMoveToTheEnd((int item) => item > 4);
-
     expect(list, [1, 2, 4, 3, 10, 5]);
   });
 
@@ -80,9 +94,7 @@ void main() {
 
   test("whereMoveToTheFront", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
-
     list.whereMoveToTheFront((int item) => item > 4);
-
     expect(list, [10, 5, 1, 2, 4, 3]);
   });
 
