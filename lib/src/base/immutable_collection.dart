@@ -305,18 +305,19 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
     }
   }
 
-  /// Return a list with the same items as this [Iterable], where the list items appear
-  /// in the same order as [order]. The items which don't exist in [order] will be put
-  /// in the end, in any order.
+  /// Returns a list, sorted according to the order specified by the [ordering] iterable.
+  /// Items which don't appear in [ordering] will be included in the end, in no particular order.
   ///
-  /// Note: Not very efficient at the moment. Please use for a small number of items.
+  /// Note: Not very efficient at the moment (will be improved in the future).
+  /// Please use for a small number of items.
   ///
-  List<T> orderAs(List<T> order) {
-    Set<T> originalSet = Set.of(order);
+  List<T> toListSortedLike(Iterable<T> ordering) {
+    assert(ordering != null);
+    Set<T> originalSet = Set.of(ordering);
     Set<T> newSet = (this is Set<T>) ? (this as Set<T>) : Set.of(this);
     Set<T> intersection = originalSet.intersection(newSet);
     Set<T> difference = newSet.difference(originalSet);
-    List<T> result = order.where((element) => intersection.contains(element)).toList();
+    List<T> result = ordering.where((element) => intersection.contains(element)).toList();
     result.addAll(difference);
     return result;
   }

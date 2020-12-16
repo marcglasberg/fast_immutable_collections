@@ -328,7 +328,8 @@ class IList<T> // ignore: must_be_immutable
       return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
     }
 
-    if (other is List<T>) return const ListEquality().equals(UnmodifiableListFromIList(this), other);
+    if (other is List<T>)
+      return const ListEquality().equals(UnmodifiableListFromIList(this), other);
 
     if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
 
@@ -637,7 +638,7 @@ class IList<T> // ignore: must_be_immutable
     return _l.fold(initialValue, combine);
   }
 
-  /// Returns the lazy concatentation of this iterable and [other].
+  /// Returns the lazy concatenation of this iterable and [other].
   @override
   IList<T> followedBy(Iterable<T> other) => IList._(_l.followedBy(other), config: config);
 
@@ -788,9 +789,11 @@ class IList<T> // ignore: must_be_immutable
       IList._unsafe(_l.sortOrdered(compare), config: config);
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
-  /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
+  /// Items which don't appear in [ordering] will be included in the end, in no particular order.
   ///
-  /// Note: This is not very efficient. Only use for a small number of elements.
+  /// Note: Not very efficient at the moment (will be improved in the future).
+  /// Please use for a small number of items.
+  ///
   IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
@@ -1462,9 +1465,11 @@ abstract class L<T> implements Iterable<T> {
   }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
-  /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
+  /// Items which don't appear in [ordering] will be included in the end, in no particular order.
   ///
-  /// Note: This is not very efficient. Only use for a small number of elements.
+  /// Note: Not very efficient at the moment (will be improved in the future).
+  /// Please use for a small number of items.
+  ///
   L<T> sortLike(Iterable<T> ordering) {
     assert(ordering != null);
     Set<T> orderingSet = Set.of(ordering);

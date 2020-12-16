@@ -38,16 +38,15 @@ extension IListExtension<T> on List<T> {
   }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
-  /// Elements which don't appear in [ordering] will be included in the end, in no particular order.
-  /// Note: This is not very efficient. Only use for a small number of elements.
+  /// Items which don't appear in [ordering] will be included in the end, in no particular order.
+  ///
+  /// Note: Not very efficient at the moment (will be improved in the future).
+  /// Please use for a small number of items.
+  ///
   void sortLike(Iterable<T> ordering) {
-    assert(ordering != null);
-    Set<T> orderingSet = Set.of(ordering);
-    Set<T> newSet = Set.of(this);
-    Set<T> intersection = orderingSet.intersection(newSet);
-    Set<T> difference = newSet.difference(orderingSet);
+    var result = toListSortedLike(ordering);
     clear();
-    addAll(ordering.where((element) => intersection.contains(element)).followedBy(difference));
+    addAll(result);
   }
 
   /// Moves all items that satisfy the provided [test] to the end of the list.
@@ -216,6 +215,8 @@ extension IListExtension<T> on List<T> {
   ///
   /// Note: Repeating keys will be joined together, but it probably doesn't
   /// make much sense to use this with repeating keys.
+  ///
+  /// See also: [groupBy] from `package:collection`
   ///
   Map<G, List<T>> divideListAsMap<G>(
     bool Function(T item) test, {
