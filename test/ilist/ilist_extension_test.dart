@@ -519,6 +519,7 @@ void main() {
     expect([].reversed is Iterable, isTrue);
     expect([].reversed is List, isFalse);
     expect([].reversedListView is List, isTrue);
+    expect([1].reversedListView is List<int>, isTrue);
 
     expect([].reversedListView, isEmpty);
     expect([1].reversedListView, isNotEmpty);
