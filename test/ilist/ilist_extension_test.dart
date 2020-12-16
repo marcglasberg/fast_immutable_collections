@@ -91,6 +91,12 @@ void main() {
   test("splitList", () {
     expect([].splitList((v) => v == 3), []);
 
+    expect([1, 2, 3, 4, 5].splitList((v) => v == 2 || v == 4), [
+      [1],
+      [3],
+      [5]
+    ]);
+
     expect([1, 2, 3, 4, 5, 6, 7].splitList((v) => v == 3), [
       [1, 2],
       [4, 5, 6, 7]
@@ -110,6 +116,24 @@ void main() {
   test("divideList", () {
     //
     expect([].divideList((v) => v == 3), []);
+
+    expect([1, 2, 3, 4, 5].divideList((v) => v == 2 || v == 4), [
+      [1, 2, 3],
+      [4, 5]
+    ]);
+
+    expect([0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1].divideList((v) => v == 1), [
+      [0, 1, 0],
+      [1, 0],
+      [1],
+      [1, 0, 0],
+      [1],
+      [1],
+      [1],
+      [1],
+      [1, 0],
+      [1]
+    ]);
 
     expect([1].divideList((v) => v == 1), [
       [1]
@@ -175,6 +199,12 @@ void main() {
       [5, 6],
       [7]
     ]);
+
+    expect([1, 2, 3, 8, 12, 1, 4, 6].divideList((v) => v % 2 == 1), [
+      [1, 2],
+      [3, 8, 12],
+      [1, 4, 6],
+    ]);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
@@ -182,6 +212,10 @@ void main() {
   test("divideListAsMap", () {
     //
     expect([].divideListAsMap((v) => v == 3, key: (v) => -v), {});
+
+    expect([1].divideListAsMap((v) => v == 1), {
+      1: [1],
+    });
 
     expect([1].divideListAsMap((v) => v == 1, key: (v) => -v), {
       -1: [1],
@@ -246,6 +280,12 @@ void main() {
       -3: [3, 4],
       -5: [5, 6],
       -7: [7]
+    });
+
+    /// Repeating keys will be joined together.
+    expect([1, 2, 3, 8, 12, 1, 4, 6].divideListAsMap((v) => v % 2 == 1), {
+      1: [1, 2, 1, 4, 6],
+      3: [3, 8, 12],
     });
   });
 

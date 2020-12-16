@@ -109,7 +109,7 @@ extension IListExtension<T> on List<T> {
   /// removing the list item that satisfies the predicate.
   ///
   /// ```
-  /// [1,2,3].splitList((v)=>v==2) ➜ [[1], [3]]
+  /// [1,2,3,4,5].splitList((v)=>v==2 || v==4) ➜ [[1], [3], [5]]
   /// ```
   ///
   Iterable<List<T>> splitList(
@@ -132,9 +132,25 @@ extension IListExtension<T> on List<T> {
     }
   }
 
-  /// Divide a list, according to a predicate,
-  /// keeping the list item that satisfies the predicate as the first segment item.
-  /// divideList([1,2,3,4,5], (v)=>v==2 || v==4) ➜ [[1,2,3],[4,5]]
+  /// Search a list for items that satisfy a [test] predicate (matching items),
+  /// and then divide that list into parts, such as each part contains one matching item.
+  /// Except maybe for the first matching item, it will keep the matching items as
+  /// the first item in each part.
+  ///
+  /// Example: Suppose you have a list with Chapters, Texts and Images.
+  /// You can break it into separate chapters, like this:
+  ///
+  /// ```
+  /// bookInfo.divideList((item) => item is Chapter);
+  /// ```
+  ///
+  /// In the example below the matching items are `2` and `4`. This means we'll divide
+  /// this list into 2 lists, one containing `2`, and another containing `4`.
+  /// The `4` will be the first item in its part:
+  ///
+  /// ```
+  /// [1,2,3,4,5].divideList((v)=>v==2 || v==4) ➜ [[1,2,3], [4,5]]
+  /// ```
   ///
   List<List<T>> divideList(
     bool Function(T element) test,
@@ -160,16 +176,50 @@ extension IListExtension<T> on List<T> {
     }
   }
 
-  /// Divide a list into a [Map] by using a predicate, keeping as each segment's first item
-  /// the list item that satisfies the [test] predicate.
+  /// Search a list for items that satisfy a [test] predicate (matching items),
+  /// and then divide that list into a [Map] of parts, such as each part contains
+  /// one matching item, and the keys are given by the [key] function.
+  /// Except maybe for the first matching item, it will keep the matching items as
+  /// the first item in each part.
   ///
+  ///
+  /// Example: Suppose you have a list with Chapters, Texts and Images.
+  /// You can break it into chapters, by the chapter's id, like this:
+  ///
+  /// ```
+  /// bookInfo.divideListAsMap(
+  ///         (item) => item is Chapter,
+  ///         key: (item) => (item as Chapter).id);
+  /// ```
+  ///
+  /// In another example, the matching items are `2` and `4`. We'll divide
+  /// the following list into 2, one containing `2`, and another containing `4`.
+  /// The `4` will be the first item in its part:
+  ///
+  /// ```
   /// [1,2,3,4,5].divideListAsMap((v)=>v==2 || v==4, (v)=>v) ➜ {2:[1,2,3], 4:[4,5]}
+  /// ```
+  ///
+  /// In the example below the single matching item is `2`.
+  /// This means the list is unchanged:
+  ///
+  /// ```
   /// [1,2,3].divideListAsMap((v)=>v==2, (v)=>v) ➜ {2: [1,2,3]}
+  /// ```
+  ///
+  /// In the example below there is no matching item.
+  /// This means the list is unchanged:
+  ///
+  /// ```
   /// [1,2,3].divideListAsMap((v)=>v==10, (v)=>v) ➜ {null: [1,2,3]}
+  /// ```
+  ///
+  /// Note: Repeating keys will be joined together, but it probably doesn't
+  /// make much sense to use this with repeating keys.
   ///
   Map<G, List<T>> divideListAsMap<G>(
-    bool Function(T element) test, {
-    G Function(T element) key,
+    bool Function(T item) test, {
+    G Function(T item) key,
   }) {
     if (isEmpty) return {};
 
@@ -178,10 +228,11 @@ extension IListExtension<T> on List<T> {
     List<G> keys = [];
 
     for (int i = 0; i < length; i++) {
-      T element = this[i];
-      if (test(element)) {
+      T item = this[i];
+      if (test(item)) {
         indexes.add(i);
-        keys.add(key(element));
+        var _key = (key == null) ? (item as G) : key(item);
+        keys.add(_key);
       }
     }
 
@@ -191,7 +242,11 @@ extension IListExtension<T> on List<T> {
       for (int i = 0; i < indexes.length; i++) {
         var ini = i == 0 ? 0 : indexes[i];
         var fim = i == indexes.length - 1 ? length - 1 : indexes[i + 1] - 1;
-        result[keys[i]] = sublist(ini, fim + 1);
+        var repeating = result[keys[i]];
+        result[keys[i]] = (repeating != null)
+            ? //
+            repeating + sublist(ini, fim + 1)
+            : sublist(ini, fim + 1);
       }
       return result;
     }
