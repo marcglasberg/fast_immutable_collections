@@ -419,16 +419,15 @@ void main() {
     expect(<int>{}.lock.add(1), {1});
     expect(<int>{null}.lock.add(1), {null, 1});
     expect(<int>{1}.lock.add(10), {1, 10});
-    expect(<int>{null, null, null}.lock.add(10), {null, null, null, 10});
-    expect(<int>{null, 1, null, 3}.lock.add(10), {null, 1, null, 3, 10});
+    expect(<int>{null}.lock.add(10), {null, 10});
+    expect(<int>{null, 1, 3}.lock.add(10), {null, 1, 3, 10});
     expect({1, 2, 3}.lock.add(4), {1, 2, 3, 4});
 
     // 3.2) Adding a null
     expect(<int>{}.lock.add(null), {null});
-    expect(<int>{null}.lock.add(null), {null, null});
+    expect(<int>{null}.lock.add(null), {null});
     expect(<int>{1}.lock.add(null), {1, null});
-    expect(<int>{null, null, null}.lock.add(null), {null, null, null, null});
-    expect(<int>{null, 1, null, 3}.lock.add(null), {null, 1, null, 3, null});
+    expect(<int>{null, 1, 3}.lock.add(null), {null, 1, 3});
     expect({1, 2, 3}.lock.add(null), {1, 2, 3, null});
   });
 
@@ -459,25 +458,23 @@ void main() {
     expect(<int>{}.lock.addAll({1, 2}), {1, 2});
     expect(<int>{null}.lock.addAll({1, 2}), {null, 1, 2});
     expect(<int>{1}.lock.addAll({2, 3}), {1, 2, 3});
-    expect(<int>{null, null, null}.lock.addAll({1, 2}), {null, null, null, 1, 2});
-    expect(<int>{null, 1, null, 3}.lock.addAll({10, 11}), {null, 1, null, 3, 10, 11});
+    expect(<int>{null}.lock.addAll({1, 2}), {null, 1, 2});
+    expect(<int>{null, 1, 3}.lock.addAll({10, 11}), {null, 1, 3, 10, 11});
     expect({1, 2, 3, 4}.lock.addAll({5, 6}), {1, 2, 3, 4, 5, 6});
 
     // 4.2) Adding nulls
-    expect(<int>{}.lock.addAll({null, null}), {null, null});
-    expect(<int>{null}.lock.addAll({null, null}), {null, null, null});
-    expect(<int>{1}.lock.addAll({null, null}), {1, null, null});
-    expect(<int>{null, null, null}.lock.addAll({null, null}), {null, null, null, null, null});
-    expect(<int>{null, 1, null, 3}.lock.addAll({null, null}), {null, 1, null, 3, null, null});
-    expect({1, 2, 3, 4}.lock.addAll({null, null}), {1, 2, 3, 4, null, null});
+    expect(<int>{}.lock.addAll({null}), {null});
+    expect(<int>{null}.lock.addAll({null}), {null});
+    expect(<int>{1}.lock.addAll({null}), {1, null});
+    expect(<int>{null, 1, 3}.lock.addAll({null}), {null, 1, 3});
+    expect({1, 2, 3, 4}.lock.addAll({null}), {1, 2, 3, 4, null});
 
     // 4.3) Adding null and an item
     expect(<int>{}.lock.addAll({null, 1}), {null, 1});
-    expect(<int>{null}.lock.addAll({null, 1}), {null, null, 1});
+    expect(<int>{null}.lock.addAll({null, 1}), {null, 1});
     expect(<int>{1}.lock.addAll({null, 2}), {1, null, 2});
-    expect(<int>{null, null, null}.lock.addAll({null, 1}), {null, null, null, null, 1});
-    expect(<int>{null, 1, null, 3}.lock.addAll({null, 1}), {null, 1, null, 3, null, 1});
-    expect({1, 2, 3, 4}.lock.addAll({null, 1}), {1, 2, 3, 4, null, 1});
+    expect(<int>{null, 1, 3}.lock.addAll({null, 1}), {null, 1, 3});
+    expect({1, 2, 3, 4}.lock.addAll({null, 1}), {1, 2, 3, 4, null});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -490,25 +487,22 @@ void main() {
     expect(<int>{}.lock + {1, 2}, {1, 2});
     expect(<int>{null}.lock + {1, 2}, {null, 1, 2});
     expect(<int>{1}.lock + {2, 3}, {1, 2, 3});
-    expect(<int>{null, null, null}.lock + {1, 2}, {null, null, null, 1, 2});
-    expect(<int>{null, 1, null, 3}.lock + {10, 11}, {null, 1, null, 3, 10, 11});
+    expect(<int>{null, 1, 3}.lock + {10, 11}, {null, 1, 3, 10, 11});
     expect({1, 2, 3, 4}.lock + {5, 6}, {1, 2, 3, 4, 5, 6});
 
     // 3) Adding nulls
-    expect(<int>{}.lock + {null, null}, {null, null});
-    expect(<int>{null}.lock + {null, null}, {null, null, null});
-    expect(<int>{1}.lock + {null, null}, {1, null, null});
-    expect(<int>{null, null, null}.lock + {null, null}, {null, null, null, null, null});
-    expect(<int>{null, 1, null, 3}.lock + {null, null}, {null, 1, null, 3, null, null});
-    expect({1, 2, 3, 4}.lock + {null, null}, {1, 2, 3, 4, null, null});
+    expect(<int>{}.lock + {null}, {null});
+    expect(<int>{null}.lock + {null}, {null});
+    expect(<int>{1}.lock + {null}, {1, null});
+    expect(<int>{null, 1, 3}.lock + {null}, {null, 1, 3});
+    expect({1, 2, 3, 4}.lock + {null}, {1, 2, 3, 4, null});
 
     // 4) Adding null and an item
     expect(<int>{}.lock + {null, 1}, {null, 1});
-    expect(<int>{null}.lock + {null, 1}, {null, null, 1});
+    expect(<int>{null}.lock + {null, 1}, {null, 1});
     expect(<int>{1}.lock + {null, 2}, {1, null, 2});
-    expect(<int>{null, null, null}.lock + {null, 1}, {null, null, null, null, 1});
-    expect(<int>{null, 1, null, 3}.lock + {null, 1}, {null, 1, null, 3, null, 1});
-    expect({1, 2, 3, 4}.lock + {null, 1}, {1, 2, 3, 4, null, 1});
+    expect(<int>{null, 1, 3}.lock + {null, 1}, {null, 1, 3});
+    expect({1, 2, 3, 4}.lock + {null, 1}, {1, 2, 3, 4, null});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -944,14 +938,14 @@ void main() {
 
   test("unlockView", () {
     expect({1, 2, 3}.lock.unlockView,
-        allOf(isA<UnmodifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3}));
+        allOf(isA<UnmodifiableSetFromISet<int>>(), isA<Set<int>>(), {1, 2, 3}));
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("unlockLazy", () {
     expect({1, 2, 3}.lock.unlockLazy,
-        allOf(isA<ModifiableSetView<int>>(), isA<Set<int>>(), {1, 2, 3}));
+        allOf(isA<ModifiableSetFromISet<int>>(), isA<Set<int>>(), {1, 2, 3}));
   });
 
   //////////////////////////////////////////////////////////////////////////////

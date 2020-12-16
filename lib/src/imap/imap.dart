@@ -13,8 +13,8 @@ import "m_add.dart";
 import "m_add_all.dart";
 import "m_flat.dart";
 import "m_replace.dart";
-import "modifiable_map_view.dart";
-import "unmodifiable_map_view.dart";
+import "modifiable_map_from_imap.dart";
+import "unmodifiable_map_from_imap.dart";
 
 /// An **immutable**, **unordered** map.
 @immutable
@@ -536,8 +536,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// it will throw an [UnsupportedError].
   /// It is also very fast to lock this map back into an [IMap].
   ///
-  /// See also: [UnmodifiableMapView]
-  Map<K, V> get unlockView => UnmodifiableMapView(this);
+  /// See also: [UnmodifiableMapFromIMap]
+  Map<K, V> get unlockView => UnmodifiableMapFromIMap(this);
 
   /// Unlocks the map, returning a safe, modifiable (mutable) [Map].
   ///
@@ -549,8 +549,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If you never mutate the map, it will be very fast to lock this map
   /// back into an [IMap].
   ///
-  /// See also: [ModifiableMapView]
-  Map<K, V> get unlockLazy => ModifiableMapView(this);
+  /// See also: [ModifiableMapFromIMap]
+  Map<K, V> get unlockLazy => ModifiableMapFromIMap(this);
 
   /// Returns `true` if there are no elements in this collection.
   @override
@@ -593,7 +593,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
   bool equalItemsToMap(Map<K, V> other) =>
-      const MapEquality().equals(UnmodifiableMapView(this), other);
+      const MapEquality().equals(UnmodifiableMapFromIMap(this), other);
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.

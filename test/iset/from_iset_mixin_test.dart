@@ -573,7 +573,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.unlockView, allOf(isA<Set<Student>>(), isA<UnmodifiableSetView<Student>>()));
+    expect(students.unlockView, allOf(isA<Set<Student>>(), isA<UnmodifiableSetFromISet<Student>>()));
   });
 
   /////////////////////////////////////////////////////////////////////////////

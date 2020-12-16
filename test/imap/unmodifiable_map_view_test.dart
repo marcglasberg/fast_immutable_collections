@@ -6,22 +6,22 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("Empty Initialization", () {
-    expect(UnmodifiableMapView({}.lock).isEmpty, isTrue);
-    expect(UnmodifiableMapView(null).isEmpty, isTrue);
+    expect(UnmodifiableMapFromIMap({}.lock).isEmpty, isTrue);
+    expect(UnmodifiableMapFromIMap(null).isEmpty, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
-        unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
-    final List<UnmodifiableMapView<String, int>> views = [
+    final UnmodifiableMapFromIMap<String, int> unmodifiableMapView = UnmodifiableMapFromIMap(baseMap.lock),
+        unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
+    final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
       unmodifiableMapViewFromMap,
     ];
 
-    views.forEach((UnmodifiableMapView<String, int> view) {
+    views.forEach((UnmodifiableMapFromIMap<String, int> view) {
       expect(view["a"], 1);
       expect(view["b"], 2);
       expect(view["c"], 3);
@@ -33,14 +33,14 @@ void main() {
 
   test("keys", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
-        unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
-    final List<UnmodifiableMapView<String, int>> views = [
+    final UnmodifiableMapFromIMap<String, int> unmodifiableMapView = UnmodifiableMapFromIMap(baseMap.lock),
+        unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
+    final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
       unmodifiableMapViewFromMap,
     ];
 
-    views.forEach((UnmodifiableMapView<String, int> view) {
+    views.forEach((UnmodifiableMapFromIMap<String, int> view) {
       baseMap.keys.forEach((String key) => expect(view.keys.contains(key), isTrue));
       expect(baseMap.keys.length, view.keys.length);
     });
@@ -50,28 +50,28 @@ void main() {
 
   test("lock", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
-        unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
-    final List<UnmodifiableMapView<String, int>> views = [
+    final UnmodifiableMapFromIMap<String, int> unmodifiableMapView = UnmodifiableMapFromIMap(baseMap.lock),
+        unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
+    final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
       unmodifiableMapViewFromMap,
     ];
 
-    views.forEach((UnmodifiableMapView<String, int> view) => expect(view.lock, baseMap.lock));
+    views.forEach((UnmodifiableMapFromIMap<String, int> view) => expect(view.lock, baseMap.lock));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("[]=", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
-        unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
-    final List<UnmodifiableMapView<String, int>> views = [
+    final UnmodifiableMapFromIMap<String, int> unmodifiableMapView = UnmodifiableMapFromIMap(baseMap.lock),
+        unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
+    final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
       unmodifiableMapViewFromMap,
     ];
 
-    views.forEach((UnmodifiableMapView<String, int> view) =>
+    views.forEach((UnmodifiableMapFromIMap<String, int> view) =>
         expect(() => view["a"] = 10, throwsUnsupportedError));
   });
 
@@ -79,14 +79,14 @@ void main() {
 
   test("clear", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
-        unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
-    final List<UnmodifiableMapView<String, int>> views = [
+    final UnmodifiableMapFromIMap<String, int> unmodifiableMapView = UnmodifiableMapFromIMap(baseMap.lock),
+        unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
+    final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
       unmodifiableMapViewFromMap,
     ];
 
-    views.forEach((UnmodifiableMapView<String, int> view) =>
+    views.forEach((UnmodifiableMapFromIMap<String, int> view) =>
         expect(() => view.clear(), throwsUnsupportedError));
   });
 
@@ -94,14 +94,14 @@ void main() {
 
   test("remove", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final UnmodifiableMapView<String, int> unmodifiableMapView = UnmodifiableMapView(baseMap.lock),
-        unmodifiableMapViewFromMap = UnmodifiableMapView.fromMap(baseMap);
-    final List<UnmodifiableMapView<String, int>> views = [
+    final UnmodifiableMapFromIMap<String, int> unmodifiableMapView = UnmodifiableMapFromIMap(baseMap.lock),
+        unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
+    final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
       unmodifiableMapViewFromMap,
     ];
 
-    views.forEach((UnmodifiableMapView<String, int> view) =>
+    views.forEach((UnmodifiableMapFromIMap<String, int> view) =>
         expect(() => view.remove("a"), throwsUnsupportedError));
   });
 

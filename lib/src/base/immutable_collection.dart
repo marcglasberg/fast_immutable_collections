@@ -232,29 +232,35 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
 
   bool get isNotNullOrEmpty => this != null && isNotEmpty;
 
-  /// Compare all iterable items, in order, using [identical].
-  /// Return true if they are the same, in the same order.
+  /// Compare all items, in order, using [identical].
+  /// Return true if they are all the same, in the same order.
   ///
-  /// Note: since this is an extension, it works with nulls:
+  /// Note: Since this is an extension, it works with nulls:
   /// ```dart
   /// Iterable iterable1 = null;
   /// Iterable iterable2 = null;
-  /// iterable1.deepIdenticalEquals(iterable2) == true;
+  /// iterable1.deepEqualsByIdentity(iterable2) == true;
   /// ```
   ///
-  bool deepIdenticalEquals(Iterable other) {
+  bool deepEqualsByIdentity(Iterable other) {
     if (identical(this, other)) return true;
     if (this == null || other == null) return false;
 
-    if ((this is List) && (other is List) && (length != other.length)) return false;
-
-    var iterator1 = iterator;
-    var iterator2 = other.iterator;
-    while (iterator1.moveNext() && iterator2.moveNext()) {
-      if (!identical(iterator1.current, iterator2.current)) return false;
+    if ((this is List) && (other is List)) {
+      List list = this as List;
+      if (length != other.length) return false;
+      for (int i = 0; i < length; i++) {
+        if (!identical(list[i], other[i])) return false;
+      }
+      return true;
+    } else {
+      var iterator1 = iterator;
+      var iterator2 = other.iterator;
+      while (iterator1.moveNext() && iterator2.moveNext()) {
+        if (!identical(iterator1.current, iterator2.current)) return false;
+      }
+      return (iterator1.moveNext() || iterator2.moveNext()) ? false : true;
     }
-
-    return (iterator1.moveNext() || iterator2.moveNext()) ? false : true;
   }
 
   Set<T> findDuplicates() {

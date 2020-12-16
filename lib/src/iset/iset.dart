@@ -8,11 +8,11 @@ import "../base/hash.dart";
 import "../base/immutable_collection.dart";
 import "../base/sort.dart";
 import "../ilist/ilist.dart";
-import "modifiable_set_view.dart";
+import "modifiable_set_from_iset.dart";
 import "s_flat.dart";
 import "s_add.dart";
 import "s_add_all.dart";
-import "unmodifiable_set_view.dart";
+import "unmodifiable_set_from_iset.dart";
 
 /// An **immutable**, **unordered** set.
 @immutable
@@ -257,8 +257,8 @@ class ISet<T> // ignore: must_be_immutable
   /// it will throw an [UnsupportedError].
   /// It is also very fast to lock this set back into an [ISet].
   ///
-  /// See also: [UnmodifiableSetView]
-  Set<T> get unlockView => UnmodifiableSetView(this);
+  /// See also: [UnmodifiableSetFromISet]
+  Set<T> get unlockView => UnmodifiableSetFromISet(this);
 
   /// Unlocks the set, returning a safe, modifiable (mutable) [Set].
   /// Using this is very fast at first, since it makes no copies of the [ISet]
@@ -269,8 +269,8 @@ class ISet<T> // ignore: must_be_immutable
   /// If you never mutate the set, it will be very fast to lock this set
   /// back into an [ISet].
   ///
-  /// See also: [ModifiableSetView]
-  Set<T> get unlockLazy => ModifiableSetView(this);
+  /// See also: [ModifiableSetFromISet]
+  Set<T> get unlockLazy => ModifiableSetFromISet(this);
 
   /// 1. If the set's [config] has [ConfigSet.sort] `true` (the default),
   /// it will iterate in the natural order of items. In other words, if the

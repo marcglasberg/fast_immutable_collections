@@ -197,16 +197,6 @@ extension IListExtension<T> on List<T> {
     }
   }
 
-  /// Return true if the list items are identical, using [identical], in the same order.
-  bool deepIdenticalEquals(List other) {
-    if (identical(this, other)) return true;
-    if (length != other.length) return false;
-    for (int i = 0; i < length; i++) {
-      if (!identical(this[i], other[i])) return false;
-    }
-    return true;
-  }
-
   /// Return a new list, adding a separator between the original list items
   /// (but not before the first and after the last).
   ///

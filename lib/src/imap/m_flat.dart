@@ -1,7 +1,5 @@
 import "dart:collection";
-
 import "package:collection/collection.dart";
-
 import "../ilist/ilist.dart";
 import "imap.dart";
 

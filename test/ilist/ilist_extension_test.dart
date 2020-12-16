@@ -251,29 +251,6 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("deepIdenticalEqual", () {
-    expect([].deepIdenticalEquals([]), true);
-    expect([1].deepIdenticalEquals([1]), true);
-    expect([1].deepIdenticalEquals([2]), false);
-    expect([1, 2].deepIdenticalEquals([1, 2]), true);
-    expect([1, 2].deepIdenticalEquals([3, 4]), false);
-    expect([1, 2].deepIdenticalEquals([1, 3]), false);
-    expect([1, 2].deepIdenticalEquals([1, 2, 2]), false);
-
-    // Now with objects that are equal by value:
-    var obj1 = _ClassEqualsByValue();
-    expect(obj1 == obj1, true);
-    expect([obj1].deepIdenticalEquals([obj1]), true);
-    expect([obj1].deepIdenticalEquals([_ClassEqualsByValue()]), false);
-
-    var obj2 = _ClassEqualsByValue();
-    expect(obj1 == obj2, true);
-    expect([obj1].deepIdenticalEquals([obj2]), false);
-    expect([obj1, obj2].deepIdenticalEquals([obj1, obj2]), true);
-  });
-
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("addBetween", () {
     expect(null.addBetween("|"), null);
     expect([].addBetween("|"), []);
@@ -595,17 +572,6 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 }
-
-class _ClassEqualsByValue {
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is _ClassEqualsByValue && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 0;
-}
-
-// /////////////////////////////////////////////////////////////////////////////
 
 class _WithId {
   String id;

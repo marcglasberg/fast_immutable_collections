@@ -1,9 +1,11 @@
 import "dart:collection";
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 import "../base/immutable_collection.dart";
 import "iset.dart";
 
-/// The [ModifiableSetView] is a safe, modifiable [Set] that is built from an [ISet].
+/// The [ModifiableSetFromISet] is a safe, modifiable [Set] that is built from an [ISet].
 /// The construction of the set is fast at first, since it makes no copies of the
 /// [ISet] items, but just uses it directly.
 ///
@@ -15,12 +17,13 @@ import "iset.dart";
 /// If you never mutate the set, it will be very fast to lock this set
 /// back into an [ISet].
 ///
-/// See also: [UnmodifiableSetView]
-class ModifiableSetView<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
+/// See also: [UnmodifiableSetFromISet]
+///
+class ModifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   ISet<T> _iSet;
   Set<T> _set;
 
-  ModifiableSetView(ISet<T> iset)
+  ModifiableSetFromISet(ISet<T> iset)
       : _iSet = iset,
         _set = iset == null ? {} : null;
 

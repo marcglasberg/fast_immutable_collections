@@ -61,7 +61,7 @@ void main() {
     final Map<String, int> unmodifiableMapView = {"a": 1, "b": 2}.lock.unlockView;
 
     expect(unmodifiableMapView,
-        allOf(isA<Map<String, int>>(), isA<UnmodifiableMapView<String, int>>(), {"a": 1, "b": 2}));
+        allOf(isA<Map<String, int>>(), isA<UnmodifiableMapFromIMap<String, int>>(), {"a": 1, "b": 2}));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ void main() {
     final Map<String, int> modifiableMapView = {"a": 1, "b": 2}.lock.unlockLazy;
 
     expect(modifiableMapView,
-        allOf(isA<Map<String, int>>(), isA<ModifiableMapView<String, int>>(), {"a": 1, "b": 2}));
+        allOf(isA<Map<String, int>>(), isA<ModifiableMapFromIMap<String, int>>(), {"a": 1, "b": 2}));
   });
 
   //////////////////////////////////////////////////////////////////////////////

@@ -265,6 +265,32 @@ void main() {
     expect(ImmutableCollection.prettyPrint, isTrue);
   });
 
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("deepIdenticalEqual", () {
+    expect(null.deepEqualsByIdentity(null), true);
+    expect(null.deepEqualsByIdentity([]), false);
+    expect([].deepEqualsByIdentity(null), false);
+    expect([].deepEqualsByIdentity([]), true);
+    expect([1].deepEqualsByIdentity([1]), true);
+    expect([1].deepEqualsByIdentity([2]), false);
+    expect([1, 2].deepEqualsByIdentity([1, 2]), true);
+    expect([1, 2].deepEqualsByIdentity([3, 4]), false);
+    expect([1, 2].deepEqualsByIdentity([1, 3]), false);
+    expect([1, 2].deepEqualsByIdentity([1, 2, 2]), false);
+
+    // Now with objects that are equal by value:
+    var obj1 = _ClassEqualsByValue();
+    expect(obj1 == obj1, true);
+    expect([obj1].deepEqualsByIdentity([obj1]), true);
+    expect([obj1].deepEqualsByIdentity([_ClassEqualsByValue()]), false);
+
+    var obj2 = _ClassEqualsByValue();
+    expect(obj1 == obj2, true);
+    expect([obj1].deepEqualsByIdentity([obj2]), false);
+    expect([obj1, obj2].deepEqualsByIdentity([obj1, obj2]), true);
+  });
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("removeDuplicates", () {
@@ -303,6 +329,17 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 }
+
+class _ClassEqualsByValue {
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is _ClassEqualsByValue && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => 0;
+}
+
+// /////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class CanBeEmptyExample implements CanBeEmpty {

@@ -14,8 +14,8 @@ import "ilist_of_2.dart";
 import "l_add.dart";
 import "l_add_all.dart";
 import "l_flat.dart";
-import "modifiable_list_view.dart";
-import "unmodifiable_list_view.dart";
+import "modifiable_list_from_ilist.dart";
+import "unmodifiable_list_from_ilist.dart";
 
 /// An **immutable** list.
 @immutable
@@ -266,8 +266,8 @@ class IList<T> // ignore: must_be_immutable
   /// it will throw an [UnsupportedError].
   /// It is also very fast to lock this list back into an [IList].
   ///
-  /// See also: [UnmodifiableListView]
-  List<T> get unlockView => UnmodifiableListView(this);
+  /// See also: [UnmodifiableListFromIList]
+  List<T> get unlockView => UnmodifiableListFromIList(this);
 
   /// Unlocks the list, returning a **safe**, modifiable (mutable) [List].
   /// Using this is very fast at first, since it makes no copies of the [IList]
@@ -278,8 +278,8 @@ class IList<T> // ignore: must_be_immutable
   /// If you never mutate the list, it will be very fast to lock this list
   /// back into an [IList].
   ///
-  /// See also: [ModifiableListView]
-  List<T> get unlockLazy => ModifiableListView(this);
+  /// See also: [ModifiableListFromIList]
+  List<T> get unlockLazy => ModifiableListFromIList(this);
 
   /// Returns a new `Iterator` that allows iterating the elements of this [IList].
   @override
@@ -328,7 +328,7 @@ class IList<T> // ignore: must_be_immutable
       return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
     }
 
-    if (other is List<T>) return const ListEquality().equals(UnmodifiableListView(this), other);
+    if (other is List<T>) return const ListEquality().equals(UnmodifiableListFromIList(this), other);
 
     if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
 
@@ -882,7 +882,7 @@ class IList<T> // ignore: must_be_immutable
   /// ```
   IMap<int, T> asMap() {
     _count();
-    return IMap<int, T>(UnmodifiableListView(this).asMap());
+    return IMap<int, T>(UnmodifiableListFromIList(this).asMap());
   }
 
   /// Returns an empty list with the same configuration.
@@ -1315,7 +1315,7 @@ class IList<T> // ignore: must_be_immutable
   /// Returns an [Iterable] of the objects in this list in reverse order.
   IList<T> get reversed {
     // TODO: Still need to implement efficiently.
-    var list = UnmodifiableListView(this).reversed;
+    var list = UnmodifiableListFromIList(this).reversed;
     return IList.withConfig(list, config);
   }
 

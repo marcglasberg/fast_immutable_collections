@@ -1,7 +1,7 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "dart:collection";
 
-/// The [ModifiableMapView] is a safe, modifiable [Map] that is built from an [IMap].
+/// The [ModifiableMapFromIMap] is a safe, modifiable [Map] that is built from an [IMap].
 /// The construction of the map is fast at first, since it makes no copies of the
 /// [IMap] items, but just uses it directly.
 ///
@@ -13,12 +13,13 @@ import "dart:collection";
 /// If you never mutate the map, it will be very fast to lock this map
 /// back into an [IMap].
 ///
-/// See also: [UnmodifiableMapView]
-class ModifiableMapView<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeEmpty {
+/// See also: [UnmodifiableMapFromIMap]
+///
+class ModifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeEmpty {
   IMap<K, V> _iMap;
   Map<K, V> _map;
 
-  ModifiableMapView(IMap<K, V> imap)
+  ModifiableMapFromIMap(IMap<K, V> imap)
       : _iMap = imap,
         _map = imap == null ? {} : null;
 
