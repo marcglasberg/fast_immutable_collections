@@ -1,6 +1,6 @@
 import "dart:collection";
 import "package:collection/collection.dart";
-import "../ilist/ilist.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "imap.dart";
 
 // /////////////////////////////////////////////////////////////////////////////

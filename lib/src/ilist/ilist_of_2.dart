@@ -1,6 +1,4 @@
-import "../base/hash.dart";
-
-// /////////////////////////////////////////////////////////////////////////////
+import "package:fast_immutable_collections/src/base/hash.dart";
 
 /// An *immutable* list of only 2 items.
 class IListOf2<T> {

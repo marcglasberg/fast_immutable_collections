@@ -1,9 +1,7 @@
+import "package:fast_immutable_collections_example/widgets/bar_chart.dart";
 import "package:flutter/material.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
-
-import "../widgets/bar_chart.dart";
 
 class GraphScreen extends StatefulWidget {
   final String title;

@@ -1,7 +1,5 @@
 import "package:meta/meta.dart";
-
-import "../ilist/ilist.dart";
-import "../iset/iset.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "hash.dart";
 
 // /////////////////////////////////////////////////////////////////////////////

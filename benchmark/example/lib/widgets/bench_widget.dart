@@ -1,10 +1,8 @@
+import "package:fast_immutable_collections_example/screens/code_screen.dart";
+import "package:fast_immutable_collections_example/screens/graph_screen.dart";
 import "package:flutter/material.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
-
-import "../screens/code_screen.dart";
-import "../screens/graph_screen.dart";
 import "collection_button.dart";
 
 class BenchWidget extends StatefulWidget {

@@ -1,5 +1,4 @@
-import "../base/immutable_collection.dart";
-import "../iset/iset.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// This mixin implements all [Iterable] methods,
 /// but it does **NOT** implement [Iterable] nor [ISet].

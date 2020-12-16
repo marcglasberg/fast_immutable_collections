@@ -1,4 +1,4 @@
-import "../ilist/ilist.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "immutable_collection.dart";
 
 /// 1. If [a] and [b] are both `null`, they don't have order. If one of them

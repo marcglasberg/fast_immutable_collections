@@ -1,8 +1,5 @@
 import "dart:collection";
-
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-import "../base/immutable_collection.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "iset.dart";
 
 /// The [ModifiableSetFromISet] is a safe, modifiable [Set] that is built from an [ISet].

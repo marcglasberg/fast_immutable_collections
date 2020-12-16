@@ -1,14 +1,7 @@
 import "dart:collection";
-
+import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-import "../base/configs.dart";
-
-import "../base/hash.dart";
-import "../base/immutable_collection.dart";
-import "../imap/imap.dart";
-import "../imap/imap_extension.dart";
-import "../ilist/ilist.dart";
-import "../iset/iset.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// An **immutable**, **unordered**, map of sets.
 @immutable

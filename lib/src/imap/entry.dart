@@ -1,6 +1,5 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "../base/hash.dart";
-import "../base/sort.dart";
+import "package:fast_immutable_collections/src/base/hash.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 

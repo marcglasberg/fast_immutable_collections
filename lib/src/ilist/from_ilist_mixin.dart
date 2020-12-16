@@ -1,7 +1,5 @@
 import "dart:math";
-
-import "../base/immutable_collection.dart";
-import "../imap/imap.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "ilist.dart";
 
 /// This mixin implements all [IList] methods (without `config` ([ConfigList])), plus

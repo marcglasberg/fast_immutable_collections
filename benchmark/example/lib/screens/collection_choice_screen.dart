@@ -1,6 +1,5 @@
+import "package:fast_immutable_collections_example/widgets/collection_button.dart";
 import "package:flutter/material.dart";
-
-import "../widgets/collection_button.dart";
 import "multi_benchmark_screen.dart";
 
 class CollectionChoiceScreen extends StatelessWidget {
