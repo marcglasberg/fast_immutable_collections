@@ -165,10 +165,13 @@ abstract class CanBeEmpty {
 
 /// See also: [CanBeEmpty]
 extension CanBeEmptyExtension on CanBeEmpty {
+  /// Checks if `this` is `null` or `[isEmpty].
   bool get isNullOrEmpty => (this == null) || isEmpty;
 
+  /// Checks if `this` is **not** `null` and **not** `[isEmpty].
   bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
 
+  /// Checks if `this` is [isEmpty] but **not** `null`.
   bool get isEmptyButNotNull => (this != null) && isEmpty;
 }
 
@@ -263,6 +266,8 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
     }
   }
 
+  /// Finds duplicates and then returns a [Set] with the elements which were duplicated.
+  /// If there are no duplicates, an empty [Set] is returned.
   Set<T> findDuplicates() {
     final Set<T> duplicates = HashSet<T>();
     final Set<T> auxSet = HashSet<T>();
@@ -272,6 +277,9 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
     return duplicates;
   }
 
+  /// Removes `null`s from the [Iterable].
+  ///
+  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
   Iterable<T> removeNulls() sync* {
     for (T item in this) {
       if (item != null) yield item;
@@ -279,7 +287,9 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
   }
 
   /// Removes all duplicates, leaving only the distinct items.
-  /// Optionally, you can provide a [id] function to compare the items.
+  /// Optionally, you can provide an [id] function to compare the items.
+  ///
+  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
   Iterable<T> removeDuplicates([dynamic Function(T item) id]) sync* {
     if (id != null) {
       Set<dynamic> ids = {};
@@ -297,6 +307,9 @@ extension IterableToImmutableExtension<T> on Iterable<T> {
     }
   }
 
+  /// Removes `null`s and duplicates.
+  ///
+  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
   Iterable<T> removeNullAndDuplicates() sync* {
     Set<T> items = {};
     for (T item in this) {

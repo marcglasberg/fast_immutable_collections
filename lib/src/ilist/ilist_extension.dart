@@ -395,7 +395,7 @@ extension IListExtension<T> on List<T> {
   /// a `List`. This difference is important because if you do `list.reversed.toList()`
   /// you don't have a view anymore, and it's not efficient.
   ///
-  /// Important: At the moment, some of the list methods return `UnimplementedError`.
+  /// **Important**: At the moment, some of the list methods return [UnimplementedError].
   /// All methods will be completed in the future.
   ///
   List<T> get reversedListView => _ReversedListView<T>(this);
@@ -404,8 +404,8 @@ extension IListExtension<T> on List<T> {
 // ////////////////////////////////////////////////////////////////////////////
 
 /// Returns a [List] of the objects in this list in reverse order.
-/// Very efficient since it returns a view (which means, if you change the original list
-/// this one will also change, and vice-versa).
+/// Very efficient since it returns a view &mdash; which means, if you change the original list
+/// this one will also change, and vice-versa.
 ///
 /// Note: `List.reversed` returns an [Iterable], while this is a [List].
 ///

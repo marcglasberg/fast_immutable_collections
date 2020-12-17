@@ -267,7 +267,7 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("deepIdenticalEqual", () {
+  test("deepEqualsByIdentity", () {
     expect(null.deepEqualsByIdentity(null), true);
     expect(null.deepEqualsByIdentity([]), false);
     expect([].deepEqualsByIdentity(null), false);
@@ -308,7 +308,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("orderAs", () {
+  test("toListSortedLike", () {
     expect([1, 2, 3].toListSortedLike([1, 2, 3]), [1, 2, 3]);
     expect([1, 2, 3].toListSortedLike(<int>[]), [1, 2, 3]);
     expect(<int>[].toListSortedLike([1, 2, 3]), isEmpty);
