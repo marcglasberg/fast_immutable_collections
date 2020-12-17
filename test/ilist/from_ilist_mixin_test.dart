@@ -993,7 +993,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
 
-    expect(students.unlockView, allOf(isA<List<Student>>(), isA<UnmodifiableListFromIList<Student>>()));
+    expect(students.unlockView,
+        allOf(isA<List<Student>>(), isA<UnmodifiableListFromIList<Student>>()));
   });
 
   //////////////////////////////////////////////////////////////////////////////

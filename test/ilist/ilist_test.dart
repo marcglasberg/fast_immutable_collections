@@ -1038,8 +1038,8 @@ void main() {
   test("unlockView", () {
     final List<int> unmodifiableListView = [1, 2, 3].lock.unlockView;
 
-    expect(
-        unmodifiableListView, allOf(isA<List<int>>(), isA<UnmodifiableListFromIList<int>>(), [1, 2, 3]));
+    expect(unmodifiableListView,
+        allOf(isA<List<int>>(), isA<UnmodifiableListFromIList<int>>(), [1, 2, 3]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1047,7 +1047,8 @@ void main() {
   test("unlockLazy", () {
     final List<int> modifiableListView = [1, 2, 3].lock.unlockLazy;
 
-    expect(modifiableListView, allOf(isA<List<int>>(), isA<ModifiableListFromIList<int>>(), [1, 2, 3]));
+    expect(modifiableListView,
+        allOf(isA<List<int>>(), isA<ModifiableListFromIList<int>>(), [1, 2, 3]));
   });
 
   //////////////////////////////////////////////////////////////////////////////

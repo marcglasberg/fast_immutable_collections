@@ -16,7 +16,10 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
     views.forEach((UnmodifiableSetFromISet<int> view) => expect(view.length, 3));
   });
@@ -27,7 +30,10 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
     views.forEach(
         (UnmodifiableSetFromISet<int> view) => expect(view.lock, allOf(isA<ISet<int>>(), baseSet)));
@@ -39,7 +45,10 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
     views.forEach((UnmodifiableSetFromISet<int> view) {
       expect(view.isEmpty, isFalse);
@@ -53,7 +62,10 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
     views.forEach((UnmodifiableSetFromISet<int> view) => expect(view.toSet(), baseSet));
   });
@@ -64,7 +76,10 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
     views.forEach((UnmodifiableSetFromISet<int> view) {
       expect(view.contains(1), isTrue);
@@ -80,7 +95,10 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
     views.forEach((UnmodifiableSetFromISet<int> view) {
       expect(view.lookup(1), 1);
@@ -118,7 +136,10 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
     views.forEach(
         (UnmodifiableSetFromISet<int> view) => expect(() => view.add(4), throwsUnsupportedError));
@@ -128,10 +149,13 @@ void main() {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final List<UnmodifiableSetFromISet<int>> views = [unmodifiableSetView, unmodifiableSetViewFromSet];
+    final List<UnmodifiableSetFromISet<int>> views = [
+      unmodifiableSetView,
+      unmodifiableSetViewFromSet
+    ];
 
-    views.forEach(
-        (UnmodifiableSetFromISet<int> view) => expect(() => view.remove(2), throwsUnsupportedError));
+    views.forEach((UnmodifiableSetFromISet<int> view) =>
+        expect(() => view.remove(2), throwsUnsupportedError));
   });
 
   //////////////////////////////////////////////////////////////////////////////

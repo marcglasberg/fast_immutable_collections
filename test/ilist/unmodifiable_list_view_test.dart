@@ -13,7 +13,8 @@ void main() {
 
   test("[]", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -31,7 +32,8 @@ void main() {
 
   test("length", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -45,22 +47,24 @@ void main() {
 
   test("lock", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
       unmodifiableListViewFromList,
     ];
 
-    views.forEach(
-        (UnmodifiableListFromIList<int> view) => expect(view.lock, allOf(isA<IList<int>>(), baseList)));
+    views.forEach((UnmodifiableListFromIList<int> view) =>
+        expect(view.lock, allOf(isA<IList<int>>(), baseList)));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -77,37 +81,40 @@ void main() {
 
   test("[]=", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
       unmodifiableListViewFromList,
     ];
 
-    views.forEach(
-        (UnmodifiableListFromIList<int> view) => expect(() => view[0] = 10, throwsUnsupportedError));
+    views.forEach((UnmodifiableListFromIList<int> view) =>
+        expect(() => view[0] = 10, throwsUnsupportedError));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("length", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
       unmodifiableListViewFromList,
     ];
 
-    views.forEach(
-        (UnmodifiableListFromIList<int> view) => expect(() => view.length = 10, throwsUnsupportedError));
+    views.forEach((UnmodifiableListFromIList<int> view) =>
+        expect(() => view.length = 10, throwsUnsupportedError));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("add", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -122,7 +129,8 @@ void main() {
 
   test("addAll", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -137,14 +145,15 @@ void main() {
 
   test("remove", () {
     const List<int> baseList = [1, 2, 3];
-    final UnmodifiableListFromIList<int> unmodifiableListView = UnmodifiableListFromIList(baseList.lock),
+    final UnmodifiableListFromIList<int> unmodifiableListView =
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
       unmodifiableListViewFromList,
     ];
 
-    views.forEach(
-        (UnmodifiableListFromIList<int> view) => expect(() => view.remove(3), throwsUnsupportedError));
+    views.forEach((UnmodifiableListFromIList<int> view) =>
+        expect(() => view.remove(3), throwsUnsupportedError));
   });
 }
