@@ -22,7 +22,7 @@ void main() {
   testAndPrint("Creating IList", () {
     IList<int> ilist1 = IList([1, 2]);
     IList<int> ilist2 = [1, 2].lock;
-    IList<int> ilist3 = {1, 2}.lockAsList;
+    IList<int> ilist3 = {1, 2}.toIList();
 
     var list1 = List.of(ilist1);
     var list2 = ilist1.unlock;

@@ -222,11 +222,11 @@ class Output<T> {
 /// See also: [IListExtension], [ISetExtension]
 extension IterableToImmutableExtension<T> on Iterable<T> {
   //
-  /// Locks the iterable, returning an *immutable* list ([IList]).
-  IList<T> get lockAsList => IList<T>(this);
+  /// Creates an *immutable* list ([IList]) from the iterable.
+  IList<T> toIList() => (this == null) ? null : IList<T>(this);
 
-  /// Locks the iterable, returning an *immutable* set ([ISet]).
-  ISet<T> get lockAsSet => ISet<T>(this);
+  /// Creates an *immutable* set ([ISet]) from the iterable.
+  ISet<T> toISet() => (this == null) ? null : ISet<T>(this);
 
   bool get isNullOrEmpty => this == null || isEmpty;
 

@@ -123,7 +123,7 @@ IList<String> ilist = IList([1, 2]);
 IList<String> ilist = [1, 2].lock;
                           
 // Locking a set as list
-IList<String> ilist = {1, 2}.lockAsList;
+IList<String> ilist = {1, 2}.toIList();
 ```                                                                           
 
 To create a regular `List` from an `IList`,
@@ -674,7 +674,7 @@ ISet<String> iset = ISet({1, 2});
 ISet<String> iset = {1, 2}.lock;
                           
 // Locking a list as set
-ISet<String> iset = [1, 2].lockAsSet;
+ISet<String> iset = [1, 2].toISet();
 ```                                                                           
 
 To create a regular `Set` from an `ISet`,

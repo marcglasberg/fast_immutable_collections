@@ -145,10 +145,10 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("IterableToImmutableExtension.lockAsList", () {
+  test("List.toIList() / List.toISet()", () {
     const List<int> list = [1, 2, 3, 3];
-    final IList<int> ilist = list.lockAsList;
-    final ISet<int> iset = list.lockAsSet;
+    final IList<int> ilist = list.toIList();
+    final ISet<int> iset = list.toISet();
 
     expect(ilist, [1, 2, 3, 3]);
     expect(iset, {1, 2, 3});
@@ -156,10 +156,10 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("IterableToImmutableExtension.lockAsSet", () {
+  test("Set.toIList() / Set.toISet()", () {
     const Set<int> set = {1, 2, 3};
-    final IList<int> ilist = set.lockAsList;
-    final ISet<int> iset = set.lockAsSet;
+    final IList<int> ilist = set.toIList();
+    final ISet<int> iset = set.toISet();
 
     expect(ilist, [1, 2, 3]);
     expect(iset, [1, 2, 3]);
