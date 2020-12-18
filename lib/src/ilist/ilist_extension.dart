@@ -95,8 +95,8 @@ extension IListExtension<T> on List<T> {
     sortOrdered(compare);
   }
 
-  /// If the item does not exist in the list, add it and return true.
-  /// If it already exists, remove it and return false.
+  /// If the item does not exist in the list, add it and return `true`.
+  /// If it already exists, remove &mdash; the first instance &mdash; it and return `false`.
   bool toggle(T item) {
     var result = contains(item);
     if (result)
@@ -106,7 +106,7 @@ extension IListExtension<T> on List<T> {
     return result;
   }
 
-  /// Return true if the lists contain the same items (in any order).
+  /// Return `true` if the lists contain the same items (in any order).
   /// Ignores repeated items.
   bool compareAsSets(List other) {
     if (this == null) return other == null;
@@ -115,7 +115,9 @@ extension IListExtension<T> on List<T> {
   }
 
   /// Maps each element of the list.
-  /// The map function gets both the original item and its index.
+  /// The [map] function gets both the original [item] and its [index].
+  ///
+  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
   Iterable<E> mapIndexed<E>(E Function(int index, T item) map) sync* {
     for (var index = 0; index < length; index++) {
       yield map(index, this[index]);
@@ -409,7 +411,7 @@ extension IListExtension<T> on List<T> {
 ///
 /// Note: `List.reversed` returns an [Iterable], while this is a [List].
 ///
-/// Important: At the moment, many methods are still unimplemented.
+/// **Important**: At the moment, many methods are still unimplemented.
 ///
 class _ReversedListView<T> implements List<T> {
   //

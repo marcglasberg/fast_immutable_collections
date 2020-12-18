@@ -100,6 +100,97 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  test("toggle", () {
+    List<int> list = [1, 2, 3, 4, 5];
+
+    // 1) Toggle existing item
+    expect(list.contains(4), isTrue);
+    expect(list.toggle(4), isTrue);
+    expect(list.contains(4), isFalse);
+    expect(list.toggle(4), isFalse);
+    expect(list.contains(4), isTrue);
+
+    // 2) Toggle NON-existing item
+    expect(list.contains(6), isFalse);
+    expect(list.toggle(6), isFalse);
+    expect(list.contains(6), isTrue);
+    expect(list.toggle(6), isTrue);
+    expect(list.contains(6), isFalse);
+
+    // 3) Nulls and other checks
+    list = <int>[];
+    expect(list.toggle(1), isFalse);
+    expect(list.contains(1), isTrue);
+
+    list = <int>[];
+    expect(list.toggle(null), isFalse);
+    expect(list.contains(null), isTrue);
+
+    list = <int>[null];
+    expect(list.toggle(1), isFalse);
+    expect(list.contains(1), isTrue);
+
+    list = <int>[null];
+    expect(list.toggle(null), isTrue);
+    expect(list.contains(null), isFalse);
+
+    list = <int>[1];
+    expect(list.toggle(1), isTrue);
+    expect(list.contains(1), isFalse);
+
+    list = <int>[1];
+    expect(list.toggle(null), isFalse);
+    expect(list.contains(null), isTrue);
+
+    list = <int>[null, null, null];
+    expect(list.toggle(1), isFalse);
+    expect(list.contains(1), isTrue);
+
+    list = <int>[null, null, null];
+    expect(list.toggle(null), isTrue);
+    expect(list, <int>[null, null]);
+
+    list = <int>[null, 1, null, 1];
+    expect(list.toggle(1), isTrue);
+    expect(list, <int>[null, null, 1]);
+
+    list = <int>[null, 1, null, 1];
+    expect(list.toggle(null), isTrue);
+    expect(list, <int>[1, null, 1]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("compareAsSets", () {
+    // 1) Identical
+    const List<int> list1 = [1, 2, 3];
+    const List<int> list2 = [1, 2, 3];
+    const List<int> list3 = [1, 2, 4];
+    const List<int> list4 = [1, 2, 2, 3, 3, 3];
+    const List<int> list5 = [1, 2, 2, 3, 3, 3, 4];
+    expect(list1.compareAsSets(list1), isTrue);
+    expect(list1.compareAsSets(list2), isTrue);
+    expect(list1.compareAsSets(list3), isFalse);
+    expect(list1.compareAsSets(list4), isTrue);
+    expect(list1.compareAsSets(list5), isFalse);
+
+    // 3) Nulls
+    // TODO: Marcelo, se `this == null` como podemos então chamar o método `compareAsSets`?
+    List<int> list;
+    expect(list.compareAsSets(null), isTrue);
+    expect(list.compareAsSets([]), isFalse);
+    expect([].compareAsSets(list), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("mapIndexed", () {
+    expect(
+        [1, 2, 3].mapIndexed((int index, int item) => (index + item).toString()), ["1", "3", "5"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   test("splitList", () {
     expect([].splitList((v) => v == 3), []);
 
@@ -515,22 +606,25 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("reversedListView", () {
-    //
+    // 1) Runtime type
+
     expect([].reversed is Iterable, isTrue);
     expect([].reversed is List, isFalse);
     expect([].reversedListView is List, isTrue);
     expect([1].reversedListView is List<int>, isTrue);
 
+    // 2) isEmpty | isNotEmpty
+
     expect([].reversedListView, isEmpty);
     expect([1].reversedListView, isNotEmpty);
 
-    // -------------------
+    // 3) single
 
     expect(() => [].reversedListView.single, throwsStateError);
     expect(() => [1, 2].reversedListView.single, throwsStateError);
     expect([1].reversedListView.single, 1);
 
-    // -------------------
+    // 4) first | last
 
     var list = [0, 1, 2, 3, 3, 4];
     var inverted = list.reversedListView;
@@ -542,9 +636,23 @@ void main() {
     expect(() => [].reversedListView.first, throwsStateError);
     expect(() => [].reversedListView.last, throwsStateError);
 
-    // -------------------
+    // 5) length
 
     expect(inverted.length, 6);
+
+    // 6) length, first and  last setters
+
+    // TODO: Marcelo, é isso mesmo que você gostaria que fossem estes testes?
+    list = [1, 2, 3].reversedListView;
+    expect(() => list.length = 100, throwsUnsupportedError);
+
+    list.first = 100;
+    expect(list.first, 100);
+
+    list.last = 500;
+    expect(list.last, 500);
+
+    // 6) indexWhere
 
     expect(inverted.indexWhere((i) => i == 0), 5);
     expect(inverted.indexWhere((i) => i == 1), 4);
@@ -555,7 +663,7 @@ void main() {
 
     expect(inverted.indexWhere((i) => i == 4, 1), null);
 
-    // -------------------
+    // 7) lastIndexWhere
 
     expect(inverted.lastIndexWhere((i) => i == 0), 5);
     expect(inverted.lastIndexWhere((i) => i == 1), 4);
@@ -566,7 +674,17 @@ void main() {
 
     expect(inverted.lastIndexWhere((i) => i == 0, 1), null);
 
-    // -------------------
+    // 8) +
+
+    list = [1, 2, 3].reversedListView;
+
+    // TODO
+//    expect(list + [4, 5, 6], [1, 2, 3, 4, 5, 6]);
+//    expect(list + [4], [1, 2, 3, 4]);
+//    expect(list + [null], [1, 2, 3, null]);
+//    expect(() => list + null, throwsNoSuchMethodError);
+
+    // 8) []
 
     list = [0, 1, 2, 3, 4];
     inverted = list.reversedListView;
@@ -578,7 +696,23 @@ void main() {
     expect(inverted[4], 0);
     expect(() => inverted[5], throwsRangeError);
 
-    // -------------------
+    // 9) []=
+
+    list = [1, 2, 3].reversedListView;
+
+    expect(() => list[-100] = 10, throwsRangeError);
+    expect(() => list[-1] = 10, throwsRangeError);
+    expect(() => list[100] = 10, throwsRangeError);
+    expect(() => list[3] = 10, throwsRangeError);
+
+    list[0] = 10;
+    expect(list, [10, 2, 3]);
+    list[1] = 10;
+    expect(list, [10, 10, 3]);
+    list[2] = 10;
+    expect(list, [10, 10, 10]);
+
+    // 9) elementAt
 
     expect(inverted.elementAt(0), 4);
     expect(inverted.elementAt(1), 3);
@@ -587,12 +721,12 @@ void main() {
     expect(inverted.elementAt(4), 0);
     expect(() => inverted.elementAt(5), throwsRangeError);
 
-    // -------------------
+    // 10) any
 
     expect(inverted.any((i) => i == 2), isTrue);
     expect(inverted.any((i) => i == 5), isFalse);
 
-    // -------------------
+    // 11) contains
 
     expect(inverted.contains(0), isTrue);
     expect(inverted.contains(1), isTrue);
@@ -601,7 +735,7 @@ void main() {
     expect(inverted.contains(4), isTrue);
     expect(inverted.contains(5), isFalse);
 
-    // -------------------
+    // 12) iterator
 
     var iterator = inverted.iterator;
 
