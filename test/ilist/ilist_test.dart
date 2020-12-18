@@ -717,7 +717,7 @@ void main() {
     final Matcher throwsTypeError = throwsA(isTypeError);
 
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.cast<num>(), isA<IList<num>>());
+    expect(ilist.cast<num>(), allOf(isA<IList<num>>(), [1, 2, 3, 4, 5, 6]));
     expect(() => ilist.cast<String>(), throwsTypeError);
   });
 
