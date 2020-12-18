@@ -679,9 +679,9 @@ void main() {
     list = [1, 2, 3].reversedListView;
 
     // TODO
-//    expect(list + [4, 5, 6], [1, 2, 3, 4, 5, 6]);
-//    expect(list + [4], [1, 2, 3, 4]);
-//    expect(list + [null], [1, 2, 3, null]);
+//    expect(list + [4, 5, 6], [3, 2, 1, 4, 5, 6]);
+//    expect(list + [4], [3, 2, 1, 4]);
+//    expect(list + [null], [3, 2, 1, null]);
 //    expect(() => list + null, throwsNoSuchMethodError);
 
     // 8) []
@@ -706,9 +706,9 @@ void main() {
     expect(() => list[3] = 10, throwsRangeError);
 
     list[0] = 10;
-    expect(list, [10, 2, 3]);
+    expect(list, [10, 2, 1]);
     list[1] = 10;
-    expect(list, [10, 10, 3]);
+    expect(list, [10, 10, 1]);
     list[2] = 10;
     expect(list, [10, 10, 10]);
 
@@ -758,7 +758,7 @@ void main() {
 
     expect(iterator.moveNext(), isFalse);
     expect(iterator.current, isNull);
-  }, skip: true);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 }
