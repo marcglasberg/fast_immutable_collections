@@ -70,6 +70,7 @@ Later in this document, we provide benchmarks so that you can compare speeds
 
 <br />
 
+**Table of Contents**
 
 <!-- TOC -->
 

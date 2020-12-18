@@ -180,7 +180,7 @@ void main() {
     expect(list.compareAsSets(null), isTrue);
     expect(list.compareAsSets([]), isFalse);
     expect([].compareAsSets(list), isFalse);
-  });
+  }, skip: true);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -758,7 +758,7 @@ void main() {
 
     expect(iterator.moveNext(), isFalse);
     expect(iterator.current, isNull);
-  });
+  }, skip: true);
 
   /////////////////////////////////////////////////////////////////////////////
 }
