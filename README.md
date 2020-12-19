@@ -1,14 +1,22 @@
 # 1. Fast Immutable Collections
 
-[![Dart || Tests | Formatting | Analyzer][github_ci_badge]][github_actions]
-[![codecov.io][codecov_badge]][codecov]
-[![Gitter][gitter_svg]][gitter_badge]
+<p align="center">
+  <img src="assets/logo.png" alt="Logo" />
+</p>
 
-[![Logo][logo]][github_home]
-\
-[![GIF][gif]][example]
-\
-<sub>The [benchmark app][example] for comparing this package's collections to others.</sub>
+<p align="center">
+  <a href="https://github.com/marcglasberg/fast_immutable_collections/actions"><img src="https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?" alt="Github CI"></a>
+  <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
+  <a href="https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Fast-Immutable-Collections/community.svg" alt="Gitter Chat" /></a>
+</p>
+
+<p align="center">
+  <img src="benchmark/assets/demo.gif" alt="Demo GIF" />
+</p>
+
+<p align="center">
+  <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> for comparing this package's collections to others.</sub>
+</p>
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
 
