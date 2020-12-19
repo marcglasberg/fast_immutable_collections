@@ -994,6 +994,17 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("everyEntry", () {
+    final IMap<String, int> imap =
+        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+    expect(imap.everyEntry((MapEntry<String, int> entry) => entry.value < 7), isTrue);
+    expect(imap.everyEntry((MapEntry<String, int> entry) => entry.key.length <= 1), isTrue);
+    expect(imap.everyEntry((MapEntry<String, int> entry) => entry.key == "a"), isFalse);
+    expect(imap.everyEntry((MapEntry<String, int> entry) => entry.value < 4), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("cast", () {
     // 1) Regular usage
     IMap<String, int> imap =
