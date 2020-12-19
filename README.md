@@ -72,12 +72,14 @@ Later in this document, we provide benchmarks so that you can compare speeds
 
 **Table of Contents**
 
+
 <!-- TOC -->
 
 - [1. Fast Immutable Collections](#1-fast-immutable-collections)
     - [1.1. Introduction](#11-introduction)
 - [2. IList](#2-ilist)
     - [2.1. IList Equality](#21-ilist-equality)
+    - [2.1.1 Cached HashCode](#211-cached-hashcode)
     - [2.2. Global IList Configuration](#22-global-ilist-configuration)
     - [2.3. Usage in tests](#23-usage-in-tests)
     - [2.4. IList reuse by composition](#24-ilist-reuse-by-composition)
@@ -95,14 +97,14 @@ Later in this document, we provide benchmarks so that you can compare speeds
     - [6.3. SortBy function](#63-sortby-function)
     - [6.4. SortLike function](#64-sortlike-function)
     - [6.5. if0 extension](#65-if0-extension)
-    - [6.6. Flushing](#66-flushing)
-    - [6.7. Auto-flush](#67-auto-flush)
-        - [6.7.1. Sync Auto-flush](#671-sync-auto-flush)
-        - [6.7.2. Async Auto-flush](#672-async-auto-flush)
-- [7. About the Benchmarks](#7-about-the-benchmarks)
-- [8. Other Resources & Documentation](#8-other-resources--documentation)
-- [9. For the Developer or Contributor](#9-for-the-developer-or-contributor)
-    - [9.1. Formatting](#91-formatting)
+- [7. Flushing](#7-flushing)
+    - [7.1. Auto-flush](#71-auto-flush)
+    - [7.2. Sync Auto-flush](#72-sync-auto-flush)
+    - [7.3. Async Auto-flush](#73-async-auto-flush)
+- [8. About the Benchmarks](#8-about-the-benchmarks)
+- [9. Other Resources & Documentation](#9-other-resources--documentation)
+- [10. For the Developer or Contributor](#10-for-the-developer-or-contributor)
+    - [10.1. Formatting](#101-formatting)
 
 <!-- /TOC -->
 

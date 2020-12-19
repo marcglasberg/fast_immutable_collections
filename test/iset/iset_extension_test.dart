@@ -26,4 +26,28 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("toggle", () {
+    // 1) Toggling an existing element
+    Set<int> iset = {1, 2, 3};
+    expect(iset.contains(3), isTrue);
+
+    iset.toggle(3);
+    expect(iset.contains(3), isFalse);
+
+    iset.toggle(3);
+    expect(iset.contains(3), isTrue);
+
+    // 2) Toggling an nonexistent element
+    iset = {1, 2, 3};
+    expect(iset.contains(4), isFalse);
+
+    iset.toggle(4);
+    expect(iset.contains(4), isTrue);
+
+    iset.toggle(4);
+    expect(iset.contains(4), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
