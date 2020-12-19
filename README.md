@@ -1,5 +1,3 @@
-# 1. Fast Immutable Collections
-
 <p align="center">
   <img src="assets/logo.png" alt="Logo" />
 </p>
@@ -10,12 +8,16 @@
   <a href="https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Fast-Immutable-Collections/community.svg" alt="Gitter Chat" /></a>
 </p>
 
+---
+
+# 1. Fast Immutable Collections
+
 <p align="center">
   <img src="benchmark/assets/demo.gif" alt="Demo GIF" />
 </p>
 
 <p align="center">
-  <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> for comparing this package's collections to others.</sub>
+  <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> app for comparing this package's collections to others.</sub>
 </p>
 
 > **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
