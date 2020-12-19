@@ -2,7 +2,7 @@
 
 Immutable objects are those that cannot be changed once created.
 
-To create an immutable objects **in Dart** you must follow these 5 rules:
+To create an immutable object **in Dart** you must follow these 5 rules:
 
 1. Make all immutable fields final or private, so that they cannot be changed.
 
@@ -14,15 +14,14 @@ To create an immutable objects **in Dart** you must follow these 5 rules:
 4. Don’t provide any methods that give external access to internal mutable fields.
 
 5. Don’t provide any methods that change any fields, except if you make absolutely sure those changes have no external
-   effects
-   (this may be useful for lazy initialization, caching and improving performance).
+   effects (this may be useful for lazy initialization, caching and improving performance).
 
 _Note:_ There should also be a 6th rule stating that the class should be `final` (in the Java sense), but in Dart it's
-impossible to prevent a class from being subclassed. The problem is that one can always subclass an immutable class and
-then add mutable fields to it, as well as override public methods to return changed values according to those mutable
-fields. This means that in Dart it's impossible to create strictly immutable classes. However, you can make it as close
-as possible to the real thing by at least not invoking overridable methods from the constructor (which is Dart means not
-invoking public non-static methods).
+impossible to prevent a class from being subclassed. The problem is that one can always subclass an otherwise immutable
+class and then add mutable fields to it, as well as override public methods to return changed values according to those
+mutable fields. This means that in Dart it's impossible to create strictly immutable classes. However, you can make it
+as close as possible to the real thing by at least not invoking overridable methods from the constructor (which in Dart
+means not invoking public non-static methods).
 
 <br>
 
@@ -32,12 +31,12 @@ simply disappear.
 
 In Effective Java, Joshua Bloch makes this recommendation:
 
-> Classes should be immutable unless there's a very good reason to make them mutable....
+> Classes should be immutable unless there's a very good reason to make them mutable.
 > If a class cannot be made immutable, limit its mutability as much as possible.
 
-The reason for this is that mutability imposes no design constraints on developers, meaning engineers are free to sculpt
+The reason for this is that mutability imposes no design constraints on developers, meaning they are free to sculpt
 mutable imperative programs how they see fit. While mutability does not prevent us to achieve good designs, it also
-doesn't guide us to clean code like immutability does.
+doesn't guide us there like immutability does.
 
 Mutable state increases the complexity of our applications. The more parts can change within a component, the less sure
 we are of its state at any point in time, and the more unit tests we need to write to be confident that it works. Once
@@ -46,8 +45,8 @@ application that is challenging to reason about and fully test.
 
 Of course, immutable objects are mandatory for some Flutter state management solutions like Redux, and I have developed
 this package mainly to use it with my own <a href="https://pub.dev/packages/async_redux">Async Redux</a>. But the
-co-author of the present package, <a href="https://github.com/psygo">Philippe Fanaro</a> uses Bloc with immutable state.
-All state management solutions in Flutter can benefit from making your state immutable.
+co-author of the present package, <a href="https://github.com/psygo">Philippe Fanaro</a> likes using Bloc with immutable
+state. All state management solutions in Flutter can benefit from making your state immutable.
 
 <br>
 
@@ -69,24 +68,24 @@ creates a defensive copy</a>, so the resulting list is in fact immutable. Howeve
 only that they will throw an error if used.
 
 If you pass around an **unmodifiable list**, other code that accepts a `List` can't assume it's immutable. There are
-now, in fact, more ways to fail (calling any mutating method). So it makes it harder to reason about the code, not
-easier. For clean-code reasons what is needed is a **different type**, one that guarantees the object can't be mutated.
-That's why `IList` does not extend `List`.
+now, in fact, more ways to fail, because calling any mutating method of an unmodifiable list will throw an error. So it
+makes it harder to reason about the code, not easier. For clean-code reasons what is needed is a **different type**, one
+that guarantees the object can't be mutated. That's why `IList` does not extend `List`.
 
 ## Clean-code
 
-Late in the evening, exhausted and frustrated you find out that some guy that implemented
+Late in the evening, exhausted and frustrated you find out that the people who implemented
 
 ```
 int computeLength(Map<String, dynamic> responseMap)
 ```
 
-got the great idea, that instead of just computing the response length, he also mutated `responseMap` in some tricky way
-(say, he does some kind of sanitization of `responseMap`). Even if this is mentioned in the documentation and even if
+got the great idea, that instead of just computing the response length, they also mutated `responseMap` in some tricky
+way (say, doing some kind of sanitization of `responseMap`). Even if this is mentioned in the documentation and even if
 the method name was different, that's spaghetti code.
 
 On the contrary, when you pass an immutable object to a method, you know the method can't modify it. This makes it much
-easier to reason about your code:
+easier to reason about your code. By using an `IMap`:
 
 ```
 int computeLength(IMap<String, dynamic> responseMap)
@@ -105,11 +104,11 @@ invariant established once upon construction, and it never needs to be checked a
 
 <br>
 
-# Performance
+# Performance and Memory Savings
 
 Let's start off by stating the obvious. Most mutable collection operations are generally faster than their immutable
 counterparts. That's a basic fact of life. Consider a hash table for example. A mutable hash map can simply replace a
-value in an internal array in response to a `add()` call, while an immutable one has to create a number of new objects
+value in an internal array in response to an `add()` call, while an immutable one has to create a number of new objects
 to build a new version of the map reflecting the change.
 
 So, yes, mutable collections are generally faster. But sometimes they can be slower. A few examples:
@@ -122,11 +121,13 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
 
 * Another notable example is doing a "deep copy". If you want to deep copy (or clone) a regular List, you have to copy
   all its item references. However, for an immutable list a deep copy is instantaneous, because you actually don't need
-  to copy anything, you just have to pass a reference to the original list. It's like doing deep copy in O(1).
+  to copy anything. You just have to pass a reference to the original list. It's like doing deep copy in O(1). Also,
+  because a reference is much smaller than the object itself, you'll save memory if you need to keep many references to
+  an immutable collection instead of keeping many defensive copies in memory.
 
 * Yet another example is comparing two collections. Comparing with **value equality** may require considering every item
-  in each collection, on an O(N) time complexity. For large collections of values, this could become a costly operation.
-  Though if the two are not equal and hardly similar, the inequality is determined very quickly. In contrast, when
+  in each collection, on an O(N) time complexity. For large collections of values, this could become a costly operation,
+  though if the two are not equal and hardly similar, the inequality is determined very quickly. In contrast, when
   comparing two collections with **reference equality**, only the references to memory need to be compared, which has an
   O(1) time complexity.
 
@@ -137,11 +138,11 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   world.
 
   Think about it: Suppose you have a list with a million widgets and you pass it to a `ListView` to display it on
-  screen. If you add some widget to the middle of it, how is Flutter supposed to know an item was added and rebuild it?
-  If Flutter was simply repainting the list for every frame, it would display any changes instantly. But in reality
-  Flutter must know something changed before repainting, to save resources. So, again, if you pass a list and then
-  mutate it, how is Flutter supposed to know it changed? If has a reference to the original list, now mutated. There is
-  no way to know that referenced list mutated since the last frame was displayed.
+  screen. If you add some widget to the middle of it, how is Flutter supposed to know about it and rebuild
+  the `ListView`? If Flutter was simply repainting the list for every frame, it would display any changes instantly. But
+  in reality Flutter must know something changed before repainting, to save resources. So, again, if you pass a list and
+  then mutate it, how is Flutter supposed to know it changed? If has a reference to the original list, now mutated.
+  There is no way to know that the referenced list mutated since the last frame was displayed.
 
   By using mutable lists, Flutter only works if you create a new list:
 
@@ -163,17 +164,15 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
    ```
 
 * When some code accepts a mutable list but needs to make sure it's not mutated, it must make a defensive copy. This
-  requirement is quite common, and you may enjoy entertaining the idea that of all the code running on millions of
-  computers all over the world, every day, around the clock, a significant part of that total clock cycles are wasted
-  making safety copies of collections that are being returned by functions, and then garbage-collected milliseconds
-  after their creation. Using immutable collections this is not necessary, improving performance.
+  requirement is quite common, and you may entertain the idea of all the code running on millions of computers all over
+  the world, around the clock, making safety copies of collections that are being returned by functions, and then
+  garbage-collecting them milliseconds after their creation. Using immutable collections this is not necessary.
 
 * If you want to use collections as map keys, or add them to sets, you must be able to calculate their `hashCode`. If a
   collection is immutable, you can calculate its `hashCode` lazily and only if needed, and then cache it. Note: If a
   collection is mutable you can also cache its `hashCode`, but you must discard the cached value as soon as some
-  mutating method is called. Also, once you have cached `hashCode`s you can use them to speed up equality comparisons (
-  By the `hashCode`'s definition, if some collection's `hashCode`s are different, you know the collections must be
-  different).
+  mutating method is called. Also, once you have cached `hashCode`s you can use them to speed up equality comparisons,
+  since (by the `hashCode`'s definition) two collections with different `hashCode`s are always different.
 
 * In Flutter, when deciding if you should rebuild a widget or not, there are performance tradeoffs between value
   equality and identity equality. For example, if you use an immutable collection and it has not been mutated, then it
@@ -190,41 +189,26 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   List findSuspiciousEntries(List<Map> entries)
   ```
 
-  One possible workaround would be to JSONize entries to string and use such string as a hashing key. However, it's much
+  One possible workaround would be to JSONize entries to String and use such string as a hashing key. However, it's much
   more elegant, safe, performant and memory-wise with immutable structures. If the function parameters are all immutable
   and equal by identity (which is a very cheap comparison) you can return the cached value.
-
-
-# Memory savings
-
-If an object is immutable, it can be "copied" simply by making another reference to it instead of copying the entire
-object. Because a reference is much smaller than the object itself, this results in memory savings, and a potential
-boost in execution speed for programs which rely on copies (such as an undo-stack).
-
 
 # Reactive
 
 Much of what makes application development difficult is tracking mutation and maintaining state. Flutter's reactive
-model encourages you to think differently about how data flows through your application. Instead of subscribing to data
-events throughout your application,
+model encourages you to think differently about how data flows through your application. Subscribing to data events
+throughout your application, may create a huge overhead of book-keeping which can hurt performance, sometimes
+dramatically, and creates opportunities for areas of your application to get out of sync with each other due to easy to
+make programmer error. Since immutable data never changes, subscribing to changes throughout the model is a dead-end,
+and new data can only ever be passed from above.
 
-creates a huge overhead of book-keeping which can hurt performance, sometimes dramatically, and creates opportunities
-for areas of your application to get out of sync with each other due to easy to make programmer error. Since immutable
-data never changes, subscribing to changes throughout the model is a dead-end and new data can only ever be passed from
-above.
-
-and immutable objects fit well into this model.
-
-When data is passed from above rather than being subscribed to, and you're only interested in doing work when something
-has changed, you can use equality.
+# Immutable Collections
 
 Immutable collections should be treated as values rather than objects. While objects represent some thing which could
 change over time, a value represents the state of that thing at a particular instance of time. This principle is most
 important to understanding the appropriate use of immutable data. In order to treat Immutable.js collections as values,
 it's important to use the Immutable.is() function or .equals() method to determine value equality instead of the ===
 operator which determines object reference identity.
-
-# Immutable Collections
 
 Note a collection is only immutable when you can't add or remove items from it, and the items they contain are also
 immutable.
@@ -334,3 +318,21 @@ would slow down your app.
 
 All production releases undergo stress testing and pass all junit tests. Of course you should evaluate the collections
 for yourself and perform your own tests before deploying the collections to production systems.
+
+
+-----
+
+leading to much simpler application development, no defensive copying, and enabling advanced memoization and change
+detection techniques with simple logic.
+
+can be passed around without worrying about who might modify them.
+
+A Dart `String` is a typical example of a commonly used immutable objects.
+
+--
+
+Concurrency — immutable collections can be shared safely across threads.
+
+Wins of immutable collections:
+
+With small collections, speed is not an issue.
