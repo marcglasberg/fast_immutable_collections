@@ -602,7 +602,7 @@ class _ReversedListView<T> implements List<T> {
   Iterable<T> takeWhile(bool Function(T value) test) => list.reversed.takeWhile(test);
 
   @override
-  List<T> toList({bool growable = true}) => list.reversed.toList();
+  List<T> toList({bool growable = true}) => list.reversed.toList(growable: growable ?? true);
 
   @override
   Set<T> toSet() => list.reversed.toSet();

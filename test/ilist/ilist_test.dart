@@ -889,6 +889,7 @@ void main() {
     expect(ilist.skip(3).unlock, [4, 5, 6]);
     expect(ilist.skip(5).unlock, [6]);
     expect(ilist.skip(10).unlock, <int>[]);
+    expect(() => ilist.skip(-1).unlock, throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -910,6 +911,8 @@ void main() {
     expect(ilist.take(3).unlock, [1, 2, 3]);
     expect(ilist.take(5).unlock, [1, 2, 3, 4, 5]);
     expect(ilist.take(10).unlock, [1, 2, 3, 4, 5, 6]);
+    expect(() => ilist.take(-1).unlock, throwsRangeError);
+    expect(() => ilist.take(-100).unlock, throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1274,10 +1277,10 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "insertAll",
-      () => expect(["do", "re", "mi", "re"].lock.insertAll(3, ["fa", "fo", "fu"]),
-          ["do", "re", "mi", "fa", "fo", "fu", "re"]));
+  test("insertAll", () {
+    expect(["do", "re", "mi", "re"].lock.insertAll(3, ["fa", "fo", "fu"]),
+        ["do", "re", "mi", "fa", "fo", "fu", "re"]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
