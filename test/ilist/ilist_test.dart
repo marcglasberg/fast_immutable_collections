@@ -1283,6 +1283,7 @@ void main() {
 
   test("removeAt", () {
     expect(["do", "re", "mi", "re"].lock.removeAt(2), ["do", "re", "re"]);
+
     final Output<String> item = Output();
     expect(["do", "re", "mi", "re"].lock.removeAt(1, item), ["do", "mi", "re"]);
     expect(item.value, "re");
@@ -1306,31 +1307,29 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "removeWhere",
-      () => expect(
-          ["one", "two", "three", "four"].lock.removeWhere((String item) => item.length == 3),
-          ["three", "four"]));
+  test("removeWhere", () {
+    expect(["one", "two", "three", "four"].lock.removeWhere((String item) => item.length == 3),
+        ["three", "four"]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("removeAll", () => expect([1, 2, 3, 3, 4, 5, 5].lock.removeAll([3, 5]), [1, 2, 4]));
+  test("removeAll", () {
+    expect([1, 2, 3, 3, 4, 5, 5].lock.removeAll([3, 5]), [1, 2, 4]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "removeMany",
-      () => expect(["head", "shoulders", "knees", "head", "toes"].lock.removeMany("head"),
-          ["shoulders", "knees", "toes"]));
+  test("removeMany", () {
+    expect(["head", "shoulders", "knees", "head", "toes"].lock.removeMany("head"),
+        ["shoulders", "knees", "toes"]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-    "removeNulls",
-    () {
-      expect([1, 2, null, 4, null].lock.removeNulls(), [1, 2, 4]);
-    },
-  );
+  test("removeNulls", () {
+    expect([1, 2, null, 4, null].lock.removeNulls(), [1, 2, 4]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
