@@ -71,7 +71,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_3",
-            config: Config(runs: 10, size: 500),
+            config: Config(runs: 5, size: 10000),
           ),
         ),
       ].lock,

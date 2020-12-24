@@ -5,7 +5,6 @@
 <p align="center">
   <a href="https://github.com/marcglasberg/fast_immutable_collections/actions"><img src="https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?" alt="Github CI"></a>
   <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
-  <a href="https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Fast-Immutable-Collections/community.svg" alt="Gitter Chat" /></a>
 </p>
 
 ---
@@ -1692,17 +1691,6 @@ performing as well as possible.
 ***************************
 
 # 13. Bibliography
-
-The bibliography is subsectioned into:
-
-1. Projects
-    1. Dart
-    1. Java
-    1. JS
-1. Articles
-1. Other Resources
-
-There used to also exist a `docs` folder, but eveything that's relevant was later merged into this file, in order to centralize the documentation.
 
 ## 13.1. Projects
 

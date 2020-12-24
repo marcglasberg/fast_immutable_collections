@@ -7,7 +7,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 // /////////////////////////////////////////////////////////////////////////////
 
 class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-  static const int innerRuns = 100;
+  static const int innerRuns = 10000;
 
   @override
   final IList<ListBenchmarkBase> benchmarks;
