@@ -1,4 +1,3 @@
-import "dart:collection";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
@@ -163,39 +162,11 @@ abstract class CanBeEmpty {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// See also: [CanBeEmpty]
-extension CanBeEmptyExtension on CanBeEmpty {
-  /// Checks if `this` is `null` or `[isEmpty].
-  bool get isNullOrEmpty => (this == null) || isEmpty;
-
-  /// Checks if `this` is **not** `null` and **not** `[isEmpty].
-  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
-
-  /// Checks if `this` is [isEmpty] but **not** `null`.
-  bool get isEmptyButNotNull => (this != null) && isEmpty;
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-
-/// See also: [compareObject], [ComparableExtension], [ComparatorExtension], [sortBy], [sortLike]
-extension BooleanExtension on bool {
-  /// true > false
-  /// Zero: This instance and value are equal (both true or both false).
-  /// Greater than zero: This instance is true and value is false.
-  /// Less than zero: This instance is false and value is true.
-  int compareTo(bool other) => (this == other)
-      ? 0
-      : this
-          ? 1
-          : -1;
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-
-/// Meant to be used when you wish to save a value that's going to be tossed out of an immutable
-/// collection.
+/// Meant to be used when you wish to save a value that's going to be tossed
+/// out of an immutable collection.
 ///
-/// See also, for example: [IList] or the `IList.removeAt()` method.
+/// For an example, see `IList.removeAt()`.
+///
 class Output<T> {
   T _value;
 
@@ -218,148 +189,6 @@ class Output<T> {
 
   @override
   int get hashCode => _value.hashCode;
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-
-/// See also: [IListExtension], [ISetExtension]
-extension IterableToImmutableExtension<T> on Iterable<T> {
-  //
-  /// Creates an *immutable* list ([IList]) from the iterable.
-  IList<T> toIList() => (this == null) ? null : IList<T>(this);
-
-  /// Creates an *immutable* set ([ISet]) from the iterable.
-  ISet<T> toISet() => (this == null) ? null : ISet<T>(this);
-
-  bool get isNullOrEmpty => this == null || isEmpty;
-
-  bool get isNotNullOrEmpty => this != null && isNotEmpty;
-
-  /// Compare all items, in order, using [identical].
-  /// Return true if they are all the same, in the same order.
-  ///
-  /// Note: Since this is an extension, it works with nulls:
-  /// ```dart
-  /// Iterable iterable1 = null;
-  /// Iterable iterable2 = null;
-  /// iterable1.deepEqualsByIdentity(iterable2) == true;
-  /// ```
-  ///
-  bool deepEqualsByIdentity(Iterable other) {
-    if (identical(this, other)) return true;
-    if (this == null || other == null) return false;
-
-    if ((this is List) && (other is List)) {
-      List list = this as List;
-      if (length != other.length) return false;
-      for (int i = 0; i < length; i++) {
-        if (!identical(list[i], other[i])) return false;
-      }
-      return true;
-    } else {
-      var iterator1 = iterator;
-      var iterator2 = other.iterator;
-      while (iterator1.moveNext() && iterator2.moveNext()) {
-        if (!identical(iterator1.current, iterator2.current)) return false;
-      }
-      return (iterator1.moveNext() || iterator2.moveNext()) ? false : true;
-    }
-  }
-
-  /// Finds duplicates and then returns a [Set] with the elements which were duplicated.
-  /// If there are no duplicates, an empty [Set] is returned.
-  Set<T> findDuplicates() {
-    final Set<T> duplicates = HashSet<T>();
-    final Set<T> auxSet = HashSet<T>();
-    for (T elements in this) {
-      if (!auxSet.add(elements)) duplicates.add(elements);
-    }
-    return duplicates;
-  }
-
-  /// Removes `null`s from the [Iterable].
-  ///
-  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
-  Iterable<T> removeNulls() sync* {
-    for (T item in this) {
-      if (item != null) yield item;
-    }
-  }
-
-  /// Removes all duplicates, leaving only the distinct items.
-  /// Optionally, you can provide an [id] function to compare the items.
-  ///
-  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
-  Iterable<T> removeDuplicates([dynamic Function(T item) id]) sync* {
-    if (id != null) {
-      Set<dynamic> ids = {};
-      for (T item in this) {
-        var _id = id(item);
-        if (!ids.contains(_id)) yield item;
-        ids.add(_id);
-      }
-    } else {
-      Set<T> items = {};
-      for (T item in this) {
-        if (!items.contains(item)) yield item;
-        items.add(item);
-      }
-    }
-  }
-
-  /// Removes `null`s and duplicates.
-  ///
-  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
-  Iterable<T> removeNullAndDuplicates() sync* {
-    Set<T> items = {};
-    for (T item in this) {
-      if (item != null && !items.contains(item)) yield item;
-      items.add(item);
-    }
-  }
-
-  /// Returns a list, sorted according to the order specified by the [ordering] iterable.
-  /// Items which don't appear in [ordering] will be included in the end, in no particular order.
-  ///
-  /// Note: Not very efficient at the moment (will be improved in the future).
-  /// Please use for a small number of items.
-  ///
-  List<T> toListSortedLike(Iterable<T> ordering) {
-    assert(ordering != null);
-    Set<T> originalSet = Set.of(ordering);
-    Set<T> newSet = (this is Set<T>) ? (this as Set<T>) : Set.of(this);
-    Set<T> intersection = originalSet.intersection(newSet);
-    Set<T> difference = newSet.difference(originalSet);
-    List<T> result = ordering.where((element) => intersection.contains(element)).toList();
-    result.addAll(difference);
-    return result;
-  }
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-
-/// See also: [IterableToImmutableExtension]
-extension IteratorExtension<T> on Iterator<T> {
-  //
-  Iterable<T> toIterable() sync* {
-    while (moveNext()) yield current;
-  }
-
-  List<T> toList({bool growable = true}) => List.of(toIterable(), growable: growable);
-
-  Set<T> toSet() => Set.of(toIterable());
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-
-/// See also: [IterableToImmutableExtension], [IteratorExtension]
-extension MapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
-  //
-  Iterable<MapEntry<K, V>> toIterable() sync* {
-    while (moveNext()) yield current;
-  }
-
-  Map<K, V> toMap() => Map.fromEntries(toIterable());
 }
 
 // /////////////////////////////////////////////////////////////////////////////

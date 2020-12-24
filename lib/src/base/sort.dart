@@ -1,5 +1,4 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "immutable_collection.dart";
 
 /// 1. If [a] and [b] are both `null`, they don't have order. If one of them
 /// is `null`, it will come later, unless the [nullsBefore] is `true`, in which
@@ -41,59 +40,6 @@ int compareObject<T extends Object>(
     return compareObject(a.key, b.key).if0(compareObject(a.value, b.value));
   if (a is bool && b is bool) return a.compareTo(b);
   return 0;
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-
-extension ComparableExtension on Object {
-  /// 1. If this object and [other] are both `null`, they don't have order. If
-  /// one of them is `null`, it will come later, unless the [nullsBefore] is `true`,
-  /// in which case the `null` will come before.
-  ///
-  /// 2. Otherwise, if this object and [other] are both of type [Comparable],
-  /// compare them with their natural comparator.
-  ///
-  /// 3. Otherwise, if this object and [other] are map-entries (`MapEntry`), compare their
-  /// `key`s. If their `key`s compare as the same, then compare their `value`s.
-  ///
-  /// 4. Otherwise, if this object and [other] are booleans, compare them such
-  /// as `true` comes after `false`.
-  ///
-  /// 5. Otherwise, return `0`, which means **unordered**.
-  ///
-  /// Examples:
-  ///
-  /// ```dart
-  /// 5.compareObjectTo(2);
-  /// true.compareObjectTo(false);
-  /// MapEntry('a', 5).compareObjectTo(MapEntry('b', 3));
-  /// ```
-  ///
-  /// Example with `null`s coming before:
-  ///
-  /// ```dart
-  /// 5.compareObjectTo(2, nullsBefore: true);
-  /// ```
-  int compareObjectTo(
-    Object other, {
-    bool nullsBefore = false,
-    bool compareHashCodes = true,
-  }) =>
-      compareObject(this, other, nullsBefore: nullsBefore);
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-
-/// The [if0] `extension` lets you nest comparators. For example:
-///
-/// ```dart
-/// // 1) Strings are ordered according to their length.
-/// // 2) Otherwise, they come in their natural order.
-/// compareTo = (String a, String b) =>
-///     a.length.compareTo(b.length).if0(a.compareTo(b));
-/// ```
-extension ComparatorExtension on int {
-  int if0(int then) => this == 0 ? then : this;
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -239,3 +185,58 @@ int Function(T, T) sortLike<T, E>(
               ? 0
               : then(a, b);
     };
+
+// /////////////////////////////////////////////////////////////////////////////
+
+extension ComparableExtension on Object {
+  /// 1. If this object and [other] are both `null`, they don't have order. If
+  /// one of them is `null`, it will come later, unless the [nullsBefore] is `true`,
+  /// in which case the `null` will come before.
+  ///
+  /// 2. Otherwise, if this object and [other] are both of type [Comparable],
+  /// compare them with their natural comparator.
+  ///
+  /// 3. Otherwise, if this object and [other] are map-entries (`MapEntry`), compare their
+  /// `key`s. If their `key`s compare as the same, then compare their `value`s.
+  ///
+  /// 4. Otherwise, if this object and [other] are booleans, compare them such
+  /// as `true` comes after `false`.
+  ///
+  /// 5. Otherwise, return `0`, which means **unordered**.
+  ///
+  /// Examples:
+  ///
+  /// ```dart
+  /// 5.compareObjectTo(2);
+  /// true.compareObjectTo(false);
+  /// MapEntry('a', 5).compareObjectTo(MapEntry('b', 3));
+  /// ```
+  ///
+  /// Example with `null`s coming before:
+  ///
+  /// ```dart
+  /// 5.compareObjectTo(2, nullsBefore: true);
+  /// ```
+  int compareObjectTo(
+    Object other, {
+    bool nullsBefore = false,
+    bool compareHashCodes = true,
+  }) =>
+      compareObject(this, other, nullsBefore: nullsBefore);
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+
+/// The [if0] `extension` lets you nest comparators. For example:
+///
+/// ```dart
+/// // 1) Strings are ordered according to their length.
+/// // 2) Otherwise, they come in their natural order.
+/// compareTo = (String a, String b) =>
+///     a.length.compareTo(b.length).if0(a.compareTo(b));
+/// ```
+extension ComparatorExtension on int {
+  int if0(int then) => this == 0 ? then : this;
+}
+
+// /////////////////////////////////////////////////////////////////////////////

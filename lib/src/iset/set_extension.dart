@@ -1,7 +1,7 @@
-import "iset.dart";
+ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-/// See also: [IListExtension]
-extension ISetExtension<T> on Set<T> {
+/// See also: [ListExtension]
+extension SetExtension<T> on Set<T> {
   /// Locks the set, returning an *immutable* set ([ISet]).
   ISet<T> get lock => ISet<T>(this);
 

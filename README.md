@@ -12,69 +12,82 @@
 
 # 1. Fast Immutable Collections
 
+[codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
+
+[codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
+
+[example]: benchmark/example/
+
+[gif]: benchmark/assets/demo.gif
+
+[github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
+
+[github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
+
+[github_home]: https://github.com/marcglasberg/fast_immutable_collections
+
+[gitter_svg]: https://badges.gitter.im/Fast-Immutable-Collections/community.svg
+
+[gitter_badge]: https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
+[logo]: assets/logo.png
+
+## 1.1. Introduction
+
+This package, called **FIC** for short, provides:
+
+- `IList`, an immutable list
+- `ISet`, an immutable set
+- `IMap`, an immutable map
+- `IMapOfSets`, an immutable map of sets (a multimap)
+- Lock and unlock extensions, so you can easily transform mutable collections into immutable ones,
+  and vice-versa. For example: `[1, 2].lock`
+- Global and local configurations that alter how your immutable collections behave in respect to
+  equality, sort, cache, and flushing.
+- Optional deep equalities and cached hashCodes, which let you treat your collections as value
+  objects
+- Mixins for you to build your own immutable collections or objects
+- Collection views so you can work with immutable objects as if they were the mutable ones
+
+Other valuable features are:
+
+- General purpose extensions to the native collections: `List`, `Set`, `Map`. See
+  classes `ListExtension`, `SetExtension`, and `MapExtension`. For
+  example: `[1, 2, 1].removeDuplicates()`
+
+- Other extensions: `IterableExtension`, `IteratorExtension`, `MapIteratorExtension`,
+  `ComparatorExtension`, `ComparableExtension` and `BooleanExtension`. For example:
+  `false.compareTo(true)`
+
+- Comparators and related helpers to be used with native or immutable collections, or any sort
+  algorithms, such as `compareObject`, `sortBy`, `sortLike`, `if0`, in `sort.dart`.
+
+<br>
+
+**Fast Immutable Collections** is a competitor to the excellent
+[built_collection][built_collection] and [kt_dart][kt_dart] packages, but it's much **easier** to
+use than the former, and orders of magnitude **faster** than the latter.
+
+The reason it's **easier** than [built_collection][built_collection]
+is that there is no need for manual mutable/immutable cycles. You just create your immutable
+collections and use them directly.
+
+The reason it's **faster** than [kt_dart][kt_dart] is that it creates immutable collections by
+internally saving only the difference between each collection, instead of copying the whole
+collection each time. This is transparent to the developer, which doesn't need to know about these
+implementation details. Later in this document, we provide benchmarks so that you can compare speeds
+(and you can also run the benchmarks yourself).
+
 <p align="center">
-  <img src="benchmark/assets/demo.gif" alt="Demo GIF" />
+  <img src="benchmark/assets/demo.gif" alt="Benckmarks GIF" />
 </p>
 
 <p align="center">
   <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> app for comparing this package's collections to others.</sub>
 </p>
 
-> **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
-
-> **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
-
-> **THIS IS UNDER ACTIVE DEVELOPMENT. DON'T USE IT.**
-
-[codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
-[codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
-[example]: benchmark/example/
-[gif]: benchmark/assets/demo.gif
-[github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
-[github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
-[github_home]: https://github.com/marcglasberg/fast_immutable_collections
-[gitter_svg]: https://badges.gitter.im/Fast-Immutable-Collections/community.svg
-[gitter_badge]: https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-[logo]: assets/logo.png
-
-## 1.1. Introduction
-
-This package provides:
-
-- `IList`, an immutable list
-- `ISet`, an immutable set
-- `IMap`, an immutable map
-- `IMapOfSets`, an immutable map of sets (a multimap)
-
-Other valuable features are:
-
-- Extensions to the typical collections &mdash; `List`, `Set`, `Map` &mdash; so you can easily transform a mutable object into an immutable one (`.lock`).
-- Global and local configurations that alter how your immutable collections behave.
-- Mixins for you to build your own immutable collections or objects.
-- Collection views so you can work with immutable objects as if they were the mutable ones.
-- Deep equalities and cached hashCodes, which let you treat your collections as value objects.
-- Comparators and related helpers to be used with any collections.
-
-<br>
-
-**Fast Immutable Collections** is a competitor to the excellent
-[built_collection][built_collection] and [kt_dart][kt_dart] packages, 
-but it's much **easier** to use than the former, 
-and orders of magnitude **faster** than the latter.
-
-The reason it's **easier** than [built_collection][built_collection] 
-is that there is no need for manual mutable/immutable cycles.
-You just create your immutable collections and use them directly. 
-
-The reason it's **faster** than [kt_dart][kt_dart] is that it creates immutable collections by 
-internally saving only the difference between each collection, 
-instead of copying the whole collection each time.
-This is transparent to the developer, which doesn't need to know about these implementation details. 
-Later in this document, we provide benchmarks so that you can compare speeds
-(and you can also run the benchmarks yourself).
-
-
 [built_collection]: https://pub.dev/packages/built_collection
+
 [kt_dart]: https://pub.dev/packages/kt_dart
 
 
@@ -118,13 +131,11 @@ Later in this document, we provide benchmarks so that you can compare speeds
 
 <!-- /TOC -->
 
-
 # 2. IList
 
-An `IList` is an immutable list, meaning once it's created it cannot be modified. 
-You can create an `IList` by passing an iterable to its constructor, 
-or you can simply "lock" a regular list. 
-Other iterables (which are not lists) can also be locked as lists:  
+An `IList` is an immutable list, meaning once it's created it cannot be modified. You can create
+an `IList` by passing an iterable to its constructor, or you can simply "lock" a regular list. Other
+iterables (which are not lists) can also be locked as lists:
 
 ```          
 /// Ways to build an IList
@@ -139,8 +150,8 @@ IList<String> ilist = [1, 2].lock;
 IList<String> ilist = {1, 2}.toIList();
 ```                                                                           
 
-To create a regular `List` from an `IList`,
-you can use `List.of`, or simply "unlock" an immutable list:
+To create a regular `List` from an `IList`, you can use `List.of`, or simply "unlock" an immutable
+list:
 
 ```  
 /// Going back from IList to List
@@ -163,8 +174,7 @@ var ilist = [1, 2, 3, 4].lock;
 for (int value in ilist) print(value);  
 ```                                                                           
 
-`IList` methods always return a new `IList`, instead of modifying the original one. 
-For example:
+`IList` methods always return a new `IList`, instead of modifying the original one. For example:
 
 ```                                     
 var ilist1 = [1, 2].lock;
@@ -186,8 +196,8 @@ Because of that, you can easily chain methods:
 var ilist = [1, 2, 3].lock.add(4).remove(2);
 ```   
 
-Since `IList` methods always return a new `IList`, 
-it is an **error** to call some method and then discard the result: 
+Since `IList` methods always return a new `IList`, it is an **error** to call some method and then
+discard the result:
 
 ```                                     
 var ilist = [1, 2].lock;
@@ -205,10 +215,8 @@ ilist = ilist.add(3);
 print(ilist); // 1, 2, 3                        
 ```   
 
-`IList` has **all** the methods of `List`,
-plus some other new and useful ones.
-However, `IList` methods always return a new `IList`, 
-instead of modifying the original list or returning iterables. 
+`IList` has **all** the methods of `List`, plus some other new and useful ones. However, `IList`
+methods always return a new `IList`, instead of modifying the original list or returning iterables.
 
 For example:
 
@@ -291,9 +299,9 @@ IList methods and getters:
 `setAll`,
 `setRange`,
 `shuffle`.
-                                                                        
-## 2.1. IList Equality 
-   
+
+## 2.1. IList Equality
+
 By default, `IList`s are equal if they have the same items in the same order.
 
 ```                                     
@@ -321,10 +329,9 @@ print(list1 == list2); // False!
 print(list1.lock == list2.lock); // True!
 ```                                                                          
 
-This also means `IList`s can be used as **map keys**, 
-which is a very useful property in itself, 
-but can also help when implementing some other interesting data structures.
-For example, to implement **caches**:      
+This also means `IList`s can be used as **map keys**, which is a very useful property in itself, but
+can also help when implementing some other interesting data structures. For example, to implement **
+caches**:
 
 ```                                     
 Map<IList, int> sumResult = {};
@@ -347,10 +354,9 @@ print(getSum(8, 9)); // Newly calculated: 8 + 9 = 17
 print(getSum(5, 3)); // Got from cache: 5 + 3 = 8
 ```    
 
-However, `IList`s are configurable, and you can actually create `IList`s which
-compare their internals by **identity** or **deep equals**, as desired.
-There are 3 main ways to do it:
- 
+However, `IList`s are configurable, and you can actually create `IList`s which compare their
+internals by **identity** or **deep equals**, as desired. There are 3 main ways to do it:
+
 1. You can use getters `withIdentityEquals` and `withDeepEquals`:
 
     ```                    
@@ -365,8 +371,7 @@ There are 3 main ways to do it:
     print(ilist == ilist3); // True!
     ```
 
-1. You can also use the `withConfig` method 
-and the `ConfigList` class to change the configuration:
+1. You can also use the `withConfig` method and the `ConfigList` class to change the configuration:
 
     ```
     var list = [1, 2];
@@ -377,8 +382,8 @@ and the `ConfigList` class to change the configuration:
     print(list.lock == ilist2); // False!
     ```
 
-1. Or you can use the `withConfig` constructor to
-explicitly create the `IList` already with your desired configuration:
+1. Or you can use the `withConfig` constructor to explicitly create the `IList` already with your
+   desired configuration:
 
     ```
     var list = [1, 2];
@@ -389,64 +394,62 @@ explicitly create the `IList` already with your desired configuration:
     print(list.lock == ilist2); // False!
     ```
 
-The above described configurations affects how the `== operator` works, 
-but you can also choose how to compare lists by using the following `IList` methods:
+The above described configurations affects how the `== operator` works, but you can also choose how
+to compare lists by using the following `IList` methods:
 
-- `equalItems` will return true only if the IList items are equal to the iterable items,
-and in the same order. This may be slow for very large lists, since it compares each item,
-one by one. You can compare the list with ordered sets, but unordered sets will throw an error.
+- `equalItems` will return true only if the IList items are equal to the iterable items, and in the
+  same order. This may be slow for very large lists, since it compares each item, one by one. You
+  can compare the list with ordered sets, but unordered sets will throw an error.
 
-- `unorderedEqualItems` will return true only if the IList and the iterable items have the same number of elements,
-and the elements of the IList can be paired with the elements of the iterable, so that each
-pair is equal. This may be slow for very large lists, since it compares each item,
-one by one.
+- `unorderedEqualItems` will return true only if the IList and the iterable items have the same
+  number of elements, and the elements of the IList can be paired with the elements of the iterable,
+  so that each pair is equal. This may be slow for very large lists, since it compares each item,
+  one by one.
 
-- `equalItemsAndConfig` will return true only if the list items are equal and in the same order,
-and the list configurations are equal. This may be slow for very large lists, since it compares each item, one by one.
+- `equalItemsAndConfig` will return true only if the list items are equal and in the same order, and
+  the list configurations are equal. This may be slow for very large lists, since it compares each
+  item, one by one.
 
 - `same` will return true only if the lists internals are the same instances
-(comparing by identity). This will be fast even for very large lists,
-since it doesn't compare each item.
-Note: This is not the same as `identical(list1, list2)` since it doesn't
-compare the lists themselves, but their internal state. Comparing the
-internal state is better, because it will return `true` more often.
-  
-  
+  (comparing by identity). This will be fast even for very large lists, since it doesn't compare
+  each item. Note: This is not the same as `identical(list1, list2)` since it doesn't compare the
+  lists themselves, but their internal state. Comparing the internal state is better, because it
+  will return `true` more often.
+
 ## 2.1.1 Cached HashCode
 
-By default, the hashCode of `IList` and the other immutable collections is **cached** once calculated.
+By default, the hashCode of `IList` and the other immutable collections is **cached** once
+calculated.
 
-This not only speeds up the use of these collections inside of sets and maps, 
-but it also speeds up their deep equals. 
-The reason is simple: Two equal objects always have the same hashCode. 
-So, if the cashed hashCode of two immutable collections are not the same, 
-we know the collections are different, and there is no need to check each collection item, one by one.
+This not only speeds up the use of these collections inside of sets and maps, but it also speeds up
+their deep equals. The reason is simple: Two equal objects always have the same hashCode. So, if the
+cashed hashCode of two immutable collections are not the same, we know the collections are
+different, and there is no need to check each collection item, one by one.
 
 However, this only works if the collections are really _immutable_, and not simply _unmodifiable_.
-If you put modifiable objects into an `IList` and then later modify those objects, 
-this breaks the immutability of the `IList`, which then becomes simply unmodifiable. 
+If you put modifiable objects into an `IList` and then later modify those objects, this breaks the
+immutability of the `IList`, which then becomes simply unmodifiable.
 
-In other words, even if you can't change which objects the list contains, 
-if the objects themselves will be changed, then the hashCode must not be cached.
-Therefore, if you intend on using the `IList` to hold modifiable objects, 
-you should think about turning off the hashCode cache. For example:    
+In other words, even if you can't change which objects the list contains, if the objects themselves
+will be changed, then the hashCode must not be cached. Therefore, if you intend on using the `IList`
+to hold modifiable objects, you should think about turning off the hashCode cache. For example:
 
 ```
 var ilist1 = [1, 2].lock.withConfig(ConfigList(cacheHashCode: false));
 var ilist2 = IList.withConfig([1, 2], ConfigList(cacheHashCode: false));
 ```   
 
-Note: Modifying mutable objects in a collection could only make sense for lists anyway, 
-since list don't rely on the equality and hashCode of their items to structure themselves.
-If objects are modified after you put them into both mutable or immutable sets and maps,
-this most likely breaks the sets/maps they belong to.
-    
-  
+Note: Modifying mutable objects in a collection could only make sense for lists anyway, since list
+don't rely on the equality and hashCode of their items to structure themselves. If objects are
+modified after you put them into both mutable or immutable sets and maps, this most likely breaks
+the sets/maps they belong to.
+
 ## 2.2. Global IList Configuration
 
 As explained above, the **default** configuration of the `IList` is that:
+
 * It compares by deep equality: They are equal if they have the same items in the same order.
-* The hashCode cache is turned on. 
+* The hashCode cache is turned on.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 
@@ -469,12 +472,12 @@ print(ilistB1 == ilistB2); // False!
 print(ilistA1 == ilistA2); // True!
 ```                                                                        
 
-**Important note:** 
+**Important note:**
 
-The global configuration is meant to be decided during your app's initialization, and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration by calling `ImmutableCollection.lockConfig();`
+The global configuration is meant to be decided during your app's initialization, and then not
+changed again. We strongly suggest that you prohibit further changes to the global configuration by
+calling `ImmutableCollection.lockConfig();`
 after you set your desired configuration.
-
 
 ## 2.3. Usage in tests
 
@@ -484,9 +487,8 @@ An `IList` is not a `List`, so this is false:
 [1, 2] == [1, 2].lock // False!
 ```
 
-However, when you are writing tests, 
-the `expect` method actually compares all `Iterables` by comparing their items.
-Since `List` and `IList` are iterables, you can write the following tests: 
+However, when you are writing tests, the `expect` method actually compares all `Iterables` by
+comparing their items. Since `List` and `IList` are iterables, you can write the following tests:
 
 ```                                 
 /// All these tests pass:
@@ -504,7 +506,7 @@ expect([2, 1].lock, isNot([1, 2].lock)); // IList with IList, wrong order.
 
 So, for comparing `List` with `IList` and vice-versa this is fine.
 
-However, `expect` treats `Set`s differently, resulting that 
+However, `expect` treats `Set`s differently, resulting that
 `expect(a, b)` may be different from `expect(b, a)`. For example:
 
 ```
@@ -512,16 +514,14 @@ expect([1, 2], {2, 1}); // This test passes.
 expect({2, 1}, [1, 2]); // This test does NOT pass.
 ```                                               
 
-If you ask me, this is all very confusing. 
-A good rule of thumb to avoid all these `expect` complexities 
-is only comparing lists with lists, set with sets, etc.
+If you ask me, this is all very confusing. A good rule of thumb to avoid all these `expect`
+complexities is only comparing lists with lists, set with sets, etc.
 
 ## 2.4. IList reuse by composition
 
-Classes `FromIListMixin` and `FromIterableIListMixin` let you easily 
-create your own immutable classes based on the `IList`.
-This helps you create more strongly typed collections, 
-and add your own methods to them.
+Classes `FromIListMixin` and `FromIterableIListMixin` let you easily create your own immutable
+classes based on the `IList`. This helps you create more strongly typed collections, and add your
+own methods to them.
 
 For example, suppose you have some `Student` class:
 
@@ -542,8 +542,7 @@ class Student implements Comparable<Student>{
 }
 ```
 
-And suppose you want to create a `Students` class 
-which is an immutable collection of `Student`s. 
+And suppose you want to create a `Students` class which is an immutable collection of `Student`s.
 
 You can easily implement it using the `FromIListMixin`:
 
@@ -580,29 +579,31 @@ expect(students, [james, sara, lucy]);
 print(students.greetings()); 
 ```     
 
-There are a few aspects of native Dart collection mixins which I don't like, so I've tried to improve on those here.
+There are a few aspects of native Dart collection mixins which I don't like, so I've tried to
+improve on those here.
 
-- First is that some Dart mixins let you create inefficient methods 
-(like fore example, a `length` getter which has to iterate through all items to yield a result).
-All mixins within `fast_immutable_collections` are as efficient as the underlying immutable collection, 
-so you don't need to worry about this problem.
+- First is that some Dart mixins let you create inefficient methods
+  (like fore example, a `length` getter which has to iterate through all items to yield a result).
+  All mixins within **FIC** are as efficient as the underlying immutable collection, so you don't
+  need to worry about this problem.
 
-- Second is that the native Dart mixins implement their respective collections. 
-For example, a `ListMixin` implements `List`. I don't think this is desirable. 
-For example, should a `Students` class be an `IList` by default? I don't think so.
-For this reason, the `FromIListMixin` is not called `IListMixin`, and it does not implement `IList` nor `Iterable`.
+- Second is that the native Dart mixins implement their respective collections. For example,
+  a `ListMixin` implements `List`. I don't think this is desirable. For example, should a `Students`
+  class be an `IList` by default? I don't think so. For this reason, the `FromIListMixin` is not
+  called `IListMixin`, and it does not implement `IList` nor `Iterable`.
 
-- Third, unfortunately, the `expect` method in tests compare iterables by comparing their items. 
-So, if the `Students` class were to implement `Iterable`, the `expect` method would completely ignore its 
-`operator ==`, which probably is not what you want.
+- Third, unfortunately, the `expect` method in tests compare iterables by comparing their items. So,
+  if the `Students` class were to implement `Iterable`, the `expect` method would completely ignore
+  its
+  `operator ==`, which probably is not what you want.
 
 Note, you can still iterate through the `Students` class in the example by calling `.iter` on it:
 
 ```  
 for (Student student in students.iter) { ... }
 ```
- 
-And also, if really do want it to implement `Iterable`, you can do so by explicitly declaring it: 
+
+And also, if really do want it to implement `Iterable`, you can do so by explicitly declaring it:
 
 ```  
 class Students with FromIListMixin<Student, Students> implements Iterable<Student> { ... }
@@ -610,14 +611,13 @@ class Students with FromIListMixin<Student, Students> implements Iterable<Studen
 class Students with FromIterableIListMixin<Student> implements Iterable<Student> { ... }
 ```
 
-Please refer to the `FromIListMixin` and `FromIterableIListMixin` own documentation 
-to learn how to use these mixins in detail.
-
+Please refer to the `FromIListMixin` and `FromIterableIListMixin` own documentation to learn how to
+use these mixins in detail.
 
 ## 2.5. Advanced usage
 
-There are a few ways to lock and unlock a list, 
-which will have different results in speed and safety.
+There are a few ways to lock and unlock a list, which will have different results in speed and
+safety.
 
 ```
 IList<int> ilist = [1, 2, 3].lock;       // Safe
@@ -628,54 +628,45 @@ List<int> list = ilist.unlockView;       // Safe, fast and immutable
 List<int> list = ilist.unlockLazy;       // Safe, fast and mutable
 ```
 
-Suppose you have some `List`.
-These are your options to create an `IList` from it:
+Suppose you have some `List`. These are your options to create an `IList` from it:
 
-- Getter `lock` will create an internal defensive copy of the original list, 
-which will be used to back the `IList`.
-This is the same doing: `IList(list)`.
+- Getter `lock` will create an internal defensive copy of the original list, which will be used to
+  back the `IList`. This is the same doing: `IList(list)`.
 
-- Getter `lockUnsafe` is fast, since it makes no defensive copies of the list.
-However, you should only use this with a new list you've created yourself,
-when you are sure no external copies exist. If the original list is modified,
-it will break the `IList` and any other derived lists in unpredictable ways.
-Use this at your own peril. This is the same doing: `IList.unsafe(list)`.
-Note you can optionally disallow unsafe constructors in the global configuration 
-by doing: `disallowUnsafeConstructors = true` (and then optionally prevent 
-further configuration changes by calling `ImmutableCollection.lockConfig()`).                  
+- Getter `lockUnsafe` is fast, since it makes no defensive copies of the list. However, you should
+  only use this with a new list you've created yourself, when you are sure no external copies exist.
+  If the original list is modified, it will break the `IList` and any other derived lists in
+  unpredictable ways. Use this at your own peril. This is the same doing: `IList.unsafe(list)`. Note
+  you can optionally disallow unsafe constructors in the global configuration by
+  doing: `disallowUnsafeConstructors = true` (and then optionally prevent further configuration
+  changes by calling `ImmutableCollection.lockConfig()`).
 
 These are your options to obtain a regular `List` back from an `IList`:
 
-- Getter `unlock` unlocks the list, returning a regular (mutable, growable) `List`.
-This returned list is "safe", in the sense that is newly created, 
-independent of the original `IList` or any other lists.
+- Getter `unlock` unlocks the list, returning a regular (mutable, growable) `List`. This returned
+  list is "safe", in the sense that is newly created, independent of the original `IList` or any
+  other lists.
 
-- Getter `unlockView` unlocks the list, returning a safe, unmodifiable (immutable) `List` view.
-The word "view" means the list is backed by the original `IList`.
-This is very fast, since it makes no copies of the `IList` items.
-However, if you try to use methods that modify the list, like `add`,
-it will throw an `UnsupportedError`.
-It is also very fast to lock this list back into an `IList`.
+- Getter `unlockView` unlocks the list, returning a safe, unmodifiable (immutable) `List` view. The
+  word "view" means the list is backed by the original `IList`. This is very fast, since it makes no
+  copies of the `IList` items. However, if you try to use methods that modify the list, like `add`,
+  it will throw an `UnsupportedError`. It is also very fast to lock this list back into an `IList`.
 
-- Getter `unlockLazy` unlocks the list, returning a safe, modifiable (mutable) `List`.
-Using this is very fast at first, since it makes no copies of the `IList` items. 
-However, if (and only if) you use a method that mutates the list, like `add`, 
-it will unlock it internally (make a copy of all `IList` items). 
-This is transparent to you, and will happen at most only once. 
-In other words, it will unlock the `IList` lazily, only if necessary.
-If you never mutate the list, it will be very fast to lock this list
-back into an `IList`.
-
+- Getter `unlockLazy` unlocks the list, returning a safe, modifiable (mutable) `List`. Using this is
+  very fast at first, since it makes no copies of the `IList` items. However, if (and only if) you
+  use a method that mutates the list, like `add`, it will unlock it internally (make a copy of
+  all `IList` items). This is transparent to you, and will happen at most only once. In other words,
+  it will unlock the `IList` lazily, only if necessary. If you never mutate the list, it will be
+  very fast to lock this list back into an `IList`.
 
 # 3. ISet
 
-An `ISet` is an immutable set, meaning once it's created it cannot be modified.
-An `ISet` is always **unordered** 
-(though, as we'll see, it can be automatically sorted when you use it).  
+An `ISet` is an immutable set, meaning once it's created it cannot be modified. An `ISet` is
+always **unordered**
+(though, as we'll see, it can be automatically sorted when you use it).
 
-You can create an `ISet` by passing an iterable to its constructor, 
-or you can simply "lock" a regular set. 
-Other iterables (which are not sets) can also be locked as sets:  
+You can create an `ISet` by passing an iterable to its constructor, or you can simply "lock" a
+regular set. Other iterables (which are not sets) can also be locked as sets:
 
 ```          
 /// Ways to build an ISet
@@ -690,8 +681,7 @@ ISet<String> iset = {1, 2}.lock;
 ISet<String> iset = [1, 2].toISet();
 ```                                                                           
 
-To create a regular `Set` from an `ISet`,
-you can use `Set.of`, or simply "unlock" an immutable set:
+To create a regular `Set` from an `ISet`, you can use `Set.of`, or simply "unlock" an immutable set:
 
 ```  
 /// Going back from ISet to Set
@@ -709,56 +699,50 @@ ISet constructors:
 `ISet()`,
 `ISet.withConfig()`,
 `ISet.unsafe()`.
-                                                              
+
 ## 3.1. Similarities and Differences to the IList
 
-Since I don't want to repeat myself, 
-all the topics below are explained in much less detail here than for the IList.
-Please read the IList explanation first, before trying to understand the ISet.
+Since I don't want to repeat myself, all the topics below are explained in much less detail here
+than for the IList. Please read the IList explanation first, before trying to understand the ISet.
 
 - An `ISet` is an `Iterable`, so you can iterate over it.
 
 - `ISet` has **all** the methods of `Set`, plus some other new and useful ones.
-`ISet` methods always return a new `ISet`, instead of modifying the original one. 
-Because of that, you can easily chain methods.
-But since `ISet` methods always return a new `ISet`, 
-it is an **error** to call some method and then discard the result. 
+  `ISet` methods always return a new `ISet`, instead of modifying the original one. Because of that,
+  you can easily chain methods. But since `ISet` methods always return a new `ISet`, it is an **
+  error** to call some method and then discard the result.
 
-- `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order. 
-They can be used as **map keys**, which is a very useful property in itself, 
-but can also help when implementing some other interesting data structures.
-  
-- However, `ISet`s are configurable, and you can actually create `ISet`s which
-compare their internals by identity or deep equals, as desired.
-   
-- To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`;
-or else use the `withConfig` method and the `ConfigSet` class to change the configuration;
-or else use the `withConfig` constructor to explicitly create the `ISet` with your desired configuration.
- 
-- The configuration affects how the `== operator` works, 
-but you can also choose how to compare sets by using the following `ISet` methods:
-`equalItems`, `equalItemsAndConfig` and `same`.
-Note, however, there is no `unorderedEqualItems` like in the `IList`, 
-because since `ISets` are unordered the `equalItems` method already disregards the order.
+- `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order.
+  They can be used as **map keys**, which is a very useful property in itself, but can also help
+  when implementing some other interesting data structures.
 
-- Classes `FromISetMixin` and `FromIterableISetMixin` let you easily 
-create your own immutable classes based on the `ISet`.
-This helps you create more strongly typed collections, 
-and add your own methods to them.
+- However, `ISet`s are configurable, and you can actually create `ISet`s which compare their
+  internals by identity or deep equals, as desired.
 
-- You can flush some `ISet` by using the getter `.flush`.
-Note flush just optimizes the set **internally**, 
-and no external difference will be visible.
-Depending on the global configuration, the `ISet`s 
-will flush automatically for you.  
+- To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`; or else
+  use the `withConfig` method and the `ConfigSet` class to change the configuration; or else use
+  the `withConfig` constructor to explicitly create the `ISet` with your desired configuration.
 
-- There are a few ways to lock and unlock a set, 
-which will have different results in speed and safety.
-Getter `lock` will create an internal defensive copy of the original set.
-Getter `lockUnsafe` is fast, since it makes no defensive copies of the set.
-Getter `unlock` unlocks the set, returning a regular (mutable, growable) set.
-Getter `unlockView` unlocks the set, returning a safe, unmodifiable (immutable) set view.
-And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) set.
+- The configuration affects how the `== operator` works, but you can also choose how to compare sets
+  by using the following `ISet` methods:
+  `equalItems`, `equalItemsAndConfig` and `same`. Note, however, there is no `unorderedEqualItems`
+  like in the `IList`, because since `ISets` are unordered the `equalItems` method already
+  disregards the order.
+
+- Classes `FromISetMixin` and `FromIterableISetMixin` let you easily create your own immutable
+  classes based on the `ISet`. This helps you create more strongly typed collections, and add your
+  own methods to them.
+
+- You can flush some `ISet` by using the getter `.flush`. Note flush just optimizes the set **
+  internally**, and no external difference will be visible. Depending on the global configuration,
+  the `ISet`s will flush automatically for you.
+
+- There are a few ways to lock and unlock a set, which will have different results in speed and
+  safety. Getter `lock` will create an internal defensive copy of the original set.
+  Getter `lockUnsafe` is fast, since it makes no defensive copies of the set. Getter `unlock`
+  unlocks the set, returning a regular (mutable, growable) set. Getter `unlockView` unlocks the set,
+  returning a safe, unmodifiable (immutable) set view. And getter `unlockLazy` unlocks the set,
+  returning a safe, modifiable (mutable) set.
 
     ```
     ISet<int> iset = {1, 2, 3}.lock;       // Safe
@@ -769,21 +753,23 @@ And getter `unlockLazy` unlocks the set, returning a safe, modifiable (mutable) 
     Set<int> set = iset.unlockLazy;        // Safe, fast and mutable
     ```                                                        
 
-  
 ## 3.2. Global ISet Configuration
 
-The **default** configuration of the `ISet` is `ConfigSet(isDeepEquals: true, sort: true, cacheHashCode: true)`:
+The **default** configuration of the `ISet`
+is `ConfigSet(isDeepEquals: true, sort: true, cacheHashCode: true)`:
 
-1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the same order.
+1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the
+   same order.
 
 2. `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
    will return sorted outputs.
 
-3. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off for sets.
+3. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off
+   for sets.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigSet(isDeepEquals: false, sort: false);`
-                                                                        
+
 Note that `ConfigSet` is similar to `ConfigList`, but it has the extra parameter `sort`:
 
 ```
@@ -795,22 +781,20 @@ print(iset.join(","));
 var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: false));  
 print(iset.join(","));
 ``` 
-  
-As previously discussed with the `IList`, 
-the global configuration is meant to be decided during your app's initialization, and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration by calling `ImmutableCollection.lockConfig();`
-after you set your desired configuration.
 
+As previously discussed with the `IList`, the global configuration is meant to be decided during
+your app's initialization, and then not changed again. We strongly suggest that you prohibit further
+changes to the global configuration by calling `ImmutableCollection.lockConfig();`
+after you set your desired configuration.
 
 # 4. IMap
 
-An `IMap` is an immutable map, meaning once it's created it cannot be modified.
-An `IMap` is always **unordered** 
-(though, as we'll see, it can be automatically sorted when you use it).  
+An `IMap` is an immutable map, meaning once it's created it cannot be modified. An `IMap` is
+always **unordered**
+(though, as we'll see, it can be automatically sorted when you use it).
 
-You can create an `IMap` by passing a regular map to its constructor, 
-or you can simply "lock" a regular map. 
-There are also a few other specialized constructors:  
+You can create an `IMap` by passing a regular map to its constructor, or you can simply "lock" a
+regular map. There are also a few other specialized constructors:
 
 ```          
 /// Ways to build an IMap
@@ -856,15 +840,14 @@ To create a regular `Map` from an `IMap`, you can "unlock" an immutable map:
 IMap<String, int> imap = {"a": 1, "b": 2}.lock;
 Map<String, int> map = imap.unlock; 
 ```             
-                                                             
+
 ## 4.1. Similarities and Differences to the IList/ISet
 
-Since I don't want to repeat myself, 
-all the topics below are explained in much less detail here than for the IList.
-Please read the IList explanation first, before trying to understand the IMap.
+Since I don't want to repeat myself, all the topics below are explained in much less detail here
+than for the IList. Please read the IList explanation first, before trying to understand the IMap.
 
-- Just like a regular map, an `IMap` is **not** an `Iterable`.
-However, you can iterate over its entries, keys and values:
+- Just like a regular map, an `IMap` is **not** an `Iterable`. However, you can iterate over its
+  entries, keys and values:
 
     ```               
     /// Unordered
@@ -899,41 +882,37 @@ However, you can iterate over its entries, keys and values:
     Iterator<MapEntry<K, V>> get fastIterator;
     ```
 
-- `IMap` has **all** the methods of `Map`, plus some other new and useful ones. 
-`IMap` methods always return a new `IMap`, instead of modifying the original one. 
-Because of that, you can easily chain methods.
-But since `IMap` methods always return a new `IMap`, 
-it is an **error** to call some method and then discard the result. 
+- `IMap` has **all** the methods of `Map`, plus some other new and useful ones.
+  `IMap` methods always return a new `IMap`, instead of modifying the original one. Because of that,
+  you can easily chain methods. But since `IMap` methods always return a new `IMap`, it is an **
+  error** to call some method and then discard the result.
 
-- `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order. 
-These maps can be used as **map keys** themselves.
-  
-- However, `IMap`s are configurable, and you can actually create `IMap`s which
-compare their internals by identity or deep equals, as desired.
-   
-- To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`;
-or else use the `withConfig` method and the `ConfigMap` class to change the configuration;
-or else use the `withConfig` constructor to explicitly create the `IMap` with your desired configuration.
- 
-- The configuration affects how the `== operator` works, 
-but you can also choose how to compare sets by using the following `IMap` methods:
-`equalItems`, `equalItemsAndConfig`, `equalItemsToIMap` and `same`.
-Note, however, there is no `unorderedEqualItems` like in the `IList`, 
-because since `IMaps` are unordered the `equalItems` method already disregards the order.
+- `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order.
+  These maps can be used as **map keys** themselves.
 
-- You can flush some `IMap` by using the getter `.flush`.
-Note flush just optimizes the map **internally**, 
-and no external difference will be visible.
-Depending on the global configuration, the `IMap`s 
-will flush automatically for you.  
+- However, `IMap`s are configurable, and you can actually create `IMap`s which compare their
+  internals by identity or deep equals, as desired.
 
-- There are a few ways to lock and unlock a map, 
-which will have different results in speed and safety.
-Getter `lock` will create an internal defensive copy of the original map.
-Getter `lockUnsafe` is fast, since it makes no defensive copies of the map.
-Getter `unlock` unlocks the map, returning a regular (mutable, growable) set.
-Getter `unlockView` unlocks the map, returning a safe, unmodifiable (immutable) map view.
-And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) map.
+- To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`; or else
+  use the `withConfig` method and the `ConfigMap` class to change the configuration; or else use
+  the `withConfig` constructor to explicitly create the `IMap` with your desired configuration.
+
+- The configuration affects how the `== operator` works, but you can also choose how to compare sets
+  by using the following `IMap` methods:
+  `equalItems`, `equalItemsAndConfig`, `equalItemsToIMap` and `same`. Note, however, there is
+  no `unorderedEqualItems` like in the `IList`, because since `IMaps` are unordered the `equalItems`
+  method already disregards the order.
+
+- You can flush some `IMap` by using the getter `.flush`. Note flush just optimizes the map **
+  internally**, and no external difference will be visible. Depending on the global configuration,
+  the `IMap`s will flush automatically for you.
+
+- There are a few ways to lock and unlock a map, which will have different results in speed and
+  safety. Getter `lock` will create an internal defensive copy of the original map.
+  Getter `lockUnsafe` is fast, since it makes no defensive copies of the map. Getter `unlock`
+  unlocks the map, returning a regular (mutable, growable) set. Getter `unlockView` unlocks the map,
+  returning a safe, unmodifiable (immutable) map view. And getter `unlockLazy` unlocks the map,
+  returning a safe, modifiable (mutable) map.
 
     ```
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;        // Safe
@@ -945,27 +924,29 @@ And getter `unlockLazy` unlocks the map, returning a safe, modifiable (mutable) 
     Map<String, int> set = imap.unlockLazy;                // Safe, fast and mutable
     ```                                                        
 
-  
 ## 4.2. Global IMap Configuration
 
-The **default** configuration of the `IMap` is 
+The **default** configuration of the `IMap` is
 `ConfigMap(isDeepEquals: true, sortKeys: true, sortValues: true)`:
 
-1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in the same order.
+1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in
+   the same order.
 
-2. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`, `IMap.toEntryList`,
-`IMap.toKeyList`, `IMap.toEntrySet` and `IMap.toKeySet` will return sorted outputs.
+2. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`
+   , `IMap.toEntryList`,
+   `IMap.toKeyList`, `IMap.toEntrySet` and `IMap.toKeySet` will return sorted outputs.
 
-3. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet` 
-will return sorted outputs.
+3. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet`
+   will return sorted outputs.
 
-4. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off for maps.
+4. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off
+   for maps.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: false, sortValues: false);`
-                                                                        
-Note that `ConfigMap` is similar to `ConfigSet`, 
-but has separate sort parameters for keys and values: `sortKeys` and `sortValues`:
+
+Note that `ConfigMap` is similar to `ConfigSet`, but has separate sort parameters for keys and
+values: `sortKeys` and `sortValues`:
 
 ```
 /// Prints sorted: "1,2,4,9"
@@ -976,20 +957,18 @@ print(imap.keyList.join(","));
 var imap = {2: "a", 4: "x", 1: "z", 9: "k"}.lock.withConfig(ConfigMap(sortKeys: false));  
 print(imap.keyList.join(","));
 ``` 
-  
-As previously discussed with `IList` and `ISet`, 
-the global configuration is meant to be decided during your app's initialization, 
-and then not changed again.
-We strongly suggest that you prohibit further changes to the global configuration 
-by calling `ImmutableCollection.lockConfig();` after you set your desired configuration.
 
+As previously discussed with `IList` and `ISet`, the global configuration is meant to be decided
+during your app's initialization, and then not changed again. We strongly suggest that you prohibit
+further changes to the global configuration by calling `ImmutableCollection.lockConfig();` after you
+set your desired configuration.
 
 # 5. IMapOfSets
 
 When you lock a `Map<K, V>` it turns into an `IMap<K, V>`.
 
-However, a locked `Map<K, Set<V>>` turns into an `IMapOfSets<K, V>`.  
- 
+However, a locked `Map<K, Set<V>>` turns into an `IMapOfSets<K, V>`.
+
  ```
 /// Map to IMap
 IMap<K, V> map = {'a': 1, 'b': 2}.lock;
@@ -998,9 +977,8 @@ IMap<K, V> map = {'a': 1, 'b': 2}.lock;
 IMapOfSets<K, V> map = {'a': {1, 2}, 'b': {3, 4}}.lock;
 ```
 
-The `IMapOfSets` lets you add / remove **values**, 
-without having to think about the **sets** that contain them.
-For example:
+The `IMapOfSets` lets you add / remove **values**, without having to think about the **sets** that
+contain them. For example:
 
  ```
 IMapOfSets<K, V> map = {'a': {1, 2}, 'b': {3, 4}}.lock;
@@ -1008,16 +986,14 @@ IMapOfSets<K, V> map = {'a': {1, 2}, 'b': {3, 4}}.lock;
 // Prints {'a': {1, 2, 3}, 'b': {3, 4}}
 print(map.add('a', 3)); 
 ```
- 
 
-Suppose you want to create an immutable structure 
-that lets you arrange `Student`s into `Course`s.
-Each student can be enrolled into one or more courses. 
+Suppose you want to create an immutable structure that lets you arrange `Student`s into `Course`s.
+Each student can be enrolled into one or more courses.
 
 This can be modeled by a map where the keys are the courses, and the values are sets of students.
 
-Implementing structures that **nest** immutable collections like this can be quite tricky.
-That's where an `IMapOfSets` comes handy:
+Implementing structures that **nest** immutable collections like this can be quite tricky. That's
+where an `IMapOfSets` comes handy:
 
 ```
 class StudentsPerCourse {
@@ -1068,10 +1044,10 @@ class StudentsPerCourse {
 }
 ```
 
-Note: The `IMapOfSets` configuration `ConfigMapOfSets.removeEmptySets` 
-lets you choose if empty sets should be automatically removed or not.
-In the above example, this would mean removing the course automatically when the last student leaves,
-or else allowing courses with no students.
+Note: The `IMapOfSets` configuration `ConfigMapOfSets.removeEmptySets`
+lets you choose if empty sets should be automatically removed or not. In the above example, this
+would mean removing the course automatically when the last student leaves, or else allowing courses
+with no students.
 
 ```
 /// Using the default configuration: Empty sets are removed.
@@ -1083,30 +1059,26 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
    : imap = (studentsPerCourse ?? {}).lock   
        .withConfig(ConfigMapOfSets(removeEmptySets: false));
 ```  
-        
+
 Note: A `MapOfSets` is an immutable <a href="https://en.wikipedia.org/wiki/Multimap">multimap</a>.
 If you need it, <a href="https://pub.dev/packages/quiver">Quiver</a> provides a mutable multimap.
-                                                                                                
 
 # 6. Comparators
 
-To help you sort collections, 
-we provide the global comparator functions `compareObject`, `sortBy` and `sortLike`, 
-as well as the `compareObjectTo` and `if0` extensions.
-These make it easy for you to create other complex comparators,
-as described below. 
+To help you sort collections, we provide the global comparator functions `compareObject`, `sortBy`
+and `sortLike`, as well as the `compareObjectTo` and `if0` extensions. These make it easy for you to
+create other complex comparators, as described below.
 
 ## 6.1. CompareObject function
 
 The `compareObject` function lets you easily compare `a` and `b`, as follows:
 
-If `a` or `b` is `null`, the null one will come later (the default), 
-unless the `nullsBefore` parameter is `true`, 
-in which case the `null` one will come before.
+If `a` or `b` is `null`, the null one will come later (the default), unless the `nullsBefore`
+parameter is `true`, in which case the `null` one will come before.
 
 If `a` and `b` are both of type `Comparable`, it compares them with their natural comparator.
 
-If `a` and `b` are map-entries, it compares their keys first, and then, if necessary, their values. 
+If `a` and `b` are map-entries, it compares their keys first, and then, if necessary, their values.
 
 If `a` and `b` are booleans, it compares them such as `true > false`.
 
@@ -1122,14 +1094,12 @@ You can use the comparator in sorts:
 [1, 2, null, 3].sort((a, b) => compareObject(a, b, nullsBefore: true));
 ```             
 
-
 ## 6.2. CompareObjectTo extension
 
-Beside the `compareObject` function above, 
-you can also use the `compareObjectTo` extension.
+Beside the `compareObject` function above, you can also use the `compareObjectTo` extension.
 
-For example: 
- 
+For example:
+
 ```
 // Results in: [1, 2, null]
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b));
@@ -1138,13 +1108,11 @@ For example:
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b, nullsBefore: true));
 ```              
 
-
 ## 6.3. SortBy function
 
-The `sortBy` function lets you define a rule, 
-and then possibly nest it with other rules with lower priority.
-For example, suppose you have a list of numbers 
-which you want to sort according to the following rules:
+The `sortBy` function lets you define a rule, and then possibly nest it with other rules with lower
+priority. For example, suppose you have a list of numbers which you want to sort according to the
+following rules:
 
 > 1. If present, number 14 is always the first, followed by number 15.
 > 2. Otherwise, odd numbers come before even ones.
@@ -1152,11 +1120,11 @@ which you want to sort according to the following rules:
 > 4. Otherwise, come numbers which are multiples of 5,
 > 5. Otherwise, numbers come in their natural order.
 
-You start by creating the first rule: `sortBy((x) => x == 15)` and
-then nesting the next rule in the `then` parameter:
+You start by creating the first rule: `sortBy((x) => x == 15)` and then nesting the next rule in
+the `then` parameter:
 `sortBy((x) => x == 15, then: sortBy((x) => x % 2 == 1)`.
 
-After all the rules are in place you have this: 
+After all the rules are in place you have this:
 
 ```
 int Function(int, int) compareTo = sortBy((x) => x == 14,
@@ -1168,15 +1136,14 @@ int Function(int, int) compareTo = sortBy((x) => x == 14,
                )))));
 ``` 
 
-
 ## 6.4. SortLike function
 
-The `sortLike` function lets you define a list with the desired sort order. 
-For example, if you want to sort numbers in this order: `[7, 3, 4, 21, 2]`
+The `sortLike` function lets you define a list with the desired sort order. For example, if you want
+to sort numbers in this order: `[7, 3, 4, 21, 2]`
 you can do it like this: `sortLike([7, 3, 4, 21, 2])`.
 
-You can also nest other comparators, including mixing `sortBy` and `sortLike`.
-For example, to implement the following rules:  
+You can also nest other comparators, including mixing `sortBy` and `sortLike`. For example, to
+implement the following rules:
 
 > 1. Order should be [7, 3, 4, 21, 2] when these values appear.
 > 2. Otherwise, odd numbers come before even ones.
@@ -1189,23 +1156,21 @@ int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
            ));
 ``` 
 
-Important: When nested comparators are used, make sure you don't create
-inconsistencies. For example, a rule that states `a<b then a>c then b<c`
-may result in different orders for the same items depending on their initial 
-position. This also means inconsistent rules may not be followed precisely.
+Important: When nested comparators are used, make sure you don't create inconsistencies. For
+example, a rule that states `a<b then a>c then b<c`
+may result in different orders for the same items depending on their initial position. This also
+means inconsistent rules may not be followed precisely.
 
-Please note, your order list may be of a different type than the values you
-are sorting. If this is the case, you can provide a `mapper` function, 
-to convert the values into the `order` type. See the `sort_test.dart`
-file for more information and runnable examples. 
-
+Please note, your order list may be of a different type than the values you are sorting. If this is
+the case, you can provide a `mapper` function, to convert the values into the `order` type. See
+the `sort_test.dart`
+file for more information and runnable examples.
 
 ## 6.5. if0 extension
 
 The `if0` function lets you nest comparators.
 
-You can think of `if0` as a "then",
-so that these two comparators are equivalent:
+You can think of `if0` as a "then", so that these two comparators are equivalent:
 
 ```
 /// This:
@@ -1246,23 +1211,19 @@ list.sort(compareTo);
 expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
 ``` 
 
-# 7. Flushing 
+# 7. Flushing
 
-As explained, `fast_immutable_collections` is fast because it creates a new collection 
-by internally "composing" the source collection with some other information, 
-saving only the difference between the source and destination collections, 
-instead of copying the whole collection each time.
+As explained, **FIC** is fast because it creates a new collection by internally "composing" the
+source collection with some other information, saving only the difference between the source and
+destination collections, instead of copying the whole collection each time.
 
-After a lot of modifications, 
-these composed collections may end up with lots of information to coordinate the composition, 
-and may become slower than a regular mutable collection.
+After a lot of modifications, these composed collections may end up with lots of information to
+coordinate the composition, and may become slower than a regular mutable collection.
 
-The loss of speed depends on the type of collection. 
-For example, `IList` doesn't suffer much from deep compositions,
-while `ISet` and `IMap` will take more of a hit.  
+The loss of speed depends on the type of collection. For example, `IList` doesn't suffer much from
+deep compositions, while `ISet` and `IMap` will take more of a hit.
 
-If you call `flush` on an immutable collection, 
-it will internally remove all the composition,
+If you call `flush` on an immutable collection, it will internally remove all the composition,
 making sure it is perfectly optimized again. For example:
 
 ```
@@ -1270,26 +1231,21 @@ var ilist = [1.2].lock.add([3, 4]).add(5);
 ilist.flush;
 ```         
 
-Please note, `flush` is a getter which returns the exact same instance, 
-just so you can chain other methods on it, if you wish. 
-But it does NOT create a new list. 
-It actually just optimizes the current list, internally.
+Please note, `flush` is a getter which returns the exact same instance, just so you can chain other
+methods on it, if you wish. But it does NOT create a new list. It actually just optimizes the
+current list, internally.
 
-If you flush a list which is already flushed, nothing will happen,
-and it won't take any time to flush the list again.
-So you don't need to worry about flushing the list more than once.
+If you flush a list which is already flushed, nothing will happen, and it won't take any time to
+flush the list again. So you don't need to worry about flushing the list more than once.
 
-Also, note that flushing just optimizes the list **internally**, 
-and no external difference will be visible. 
-So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
+Also, note that flushing just optimizes the list **internally**, and no external difference will be
+visible. So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
+## 7.1. Auto-flush
 
-## 7.1. Auto-flush      
-
-Usually you don't need to flush your collections manually.
-Depending on the global configuration, 
-the collections will flush automatically for you.
-The global configuration default is to have auto-flush on. It's easy to disable it:
+Usually you don't need to flush your collections manually. Depending on the global configuration,
+the collections will flush automatically for you. The global configuration default is to have
+auto-flush on. It's easy to disable it:
 
 ```
 ImmutableCollection.autoFlush = false;
@@ -1299,47 +1255,44 @@ ImmutableCollection.lockConfig();
 ```                                                    
 
 If you leave it on, you can configure auto-flush to happen after you use a collection a few times.
-And you can also configure it to flush at most once per asynchronous gap.   
+And you can also configure it to flush at most once per asynchronous gap.
 
-Auto-flush is an advanced topic, 
-and you don't need to read the following detailed explanation at all to use the immutable collections.
-However, in case you want to tweak the auto-flush configuration, here it goes:
+Auto-flush is an advanced topic, and you don't need to read the following detailed explanation at
+all to use the immutable collections. However, in case you want to tweak the auto-flush
+configuration, here it goes:
 
 ## 7.2. Sync Auto-flush
 
 If your auto-flush is set to occur synchronously:
 
-Each collection keeps a `counter` variable which starts at `0` 
-and is incremented each time some collection methods are called. 
-As soon as this counter reaches a certain value called the `flushFactor`, 
-the collection is flushed.
+Each collection keeps a `counter` variable which starts at `0`
+and is incremented each time some collection methods are called. As soon as this counter reaches a
+certain value called the `flushFactor`, the collection is flushed.
 
 ## 7.3. Async Auto-flush
 
-If your auto-flush is set to occur asynchronously: 
+If your auto-flush is set to occur asynchronously:
 
-If you take a collection and add or remove a lot of items synchronously,
-no flushing will take place.
+If you take a collection and add or remove a lot of items synchronously, no flushing will take
+place.
 
-Each collection still keeps a `counter` variable which starts at `0`, 
-but it will be incremented during method calls only while `counter >= 0`. 
-As soon as this counter reaches a certain value called the `flushFactor`, 
-the collection is marked for flushing.
+Each collection still keeps a `counter` variable which starts at `0`, but it will be incremented
+during method calls only while `counter >= 0`. As soon as this counter reaches a certain value
+called the `flushFactor`, the collection is marked for flushing.
 
-But after the asynchronous gap, as soon as you try to get, add or remove an item from it,
-it will flush automatically.  
+But after the asynchronous gap, as soon as you try to get, add or remove an item from it, it will
+flush automatically.
 
-There is also a global counter called an `asyncCounter` which starts at `1`. 
-When a collection is marked for flushing, 
-it first creates a future to increment the `asyncCounter`. 
-Then, the collection's own `counter` is set to be `-asyncCounter`. 
-Having a negative value means the collection's `counter` will not
-be incremented anymore. However, when `counter` is negative and different from `-asyncCounter` 
-it means we are one async gap after the collection was marked for flushing. 
+There is also a global counter called an `asyncCounter` which starts at `1`. When a collection is
+marked for flushing, it first creates a future to increment the `asyncCounter`. Then, the
+collection's own `counter` is set to be `-asyncCounter`. Having a negative value means the
+collection's `counter` will not be incremented anymore. However, when `counter` is negative and
+different from `-asyncCounter`
+it means we are one async gap after the collection was marked for flushing.
 
 At this point, the collection will be flushed and its `counter` will return to zero.
 
-An example: 
+An example:
 
 ```text
 1. The flushFactor is 3. The asyncCounter is 1.
@@ -1364,25 +1317,24 @@ An example:
    Also, its counter reverts to 0.                                   
 ```   
 
-The auto-flush process is a heuristic only.
-However, note the process is very fast, using only simple integer operations and a few bytes of memory.
-It guarantees that, if a collection is being used a lot, it will flush more often than one which is not being used that often.
-It also guarantees a collection will not auto-flush in the middle of sync operations.
-Finally, it saves no references to the collections, so it doesn't prevent them from being garbage collected.
+The auto-flush process is a heuristic only. However, note the process is very fast, using only
+simple integer operations and a few bytes of memory. It guarantees that, if a collection is being
+used a lot, it will flush more often than one which is not being used that often. It also guarantees
+a collection will not auto-flush in the middle of sync operations. Finally, it saves no references
+to the collections, so it doesn't prevent them from being garbage collected.
 
-If you think about the update/publish cycle of the `built_collections` package, 
-it has an intermediate state (the builder) which is not a valid collection, 
-and then you publish it manually.
-In contrast, `fast_immutable_collections` does have a valid intermediate state (unflushed)
-which you can use as a valid collection, 
-and then it publishes automatically (flushes) after the async gap (when so configured).
+If you think about the update/publish cycle of the `built_collections` package, it has an
+intermediate state (the builder) which is not a valid collection, and then you publish it manually.
+In contrast, **FIC** does have a valid intermediate state (unflushed)
+which you can use as a valid collection, and then it publishes automatically (flushes) after the
+async gap (when so configured).
 
-As discussed, the default is to have auto-flush turned on, but you can turn it off. 
-If you leave it on, you can tweak the `flushFactor` for lists, sets and maps. 
-Usually, lists should have a higher `flushFactor` because they are generally still very efficient when unflushed.
+As discussed, the default is to have auto-flush turned on, but you can turn it off. If you leave it
+on, you can tweak the `flushFactor` for lists, sets and maps. Usually, lists should have a
+higher `flushFactor` because they are generally still very efficient when unflushed.
 
-The minimum `flushFactor` you can choose is `1`, which means the collections will always flush in the 
-next async gap after they are touched.    
+The minimum `flushFactor` you can choose is `1`, which means the collections will always flush in
+the next async gap after they are touched.
 
 ```
 IList.flushFactor = 150;
@@ -1392,14 +1344,15 @@ IMap.flushFactor = 15;
 // Lock further changes, if desired:                                              
 ImmutableCollection.lockConfig();
 ```                                                    
-    
+
 # 8. About the Benchmarks
 
-Having benchmarks for this project is essential to justifying its existence, after all, if it isn't faster or on par 
-with competitors, there would be no point in creating/publishing this package. Luckily, that isn't the case.
+Having benchmarks for this project is essential to justifying its existence, after all, if it isn't
+faster or on par with competitors, there would be no point in creating/publishing this package.
+Luckily, that isn't the case.
 
-The [`benchmark` package][benchmark] demonstrates that this package's collections are close to even its mutable 
-counterparts, both under development and production environments.
+The [`benchmark` package][benchmark] demonstrates that this package's collections are close to even
+its mutable counterparts, both under development and production environments.
 
 You can either run the benchmarks:
 
@@ -1413,26 +1366,33 @@ You can find more info on the benchmarks, by reading [its documentation][benchma
 
 
 [benchmark]: benchmark/
+
 [benchmark_docs]: benchmark/README.md
+
 [example]: benchmark/example/
 
 # 9. Other Resources & Documentation
 
-The [`docs`][docs] folder features information which might be useful for you either as an end user or a developer:
+The [`docs`][docs] folder features information which might be useful for you either as an end user
+or a developer:
 
 | File                                                                                | Purpose                                                                                          |
 | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [`different_fixed_list_initializations.dart`][different_fixed_list_initializations] | Different ways of creating an *immutable* list in pure Dart and their underlying implementations |
+| [`different_fixed_list_initializations.dart`][different_fixed_list_initializations] | Different ways of creating an *
+immutable* list in pure Dart and their underlying implementations |
 | [`resources.md`][resources]                                                         | Resources for studying the topic of immutable collections                                        |
 | [`uml.puml`][uml]                                                                   | The UML diagram for this package (Uses [PlantUML][plant_uml])                                    |
 
-
 [docs]: docs/
+
 [different_fixed_list_initializations]: docs/different_fixed_list_initializations.dart
+
 [plant_uml]: https://plantuml.com/
+
 [resources]: docs/resources.md
+
 [uml]: docs/uml.puml
-                        
+
 *************************
 
 # Immutable Objects
@@ -1493,7 +1453,10 @@ state. All state management solutions in Flutter can benefit from making your st
 widgets subscribe to data objects throughout your application. If those objects are mutable, and if
 your widgets mutate them, this creates opportunities for areas of your application to get out of
 sync with each other. If those objects are immutable, since they can't change, subscribing to
-changes throughout the model is a dead-end, and new data can only ever be passed from above.
+changes throughout the model is a dead-end, and new data can only ever be passed from above. In
+other words, immutability can be used to enforce boundaries between layers of abstractions.
+Typically, on the bottom-most layer of your application, where you will find data-value objects, as
+long as the object exists, its data is permanent and should not be changed.
 
 <br>
 
@@ -1600,7 +1563,7 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   about it and rebuild the `ListView`? If Flutter was simply repainting the list for every frame, it
   would display any changes instantly. But in reality Flutter must know something changed before
   repainting, to save resources. So, again, if you pass a list and then mutate it, how is Flutter
-  supposed to know it changed? If has a reference to the original list, now mutated. There is no way
+  supposed to know it changed? It has a reference to the original list, now mutated. There is no way
   to know that the referenced list mutated since the last frame was displayed.
 
   By using mutable lists, Flutter only works if you create a new list:
@@ -1639,12 +1602,12 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   between value equality and identity equality. For example, if you use an immutable collection and
   it has not been mutated, then it is equal by identity (which is a very cheap comparison). On the
   other hand, when it's not equal by identity this does not rule out the possibility that they may
-  be value-equal. But in practice, when possible, fast_immutable_collections avoids creating new
-  objects for updates where no change in value occurred. For this reason, if some state and its next
-  state are immutable collections not equal by identity, they are almost certainly NOT value-equal,
-  otherwise why would you have mutated the collection to begin with? If you are ok with doing some
-  rare unnecessary rebuilds, you can decide whether or not to rebuild the widget without having to
-  compare each item of the collections.
+  be value-equal. But in practice, when possible, **FIC** avoids creating new objects for updates
+  where no change in value occurred. For this reason, if some state and its next state are immutable
+  collections not equal by identity, they are almost certainly NOT value-equal, otherwise why would
+  you have mutated the collection to begin with? If you are ok with doing some rare unnecessary
+  rebuilds, you can decide whether or not to rebuild the widget without having to compare each item
+  of the collections.
 
 * Caching can speed things up significantly. But how do you cache results of a function?
 
@@ -1720,10 +1683,10 @@ and general sanity. It will remove distractions and leave you more energy for cr
 problem-solving. And for that you need a package, since it offers you a low-cost way: It's not
 always easy to create immutable data structures by hand in a compact, maintainable way.
 
-The immutable collections in fast_immutable_collections all use the simple approach of recording
-changes, while periodically "flushing" them internally into regular mutable Dart collections and
-hiding their mutability. This approach works well, and the benchmarks seem to indicate they improve
-performance by an order of magnitude. However, the best possible approach would be to implement   
+The immutable collections in **FIC** all use the simple approach of recording changes, while
+periodically "flushing" them internally into regular mutable Dart collections and hiding their
+mutability. This approach works well, and the benchmarks seem to indicate they improve performance
+by an order of magnitude. However, the best possible approach would be to implement   
 <a href="https://en.wikipedia.org/wiki/Hash_array_mapped_trie">hash array mapped tries</a> (HAMTs),
 which are dedicated immutable structures that are not built on top of regular mutable collections.
 The reason we did not use HAMTs is that it would be much more work, and also because I am unsure if
@@ -1736,5 +1699,276 @@ immutability into Dart itself, which could be used to improve our collections or
 efficient ones. In any case, if and when better immutable collections arise, we'll run the
 benchmarks, and if necessary switch the implementation so that the collections in this package keep
 performing as well as possible.
-                 
+
 ****************************
+
+# Related reading
+
+# Immutability Resources for Dart
+
+> Resources for studying immutability in the context of OOP languages.
+
+The numbering below is simply for differentiation.
+
+> ~90% of the resources below come from Marcelo Glasberg.
+
+## 0. How do I read this???
+
+The sub, unordered lists are my highlights, it's probably simpler if you go through each of the
+links in the ordered lists.
+
+## 1. Projects
+
+### 1.1. Dart
+
+1. [persistent][persistent_dart]
+
+- They've implemented *operators* for the objects, something which converges to the assumption that
+  immutable objects should be treated just like values.
+- Is very old apparently. It depends on Dart `>=0.8.10+6 <2.0.0`.
+    - It's so old that *typing* is very weak throughout the package. So a major refactor would be
+      necessary in order to use it with more recent versions of Dart, which will likely not happen.
+
+1. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
+
+- Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
+
+1. [kt.dart][kt_dart]
+
+- Features interesting annotations from Kotlin, though some will become useless after non-nullable
+  integration to Dart.
+- Doesn't seem to use a recursive data structure in the background to ease copying, just simple
+  iterators, but I would have to study it more to be sure.
+- Not that many worries about speed.
+
+1. [built_collection][built_collection]
+
+- Each of the core SDK collections is split in two: a mutable builder class and an immutable "built"
+  class. Builders are for computation, "built" classes are for safely sharing with no need to copy
+  defensively.
+- Uses the [Builder Pattern][builder_pattern], which simplifies the creation of objects, and even
+  allows for lazy optimizations.
+- Uses (deep) hash codes.
+- (...) do not make a copy, but return a copy-on-write wrapper.
+
+1. [Make it easy/efficient to create immutable collections via literals][dart_lang_117]
+
+- Nice overview of the different types of "immutable" definitions.
+- Good idea to simplify the use of unmodifiable data types.
+
+1. [Dart should provide a way of combining hashes][dart_lang_11617]
+
+- Nice discussion on the &mdash; absurd &mdash; absence of basic good hashing methods inside Dart's
+  basic packages.
+
+1. [Dart's Immutable Collections' Feature Specification][dart_immutable_feature_spec]
+
+- Dart apparently already has plans of incorporating immutable objects. The question is how long
+  they will take for this to happen?
+
+[benchmark_harness]: https://pub.dev/packages/benchmark_harness
+
+[builder_pattern]: https://en.wikipedia.org/wiki/Builder_pattern
+
+[built_collection]: https://github.com/google/built_collection.dart
+
+[dart_immutable_feature_spec]: https://github.com/dart-lang/language/blob/master/working/0125-static-immutability/feature-specification.md
+
+[dart_lang_117]: https://github.com/dart-lang/language/issues/117
+
+[dart_lang_11617]: https://github.com/dart-lang/sdk/issues/11617
+
+[kt_dart]: https://github.com/passsy/kt.dart
+
+[persistent_dart]: https://github.com/vacuumlabs/persistent
+
+[remi_performance_testing_dart]: https://gist.github.com/rrousselGit/5a047bd4ec36515a4cfcc6bd275f05f5
+
+### 1.2. Java
+
+1. [Dexx][dexx]
+
+- Port of Scala's immutable, persistent collections to Java and Kotlin.
+- [Class Hierarchy][dexx_class_hierarchy]
+- Interesting feature: Explore annotating methods that return a new collection
+  with `@CheckReturnValue` to allow static verification of collection usage.
+
+1. [Paguro][paguro]
+
+- Immutable Collections and Functional Transformations for the JVM.
+- Inspired by Clojure.
+- Is based on the question-discussion &mdash; mentioned in the next section
+  &mdash;: [Why doesn't Java 8 include immutable collections?][why_no_immutable_on_java_8]
+
+1. Brian Burton's [Java Immutable Collections][java_immutable_collections]
+
+- [Comparative Performance of Java Immutable Collections][performance_java_immutable]
+    - The real questions are: how much faster are mutable collections and will you really notice the
+      difference. Based on benchmark runs a JImmutableHashMap is about 2-3 times slower than a
+      HashMap but is about 1.5x faster than a TreeMap. Unless your application spends most of its
+      time CPU bound updating collections you generally won't notice much of a difference using an
+      immutable collection.
+- [List Tutorial][java_immutable_collections_list_tutorial]
+    - The current implementation uses a balanced binary tree with leaf nodes containing up to 64
+      values each which provides `O(log2(n))` performance for all operations.
+
+[dexx]: https://github.com/andrewoma/dexx
+
+[dexx_class_hierarchy]: https://github.com/andrewoma/dexx/raw/master/docs/dexxcollections.png
+
+[java_immutable_collections]: https://github.com/brianburton/java-immutable-collections
+
+[java_immutable_collections_list_tutorial]: https://github.com/brianburton/java-immutable-collections/wiki/List-Tutorial
+
+[paguro]: https://github.com/GlenKPeterson/Paguro
+
+[performance_java_immutable]: https://github.com/brianburton/java-immutable-collections/wiki/Comparative-Performance
+
+### 1.3. JS
+
+1. [immutable-js][immutable_js]
+
+- Immutable data cannot be changed once created, leading to much simpler application development, no
+  defensive copying, and enabling advanced memoization and change detection techniques with simple
+  logic. Persistent data presents a mutative API which does not update the data in-place, but
+  instead always yields new updated data.
+- Alan Kay: The last thing you wanted any programmer to do is mess with internal state even if
+  presented figuratively. It is unfortunate that much of what is called "object-oriented
+  programming" today is simply old style programming with fancier constructs.
+    - [React.js Conf 2015 &ndash; Immutable Data and React][immutable_data_react_lecture]
+- These data structures are highly efficient on modern JavaScript VMs by using structural sharing
+  via hash maps tries and vector tries as popularized by Clojure and Scala, minimizing the need to
+  copy or cache data.
+- Immutable collections should be treated as *values* rather than *objects*. While objects represent
+  some thing which could change over time, a value represents the state of that thing at a
+  particular instance of time. This principle is most important to understanding the appropriate use
+  of immutable data. In order to treat Immutable.js collections as values, it's important to use
+  the `Immutable.is()` function or `.equals()` method to determine value equality instead of
+  the `===` operator which determines object *reference identity*.
+- If an object is immutable, it can be "copied" simply by making another reference to it instead of
+  copying the entire object. Because a reference is much smaller than the object itself, this
+  results in memory savings and a potential boost in execution speed for programs which rely on
+  copies (such as an undo-stack).
+
+[immutable_data_react_lecture]: https://youtu.be/I7IdS-PbEgI
+
+[immutable_js]: https://github.com/immutable-js/immutable-js
+
+## 2. Articles
+
+1. [Discussion on the Performance of Immutable Collections][performance_discussion]
+
+- Kevin Bourrillion: "Raw CPU speed? To a first order of approximation, the performance is the same.
+  Heck, to a second order of approximation, it's the same, too. These kinds of performance
+  differences are nearly always absolutely dwarfed by bigger concerns &mdash; I/O, lock contention,
+  memory leaks, algorithms of the wrong big-O complexity, sheer coding errors, failure to properly
+  reuse data once obtained (which may be solved by "caching" or simply by structuring the code
+  better), etc. etc. etc."
+- If you measure your isolated component and it performs better than competitors, then it is better
+  in isolation. If it doesn't perform as expected in the system, it's because its design doesn't
+  fit, the specifications are probably wrong.
+    - Systems are bigger than the sum of its components, but they are finite and can have their
+      external interactions abstracted away.
+        - So I kind of disagree with Bourrillion's answer.
+
+1. [Why doesn't Java 8 include immutable collections?][why_no_immutable_on_java_8]
+
+- [The difference between *readable*, *read-only* and *
+  immutable* collections][3_types_of_collections].
+- Basically, the `UnmodifiableListMixin` also exists in Java. For more,
+  check [Arkanon's answer][arkanon_answer].
+- I enjoy entertaining the idea that of all the code written in java and running on millions of
+  computers all over the world, every day, around the clock, about half the total clock cycles must
+  be wasted doing nothing but making safety copies of collections that are being returned by
+  functions. (And garbage-collecting these collections milliseconds after their creation.)
+    - From [Mike Nakis' answer][mike_nakis_answer].
+    - Now, an interface like Collection which would be missing the `add()`, `remove()` and `clear()`
+      methods would not be an `ImmutableCollection` interface; it would be
+      an `UnmodifiableCollection` interface. As a matter of fact, there could never be
+      an `ImmutableCollection` interface, because immutability is a nature of an implementation, not
+      a characteristic of an interface. I know, that's not very clear; let me explain.
+- [Ben Rayfield on recursiveness][ben_rayfield_recursiveness]
+
+1. [MarcG's question on the behavior of `List.unmodifiable`][marcelo_list_unmodifiable]
+
+- `List.unmodifiable` does create a new list. And it's `O(N)`.
+
+1. [Immutable Collections In Java &ndash; Not Now, Not Ever][immutable_collections_java_not_now_not_ever]
+
+- Originally, unmodifiable marked an instance that offered no mutability (by throwing
+  UnsupportedOperationException on mutating methods) but may be changed in other ways (maybe because
+  it was just a wrapper around a mutable collection).
+- An immutable collection of secret agents might sound an awful lot like an immutable collection of
+  immutable secret agents, but the two are not the same. The immutable collection may not be
+  editable by adding/removing/clearing/etc, but, if secrets agents are mutable (although the lack of
+  character development in spy movies seems to suggest otherwise), that doesn’t mean the collection
+  of agents as a whole is immutable.
+- *Immutability is not an absence of mutation, it’s a guarantee there won’t be mutation*.
+- Converting old code to a new immutability hierarchy may be source-incompatible.
+
+1. [Faster Purely Functional Data Structures for Java][faster_java_functional_data_structures]
+
+- Use unifying interfaces for more flexibility with respect to implementations.
+- Laziness in copying is key to performance.
+- *Persistent collections are immutable collections with efficient copy-on-write operations.*
+- [Chris Osaki's thesis on *Purely Functional Data Structures*][osaki_thesis]
+- [Extreme Cleverness: Functional Data Structures in Scala - Daniel Spiewak][spiewak_lecture]
+- [Clojure Data Structures Part 1 - Rich Hickey][hickey_lecture]
+
+1. [How can List be faster than native arrays?][how_can_lists_be_faster_than_arrays]
+
+- Structural sharing makes an immutable list be faster than a native array in JS.
+- `List` is an implementation of an immutable data-structure called relaxed *radix balanced trees*.
+- Not all operations are faster...
+- [`List` on Github][list_github]
+
+[3_types_of_collections]: https://softwareengineering.stackexchange.com/a/222052/344810
+
+[arkanon_answer]: https://softwareengineering.stackexchange.com/a/222323/344810
+
+[ben_rayfield_recursiveness]: https://softwareengineering.stackexchange.com/a/330179/344810
+
+[faster_java_functional_data_structures]: https://medium.com/@johnmcclean/the-rise-and-rise-of-java-functional-data-structures-63782436f93b
+
+[hickey_lecture]: https://youtu.be/ketJlzX-254
+
+[how_can_lists_be_faster_than_arrays]: http://vindum.io/blog/how-can-list-be-faster-than-native-arrays/
+
+[immutable_collections_java_not_now_not_ever]: http://blog.codefx.org/java/immutable-collections-in-java/
+
+[list_github]: https://github.com/funkia/list
+
+[marcelo_list_unmodifiable]: https://stackoverflow.com/q/50311900/4756173
+
+[mike_nakis_answer]: https://softwareengineering.stackexchange.com/a/285839/344810
+
+[osaki_thesis]: https://www.cs.cmu.edu/~rwh/theses/okasaki.pdf
+
+[performance_discussion]: https://groups.google.com/g/guava-discuss/c/hfyhraawwUc?pli=1
+
+[spiewak_lecture]: https://youtu.be/pNhBQJN44YQ
+
+[why_no_immutable_on_java_8]: https://softwareengineering.stackexchange.com/q/221762/344810
+
+## 3. Other Resources
+
+1. [Is Dart Compiled or Interpreted?][dart_compiled_or_interpreted]
+
+- Both.
+
+1. [Introduction to Dart VM][intro_dart_vm]
+1. [What does `external` mean in Dart?][external_in_dart]
+
+- Basically that the method is implemented elsewhere, probably by a subclass. It's kind of like an
+  abstract method outside an abstract class.
+
+1. [An example of how to graph benchmarks][funkia].
+
+[dart_compiled_or_interpreted]: https://www.quora.com/Is-Dart-a-compiled-or-interpreted-language
+
+[external_in_dart]: https://stackoverflow.com/q/24929659/4756173
+
+[funkia]: https://funkia.github.io/list/benchmarks/
+
+[intro_dart_vm]: https://mrale.ph/dartvm/
+

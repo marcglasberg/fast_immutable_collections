@@ -1,11 +1,10 @@
 import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:collection/collection.dart";
-import "package:fast_immutable_collections/src/iset/s_flat.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
 
-extension IListExtension<T> on List<T> {
+extension ListExtension<T> on List<T> {
   //
   /// Locks the list, returning an *immutable* list ([IList]).
   IList<T> get lock => IList<T>(this);
@@ -382,7 +381,10 @@ extension IListExtension<T> on List<T> {
   }
 
   /// Removes all duplicates, leaving only the distinct items.
-  /// Optionally, you can provide a [id] function to compare the items.
+  /// Optionally, you can provide an [id] function to compare the items.
+  ///
+  /// See also `Iterable.removeDuplicates()` in [IterableExtension] for a lazy version.
+  ///
   List<T> distinct([dynamic Function(T item) id]) => id != null
       ? removeDuplicates(id).toList()
       : [

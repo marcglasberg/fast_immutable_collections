@@ -3,8 +3,6 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "imap.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
-
 class MFlat<K, V> extends M<K, V> {
   //
   static M<K, V> empty<K, V>() => MFlat<K, V>.unsafe(<K, V>{});
@@ -67,4 +65,3 @@ class MFlat<K, V> extends M<K, V> {
   int deepMapHashcode() => const MapEquality().hash(_map);
 }
 
-// /////////////////////////////////////////////////////////////////////////////

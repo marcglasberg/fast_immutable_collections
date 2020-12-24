@@ -2,7 +2,7 @@ import "dart:collection";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 import "iset.dart";
-import "iset_extension.dart";
+import "set_extension.dart";
 
 /// The [UnmodifiableSetFromISet] is a relatively safe, unmodifiable [Set] view that is built from
 /// an [ISet] or another [Set]. The construction of the [UnmodifiableSetFromISet] is very fast,

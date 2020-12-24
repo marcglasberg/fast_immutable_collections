@@ -2,8 +2,6 @@ import "package:collection/collection.dart";
 
 import "ilist.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
-
 class LFlat<T> extends L<T> {
   final List<T> _list;
 
@@ -118,5 +116,3 @@ class LFlat<T> extends L<T> {
 
   int deepListHashcode() => const ListEquality().hash(_list);
 }
-
-// /////////////////////////////////////////////////////////////////////////////
