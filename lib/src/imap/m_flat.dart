@@ -64,4 +64,3 @@ class MFlat<K, V> extends M<K, V> {
 
   int deepMapHashcode() => const MapEquality().hash(_map);
 }
-

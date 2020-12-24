@@ -1,4 +1,4 @@
- import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// See also: [ListExtension]
 extension SetExtension<T> on Set<T> {

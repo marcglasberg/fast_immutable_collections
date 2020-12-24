@@ -22,4 +22,3 @@ class MapEntryEquality<E> implements Equality<E> {
   @override
   bool isValidKey(Object o) => true;
 }
-
