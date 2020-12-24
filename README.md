@@ -1347,12 +1347,9 @@ ImmutableCollection.lockConfig();
 
 # 8. About the Benchmarks
 
-Having benchmarks for this project is essential to justifying its existence, after all, if it isn't
-faster or on par with competitors, there would be no point in creating/publishing this package.
-Luckily, that isn't the case.
-
-The [`benchmark` package][benchmark] demonstrates that this package's collections are close to even
-its mutable counterparts, both under development and production environments.
+Having benchmarks for this project are necessary to justifying its existence.
+The [`benchmark` package][benchmark] demonstrates that FIC immutable collections are similar to even
+its mutable counterparts in many operations.
 
 You can either run the benchmarks:
 
@@ -1364,34 +1361,16 @@ You can either run the benchmarks:
 
 You can find more info on the benchmarks, by reading [its documentation][benchmark_docs].
 
+Note: The benchmarks cover what we have done so far, which are the most common operations. There are
+many collection operations within **FIC** which are not yet made as efficient as they can. Most of
+the corresponding methods are marked with `// TODO: Still need to implement efficiently` and will be
+updated in future versions.
 
 [benchmark]: benchmark/
 
 [benchmark_docs]: benchmark/README.md
 
 [example]: benchmark/example/
-
-# 9. Other Resources & Documentation
-
-The [`docs`][docs] folder features information which might be useful for you either as an end user
-or a developer:
-
-| File                                                                                | Purpose                                                                                          |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [`different_fixed_list_initializations.dart`][different_fixed_list_initializations] | Different ways of creating an *
-immutable* list in pure Dart and their underlying implementations |
-| [`resources.md`][resources]                                                         | Resources for studying the topic of immutable collections                                        |
-| [`uml.puml`][uml]                                                                   | The UML diagram for this package (Uses [PlantUML][plant_uml])                                    |
-
-[docs]: docs/
-
-[different_fixed_list_initializations]: docs/different_fixed_list_initializations.dart
-
-[plant_uml]: https://plantuml.com/
-
-[resources]: docs/resources.md
-
-[uml]: docs/uml.puml
 
 *************************
 
@@ -1700,22 +1679,30 @@ efficient ones. In any case, if and when better immutable collections arise, we'
 benchmarks, and if necessary switch the implementation so that the collections in this package keep
 performing as well as possible.
 
-****************************
+***************************
 
-# Related reading
+# Bibliography
 
-# Immutability Resources for Dart
+## 1. Related reading
 
-> Resources for studying immutability in the context of OOP languages.
+The [`docs`][docs] folder features information which might be useful for you either as an end user
+or a developer:
 
-The numbering below is simply for differentiation.
+| File                                                                                | Purpose                                                                                          |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [`different_fixed_list_initializations.dart`][different_fixed_list_initializations] | Different ways of creating an *
+immutable* list in pure Dart and their underlying implementations |
+| [`uml.puml`][uml]                                                                   | The UML diagram for this package (Uses [PlantUML][plant_uml])                                    |
 
-> ~90% of the resources below come from Marcelo Glasberg.
+[docs]: docs/
 
-## 0. How do I read this???
+[different_fixed_list_initializations]: docs/different_fixed_list_initializations.dart
 
-The sub, unordered lists are my highlights, it's probably simpler if you go through each of the
-links in the ordered lists.
+[plant_uml]: https://plantuml.com/
+
+[resources]: docs/resources.md
+
+[uml]: docs/uml.puml
 
 ## 1. Projects
 
@@ -1725,21 +1712,16 @@ links in the ordered lists.
 
 - They've implemented *operators* for the objects, something which converges to the assumption that
   immutable objects should be treated just like values.
-- Is very old apparently. It depends on Dart `>=0.8.10+6 <2.0.0`.
-    - It's so old that *typing* is very weak throughout the package. So a major refactor would be
-      necessary in order to use it with more recent versions of Dart, which will likely not happen.
-
-1. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
-
-- Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
+- It depends on Dart `>=0.8.10+6 <2.0.0`. It's old enough so that *typing* is very weak throughout
+  the package. So a major refactor would be necessary in order to use it with more recent versions
+  of Dart.
 
 1. [kt.dart][kt_dart]
 
-- Features interesting annotations from Kotlin, though some will become useless after non-nullable
-  integration to Dart.
-- Doesn't seem to use a recursive data structure in the background to ease copying, just simple
-  iterators, but I would have to study it more to be sure.
-- Not that many worries about speed.
+- Follows Kotlin conventions.
+- Doesn't use a persistent data structure. Not that many worries about speed.
+- Features interesting annotations, though some will become unnecessary after NNBD.
+
 
 1. [built_collection][built_collection]
 
@@ -1750,6 +1732,10 @@ links in the ordered lists.
   allows for lazy optimizations.
 - Uses (deep) hash codes.
 - (...) do not make a copy, but return a copy-on-write wrapper.
+
+1. [Rémi Rousselet's Example of Performance Testing in Dart][remi_performance_testing_dart]
+
+- Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
 
 1. [Make it easy/efficient to create immutable collections via literals][dart_lang_117]
 
@@ -1957,6 +1943,7 @@ links in the ordered lists.
 - Both.
 
 1. [Introduction to Dart VM][intro_dart_vm]
+
 1. [What does `external` mean in Dart?][external_in_dart]
 
 - Basically that the method is implemented elsewhere, probably by a subclass. It's kind of like an
