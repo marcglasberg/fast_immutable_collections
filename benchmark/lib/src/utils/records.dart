@@ -73,6 +73,22 @@ class RecordsColumn {
       .first
       .record;
 
+  List<String> get rowNames {
+    final List<String> rowNames = [];
+    records.forEach((StopwatchRecord record) => rowNames.add(record.collectionName));
+    return rowNames;
+  }
+
+  RecordsColumn filter(String collectionName) {
+    if (collectionName != null) {
+      final List<StopwatchRecord> recordsCopy = List.of(records);
+      recordsCopy.removeWhere((StopwatchRecord record) => record.collectionName == collectionName);
+      return RecordsColumn._(recordsCopy, title);
+    } else {
+      return this;
+    }
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -137,6 +153,11 @@ class RecordsTable {
   /// Note that we are currently rounding off at 2 floating points.
   RecordsColumn get normalizedAgainstSize =>
       _normalize(config.size.toDouble(), "Time (${_mu}s) / Size");
+
+  List<String> get rowNames => resultsColumn.rowNames;
+
+  RecordsTable filter(String collectionName) =>
+      RecordsTable(resultsColumn: resultsColumn.filter(collectionName), config: config);
 
   static const String _mu = "\u{03BC}";
 

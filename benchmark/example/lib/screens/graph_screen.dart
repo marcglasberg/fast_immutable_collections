@@ -31,11 +31,22 @@ class _GraphScreenState extends State<GraphScreen> {
   bool _onlyOneBenchmark = false;
   bool _stacked = false;
 
-  RecordsTable get _currentTable => widget.tables[_currentTableIndex];
+  RecordsTable get _currentTable {
+    if (_currentTableIndex >= widget.tables.length) {
+      return widget.tables.last;
+    } else {
+      return widget.tables[_currentTableIndex];
+    }
+  }
+
+  List<String> _possibleFilters;
 
   @override
   void initState() {
+    _possibleFilters = _currentTable.rowNames;
+
     super.initState();
+
     _bottomItems = <BottomNavigationBarItem>[
       for (int i = 0; i < widget.tables.length; i++)
         BottomNavigationBarItem(
@@ -54,7 +65,7 @@ class _GraphScreenState extends State<GraphScreen> {
     } else if (_bottomItems.length > 1) {
       _bottomItems.add(
         BottomNavigationBarItem(
-          icon: Icon(Icons.place),
+          icon: const Icon(Icons.table_rows),
           label: "All",
         ),
       );
@@ -73,6 +84,8 @@ class _GraphScreenState extends State<GraphScreen> {
         }
       });
 
+  final List<String> _currentFilters = [];
+
   @override
   Widget build(_) {
     return Scaffold(
@@ -80,10 +93,45 @@ class _GraphScreenState extends State<GraphScreen> {
         title: Text("${widget.title} Benchmark Graph Results"),
       ),
       body: Container(
-        padding: const EdgeInsets.only(left: 5),
-        child: _stacked
-            ? StackedBarChart(recordsTables: widget.tables)
-            : BarChart(recordsTable: _currentTable),
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: ListView(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownButton<String>(
+                  hint: Text(
+                    "Filter by: ",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  items: _possibleFilters
+                      .map<DropdownMenuItem<String>>(
+                        (String filter) => DropdownMenuItem<String>(
+                          value: filter,
+                          child: Text(
+                            filter,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (String newFilter) {
+                    setState(() {
+                      _possibleFilters.remove(newFilter);
+                      _currentFilters.add(newFilter);
+                    });
+                  },
+                ),
+              ],
+            ),
+            Container(
+              height: 500,
+              child: _stacked
+                  ? StackedBarChart(recordsTables: _filterAllNTimes())
+                  : BarChart(recordsTable: _filterNTimes(_currentTable)),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black,
@@ -94,5 +142,16 @@ class _GraphScreenState extends State<GraphScreen> {
         currentIndex: _currentTableIndex,
       ),
     );
+  }
+
+  List<RecordsTable> _filterAllNTimes() {
+    final List<RecordsTable> tables = [];
+    widget.tables.forEach((RecordsTable table) => tables.add(_filterNTimes(table)));
+    return tables;
+  }
+
+  RecordsTable _filterNTimes(RecordsTable table) {
+    _currentFilters.forEach((String filter) => table = table.filter(filter));
+    return table;
   }
 }

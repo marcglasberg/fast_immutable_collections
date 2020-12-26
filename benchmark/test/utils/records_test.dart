@@ -35,7 +35,8 @@ void main() {
     test(
         "The record has to be bigger than 0",
         () =>
-            expect(() => StopwatchRecord(collectionName: "asdf", record: 0), throwsAssertionError));
+            expect(() => StopwatchRecord(collectionName: "asdf", record: 0), throwsAssertionError),
+        skip: true);
 
     test("Simple usage", () {
       const StopwatchRecord stopwatchRecord = StopwatchRecord(collectionName: "list", record: 10);
@@ -142,6 +143,28 @@ void main() {
 
       expect(recordsColumn.toString(),
           "RecordsColumn: [StopwatchRecord: (collectionName: list, record: 10.0)]");
+    });
+
+    test("Names of each row", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty();
+      recordsColumn += StopwatchRecord(collectionName: "list (mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "ilist", record: 11);
+      recordsColumn += StopwatchRecord(collectionName: "builtList", record: 11);
+
+      expect(recordsColumn.rowNames, ["list (mutable)", "ilist", "builtList"]);
+    });
+
+    test("Filter", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty();
+      recordsColumn += StopwatchRecord(collectionName: "list (mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "ilist", record: 11);
+      recordsColumn += StopwatchRecord(collectionName: "builtList", record: 11);
+
+      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
+      recordsColumnAnswer += StopwatchRecord(collectionName: "list (mutable)", record: 10);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "ilist", record: 11);
+
+      expect(recordsColumn.filter("builtList"), recordsColumnAnswer);
     });
   });
 
@@ -292,6 +315,26 @@ void main() {
           "";
 
       expect(recordsTable.toString(), correctTableAsString);
+    });
+
+    test("Filter", () {
+      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
+      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
+      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
+      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
+      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
+
+      final RecordsTable recordsTable =
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+
+      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
+      recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .5);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .75);
+      recordsColumnAnswer += StopwatchRecord(collectionName: "KtList", record: 1);
+
+      final RecordsTable recordsTableFiltered = recordsTable.filter("BuiltList");
+
+      expect(recordsTableFiltered.normalizedAgainstMax, recordsColumnAnswer);
     });
   });
 }
