@@ -11,7 +11,7 @@ class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   static const Map<String, int> baseMap = {"1": 1, "2": 3}, mapToAdd = {"4": 4, "5": 5, "6": 6};
 
   @override
-  final IList<MapBenchmarkBase> benchmarks;
+  final List<MapBenchmarkBase> benchmarks;
 
   MapAddAllBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <MapBenchmarkBase>[
@@ -19,7 +19,7 @@ class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
           IMapAddAllBenchmark(emitter: emitter),
           KtMapAddAllBenchmark(emitter: emitter),
           BuiltMapAddAllBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

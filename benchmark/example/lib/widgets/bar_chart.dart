@@ -1,7 +1,6 @@
 import "package:charts_flutter/flutter.dart" as charts;
 import "package:flutter/material.dart";
 
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 class BarChart extends StatelessWidget {
@@ -29,7 +28,8 @@ class BarChart extends StatelessWidget {
       animate: true,
       animationDuration: const Duration(milliseconds: 100),
       barRendererDecorator: charts.BarLabelDecorator<String>(),
-      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+      domainAxis:
+          const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       behaviors: <charts.ChartBehavior>[
         charts.SeriesLegend(position: charts.BehaviorPosition.top),
       ],
@@ -38,7 +38,7 @@ class BarChart extends StatelessWidget {
 }
 
 class StackedBarChart extends StatelessWidget {
-  final IList<RecordsTable> recordsTables;
+  final List<RecordsTable> recordsTables;
 
   const StackedBarChart({@required this.recordsTables});
 
@@ -60,7 +60,8 @@ class StackedBarChart extends StatelessWidget {
       vertical: false,
       animationDuration: const Duration(milliseconds: 100),
       barRendererDecorator: charts.BarLabelDecorator<String>(),
-      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+      domainAxis:
+          const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       behaviors: <charts.ChartBehavior>[
         charts.SeriesLegend(position: charts.BehaviorPosition.top),
       ],

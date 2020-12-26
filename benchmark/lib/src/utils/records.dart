@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
@@ -23,7 +24,7 @@ class StopwatchRecord {
 
   const StopwatchRecord({@required this.collectionName, @required this.record})
       : assert(collectionName != null && collectionName.length > 0),
-        assert(record != null && record > 0);
+        assert(record != null);
 
   @override
   bool operator ==(Object other) =>
@@ -39,16 +40,15 @@ class StopwatchRecord {
 
 @immutable
 class RecordsColumn {
-  /// Note that the records are of type [IList] already.
-  final IList<StopwatchRecord> records;
+  final List<StopwatchRecord> records;
   final String title;
 
-  RecordsColumn.empty({String title = "Column"}) : this._(const <StopwatchRecord>[].lock, title);
+  RecordsColumn.empty({String title = "Column"}) : this._(const <StopwatchRecord>[], title);
 
   const RecordsColumn._(this.records, this.title) : assert(title != null && title.length > 0);
 
   RecordsColumn operator +(StopwatchRecord stopwatchRecord) =>
-      RecordsColumn._(records.add(stopwatchRecord), title);
+      RecordsColumn._(List.of([...records, stopwatchRecord]), title);
 
   double get max {
     double max = 0;
@@ -75,7 +75,10 @@ class RecordsColumn {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is RecordsColumn && other.records == records;
+      identical(this, other) ||
+      other is RecordsColumn &&
+          runtimeType == other.runtimeType &&
+          ListEquality().equals(other.records, records);
 
   @override
   int get hashCode => records.hashCode;

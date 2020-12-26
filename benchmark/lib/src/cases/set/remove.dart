@@ -6,7 +6,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
-  final IList<SetBenchmarkBase> benchmarks;
+  final List<SetBenchmarkBase> benchmarks;
 
   SetRemoveBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <SetBenchmarkBase>[
@@ -14,7 +14,7 @@ class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
           ISetRemoveBenchmark(emitter: emitter),
           KtSetRemoveBenchmark(emitter: emitter),
           BuiltSetRemoveBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

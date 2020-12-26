@@ -11,7 +11,7 @@ class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   static const String keyToRead = "10";
 
   @override
-  final IList<MapBenchmarkBase> benchmarks;
+  final List<MapBenchmarkBase> benchmarks;
 
   MapReadBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <MapBenchmarkBase>[
@@ -19,7 +19,7 @@ class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
           IMapReadBenchmark(emitter: emitter),
           KtMapReadBenchmark(emitter: emitter),
           BuiltMapReadBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

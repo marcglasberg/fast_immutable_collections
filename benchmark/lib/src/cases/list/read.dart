@@ -11,7 +11,7 @@ class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   static const int indexToRead = 10;
 
   @override
-  final IList<ListBenchmarkBase> benchmarks;
+  final List<ListBenchmarkBase> benchmarks;
 
   ListReadBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <ListBenchmarkBase>[
@@ -19,7 +19,7 @@ class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
           IListReadBenchmark(emitter: emitter),
           KtListReadBenchmark(emitter: emitter),
           BuiltListReadBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

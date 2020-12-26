@@ -11,7 +11,7 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   static const Set<int> baseSet = {1, 2, 3}, setToAdd = {1, 2, 3, 4, 5, 6};
 
   @override
-  final IList<SetBenchmarkBase> benchmarks;
+  final List<SetBenchmarkBase> benchmarks;
 
   SetAddAllBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <SetBenchmarkBase>[
@@ -19,7 +19,7 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
           ISetAddAllBenchmark(emitter: emitter),
           KtSetAddAllBenchmark(emitter: emitter),
           BuiltSetAddAllBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

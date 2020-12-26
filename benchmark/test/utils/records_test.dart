@@ -68,7 +68,7 @@ void main() {
     test("Empty initialization", () {
       final RecordsColumn recordsColumn = RecordsColumn.empty();
 
-      expect(recordsColumn.records, allOf(isA<IList<StopwatchRecord>>(), isEmpty));
+      expect(recordsColumn.records, allOf(isA<List<StopwatchRecord>>(), isEmpty));
     });
 
     test("Title cannot be null nor have length equal to zero", () {

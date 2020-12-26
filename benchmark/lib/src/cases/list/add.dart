@@ -7,10 +7,10 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 // /////////////////////////////////////////////////////////////////////////////
 
 class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-  static const int innerRuns = 10000;
+  static const int innerRuns = 1000;
 
   @override
-  final IList<ListBenchmarkBase> benchmarks;
+  final List<ListBenchmarkBase> benchmarks;
 
   ListAddBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <ListBenchmarkBase>[
@@ -19,7 +19,7 @@ class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
           KtListAddBenchmark(emitter: emitter),
           BuiltListAddWithRebuildBenchmark(emitter: emitter),
           BuiltListAddWithListBuilderBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 
