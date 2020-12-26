@@ -146,9 +146,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   Set<T> get unlockView => iter.unlockView;
 
-  // TODO: Marcelo, a tipagem dos parâmetros dos próximos métodos não deveria ser mais específica?
-  // Algo como `Iterable<T>` ou `ISet<T>` ao invés de `Set<Object>`?
-  bool containsAll(Iterable<Object> other) => iter.containsAll(other);
+  bool containsAll(Iterable<T> other) => iter.containsAll(other);
 
   ISet<T> difference(Set<Object> other) => iter.difference(other);
 

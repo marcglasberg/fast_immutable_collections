@@ -1082,8 +1082,6 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  // TODO: Marcelo, o nome da função é getOrNull mas ela nunca retorna null?
-  // Pelo menos é isso que está escrito na documentação...
   test("getOrNull", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
@@ -1490,8 +1488,6 @@ void main() {
     });
     final IMapOfSets<String, int> iMapOfSetsCleared = iMapOfSets.clear();
 
-    // TODO: Marcelo, Ao que parece `.empty` leva a uma chamada sobre em `IMapOfSets.from` com
-    // `mapOfSets` como `null`. Para resolver isso, eu adicionei um `?.` no `mapOfSets.map`.
     expect(iMapOfSetsCleared.unlock, <String, Set<int>>{});
 
     // 2) If removeEmptySets == false
@@ -1593,10 +1589,11 @@ void main() {
       "2": {4},
       "3": {10, 11},
     });
-    // TODO: Marcelo, talvez não seria melhor renomear este método para `updateSet`?
-    // TODO: Este método nao possui o parâmetro `value` (`Item`), como no caso do IMap, é isso
-    // mesmo?
-    IMapOfSets<String, int> newIMapOfSets = iMapOfSets.update("1", (ISet<int> set) => {100}.lock);
+
+    var previousSet = Output<ISet<int>>();
+
+    IMapOfSets<String, int> newIMapOfSets =
+        iMapOfSets.update("1", (ISet<int> set) => {100}.lock, previousSet: previousSet);
 
     expect(
         newIMapOfSets,
@@ -1605,6 +1602,8 @@ void main() {
           "2": {4},
           "3": {10, 11},
         }));
+
+    expect(previousSet.value, {1, 2, 3});
 
     // 2) Updating a nonexistent key
     iMapOfSets = IMapOfSets({
@@ -1746,8 +1745,28 @@ void main() {
     iMapOfSets = IMapOfSets.withConfig({"a": {}}, ConfigMapOfSets(removeEmptySets: false));
 
     expect(iMapOfSets.unlock, {"a": <int>{}});
+    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: true).unlock, {
+      null: {"a"}
+    });
+    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: false), isEmpty);
 
-    // TODO: Marcelo, como definir isso?
+    iMapOfSets = IMapOfSets.withConfig({
+      "a": <int>{},
+      "b": <int>{},
+      "c": <int>{1},
+      "d": <int>{2},
+      "e": <int>{1},
+    }, ConfigMapOfSets(removeEmptySets: false));
+
+    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: true).unlock, {
+      null: {"a", "b"},
+      1: {"c", "e"},
+      2: {"d"},
+    });
+    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: false).unlock, {
+      1: {"c", "e"},
+      2: {"d"},
+    });
   });
 
   // //////////////////////////////////////////////////////////////////////////////
@@ -1804,16 +1823,14 @@ void main() {
 
   // //////////////////////////////////////////////////////////////////////////////
 
-  // TODO: Marcelo, sugiro mudarmos o nome deste método para algo no plural, como
-  // removeValuesFromKeyWhere.
-  test("removeValueWhere", () {
+  test("removeValuesFromKeyWhere", () {
     // 1) Regular usage
     final IMapOfSets<String, int> mapOfSets = {
       "a": {1, 2},
       "b": {11, 12, 13},
     }.lock;
 
-    expect(mapOfSets.removeValueWhere("b", (int value) => value > 11).unlock, {
+    expect(mapOfSets.removeValuesFromKeyWhere("b", (int value) => value > 11).unlock, {
       "a": {1, 2},
       "b": {11},
     });
@@ -1828,10 +1845,10 @@ void main() {
       "b": {11, 12, 13},
     }.lock.withConfig(ConfigMapOfSets(removeEmptySets: false));
 
-    expect(mapOfSets1.removeValueWhere("b", (int value) => value > 10).unlock, {
+    expect(mapOfSets1.removeValuesFromKeyWhere("b", (int value) => value > 10).unlock, {
       "a": {1, 2},
     });
-    expect(mapOfSets2.removeValueWhere("b", (int value) => value > 10).unlock, {
+    expect(mapOfSets2.removeValuesFromKeyWhere("b", (int value) => value > 10).unlock, {
       "a": {1, 2},
       "b": <int>{}
     });

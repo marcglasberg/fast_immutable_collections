@@ -885,9 +885,9 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Look up the value of [key], or add a new value if it isn't there.
   ///
-  /// Returns the modified map, and sets the [value] associated to [key],
+  /// Returns the modified map, and sets the [previousValue] associated to [key],
   /// if there is one. Otherwise calls [ifAbsent] to get a new value,
-  /// associates [key] to that value, and then sets the new [value].
+  /// associates [key] to that value, and then sets the new [previousValue].
   ///
   /// ```dart
   /// IMap<String, int> scores = {"Bob": 36}.lock;
@@ -906,19 +906,20 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Calling [ifAbsent] must not add or remove keys from the map.
   ///
-  /// See also: [Output]
-  IMap<K, V> putIfAbsent(K key, V Function() ifAbsent, {Output<V> value}) {
+  ///
+  IMap<K, V> putIfAbsent(
+    K key,
+    V Function() ifAbsent, {
+    Output<V> previousValue,
+  }) {
     // TODO: Still need to implement efficiently.
     Map<K, V> map = unlock;
     var result = map.putIfAbsent(key, ifAbsent);
-    if (value != null) value.save(result);
+    if (previousValue != null) previousValue.save(result);
     return IMap._unsafeFromMap(map, config: config);
   }
 
-  // TODO: Marcelo, por favor, adicione documentação sobre `ifRemove`.
   /// Updates the value for the provided [key].
-  ///
-  /// Returns the modified map and sets the new [value] of the key.
   ///
   /// If the key is present, invokes [update] with the current value and stores
   /// the new value in the map. However, if [ifRemove] is provided, the updated value will
@@ -927,18 +928,19 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
   /// and adds the key with the returned value to the map.
-  ///
   /// If the key is not present and [ifAbsent] is not provided, return the original map
   /// without modification. Note: If you want [ifAbsent] to throw an error, pass it like
   /// this: `ifAbsent: () => throw ArgumentError();`.
   ///
-  /// See also: [Output]
+  /// If you want to get the original value before the update, you can provide the
+  /// [previousValue] parameter.
+  ///
   IMap<K, V> update(
     K key,
     V Function(V value) update, {
     bool Function(K key, V value) ifRemove,
     V Function() ifAbsent,
-    Output<V> value,
+    Output<V> previousValue,
   }) {
     assert(update != null);
     // ---
@@ -955,7 +957,7 @@ class IMap<K, V> // ignore: must_be_immutable
         map[key] = updatedValue;
       }
 
-      if (value != null) value.save(updatedValue);
+      if (previousValue != null) previousValue.save(originalValue);
       return IMap._unsafeFromMap(map, config: config);
     }
     //
@@ -963,11 +965,11 @@ class IMap<K, V> // ignore: must_be_immutable
     else {
       if (ifAbsent != null) {
         var updatedValue = ifAbsent();
-        if (value != null) value.save(updatedValue);
+        if (previousValue != null) previousValue.save(null);
         map[key] = updatedValue;
         return IMap._unsafeFromMap(map, config: config);
       } else {
-        if (value != null) value.save(null);
+        if (previousValue != null) previousValue.save(null);
         return this;
       }
     }

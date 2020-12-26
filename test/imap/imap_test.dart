@@ -1266,14 +1266,11 @@ void main() {
   test("putIfAbsent", () {
     IMap<String, int> scores = {"Bob": 36}.lock;
 
-    Output<int> item;
+    Output<int> value;
     for (String key in ["Bob", "Rohan", "Sophia"]) {
-      item = Output();
-      // TODO: Marcelo, nomear o parametro de `value` mas com tipo `Item`, que contém um `value`
-      // como propriedade me parece um tanto confuso. E o método `update` ainda possui `value`
-      // como parâmetro da função de `update`.
-      scores = scores.putIfAbsent(key, () => key.length, value: item);
-      expect(item.value, scores[key]);
+      value = Output();
+      scores = scores.putIfAbsent(key, () => key.length, previousValue: value);
+      expect(value.value, scores[key]);
     }
 
     expect(scores["Bob"], 36);
@@ -1287,44 +1284,46 @@ void main() {
     // 1) Existent key
     IMap<String, int> scores = {"Bob": 36}.lock;
 
-    Output<int> item = Output();
-    IMap<String, int> updatedScores = scores.update("Bob", (int value) => value * 2, value: item);
+    Output<int> value = Output();
+    IMap<String, int> updatedScores =
+        scores.update("Bob", (int value) => value * 2, previousValue: value);
 
     expect(scores.unlock, {"Bob": 36});
     expect(updatedScores.unlock, {"Bob": 72});
-    expect(item.value, 72);
+    expect(value.value, 36);
 
     // 2) Nonexistent key
     scores = {"Bob": 36}.lock;
 
-    item = Output();
-    updatedScores = scores.update("Joe", (int value) => value * 2, value: item, ifAbsent: () => 1);
+    value = Output();
+    updatedScores =
+        scores.update("Joe", (int value) => value * 2, previousValue: value, ifAbsent: () => 1);
 
     expect(scores.unlock, {"Bob": 36});
     expect(updatedScores.unlock, {"Bob": 36, "Joe": 1});
-    expect(item.value, 1);
+    expect(value.value, null);
 
     // 3) Return the original map if update a nonexistent key without the ifAbsent parameter
     scores = {"Bob": 36}.lock;
 
-    item = Output();
+    value = Output();
     expect(
         () => scores.update("Joe", (int value) => value * 2,
-            value: item, ifAbsent: () => throw ArgumentError()),
+            previousValue: value, ifAbsent: () => throw ArgumentError()),
         throwsArgumentError);
 
-    item = Output();
-    expect(scores.update("Joe", (int value) => value * 2, value: item), scores);
-    expect(item.value, null);
+    value = Output();
+    expect(scores.update("Joe", (int value) => value * 2, previousValue: value), scores);
+    expect(value.value, null);
 
     // 4) ifRemove
     scores = {"Bob": 36, "Joe": 10}.lock;
 
-    item = Output();
+    value = Output();
     final IMap<String, int> newScores = scores.update("Joe", (int value) => 2 * value,
-        ifRemove: (String key, int value) => value == 20, value: item);
+        ifRemove: (String key, int value) => value == 20, previousValue: value);
     expect(newScores.unlock, {"Bob": 36});
-    expect(item.value, 20);
+    expect(value.value, 10);
 
     // 5) update cannot be null
     expect(() => {"Bob": 36, "Joe": 10}.lock.update("Bob", null), throwsAssertionError);

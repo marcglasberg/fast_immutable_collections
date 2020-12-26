@@ -1029,9 +1029,9 @@ void main() {
 
   test("containsAll", () {
     final ISet<int> iset = {1, 2, 3, 4}.lock;
-    // TODO: Marcelo, o argumento desses métodos não deveria ser `Iterable` ou `ISet`?
     expect(iset.containsAll([2, 2, 3]), isTrue);
     expect(iset.containsAll({1, 2, 3, 4}), isTrue);
+    expect(iset.containsAll({1, 2, 3, 4}.lock), isTrue);
     expect(iset.containsAll({10, 20, 30, 40}), isFalse);
   });
 

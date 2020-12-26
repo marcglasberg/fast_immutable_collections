@@ -484,16 +484,9 @@ class ISet<T> // ignore: must_be_immutable
     return _s.any(test);
   }
 
-  /// Provides a **view** of this set as a set of [R] instances.
-  ///
-  /// If this set contains only instances of [R], all read operations
-  /// will work correctly. If any operation tries to access an element
-  /// that is not an instance of [R], the access will throw instead.
-  ///
-  /// Elements added to the set (e.g., by using [add] or [addAll])
-  /// must be instance of [R] to be valid arguments to the adding function,
-  /// and they must be instances of [E] as well to be accepted by
-  /// this set as well.
+  /// Returns a set of [R] instances.
+  /// If this set contains instances which cannot be cast to [R],
+  /// it will throw an error.
   @override
   ISet<R> cast<R>() {
     var result = _s.cast<R>();
@@ -812,7 +805,7 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> clear() => empty<T>(config);
 
   /// Returns whether this [ISet] contains all the elements of [other].
-  bool containsAll(Iterable<Object> other) {
+  bool containsAll(Iterable<T> other) {
     _count();
     // TODO: Still need to implement efficiently.
     return unlock.containsAll(other);
