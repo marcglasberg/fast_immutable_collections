@@ -1,7 +1,6 @@
-import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:collection/collection.dart";
-import 'package:fast_immutable_collections/src/ilist/reversed_list_view.dart';
+import "package:fast_immutable_collections/src/ilist/reversed_list_view.dart";
 
 extension ListExtension<T> on List<T> {
   //
