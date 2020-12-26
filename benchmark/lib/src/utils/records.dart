@@ -148,18 +148,16 @@ class RecordsTable {
 
   /// Note that we are currently rounding off at 2 floating points.
   RecordsColumn get normalizedAgainstRuns =>
-      _normalize(config.runs.toDouble(), "Time (${_mu}s) / Runs");
+      _normalize(config.runs.toDouble(), "Time (μs) / Runs");
 
   /// Note that we are currently rounding off at 2 floating points.
   RecordsColumn get normalizedAgainstSize =>
-      _normalize(config.size.toDouble(), "Time (${_mu}s) / Size");
+      _normalize(config.size.toDouble(), "Time (μs) / Size");
 
   List<String> get rowNames => resultsColumn.rowNames;
 
   RecordsTable filter(String collectionName) =>
       RecordsTable(resultsColumn: resultsColumn.filter(collectionName), config: config);
-
-  static const String _mu = "\u{03BC}";
 
   @override
   String toString() {

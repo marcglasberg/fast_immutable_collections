@@ -31,13 +31,9 @@ class _GraphScreenState extends State<GraphScreen> {
   bool _onlyOneBenchmark = false;
   bool _stacked = false;
 
-  RecordsTable get _currentTable {
-    if (_currentTableIndex >= widget.tables.length) {
-      return widget.tables.last;
-    } else {
-      return widget.tables[_currentTableIndex];
-    }
-  }
+  RecordsTable get _currentTable => _currentTableIndex >= widget.tables.length
+      ? widget.tables.last
+      : widget.tables[_currentTableIndex];
 
   List<String> _possibleFilters;
 
@@ -115,12 +111,10 @@ class _GraphScreenState extends State<GraphScreen> {
                         ),
                       )
                       .toList(),
-                  onChanged: (String newFilter) {
-                    setState(() {
-                      _possibleFilters.remove(newFilter);
-                      _currentFilters.add(newFilter);
-                    });
-                  },
+                  onChanged: (String newFilter) => setState(() {
+                    _possibleFilters.remove(newFilter);
+                    _currentFilters.add(newFilter);
+                  }),
                 ),
               ],
             ),

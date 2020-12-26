@@ -8,16 +8,13 @@ class BarChart extends StatelessWidget {
 
   const BarChart({@required this.recordsTable});
 
-  List<StopwatchRecord> get _normalizedAgainstMax =>
-      recordsTable.normalizedAgainstMax.records.toList();
-
   List<charts.Series<StopwatchRecord, String>> get _seriesList => [
         charts.Series<StopwatchRecord, String>(
           id: "Normalized Against\nthe Maximum Value",
           colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
           domainFn: (StopwatchRecord record, _) => record.collectionName,
           measureFn: (StopwatchRecord record, _) => record.record,
-          data: _normalizedAgainstMax,
+          data: _normalizedAgainstMaxPrefixedByAbs(recordsTable),
         ),
       ];
 
@@ -28,13 +25,28 @@ class BarChart extends StatelessWidget {
       animate: true,
       animationDuration: const Duration(milliseconds: 100),
       barRendererDecorator: charts.BarLabelDecorator<String>(),
-      domainAxis:
-          const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       behaviors: <charts.ChartBehavior>[
         charts.SeriesLegend(position: charts.BehaviorPosition.top),
       ],
     );
   }
+}
+
+List<StopwatchRecord> _normalizedAgainstMaxPrefixedByAbs(RecordsTable table) {
+  final List<StopwatchRecord> records = [];
+  final RecordsColumn resultsColumn = table.resultsColumn;
+  final RecordsColumn normalizedAgainstMaxColumn = table.normalizedAgainstMax;
+  for (int i = 0; i < resultsColumn.records.length; i++) {
+    final StopwatchRecord stopwatchRecord = StopwatchRecord(
+      collectionName: resultsColumn.records[i].record.round().toString() +
+          " μs | " +
+          normalizedAgainstMaxColumn.records[i].collectionName,
+      record: normalizedAgainstMaxColumn.records[i].record,
+    );
+    records.add(stopwatchRecord);
+  }
+  return records;
 }
 
 class StackedBarChart extends StatelessWidget {
@@ -48,7 +60,7 @@ class StackedBarChart extends StatelessWidget {
             id: "${recordsTable.config.size}",
             domainFn: (StopwatchRecord record, _) => record.collectionName,
             measureFn: (StopwatchRecord record, _) => record.record,
-            data: recordsTable.normalizedAgainstMax.records.toList(),
+            data: _normalizedAgainstMaxPrefixedByAbs(recordsTable),
           )
       ];
 
@@ -60,8 +72,7 @@ class StackedBarChart extends StatelessWidget {
       vertical: false,
       animationDuration: const Duration(milliseconds: 100),
       barRendererDecorator: charts.BarLabelDecorator<String>(),
-      domainAxis:
-          const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       behaviors: <charts.ChartBehavior>[
         charts.SeriesLegend(position: charts.BehaviorPosition.top),
       ],
