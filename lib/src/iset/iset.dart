@@ -218,6 +218,24 @@ class ISet<T> // ignore: must_be_immutable
   ISet._unsafeFromSet(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
+  /// Explicitly get a simple [Iterable] from the [ISet].
+  ///
+  /// While many [List] methods, like [map] and [where] return an [Iterable],
+  /// the equivalent [ISet] methods return another [ISet]. As a result,
+  /// if you want to do lazy processing from an [ISet] you must first use
+  /// [iter] to get a regular [Iterable] which is not an [ISet].
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// // Direct ISet use:
+  /// ISet iset = iset.where((x) => x != null).take(3);
+  ///
+  /// // Lazy processing:
+  /// ISet iset = iset.iter.where((x) => x != null).take(3).toISet();
+  /// ```
+  Iterable<T> get iter => iterator.toIterable();
+
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
   ISet<T> get withIdentityEquals =>
       config.isDeepEquals ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false)) : this;

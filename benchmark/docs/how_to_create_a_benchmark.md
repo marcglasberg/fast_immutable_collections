@@ -8,7 +8,7 @@ Please do check out the [`benchmark_harness`][benchmark_harness] package before 
 ## 1. Creating a Benchmark
 
 1. Create a use case file under the `benchmark/case` folder.
-1. Create your benchmarks extending from base cases &mdash; for example `ListBenchmarkBase`, which is in `benchmark/utils/list_benchmark_base.dart`. 
+1. Create your benchmarks extending from base cases — for example `ListBenchmarkBase`, which is in `benchmark/utils/list_benchmark_base.dart`. 
    - A simple example would be something like:
        ```dart
        class _SampleBenchmark extends ListBenchmarkBase {

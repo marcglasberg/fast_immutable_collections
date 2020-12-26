@@ -1,7 +1,7 @@
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
-/// Run the benchmarks with, for example &mdash; from the top of the project
-/// &mdash;:
+/// Run the benchmarks with, for example — from the top of the project
+/// —:
 ///
 /// ```sh
 /// dart benchmark/lib/src/benchmarks.dart

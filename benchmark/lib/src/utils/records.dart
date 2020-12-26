@@ -66,8 +66,8 @@ class RecordsColumn {
     return min;
   }
 
-  /// Finding the mutable record is linked to having the word *mutable* &mdash; it doesn't really
-  /// matter if it's uppercase or not &mdash; somewhere on the row's name.
+  /// Finding the mutable record is linked to having the word *mutable* — it doesn't really
+  /// matter if it's uppercase or not — somewhere on the row's name.
   double get mutableRecord => records
       .where((StopwatchRecord record) => record.collectionName.toLowerCase().contains("mutable"))
       .first

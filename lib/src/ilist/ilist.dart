@@ -236,6 +236,24 @@ class IList<T> // ignore: must_be_immutable
       : assert(config != null),
         _l = (list == null) ? LFlat.empty<T>() : LFlat<T>.unsafe(list);
 
+  /// Explicitly get a simple [Iterable] from the [IList].
+  ///
+  /// While many [List] methods, like [map] and [where] return an [Iterable],
+  /// the equivalent [IList] methods return another [IList]. As a result,
+  /// if you want to do lazy processing from an [IList] you must first use
+  /// [iter] to get a regular [Iterable] which is not an [IList].
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// // Direct IList use:
+  /// IList ilist = ilist.where((x) => x != null).take(3);
+  ///
+  /// // Lazy processing:
+  /// IList ilist = ilist.iter.where((x) => x != null).take(3).toIList();
+  /// ```
+  Iterable<T> get iter => iterator.toIterable();
+
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
   IList<T> get withIdentityEquals =>
       config.isDeepEquals ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false)) : this;

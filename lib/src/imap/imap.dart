@@ -519,7 +519,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// the original [IMap].
   Map<K, V> get unlock => _m.unlock;
 
-  /// Unlocks the map, returning a regular &mdash; *mutable, ordered, sorted* &mdash; [Map]
+  /// Unlocks the map, returning a regular, *mutable, ordered, sorted*, [Map]
   /// of type [LinkedHashMap]. This map is "safe", in the sense that is
   /// independent from the original [IMap].
   Map<K, V> get unlockSorted => <K, V>{}..addEntries(entryList());

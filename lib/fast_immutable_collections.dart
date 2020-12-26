@@ -18,6 +18,7 @@ export "src/ilist/ilist_of_2.dart";
 export "src/ilist/from_iterable_ilist_mixin.dart";
 export "src/ilist/modifiable_list_from_ilist.dart";
 export "src/ilist/unmodifiable_list_from_ilist.dart";
+export "src/ilist/reversed_list_view.dart";
 
 // IMap:
 export "src/imap/imap.dart";

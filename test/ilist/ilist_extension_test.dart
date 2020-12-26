@@ -178,12 +178,11 @@ void main() {
     expect(list1.compareAsSets(list5), isFalse);
 
     // 3) Nulls
-    // TODO: Marcelo, se `this == null` como podemos então chamar o método `compareAsSets`?
     List<int> list;
     expect(list.compareAsSets(null), isTrue);
     expect(list.compareAsSets([]), isFalse);
     expect([].compareAsSets(list), isFalse);
-  }, skip: true);
+  });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -608,43 +607,39 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView runtime type", () {
+  test("reversedView runtime type", () {
     expect([].reversed is Iterable, isTrue);
     expect([].reversed is List, isFalse);
-    expect([].reversedListView is List, isTrue);
-    expect([1].reversedListView is List<int>, isTrue);
+    expect([].reversedView is List, isTrue);
+    expect([1].reversedView is List<int>, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView | single, first, last, length", () {
+  test("reversedView | single, first, last, length", () {
     // 1) single
 
-    expect(() => [].reversedListView.single, throwsStateError);
-    expect(() => [1, 2].reversedListView.single, throwsStateError);
-    expect([1].reversedListView.single, 1);
+    expect(() => [].reversedView.single, throwsStateError);
+    expect(() => [1, 2].reversedView.single, throwsStateError);
+    expect([1].reversedView.single, 1);
 
     // 2) first | last
 
     var list = [0, 1, 2, 3, 3, 4];
-    var inverted = list.reversedListView;
+    var reversed = list.reversedView;
 
-    expect(inverted.first, 4);
+    expect(reversed.first, 4);
 
-    expect(inverted.last, 0);
+    expect(reversed.last, 0);
 
-    expect(() => [].reversedListView.first, throwsStateError);
-    expect(() => [].reversedListView.last, throwsStateError);
+    expect(() => [].reversedView.first, throwsStateError);
+    expect(() => [].reversedView.last, throwsStateError);
 
     // 3) length
 
-    expect(inverted.length, 6);
+    expect(reversed.length, 6);
 
     // 4) length, first and  last setters
-
-    // TODO: Marcelo, é isso mesmo que você gostaria que fossem estes testes?
-    list = [1, 2, 3].reversedListView;
-    expect(() => list.length = 100, throwsUnsupportedError);
 
     list.first = 100;
     expect(list.first, 100);
@@ -655,65 +650,76 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.indexWhere", () {
-    var list = [0, 1, 2, 3, 3, 4];
-    var inverted = list.reversedListView;
+  test("reversedView | set length", () {
+    var list = [0, 1, 2, 3, 4, 5, 6];
+    var reversed = list.reversedView;
 
-    expect(inverted.indexWhere((i) => i == 0), 5);
-    expect(inverted.indexWhere((i) => i == 1), 4);
-    expect(inverted.indexWhere((i) => i == 2), 3);
-    expect(inverted.indexWhere((i) => i == 3), 1);
-    expect(inverted.indexWhere((i) => i == 4), 0);
-    expect(inverted.indexWhere((i) => i == 5), null);
-    expect(inverted.indexWhere((i) => i == 4, 1), null);
+    reversed.length = 4;
+    expect(reversed, [6, 5, 4, 3]);
+    expect(list, [3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.lastIndexWhere", () {
+  test("reversedView.indexWhere", () {
     var list = [0, 1, 2, 3, 3, 4];
-    var inverted = list.reversedListView;
+    var reversed = list.reversedView;
 
-    expect(inverted.lastIndexWhere((i) => i == 0), 5);
-    expect(inverted.lastIndexWhere((i) => i == 1), 4);
-    expect(inverted.lastIndexWhere((i) => i == 2), 3);
-    expect(inverted.lastIndexWhere((i) => i == 3), 2);
-    expect(inverted.lastIndexWhere((i) => i == 4), 0);
-    expect(inverted.lastIndexWhere((i) => i == 5), null);
-
-    expect(inverted.lastIndexWhere((i) => i == 0, 1), null);
+    expect(reversed.indexWhere((i) => i == 0), 5);
+    expect(reversed.indexWhere((i) => i == 1), 4);
+    expect(reversed.indexWhere((i) => i == 2), 3);
+    expect(reversed.indexWhere((i) => i == 3), 1);
+    expect(reversed.indexWhere((i) => i == 4), 0);
+    expect(reversed.indexWhere((i) => i == 5), null);
+    expect(reversed.indexWhere((i) => i == 4, 1), null);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.+", () {
-    List<int> list = [1, 2, 3].reversedListView;
+  test("reversedView.lastIndexWhere", () {
+    var list = [0, 1, 2, 3, 3, 4];
+    var reversed = list.reversedView;
+
+    expect(reversed.lastIndexWhere((i) => i == 0), 5);
+    expect(reversed.lastIndexWhere((i) => i == 1), 4);
+    expect(reversed.lastIndexWhere((i) => i == 2), 3);
+    expect(reversed.lastIndexWhere((i) => i == 3), 2);
+    expect(reversed.lastIndexWhere((i) => i == 4), 0);
+    expect(reversed.lastIndexWhere((i) => i == 5), null);
+
+    expect(reversed.lastIndexWhere((i) => i == 0, 1), null);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.+", () {
+    List<int> list = [1, 2, 3].reversedView;
 
     // TODO
     expect(list + [4, 5, 6], [3, 2, 1, 4, 5, 6]);
     expect(list + [4], [3, 2, 1, 4]);
     expect(list + [null], [3, 2, 1, null]);
     expect(() => list + null, throwsNoSuchMethodError);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.[]", () {
-    const List<int> list = [0, 1, 2, 3, 4];
-    final List<int> inverted = list.reversedListView;
-
-    expect(inverted[0], 4);
-    expect(inverted[1], 3);
-    expect(inverted[2], 2);
-    expect(inverted[3], 1);
-    expect(inverted[4], 0);
-    expect(() => inverted[5], throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.[]=", () {
-    List<int> list = [1, 2, 3].reversedListView;
+  test("reversedView.[]", () {
+    const List<int> list = [0, 1, 2, 3, 4];
+    final List<int> reversed = list.reversedView;
+
+    expect(reversed[0], 4);
+    expect(reversed[1], 3);
+    expect(reversed[2], 2);
+    expect(reversed[3], 1);
+    expect(reversed[4], 0);
+    expect(() => reversed[5], throwsRangeError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.[]=", () {
+    List<int> list = [1, 2, 3].reversedView;
 
     expect(() => list[-100] = 10, throwsRangeError);
     expect(() => list[-1] = 10, throwsRangeError);
@@ -730,8 +736,8 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.add", () {
-    List<int> reversed = [1, 2, 3].reversedListView;
+  test("reversedView.add", () {
+    List<int> reversed = [1, 2, 3].reversedView;
 
     reversed.add(1);
     expect(reversed, [3, 2, 1, 1]);
@@ -739,220 +745,263 @@ void main() {
     reversed.add(null);
     expect(reversed, [3, 2, 1, 1, null]);
 
-    reversed = <int>[null].reversedListView;
+    reversed = <int>[null].reversedView;
     reversed.add(1);
     expect(reversed, <int>[null, 1]);
 
-    reversed = [null, 1, null, 2].reversedListView;
+    reversed = [null, 1, null, 2].reversedView;
     reversed.add(10);
     expect(reversed, <int>[2, null, 1, null, 10]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.addAll", () {
-    List<int> reversed = [1, 2, 3].reversedListView;
+  test("reversedView.addAll", () {
+    List<int> reversed = [1, 2, 3].reversedView;
 
     reversed.addAll([1, 2]);
     expect(reversed, [3, 2, 1, 1, 2]);
 
     reversed.addAll([1, null]);
-    expect(reversed, [3, 2, 1, 1, null]);
+    expect(reversed, [3, 2, 1, 1, 2, 1, null]);
 
-    reversed = <int>[null].reversedListView;
+    reversed = <int>[null].reversedView;
     reversed.addAll([1, 2]);
     expect(reversed, <int>[null, 1, 2]);
 
-    reversed = [null, 1, null, 2].reversedListView;
+    reversed = [null, 1, null, 2].reversedView;
     reversed.addAll([10, 11]);
     expect(reversed, <int>[2, null, 1, null, 10, 11]);
-  }, skip: true);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.elementAt", () {
+  test("reversedView.elementAt", () {
     const List<int> list = [0, 1, 2, 3, 4];
-    final List<int> inverted = list.reversedListView;
+    final List<int> reversed = list.reversedView;
 
-    expect(inverted.elementAt(0), 4);
-    expect(inverted.elementAt(1), 3);
-    expect(inverted.elementAt(2), 2);
-    expect(inverted.elementAt(3), 1);
-    expect(inverted.elementAt(4), 0);
-    expect(() => inverted.elementAt(5), throwsRangeError);
+    expect(reversed.elementAt(0), 4);
+    expect(reversed.elementAt(1), 3);
+    expect(reversed.elementAt(2), 2);
+    expect(reversed.elementAt(3), 1);
+    expect(reversed.elementAt(4), 0);
+    expect(() => reversed.elementAt(5), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.any", () {
-    final List<int> inverted = [0, 1, 2, 3, 4].reversedListView;
+  test("reversedView.any", () {
+    final List<int> reversed = [0, 1, 2, 3, 4].reversedView;
 
-    expect(inverted.any((i) => i == 2), isTrue);
-    expect(inverted.any((i) => i == 5), isFalse);
+    expect(reversed.any((i) => i == 2), isTrue);
+    expect(reversed.any((i) => i == 5), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.asMap", () {
-    expect([1, 2, 3].reversedListView.asMap(), {0: 3, 1: 2, 2: 1});
+  test("reversedView.asMap", () {
+    expect([1, 2, 3].reversedView.asMap(), {0: 3, 1: 2, 2: 1});
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.cast", () {
+  test("reversedView.cast", () {
     const TypeMatcher<TypeError> isTypeError = TypeMatcher<TypeError>();
     final Matcher throwsTypeError = throwsA(isTypeError);
 
-    final List<int> inverted = [1, 2, 3].reversedListView;
-    expect(inverted.cast<num>(), allOf(isA<List<num>>(), <num>[3, 2, 1]));
-    expect(() => inverted.cast<String>(), throwsTypeError);
+    final List<int> reversed = [1, 2, 3].reversedView;
+    expect(reversed.cast<num>(), allOf(isA<List<num>>(), <num>[3, 2, 1]));
+    expect(() => reversed.cast<String>(), throwsTypeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.clear", () {
-    final List<int> inverted = [0, 1, 2, 3, 4].reversedListView;
-    expect(inverted, [4, 3, 2, 1, 0]);
-    expect(inverted.isEmpty, isFalse);
-    inverted.clear();
-    expect(inverted, []);
-    expect(inverted.isEmpty, isTrue);
+  test("reversedView.clear", () {
+    final List<int> reversed = [0, 1, 2, 3, 4].reversedView;
+    expect(reversed, [4, 3, 2, 1, 0]);
+    expect(reversed.isEmpty, isFalse);
+    reversed.clear();
+    expect(reversed, []);
+    expect(reversed.isEmpty, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.contains", () {
-    final List<int> inverted = [0, 1, 2, 3, 4].reversedListView;
+  test("reversedView.contains", () {
+    final List<int> reversed = [0, 1, 2, 3, 4].reversedView;
 
-    expect(inverted.contains(0), isTrue);
-    expect(inverted.contains(1), isTrue);
-    expect(inverted.contains(2), isTrue);
-    expect(inverted.contains(3), isTrue);
-    expect(inverted.contains(4), isTrue);
-    expect(inverted.contains(5), isFalse);
+    expect(reversed.contains(0), isTrue);
+    expect(reversed.contains(1), isTrue);
+    expect(reversed.contains(2), isTrue);
+    expect(reversed.contains(3), isTrue);
+    expect(reversed.contains(4), isTrue);
+    expect(reversed.contains(5), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.every", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.every((int v) => v > 0), isTrue);
-    expect(inverted.every((int v) => v < 0), isFalse);
-    expect(inverted.every((int v) => v != 4), isFalse);
+  test("reversedView.every", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.every((int v) => v > 0), isTrue);
+    expect(reversed.every((int v) => v < 0), isFalse);
+    expect(reversed.every((int v) => v != 4), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.expand", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.expand((int v) => [v, v]),
+  test("reversedView.expand", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.expand((int v) => [v, v]),
         allOf(isA<Iterable<int>>(), [6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]));
-    expect(inverted.expand((int v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[]));
+    expect(reversed.expand((int v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.fillRange", () {
-    final List<int> list = List<int>(3).reversedListView;
-    list.fillRange(0, 2, 1);
-    expect(list, [1, 1, null]);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.firstWhere", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.firstWhere((int v) => v <= 1, orElse: () => 100), 1);
-    expect(inverted.firstWhere((int v) => v < 5, orElse: () => 100), 4);
-    expect(inverted.firstWhere((int v) => v > 5, orElse: () => 100), 6);
-    expect(inverted.firstWhere((int v) => v > 6, orElse: () => 100), 100);
+  test("reversedView.fillRange", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6, 7, 8, 9].reversedView;
+    reversed.fillRange(2, 5, -1);
+    expect(reversed, [9, 8, -1, -1, -1, 4, 3, 2, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.fold", () {
-    expect([1, 2, 3, 4, 5, 6].reversedListView.fold(100, (int p, int e) => p * (1 + e)), 504000);
+  test("reversedView.firstWhere", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.firstWhere((int v) => v <= 1, orElse: () => 100), 1);
+    expect(reversed.firstWhere((int v) => v < 5, orElse: () => 100), 4);
+    expect(reversed.firstWhere((int v) => v > 5, orElse: () => 100), 6);
+    expect(reversed.firstWhere((int v) => v > 6, orElse: () => 100), 100);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.followedBy", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.followedBy([7, 8]), [6, 5, 4, 3, 2, 1, 7, 8]);
-    expect(inverted.followedBy(<int>[].lock.add(7).addAll([8, 9])), [6, 5, 4, 3, 2, 1, 7, 8, 9]);
+  test("reversedView.fold", () {
+    expect([1, 2, 3, 4, 5, 6].reversedView.fold(100, (int p, int e) => p * (1 + e)), 504000);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.forEach", () {
+  test("reversedView.followedBy", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.followedBy([7, 8]), [6, 5, 4, 3, 2, 1, 7, 8]);
+    expect(reversed.followedBy(<int>[].lock.add(7).addAll([8, 9])), [6, 5, 4, 3, 2, 1, 7, 8, 9]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.forEach", () {
     int result = 100;
-    [1, 2, 3, 4, 5, 6].reversedListView.forEach((int v) => result *= 1 + v);
+    [1, 2, 3, 4, 5, 6].reversedView.forEach((int v) => result *= 1 + v);
     expect(result, 504000);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.getRange", () {
-    final List<String> colors = ["red", "green", "blue", "orange", "pink"].reversedListView;
-    final Iterable<String> range = colors.getRange(1, 4);
-    expect(range, ["green", "blue", "orange"]);
-    expect(colors, ["red", "green", "blue", "orange", "pink"]);
-  }, skip: true);
+  test("reversedView.getRange", () {
+    final List<String> colors = ["red", "green", "blue", "orange", "pink"].reversedView;
+    expect(colors, ["pink", "orange", "blue", "green", "red"]);
+    expect(colors.getRange(1, 4), ["orange", "blue", "green"]);
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.indexOf", () {
-    var inverted = ["do", "re", "mi", "re"].reversedListView;
-
-    // 1) Regular usage
-    expect(inverted.indexOf("re"), 0);
-    expect(inverted.indexOf("re", 1), 2);
-    expect(inverted.indexOf("fa"), -1);
-
-    // 2) Argument error
-    expect(() => inverted.indexOf("re", -1), throwsArgumentError);
-    expect(() => inverted.indexOf("re", 4), throwsArgumentError);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.insert", () {
-    final List<String> inverted = ["do", "re", "mi", "re"].reversedListView;
-    inverted.insert(2, "fa");
-
-    expect(inverted, ["re", "mi", "fa", "re", "do"]);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView || isEmpty | isNotEmpty", () {
-    expect([].reversedListView, isEmpty);
-    expect([1].reversedListView, isNotEmpty);
+    expect(() => colors.getRange(1, 400), throwsRangeError);
+    expect(() => colors.getRange(4, 1), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.iterator", () {
+  test("reversedView.indexOf", () {
+    //
+    var list = ["do", "re", "mi", "re"];
+    var reversed = list.reversedView;
+
+    // 1) Regular usage
+    expect(reversed.indexOf("fa"), -1);
+    expect(reversed.indexOf("do"), 3);
+    expect(reversed.indexOf("re"), 0);
+    expect(reversed.indexOf("re", 1), 2);
+
+    // 2) Wrong start
+    expect(list.indexOf("do", -1), 0);
+    expect(reversed.indexOf("re", -1), 0);
+    expect(list.indexOf("do", -10), 0);
+    expect(reversed.indexOf("re", -10), 0);
+    expect(list.indexOf("do", 100), -1);
+    expect(reversed.indexOf("re", 100), -1);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.lastIndexOf", () {
+    var list = ["re", "mi", "re", "do"];
+    var reversed = list.reversedView;
+
+    // 1) Regular usage
+    expect(reversed.lastIndexOf("fa"), -1);
+    expect(reversed.lastIndexOf("do"), 0);
+    expect(reversed.lastIndexOf("re"), 3);
+    expect(reversed.lastIndexOf("re", 0), -1);
+    expect(reversed.lastIndexOf("re", 1), 1);
+    expect(reversed.lastIndexOf("re", 2), 1);
+    expect(reversed.lastIndexOf("re", 3), 3);
+
+    // 2) Wrong start
+    expect(reversed.lastIndexOf("fa", 10), -1);
+    expect(reversed.lastIndexOf("fa", -10), -1);
+    expect(reversed.lastIndexOf("do", 10), 0);
+    expect(reversed.lastIndexOf("do", -10), -1);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.insert", () {
+    final List<String> reversed = ["do", "re", "mi", "re"].reversedView;
+    reversed.insert(2, "fa");
+
+    expect(reversed, ["re", "mi", "fa", "re", "do"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.insertAll", () {
+    List<String> reversed = ["do", "re", "mi", "re"].reversedView;
+    reversed.insertAll(2, ["fa"]);
+    expect(reversed, ["re", "mi", "fa", "re", "do"]);
+
+    reversed = ["do", "re", "mi", "re"].reversedView;
+    reversed.insertAll(2, ["fa", "sol"]);
+    expect(reversed, ["re", "mi", "fa", "sol", "re", "do"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView || isEmpty | isNotEmpty", () {
+    expect([].reversedView, isEmpty);
+    expect([1].reversedView, isNotEmpty);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.iterator", () {
     const List<int> list = [0, 1, 2, 3, 4];
-    final List<int> inverted = list.reversedListView;
-    var iterator = inverted.iterator;
+    final List<int> reversed = list.reversedView;
+    var iterator = reversed.iterator;
 
     expect(iterator.current, isNull);
 
     expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, inverted[0]);
+    expect(iterator.current, reversed[0]);
 
     expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, inverted[1]);
+    expect(iterator.current, reversed[1]);
 
     expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, inverted[2]);
+    expect(iterator.current, reversed[2]);
 
     expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, inverted[3]);
+    expect(iterator.current, reversed[3]);
 
     expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, inverted[4]);
+    expect(iterator.current, reversed[4]);
 
     expect(iterator.moveNext(), isFalse);
     expect(iterator.current, isNull);
@@ -960,43 +1009,29 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.lastIndexOf", () {
-    // 1) Regular Usage
-    List<String> inverted = ["do", "re", "mi", "re"].reversedListView;
-    expect(inverted.lastIndexOf("re", 1), 2);
-    expect(inverted.lastIndexOf("re"), 2);
-    expect(inverted.lastIndexOf("fa"), -1);
-
-    // 2) Start cannot be smaller than zero
-    inverted = ["do", "re", "mi", "re"].reversedListView;
-    expect(() => inverted.lastIndexOf("do", -1), throwsArgumentError);
-  }, skip: true);
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.lastWhere", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.lastWhere((int v) => v < 2, orElse: () => 100), 1);
-    expect(inverted.lastWhere((int v) => v < 5, orElse: () => 100), 1);
-    expect(inverted.lastWhere((int v) => v > 1, orElse: () => 100), 2);
-    expect(inverted.lastWhere((int v) => v >= 5, orElse: () => 100), 5);
-    expect(inverted.lastWhere((int v) => v < 50, orElse: () => 100), 1);
-    expect(inverted.lastWhere((int v) => v < 1, orElse: () => 100), 100);
+  test("reversedView.lastWhere", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.lastWhere((int v) => v < 2, orElse: () => 100), 1);
+    expect(reversed.lastWhere((int v) => v < 5, orElse: () => 100), 1);
+    expect(reversed.lastWhere((int v) => v > 1, orElse: () => 100), 2);
+    expect(reversed.lastWhere((int v) => v >= 5, orElse: () => 100), 5);
+    expect(reversed.lastWhere((int v) => v < 50, orElse: () => 100), 1);
+    expect(reversed.lastWhere((int v) => v < 1, orElse: () => 100), 100);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.map", () {
-    expect([1, 2, 3].reversedListView.map((int v) => v + 1), [4, 3, 2]);
-    expect([1, 2, 3, 4, 5, 6].reversedListView.map((int v) => v + 1), [7, 6, 5, 4, 3, 2]);
+  test("reversedView.map", () {
+    expect([1, 2, 3].reversedView.map((int v) => v + 1), [4, 3, 2]);
+    expect([1, 2, 3, 4, 5, 6].reversedView.map((int v) => v + 1), [7, 6, 5, 4, 3, 2]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.reduce", () {
+  test("reversedView.reduce", () {
     // 1) Regular usage
-    expect([1, 2, 3, 4, 5, 6].reversedListView.reduce((int p, int e) => p * (1 + e)), 4320);
-    expect([5].reversedListView.reduce((int p, int e) => p * (1 + e)), 5);
+    expect([1, 2, 3, 4, 5, 6].reversedView.reduce((int p, int e) => p * (1 + e)), 4320);
+    expect([5].reversedView.reduce((int p, int e) => p * (1 + e)), 5);
 
     // 2) State Exception
     expect(() => IList().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
@@ -1004,161 +1039,185 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.remove", () {
-    List<int> inverted = [1, 2, 3].reversedListView;
+  test("reversedView.remove", () {
+    List<int> reversed = [1, 2, 3].reversedView;
 
-    expect(inverted.remove(2), isTrue);
-    expect(inverted, [3, 1]);
+    expect(reversed.remove(2), isTrue);
+    expect(reversed, [3, 1]);
 
-    expect(inverted.remove(3), isTrue);
-    expect(inverted, [1]);
+    expect(reversed.remove(3), isTrue);
+    expect(reversed, [1]);
 
-    expect(inverted.remove(10), isFalse);
-    expect(inverted, [1]);
+    expect(reversed.remove(10), isFalse);
+    expect(reversed, [1]);
 
-    expect(inverted.remove(1), isTrue);
-    expect(inverted, []);
+    expect(reversed.remove(1), isTrue);
+    expect(reversed, []);
 
-    expect(inverted.remove(10), isFalse);
-    expect(inverted, []);
+    expect(reversed.remove(10), isFalse);
+    expect(reversed, []);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.removeAt", () {
-    final List<String> inverted = ["do", "re", "mi", "re"].reversedListView;
-    expect(inverted.removeAt(1), "mi");
-    expect(inverted, ["re", "re", "do"]);
+  test("reversedView.removeAt", () {
+    final List<String> reversed = ["do", "re", "mi", "re"].reversedView;
+    expect(reversed.removeAt(1), "mi");
+    expect(reversed, ["re", "re", "do"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.removeLast", () {
-    final List<String> inverted = ["do", "re", "mi", "re"].reversedListView;
-    expect(inverted.removeLast(), "do");
-    expect(inverted, ["re", "mi", "re"]);
+  test("reversedView.removeLast", () {
+    final List<String> reversed = ["do", "re", "mi", "re"].reversedView;
+    expect(reversed.removeLast(), "do");
+    expect(reversed, ["re", "mi", "re"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.removeRange", () {
-    final List<String> inverted = ["do", "re", "mi", "re"].reversedListView;
-    inverted.removeRange(1, 3);
-    expect(inverted, ["re", "do"]);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.removeWhere", () {
-    final List<String> inverted = ["one", "two", "three", "four"].reversedListView;
-    inverted.removeWhere((String item) => item.length == 3);
-    expect(inverted, ["four", "three"]);
+  test("reversedView.removeRange", () {
+    final List<String> reversed = ["do", "re", "mi", "fa", "sol", "la"].reversedView;
+    reversed.removeRange(1, 3);
+    expect(reversed, ["la", "mi", "re", "do"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.replaceRange", () {
-    final List<String> inverted = ["a", "b", "c", "d", "e"].reversedListView;
-    inverted.replaceRange(1, 4, ["f", "g"]);
-    expect(inverted, ["e", "f", "g"]);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.retainWhere", () {
-    final List<String> inverted = ["one", "two", "three", "four"].reversedListView;
-    inverted.retainWhere((String item) => item.length == 3);
-    expect(inverted, ["two", "one"]);
+  test("reversedView.removeWhere", () {
+    final List<String> reversed = ["one", "two", "three", "four"].reversedView;
+    reversed.removeWhere((String item) => item.length == 3);
+    expect(reversed, ["four", "three"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.reversed", () {
-    final List<String> inverted = ["one", "two", "three", "four"].reversedListView;
-    expect(inverted.reversed, ["one", "two", "three", "four"]);
+  test("reversedView.replaceRange", () {
+    final List<String> reversed = ["a", "b", "c", "d", "e", "f"].reversedView;
+    reversed.replaceRange(1, 4, ["1", "2"]);
+    expect(reversed, ["f", "1", "2", "b", "a"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.setAll", () {
-    final List<String> inverted = ["one", "two", "three", "four"].reversedListView;
-    inverted.setAll(1, ["bee", "sea"]);
-    expect(inverted, ["four", "bee", "sea", "one"]);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.setRange", () {
-    final List<String> inverted = ["one", "two", "three", "four"].reversedListView;
-    inverted.setRange(1, 3, ["ten", "eleven", "twelve"]);
-    expect(inverted, ["four", "ten", "eleven", "four"]);
-  }, skip: true);
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("reversedListView.shuffle", () {
-    List<int> inverted = [1, 2, 3, 4, 5, 6, 7, 8, 9].reversedListView;
-
-    inverted.shuffle(Random(0));
-    expect(inverted, [4, 2, 7, 8, 6, 9, 3, 5, 1]);
-
-    inverted = [1, 2, 3, 4, 5, 6, 7, 8, 9].reversedListView;
-
-    inverted.shuffle(Random(1));
-    expect(inverted, [7, 4, 2, 8, 1, 9, 3, 6, 5]);
+  test("reversedView.retainWhere", () {
+    final List<String> reversed = ["one", "two", "three", "four"].reversedView;
+    reversed.retainWhere((String item) => item.length == 3);
+    expect(reversed, ["two", "one"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.singleWhere", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6, 7, 8, 9].reversedListView;
+  test("reversedView.reversed", () {
+    final List<String> reversed = ["one", "two", "three", "four"].reversedView;
+    expect(reversed.reversed, ["one", "two", "three", "four"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.setAll", () {
+    List<int> reversed = [1, 2, 3, 4, 5].reversedView;
+    reversed.setAll(0, [-10, -100]);
+    expect(reversed, [-10, -100, 3, 2, 1]);
+
+    reversed = [1, 2, 3, 4, 5].reversedView;
+    reversed.setAll(1, [-10, -100]);
+    expect(reversed, [5, -10, -100, 2, 1]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.setRange", () {
+    List<String> reversed = ["1", "2", "3", "4"].reversedView;
+    reversed.setRange(1, 3, ["10", "11", "12"]);
+    expect(reversed, ["4", "10", "11", "1"]);
+
+    reversed = ["1", "2", "3", "4"].reversedView;
+    reversed.setRange(1, 3, ["10", "11", "12"], 1);
+    expect(reversed, ["4", "11", "12", "1"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.shuffle", () {
+    List<int> reversed = [1, 2, 3, 4, 5, 6, 7, 8, 9].reversedView;
+
+    reversed.shuffle(Random(0));
+    expect(reversed, [4, 2, 7, 8, 6, 9, 3, 5, 1]);
+
+    reversed = [1, 2, 3, 4, 5, 6, 7, 8, 9].reversedView;
+
+    reversed.shuffle(Random(1));
+    expect(reversed, [7, 4, 2, 8, 1, 9, 3, 6, 5]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView.singleWhere", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6, 7, 8, 9].reversedView;
 
     // 1) Regular usage
-    expect(inverted.singleWhere((int v) => v == 4, orElse: () => 100), 4);
-    expect(inverted.singleWhere((int v) => v == 50, orElse: () => 100), 100);
+    expect(reversed.singleWhere((int v) => v == 4, orElse: () => 100), 4);
+    expect(reversed.singleWhere((int v) => v == 50, orElse: () => 100), 100);
 
     // 2) State Exception
-    expect(() => inverted.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError);
+    expect(() => reversed.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.skip", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
+  test("reversedView.skip", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
 
-    expect(inverted.skip(1), [5, 4, 3, 2, 1]);
-    expect(inverted.skip(3), [3, 2, 1]);
-    expect(inverted.skip(5), [1]);
-    expect(inverted.skip(10), <int>[]);
-    expect(() => inverted.skip(-1), throwsRangeError);
+    expect(reversed.skip(1), [5, 4, 3, 2, 1]);
+    expect(reversed.skip(3), [3, 2, 1]);
+    expect(reversed.skip(5), [1]);
+    expect(reversed.skip(10), <int>[]);
+    expect(() => reversed.skip(-1), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.skipWhile", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.skipWhile((int v) => v > 3), [3, 2, 1]);
-    expect(inverted.skipWhile((int v) => v >= 5), [4, 3, 2, 1]);
-    expect(inverted.skipWhile((int v) => v < 6), [6, 5, 4, 3, 2, 1]);
-    expect(inverted.skipWhile((int v) => v < 100), []);
+  test("reversedView.skipWhile", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.skipWhile((int v) => v > 3), [3, 2, 1]);
+    expect(reversed.skipWhile((int v) => v >= 5), [4, 3, 2, 1]);
+    expect(reversed.skipWhile((int v) => v < 6), [6, 5, 4, 3, 2, 1]);
+    expect(reversed.skipWhile((int v) => v < 100), []);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.sort", () {
-    List<int> inverted = [1, 5, 3, 2, 4, 6].reversedListView;
-    inverted.sort();
-    expect(inverted, [1, 2, 3, 4, 5, 6]);
+  test("reversedView.sort", () {
+    List<int> list = [1, 5, 3, 2, 4, 6];
+    List<int> reversed = list.reversedView;
 
-    inverted = [1, 5, 3, 4, 6].reversedListView;
-    inverted.sort((int a, int b) => -a.compareTo(b));
-    expect(inverted, [6, 5, 4, 3, 2, 1]);
-  }, skip: true);
+    reversed.sort();
+    expect(list, [6, 5, 4, 3, 2, 1]);
+    expect(reversed, [1, 2, 3, 4, 5, 6]);
+
+    list.sort();
+    expect(list, [1, 2, 3, 4, 5, 6]);
+    expect(reversed, [6, 5, 4, 3, 2, 1]);
+
+    // ---
+
+    list = [1, 5, 3, 4, 6];
+    reversed = list.reversedView;
+
+    reversed.sort((int a, int b) => a.compareTo(b));
+    expect(list, [6, 5, 4, 3, 1]);
+    expect(reversed, [1, 3, 4, 5, 6]);
+
+    list.sort((int a, int b) => a.compareTo(b));
+    expect(list, [1, 3, 4, 5, 6]);
+    expect(reversed, [6, 5, 4, 3, 1]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.sublist", () {
-    final List<String> colors = ["red", "green", "blue", "orange", "pink"].reversedListView;
+  test("reversedView.sublist", () {
+    final List<String> colors = ["red", "green", "blue", "orange", "pink"].reversedView;
     expect(colors.sublist(1, 3), ["orange", "blue"]);
     expect(colors.sublist(1), ["orange", "blue", "green", "red"]);
     expect(colors, ["red", "green", "blue", "orange", "pink"].reversed);
@@ -1166,62 +1225,62 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.take", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.take(0), []);
-    expect(inverted.take(1), [6]);
-    expect(inverted.take(3), [6, 5, 4]);
-    expect(inverted.take(5), [6, 5, 4, 3, 2]);
-    expect(inverted.take(10), [6, 5, 4, 3, 2, 1]);
-    expect(() => inverted.take(-1), throwsRangeError);
-    expect(() => inverted.take(-100), throwsRangeError);
+  test("reversedView.take", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.take(0), []);
+    expect(reversed.take(1), [6]);
+    expect(reversed.take(3), [6, 5, 4]);
+    expect(reversed.take(5), [6, 5, 4, 3, 2]);
+    expect(reversed.take(10), [6, 5, 4, 3, 2, 1]);
+    expect(() => reversed.take(-1), throwsRangeError);
+    expect(() => reversed.take(-100), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.takeWhile", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.takeWhile((int v) => v < 3), []);
-    expect(inverted.takeWhile((int v) => v >= 5), [6, 5]);
-    expect(inverted.takeWhile((int v) => v > 1), [6, 5, 4, 3, 2]);
-    expect(inverted.takeWhile((int v) => v < 100), [6, 5, 4, 3, 2, 1]);
+  test("reversedView.takeWhile", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.takeWhile((int v) => v < 3), []);
+    expect(reversed.takeWhile((int v) => v >= 5), [6, 5]);
+    expect(reversed.takeWhile((int v) => v > 1), [6, 5, 4, 3, 2]);
+    expect(reversed.takeWhile((int v) => v < 100), [6, 5, 4, 3, 2, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.toList", () {
-    List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.toList(), [6, 5, 4, 3, 2, 1]);
+  test("reversedView.toList", () {
+    List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.toList(), [6, 5, 4, 3, 2, 1]);
 
-    inverted.add(7);
-    expect(inverted.toList(), [6, 5, 4, 3, 2, 1, 7]);
+    reversed.add(7);
+    expect(reversed.toList(), [6, 5, 4, 3, 2, 1, 7]);
 
-    List<int> fixedList = inverted.toList(growable: false);
+    List<int> fixedList = reversed.toList(growable: false);
     expect(() => fixedList.add(8), throwsUnsupportedError);
     expect(fixedList.toList(), [6, 5, 4, 3, 2, 1, 7]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.toSet", () {
-    final List<int> inverted = [1, 2, 2, 3, 4, 4, 5, 6].reversedListView;
-    expect(inverted.toSet(), allOf(isA<Set<int>>(), {1, 2, 3, 4, 5, 6}));
+  test("reversedView.toSet", () {
+    final List<int> reversed = [1, 2, 2, 3, 4, 4, 5, 6].reversedView;
+    expect(reversed.toSet(), allOf(isA<Set<int>>(), {1, 2, 3, 4, 5, 6}));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.where", () {
-    final List<int> inverted = [1, 2, 3, 4, 5, 6].reversedListView;
-    expect(inverted.where((int v) => v < 0), []);
-    expect(inverted.where((int v) => v < 3), [2, 1]);
-    expect(inverted.where((int v) => v < 5), [4, 3, 2, 1]);
-    expect(inverted.where((int v) => v < 100), [6, 5, 4, 3, 2, 1]);
+  test("reversedView.where", () {
+    final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
+    expect(reversed.where((int v) => v < 0), []);
+    expect(reversed.where((int v) => v < 3), [2, 1]);
+    expect(reversed.where((int v) => v < 5), [4, 3, 2, 1]);
+    expect(reversed.where((int v) => v < 100), [6, 5, 4, 3, 2, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("reversedListView.whereType", () {
-    expect(<num>[1, 2, 1.5].reversedListView.whereType<double>(), [1.5]);
+  test("reversedView.whereType", () {
+    expect(<num>[1, 2, 1.5].reversedView.whereType<double>(), [1.5]);
   });
 }
 

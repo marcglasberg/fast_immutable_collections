@@ -1156,5 +1156,76 @@ void main() {
     expect(ISet.asyncAutoflush, isTrue);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("iter (to get a simple Iterable)", () {
+    //
+    var set = {1, 2, 3, 4, 5, 6, 7};
+    var iset = set.lock;
+
+    // -------------
+
+    // 1) List methods that return an Iterable do lazy processing.
+
+    int count1 = 0;
+
+    var iterableFromList = set.where((x) {
+      count1++;
+      return x != null;
+    }).take(3);
+
+    // Only 3 (not 7) because we're doing it lazily.
+    iterableFromList.join();
+    expect(count1, 3);
+
+    // Now it's 6 (= 3+3) because we did it lazily AGAIN.
+    iterableFromList.join();
+    expect(count1, 6);
+
+    // -------------
+
+    // 2) To do lazy processing with IList you must explicitly get an Iterable
+    // from IList.iter().
+
+    int count2 = 0;
+
+    var iterableFromIList = iset.iter.where((x) {
+      count2++;
+      return x != null;
+    }).take(3);
+
+    // Only 3 (not 7) because we're doing it lazily.
+    iterableFromIList.join();
+    expect(count2, 3);
+
+    // Now it's 6 (= 3+3) because we did it lazily AGAIN.
+    iterableFromIList.join();
+    expect(count2, 6);
+
+    // -------------
+
+    // 3) Otherwise, IList methods all return an IList, which is not lazy.
+
+    int count3 = 0;
+
+    var directIList = iset.where((x) {
+      count3++;
+      return x != null;
+    }).take(3);
+
+    // Method `where` runs 7 times, before `take` is called.
+    // For this reason we get a 7.
+    directIList.join();
+    expect(count3, 7);
+
+    // We already have an IList, so no further processing is necessary.
+    // We keep at 7.
+    directIList.join();
+    expect(count3, 7);
+
+    // -------------
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
 }
