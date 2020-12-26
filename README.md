@@ -122,27 +122,9 @@ so that you can compare speeds
     - [7.2. Sync Auto-flush](#72-sync-auto-flush)
     - [7.3. Async Auto-flush](#73-async-auto-flush)
 - [8. Benchmarks](#8-benchmarks)
-    - [8.1. Benchmarks Results](#81-benchmarks-results)
-        - [8.1.1. List Benchmarks](#811-list-benchmarks)
-            - [8.1.1.1. List Add](#8111-list-add)
-            - [8.1.1.2. List AddAll](#8112-list-addall)
-            - [8.1.1.3. List Contains](#8113-list-contains)
-            - [8.1.1.4. List Empty](#8114-list-empty)
-            - [8.1.1.5. List Read](#8115-list-read)
-            - [8.1.1.6. List Remove](#8116-list-remove)
-        - [8.1.2. Map Benchmarks](#812-map-benchmarks)
-            - [8.1.2.1. Map Add](#8121-map-add)
-            - [8.1.2.2. Map AddAll](#8122-map-addall)
-            - [8.1.2.3. Map ContainsValue](#8123-map-containsvalue)
-            - [8.1.2.4. Map Empty](#8124-map-empty)
-            - [8.1.2.5. Map Read](#8125-map-read)
-            - [8.1.2.5. Map Remove](#8125-map-remove)
-        - [8.1.3. Set Benchmarks](#813-set-benchmarks)
-            - [8.1.2.5. Set Add](#8125-set-add)
-            - [8.1.2.6. Set AddAll](#8126-set-addall)
-            - [8.1.2.6. Set Contains](#8126-set-contains)
-            - [8.1.2.6. Set Empty](#8126-set-empty)
-            - [8.1.2.6. Set Remove](#8126-set-remove)
+    - [8.1. List Benchmarks](#811-list-benchmarks)
+    - [8.2. Map Benchmarks](#812-map-benchmarks)
+    - [8.3. Set Benchmarks](#813-set-benchmarks)
 - [9. Immutable Objects](#9-immutable-objects)
     - [9.1. What's the difference between Unmodifiable and Immutable?](#91-whats-the-difference-between-unmodifiable-and-immutable)
     - [9.2. Clean-code](#92-clean-code)
@@ -1385,16 +1367,18 @@ with `// TODO: Still needs to implement efficiently` and will be updated in futu
 [benchmark_docs]: benchmark/README.md
 
 [example]: benchmark/example/
+                      
+<br>
 
-## 8.1. Benchmarks Results
+**Benchmarks Results**
 
 Run the benchmarks preferably in *release mode*, a green snackbar will then appear.
 
 <img src="assets/benchmark_screenshots/example_run.png" height="500px"/>  
 
-### 8.1.1. List Benchmarks
+### 8.1. List Benchmarks
 
-#### 8.1.1.1. List Add
+#### 8.1.1. List Add
 
 <img src="assets/benchmark_screenshots/list_add_10.png" height="500px"/>  
 <img src="assets/benchmark_screenshots/list_add_100.png" height="500px"/>  
@@ -1417,77 +1401,77 @@ And here we add 100 items to a list of 1,000,000 items:
 
 <img src="assets/benchmark_screenshots/list_add_1000000.png" height="500px"/>  
 
-#### 8.1.1.2. List AddAll
+#### 8.1.2. List AddAll
 
 <img src="assets/benchmark_screenshots/list_addall.png" height="500px"/>  
 
-#### 8.1.1.3. List Contains
+#### 8.1.3. List Contains
 
 <img src="assets/benchmark_screenshots/list_contains_100.png" height="500px"/>  
 
-#### 8.1.1.4. List Empty
+#### 8.1.4. List Empty
 
 <img src="assets/benchmark_screenshots/list_empty.png" height="500px"/>  
 
-#### 8.1.1.5. List Read
+#### 8.1.5. List Read
 
 <img src="assets/benchmark_screenshots/list_read_100.png" height="500px"/>  
 
-#### 8.1.1.6. List Remove
+#### 8.1.6. List Remove
 
 <img src="assets/benchmark_screenshots/list_remove_100.png" height="500px"/>  
 
-### 8.1.2. Map Benchmarks
+### 8.2. Map Benchmarks
 
-#### 8.1.2.1. Map Add
+#### 8.2.1. Map Add
 
 <img src="assets/benchmark_screenshots/map_add_10.png" height="500px"/>  
 <img src="assets/benchmark_screenshots/map_add_100.png" height="500px"/>  
 <img src="assets/benchmark_screenshots/map_add_500.png" height="500px"/>  
 <img src="assets/benchmark_screenshots/map_add_all.png" height="500px"/>  
 
-#### 8.1.2.2. Map AddAll
+#### 8.2.2. Map AddAll
 
 <img src="assets/benchmark_screenshots/map_addall_10.png" height="500px"/>  
 
-#### 8.1.2.3. Map ContainsValue
+#### 8.2.3. Map ContainsValue
 
 <img src="assets/benchmark_screenshots/map_containsvalue.png" height="500px"/>  
 
-#### 8.1.2.4. Map Empty
+#### 8.2.4. Map Empty
 
 <img src="assets/benchmark_screenshots/map_empty.png" height="500px"/>  
 
-#### 8.1.2.5. Map Read
+#### 8.2.5. Map Read
 
 <img src="assets/benchmark_screenshots/map_read_1000.png" height="500px"/>  
 
-#### 8.1.2.5. Map Remove
+#### 8.2.5. Map Remove
 
 <img src="assets/benchmark_screenshots/map_remove_1000.png" height="500px"/>  
 
-### 8.1.3. Set Benchmarks
+### 8.3. Set Benchmarks
 
-#### 8.1.2.5. Set Add
+#### 8.2.5. Set Add
 
 <img src="assets/benchmark_screenshots/set_add_10.png" height="500px"/>
 <img src="assets/benchmark_screenshots/set_add_50.png" height="500px"/>
 <img src="assets/benchmark_screenshots/set_add_100.png" height="500px"/>
 <img src="assets/benchmark_screenshots/set_add_all.png" height="500px"/>
 
-#### 8.1.2.6. Set AddAll
+#### 8.2.6. Set AddAll
 
 <img src="assets/benchmark_screenshots/set_addall_100.png" height="500px"/>
 
-#### 8.1.2.6. Set Contains
+#### 8.2.6. Set Contains
 
 <img src="assets/benchmark_screenshots/set_contains_100.png" height="500px"/>
 
-#### 8.1.2.6. Set Empty
+#### 8.2.6. Set Empty
 
 <img src="assets/benchmark_screenshots/set_empty.png" height="500px"/>
 
-#### 8.1.2.6. Set Remove
+#### 8.2.6. Set Remove
 
 <img src="assets/benchmark_screenshots/set_remove_100.png" height="500px"/>
 
