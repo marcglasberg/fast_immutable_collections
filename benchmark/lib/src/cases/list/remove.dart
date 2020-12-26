@@ -9,7 +9,7 @@ import "../../utils/collection_benchmark_base.dart";
 
 class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
-  final IList<ListBenchmarkBase> benchmarks;
+  final List<ListBenchmarkBase> benchmarks;
 
   ListRemoveBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <ListBenchmarkBase>[
@@ -17,7 +17,7 @@ class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
           IListRemoveBenchmark(emitter: emitter),
           KtListRemoveBenchmark(emitter: emitter),
           BuiltListRemoveBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

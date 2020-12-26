@@ -13,6 +13,7 @@ publish_to: none
 
 dependencies:
   benchmark_harness: ^1.0.5
+  collection: ^1.14.13
   meta: ^1.2.3
   path: ^1.7.0
 

@@ -1,11 +1,10 @@
 import "package:fast_immutable_collections_example/widgets/bar_chart.dart";
 import "package:flutter/material.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 class GraphScreen extends StatefulWidget {
   final String title;
-  final IList<RecordsTable> tables;
+  final List<RecordsTable> tables;
 
   const GraphScreen({@required this.title, @required this.tables});
 
@@ -16,13 +15,13 @@ class GraphScreen extends StatefulWidget {
 class _GraphScreenState extends State<GraphScreen> {
   /// Currently, only 5 configurations are possible, but you can easily change it by adding more
   /// icons, though the bottom bar will get crowded.
-  static final IList<Icon> _sizeIcons = const [
+  static const List<Icon> _sizeIcons = [
     Icon(Icons.filter_1),
     Icon(Icons.filter_2),
     Icon(Icons.filter_3),
     Icon(Icons.filter_4),
     Icon(Icons.filter_5),
-  ].lock;
+  ];
 
   int _currentTableIndex = 0;
   List<BottomNavigationBarItem> _bottomItems;

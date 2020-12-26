@@ -9,7 +9,7 @@ import "../../utils/collection_benchmark_base.dart";
 
 class MapEmptyBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
-  final IList<MapBenchmarkBase> benchmarks;
+  final List<MapBenchmarkBase> benchmarks;
 
   MapEmptyBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <MapBenchmarkBase>[
@@ -17,7 +17,7 @@ class MapEmptyBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
           IMapEmptyBenchmark(emitter: emitter),
           KtMapEmptyBenchmark(emitter: emitter),
           BuiltMapEmptyBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

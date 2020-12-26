@@ -1,14 +1,13 @@
 import "package:fast_immutable_collections_example/screens/code_screen.dart";
 import "package:fast_immutable_collections_example/screens/graph_screen.dart";
 import "package:flutter/material.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "collection_button.dart";
 
 class BenchWidget extends StatefulWidget {
   final String title;
-  final IMap<String, String> code;
-  final IList<MultiBenchmarkReporter> benchmarks;
+  final Map<String, String> code;
+  final List<MultiBenchmarkReporter> benchmarks;
 
   BenchWidget({
     this.title,
@@ -22,7 +21,7 @@ class BenchWidget extends StatefulWidget {
 
 class _BenchWidgetState extends State<BenchWidget> {
   bool _isRunning = false;
-  IList<RecordsTable> _results;
+  List<RecordsTable> _results;
 
   void _goToResults() => Navigator.of(context).push(
         MaterialPageRoute(
@@ -38,10 +37,11 @@ class _BenchWidgetState extends State<BenchWidget> {
       setState(() => _isRunning = true);
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => setState(() {
-          _results = const <RecordsTable>[].lock;
+          _results = <RecordsTable>[];
           widget.benchmarks.forEach((MultiBenchmarkReporter benchmark) {
             benchmark.report();
-            _results = _results.add(benchmark.emitter.table);
+            print(benchmark.emitter.table);
+            _results.add(benchmark.emitter.table);
           });
           _isRunning = false;
           _goToResults();

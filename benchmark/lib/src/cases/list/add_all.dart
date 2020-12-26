@@ -8,7 +8,7 @@ class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   static const List<int> baseList = [1, 2, 3], listToAdd = [4, 5, 6];
 
   @override
-  final IList<ListBenchmarkBase> benchmarks;
+  final List<ListBenchmarkBase> benchmarks;
 
   ListAddAllBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <ListBenchmarkBase>[
@@ -16,7 +16,7 @@ class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
           IListAddAllBenchmark(emitter: emitter),
           KtListAddAllBenchmark(emitter: emitter),
           BuiltListAddAllBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

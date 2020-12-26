@@ -1,11 +1,10 @@
 import "dart:io";
 import "package:fast_immutable_collections_example/widgets/collection_button.dart";
 import "package:flutter/material.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 class CodeScreen extends StatelessWidget {
   final String description;
-  final IMap<String, String> code;
+  final Map<String, String> code;
 
   const CodeScreen(this.description, this.code);
 

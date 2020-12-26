@@ -9,7 +9,7 @@ import "../../utils/collection_benchmark_base.dart";
 
 class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
-  final IList<MapBenchmarkBase> benchmarks;
+  final List<MapBenchmarkBase> benchmarks;
 
   MapRemoveBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <MapBenchmarkBase>[
@@ -17,7 +17,7 @@ class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
           IMapRemoveBenchmark(emitter: emitter),
           KtMapRemoveBenchmark(emitter: emitter),
           BuiltMapMapRemoveBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

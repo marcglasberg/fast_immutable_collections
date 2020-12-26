@@ -9,7 +9,7 @@ import "../../utils/collection_benchmark_base.dart";
 
 class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
-  final IList<SetBenchmarkBase> benchmarks;
+  final List<SetBenchmarkBase> benchmarks;
 
   SetEmptyBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <SetBenchmarkBase>[
@@ -17,7 +17,7 @@ class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
           ISetEmptyBenchmark(emitter: emitter),
           KtSetEmptyBenchmark(emitter: emitter),
           BuiltSetEmptyBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 

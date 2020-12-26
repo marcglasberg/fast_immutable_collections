@@ -9,7 +9,7 @@ import "../../utils/collection_benchmark_base.dart";
 
 class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
-  final IList<MapBenchmarkBase> benchmarks;
+  final List<MapBenchmarkBase> benchmarks;
 
   MapContainsValueBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <MapBenchmarkBase>[
@@ -17,7 +17,7 @@ class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase>
           IMapContainsValueBenchmark(emitter: emitter),
           KtMapContainsValueBenchmark(emitter: emitter),
           BuiltMapContainsValueBenchmark(emitter: emitter),
-        ].lock,
+        ],
         super(emitter: emitter);
 }
 
