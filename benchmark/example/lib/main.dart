@@ -15,7 +15,7 @@ class BenchmarkApp extends StatelessWidget {
         appBar: AppBar(
           toolbarHeight: kToolbarHeight * 1.3,
           title: const Text(
-            "Fast Immutable Collections Benchmarks",
+            "Fast Immutable Collections (FIC) Benchmarks",
             maxLines: 2,
             style: TextStyle(color: Colors.white, height: 1.3),
           ),

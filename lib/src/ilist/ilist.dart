@@ -538,8 +538,9 @@ class IList<T> // ignore: must_be_immutable
     return _l.any(test);
   }
 
-  // TODO: Marcelo, por favor, adicione a documentação sobre views e cast.
-  /// Provides a view of this iterable as an iterable of [R] instances.
+  /// Returns a list of [R] instances.
+  /// If this list contains instances which cannot be cast to [R],
+  /// it will throw an error.
   @override
   IList<R> cast<R>() {
     Iterable<R> result = _l.cast<R>();
@@ -1277,10 +1278,7 @@ class IList<T> // ignore: must_be_immutable
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
   ///
-  /// See also: [Output].
-  IList<T> removeLast([Output<T> removedItem]) {
-    return removeAt(length - 1, removedItem);
-  }
+  IList<T> removeLast([Output<T> removedItem]) => removeAt(length - 1, removedItem);
 
   /// Removes the objects in the range [start] inclusive to [end] exclusive.
   ///
