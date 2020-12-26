@@ -1,19 +1,16 @@
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: "FIC Example",
-        theme: ThemeData(
-          textTheme: TextTheme(bodyText2: TextStyle(fontSize: 21)),
-        ),
-        home: MyHomePage(),
-      );
+      title: "FIC Example",
+      home: MyHomePage(),
+      theme: ThemeData(
+        textTheme: TextTheme(bodyText2: TextStyle(fontSize: 21)),
+      ));
 }
 
 class MyHomePage extends StatefulWidget {
