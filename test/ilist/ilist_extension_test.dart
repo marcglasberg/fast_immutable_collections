@@ -602,7 +602,8 @@ void main() {
     expect((["abc", "abc", "def"].distinct()), ["abc", "def"]);
     expect((["abc", "abc", "def"].distinct()).take(1), ["abc"]);
 
-    expect((["a", "b", "abc", "ab", "def"].distinct((item) => item.length)), ["a", "abc", "ab"]);
+    expect(
+        (["a", "b", "abc", "ab", "def"].distinct(by: (item) => item.length)), ["a", "abc", "ab"]);
   });
 
   /////////////////////////////////////////////////////////////////////////////

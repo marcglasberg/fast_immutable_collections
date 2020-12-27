@@ -302,7 +302,20 @@ void main() {
     expect((["abc", "abc", "def"].removeDuplicates()), ["abc", "def"]);
     expect((["abc", "abc", "def"].removeDuplicates()).take(1), ["abc"]);
 
-    expect((["a", "b", "abc", "ab", "def"].removeDuplicates((item) => item.length)),
+    expect((["a", "b", "abc", "ab", "def"].removeDuplicates(by: (item) => item.length)),
+        ["a", "abc", "ab"]);
+
+    expect(
+        (["a", "b", "abc", "ab", "def"]
+            .removeDuplicates(by: (item) => item.length, removeNulls: true)),
+        ["a", "abc", "ab"]);
+
+    expect(([null, 1, 2, 3, null, 4, 3, 5, 1, null].removeDuplicates(removeNulls: true)),
+        [1, 2, 3, 4, 5]);
+
+    expect(
+        ([null, "a", "b", null, "abc", "ab", "def", null]
+            .removeDuplicates(by: (item) => item.length, removeNulls: true)),
         ["a", "abc", "ab"]);
   });
 

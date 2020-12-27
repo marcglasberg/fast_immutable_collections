@@ -66,7 +66,10 @@ extension IterableExtension<T> on Iterable<T> {
   }
 
   /// Removes all duplicates, leaving only the distinct items.
-  /// Optionally, you can provide an [id] function to compare the items.
+  /// Optionally, you can provide an [by] function to compare the items.
+  ///
+  /// If you pass [removeNulls] as true, it will also remove the nulls
+  /// (it will check the item is null, before applying the [by] function).
   ///
   /// Note: This is different from `List.distinct()` because `removeDuplicates`
   /// is lazy (and you can use it with any Iterable, not just a List).
@@ -80,31 +83,25 @@ extension IterableExtension<T> on Iterable<T> {
   /// // This will process a million items:
   /// var newList = list.distinct().sublist(0, 5);
   ///
-  Iterable<T> removeDuplicates([dynamic Function(T item) id]) sync* {
-    if (id != null) {
+  Iterable<T> removeDuplicates({
+    dynamic Function(T item) by,
+    bool removeNulls = false,
+  }) sync* {
+    if (by != null) {
       Set<dynamic> ids = {};
       for (T item in this) {
-        var _id = id(item);
-        if (!ids.contains(_id)) yield item;
-        ids.add(_id);
+        if (removeNulls && item == null) continue;
+        var id = by(item);
+        if (!ids.contains(id)) yield item;
+        ids.add(id);
       }
     } else {
       Set<T> items = {};
       for (T item in this) {
+        if (removeNulls && item == null) continue;
         if (!items.contains(item)) yield item;
         items.add(item);
       }
-    }
-  }
-
-  /// Removes `null`s and duplicates.
-  ///
-  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
-  Iterable<T> removeNullAndDuplicates() sync* {
-    Set<T> items = {};
-    for (T item in this) {
-      if (item != null && !items.contains(item)) yield item;
-      items.add(item);
     }
   }
 

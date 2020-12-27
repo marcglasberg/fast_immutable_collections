@@ -384,8 +384,8 @@ extension ListExtension<T> on List<T> {
   ///
   /// See also `Iterable.removeDuplicates()` in [IterableExtension] for a lazy version.
   ///
-  List<T> distinct([dynamic Function(T item) id]) => id != null
-      ? removeDuplicates(id).toList()
+  List<T> distinct({dynamic Function(T item) by}) => by != null
+      ? removeDuplicates(by: by).toList()
       : [
           ...{...this}
         ];
