@@ -1,13 +1,16 @@
-import "package:fast_immutable_collections_example/screens/code_screen.dart";
-import "package:fast_immutable_collections_example/screens/graph_screen.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "../screens/code_screen.dart";
+import "../screens/graph_screen.dart";
 import "collection_button.dart";
 
 class BenchWidget extends StatefulWidget {
   final String title;
   final Map<String, String> code;
-  final List<MultiBenchmarkReporter> benchmarks;
+
+  // The benchmarks are given as a function just so they are recreated when we rerun them, instead
+  // of data being appended to previous runs.
+  final List<MultiBenchmarkReporter> Function() benchmarks;
 
   BenchWidget({
     this.title,
@@ -23,7 +26,7 @@ class _BenchWidgetState extends State<BenchWidget> {
   bool _isRunning = false;
   List<RecordsTable> _results;
 
-  void _goToResults() => Navigator.of(context).push(
+  Future<void> _goToResults() => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => GraphScreen(
             title: widget.title,
@@ -38,9 +41,9 @@ class _BenchWidgetState extends State<BenchWidget> {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => setState(() {
           _results = <RecordsTable>[];
-          widget.benchmarks.forEach((MultiBenchmarkReporter benchmark) {
+          widget.benchmarks().forEach((MultiBenchmarkReporter benchmark) {
             benchmark.report();
-            print(benchmark.emitter.table);
+            // print(benchmark.emitter.table);
             _results.add(benchmark.emitter.table);
           });
           _isRunning = false;

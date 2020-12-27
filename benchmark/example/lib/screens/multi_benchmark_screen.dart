@@ -54,7 +54,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Add",
       code: ListCode.add,
-      benchmarks: [
+      benchmarks: () => [
         ListAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_1",
@@ -78,7 +78,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "AddAll",
       code: ListCode.addAll,
-      benchmarks: [
+      benchmarks: () => [
         ListAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_all",
@@ -90,7 +90,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Contains",
       code: ListCode.contains,
-      benchmarks: [
+      benchmarks: () => [
         ListContainsBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_contains",
@@ -102,7 +102,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Empty",
       code: ListCode.empty,
-      benchmarks: [
+      benchmarks: () => [
         ListEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_empty",
@@ -114,7 +114,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Read",
       code: ListCode.read,
-      benchmarks: [
+      benchmarks: () => [
         ListReadBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_read",
@@ -126,7 +126,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Remove",
       code: ListCode.remove,
-      benchmarks: [
+      benchmarks: () => [
         ListRemoveBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_remove",
@@ -141,7 +141,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Add",
       code: SetCode.add,
-      benchmarks: [
+      benchmarks: () => [
         SetAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_1",
@@ -165,7 +165,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "AddAll",
       code: SetCode.addAll,
-      benchmarks: [
+      benchmarks: () => [
         SetAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_all",
@@ -177,7 +177,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Contains",
       code: SetCode.contains,
-      benchmarks: [
+      benchmarks: () => [
         SetContainsBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_contains",
@@ -189,7 +189,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Empty",
       code: SetCode.contains,
-      benchmarks: [
+      benchmarks: () => [
         SetEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_empty",
@@ -201,7 +201,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Remove",
       code: SetCode.contains,
-      benchmarks: [
+      benchmarks: () => [
         SetRemoveBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_remove",
@@ -216,7 +216,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Add",
       code: MapCode.add,
-      benchmarks: [
+      benchmarks: () => [
         MapAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_1",
@@ -240,7 +240,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "AddAll",
       code: MapCode.addAll,
-      benchmarks: [
+      benchmarks: () => [
         MapAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_all",
@@ -252,7 +252,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "ContainsValue",
       code: MapCode.containsValue,
-      benchmarks: [
+      benchmarks: () => [
         MapContainsValueBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_contains_value",
@@ -264,7 +264,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Empty",
       code: MapCode.empty,
-      benchmarks: [
+      benchmarks: () => [
         MapEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_empty",
@@ -276,7 +276,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Read",
       code: MapCode.read,
-      benchmarks: [
+      benchmarks: () => [
         MapReadBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_read",
@@ -288,7 +288,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
     BenchWidget(
       title: "Remove",
       code: MapCode.remove,
-      benchmarks: [
+      benchmarks: () => [
         MapRemoveBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_remove",

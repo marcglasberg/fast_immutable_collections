@@ -23,23 +23,28 @@ class _GraphScreenState extends State<GraphScreen> {
     Icon(Icons.filter_5),
   ];
 
-  int _currentTableIndex = 0;
+  int _currentTableIndex;
   List<BottomNavigationBarItem> _bottomItems;
 
-  /// We will need to add an artifial button to the bottom bar if there's only one benchmark, since
-  /// it requires at least 2 items.
-  bool _onlyOneBenchmark = false;
-  bool _stacked = false;
+  /// We will need to add an artificial button to the bottom bar if there's only one benchmark,
+  /// since it requires at least 2 items.
+  bool _onlyOneBenchmark;
+  bool _stacked;
+
+  List<String> _possibleFilters;
+  List<String> _currentFilters;
 
   RecordsTable get _currentTable => _currentTableIndex >= widget.tables.length
       ? widget.tables.last
       : widget.tables[_currentTableIndex];
 
-  List<String> _possibleFilters;
-
   @override
   void initState() {
+    _onlyOneBenchmark = false;
+    _stacked = false;
+    _currentTableIndex = 0;
     _possibleFilters = _currentTable.rowNames;
+    _currentFilters = [];
 
     super.initState();
 
@@ -79,8 +84,6 @@ class _GraphScreenState extends State<GraphScreen> {
           _currentTableIndex = index;
         }
       });
-
-  final List<String> _currentFilters = [];
 
   @override
   Widget build(_) {
