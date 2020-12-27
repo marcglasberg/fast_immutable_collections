@@ -3,7 +3,7 @@ import "package:fast_immutable_collections/src/base/hash.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
-extension MapEntryExtension<K, V> on MapEntry<K, V> {
+extension FicMapEntryExtension<K, V> on MapEntry<K, V> {
   //
   /// [MapEntry] is **not** [Comparable].
   /// If you need it to be comparable, you can use this getter to turn

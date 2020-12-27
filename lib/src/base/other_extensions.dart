@@ -16,8 +16,8 @@ extension CanBeEmptyExtension on CanBeEmpty {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// See also: [IterableExtension]
-extension IteratorExtension<T> on Iterator<T> {
+/// See also: [FicIterableExtension]
+extension FicIteratorExtension<T> on Iterator<T> {
   //
   Iterable<T> toIterable() sync* {
     while (moveNext()) yield current;
@@ -30,8 +30,8 @@ extension IteratorExtension<T> on Iterator<T> {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// See also: [compareObject], [ComparableExtension], [ComparatorExtension], [sortBy], [sortLike]
-extension BooleanExtension on bool {
+/// See also: [compareObject], [FicComparableExtension], [FicComparatorExtension], [sortBy], [sortLike]
+extension FicBooleanExtension on bool {
   /// true > false
   /// Zero: This instance and value are equal (both true or both false).
   /// Greater than zero: This instance is true and value is false.

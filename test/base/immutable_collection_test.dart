@@ -321,15 +321,15 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("toListSortedLike", () {
-    expect([1, 2, 3].toListSortedLike([1, 2, 3]), [1, 2, 3]);
-    expect([1, 2, 3].toListSortedLike(<int>[]), [1, 2, 3]);
-    expect(<int>[].toListSortedLike([1, 2, 3]), isEmpty);
-    expect([2, 3].toListSortedLike([1, 2]), [2, 3]);
-    expect([3, 4, 5, 6, 7].toListSortedLike([5, 4, 3, 2, 1]), [5, 4, 3, 6, 7]);
-    expect([7, 3, 4, 6].toListSortedLike([5, 4, 3, 2, 1]), [4, 3, 7, 6]);
-    expect([2, 3, 1].toListSortedLike([1, 2, 2, 1]), [1, 2, 2, 1, 3]);
-    expect([3, 2].toListSortedLike([1, 2, 3, 2, 1]), [2, 3, 2]);
+  test("sortedLike", () {
+    expect([1, 2, 3].sortedLike([1, 2, 3]), [1, 2, 3]);
+    expect([1, 2, 3].sortedLike(<int>[]), [1, 2, 3]);
+    expect(<int>[].sortedLike([1, 2, 3]), isEmpty);
+    expect([2, 3].sortedLike([1, 2]), [2, 3]);
+    expect([3, 4, 5, 6, 7].sortedLike([5, 4, 3, 2, 1]), [5, 4, 3, 6, 7]);
+    expect([7, 3, 4, 6].sortedLike([5, 4, 3, 2, 1]), [4, 3, 7, 6]);
+    expect([2, 3, 1].sortedLike([1, 2, 2, 1]), [1, 2, 2, 1, 3]);
+    expect([3, 2].sortedLike([1, 2, 3, 2, 1]), [2, 3, 2]);
   });
 
   // /////////////////////////////////////////////////////////////////////////////

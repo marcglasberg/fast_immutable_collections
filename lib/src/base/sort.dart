@@ -188,7 +188,7 @@ int Function(T, T) sortLike<T, E>(
 
 // /////////////////////////////////////////////////////////////////////////////
 
-extension ComparableExtension on Object {
+extension FicComparableExtension on Object {
   /// 1. If this object and [other] are both `null`, they don't have order. If
   /// one of them is `null`, it will come later, unless the [nullsBefore] is `true`,
   /// in which case the `null` will come before.
@@ -235,7 +235,7 @@ extension ComparableExtension on Object {
 /// compareTo = (String a, String b) =>
 ///     a.length.compareTo(b.length).if0(a.compareTo(b));
 /// ```
-extension ComparatorExtension on int {
+extension FicComparatorExtension on int {
   int if0(int then) => this == 0 ? then : this;
 }
 

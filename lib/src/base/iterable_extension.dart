@@ -1,8 +1,8 @@
 import "dart:collection";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-/// See also: [ListExtension], [SetExtension]
-extension IterableExtension<T> on Iterable<T> {
+/// See also: [FicListExtension], [FicSetExtension]
+extension FicIterableExtension<T> on Iterable<T> {
   //
   /// Creates an *immutable* list ([IList]) from the iterable.
   IList<T> toIList() => (this == null) ? null : IList<T>(this);
@@ -108,10 +108,8 @@ extension IterableExtension<T> on Iterable<T> {
   /// Returns a list, sorted according to the order specified by the [ordering] iterable.
   /// Items which don't appear in [ordering] will be included in the end, in no particular order.
   ///
-  /// Note: Not very efficient at the moment (will be improved in the future).
-  /// Please use for a small number of items.
-  ///
-  List<T> toListSortedLike(Iterable<T> ordering) {
+  List<T> sortedLike(Iterable<T> ordering) {
+    // TODO: Still need to implement efficiently.
     assert(ordering != null);
     Set<T> originalSet = Set.of(ordering);
     Set<T> newSet = (this is Set<T>) ? (this as Set<T>) : Set.of(this);

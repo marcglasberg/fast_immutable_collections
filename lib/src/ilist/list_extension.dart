@@ -2,7 +2,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/src/ilist/reversed_list_view.dart";
 
-extension ListExtension<T> on List<T> {
+extension FicListExtension<T> on List<T> {
   //
   /// Locks the list, returning an *immutable* list ([IList]).
   IList<T> get lock => IList<T>(this);
@@ -41,7 +41,7 @@ extension ListExtension<T> on List<T> {
   /// Please use for a small number of items.
   ///
   void sortLike(Iterable<T> ordering) {
-    var result = toListSortedLike(ordering);
+    var result = sortedLike(ordering);
     clear();
     addAll(result);
   }
@@ -382,7 +382,7 @@ extension ListExtension<T> on List<T> {
   /// Removes all duplicates, leaving only the distinct items.
   /// Optionally, you can provide an [id] function to compare the items.
   ///
-  /// See also `Iterable.removeDuplicates()` in [IterableExtension] for a lazy version.
+  /// See also `Iterable.removeDuplicates()` in [FicIterableExtension] for a lazy version.
   ///
   List<T> distinct({dynamic Function(T item) by}) => by != null
       ? removeDuplicates(by: by).toList()

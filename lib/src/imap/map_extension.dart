@@ -2,8 +2,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// See also: [MapOfSetsExtension]
-extension MapExtension<K, V> on Map<K, V> {
+/// See also: [FicMapOfSetsExtension]
+extension FicMapExtension<K, V> on Map<K, V> {
   /// Locks the map, returning an *immutable* map ([IMap]).
   IMap<K, V> get lock => IMap<K, V>(this);
 
@@ -26,16 +26,16 @@ extension MapExtension<K, V> on Map<K, V> {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// See also: [MapExtension]
-extension MapOfSetsExtension<K, V> on Map<K, Set<V>> {
+/// See also: [FicMapExtension]
+extension FicMapOfSetsExtension<K, V> on Map<K, Set<V>> {
   /// Locks the map of sets, returning an *immutable* map ([IMapOfSets]).
   IMapOfSets<K, V> get lock => IMapOfSets<K, V>(this);
 }
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// See also: [IterableExtension], [IteratorExtension]
-extension MapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
+/// See also: [FicIterableExtension], [FicIteratorExtension]
+extension FicMapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
   //
   Iterable<MapEntry<K, V>> toIterable() sync* {
     while (moveNext()) yield current;
