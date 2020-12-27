@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Set (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_all_set_mutable", config: Config(runs: 100, size: 100));
+          prefixName: "add_all_set_mutable", config: Config(size: 100));
       final MutableSetAddAllBenchmark mutableSetAddAllBenchmark =
           MutableSetAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
 
     test("ISet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_iSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_all_iSet", config: Config(size: 100));
       final ISetAddAllBenchmark iSetAddAllBenchmark =
           ISetAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -32,7 +32,7 @@ void main() {
 
     test("KtSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_ktSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_all_ktSet", config: Config(size: 100));
       final KtSetAddAllBenchmark ktSetAddAllBenchmark =
           KtSetAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -45,7 +45,7 @@ void main() {
 
     test("BuiltSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_builtSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_all_builtSet", config: Config(size: 100));
       final BuiltSetAddAllBenchmark builtSetAddAllBenchmark =
           BuiltSetAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -60,7 +60,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_all", config: Config(size: 100));
       final SetAddAllBenchmark setAddAllBenchmark = SetAddAllBenchmark(emitter: tableScoreEmitter);
 
       setAddAllBenchmark.report();

@@ -5,7 +5,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 void main() {
   group("Table and Scores |", () {
     test("TableScoreEmitter.emit adds values to the TableScoreEmitter.table", () {
-      const Config config = Config(runs: 100, size: 100);
+      const Config config = Config(size: 100);
 
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "report", config: config);
@@ -23,7 +23,7 @@ void main() {
   group("Other stuff |", () {
     test("TableScoreEmitter.toString method", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "report", config: Config(runs: 10, size: 10));
+          TableScoreEmitter(prefixName: "report", config: Config(size: 10));
 
       tableScoreEmitter.emit("Test1", 5);
 

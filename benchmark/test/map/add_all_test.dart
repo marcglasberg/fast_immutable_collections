@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Map (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_map_mutable", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "add_map_mutable", config: Config(size: 10));
       final MutableMapAddAllBenchmark mapAddAllBenchmark =
           MutableMapAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
 
     test("IMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_map_iMap", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "add_map_iMap", config: Config(size: 10));
       final IMapAddAllBenchmark iMapAddAllBenchmark =
           IMapAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -32,7 +32,7 @@ void main() {
 
     test("KtMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_map_ktMap", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "add_map_ktMap", config: Config(size: 10));
       final KtMapAddAllBenchmark ktMapAddAllBenchmark =
           KtMapAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -45,7 +45,7 @@ void main() {
 
     test("BuiltMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_map_builtMap", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "add_map_builtMap", config: Config(size: 10));
       final BuiltMapAddAllBenchmark builtMapAddAllBenchmark =
           BuiltMapAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -60,7 +60,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_map", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "add_map", config: Config(size: 10));
       final MapAddAllBenchmark addAllBenchmark = MapAddAllBenchmark(emitter: tableScoreEmitter);
 
       addAllBenchmark.report();

@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Set (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_set_mutable", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "empty_set_mutable", config: Config(size: 100));
       final MutableSetEmptyBenchmark setEmptyBenchmark =
           MutableSetEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -17,7 +17,7 @@ void main() {
 
     test("ISet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_iSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "empty_iSet", config: Config(size: 100));
       final ISetEmptyBenchmark iSetEmptyBenchmark = ISetEmptyBenchmark(emitter: tableScoreEmitter);
 
       iSetEmptyBenchmark.report();
@@ -27,7 +27,7 @@ void main() {
 
     test("KtSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_ktSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "empty_ktSet", config: Config(size: 100));
       final KtSetEmptyBenchmark ktSetEmptyBenchmark =
           KtSetEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -38,7 +38,7 @@ void main() {
 
     test("BuiltSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_builtSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "empty_builtSet", config: Config(size: 100));
       final BuiltSetEmptyBenchmark builtSetEmptyBenchmark =
           BuiltSetEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -51,7 +51,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "empty", config: Config(size: 100));
       final SetEmptyBenchmark emptyBenchmark = SetEmptyBenchmark(emitter: tableScoreEmitter);
 
       emptyBenchmark.report();

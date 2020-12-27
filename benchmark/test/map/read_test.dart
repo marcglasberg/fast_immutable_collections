@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Map (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_map_mutable", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_map_mutable", config: Config(size: 1000));
       final MutableMapReadBenchmark mutableMapReadBenchmark =
           MutableMapReadBenchmark(emitter: tableScoreEmitter);
 
@@ -18,7 +18,7 @@ void main() {
 
     test("IMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_iMap", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_iMap", config: Config(size: 1000));
       final IMapReadBenchmark iMapReadBenchmark = IMapReadBenchmark(emitter: tableScoreEmitter);
 
       iMapReadBenchmark.report();
@@ -29,7 +29,7 @@ void main() {
 
     test("KtMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_ktMap", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_ktMap", config: Config(size: 1000));
       final KtMapReadBenchmark ktMapReadBenchmark = KtMapReadBenchmark(emitter: tableScoreEmitter);
 
       ktMapReadBenchmark.report();
@@ -40,7 +40,7 @@ void main() {
 
     test("BuiltMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_builtMap", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_builtMap", config: Config(size: 1000));
       final BuiltMapReadBenchmark builtMapReadBenchmark =
           BuiltMapReadBenchmark(emitter: tableScoreEmitter);
 
@@ -54,7 +54,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read", config: Config(size: 1000));
       final MapReadBenchmark readBenchmark = MapReadBenchmark(emitter: tableScoreEmitter);
 
       readBenchmark.report();

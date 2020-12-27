@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("List (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_list_mutable", config: Config(runs: 100, size: 10));
+          prefixName: "contains_list_mutable", config: Config(size: 10));
       final MutableListContainsBenchmark listContainsBenchmark =
           MutableListContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
 
     test("IList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "contains_iList", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "contains_iList", config: Config(size: 10));
       final IListContainsBenchmark iListContainsBenchmark =
           IListContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -32,7 +32,7 @@ void main() {
 
     test("KtList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "contains_ktList", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "contains_ktList", config: Config(size: 10));
       final KtListContainsBenchmark ktListContainsBenchmark =
           KtListContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -45,7 +45,7 @@ void main() {
 
     test("BuiltList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "contains_builtList", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "contains_builtList", config: Config(size: 10));
       final BuiltListContainsBenchmark builtListContainsBenchmark =
           BuiltListContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -60,7 +60,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "contains", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "contains", config: Config(size: 10));
       final ListContainsBenchmark containsBenchmark =
           ListContainsBenchmark(emitter: tableScoreEmitter);
 

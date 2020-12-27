@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("List (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_list_mutable", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_list_mutable", config: Config(size: 1000));
       final MutableListReadBenchmark listReadBenchmark =
           MutableListReadBenchmark(emitter: tableScoreEmitter);
 
@@ -18,7 +18,7 @@ void main() {
 
     test("IList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_iList", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_iList", config: Config(size: 1000));
       final IListReadBenchmark iListReadBenchmark = IListReadBenchmark(emitter: tableScoreEmitter);
 
       iListReadBenchmark.report();
@@ -29,7 +29,7 @@ void main() {
 
     test("KtList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_ktList", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_ktList", config: Config(size: 1000));
       final KtListReadBenchmark ktListReadBenchmark =
           KtListReadBenchmark(emitter: tableScoreEmitter);
 
@@ -41,7 +41,7 @@ void main() {
 
     test("BuiltList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_builtList", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read_builtList", config: Config(size: 1000));
       final BuiltListReadBenchmark builtListReadBenchmark =
           BuiltListReadBenchmark(emitter: tableScoreEmitter);
 
@@ -55,7 +55,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read", config: Config(runs: 100, size: 1000));
+          TableScoreEmitter(prefixName: "read", config: Config(size: 1000));
       final ListReadBenchmark readBenchmark = ListReadBenchmark(emitter: tableScoreEmitter);
 
       readBenchmark.report();

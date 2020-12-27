@@ -25,7 +25,7 @@ class TableScoreEmitter implements ScoreEmitter {
   void saveReport() {
     _createReportsFolderIfNonExistent();
 
-    final String fileName = "${prefixName}_runs_${config.runs}_size_${config.size}";
+    final String fileName = "${prefixName}_size_${config.size}";
     final File reportFile = File("benchmark/reports/$fileName.csv");
 
     reportFile.writeAsStringSync(_tableAsString);

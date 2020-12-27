@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import "package:benchmark_harness/benchmark_harness.dart";
 import "package:meta/meta.dart";
 
@@ -28,20 +30,47 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
 
   Config get config => emitter.config;
 
-  @override
-  void exercise() {
-    for (int i = 0; i < config.runs; i++) run();
-  }
-
   /// This will be important for later checking if the resulting mutable
   /// collection processed by the benchmark is indeed the one we expected (TDD).
   @visibleForTesting
   @visibleForOverriding
   T toMutable();
+
+  // Measures the score for the benchmark and returns it.
+  @override
+  double measure() {
+    setup();
+    // Warmup for at least 100ms. Discard result.
+    measureFor(() {
+      warmup();
+    }, 100);
+    // Run the benchmark for at least 900ms.
+    double result = measureFor(() {
+      exercise();
+    }, 900);
+    teardown();
+    return result;
+  }
+
+  // Measures the score for this benchmark by executing it repeatedly
+  // until time minimum has been reached.
+  static double measureFor(Function f, int minimumMillis) {
+    int minimumMicros = minimumMillis * 1000;
+    int iter = 0;
+    Stopwatch watch = Stopwatch();
+    watch.start();
+    int elapsed = 0;
+    while (elapsed < minimumMicros) {
+      f();
+      elapsed = watch.elapsedMicroseconds;
+      iter++;
+    }
+    return elapsed / iter;
+  }
 }
 
 abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
-  const ListBenchmarkBase({
+  ListBenchmarkBase({
     @required String name,
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
@@ -53,6 +82,13 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   @visibleForOverriding
   @override
   List<int> toMutable();
+
+  int _innerRuns;
+
+  /// Inner runs is half of the config.size.
+  /// For example, we can measure adding 5 items to a list of 10 items,
+  /// or adding 50 items to a list of 100 items.
+  int innerRuns() => _innerRuns ??= min(1, config.size ~/ 2);
 }
 
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {

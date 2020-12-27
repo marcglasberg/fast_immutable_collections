@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Map (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_map_mutable", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_map_mutable", config: Config(size: 0));
       final MutableMapEmptyBenchmark mapEmptyBenchmark =
           MutableMapEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -17,7 +17,7 @@ void main() {
 
     test("IMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_iMap", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_iMap", config: Config(size: 0));
       final IMapEmptyBenchmark iMapEmptyBenchmark = IMapEmptyBenchmark(emitter: tableScoreEmitter);
 
       iMapEmptyBenchmark.report();
@@ -27,7 +27,7 @@ void main() {
 
     test("KtMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_ktMap", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_ktMap", config: Config(size: 0));
       final KtMapEmptyBenchmark ktMapEmptyBenchmark =
           KtMapEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -38,7 +38,7 @@ void main() {
 
     test("BuiltMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_builtMap", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_builtMap", config: Config(size: 0));
       final BuiltMapEmptyBenchmark builtMapEmptyBenchmark =
           BuiltMapEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -51,7 +51,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty", config: Config(size: 0));
       final MapEmptyBenchmark emptyBenchmark = MapEmptyBenchmark(emitter: tableScoreEmitter);
 
       emptyBenchmark.report();

@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Set (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_set_mutable", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_set_mutable", config: Config(size: 100));
       final MutableSetAddBenchmark mutableSetAddBenchmark =
           MutableSetAddBenchmark(emitter: tableScoreEmitter);
 
@@ -20,7 +20,7 @@ void main() {
 
     test("ISet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_iSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_iSet", config: Config(size: 100));
       final ISetAddBenchmark iSetAddBenchmark = ISetAddBenchmark(emitter: tableScoreEmitter);
 
       iSetAddBenchmark.report();
@@ -33,7 +33,7 @@ void main() {
 
     test("KtSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_ktSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_ktSet", config: Config(size: 100));
       final KtSetAddBenchmark ktSetAddBenchmark = KtSetAddBenchmark(emitter: tableScoreEmitter);
 
       ktSetAddBenchmark.report();
@@ -46,7 +46,7 @@ void main() {
 
     test("BuiltSet with .rebuild()", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtSet_with_rebuild", config: Config(runs: 100, size: 100));
+          prefixName: "add_builtSet_with_rebuild", config: Config(size: 100));
       final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark =
           BuiltSetAddWithRebuildBenchmark(emitter: tableScoreEmitter);
 
@@ -60,7 +60,7 @@ void main() {
 
     test("BuiltSet with ListBuilder", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtSet_with_listBuilder", config: Config(runs: 100, size: 100));
+          prefixName: "add_builtSet_with_listBuilder", config: Config(size: 100));
       final BuiltSetAddWithSetBuilderBenchmark builtSetAddWithListBuilderBenchmark =
           BuiltSetAddWithSetBuilderBenchmark(emitter: tableScoreEmitter);
 
@@ -76,7 +76,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add", config: Config(size: 100));
       final SetAddBenchmark setAddBenchmark = SetAddBenchmark(emitter: tableScoreEmitter);
 
       setAddBenchmark.report();

@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Set (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_set_mutable", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_set_mutable", config: Config(size: 100));
       final MutableSetRemoveBenchmark mutableSetRemoveBenchmark =
           MutableSetRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -18,7 +18,7 @@ void main() {
 
     test("ISet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_iSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_iSet", config: Config(size: 100));
       final ISetRemoveBenchmark iSetRemoveBenchmark =
           ISetRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -30,7 +30,7 @@ void main() {
 
     test("KtSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_ktSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_ktSet", config: Config(size: 100));
       final KtSetRemoveBenchmark ktSetRemoveBenchmark =
           KtSetRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -42,7 +42,7 @@ void main() {
 
     test("BuiltSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_builtSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_builtSet", config: Config(size: 100));
       final BuiltSetRemoveBenchmark builtSetRemoveBenchmark =
           BuiltSetRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -56,7 +56,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove", config: Config(size: 100));
       final SetRemoveBenchmark setRemoveBenchmark = SetRemoveBenchmark(emitter: tableScoreEmitter);
 
       setRemoveBenchmark.report();

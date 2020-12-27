@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Map (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_value_map_mutable", config: Config(runs: 100, size: 10));
+          prefixName: "contains_value_map_mutable", config: Config(size: 10));
       final MutableMapContainsValueBenchmark mapContainsValueBenchmark =
           MutableMapContainsValueBenchmark(emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
 
     test("IMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "contains_value_iMap", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "contains_value_iMap", config: Config(size: 10));
       final IMapContainsValueBenchmark iMapContainsValueBenchmark =
           IMapContainsValueBenchmark(emitter: tableScoreEmitter);
 
@@ -32,7 +32,7 @@ void main() {
 
     test("KtMap", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_value_ktMap", config: Config(runs: 100, size: 10));
+          prefixName: "contains_value_ktMap", config: Config(size: 10));
       final KtMapContainsValueBenchmark ktMapContainsValueBenchmark =
           KtMapContainsValueBenchmark(emitter: tableScoreEmitter);
 
@@ -45,7 +45,7 @@ void main() {
 
     test("BuiltMap", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_value_builtMap", config: Config(runs: 100, size: 10));
+          prefixName: "contains_value_builtMap", config: Config(size: 10));
       final BuiltMapContainsValueBenchmark builtMapContainsValueBenchmark =
           BuiltMapContainsValueBenchmark(emitter: tableScoreEmitter);
 
@@ -60,7 +60,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "contains_value", config: Config(runs: 100, size: 10));
+          TableScoreEmitter(prefixName: "contains_value", config: Config(size: 10));
       final MapContainsValueBenchmark mapContainsValueBenchmark =
           MapContainsValueBenchmark(emitter: tableScoreEmitter);
 

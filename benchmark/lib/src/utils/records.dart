@@ -4,14 +4,12 @@ import "package:meta/meta.dart";
 
 @immutable
 class Config {
-  final int runs, size;
+  final int size;
 
-  const Config({@required this.runs, @required this.size})
-      : assert(runs != null && runs > 0),
-        assert(size != null && size >= 0);
+  const Config({@required this.size}) : assert(size != null && size >= 0);
 
   @override
-  String toString() => "Config: (runs: $runs, size: $size)";
+  String toString() => "Config: (size: $size)";
 }
 
 @immutable
@@ -147,12 +145,7 @@ class RecordsTable {
       _normalize(resultsColumn.mutableRecord, "x Mutable Time");
 
   /// Note that we are currently rounding off at 2 floating points.
-  RecordsColumn get normalizedAgainstRuns =>
-      _normalize(config.runs.toDouble(), "Time (μs) / Runs");
-
-  /// Note that we are currently rounding off at 2 floating points.
-  RecordsColumn get normalizedAgainstSize =>
-      _normalize(config.size.toDouble(), "Time (μs) / Size");
+  RecordsColumn get normalizedAgainstSize => _normalize(config.size.toDouble(), "Time (μs) / Size");
 
   List<String> get rowNames => resultsColumn.rowNames;
 
@@ -175,7 +168,6 @@ class RecordsTable {
       normalizedAgainstMax,
       normalizedAgainstMin,
       normalizedAgainstMutable,
-      normalizedAgainstRuns,
       normalizedAgainstSize,
     ].lock;
 
@@ -192,7 +184,6 @@ class RecordsTable {
       normalizedAgainstMax,
       normalizedAgainstMin,
       normalizedAgainstMutable,
-      normalizedAgainstRuns,
       normalizedAgainstSize,
     ].lock;
 

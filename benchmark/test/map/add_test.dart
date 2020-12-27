@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Map (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_map_mutable", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_map_mutable", config: Config(size: 100));
       final MutableMapAddBenchmark mapAddBenchmark =
           MutableMapAddBenchmark(emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
 
     test("IMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_iMap", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_iMap", config: Config(size: 100));
       final IMapAddBenchmark iMapAddBenchmark = IMapAddBenchmark(emitter: tableScoreEmitter);
 
       iMapAddBenchmark.report();
@@ -31,7 +31,7 @@ void main() {
 
     test("KtMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_ktMap", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add_ktMap", config: Config(size: 100));
       final KtMapAddBenchmark ktMapAddBenchmark = KtMapAddBenchmark(emitter: tableScoreEmitter);
 
       ktMapAddBenchmark.report();
@@ -43,7 +43,7 @@ void main() {
 
     test("BuiltMap with Rebuild", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtMap_with_rebuild", config: Config(runs: 100, size: 100));
+          prefixName: "add_builtMap_with_rebuild", config: Config(size: 100));
       final BuiltMapAddWithRebuildBenchmark builtMapAddWithRebuildBenchmark =
           BuiltMapAddWithRebuildBenchmark(emitter: tableScoreEmitter);
 
@@ -56,7 +56,7 @@ void main() {
 
     test("BuiltMap with ListBuilder", () {
       final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtMap_with_listBuilder", config: Config(runs: 100, size: 100));
+          prefixName: "add_builtMap_with_listBuilder", config: Config(size: 100));
       final BuiltMapAddWithListBuilderBenchmark builtMapAddWithListBuilderBenchmark =
           BuiltMapAddWithListBuilderBenchmark(emitter: tableScoreEmitter);
 
@@ -71,7 +71,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "add", config: Config(size: 100));
       final MapAddBenchmark addBenchmark = MapAddBenchmark(emitter: tableScoreEmitter);
 
       addBenchmark.report();

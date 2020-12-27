@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("List (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_list_mutable", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_list_mutable", config: Config(size: 0));
       final MutableListEmptyBenchmark listEmptyBenchmark =
           MutableListEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -17,7 +17,7 @@ void main() {
 
     test("IList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_iList", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_iList", config: Config(size: 0));
       final IListEmptyBenchmark iListEmptyBenchmark =
           IListEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -28,7 +28,7 @@ void main() {
 
     test("KtList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_ktList", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_ktList", config: Config(size: 0));
       final KtListEmptyBenchmark ktListEmptyBenchmark =
           KtListEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -39,7 +39,7 @@ void main() {
 
     test("BuiltList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty_builtList", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty_builtList", config: Config(size: 0));
       final BuiltListEmptyBenchmark builtListEmptyBenchmark =
           BuiltListEmptyBenchmark(emitter: tableScoreEmitter);
 
@@ -52,7 +52,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "empty", config: Config(runs: 100, size: 0));
+          TableScoreEmitter(prefixName: "empty", config: Config(size: 0));
       final ListEmptyBenchmark emptyBenchmark = ListEmptyBenchmark(emitter: tableScoreEmitter);
 
       emptyBenchmark.report();

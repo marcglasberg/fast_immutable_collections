@@ -58,19 +58,25 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_1",
-            config: Config(runs: 10, size: 10),
+            config: Config(size: 10),
           ),
         ),
         ListAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_2",
-            config: Config(runs: 10, size: 1000),
+            config: Config(size: 1000),
           ),
         ),
         ListAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_3",
-            config: Config(runs: 1, size: 10000),
+            config: Config(size: 10000),
+          ),
+        ),
+        ListAddBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_add_4",
+            config: Config(size: 100000),
           ),
         ),
       ],
@@ -82,7 +88,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_all",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -94,7 +100,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListContainsBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_contains",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -106,7 +112,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_empty",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -118,7 +124,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListReadBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_read",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -130,7 +136,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListRemoveBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_remove",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -145,19 +151,19 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_1",
-            config: Config(runs: 10, size: 10),
+            config: Config(size: 10),
           ),
         ),
         SetAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_2",
-            config: Config(runs: 10, size: 50),
+            config: Config(size: 50),
           ),
         ),
         SetAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_3",
-            config: Config(runs: 10, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -169,7 +175,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_all",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -181,7 +187,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetContainsBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_contains",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -193,7 +199,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_empty",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -205,7 +211,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetRemoveBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_remove",
-            config: Config(runs: 100, size: 100),
+            config: Config(size: 100),
           ),
         ),
       ],
@@ -220,19 +226,19 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_1",
-            config: Config(runs: 10, size: 10),
+            config: Config(size: 10),
           ),
         ),
         MapAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_2",
-            config: Config(runs: 10, size: 100),
+            config: Config(size: 100),
           ),
         ),
         MapAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_3",
-            config: Config(runs: 10, size: 500),
+            config: Config(size: 500),
           ),
         ),
       ],
@@ -244,7 +250,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_all",
-            config: Config(runs: 100, size: 10),
+            config: Config(size: 10),
           ),
         ),
       ],
@@ -256,7 +262,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapContainsValueBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_contains_value",
-            config: Config(runs: 100, size: 10),
+            config: Config(size: 10),
           ),
         ),
       ],
@@ -268,7 +274,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_empty",
-            config: Config(runs: 100, size: 0),
+            config: Config(size: 0),
           ),
         ),
       ],
@@ -280,7 +286,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapReadBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_read",
-            config: Config(runs: 100, size: 1000),
+            config: Config(size: 1000),
           ),
         ),
       ],
@@ -292,7 +298,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapRemoveBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_remove",
-            config: Config(runs: 100, size: 1000),
+            config: Config(size: 1000),
           ),
         ),
       ],

@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Set (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_set_mutable", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "read_set_mutable", config: Config(size: 100));
       final MutableSetContainsBenchmark mutableSetContainsBenchmark =
           MutableSetContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
 
     test("ISet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_iSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "read_iSet", config: Config(size: 100));
       final ISetContainsBenchmark iSetContainsBenchmark =
           ISetContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -31,7 +31,7 @@ void main() {
 
     test("KtSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_ktSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "read_ktSet", config: Config(size: 100));
       final KtSetContainsBenchmark ktSetContainsBenchmark =
           KtSetContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -43,7 +43,7 @@ void main() {
 
     test("BuiltSet", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_builtSet", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "read_builtSet", config: Config(size: 100));
       final BuiltSetContainsBenchmark builtSetContainsBenchmark =
           BuiltSetContainsBenchmark(emitter: tableScoreEmitter);
 
@@ -58,7 +58,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "read", config: Config(size: 100));
       final SetContainsBenchmark setContainsBenchmark =
           SetContainsBenchmark(emitter: tableScoreEmitter);
 

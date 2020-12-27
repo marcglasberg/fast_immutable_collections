@@ -1,3 +1,4 @@
+import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/kt.dart";
@@ -7,10 +8,16 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 // /////////////////////////////////////////////////////////////////////////////
 
 class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-  static const int innerRuns = 1000;
-
   @override
   final List<ListBenchmarkBase> benchmarks;
+
+  // TODO: REMOVER
+  // TODO: REMOVER
+  // TODO: REMOVER
+  // TODO: REMOVER
+  // TODO: REMOVER
+  // TODO: REMOVER
+  static var innerRuns = 1000;
 
   ListAddBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <ListBenchmarkBase>[
@@ -29,19 +36,42 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
   MutableListAddBenchmark({@required TableScoreEmitter emitter})
       : super(name: "List (Mutable)", emitter: emitter);
 
-  List<int> _list;
-  List<int> _fixedList;
+  List<int> list;
+
+  // Saves a single copy of the initial list (created during setup).
+  List<int> fixedInitialList;
+
+  // Saves many copies of the initial list (created during setup).
+  List<List<int>> initialLists;
+
+  int count;
 
   @override
-  List<int> toMutable() => _list;
+  List<int> toMutable() => list;
 
+  /// Since List is mutable, we have to create many copied of the original list during setup.
+  /// Note the setup does not count for the measurements.
   @override
-  void setup() => _fixedList = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+  void setup() {
+    count = 0;
+    fixedInitialList = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+    initialLists = [];
+    for (int i = 0; i < max(1, 10000000 ~/ config.size); i++)
+      initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  }
 
   @override
   void run() {
-    _list = List<int>.of(_fixedList);
-    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) _list.add(i);
+    list = getNextList();
+    for (int i = 0; i < innerRuns(); i++) list.add(i);
+  }
+
+  List<int> getNextList() {
+    if (count >= initialLists.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialLists[count];
   }
 }
 
@@ -50,22 +80,22 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
 class IListAddBenchmark extends ListBenchmarkBase {
   IListAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "IList", emitter: emitter);
 
-  IList<int> _iList;
-  IList<int> _result;
+  IList<int> iList;
+  IList<int> result;
 
   @override
-  List<int> toMutable() => _result.unlock;
+  List<int> toMutable() => result.unlock;
 
   @override
   void setup() {
-    _iList = IList<int>();
-    for (int i = 0; i < config.size; i++) _iList = _iList.add(i);
+    iList = IList<int>();
+    for (int i = 0; i < config.size; i++) iList = iList.add(i);
   }
 
   @override
   void run() {
-    _result = _iList;
-    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) _result = _result.add(i);
+    result = iList;
+    for (int i = 0; i < innerRuns(); i++) result = result.add(i);
   }
 }
 
@@ -75,20 +105,20 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   KtListAddBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtList", emitter: emitter);
 
-  KtList<int> _ktList;
-  KtList<int> _result;
+  KtList<int> ktList;
+  KtList<int> result;
 
   @override
-  List<int> toMutable() => _result.asList();
+  List<int> toMutable() => result.asList();
 
   @override
   void setup() =>
-      _ktList = ListBenchmarkBase.getDummyGeneratedList(size: config.size).toImmutableList();
+      ktList = ListBenchmarkBase.getDummyGeneratedList(size: config.size).toImmutableList();
 
   @override
   void run() {
-    _result = _ktList;
-    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) _result = _result.plusElement(i);
+    result = ktList;
+    for (int i = 0; i < innerRuns(); i++) result = result.plusElement(i);
   }
 }
 
@@ -98,21 +128,21 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   BuiltListAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList with Rebuild", emitter: emitter);
 
-  BuiltList<int> _builtList;
-  BuiltList<int> _result;
+  BuiltList<int> builtList;
+  BuiltList<int> result;
 
   @override
-  List<int> toMutable() => _result.asList();
+  List<int> toMutable() => result.asList();
 
   @override
   void setup() =>
-      _builtList = BuiltList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+      builtList = BuiltList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
   void run() {
-    _result = _builtList;
-    for (int i = 0; i < ListAddBenchmark.innerRuns; i++)
-      _result = _result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
+    result = builtList;
+    for (int i = 0; i < innerRuns(); i++)
+      result = result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
   }
 }
 
@@ -122,21 +152,21 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   BuiltListAddWithListBuilderBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList with List Builder", emitter: emitter);
 
-  BuiltList<int> _builtList;
-  BuiltList<int> _result;
+  BuiltList<int> builtList;
+  BuiltList<int> result;
 
   @override
-  List<int> toMutable() => _result.asList();
+  List<int> toMutable() => result.asList();
 
   @override
   void setup() =>
-      _builtList = BuiltList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+      builtList = BuiltList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
   void run() {
-    final ListBuilder<int> listBuilder = _builtList.toBuilder();
-    for (int i = 0; i < ListAddBenchmark.innerRuns; i++) listBuilder.add(i);
-    _result = listBuilder.build();
+    final ListBuilder<int> listBuilder = builtList.toBuilder();
+    for (int i = 0; i < innerRuns(); i++) listBuilder.add(i);
+    result = listBuilder.build();
   }
 }
 

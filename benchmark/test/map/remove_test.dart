@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("Map (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_map_mutable", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_map_mutable", config: Config(size: 100));
       final MutableMapRemoveBenchmark mutableMapRemoveBenchmark =
           MutableMapRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -18,7 +18,7 @@ void main() {
 
     test("IMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_iMap", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_iMap", config: Config(size: 100));
       final IMapRemoveBenchmark iMapRemoveBenchmark =
           IMapRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -29,7 +29,7 @@ void main() {
 
     test("KtMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_ktMap", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_ktMap", config: Config(size: 100));
       final KtMapRemoveBenchmark ktMapRemoveBenchmark =
           KtMapRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -41,7 +41,7 @@ void main() {
 
     test("BuiltMap", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_builtMap", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove_builtMap", config: Config(size: 100));
       final BuiltMapMapRemoveBenchmark builtMapRemoveBenchmark =
           BuiltMapMapRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -55,7 +55,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove", config: Config(runs: 100, size: 100));
+          TableScoreEmitter(prefixName: "remove", config: Config(size: 100));
       final MapRemoveBenchmark removeBenchmark = MapRemoveBenchmark(emitter: tableScoreEmitter);
 
       removeBenchmark.report();

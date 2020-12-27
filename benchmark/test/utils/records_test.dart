@@ -10,15 +10,15 @@ final Matcher throwsAssertionError = throwsA(isAssertionError);
 void main() {
   group("Config |", () {
     test("Only accepts runs bigger than 0",
-        () => expect(() => Config(runs: 0, size: 10), throwsAssertionError));
+        () => expect(() => Config(size: 10), throwsAssertionError));
 
     test("Only accepts sizes bigger or equal than 0",
-        () => expect(() => Config(runs: 10, size: -1), throwsAssertionError));
+        () => expect(() => Config(size: -1), throwsAssertionError));
 
     test("toString()", () {
-      const Config config = Config(runs: 10, size: 10);
+      const Config config = Config(size: 10);
 
-      expect(config.toString(), "Config: (runs: 10, size: 10)");
+      expect(config.toString(), "Config: (size: 10)");
     });
   });
 
@@ -189,7 +189,7 @@ void main() {
       recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
       final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       expect(recordsTable.leftLegend, isA<LeftLegend>());
       expect(recordsTable.leftLegend.rows,
@@ -204,7 +204,7 @@ void main() {
       recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
       final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .33);
@@ -224,7 +224,7 @@ void main() {
       recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
       final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
@@ -244,7 +244,7 @@ void main() {
       recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
       final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
@@ -256,26 +256,6 @@ void main() {
       expect(recordsTable.normalizedAgainstMutable.title, "x Mutable Time");
     });
 
-    test("Normalized against runs", () {
-      RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
-      recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
-      recordsColumn += StopwatchRecord(collectionName: "IList", record: 15);
-      recordsColumn += StopwatchRecord(collectionName: "KtList", record: 20);
-      recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
-
-      final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
-
-      RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
-      recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .1);
-      recordsColumnAnswer += StopwatchRecord(collectionName: "IList", record: .15);
-      recordsColumnAnswer += StopwatchRecord(collectionName: "KtList", record: .2);
-      recordsColumnAnswer += StopwatchRecord(collectionName: "BuiltList", record: .3);
-
-      expect(recordsTable.normalizedAgainstRuns, recordsColumnAnswer);
-      expect(recordsTable.normalizedAgainstRuns.title, "Time (μs) / Runs");
-    });
-
     test("Normalized against size", () {
       RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
       recordsColumn += StopwatchRecord(collectionName: "List (Mutable)", record: 10);
@@ -284,7 +264,7 @@ void main() {
       recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
       final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .01);
@@ -304,7 +284,7 @@ void main() {
       recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
       final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       const String correctTableAsString =
           "Collection,Time (μs),x Max Time,x Min Time,x Mutable Time,Time (μs) / Runs,Time (μs) / Size\n"
@@ -325,7 +305,7 @@ void main() {
       recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
       final RecordsTable recordsTable =
-          RecordsTable(resultsColumn: recordsColumn, config: const Config(runs: 100, size: 1000));
+          RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
       recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .5);
