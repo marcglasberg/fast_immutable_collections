@@ -1,4 +1,4 @@
-import "package:fast_immutable_collections_example/widgets/bar_chart.dart";
+import "../widgets/bar_chart.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 

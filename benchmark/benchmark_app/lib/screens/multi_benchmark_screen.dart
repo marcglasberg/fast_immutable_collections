@@ -1,6 +1,6 @@
-import "package:fast_immutable_collections_example/utils/benchmarks_code.dart";
-import "package:fast_immutable_collections_example/widgets/bench_widget.dart";
-import "package:fast_immutable_collections_example/widgets/release_mode_warning.dart";
+import "../utils/benchmarks_code.dart";
+import "../widgets/bench_widget.dart";
+import "../widgets/release_mode_warning.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
