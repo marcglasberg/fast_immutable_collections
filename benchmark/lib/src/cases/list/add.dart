@@ -56,14 +56,13 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
     count = 0;
     fixedInitialList = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
     initialLists = [];
-    for (int i = 0; i < max(1, 10000000 ~/ config.size); i++)
+    for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
       initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
   }
 
   @override
   void run() {
     list = getNextList();
-    print('innerRuns() = ${innerRuns()}');
     for (int i = 0; i < innerRuns(); i++) list.add(i);
   }
 
