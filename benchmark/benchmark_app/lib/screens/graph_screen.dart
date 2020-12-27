@@ -1,3 +1,4 @@
+import "dart:async";
 import "../widgets/bar_chart.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
@@ -20,9 +21,9 @@ class _GraphScreenState extends State<GraphScreen> {
   /// We will need to add an artificial button to the bottom bar if there's only one benchmark,
   /// since it requires at least 2 items.
   bool _onlyOneBenchmark;
-  bool _stacked;
 
-  final Map<String, bool> _filters = {};
+  final StreamController<Map<String, bool>> _filtersStream = StreamController();
+  Map<String, bool> _currentFilters = {};
 
   RecordsTable get _currentTable => _currentTableIndex >= widget.tables.length
       ? widget.tables.last
@@ -33,9 +34,11 @@ class _GraphScreenState extends State<GraphScreen> {
   @override
   void initState() {
     _onlyOneBenchmark = false;
-    _stacked = false;
     _currentTableIndex = 0;
-    _currentTable.rowNames.forEach((String rowName) => _filters.addAll({rowName: true}));
+
+    Map<String, bool> _currentFilters = {};
+    _currentTable.rowNames.forEach((String rowName) => _currentFilters.addAll({rowName: true}));
+    _filtersStream.add(_currentFilters);
 
     super.initState();
 
@@ -58,24 +61,13 @@ class _GraphScreenState extends State<GraphScreen> {
           label: "Go back",
         ),
       );
-    } else if (_bottomItems.length > 1) {
-      _bottomItems.add(
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.table_rows),
-          label: "All",
-        ),
-      );
     }
   }
 
   void _onTap(int index) => setState(() {
         if (_onlyOneBenchmark && index == 1) {
           Navigator.of(context).pop();
-        } else if (index == widget.tables.length) {
-          _stacked = true;
-          _currentTableIndex = index;
         } else {
-          _stacked = false;
           _currentTableIndex = index;
         }
       });
@@ -88,48 +80,53 @@ class _GraphScreenState extends State<GraphScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 5, right: 5),
-        child: ListView(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                DropdownButton<String>(
-                  hint: Text(
-                    "Filter",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  items: _filters.keys
-                      .map<DropdownMenuItem<String>>(
-                        (String filter) => DropdownMenuItem<String>(
-                          value: filter,
-                          child: Row(
-                            children: <Widget>[
-                              Checkbox(
-                                value: _filters[filter],
-                                onChanged: (bool value) {},
-                              ),
-                              Text(
-                                filter,
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ],
-                          ),
+        child: StreamBuilder(
+            stream: _filtersStream.stream,
+            builder: (_, AsyncSnapshot<Map<String, bool>> snapshot) {
+              if (snapshot.hasData) _currentFilters = snapshot.data;
+
+              return ListView(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButton<String>(
+                        hint: const Text(
+                          "Filter",
+                          style: TextStyle(fontSize: 20),
                         ),
-                      )
-                      .toList(),
-                  onChanged: (String newFilter) =>
-                      setState(() => _filters.update(newFilter, (bool value) => !value)),
-                ),
-              ],
-            ),
-            Container(
-              height: 500,
-              child: _stacked
-                  ? StackedBarChart(recordsTables: _filterAllNTimes(widget.tables))
-                  : BarChart(recordsTable: _filterNTimes(_currentTable)),
-            ),
-          ],
-        ),
+                        items: _currentFilters.keys
+                            .map<DropdownMenuItem<String>>(
+                              (String filter) => DropdownMenuItem<String>(
+                                value: filter,
+                                child: Row(
+                                  children: <Widget>[
+                                    Checkbox(
+                                      value: _currentFilters[filter],
+                                      onChanged: (bool value) {
+                                        updateFilters(filter);
+                                      },
+                                    ),
+                                    Text(
+                                      filter,
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: updateFilters,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 500,
+                    child: BarChart(recordsTable: _filterNTimes(_currentTable)),
+                  ),
+                ],
+              );
+            }),
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black,
@@ -142,14 +139,13 @@ class _GraphScreenState extends State<GraphScreen> {
     );
   }
 
-  List<RecordsTable> _filterAllNTimes(List<RecordsTable> tables) {
-    final List<RecordsTable> filteredTables = [];
-    tables.forEach((RecordsTable table) => filteredTables.add(_filterNTimes(table)));
-    return filteredTables;
+  void updateFilters(String newFilter) {
+    _currentFilters.update(newFilter, (bool value) => !value);
+    _filtersStream.add(_currentFilters);
   }
 
   RecordsTable _filterNTimes(RecordsTable table) {
-    _filters.forEach((String filterName, bool shouldNotFilter) {
+    _currentFilters.forEach((String filterName, bool shouldNotFilter) {
       if (!shouldNotFilter) table = table.filter(filterName);
     });
     return table;
