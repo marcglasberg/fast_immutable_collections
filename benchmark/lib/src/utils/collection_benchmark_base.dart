@@ -75,7 +75,7 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 
-  static List<int> getDummyGeneratedList({int size = 10000}) =>
+  static List<int> getDummyGeneratedList({int size}) =>
       List<int>.generate(size, (int index) => index);
 
   @visibleForTesting
@@ -97,7 +97,7 @@ abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 
-  static Set<int> getDummyGeneratedSet({int size = 10000}) =>
+  static Set<int> getDummyGeneratedSet({int size}) =>
       Set<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: size));
 
   @visibleForTesting
@@ -112,7 +112,7 @@ abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 
-  static Map<String, int> getDummyGeneratedMap({int size = 10000}) =>
+  static Map<String, int> getDummyGeneratedMap({int size}) =>
       Map<String, int>.fromEntries(List<MapEntry<String, int>>.generate(
           size, (int index) => MapEntry<String, int>(index.toString(), index)));
 

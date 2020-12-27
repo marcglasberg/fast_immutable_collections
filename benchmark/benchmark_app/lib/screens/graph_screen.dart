@@ -1,4 +1,4 @@
-import "package:fast_immutable_collections_example/widgets/bar_chart.dart";
+import "../widgets/bar_chart.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
@@ -23,23 +23,26 @@ class _GraphScreenState extends State<GraphScreen> {
     Icon(Icons.filter_5),
   ];
 
-  int _currentTableIndex = 0;
+  int _currentTableIndex;
   List<BottomNavigationBarItem> _bottomItems;
 
-  /// We will need to add an artifial button to the bottom bar if there's only one benchmark, since
-  /// it requires at least 2 items.
-  bool _onlyOneBenchmark = false;
-  bool _stacked = false;
+  /// We will need to add an artificial button to the bottom bar if there's only one benchmark,
+  /// since it requires at least 2 items.
+  bool _onlyOneBenchmark;
+  bool _stacked;
+
+  final Map<String, bool> _filters = {};
 
   RecordsTable get _currentTable => _currentTableIndex >= widget.tables.length
       ? widget.tables.last
       : widget.tables[_currentTableIndex];
 
-  List<String> _possibleFilters;
-
   @override
   void initState() {
-    _possibleFilters = _currentTable.rowNames;
+    _onlyOneBenchmark = false;
+    _stacked = false;
+    _currentTableIndex = 0;
+    _currentTable.rowNames.forEach((String rowName) => _filters.addAll({rowName: false}));
 
     super.initState();
 
@@ -80,8 +83,6 @@ class _GraphScreenState extends State<GraphScreen> {
         }
       });
 
-  final List<String> _currentFilters = [];
-
   @override
   Widget build(_) {
     return Scaffold(
@@ -97,31 +98,37 @@ class _GraphScreenState extends State<GraphScreen> {
               children: [
                 DropdownButton<String>(
                   hint: Text(
-                    "Filter by: ",
+                    "Filter",
                     style: TextStyle(fontSize: 20),
                   ),
-                  items: _possibleFilters
+                  items: _filters.keys
                       .map<DropdownMenuItem<String>>(
                         (String filter) => DropdownMenuItem<String>(
                           value: filter,
-                          child: Text(
-                            filter,
-                            style: TextStyle(fontSize: 20),
+                          child: Row(
+                            children: <Widget>[
+                              Checkbox(
+                                value: _filters[filter],
+                                onChanged: (bool value) {},
+                              ),
+                              Text(
+                                filter,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
                           ),
                         ),
                       )
                       .toList(),
-                  onChanged: (String newFilter) => setState(() {
-                    _possibleFilters.remove(newFilter);
-                    _currentFilters.add(newFilter);
-                  }),
+                  onChanged: (String newFilter) =>
+                      setState(() => _filters.update(newFilter, (bool value) => !value)),
                 ),
               ],
             ),
             Container(
               height: 500,
               child: _stacked
-                  ? StackedBarChart(recordsTables: _filterAllNTimes())
+                  ? StackedBarChart(recordsTables: _filterAllNTimes(widget.tables))
                   : BarChart(recordsTable: _filterNTimes(_currentTable)),
             ),
           ],
@@ -138,14 +145,16 @@ class _GraphScreenState extends State<GraphScreen> {
     );
   }
 
-  List<RecordsTable> _filterAllNTimes() {
-    final List<RecordsTable> tables = [];
-    widget.tables.forEach((RecordsTable table) => tables.add(_filterNTimes(table)));
-    return tables;
+  List<RecordsTable> _filterAllNTimes(List<RecordsTable> tables) {
+    final List<RecordsTable> filteredTables = [];
+    tables.forEach((RecordsTable table) => filteredTables.add(_filterNTimes(table)));
+    return filteredTables;
   }
 
   RecordsTable _filterNTimes(RecordsTable table) {
-    _currentFilters.forEach((String filter) => table = table.filter(filter));
+    _filters.forEach((String filter, bool onOff) {
+      if (onOff) table = table.filter(filter);
+    });
     return table;
   }
 }

@@ -1,5 +1,5 @@
-name: fast_immutable_collections_example
-description: The example project for the `fast_immutable_collections` package.
+name: benchmark_app
+description: The example project for the fast_immutable_collections package.
 version: 0.0.1
 authors:
   - Philippe Fanaro <philippefanaro@gmail.com>
