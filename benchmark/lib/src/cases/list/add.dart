@@ -63,6 +63,7 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     list = getNextList();
+    print('innerRuns() = ${innerRuns()}');
     for (int i = 0; i < innerRuns(); i++) list.add(i);
   }
 

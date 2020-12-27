@@ -1,8 +1,6 @@
-import 'dart:math';
-
+import "dart:math";
 import "package:benchmark_harness/benchmark_harness.dart";
 import "package:meta/meta.dart";
-
 import "records.dart";
 import "table_score_emitter.dart";
 
@@ -41,31 +39,15 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   double measure() {
     setup();
     // Warmup for at least 100ms. Discard result.
-    measureFor(() {
+    BenchmarkBase.measureFor(() {
       warmup();
     }, 100);
     // Run the benchmark for at least 900ms.
-    double result = measureFor(() {
+    double result = BenchmarkBase.measureFor(() {
       exercise();
     }, 900);
     teardown();
     return result;
-  }
-
-  // Measures the score for this benchmark by executing it repeatedly
-  // until time minimum has been reached.
-  static double measureFor(Function f, int minimumMillis) {
-    int minimumMicros = minimumMillis * 1000;
-    int iter = 0;
-    Stopwatch watch = Stopwatch();
-    watch.start();
-    int elapsed = 0;
-    while (elapsed < minimumMicros) {
-      f();
-      elapsed = watch.elapsedMicroseconds;
-      iter++;
-    }
-    return elapsed / iter;
   }
 }
 
@@ -88,7 +70,7 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   /// Inner runs is half of the config.size.
   /// For example, we can measure adding 5 items to a list of 10 items,
   /// or adding 50 items to a list of 100 items.
-  int innerRuns() => _innerRuns ??= min(1, config.size ~/ 2);
+  int innerRuns() => _innerRuns ??= min(1000, max(1, config.size ~/ 10));
 }
 
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
