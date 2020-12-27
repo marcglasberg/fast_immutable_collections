@@ -2,7 +2,7 @@ name: fast_immutable_collections
 description: Immutable lists and other collections, which are as fast as their native Dart/Flutter mutable counterparts.
 version: 0.0.1
 homepage: glasberg.dev
-authors: 
+authors:
   - glasberg.dev
   - Marcelo Glasberg
   - Philippe Fanaro <philippefanaro@gmail.com>
@@ -10,11 +10,14 @@ authors:
 environment:
   sdk: ">=2.10.0 <3.0.0"
 
+dependencies:
+  intl: ^0.16.1
+
 dev_dependencies:
   pedantic: ^1.9.2
   test: ^1.15.3
 
-  # Only for CI and test coverage purposes. 
+  # Only for CI and test coverage purposes.
   # Though you might need to test through `flutter test` instead of `pub run test`.
   flutter_test:
     sdk: flutter

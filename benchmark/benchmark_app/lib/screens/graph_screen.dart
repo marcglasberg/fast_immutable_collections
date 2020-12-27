@@ -1,6 +1,7 @@
 import "../widgets/bar_chart.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:intl/intl.dart";
 
 class GraphScreen extends StatefulWidget {
   final String title;
@@ -13,16 +14,6 @@ class GraphScreen extends StatefulWidget {
 }
 
 class _GraphScreenState extends State<GraphScreen> {
-  /// Currently, only 5 configurations are possible, but you can easily change it by adding more
-  /// icons, though the bottom bar will get crowded.
-  static const List<Icon> _sizeIcons = [
-    Icon(Icons.filter_1),
-    Icon(Icons.filter_2),
-    Icon(Icons.filter_3),
-    Icon(Icons.filter_4),
-    Icon(Icons.filter_5),
-  ];
-
   int _currentTableIndex;
   List<BottomNavigationBarItem> _bottomItems;
 
@@ -37,20 +28,26 @@ class _GraphScreenState extends State<GraphScreen> {
       ? widget.tables.last
       : widget.tables[_currentTableIndex];
 
+  final NumberFormat formatter = NumberFormat("#,##0", "en_US");
+
   @override
   void initState() {
     _onlyOneBenchmark = false;
     _stacked = false;
     _currentTableIndex = 0;
-    _currentTable.rowNames.forEach((String rowName) => _filters.addAll({rowName: false}));
+    _currentTable.rowNames.forEach((String rowName) => _filters.addAll({rowName: true}));
 
     super.initState();
 
     _bottomItems = <BottomNavigationBarItem>[
       for (int i = 0; i < widget.tables.length; i++)
         BottomNavigationBarItem(
-          icon: _sizeIcons[i],
-          label: "Size: ${widget.tables[i].config.size}",
+          icon: Text(
+            "Size\n${formatter.format(widget.tables[i].config.size)}",
+            style: TextStyle(fontSize: 17),
+            textAlign: TextAlign.center,
+          ),
+          label: "",
         ),
     ];
     if (_bottomItems.length == 1) {
@@ -152,8 +149,8 @@ class _GraphScreenState extends State<GraphScreen> {
   }
 
   RecordsTable _filterNTimes(RecordsTable table) {
-    _filters.forEach((String filter, bool onOff) {
-      if (onOff) table = table.filter(filter);
+    _filters.forEach((String filterName, bool shouldNotFilter) {
+      if (!shouldNotFilter) table = table.filter(filterName);
     });
     return table;
   }
