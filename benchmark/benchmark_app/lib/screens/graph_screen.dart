@@ -62,7 +62,7 @@ class _GraphScreenState extends State<GraphScreen> {
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: ListView(
         children: [
-          _DropdownButton(filters, updateFilters),
+          Center(child: _DropdownButton(filters, updateFilters)),
           Container(
             height: 490,
             child: BarChart(recordsTable: _filterNTimes(_currentTable)),
