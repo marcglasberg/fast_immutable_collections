@@ -27,19 +27,19 @@ class MutableMapAddAllBenchmark extends MapBenchmarkBase {
   MutableMapAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Map (Mutable)", emitter: emitter);
 
-  Map<String, int> _map;
-  Map<String, int> _fixedMap;
+  Map<String, int> map;
+  Map<String, int> fixedMap;
 
   @override
-  Map<String, int> toMutable() => _map;
+  Map<String, int> toMutable() => map;
 
   @override
-  void setup() => _fixedMap = Map<String, int>.of(MapAddAllBenchmark.baseMap);
+  void setup() => fixedMap = Map<String, int>.of(MapAddAllBenchmark.baseMap);
 
   @override
   void run() {
-    _map = Map<String, int>.of(_fixedMap);
-    _map.addAll(MapAddAllBenchmark.mapToAdd);
+    map = Map<String, int>.of(fixedMap);
+    map.addAll(MapAddAllBenchmark.mapToAdd);
   }
 }
 
@@ -47,50 +47,50 @@ class IMapAddAllBenchmark extends MapBenchmarkBase {
   IMapAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IMap", emitter: emitter);
 
-  IMap<String, int> _iMap;
-  IMap<String, int> _result;
+  IMap<String, int> iMap;
+  IMap<String, int> result;
 
   @override
-  Map<String, int> toMutable() => _result.unlock;
+  Map<String, int> toMutable() => result.unlock;
 
   @override
-  void setup() => _iMap = IMap<String, int>(MapAddAllBenchmark.baseMap);
+  void setup() => iMap = IMap<String, int>(MapAddAllBenchmark.baseMap);
 
   @override
-  void run() => _result = _iMap.addAll(MapAddAllBenchmark.mapToAdd.lock);
+  void run() => result = iMap.addAll(MapAddAllBenchmark.mapToAdd.lock);
 }
 
 class KtMapAddAllBenchmark extends MapBenchmarkBase {
   KtMapAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtMap", emitter: emitter);
 
-  KtMap<String, int> _ktMap;
-  KtMap<String, int> _result;
+  KtMap<String, int> ktMap;
+  KtMap<String, int> result;
 
   @override
-  Map<String, int> toMutable() => _result.asMap();
+  Map<String, int> toMutable() => result.asMap();
 
   @override
-  void setup() => _ktMap = KtMap<String, int>.from(MapAddAllBenchmark.baseMap);
+  void setup() => ktMap = KtMap<String, int>.from(MapAddAllBenchmark.baseMap);
 
   @override
-  void run() => _result = _ktMap.plus(KtMap<String, int>.from(MapAddAllBenchmark.mapToAdd));
+  void run() => result = ktMap.plus(KtMap<String, int>.from(MapAddAllBenchmark.mapToAdd));
 }
 
 class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
   BuiltMapAddAllBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+      : super(name: "BuiltMap", emitter: emitter);
 
-  BuiltMap<String, int> _builtMap;
-  BuiltMap<String, int> _result;
-
-  @override
-  Map<String, int> toMutable() => _result.asMap();
+  BuiltMap<String, int> builtMap;
+  BuiltMap<String, int> result;
 
   @override
-  void setup() => _builtMap = BuiltMap<String, int>.of(MapAddAllBenchmark.baseMap);
+  Map<String, int> toMutable() => result.asMap();
 
   @override
-  void run() => _result = _builtMap.rebuild(
+  void setup() => builtMap = BuiltMap<String, int>.of(MapAddAllBenchmark.baseMap);
+
+  @override
+  void run() => result = builtMap.rebuild(
       (MapBuilder<String, int> mapBuilder) => mapBuilder.addAll(MapAddAllBenchmark.mapToAdd));
 }

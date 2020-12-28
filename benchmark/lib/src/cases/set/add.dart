@@ -28,60 +28,57 @@ class MutableSetAddBenchmark extends SetBenchmarkBase {
   MutableSetAddBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
-  Set<int> _set;
-  Set<int> _fixedSet;
+  Set<int> set;
+  Set<int> fixedSet;
 
   @override
-  Set<int> toMutable() => _set;
+  Set<int> toMutable() => set;
 
   @override
-  void setup() => _fixedSet = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+  void setup() => fixedSet = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
 
   @override
   void run() {
-    _set = Set<int>.of(_fixedSet);
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) _set.add(i);
+    set = Set<int>.of(fixedSet);
+    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) set.add(i);
   }
 }
 
 class ISetAddBenchmark extends SetBenchmarkBase {
   ISetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
-  ISet<int> _iSet;
-  ISet<int> _result;
+  ISet<int> iSet;
+  ISet<int> result;
 
   @override
-  Set<int> toMutable() => _result.unlock;
+  Set<int> toMutable() => result.unlock;
 
   @override
-  void setup() => _iSet = ISet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => iSet = ISet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
-    _result = _iSet;
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) _result = _result.add(i);
+    result = iSet;
+    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) result = result.add(i);
   }
 }
 
 class KtSetAddBenchmark extends SetBenchmarkBase {
   KtSetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "KtSet", emitter: emitter);
 
-  KtSet<int> _ktSet;
-  KtSet<int> _result;
+  KtSet<int> ktSet;
+  KtSet<int> result;
 
   @override
-  Set<int> toMutable() => _result.asSet();
-
-  Set<int> get ktSet => _ktSet.asSet();
+  Set<int> toMutable() => result.asSet();
 
   @override
-  void setup() =>
-      _ktSet = SetBenchmarkBase.getDummyGeneratedSet(size: config.size).toImmutableSet();
+  void setup() => ktSet = SetBenchmarkBase.getDummyGeneratedSet(size: config.size).toImmutableSet();
 
   @override
   void run() {
-    _result = _ktSet;
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) _result = _result.plusElement(i).toSet();
+    result = ktSet;
+    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) result = result.plusElement(i).toSet();
   }
 }
 
@@ -89,20 +86,20 @@ class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
   BuiltSetAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet with Rebuild", emitter: emitter);
 
-  BuiltSet<int> _builtSet;
-  BuiltSet<int> _result;
+  BuiltSet<int> builtSet;
+  BuiltSet<int> result;
 
   @override
-  Set<int> toMutable() => _result.asSet();
+  Set<int> toMutable() => result.asSet();
 
   @override
-  void setup() => _builtSet = BuiltSet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => builtSet = BuiltSet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
-    _result = _builtSet;
+    result = builtSet;
     for (int i = 0; i < SetAddBenchmark.innerRuns; i++)
-      _result = _result.rebuild((SetBuilder<int> setBuilder) => setBuilder.add(i));
+      result = result.rebuild((SetBuilder<int> setBuilder) => setBuilder.add(i));
   }
 }
 
@@ -110,19 +107,19 @@ class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
   BuiltSetAddWithSetBuilderBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet with ListBuilder", emitter: emitter);
 
-  BuiltSet<int> _builtSet;
-  BuiltSet<int> _result;
+  BuiltSet<int> builtSet;
+  BuiltSet<int> result;
 
   @override
-  Set<int> toMutable() => _result.asSet();
+  Set<int> toMutable() => result.asSet();
 
   @override
-  void setup() => _builtSet = BuiltSet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => builtSet = BuiltSet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
-    final SetBuilder<int> setBuilder = _builtSet.toBuilder();
+    final SetBuilder<int> setBuilder = builtSet.toBuilder();
     for (int i = 0; i < SetAddBenchmark.innerRuns; i++) setBuilder.add(i);
-    _result = setBuilder.build();
+    result = setBuilder.build();
   }
 }

@@ -11,14 +11,6 @@ class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  // TODO: REMOVER
-  // TODO: REMOVER
-  // TODO: REMOVER
-  // TODO: REMOVER
-  // TODO: REMOVER
-  // TODO: REMOVER
-  static var innerRuns = 1000;
-
   ListAddBenchmark({@required TableScoreEmitter emitter})
       : benchmarks = <ListBenchmarkBase>[
           MutableListAddBenchmark(emitter: emitter),

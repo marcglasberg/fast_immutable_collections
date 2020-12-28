@@ -28,62 +28,61 @@ class MutableMapAddBenchmark extends MapBenchmarkBase {
   MutableMapAddBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Map (Mutable)", emitter: emitter);
 
-  Map<String, int> _map;
-  Map<String, int> _fixedMap;
+  Map<String, int> map;
+  Map<String, int> fixedMap;
 
   @override
-  Map<String, int> toMutable() => _map;
+  Map<String, int> toMutable() => map;
 
   @override
-  void setup() => _fixedMap = MapBenchmarkBase.getDummyGeneratedMap(size: config.size);
+  void setup() => fixedMap = MapBenchmarkBase.getDummyGeneratedMap(size: config.size);
 
   @override
   void run() {
-    _map = Map<String, int>.of(_fixedMap);
-    for (int i = 0; i < MapAddBenchmark.innerRuns; i++) _map.addAll({i.toString(): i});
+    map = Map<String, int>.of(fixedMap);
+    for (int i = 0; i < MapAddBenchmark.innerRuns; i++) map.addAll({i.toString(): i});
   }
 }
 
 class IMapAddBenchmark extends MapBenchmarkBase {
   IMapAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
 
-  IMap<String, int> _iMap;
-  IMap<String, int> _result;
+  IMap<String, int> iMap;
+  IMap<String, int> result;
 
   @override
-  Map<String, int> toMutable() => _result.unlock;
+  Map<String, int> toMutable() => result.unlock;
 
   @override
   void setup() {
-    _iMap = IMap<String, int>();
-    for (int i = 0; i < config.size; i++) _iMap = _iMap.add(i.toString(), i);
+    iMap = IMap<String, int>();
+    for (int i = 0; i < config.size; i++) iMap = iMap.add(i.toString(), i);
   }
 
   @override
   void run() {
-    _result = _iMap;
-    for (int i = 0; i < MapAddBenchmark.innerRuns; i++) _result = _result.add(i.toString(), i);
+    result = iMap;
+    for (int i = 0; i < MapAddBenchmark.innerRuns; i++) result = result.add(i.toString(), i);
   }
 }
 
 class KtMapAddBenchmark extends MapBenchmarkBase {
   KtMapAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "KtMap", emitter: emitter);
 
-  KtMap<String, int> _ktMap;
-  KtMap<String, int> _result;
+  KtMap<String, int> ktMap;
+  KtMap<String, int> result;
 
   @override
-  Map<String, int> toMutable() => _result.asMap();
+  Map<String, int> toMutable() => result.asMap();
 
   @override
-  void setup() =>
-      _ktMap = MapBenchmarkBase.getDummyGeneratedMap(size: config.size).toImmutableMap();
+  void setup() => ktMap = MapBenchmarkBase.getDummyGeneratedMap(size: config.size).toImmutableMap();
 
   @override
   void run() {
-    _result = _ktMap;
+    result = ktMap;
     for (int i = 0; i < MapAddBenchmark.innerRuns; i++)
-      _result = _result.plus(<String, int>{i.toString(): i}.toImmutableMap());
+      result = result.plus(<String, int>{i.toString(): i}.toImmutableMap());
   }
 }
 
@@ -91,21 +90,21 @@ class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap with Rebuild", emitter: emitter);
 
-  BuiltMap<String, int> _builtMap;
-  BuiltMap<String, int> _result;
+  BuiltMap<String, int> builtMap;
+  BuiltMap<String, int> result;
 
   @override
-  Map<String, int> toMutable() => _result.asMap();
+  Map<String, int> toMutable() => result.asMap();
 
   @override
   void setup() =>
-      _builtMap = BuiltMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+      builtMap = BuiltMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() {
-    _result = _builtMap;
+    result = builtMap;
     for (int i = 0; i < MapAddBenchmark.innerRuns; i++)
-      _result = _result.rebuild((MapBuilder<String, int> mapBuilder) =>
+      result = result.rebuild((MapBuilder<String, int> mapBuilder) =>
           mapBuilder.addAll(<String, int>{i.toString(): i}));
   }
 }
@@ -114,21 +113,21 @@ class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithListBuilderBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap with ListBuilder", emitter: emitter);
 
-  BuiltMap<String, int> _builtMap;
-  BuiltMap<String, int> _result;
+  BuiltMap<String, int> builtMap;
+  BuiltMap<String, int> result;
 
   @override
-  Map<String, int> toMutable() => _result.asMap();
+  Map<String, int> toMutable() => result.asMap();
 
   @override
   void setup() =>
-      _builtMap = BuiltMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+      builtMap = BuiltMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() {
-    final MapBuilder<String, int> mapBuilder = _builtMap.toBuilder();
+    final MapBuilder<String, int> mapBuilder = builtMap.toBuilder();
     for (int i = 0; i < MapAddBenchmark.innerRuns; i++)
       mapBuilder.addAll(<String, int>{i.toString(): i});
-    _result = mapBuilder.build();
+    result = mapBuilder.build();
   }
 }

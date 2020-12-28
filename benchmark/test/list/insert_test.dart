@@ -37,15 +37,15 @@ void main() {
     test("KtList", () {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "insert_ktlist", config: Config(size: 100));
-      final KtListInsertBenchmark ktlistInsertBenchmark =
+      final KtListInsertBenchmark ktListInsertBenchmark =
           KtListInsertBenchmark(emitter: tableScoreEmitter);
 
-      ktlistInsertBenchmark.report();
+      ktListInsertBenchmark.report();
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index);
       final int randomInt = Random(0).nextInt(100);
       expectedList.insert(randomInt, randomInt);
-      expect(ktlistInsertBenchmark.toMutable(), expectedList);
+      expect(ktListInsertBenchmark.toMutable(), expectedList);
     });
 
     test("BuiltList", () {

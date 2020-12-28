@@ -25,50 +25,50 @@ class MutableListEmptyBenchmark extends ListBenchmarkBase {
   MutableListEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "List (Mutable)", emitter: emitter);
 
-  List<int> _list;
+  List<int> list;
 
   @override
-  List<int> toMutable() => _list;
+  List<int> toMutable() => list;
 
   @override
-  void run() => _list = <int>[];
+  void run() => list = <int>[];
 }
 
 class IListEmptyBenchmark extends ListBenchmarkBase {
   IListEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IList", emitter: emitter);
 
-  IList<int> _iList;
+  IList<int> iList;
 
   @override
-  List<int> toMutable() => _iList.unlock;
+  List<int> toMutable() => iList.unlock;
 
   @override
-  void run() => _iList = IList<int>();
+  void run() => iList = IList<int>();
 }
 
 class KtListEmptyBenchmark extends ListBenchmarkBase {
   KtListEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtList", emitter: emitter);
 
-  KtList<int> _ktList;
+  KtList<int> ktList;
 
   @override
-  List<int> toMutable() => _ktList.asList();
+  List<int> toMutable() => ktList.asList();
 
   @override
-  void run() => _ktList = KtList<int>.empty();
+  void run() => ktList = KtList<int>.empty();
 }
 
 class BuiltListEmptyBenchmark extends ListBenchmarkBase {
   BuiltListEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList", emitter: emitter);
 
-  BuiltList<int> _builtList;
+  BuiltList<int> builtList;
 
   @override
-  List<int> toMutable() => _builtList.asList();
+  List<int> toMutable() => builtList.asList();
 
   @override
-  void run() => _builtList = BuiltList<int>();
+  void run() => builtList = BuiltList<int>();
 }

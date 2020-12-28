@@ -25,20 +25,18 @@ class MutableListContainsBenchmark extends ListBenchmarkBase {
   MutableListContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "List (Mutable)", emitter: emitter);
 
-  List<int> _list;
-  bool _contains;
-
-  bool get contains => _contains;
+  List<int> list;
+  bool contains;
 
   @override
-  List<int> toMutable() => _list;
+  List<int> toMutable() => list;
 
   @override
-  void setup() => _list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+  void setup() => list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
 
   @override
   void run() {
-    for (int i = 0; i < _list.length + 1; i++) _contains = _list.contains(i);
+    for (int i = 0; i < list.length + 1; i++) contains = list.contains(i);
   }
 }
 
@@ -47,9 +45,7 @@ class IListContainsBenchmark extends ListBenchmarkBase {
       : super(name: "IList", emitter: emitter);
 
   IList<int> _iList;
-  bool _contains;
-
-  bool get contains => _contains;
+  bool contains;
 
   @override
   List<int> toMutable() => _iList.unlock;
@@ -59,7 +55,7 @@ class IListContainsBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    for (int i = 0; i < _iList.length + 1; i++) _contains = _iList.contains(i);
+    for (int i = 0; i < _iList.length + 1; i++) contains = _iList.contains(i);
   }
 }
 
@@ -68,9 +64,7 @@ class KtListContainsBenchmark extends ListBenchmarkBase {
       : super(name: "KtList", emitter: emitter);
 
   KtList<int> _ktList;
-  bool _contains;
-
-  bool get contains => _contains;
+  bool contains;
 
   @override
   List<int> toMutable() => _ktList.asList();
@@ -80,7 +74,7 @@ class KtListContainsBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    for (int i = 0; i < _ktList.size + 1; i++) _contains = _ktList.contains(i);
+    for (int i = 0; i < _ktList.size + 1; i++) contains = _ktList.contains(i);
   }
 }
 
@@ -89,9 +83,7 @@ class BuiltListContainsBenchmark extends ListBenchmarkBase {
       : super(name: "BuiltList", emitter: emitter);
 
   BuiltList<int> _builtList;
-  bool _contains;
-
-  bool get contains => _contains;
+  bool contains;
 
   @override
   List<int> toMutable() => _builtList.asList();
@@ -102,6 +94,6 @@ class BuiltListContainsBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
-    for (int i = 0; i < _builtList.length + 1; i++) _contains = _builtList.contains(i);
+    for (int i = 0; i < _builtList.length + 1; i++) contains = _builtList.contains(i);
   }
 }

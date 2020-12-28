@@ -27,19 +27,19 @@ class MutableSetAddAllBenchmark extends SetBenchmarkBase {
   MutableSetAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
-  Set<int> _set;
-  Set<int> _fixedSet;
+  Set<int> set;
+  Set<int> fixedSet;
 
   @override
-  Set<int> toMutable() => _set;
+  Set<int> toMutable() => set;
 
   @override
-  void setup() => _fixedSet = Set<int>.of(SetAddAllBenchmark.baseSet);
+  void setup() => fixedSet = Set<int>.of(SetAddAllBenchmark.baseSet);
 
   @override
   void run() {
-    _set = Set<int>.of(_fixedSet);
-    _set.addAll(SetAddAllBenchmark.setToAdd);
+    set = Set<int>.of(fixedSet);
+    set.addAll(SetAddAllBenchmark.setToAdd);
   }
 }
 
@@ -47,50 +47,50 @@ class ISetAddAllBenchmark extends SetBenchmarkBase {
   ISetAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "ISet", emitter: emitter);
 
-  ISet<int> _iSet;
-  ISet<int> _fixedISet;
+  ISet<int> iSet;
+  ISet<int> fixedISet;
 
   @override
-  Set<int> toMutable() => _iSet.unlock;
+  Set<int> toMutable() => iSet.unlock;
 
   @override
-  void setup() => _fixedISet = ISet(SetAddAllBenchmark.baseSet);
+  void setup() => fixedISet = ISet(SetAddAllBenchmark.baseSet);
 
   @override
-  void run() => _iSet = _fixedISet.addAll(SetAddAllBenchmark.setToAdd);
+  void run() => iSet = fixedISet.addAll(SetAddAllBenchmark.setToAdd);
 }
 
 class KtSetAddAllBenchmark extends SetBenchmarkBase {
   KtSetAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtSet", emitter: emitter);
 
-  KtSet<int> _ktSet;
-  KtSet<int> _fixedISet;
+  KtSet<int> ktSet;
+  KtSet<int> fixedISet;
 
   @override
-  Set<int> toMutable() => _ktSet.asSet();
+  Set<int> toMutable() => ktSet.asSet();
 
   @override
-  void setup() => _fixedISet = KtSet.from(SetAddAllBenchmark.baseSet);
+  void setup() => fixedISet = KtSet.from(SetAddAllBenchmark.baseSet);
 
   @override
-  void run() => _ktSet = _fixedISet.plus(SetAddAllBenchmark.setToAdd.toImmutableSet()).toSet();
+  void run() => ktSet = fixedISet.plus(SetAddAllBenchmark.setToAdd.toImmutableSet()).toSet();
 }
 
 class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
   BuiltSetAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
 
-  BuiltSet<int> _builtSet;
-  BuiltSet<int> _fixedISet;
+  BuiltSet<int> builtSet;
+  BuiltSet<int> fixedISet;
 
   @override
-  Set<int> toMutable() => _builtSet.asSet();
+  Set<int> toMutable() => builtSet.asSet();
 
   @override
-  void setup() => _fixedISet = BuiltSet.of(SetAddAllBenchmark.baseSet);
+  void setup() => fixedISet = BuiltSet.of(SetAddAllBenchmark.baseSet);
 
   @override
-  void run() => _builtSet = _fixedISet
+  void run() => builtSet = fixedISet
       .rebuild((SetBuilder<int> setBuilder) => setBuilder.addAll(SetAddAllBenchmark.setToAdd));
 }

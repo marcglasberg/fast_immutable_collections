@@ -22,65 +22,65 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
   MutableSetRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
-  Set<int> _set;
+  Set<int> set;
 
   @override
-  Set<int> toMutable() => _set;
+  Set<int> toMutable() => set;
 
   @override
-  void setup() => _set = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+  void setup() => set = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
 
   @override
-  void run() => _set.remove(1);
+  void run() => set.remove(1);
 }
 
 class ISetRemoveBenchmark extends SetBenchmarkBase {
   ISetRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "ISet", emitter: emitter);
 
-  ISet<int> _fixedSet;
-  ISet<int> _iSet;
+  ISet<int> fixedSet;
+  ISet<int> iSet;
 
   @override
-  Set<int> toMutable() => _iSet.unlock;
+  Set<int> toMutable() => iSet.unlock;
 
   @override
-  void setup() => _fixedSet = ISet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => fixedSet = ISet(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
-  void run() => _iSet = _fixedSet.remove(1);
+  void run() => iSet = fixedSet.remove(1);
 }
 
 class KtSetRemoveBenchmark extends SetBenchmarkBase {
   KtSetRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtSet", emitter: emitter);
 
-  KtSet<int> _fixedSet;
-  KtSet<int> _ktSet;
+  KtSet<int> fixedSet;
+  KtSet<int> ktSet;
 
   @override
-  Set<int> toMutable() => _ktSet.asSet();
+  Set<int> toMutable() => ktSet.asSet();
 
   @override
-  void setup() => _fixedSet = KtSet.from(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => fixedSet = KtSet.from(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
-  void run() => _ktSet = _fixedSet.minusElement(1).toSet();
+  void run() => ktSet = fixedSet.minusElement(1).toSet();
 }
 
 class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
   BuiltSetRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
 
-  BuiltSet<int> _fixedSet;
-  BuiltSet<int> _builtSet;
+  BuiltSet<int> fixedSet;
+  BuiltSet<int> builtSet;
 
   @override
-  Set<int> toMutable() => _builtSet.asSet();
+  Set<int> toMutable() => builtSet.asSet();
 
   @override
-  void setup() => _fixedSet = BuiltSet.of(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => fixedSet = BuiltSet.of(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
-  void run() => _builtSet = _fixedSet.rebuild((SetBuilder<int> setBuilder) => setBuilder.remove(1));
+  void run() => builtSet = fixedSet.rebuild((SetBuilder<int> setBuilder) => setBuilder.remove(1));
 }

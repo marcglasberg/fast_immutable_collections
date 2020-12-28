@@ -25,49 +25,49 @@ class MutableMapEmptyBenchmark extends MapBenchmarkBase {
   MutableMapEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Map (Mutable)", emitter: emitter);
 
-  Map<String, int> _map;
+  Map<String, int> map;
 
   @override
-  Map<String, int> toMutable() => _map;
+  Map<String, int> toMutable() => map;
 
   @override
-  void run() => _map = <String, int>{};
+  void run() => map = <String, int>{};
 }
 
 class IMapEmptyBenchmark extends MapBenchmarkBase {
   IMapEmptyBenchmark({@required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
 
-  IMap<String, int> _iMap;
+  IMap<String, int> iMap;
 
   @override
-  Map<String, int> toMutable() => _iMap.unlock;
+  Map<String, int> toMutable() => iMap.unlock;
 
   @override
-  void run() => _iMap = IMap<String, int>();
+  void run() => iMap = IMap<String, int>();
 }
 
 class KtMapEmptyBenchmark extends MapBenchmarkBase {
   KtMapEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtMap", emitter: emitter);
 
-  KtMap<String, int> _ktMap;
+  KtMap<String, int> ktMap;
 
   @override
-  Map<String, int> toMutable() => _ktMap.asMap();
+  Map<String, int> toMutable() => ktMap.asMap();
 
   @override
-  void run() => _ktMap = KtMap<String, int>.empty();
+  void run() => ktMap = KtMap<String, int>.empty();
 }
 
 class BuiltMapEmptyBenchmark extends MapBenchmarkBase {
   BuiltMapEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap", emitter: emitter);
 
-  BuiltMap<String, int> _builtMap;
+  BuiltMap<String, int> builtMap;
 
   @override
-  Map<String, int> toMutable() => _builtMap.asMap();
+  Map<String, int> toMutable() => builtMap.asMap();
 
   @override
-  void run() => _builtMap = BuiltMap<String, int>();
+  void run() => builtMap = BuiltMap<String, int>();
 }

@@ -25,20 +25,18 @@ class MutableSetContainsBenchmark extends SetBenchmarkBase {
   MutableSetContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
-  Set<int> _set;
-  bool _contains;
-
-  bool get contains => _contains;
+  Set<int> set;
+  bool contains;
 
   @override
-  Set<int> toMutable() => _set;
+  Set<int> toMutable() => set;
 
   @override
-  void setup() => _set = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+  void setup() => set = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
 
   @override
   void run() {
-    for (int i = 0; i < _set.length + 1; i++) _contains = _set.contains(i);
+    for (int i = 0; i < set.length + 1; i++) contains = set.contains(i);
   }
 }
 
@@ -46,20 +44,18 @@ class ISetContainsBenchmark extends SetBenchmarkBase {
   ISetContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "ISet", emitter: emitter);
 
-  ISet<int> _iSet;
-  bool _contains;
-
-  bool get contains => _contains;
+  ISet<int> iSet;
+  bool contains;
 
   @override
-  Set<int> toMutable() => _iSet.unlock;
+  Set<int> toMutable() => iSet.unlock;
 
   @override
-  void setup() => _iSet = ISet<int>(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => iSet = ISet<int>(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
-    for (int i = 0; i < _iSet.length + 1; i++) _contains = _iSet.contains(i);
+    for (int i = 0; i < iSet.length + 1; i++) contains = iSet.contains(i);
   }
 }
 
@@ -67,21 +63,18 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
   KtSetContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtSet", emitter: emitter);
 
-  KtSet<int> _ktSet;
-  bool _contains;
-
-  bool get contains => _contains;
+  KtSet<int> ktSet;
+  bool contains;
 
   @override
-  Set<int> toMutable() => _ktSet.asSet();
+  Set<int> toMutable() => ktSet.asSet();
 
   @override
-  void setup() =>
-      _ktSet = KtSet<int>.from(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  void setup() => ktSet = KtSet<int>.from(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
-    for (int i = 0; i < _ktSet.size + 1; i++) _contains = _ktSet.contains(i);
+    for (int i = 0; i < ktSet.size + 1; i++) contains = ktSet.contains(i);
   }
 }
 
@@ -89,20 +82,18 @@ class BuiltSetContainsBenchmark extends SetBenchmarkBase {
   BuiltSetContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
 
-  BuiltSet<int> _builtSet;
-  bool _contains;
-
-  bool get contains => _contains;
+  BuiltSet<int> builtSet;
+  bool contains;
 
   @override
-  Set<int> toMutable() => _builtSet.asSet();
+  Set<int> toMutable() => builtSet.asSet();
 
   @override
   void setup() =>
-      _builtSet = BuiltSet<int>.of(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+      builtSet = BuiltSet<int>.of(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
 
   @override
   void run() {
-    for (int i = 0; i < _builtSet.length + 1; i++) _contains = _builtSet.contains(i);
+    for (int i = 0; i < builtSet.length + 1; i++) contains = builtSet.contains(i);
   }
 }

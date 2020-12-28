@@ -25,63 +25,63 @@ class MutableListRemoveBenchmark extends ListBenchmarkBase {
   MutableListRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "List (Mutable)", emitter: emitter);
 
-  List<int> _list;
+  List<int> list;
 
   @override
-  List<int> toMutable() => _list;
+  List<int> toMutable() => list;
 
   @override
-  void setup() => _list = ListBenchmarkBase.getDummyGeneratedList();
+  void setup() => list = ListBenchmarkBase.getDummyGeneratedList();
 
   @override
-  void run() => _list.remove(1);
+  void run() => list.remove(1);
 }
 
 class IListRemoveBenchmark extends ListBenchmarkBase {
   IListRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IList", emitter: emitter);
 
-  IList<int> _iList;
+  IList<int> iList;
 
   @override
-  List<int> toMutable() => _iList.unlock;
+  List<int> toMutable() => iList.unlock;
 
   @override
-  void setup() => _iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() => iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
-  void run() => _iList = _iList.remove(1);
+  void run() => iList = iList.remove(1);
 }
 
 class KtListRemoveBenchmark extends ListBenchmarkBase {
   KtListRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtList", emitter: emitter);
 
-  KtList<int> _ktList;
+  KtList<int> ktList;
 
   @override
-  List<int> toMutable() => _ktList.asList();
+  List<int> toMutable() => ktList.asList();
 
   @override
-  void setup() => _ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() => ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
-  void run() => _ktList = _ktList.minusElement(1);
+  void run() => ktList = ktList.minusElement(1);
 }
 
 class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   BuiltListRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList", emitter: emitter);
 
-  BuiltList<int> _builtList;
+  BuiltList<int> builtList;
 
   @override
-  List<int> toMutable() => _builtList.asList();
+  List<int> toMutable() => builtList.asList();
 
   @override
-  void setup() => _builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() => builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList());
 
   @override
   void run() =>
-      _builtList = _builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(1));
+      builtList = builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(1));
 }

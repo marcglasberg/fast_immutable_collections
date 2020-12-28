@@ -25,49 +25,49 @@ class MutableSetEmptyBenchmark extends SetBenchmarkBase {
   MutableSetEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
-  Set<int> _set;
+  Set<int> set;
 
   @override
-  Set<int> toMutable() => _set;
+  Set<int> toMutable() => set;
 
   @override
-  void run() => _set = <int>{};
+  void run() => set = <int>{};
 }
 
 class ISetEmptyBenchmark extends SetBenchmarkBase {
   ISetEmptyBenchmark({@required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
-  ISet<int> _iSet;
+  ISet<int> iSet;
 
   @override
-  Set<int> toMutable() => _iSet.unlock;
+  Set<int> toMutable() => iSet.unlock;
 
   @override
-  void run() => _iSet = ISet<int>();
+  void run() => iSet = ISet<int>();
 }
 
 class KtSetEmptyBenchmark extends SetBenchmarkBase {
   KtSetEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtSet", emitter: emitter);
 
-  KtSet<int> _ktSet;
+  KtSet<int> ktSet;
 
   @override
-  Set<int> toMutable() => _ktSet.asSet();
+  Set<int> toMutable() => ktSet.asSet();
 
   @override
-  void run() => _ktSet = KtSet<int>.empty();
+  void run() => ktSet = KtSet<int>.empty();
 }
 
 class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
   BuiltSetEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
 
-  BuiltSet<int> _builtSet;
+  BuiltSet<int> builtSet;
 
   @override
-  Set<int> toMutable() => _builtSet.asSet();
+  Set<int> toMutable() => builtSet.asSet();
 
   @override
-  void run() => _builtSet = BuiltSet<int>();
+  void run() => builtSet = BuiltSet<int>();
 }
