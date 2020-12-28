@@ -21,10 +21,6 @@ class GraphScreen extends StatefulWidget {
 class _GraphScreenState extends State<GraphScreen> {
   static final NumberFormat formatter = NumberFormat("#,##0", "en_US");
 
-  static const bottomNavigationBarDecoration = BoxDecoration(
-    border: Border.fromBorderSide(BorderSide(color: Colors.grey)),
-  );
-
   int _currentTableIndex;
 
   /// We need to add an artificial button to the bottom bar if there's
@@ -64,7 +60,7 @@ class _GraphScreenState extends State<GraphScreen> {
         children: [
           Center(child: _DropdownButton(filters, updateFilters)),
           Container(
-            height: 490,
+            height: 480,
             child: BarChart(recordsTable: _filterNTimes(_currentTable)),
           ),
         ],
@@ -75,13 +71,11 @@ class _GraphScreenState extends State<GraphScreen> {
   Container _bottomNavigationBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: bottomNavigationBarDecoration,
-      height: 60,
+      color: Colors.blue,
+      height: 70,
       child: Column(
-        children: [
-          const SizedBox(height: 8),
-          const Text("Sizes", style: TextStyle(color: Colors.grey)),
-          const SizedBox(height: 4),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +100,7 @@ class _GraphScreenState extends State<GraphScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Text(
-              "${formatter.format(widget.tables[i].config.size)}",
+              "Size\n${formatter.format(widget.tables[i].config.size)}",
               style: _bottomItemTextStyle(activeIndex, i),
               textAlign: TextAlign.center,
             ),
@@ -130,7 +124,7 @@ class _GraphScreenState extends State<GraphScreen> {
 
   TextStyle _bottomItemTextStyle(activeIndex, int i) => TextStyle(
         fontSize: 17,
-        color: activeIndex == i ? Colors.black : Colors.grey,
+        color: activeIndex == i ? Colors.white : Colors.black,
       );
 
   void _onTap(int index) => setState(() {
