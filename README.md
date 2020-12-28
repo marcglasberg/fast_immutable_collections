@@ -94,171 +94,168 @@ so that you can compare speeds
 
 **Table of Contents**
 
-<div id="TOC">
-  <ul style="list-style-type: none;">
-    <li>
-      <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
-      <ul style="list-style-type: none;">
-        <li><a href="#11-introduction">1.1. Introduction</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#2-ilist">2. IList</a>
-      <ul style="list-style-type: none;">
-        <li><a href="#21-ilist-equality">2.1. IList Equality</a></li>
-        <li><a href="#211-cached-hashcode">2.1.1 Cached HashCode</a></li>
-        <li>
-          <a href="#22-global-ilist-configuration"
-            >2.2. Global IList Configuration</a
-          >
-        </li>
-        <li><a href="#23-usage-in-tests">2.3. Usage in tests</a></li>
-        <li>
-          <a href="#24-ilist-reuse-by-composition"
-            >2.4. IList reuse by composition</a
-          >
-        </li>
-        <li><a href="#25-advanced-usage">2.5. Advanced usage</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#3-iset">3. ISet</a>
-      <ul style="list-style-type: none;">
-        <li>
-          <a href="#31-similarities-and-differences-to-the-ilist"
-            >3.1. Similarities and Differences to the IList</a
-          >
-        </li>
-        <li>
-          <a href="#32-global-iset-configuration"
-            >3.2. Global ISet Configuration</a
-          >
-        </li>
-      </ul>
-    </li>
-    <li>
-      <a href="#4-imap">4. IMap</a>
-      <ul style="list-style-type: none;">
-        <li>
-          <a href="#41-similarities-and-differences-to-the-ilistiset"
-            >4.1. Similarities and Differences to the IList/ISet</a
-          >
-        </li>
-        <li>
-          <a href="#42-global-imap-configuration"
-            >4.2. Global IMap Configuration</a
-          >
-        </li>
-      </ul>
-    </li>
-    <li><a href="#5-imapofsets">5. IMapOfSets</a></li>
-    <li>
-      <a href="#6-comparators">6. Comparators</a>
-      <ul style="list-style-type: none;">
-        <li>
-          <a href="#61-compareobject-function">6.1. CompareObject function</a>
-        </li>
-        <li>
-          <a href="#62-compareobjectto-extension"
-            >6.2. CompareObjectTo extension</a
-          >
-        </li>
-        <li><a href="#63-sortby-function">6.3. SortBy function</a></li>
-        <li><a href="#64-sortlike-function">6.4. SortLike function</a></li>
-        <li><a href="#65-if0-extension">6.5. if0 extension</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#7-flushing">7. Flushing</a>
-      <ul style="list-style-type: none;">
-        <li><a href="#71-auto-flush">7.1. Auto-flush</a></li>
-        <li><a href="#72-sync-auto-flush">7.2. Sync Auto-flush</a></li>
-        <li><a href="#73-async-auto-flush">7.3. Async Auto-flush</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#8-benchmarks">8. Benchmarks</a>
-      <ul style="list-style-type: none;">
-        <li>
-          <a href="#81-list-benchmarks">8.1. List Benchmarks</a>
-          <ul style="list-style-type: none;">
-            <li><a href="#811-list-add">8.1.1. List Add</a></li>
-            <li><a href="#812-list-addall">8.1.2. List AddAll</a></li>
-            <li><a href="#813-list-contains">8.1.3. List Contains</a></li>
-            <li><a href="#814-list-empty">8.1.4. List Empty</a></li>
-            <li><a href="#815-list-read">8.1.5. List Read</a></li>
-            <li><a href="#816-list-remove">8.1.6. List Remove</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#82-map-benchmarks">8.2. Map Benchmarks</a>
-          <ul style="list-style-type: none;">
-            <li><a href="#821-map-add">8.2.1. Map Add</a></li>
-            <li><a href="#822-map-addall">8.2.2. Map AddAll</a></li>
-            <li>
-              <a href="#823-map-containsvalue">8.2.3. Map ContainsValue</a>
-            </li>
-            <li><a href="#824-map-empty">8.2.4. Map Empty</a></li>
-            <li><a href="#825-map-read">8.2.5. Map Read</a></li>
-            <li><a href="#825-map-remove">8.2.5. Map Remove</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#83-set-benchmarks">8.3. Set Benchmarks</a>
-          <ul style="list-style-type: none;">
-            <li><a href="#825-set-add">8.2.5. Set Add</a></li>
-            <li><a href="#826-set-addall">8.2.6. Set AddAll</a></li>
-            <li><a href="#826-set-contains">8.2.6. Set Contains</a></li>
-            <li><a href="#826-set-empty">8.2.6. Set Empty</a></li>
-            <li><a href="#826-set-remove">8.2.6. Set Remove</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <a href="#9-immutable-objects">9. Immutable Objects</a>
-      <ul style="list-style-type: none;">
-        <li>
-          <a href="#91-whats-the-difference-between-unmodifiable-and-immutable"
-            >9.1. What&#39;s the difference between Unmodifiable and
-            Immutable?</a
-          >
-        </li>
-        <li><a href="#92-clean-code">9.2. Clean-code</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#10-performance-and-memory-savings"
-        >10. Performance and Memory Savings</a
-      >
-    </li>
-    <li>
-      <a
-        href="#11-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
-        >11. The above text has about 10% of original content. The rest is
-        shamelessly copied from the following pages. Please, visit them:</a
-      >
-    </li>
-    <li>
-      <a href="#12-should-i-use-this-package">12. Should I use this package?</a>
-    </li>
-    <li>
-      <a href="#13-bibliography">13. Bibliography</a>
-      <ul style="list-style-type: none;">
-        <li>
-          <a href="#131-projects">13.1. Projects</a>
-          <ul style="list-style-type: none;">
-            <li><a href="#1311-dart">13.1.1. Dart</a></li>
-            <li><a href="#1312-java">13.1.2. Java</a></li>
-            <li><a href="#1313-js">13.1.3. JS</a></li>
-          </ul>
-        </li>
-        <li><a href="#132-articles">13.2. Articles</a></li>
-        <li><a href="#133-other-resources">13.3. Other Resources</a></li>
-      </ul>
-    </li>
-  </ul>
-</div>
+<ul style="list-style-type: none">
+  <li>
+    <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
+    <ul style="list-style-type: none">
+      <li><a href="#11-introduction">1.1. Introduction</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#2-ilist">2. IList</a>
+    <ul style="list-style-type: none">
+      <li><a href="#21-ilist-equality">2.1. IList Equality</a></li>
+      <li><a href="#211-cached-hashcode">2.1.1 Cached HashCode</a></li>
+      <li>
+        <a href="#22-global-ilist-configuration"
+          >2.2. Global IList Configuration</a
+        >
+      </li>
+      <li><a href="#23-usage-in-tests">2.3. Usage in tests</a></li>
+      <li>
+        <a href="#24-ilist-reuse-by-composition"
+          >2.4. IList reuse by composition</a
+        >
+      </li>
+      <li><a href="#25-advanced-usage">2.5. Advanced usage</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#3-iset">3. ISet</a>
+    <ul style="list-style-type: none">
+      <li>
+        <a href="#31-similarities-and-differences-to-the-ilist"
+          >3.1. Similarities and Differences to the IList</a
+        >
+      </li>
+      <li>
+        <a href="#32-global-iset-configuration"
+          >3.2. Global ISet Configuration</a
+        >
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="#4-imap">4. IMap</a>
+    <ul style="list-style-type: none">
+      <li>
+        <a href="#41-similarities-and-differences-to-the-ilistiset"
+          >4.1. Similarities and Differences to the IList/ISet</a
+        >
+      </li>
+      <li>
+        <a href="#42-global-imap-configuration"
+          >4.2. Global IMap Configuration</a
+        >
+      </li>
+    </ul>
+  </li>
+  <li><a href="#5-imapofsets">5. IMapOfSets</a></li>
+  <li>
+    <a href="#6-comparators">6. Comparators</a>
+    <ul style="list-style-type: none">
+      <li>
+        <a href="#61-compareobject-function">6.1. CompareObject function</a>
+      </li>
+      <li>
+        <a href="#62-compareobjectto-extension"
+          >6.2. CompareObjectTo extension</a
+        >
+      </li>
+      <li><a href="#63-sortby-function">6.3. SortBy function</a></li>
+      <li><a href="#64-sortlike-function">6.4. SortLike function</a></li>
+      <li><a href="#65-if0-extension">6.5. if0 extension</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#7-flushing">7. Flushing</a>
+    <ul style="list-style-type: none">
+      <li><a href="#71-auto-flush">7.1. Auto-flush</a></li>
+      <li><a href="#72-sync-auto-flush">7.2. Sync Auto-flush</a></li>
+      <li><a href="#73-async-auto-flush">7.3. Async Auto-flush</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#8-benchmarks">8. Benchmarks</a>
+    <ul style="list-style-type: none">
+      <li>
+        <a href="#81-list-benchmarks">8.1. List Benchmarks</a>
+        <ul style="list-style-type: none">
+          <li><a href="#811-list-add">8.1.1. List Add</a></li>
+          <li><a href="#812-list-addall">8.1.2. List AddAll</a></li>
+          <li><a href="#813-list-contains">8.1.3. List Contains</a></li>
+          <li><a href="#814-list-empty">8.1.4. List Empty</a></li>
+          <li><a href="#815-list-read">8.1.5. List Read</a></li>
+          <li><a href="#816-list-remove">8.1.6. List Remove</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#82-map-benchmarks">8.2. Map Benchmarks</a>
+        <ul style="list-style-type: none">
+          <li><a href="#821-map-add">8.2.1. Map Add</a></li>
+          <li><a href="#822-map-addall">8.2.2. Map AddAll</a></li>
+          <li>
+            <a href="#823-map-containsvalue">8.2.3. Map ContainsValue</a>
+          </li>
+          <li><a href="#824-map-empty">8.2.4. Map Empty</a></li>
+          <li><a href="#825-map-read">8.2.5. Map Read</a></li>
+          <li><a href="#825-map-remove">8.2.5. Map Remove</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#83-set-benchmarks">8.3. Set Benchmarks</a>
+        <ul style="list-style-type: none">
+          <li><a href="#825-set-add">8.2.5. Set Add</a></li>
+          <li><a href="#826-set-addall">8.2.6. Set AddAll</a></li>
+          <li><a href="#826-set-contains">8.2.6. Set Contains</a></li>
+          <li><a href="#826-set-empty">8.2.6. Set Empty</a></li>
+          <li><a href="#826-set-remove">8.2.6. Set Remove</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="#9-immutable-objects">9. Immutable Objects</a>
+    <ul style="list-style-type: none">
+      <li>
+        <a href="#91-whats-the-difference-between-unmodifiable-and-immutable"
+          >9.1. What&#39;s the difference between Unmodifiable and Immutable?</a
+        >
+      </li>
+      <li><a href="#92-clean-code">9.2. Clean-code</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#10-performance-and-memory-savings"
+      >10. Performance and Memory Savings</a
+    >
+  </li>
+  <li>
+    <a
+      href="#11-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
+      >11. The above text has about 10% of original content. The rest is
+      shamelessly copied from the following pages. Please, visit them:</a
+    >
+  </li>
+  <li>
+    <a href="#12-should-i-use-this-package">12. Should I use this package?</a>
+  </li>
+  <li>
+    <a href="#13-bibliography">13. Bibliography</a>
+    <ul style="list-style-type: none">
+      <li>
+        <a href="#131-projects">13.1. Projects</a>
+        <ul style="list-style-type: none">
+          <li><a href="#1311-dart">13.1.1. Dart</a></li>
+          <li><a href="#1312-java">13.1.2. Java</a></li>
+          <li><a href="#1313-js">13.1.3. JS</a></li>
+        </ul>
+      </li>
+      <li><a href="#132-articles">13.2. Articles</a></li>
+      <li><a href="#133-other-resources">13.3. Other Resources</a></li>
+    </ul>
+  </li>
+</ul>
 
 ---
 
