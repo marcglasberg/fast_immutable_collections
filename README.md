@@ -95,12 +95,12 @@ so that you can compare speeds
 **Table of Contents**
 
 <style>
-  #toc ul {
+  #TOC ul {
     list-style-type: none;
   }
 </style>
 
-<div id="toc">
+<div id="TOC">
   <ul>
     <li>
       <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
@@ -274,7 +274,7 @@ An `IList` is an immutable list, meaning once it's created it cannot be modified
 an iterable to its constructor, or you can simply "lock" a regular list. Other iterables (which are not lists) can also
 be locked as lists:
 
-```          
+```
 /// Ways to build an IList
 
 // Using the IList constructor                                                                      
@@ -285,11 +285,11 @@ IList<String> ilist = [1, 2].lock;
                           
 // Locking a set as list
 IList<String> ilist = {1, 2}.toIList();
-```                                                                           
+```
 
 To create a regular `List` from an `IList`, you can use `List.of`, or simply "unlock" an immutable list:
 
-```  
+```
 /// Going back from IList to List
                  
 var ilist = [1, 2].lock;
@@ -299,20 +299,20 @@ List<String> list = List.of(ilist);
                                   
 // Is the same as unlocking the IList
 List<String> list = ilist.unlock; 
-```                                                                           
+```
 
 An `IList` is an `Iterable`, so you can iterate over it:
 
-```  
+```
 var ilist = [1, 2, 3, 4].lock;
                                                             
 // Prints 1 2 3 4
 for (int value in ilist) print(value);  
-```                                                                           
+```
 
 `IList` methods always return a new `IList`, instead of modifying the original one. For example:
 
-```                                     
+```
 var ilist1 = [1, 2].lock;
                                                   
 // Results in: 1, 2, 3
@@ -323,18 +323,18 @@ var ilist3 = ilist2.remove(2);
                
 // Still: 1, 2
 print(ilist1); 
-```   
+```
 
 Because of that, you can easily chain methods:
 
-```                                     
+```
 // Results in: 1, 3, 4.
 var ilist = [1, 2, 3].lock.add(4).remove(2);
-```   
+```
 
 Since `IList` methods always return a new `IList`, it is an **error** to call some method and then discard the result:
 
-```                                     
+```
 var ilist = [1, 2].lock;
                                                   
 // Wrong
@@ -348,14 +348,14 @@ print(ilist); // 1, 2
 // Right!
 ilist = ilist.add(3);              
 print(ilist); // 1, 2, 3                        
-```   
+```
 
 `IList` has **all** the methods of `List`, plus some other new and useful ones. However, `IList`
 methods always return a new `IList`, instead of modifying the original list or returning iterables.
 
 For example:
 
-```                                     
+```
 IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl'].lock   
    .sort() // Alice, Bob, Carl, Dominic
    .map((name) => name.length) // 5, 3, 4, 7
@@ -363,7 +363,7 @@ IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl'].lock
    .sort(); // 3, 4, 5
    .toggle(4) // 3, 5
    .toggle(2) // 3, 5, 2
-```       
+```
 
 While many `List` methods, like `map()` and `where()` return an `Iterable`, the equivalent `IList` methods return
 another `IList`. As a result, if you want to do lazy processing from an `IList` you must first use `iter`
@@ -451,7 +451,7 @@ IList methods and getters:
 
 By default, `IList`s are equal if they have the same items in the same order.
 
-```                                     
+```
 var ilist1 = [1, 2, 3].lock;
 var ilist2 = [1, 2, 3].lock;
                                     
@@ -460,11 +460,11 @@ print(identical(ilist1 == ilist2));
                          
 // True!
 print(ilist1 == ilist2);
-```                                                                          
+```
 
 This is in sharp contrast to regular `List`s, which are compared by identity:
 
-```                                     
+```
 var list1 = [1, 2, 3];
 var list2 = [1, 2, 3];
                       
@@ -474,13 +474,13 @@ print(list1 == list2); // False!
 
 // While ILists compare by deep equals:
 print(list1.lock == list2.lock); // True!
-```                                                                          
+```
 
 This also means `IList`s can be used as **map keys**, which is a very useful property in itself, but can also help when
 implementing some other interesting data structures. For example, to implement **
 caches**:
 
-```                                     
+```
 Map<IList, int> sumResult = {};
 
 String getSum(int a, int b) {
@@ -499,14 +499,14 @@ String getSum(int a, int b) {
 print(getSum(5, 3)); // Newly calculated: 5 + 3 = 8
 print(getSum(8, 9)); // Newly calculated: 8 + 9 = 17                     
 print(getSum(5, 3)); // Got from cache: 5 + 3 = 8
-```    
+```
 
 However, `IList`s are configurable, and you can actually create `IList`s which compare their internals by **identity**
 or **deep equals**, as desired. There are 3 main ways to do it:
 
 1. You can use getters `withIdentityEquals` and `withDeepEquals`:
 
-    ```                    
+    ```
     var ilist = [1, 2].lock;
     
     var ilist1 = [1, 2].lock;              // By default use deep equals.
@@ -579,7 +579,7 @@ to hold modifiable objects, you should think about turning off the hashCode cach
 ```
 var ilist1 = [1, 2].lock.withConfig(ConfigList(cacheHashCode: false));
 var ilist2 = IList.withConfig([1, 2], ConfigList(cacheHashCode: false));
-```   
+```
 
 Note: Modifying mutable objects in a collection could only make sense for lists anyway, since list don't rely on the
 equality and hashCode of their items to structure themselves. If objects are modified after you put them into both
@@ -611,7 +611,7 @@ print(ilistB1 == ilistB2); // False!
 
 /// Configuration changes don't affect existing lists.
 print(ilistA1 == ilistA2); // True!
-```                                                                        
+```
 
 **Important note:**
 
@@ -631,7 +631,7 @@ An `IList` is not a `List`, so this is false:
 However, when you are writing tests, the `expect` method actually compares all `Iterables` by comparing their items.
 Since `List` and `IList` are iterables, you can write the following tests:
 
-```                                 
+```
 /// All these tests pass:
 
 expect([1, 2], [1, 2]); // List with List, same order.
@@ -643,7 +643,7 @@ expect([2, 1], isNot([1, 2])); // List with List, wrong order.
 expect([2, 1].lock, isNot([1, 2])); // IList with List, wrong order.
 expect([2, 1], isNot([1, 2].lock)); // List with IList, wrong order.
 expect([2, 1].lock, isNot([1, 2].lock)); // IList with IList, wrong order.
-```                   
+```
 
 So, for comparing `List` with `IList` and vice-versa this is fine.
 
@@ -653,7 +653,7 @@ However, `expect` treats `Set`s differently, resulting that
 ```
 expect([1, 2], {2, 1}); // This test passes.
 expect({2, 1}, [1, 2]); // This test does NOT pass.
-```                                               
+```
 
 If you ask me, this is all very confusing. A good rule of thumb to avoid all these `expect`
 complexities is only comparing lists with lists, set with sets, etc.
@@ -686,7 +686,7 @@ And suppose you want to create a `Students` class which is an immutable collecti
 
 You can easily implement it using the `FromIListMixin`:
 
-```  
+```
 class Students with FromIListMixin<Student, Students> {
 
    /// This is the boilerplate to create the collection:
@@ -701,11 +701,11 @@ class Students with FromIListMixin<Student, Students> {
    /// And then you can add your own specific methods:
    String greetings() => "Hello ${_students.join(", ")}.";
 }
-```    
+```
 
 And then use the class:
 
-```  
+```
 var james = Student("James");
 var sara = Student("Sara");
 var lucy = Student("Lucy");
@@ -717,7 +717,7 @@ expect(students, [james, sara, lucy]);
                              
 // Prints: "Hello James, Sara, Lucy."
 print(students.greetings()); 
-```     
+```
 
 There are a few aspects of native Dart collection mixins which I don't like, so I've tried to improve on those here.
 
@@ -736,13 +736,13 @@ There are a few aspects of native Dart collection mixins which I don't like, so 
 
 Note, you can still iterate through the `Students` class in the example by calling `.iter` on it:
 
-```  
+```
 for (Student student in students.iter) { ... }
 ```
 
 And also, if really do want it to implement `Iterable`, you can do so by explicitly declaring it:
 
-```  
+```
 class Students with FromIListMixin<Student, Students> implements Iterable<Student> { ... }
 
 class Students with FromIterableIListMixin<Student> implements Iterable<Student> { ... }
@@ -800,7 +800,7 @@ An `ISet` is an immutable set, meaning once it's created it cannot be modified. 
 You can create an `ISet` by passing an iterable to its constructor, or you can simply "lock" a regular set. Other
 iterables (which are not sets) can also be locked as sets:
 
-```          
+```
 /// Ways to build an ISet
 
 // Using the ISet constructor                                                                      
@@ -811,11 +811,11 @@ ISet<String> iset = {1, 2}.lock;
                           
 // Locking a list as set
 ISet<String> iset = [1, 2].toISet();
-```                                                                           
+```
 
 To create a regular `Set` from an `ISet`, you can use `Set.of`, or simply "unlock" an immutable set:
 
-```  
+```
 /// Going back from ISet to Set
                  
 var iset = {1, 2}.lock;
@@ -825,7 +825,7 @@ Set<String> set = Set.of(iset);
                                   
 // Is the same as unlocking the ISet
 Set<String> set = iset.unlock; 
-```             
+```
 
 While many `Set` methods, like `map()` and `where()` return an `Iterable`, the equivalent `ISet` methods return
 another `ISet`. As a result, if you want to do lazy processing from an `ISet` you must first use `iter`
@@ -893,7 +893,7 @@ Please read the IList explanation first, before trying to understand the ISet.
     Set<int> set = iset.unlockSorted;      // Safe, mutable and ordered 
     Set<int> set = iset.unlockView;        // Safe, fast and immutable
     Set<int> set = iset.unlockLazy;        // Safe, fast and mutable
-    ```                                                        
+    ```
 
 ## 3.2. Global ISet Configuration
 
@@ -920,7 +920,7 @@ print(iset.join(","));
 /// Prints in any order: "2,4,1,9,3"
 var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: false));  
 print(iset.join(","));
-``` 
+```
 
 As previously discussed with the `IList`, the global configuration is meant to be decided during your app's
 initialization, and then not changed again. We strongly suggest that you prohibit further changes to the global
@@ -935,7 +935,7 @@ An `IMap` is an immutable map, meaning once it's created it cannot be modified. 
 You can create an `IMap` by passing a regular map to its constructor, or you can simply "lock" a regular map. There are
 also a few other specialized constructors:
 
-```          
+```
 /// Ways to build an IMap
 
 // Using the IMap constructor                                                                      
@@ -969,16 +969,16 @@ IMap<int, String> imap =
 // From key and value Iterables          
 // This results in {"a": 1, "b": 2}
 IMap<int, String> imap = IMap.fromIterables(["a", "b"], [1, 2]);                      
-```                                                                           
+```
 
 To create a regular `Map` from an `IMap`, you can "unlock" an immutable map:
 
-```  
+```
 /// Going back from IMap to Map
                  
 IMap<String, int> imap = {"a": 1, "b": 2}.lock;
 Map<String, int> map = imap.unlock; 
-```             
+```
 
 ## 4.1. Similarities and Differences to the IList/ISet
 
@@ -988,7 +988,7 @@ Please read the IList explanation first, before trying to understand the IMap.
 - Just like a regular map, an `IMap` is **not** an `Iterable`. However, you can iterate over its entries, keys and
   values:
 
-    ```               
+    ```
     /// Unordered
     Iterable<MapEntry<K, V>> get entries;  
     Iterable<K> get keys;
@@ -1061,7 +1061,7 @@ Please read the IList explanation first, before trying to understand the IMap.
     Map<String, int> set = imap.unlockSorted;              // Safe, mutable and ordered 
     Map<String, int> set = imap.unlockView;                // Safe, fast and immutable
     Map<String, int> set = imap.unlockLazy;                // Safe, fast and mutable
-    ```                                                        
+    ```
 
 ## 4.2. Global IMap Configuration
 
@@ -1093,7 +1093,7 @@ print(imap.keyList.join(","));
 /// Prints in any order: "2,4,1,9"
 var imap = {2: "a", 4: "x", 1: "z", 9: "k"}.lock.withConfig(ConfigMap(sortKeys: false));  
 print(imap.keyList.join(","));
-``` 
+```
 
 As previously discussed with `IList` and `ISet`, the global configuration is meant to be decided during your app's
 initialization, and then not changed again. We strongly suggest that you prohibit further changes to the global
@@ -1193,7 +1193,7 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
 StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
    : imap = (studentsPerCourse ?? {}).lock   
        .withConfig(ConfigMapOfSets(removeEmptySets: false));
-```  
+```
 
 Note: A `MapOfSets` is an immutable <a href="https://en.wikipedia.org/wiki/Multimap">multimap</a>. If you need
 it, <a href="https://pub.dev/packages/quiver">Quiver</a> provides a mutable multimap.
@@ -1227,7 +1227,7 @@ You can use the comparator in sorts:
 
 // Results in: [null, 1, 2]
 [1, 2, null, 3].sort((a, b) => compareObject(a, b, nullsBefore: true));
-```             
+```
 
 ## 6.2. CompareObjectTo extension
 
@@ -1241,7 +1241,7 @@ For example:
 
 // Results in: [null, 1, 2]
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b, nullsBefore: true));
-```              
+```
 
 ## 6.3. SortBy function
 
@@ -1267,7 +1267,7 @@ int Function(int, int) compareTo = sortBy((x) => x == 14,
                then: sortBy((x) => x % 5 == 0,
                    then: (int a, int b) => a.compareTo(b),
                )))));
-``` 
+```
 
 ## 6.4. SortLike function
 
@@ -1278,16 +1278,16 @@ you can do it like this: `sortLike([7, 3, 4, 21, 2])`.
 You can also nest other comparators, including mixing `sortBy` and `sortLike`. For example, to implement the following
 rules:
 
-> 1. Order should be [7, 3, 4, 21, 2] when these values appear.
+> 1. Order should be `[7, 3, 4, 21, 2]` when these values appear.
 > 2. Otherwise, odd numbers come before even ones.
 > 3. Otherwise, numbers come in their natural order.
 
-```                  
+```
 int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
    then: sortBy((x) => x % 2 == 1,
        then: (int a, int b) => a.compareTo(b),
            ));
-``` 
+```
 
 Important: When nested comparators are used, make sure you don't create inconsistencies. For example, a rule that
 states `a<b then a>c then b<c`
@@ -1341,7 +1341,7 @@ expect(list, ["a", "b", "c", "aa", "bb", "cc", "aaa", "bbb", "ccc"]);
 compareTo = (String a, String b) => a.length.compareTo(b.length).if0(-a.compareTo(b));
 list.sort(compareTo);
 expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
-``` 
+```
 
 # 7. Flushing
 
@@ -1361,7 +1361,7 @@ perfectly optimized again. For example:
 ```
 var ilist = [1.2].lock.add([3, 4]).add(5);
 ilist.flush;
-```         
+```
 
 Please note, `flush` is a getter which returns the exact same instance, just so you can chain other methods on it, if
 you wish. But it does NOT create a new list. It actually just optimizes the current list, internally.
@@ -1382,7 +1382,7 @@ ImmutableCollection.autoFlush = false;
 
 // You can also lock further changes to the global configuration, if desired:                                              
 ImmutableCollection.lockConfig();
-```                                                    
+```
 
 If you leave it on, you can configure auto-flush to happen after you use a collection a few times. And you can also
 configure it to flush at most once per asynchronous gap.
@@ -1441,7 +1441,7 @@ An example:
 8. IList is used. Since its counter is negative, it is not incremented.
    Since the counter is negative and different than negative asyncCounter, the list is flushed.
    Also, its counter reverts to 0.                                   
-```   
+```
 
 The auto-flush process is a heuristic only. However, note the process is very fast, using only simple integer operations
 and a few bytes of memory. It guarantees that, if a collection is being used a lot, it will flush more often than one
@@ -1468,7 +1468,7 @@ IMap.flushFactor = 15;
 
 // Lock further changes, if desired:                                              
 ImmutableCollection.lockConfig();
-```                                                    
+```
 
 # 8. Benchmarks
 
@@ -1494,23 +1494,23 @@ with `// TODO: Still needs to implement efficiently` and will be updated in futu
 [benchmark_docs]: benchmark/README.md
 
 [example]: benchmark/example/
-                      
+
 <br>
 
 **Benchmarks Results**
 
 Run the benchmarks preferably in *release mode*, a green snackbar will then appear.
 
-<img src="assets/benchmark_screenshots/example_run.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/example_run.png" height="500px"/>
 
 ### 8.1. List Benchmarks
 
 #### 8.1.1. List Add
 
-<img src="assets/benchmark_screenshots/list_add_10.png" height="500px"/>  
-<img src="assets/benchmark_screenshots/list_add_100.png" height="500px"/>  
-<img src="assets/benchmark_screenshots/list_add_500.png" height="500px"/>  
-<img src="assets/benchmark_screenshots/list_add_all.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_add_10.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_add_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_add_500.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_add_all.png" height="500px"/>
 
 <br />
 <br />
@@ -1519,63 +1519,63 @@ If you wish for larger parameters, you can modify them in the [benchmark_example
 
 Here we add 10,000 items to a list with 10,000 integers of size:
 
-<img src="assets/benchmark_screenshots/list_add_10000_adds_10000.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_add_10000_adds_10000.png" height="500px"/>
 
 <br />
 <br />
 
 And here we add 100 items to a list of 1,000,000 items:
 
-<img src="assets/benchmark_screenshots/list_add_1000000.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_add_1000000.png" height="500px"/>
 
 #### 8.1.2. List AddAll
 
-<img src="assets/benchmark_screenshots/list_addall.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_addall.png" height="500px"/>
 
 #### 8.1.3. List Contains
 
-<img src="assets/benchmark_screenshots/list_contains_100.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_contains_100.png" height="500px"/>
 
 #### 8.1.4. List Empty
 
-<img src="assets/benchmark_screenshots/list_empty.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_empty.png" height="500px"/>
 
 #### 8.1.5. List Read
 
-<img src="assets/benchmark_screenshots/list_read_100.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_read_100.png" height="500px"/>
 
 #### 8.1.6. List Remove
 
-<img src="assets/benchmark_screenshots/list_remove_100.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/list_remove_100.png" height="500px"/>
 
 ### 8.2. Map Benchmarks
 
 #### 8.2.1. Map Add
 
-<img src="assets/benchmark_screenshots/map_add_10.png" height="500px"/>  
-<img src="assets/benchmark_screenshots/map_add_100.png" height="500px"/>  
-<img src="assets/benchmark_screenshots/map_add_500.png" height="500px"/>  
-<img src="assets/benchmark_screenshots/map_add_all.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/map_add_10.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_add_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_add_500.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_add_all.png" height="500px"/>
 
 #### 8.2.2. Map AddAll
 
-<img src="assets/benchmark_screenshots/map_addall_10.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/map_addall_10.png" height="500px"/>
 
 #### 8.2.3. Map ContainsValue
 
-<img src="assets/benchmark_screenshots/map_containsvalue.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/map_containsvalue.png" height="500px"/>
 
 #### 8.2.4. Map Empty
 
-<img src="assets/benchmark_screenshots/map_empty.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/map_empty.png" height="500px"/>
 
 #### 8.2.5. Map Read
 
-<img src="assets/benchmark_screenshots/map_read_1000.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/map_read_1000.png" height="500px"/>
 
 #### 8.2.5. Map Remove
 
-<img src="assets/benchmark_screenshots/map_remove_1000.png" height="500px"/>  
+<img src="assets/benchmark_screenshots/map_remove_1000.png" height="500px"/>
 
 ### 8.3. Set Benchmarks
 
@@ -1762,7 +1762,7 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
 
   By using mutable lists, Flutter only works if you create a new list:
 
-   ```                               
+   ```
    // This will not work. Wrong operation with mutable list:
    onTap: () {
       setState(() { list.add(newItem); });
@@ -1868,7 +1868,7 @@ immutable data structures by hand in a compact, maintainable way.
 The immutable collections in **FIC** all use the simple approach of recording changes, while periodically "flushing"
 them internally into regular mutable Dart collections and hiding their mutability. This approach works well, and the
 benchmarks seem to indicate they improve performance by an order of magnitude. However, the best possible approach would
-be to implement   
+be to implement  
 <a href="https://en.wikipedia.org/wiki/Hash_array_mapped_trie">hash array mapped tries</a> (HAMTs), which are dedicated
 immutable structures that are not built on top of regular mutable collections. The reason we did not use HAMTs is that
 it would be much more work, and also because I am unsure if the results would be as good as expected. The reason is that

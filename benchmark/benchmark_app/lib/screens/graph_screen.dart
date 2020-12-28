@@ -21,39 +21,39 @@ class GraphScreen extends StatefulWidget {
 class _GraphScreenState extends State<GraphScreen> {
   static final NumberFormat formatter = NumberFormat("#,##0", "en_US");
 
-  int _currentTableIndex;
+  int currentTableIndex;
 
   /// We need to add an artificial button to the bottom bar if there's
   /// only one benchmark, since it requires at least 2 items.
-  bool _onlyOneBenchmark;
+  bool onlyOneBenchmark;
 
   IMap<String, bool> filters;
 
-  RecordsTable get _currentTable => _currentTableIndex >= widget.tables.length
+  RecordsTable get currentTable => currentTableIndex >= widget.tables.length
       ? widget.tables.last
-      : widget.tables[_currentTableIndex];
+      : widget.tables[currentTableIndex];
 
   @override
   void initState() {
-    _onlyOneBenchmark = false;
-    _currentTableIndex = 0;
+    onlyOneBenchmark = false;
+    currentTableIndex = 0;
 
     filters = <String, bool>{}.lock;
-    _currentTable.rowNames.forEach((String rowName) => filters = filters.add(rowName, true));
+    currentTable.rowNames.forEach((String rowName) => filters = filters.add(rowName, true));
 
     super.initState();
   }
 
   @override
   Widget build(_) => Scaffold(
-        appBar: AppBar(title: _title()),
-        body: _body(),
-        bottomNavigationBar: _bottomNavigationBar(),
+        appBar: AppBar(title: title()),
+        body: body(),
+        bottomNavigationBar: bottomNavigationBar(),
       );
 
-  Text _title() => Text("${widget.title} Benchmark Graph Results");
+  Text title() => Text("${widget.title} Benchmark Graph Results");
 
-  Container _body() {
+  Container body() {
     return Container(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: ListView(
@@ -61,14 +61,14 @@ class _GraphScreenState extends State<GraphScreen> {
           Center(child: _DropdownButton(filters, updateFilters)),
           Container(
             height: 480,
-            child: BarChart(recordsTable: _filterNTimes(_currentTable)),
+            child: BarChart(recordsTable: filterNTimes(currentTable)),
           ),
         ],
       ),
     );
   }
 
-  Container _bottomNavigationBar() {
+  Container bottomNavigationBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       color: Colors.blue,
@@ -79,7 +79,7 @@ class _GraphScreenState extends State<GraphScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: _bottomItems(_currentTableIndex),
+            children: bottomItems(currentTableIndex),
           ),
         ],
       ),
@@ -92,16 +92,16 @@ class _GraphScreenState extends State<GraphScreen> {
     });
   }
 
-  List<InkWell> _bottomItems(activeIndex) {
+  List<InkWell> bottomItems(activeIndex) {
     final List<InkWell> bottomItems = <InkWell>[
       for (int i = 0; i < widget.tables.length; i++)
         InkWell(
-          onTap: () => _onTap(i),
+          onTap: () => onTap(i),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Text(
               "Size\n${formatter.format(widget.tables[i].config.size)}",
-              style: _bottomItemTextStyle(activeIndex, i),
+              style: bottomItemTextStyle(activeIndex, i),
               textAlign: TextAlign.center,
             ),
           ),
@@ -109,10 +109,10 @@ class _GraphScreenState extends State<GraphScreen> {
     ];
 
     if (bottomItems.length == 1) {
-      _onlyOneBenchmark = true;
+      onlyOneBenchmark = true;
       bottomItems.add(
         InkWell(
-          onTap: () => _onTap(1),
+          onTap: () => onTap(1),
           child: Container(
             child: const Icon(Icons.arrow_back, color: Colors.grey),
           ),
@@ -122,20 +122,20 @@ class _GraphScreenState extends State<GraphScreen> {
     return bottomItems;
   }
 
-  TextStyle _bottomItemTextStyle(activeIndex, int i) => TextStyle(
+  TextStyle bottomItemTextStyle(activeIndex, int i) => TextStyle(
         fontSize: 17,
         color: activeIndex == i ? Colors.white : Colors.black,
       );
 
-  void _onTap(int index) => setState(() {
-        if (_onlyOneBenchmark && index == 1) {
+  void onTap(int index) => setState(() {
+        if (onlyOneBenchmark && index == 1) {
           Navigator.of(context).pop();
         } else {
-          _currentTableIndex = index;
+          currentTableIndex = index;
         }
       });
 
-  RecordsTable _filterNTimes(RecordsTable table) {
+  RecordsTable filterNTimes(RecordsTable table) {
     filters.forEach((String filterName, bool shouldNotFilter) {
       if (!shouldNotFilter) table = table.filter(filterName);
     });
@@ -159,19 +159,19 @@ class _DropdownButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButton<String>(
       hint: hintTitle,
-      items: _items().toList(),
+      items: items().toList(),
       onChanged: updateFilters,
     );
   }
 
-  Iterable<DropdownMenuItem<String>> _items() {
+  Iterable<DropdownMenuItem<String>> items() {
     return filters.keys.map<DropdownMenuItem<String>>(
       (String filter) {
         return DropdownMenuItem<String>(
           value: filter,
           child: Row(
             children: <Widget>[
-              _checkbox(filter),
+              checkbox(filter),
               Text(filter, style: filterTextStyle),
             ],
           ),
@@ -180,7 +180,7 @@ class _DropdownButton extends StatelessWidget {
     );
   }
 
-  Checkbox _checkbox(String filter) => Checkbox(
+  Checkbox checkbox(String filter) => Checkbox(
         value: filters[filter],
         onChanged: (bool value) {
           updateFilters(filter);
