@@ -5,8 +5,8 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 void main() {
   group("Separate Benchmarks |", () {
     test("Map (Mutable)", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_value_map_mutable", config: Config(size: 10));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "contains_value_map_mutable", config: Config(size: 10));
       final MutableMapContainsValueBenchmark mapContainsValueBenchmark =
           MutableMapContainsValueBenchmark(emitter: tableScoreEmitter);
 
@@ -31,8 +31,8 @@ void main() {
     });
 
     test("KtMap", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_value_ktMap", config: Config(size: 10));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "contains_value_ktMap", config: Config(size: 10));
       final KtMapContainsValueBenchmark ktMapContainsValueBenchmark =
           KtMapContainsValueBenchmark(emitter: tableScoreEmitter);
 
@@ -44,8 +44,8 @@ void main() {
     });
 
     test("BuiltMap", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_value_builtMap", config: Config(size: 10));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "contains_value_builtMap", config: Config(size: 10));
       final BuiltMapContainsValueBenchmark builtMapContainsValueBenchmark =
           BuiltMapContainsValueBenchmark(emitter: tableScoreEmitter);
 

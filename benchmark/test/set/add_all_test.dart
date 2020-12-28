@@ -5,8 +5,8 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 void main() {
   group("Separate Benchmarks |", () {
     test("Set (Mutable)", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_all_set_mutable", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_all_set_mutable", config: Config(size: 100));
       final MutableSetAddAllBenchmark mutableSetAddAllBenchmark =
           MutableSetAddAllBenchmark(emitter: tableScoreEmitter);
 

@@ -42,8 +42,8 @@ void main() {
     });
 
     test("BuiltList with rebuild", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtList_with_rebuild", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_builtList_with_rebuild", config: Config(size: 100));
       final BuiltListAddWithRebuildBenchmark builtListAddWithRebuildBenchmark =
           BuiltListAddWithRebuildBenchmark(emitter: tableScoreEmitter);
 

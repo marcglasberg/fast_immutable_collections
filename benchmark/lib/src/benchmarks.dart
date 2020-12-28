@@ -9,8 +9,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 ///
 /// The complete benchmark run should take around 7-10 min on a good computer at most.
 void main() {
-  ListAddBenchmark(
-      emitter: TableScoreEmitter(prefixName: "list_add", config: Config(size: 100)))
+  ListAddBenchmark(emitter: TableScoreEmitter(prefixName: "list_add", config: Config(size: 100)))
     ..report()
     ..saveReports();
   ListAddAllBenchmark(
@@ -25,8 +24,7 @@ void main() {
       emitter: TableScoreEmitter(prefixName: "list_empty", config: Config(size: 100)))
     ..report()
     ..saveReports();
-  ListReadBenchmark(
-      emitter: TableScoreEmitter(prefixName: "list_read", config: Config(size: 100)))
+  ListReadBenchmark(emitter: TableScoreEmitter(prefixName: "list_read", config: Config(size: 100)))
     ..report()
     ..saveReports();
   ListRemoveBenchmark(
@@ -34,8 +32,7 @@ void main() {
     ..report()
     ..saveReports();
 
-  SetAddBenchmark(
-      emitter: TableScoreEmitter(prefixName: "set_add", config: Config(size: 100)))
+  SetAddBenchmark(emitter: TableScoreEmitter(prefixName: "set_add", config: Config(size: 100)))
     ..report()
     ..saveReports();
   SetAddAllBenchmark(
@@ -46,8 +43,7 @@ void main() {
       emitter: TableScoreEmitter(prefixName: "set_contains", config: Config(size: 100)))
     ..report()
     ..saveReports();
-  SetEmptyBenchmark(
-      emitter: TableScoreEmitter(prefixName: "set_empty", config: Config(size: 100)))
+  SetEmptyBenchmark(emitter: TableScoreEmitter(prefixName: "set_empty", config: Config(size: 100)))
     ..report()
     ..saveReports();
   SetRemoveBenchmark(
@@ -55,8 +51,7 @@ void main() {
     ..report()
     ..saveReports();
 
-  MapAddBenchmark(
-      emitter: TableScoreEmitter(prefixName: "map_add", config: Config(size: 500)))
+  MapAddBenchmark(emitter: TableScoreEmitter(prefixName: "map_add", config: Config(size: 500)))
     ..report()
     ..saveReports();
   MapAddAllBenchmark(
@@ -64,16 +59,13 @@ void main() {
     ..report()
     ..saveReports();
   MapContainsValueBenchmark(
-      emitter:
-          TableScoreEmitter(prefixName: "map_contains_value", config: Config(size: 10)))
+      emitter: TableScoreEmitter(prefixName: "map_contains_value", config: Config(size: 10)))
     ..report()
     ..saveReports();
-  MapEmptyBenchmark(
-      emitter: TableScoreEmitter(prefixName: "map_empty", config: Config(size: 0)))
+  MapEmptyBenchmark(emitter: TableScoreEmitter(prefixName: "map_empty", config: Config(size: 0)))
     ..report()
     ..saveReports();
-  MapReadBenchmark(
-      emitter: TableScoreEmitter(prefixName: "map_read", config: Config(size: 1000)))
+  MapReadBenchmark(emitter: TableScoreEmitter(prefixName: "map_read", config: Config(size: 1000)))
     ..report()
     ..saveReports();
   MapRemoveBenchmark(

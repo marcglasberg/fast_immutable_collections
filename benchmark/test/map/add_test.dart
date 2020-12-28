@@ -42,8 +42,8 @@ void main() {
     });
 
     test("BuiltMap with Rebuild", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtMap_with_rebuild", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_builtMap_with_rebuild", config: Config(size: 100));
       final BuiltMapAddWithRebuildBenchmark builtMapAddWithRebuildBenchmark =
           BuiltMapAddWithRebuildBenchmark(emitter: tableScoreEmitter);
 
@@ -55,8 +55,8 @@ void main() {
     });
 
     test("BuiltMap with ListBuilder", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtMap_with_listBuilder", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_builtMap_with_listBuilder", config: Config(size: 100));
       final BuiltMapAddWithListBuilderBenchmark builtMapAddWithListBuilderBenchmark =
           BuiltMapAddWithListBuilderBenchmark(emitter: tableScoreEmitter);
 

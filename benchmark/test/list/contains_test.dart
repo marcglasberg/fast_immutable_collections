@@ -5,8 +5,8 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 void main() {
   group("Separate Benchmarks |", () {
     test("List (Mutable)", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "contains_list_mutable", config: Config(size: 10));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "contains_list_mutable", config: Config(size: 10));
       final MutableListContainsBenchmark listContainsBenchmark =
           MutableListContainsBenchmark(emitter: tableScoreEmitter);
 

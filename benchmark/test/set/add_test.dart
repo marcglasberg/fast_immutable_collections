@@ -45,8 +45,8 @@ void main() {
     });
 
     test("BuiltSet with .rebuild()", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtSet_with_rebuild", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_builtSet_with_rebuild", config: Config(size: 100));
       final BuiltSetAddWithRebuildBenchmark builtSetAddWithRebuildBenchmark =
           BuiltSetAddWithRebuildBenchmark(emitter: tableScoreEmitter);
 
@@ -59,8 +59,8 @@ void main() {
     });
 
     test("BuiltSet with ListBuilder", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "add_builtSet_with_listBuilder", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "add_builtSet_with_listBuilder", config: Config(size: 100));
       final BuiltSetAddWithSetBuilderBenchmark builtSetAddWithListBuilderBenchmark =
           BuiltSetAddWithSetBuilderBenchmark(emitter: tableScoreEmitter);
 

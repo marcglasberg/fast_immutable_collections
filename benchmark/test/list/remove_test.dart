@@ -5,8 +5,8 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 void main() {
   group("Separate Benchmarks |", () {
     test("List (Mutable)", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "remove_list_mutable", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "remove_list_mutable", config: Config(size: 100));
       final MutableListRemoveBenchmark listRemoveBenchmark =
           MutableListRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -16,8 +16,8 @@ void main() {
     });
 
     test("IList", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "remove_list_mutable", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "remove_list_mutable", config: Config(size: 100));
       final IListRemoveBenchmark iListRemoveBenchmark =
           IListRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -28,8 +28,8 @@ void main() {
     });
 
     test("KtList", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "remove_list_mutable", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "remove_list_mutable", config: Config(size: 100));
       final KtListRemoveBenchmark ktListRemoveBenchmark =
           KtListRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -40,8 +40,8 @@ void main() {
     });
 
     test("BuiltList", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "remove_list_mutable", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "remove_list_mutable", config: Config(size: 100));
       final BuiltListRemoveBenchmark builtListRemoveBenchmark =
           BuiltListRemoveBenchmark(emitter: tableScoreEmitter);
 
@@ -54,8 +54,8 @@ void main() {
 
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
-      final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
-          prefixName: "remove_list_mutable", config: Config(size: 100));
+      final TableScoreEmitter tableScoreEmitter =
+          TableScoreEmitter(prefixName: "remove_list_mutable", config: Config(size: 100));
       final ListRemoveBenchmark removeBenchmark = ListRemoveBenchmark(emitter: tableScoreEmitter);
 
       removeBenchmark.report();
