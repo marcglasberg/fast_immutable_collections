@@ -16,7 +16,6 @@ class GraphScreen extends StatefulWidget {
 
 class _GraphScreenState extends State<GraphScreen> {
   int _currentTableIndex;
-  List<BottomNavigationBarItem> _bottomItems;
 
   /// We will need to add an artificial button to the bottom bar if there's only one benchmark,
   /// since it requires at least 2 items.
@@ -41,27 +40,38 @@ class _GraphScreenState extends State<GraphScreen> {
     _filtersStream.add(_currentFilters);
 
     super.initState();
+  }
 
-    _bottomItems = <BottomNavigationBarItem>[
+  List<InkWell> _bottomItems(activeIndex) {
+    final List<InkWell> bottomItems = <InkWell>[
       for (int i = 0; i < widget.tables.length; i++)
-        BottomNavigationBarItem(
-          icon: Text(
-            "Size\n${formatter.format(widget.tables[i].config.size)}",
-            style: TextStyle(fontSize: 17),
-            textAlign: TextAlign.center,
+        InkWell(
+          onTap: () => _onTap(i),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            child: Text(
+              "${formatter.format(widget.tables[i].config.size)}",
+              style: TextStyle(
+                fontSize: 17,
+                color: activeIndex == i ? Colors.black : Colors.grey,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
-          label: "",
         ),
     ];
-    if (_bottomItems.length == 1) {
+    if (bottomItems.length == 1) {
       _onlyOneBenchmark = true;
-      _bottomItems.add(
-        BottomNavigationBarItem(
-          icon: Icon(Icons.arrow_back),
-          label: "Go back",
+      bottomItems.add(
+        InkWell(
+          onTap: () => _onTap(1),
+          child: Container(
+            child: Icon(Icons.arrow_back),
+          ),
         ),
       );
     }
+    return bottomItems;
   }
 
   void _onTap(int index) => setState(() {
@@ -121,20 +131,33 @@ class _GraphScreenState extends State<GraphScreen> {
                     ],
                   ),
                   Container(
-                    height: 500,
+                    height: 490,
                     child: BarChart(recordsTable: _filterNTimes(_currentTable)),
                   ),
                 ],
               );
             }),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        unselectedLabelStyle: TextStyle(color: Colors.grey),
-        items: _bottomItems,
-        onTap: _onTap,
-        currentIndex: _currentTableIndex,
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[100]),
+        ),
+        height: 60,
+        child: Column(
+          children: [
+            Text(
+              "Size",
+              style: TextStyle(color: Colors.grey),
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: _bottomItems(_currentTableIndex),
+            ),
+          ],
+        ),
       ),
     );
   }
