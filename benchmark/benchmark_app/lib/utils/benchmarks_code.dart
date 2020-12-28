@@ -39,6 +39,21 @@ abstract class ListCode {
     "BuiltList": "_builtList = BuiltList<int>();",
   };
 
+  static final Map<String, String> insert = {
+    "List (Mutable)": "list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);\n"
+        "  list.insert(randomInt, randomInt);",
+    "IList": "result = ListBenchmarkBase.getDummyGeneratedList(size: config.size).lock;\n"
+        "  result = result.insert(randomInt, randomInt);",
+    "KtList":
+        "result = ListBenchmarkBase.getDummyGeneratedList(size: config.size).toImmutableList();\n"
+            "  final KtMutableList<int> mutable = result.toMutableList();\n"
+            "  mutable.addAt(randomInt, randomInt);\n"
+            "  result = KtList<int>.from(mutable.iter);",
+    "BuiltList": "final ListBuilder<int> listBuilder = builtList.toBuilder();\n"
+        "  listBuilder.insert(randomInt, randomInt);\n"
+        "  result = listBuilder.build();",
+  };
+
   static final Map<String, String> read = {
     "List (Mutable)": "newVar = _list[ListReadBenchmark.indexToRead];",
     "IList": "newVar = _iList[ListReadBenchmark.indexToRead];",

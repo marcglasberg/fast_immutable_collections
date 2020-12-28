@@ -38,9 +38,6 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
 
   List<int> list;
 
-  // Saves a single copy of the initial list (created during setup).
-  List<int> fixedInitialList;
-
   // Saves many copies of the initial list (created during setup).
   List<List<int>> initialLists;
 
@@ -54,7 +51,6 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
   @override
   void setup() {
     count = 0;
-    fixedInitialList = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
     initialLists = [];
     for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
       initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));

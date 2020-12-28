@@ -118,6 +118,18 @@ class MultiBenchmarkScreen extends StatelessWidget {
       ],
     ),
     BenchWidget(
+      title: "Insert",
+      code: ListCode.insert,
+      benchmarks: () => [
+        ListInsertBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "list_insert",
+            config: Config(size: 1000),
+          ),
+        ),
+      ],
+    ),
+    BenchWidget(
       title: "Read",
       code: ListCode.read,
       benchmarks: () => [

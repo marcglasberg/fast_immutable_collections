@@ -20,7 +20,7 @@ class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
 
 class MutableSetRemoveBenchmark extends SetBenchmarkBase {
   MutableSetRemoveBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "List (Mutable)", emitter: emitter);
+      : super(name: "Set (Mutable)", emitter: emitter);
 
   Set<int> _set;
 
