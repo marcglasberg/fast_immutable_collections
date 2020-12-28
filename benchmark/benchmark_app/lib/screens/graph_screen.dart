@@ -48,7 +48,7 @@ class _GraphScreenState extends State<GraphScreen> {
         InkWell(
           onTap: () => _onTap(i),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Text(
               "${formatter.format(widget.tables[i].config.size)}",
               style: TextStyle(
@@ -66,7 +66,7 @@ class _GraphScreenState extends State<GraphScreen> {
         InkWell(
           onTap: () => _onTap(1),
           child: Container(
-            child: Icon(Icons.arrow_back),
+            child: const Icon(Icons.arrow_back),
           ),
         ),
       );
@@ -146,11 +146,11 @@ class _GraphScreenState extends State<GraphScreen> {
         height: 60,
         child: Column(
           children: [
-            Text(
+            const Text(
               "Size",
               style: TextStyle(color: Colors.grey),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
