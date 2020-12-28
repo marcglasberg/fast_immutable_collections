@@ -15,6 +15,8 @@ class GraphScreen extends StatefulWidget {
 }
 
 class _GraphScreenState extends State<GraphScreen> {
+  static final NumberFormat formatter = NumberFormat("#,##0", "en_US");
+
   int _currentTableIndex;
 
   /// We will need to add an artificial button to the bottom bar if there's only one benchmark,
@@ -27,8 +29,6 @@ class _GraphScreenState extends State<GraphScreen> {
   RecordsTable get _currentTable => _currentTableIndex >= widget.tables.length
       ? widget.tables.last
       : widget.tables[_currentTableIndex];
-
-  final NumberFormat formatter = NumberFormat("#,##0", "en_US");
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _GraphScreenState extends State<GraphScreen> {
         InkWell(
           onTap: () => _onTap(1),
           child: Container(
-            child: const Icon(Icons.arrow_back),
+            child: const Icon(Icons.arrow_back, color: Colors.grey),
           ),
         ),
       );
@@ -90,7 +90,7 @@ class _GraphScreenState extends State<GraphScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 5, right: 5),
-        child: StreamBuilder(
+        child: StreamBuilder<Map<String, bool>>(
             stream: _filtersStream.stream,
             builder: (_, AsyncSnapshot<Map<String, bool>> snapshot) {
               if (snapshot.hasData) _currentFilters = snapshot.data;
@@ -119,7 +119,7 @@ class _GraphScreenState extends State<GraphScreen> {
                                     ),
                                     Text(
                                       filter,
-                                      style: TextStyle(fontSize: 20),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ],
                                 ),
@@ -139,18 +139,19 @@ class _GraphScreenState extends State<GraphScreen> {
             }),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[100]),
+          border: Border.all(color: Colors.grey[400]),
         ),
         height: 60,
         child: Column(
-          children: [
+          children: <Widget>[
+            const SizedBox(height: 8),
             const Text(
-              "Size",
+              "Sizes",
               style: TextStyle(color: Colors.grey),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
