@@ -94,23 +94,17 @@ so that you can compare speeds
 
 **Table of Contents**
 
-<style>
-  #TOC ul {
-    list-style-type: none;
-  }
-</style>
-
 <div id="TOC">
-  <ul>
+  <ul style="list-style-type: none;">
     <li>
       <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li><a href="#11-introduction">1.1. Introduction</a></li>
       </ul>
     </li>
     <li>
       <a href="#2-ilist">2. IList</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li><a href="#21-ilist-equality">2.1. IList Equality</a></li>
         <li><a href="#211-cached-hashcode">2.1.1 Cached HashCode</a></li>
         <li>
@@ -129,7 +123,7 @@ so that you can compare speeds
     </li>
     <li>
       <a href="#3-iset">3. ISet</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li>
           <a href="#31-similarities-and-differences-to-the-ilist"
             >3.1. Similarities and Differences to the IList</a
@@ -144,7 +138,7 @@ so that you can compare speeds
     </li>
     <li>
       <a href="#4-imap">4. IMap</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li>
           <a href="#41-similarities-and-differences-to-the-ilistiset"
             >4.1. Similarities and Differences to the IList/ISet</a
@@ -160,7 +154,7 @@ so that you can compare speeds
     <li><a href="#5-imapofsets">5. IMapOfSets</a></li>
     <li>
       <a href="#6-comparators">6. Comparators</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li>
           <a href="#61-compareobject-function">6.1. CompareObject function</a>
         </li>
@@ -176,7 +170,7 @@ so that you can compare speeds
     </li>
     <li>
       <a href="#7-flushing">7. Flushing</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li><a href="#71-auto-flush">7.1. Auto-flush</a></li>
         <li><a href="#72-sync-auto-flush">7.2. Sync Auto-flush</a></li>
         <li><a href="#73-async-auto-flush">7.3. Async Auto-flush</a></li>
@@ -184,10 +178,10 @@ so that you can compare speeds
     </li>
     <li>
       <a href="#8-benchmarks">8. Benchmarks</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li>
           <a href="#81-list-benchmarks">8.1. List Benchmarks</a>
-          <ul>
+          <ul style="list-style-type: none;">
             <li><a href="#811-list-add">8.1.1. List Add</a></li>
             <li><a href="#812-list-addall">8.1.2. List AddAll</a></li>
             <li><a href="#813-list-contains">8.1.3. List Contains</a></li>
@@ -198,7 +192,7 @@ so that you can compare speeds
         </li>
         <li>
           <a href="#82-map-benchmarks">8.2. Map Benchmarks</a>
-          <ul>
+          <ul style="list-style-type: none;">
             <li><a href="#821-map-add">8.2.1. Map Add</a></li>
             <li><a href="#822-map-addall">8.2.2. Map AddAll</a></li>
             <li>
@@ -211,7 +205,7 @@ so that you can compare speeds
         </li>
         <li>
           <a href="#83-set-benchmarks">8.3. Set Benchmarks</a>
-          <ul>
+          <ul style="list-style-type: none;">
             <li><a href="#825-set-add">8.2.5. Set Add</a></li>
             <li><a href="#826-set-addall">8.2.6. Set AddAll</a></li>
             <li><a href="#826-set-contains">8.2.6. Set Contains</a></li>
@@ -223,7 +217,7 @@ so that you can compare speeds
     </li>
     <li>
       <a href="#9-immutable-objects">9. Immutable Objects</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li>
           <a href="#91-whats-the-difference-between-unmodifiable-and-immutable"
             >9.1. What&#39;s the difference between Unmodifiable and
@@ -250,10 +244,10 @@ so that you can compare speeds
     </li>
     <li>
       <a href="#13-bibliography">13. Bibliography</a>
-      <ul>
+      <ul style="list-style-type: none;">
         <li>
           <a href="#131-projects">13.1. Projects</a>
-          <ul>
+          <ul style="list-style-type: none;">
             <li><a href="#1311-dart">13.1.1. Dart</a></li>
             <li><a href="#1312-java">13.1.2. Java</a></li>
             <li><a href="#1313-js">13.1.3. JS</a></li>
