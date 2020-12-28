@@ -80,7 +80,7 @@ so that you can compare speeds
 </p>
 
 <p align="center">
-  <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> app for comparing this package's collections to others.</sub>
+  <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> app for comparing this package's collections to others. Use it preferably in *release mode*.</sub>
 </p>
 
 [built_collection]: https://pub.dev/packages/built_collection

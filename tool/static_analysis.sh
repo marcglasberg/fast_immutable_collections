@@ -3,7 +3,7 @@
 cd benchmark || exit
 flutter pub get
 
-cd example || exit
+cd benchmark_app || exit
 flutter pub get
 
 cd ../..
