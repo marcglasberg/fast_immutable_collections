@@ -2,7 +2,6 @@ import "../widgets/bar_chart.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:intl/intl.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -34,10 +33,6 @@ class _GraphScreenState extends State<GraphScreen> {
 
   int currentTableIndex;
 
-  /// We need to add an artificial button to the bottom bar if there's
-  /// only one benchmark, since it requires at least 2 items.
-  bool onlyOneBenchmark;
-
   Map<String, bool> filters;
 
   RecordsTable get currentTable => currentTableIndex >= widget.tables.length
@@ -46,9 +41,7 @@ class _GraphScreenState extends State<GraphScreen> {
 
   @override
   void initState() {
-    onlyOneBenchmark = false;
     currentTableIndex = 0;
-
     filters = {};
     currentTable.rowNames.forEach((String rowName) => filters[rowName] = true);
 
@@ -56,11 +49,13 @@ class _GraphScreenState extends State<GraphScreen> {
   }
 
   @override
-  Widget build(_) => Scaffold(
-        appBar: AppBar(title: title()),
-        body: body(),
-        bottomNavigationBar: bottomNavigationBar(),
-      );
+  Widget build(_) {
+    return Scaffold(
+      appBar: AppBar(title: title()),
+      body: body(),
+      bottomNavigationBar: bottomNavigationBar(),
+    );
+  }
 
   Text title() => Text("${widget.title} Benchmark Graph Results");
 
@@ -103,33 +98,33 @@ class _GraphScreenState extends State<GraphScreen> {
     });
   }
 
-  List<InkWell> bottomItems(activeIndex) => <InkWell>[
-        for (int i = 0; i < widget.tables.length; i++)
-          InkWell(
-            onTap: () => onTap(i),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Text(
-                "Size\n${formatter.format(widget.tables[i].config.size)}",
-                style: bottomItemTextStyle(activeIndex, i),
-                textAlign: TextAlign.center,
-              ),
+  List<InkWell> bottomItems(activeIndex) {
+    return <InkWell>[
+      for (int i = 0; i < widget.tables.length; i++)
+        InkWell(
+          onTap: () => onTap(i),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            child: Text(
+              "Size\n${formatter.format(widget.tables[i].config.size)}",
+              style: bottomItemTextStyle(activeIndex, i),
+              textAlign: TextAlign.center,
             ),
           ),
-      ];
+        ),
+    ];
+  }
 
   TextStyle bottomItemTextStyle(activeIndex, int i) => TextStyle(
         fontSize: 17,
         color: activeIndex == i ? Colors.white : Colors.black,
       );
 
-  void onTap(int index) => setState(() {
-        if (onlyOneBenchmark && index == 1) {
-          Navigator.of(context).pop();
-        } else {
-          currentTableIndex = index;
-        }
-      });
+  void onTap(int index) {
+    setState(() {
+      currentTableIndex = index;
+    });
+  }
 
   RecordsTable filterNTimes(RecordsTable table) {
     filters.forEach((String filterName, bool shouldNotFilter) {
@@ -230,13 +225,12 @@ class _FilterDialogState extends State<_FilterDialog> {
             onTap: () {
               setState(() {
                 widget.updateFilters(filter);
-                // filters = filters.update(filter, (bool value) => !value);
               });
             },
             child: Container(
               child: Row(
                 children: <Widget>[
-                  checkbox(filter),
+                  _checkbox(filter),
                   Text(filter, style: filterTextStyle),
                 ],
               ),
@@ -247,18 +241,16 @@ class _FilterDialogState extends State<_FilterDialog> {
     ).toList();
   }
 
-  GestureDetector checkbox(String filter) => GestureDetector(
-        onTap: () {
+  Checkbox _checkbox(String filter) {
+    return Checkbox(
+      value: filters[filter],
+      onChanged: (bool value) {
+        setState(() {
           widget.updateFilters(filter);
-          print("${filters[filter]}");
-        },
-        child: Checkbox(
-          value: filters[filter],
-          onChanged: (bool value) {
-            widget.updateFilters(filter);
-          },
-        ),
-      );
+        });
+      },
+    );
+  }
 }
 
 // ////////////////////////////////////////////////////////////////////////////
