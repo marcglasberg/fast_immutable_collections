@@ -38,7 +38,7 @@ class _GraphScreenState extends State<GraphScreen> {
   /// only one benchmark, since it requires at least 2 items.
   bool onlyOneBenchmark;
 
-  IMap<String, bool> filters;
+  Map<String, bool> filters;
 
   RecordsTable get currentTable => currentTableIndex >= widget.tables.length
       ? widget.tables.last
@@ -49,8 +49,8 @@ class _GraphScreenState extends State<GraphScreen> {
     onlyOneBenchmark = false;
     currentTableIndex = 0;
 
-    filters = <String, bool>{}.lock;
-    currentTable.rowNames.forEach((String rowName) => filters = filters.add(rowName, true));
+    filters = {};
+    currentTable.rowNames.forEach((String rowName) => filters[rowName] = true);
 
     super.initState();
   }
@@ -66,10 +66,10 @@ class _GraphScreenState extends State<GraphScreen> {
 
   Container body() {
     return Container(
-      padding: const EdgeInsets.only(left: 5, right: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: ListView(
         children: [
-          Center(child: _DropdownButton(filters, updateFilters)),
+          _DropdownButton(showFilterDialog),
           Container(
             height: 480,
             child: BarChart(recordsTable: filterNTimes(currentTable)),
@@ -99,7 +99,7 @@ class _GraphScreenState extends State<GraphScreen> {
 
   void updateFilters(String newFilter) {
     setState(() {
-      filters = filters.update(newFilter, (bool value) => !value);
+      filters[newFilter] = !filters[newFilter];
     });
   }
 
@@ -137,57 +137,86 @@ class _GraphScreenState extends State<GraphScreen> {
     });
     return table;
   }
+
+  Future<void> showFilterDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return _FilterDialog(filters, updateFilters);
+      },
+    );
+  }
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 
 class _DropdownButton extends StatelessWidget {
-  static const filterTextStyle = TextStyle(fontSize: 20);
+  //
+  final VoidCallback onTap;
 
-  final IMap<String, bool> filters;
-  final void Function(String newFilter) updateFilters;
-
-  _DropdownButton(this.filters, this.updateFilters);
+  _DropdownButton(this.onTap);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showDialog(context),
-      child: Container(
-        margin: EdgeInsets.only(top: 8, bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Filters", style: TextStyle(fontSize: 20)),
-            Icon(Icons.arrow_drop_down),
-          ],
+    return Center(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: EdgeInsets.all(8),
+          child: Container(
+            color: Color(0x22000000),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Filters", style: TextStyle(fontSize: 20)),
+                  Icon(Icons.arrow_drop_down),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
+}
 
-  Future<void> _showDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Show:"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: items(),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("OK", style: TextStyle(fontSize: 21)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+// ////////////////////////////////////////////////////////////////////////////
+
+class _FilterDialog extends StatefulWidget {
+  //
+  final Map<String, bool> filters;
+  final void Function(String newFilter) updateFilters;
+
+  _FilterDialog(this.filters, this.updateFilters);
+
+  @override
+  _FilterDialogState createState() => _FilterDialogState();
+}
+
+class _FilterDialogState extends State<_FilterDialog> {
+  //
+  Map<String, bool> get filters => widget.filters;
+
+  static const filterTextStyle = TextStyle(fontSize: 20);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Show:"),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: items(),
+        ),
+      ),
+      actions: [
+        TextButton(
+          child: Text("OK", style: TextStyle(fontSize: 21)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
     );
   }
 
@@ -199,7 +228,10 @@ class _DropdownButton extends StatelessWidget {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              updateFilters(filter);
+              setState(() {
+                widget.updateFilters(filter);
+                // filters = filters.update(filter, (bool value) => !value);
+              });
             },
             child: Container(
               child: Row(
@@ -217,13 +249,13 @@ class _DropdownButton extends StatelessWidget {
 
   GestureDetector checkbox(String filter) => GestureDetector(
         onTap: () {
-          updateFilters(filter);
+          widget.updateFilters(filter);
           print("${filters[filter]}");
         },
         child: Checkbox(
-          value: filters.get(filter),
+          value: filters[filter],
           onChanged: (bool value) {
-            updateFilters(filter);
+            widget.updateFilters(filter);
           },
         ),
       );

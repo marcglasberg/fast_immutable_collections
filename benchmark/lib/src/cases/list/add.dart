@@ -114,7 +114,7 @@ class KtListAddBenchmark extends ListBenchmarkBase {
 
 class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   BuiltListAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "BuiltList with Rebuild", emitter: emitter);
+      : super(name: "BuiltList (Rebuild)", emitter: emitter);
 
   BuiltList<int> builtList;
   BuiltList<int> result;
@@ -138,7 +138,7 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
 
 class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   BuiltListAddWithListBuilderBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "BuiltList with List Builder", emitter: emitter);
+      : super(name: "BuiltList (ListBuilder)", emitter: emitter);
 
   BuiltList<int> builtList;
   BuiltList<int> result;
