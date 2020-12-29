@@ -168,21 +168,18 @@ class _DropdownButton extends StatelessWidget {
   Future<void> _showDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('AlertDialog Title'),
+          title: Text("Show these:"),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
+              children: items(),
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Approve'),
+              child: Text("OK", style:TextStyle(fontSize: 21)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -193,31 +190,29 @@ class _DropdownButton extends StatelessWidget {
     );
   }
 
-  Iterable<DropdownMenuItem<String>> items() {
-    return filters.keys.map<DropdownMenuItem<String>>(
+  List<Widget> items() {
+    return filters.keys.map<Widget>(
       (String filter) {
-        return DropdownMenuItem<String>(
-          value: filter,
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: GestureDetector(
-            onTap: null,
-            // onTap: () {
-            //   print('_DropdownButton.items --------------------------------');
-            // },
-            child: IgnorePointer(
-              child: Container(
-                color: Colors.red,
-                child: Row(
-                  children: <Widget>[
-                    checkbox(filter),
-                    Text(filter, style: filterTextStyle),
-                  ],
-                ),
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              print('filter = $filter');
+            },
+            child: Container(
+              color: Colors.green,
+              child: Row(
+                children: [
+                  checkbox(filter),
+                  Text(filter, style: filterTextStyle),
+                ],
               ),
             ),
           ),
         );
       },
-    );
+    ).toList();
   }
 
   Checkbox checkbox(String filter) => Checkbox(
