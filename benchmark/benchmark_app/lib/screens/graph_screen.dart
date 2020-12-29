@@ -19,6 +19,17 @@ class GraphScreen extends StatefulWidget {
 // ////////////////////////////////////////////////////////////////////////////
 
 class _GraphScreenState extends State<GraphScreen> {
+  static final BoxDecoration bottomDecoration = BoxDecoration(
+    color: Colors.blue,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 5,
+        blurRadius: 7,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
+  );
   static final NumberFormat formatter = NumberFormat("#,##0", "en_US");
 
   int currentTableIndex;
@@ -71,8 +82,8 @@ class _GraphScreenState extends State<GraphScreen> {
   Container bottomNavigationBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      color: Colors.blue,
       height: 70,
+      decoration: bottomDecoration,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -192,7 +203,7 @@ class _DropdownButton extends StatelessWidget {
             },
             child: Container(
               child: Row(
-                children: [
+                children: <Widget>[
                   checkbox(filter),
                   Text(filter, style: filterTextStyle),
                 ],
