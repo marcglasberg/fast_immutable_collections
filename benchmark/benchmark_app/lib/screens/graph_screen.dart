@@ -66,7 +66,7 @@ class _GraphScreenState extends State<GraphScreen> {
         children: [
           _DropdownButton(showFilterDialog),
           Container(
-            height: 480,
+            height: 460,
             child: BarChart(recordsTable: filterNTimes(currentTable)),
           ),
         ],
@@ -158,7 +158,7 @@ class _DropdownButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          margin: EdgeInsets.all(8),
+          margin: EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 8),
           child: Container(
             color: Color(0x22000000),
             child: Padding(
