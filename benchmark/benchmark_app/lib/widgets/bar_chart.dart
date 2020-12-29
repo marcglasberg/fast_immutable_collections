@@ -42,9 +42,6 @@ class BarChart extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 100),
       barRendererDecorator: charts.BarLabelDecorator<String>(),
       domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
-      behaviors: <charts.ChartBehavior>[
-        charts.SeriesLegend(position: charts.BehaviorPosition.top),
-      ],
     );
   }
 }

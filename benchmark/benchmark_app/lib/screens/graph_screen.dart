@@ -92,35 +92,20 @@ class _GraphScreenState extends State<GraphScreen> {
     });
   }
 
-  List<InkWell> bottomItems(activeIndex) {
-    final List<InkWell> bottomItems = <InkWell>[
-      for (int i = 0; i < widget.tables.length; i++)
-        InkWell(
-          onTap: () => onTap(i),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            child: Text(
-              "Size\n${formatter.format(widget.tables[i].config.size)}",
-              style: bottomItemTextStyle(activeIndex, i),
-              textAlign: TextAlign.center,
+  List<InkWell> bottomItems(activeIndex) => <InkWell>[
+        for (int i = 0; i < widget.tables.length; i++)
+          InkWell(
+            onTap: () => onTap(i),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              child: Text(
+                "Size\n${formatter.format(widget.tables[i].config.size)}",
+                style: bottomItemTextStyle(activeIndex, i),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-        ),
-    ];
-
-    if (bottomItems.length == 1) {
-      onlyOneBenchmark = true;
-      bottomItems.add(
-        InkWell(
-          onTap: () => onTap(1),
-          child: Container(
-            child: const Icon(Icons.arrow_back, color: Colors.grey),
-          ),
-        ),
-      );
-    }
-    return bottomItems;
-  }
+      ];
 
   TextStyle bottomItemTextStyle(activeIndex, int i) => TextStyle(
         fontSize: 17,
@@ -147,8 +132,6 @@ class _GraphScreenState extends State<GraphScreen> {
 
 class _DropdownButton extends StatelessWidget {
   static const filterTextStyle = TextStyle(fontSize: 20);
-  static const hintTextStyle = TextStyle(fontSize: 20);
-  static const hintTitle = Text("Filter", style: hintTextStyle);
 
   final IMap<String, bool> filters;
   final void Function(String newFilter) updateFilters;
@@ -157,21 +140,28 @@ class _DropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.red,
-        child: GestureDetector(
-          onTap: () => _showDialog(context),
-          child: Text("Filter"),
-        ));
+    return GestureDetector(
+      onTap: () => _showDialog(context),
+      child: Container(
+        margin: EdgeInsets.only(top: 8, bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Filters", style: TextStyle(fontSize: 20)),
+            Icon(Icons.arrow_drop_down),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _showDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Show these:"),
+          title: Text("Show:"),
           content: SingleChildScrollView(
             child: ListBody(
               children: items(),
@@ -179,7 +169,7 @@ class _DropdownButton extends StatelessWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text("OK", style:TextStyle(fontSize: 21)),
+              child: Text("OK", style: TextStyle(fontSize: 21)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -198,10 +188,9 @@ class _DropdownButton extends StatelessWidget {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              print('filter = $filter');
+              updateFilters(filter);
             },
             child: Container(
-              color: Colors.green,
               child: Row(
                 children: [
                   checkbox(filter),
@@ -215,65 +204,18 @@ class _DropdownButton extends StatelessWidget {
     ).toList();
   }
 
-  Checkbox checkbox(String filter) => Checkbox(
-        value: filters[filter],
-        onChanged: (bool value) {
+  GestureDetector checkbox(String filter) => GestureDetector(
+        onTap: () {
           updateFilters(filter);
+          print("${filters[filter]}");
         },
+        child: Checkbox(
+          value: filters.get(filter),
+          onChanged: (bool value) {
+            updateFilters(filter);
+          },
+        ),
       );
 }
-// class _DropdownButton extends StatelessWidget {
-//   static const filterTextStyle = TextStyle(fontSize: 20);
-//   static const hintTextStyle = TextStyle(fontSize: 20);
-//   static const hintTitle = Text("Filter", style: hintTextStyle);
-//
-//   final IMap<String, bool> filters;
-//   final void Function(String newFilter) updateFilters;
-//
-//   _DropdownButton(this.filters, this.updateFilters);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return DropdownButton<String>(
-//       hint: hintTitle,
-//       items: items().toList(),
-//       onChanged: updateFilters,
-//     );
-//   }
-//
-//   Iterable<DropdownMenuItem<String>> items() {
-//     return filters.keys.map<DropdownMenuItem<String>>(
-//       (String filter) {
-//         return DropdownMenuItem<String>(
-//           value: filter,
-//           child: GestureDetector(
-//               onTap:null,
-//             // onTap: () {
-//             //   print('_DropdownButton.items --------------------------------');
-//             // },
-//             child: IgnorePointer(
-//               child: Container(
-//                 color: Colors.red,
-//                 child: Row(
-//                   children: <Widget>[
-//                     checkbox(filter),
-//                     Text(filter, style: filterTextStyle),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-//
-//   Checkbox checkbox(String filter) => Checkbox(
-//         value: filters[filter],
-//         onChanged: (bool value) {
-//           updateFilters(filter);
-//         },
-//       );
-// }
 
 // ////////////////////////////////////////////////////////////////////////////
