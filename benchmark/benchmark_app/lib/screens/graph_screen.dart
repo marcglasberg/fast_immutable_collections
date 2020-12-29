@@ -157,10 +157,39 @@ class _DropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      hint: hintTitle,
-      items: items().toList(),
-      onChanged: updateFilters,
+    return Container(
+        color: Colors.red,
+        child: GestureDetector(
+          onTap: () => _showDialog(context),
+          child: Text("Filter"),
+        ));
+  }
+
+  Future<void> _showDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -169,11 +198,22 @@ class _DropdownButton extends StatelessWidget {
       (String filter) {
         return DropdownMenuItem<String>(
           value: filter,
-          child: Row(
-            children: <Widget>[
-              checkbox(filter),
-              Text(filter, style: filterTextStyle),
-            ],
+          child: GestureDetector(
+            onTap: null,
+            // onTap: () {
+            //   print('_DropdownButton.items --------------------------------');
+            // },
+            child: IgnorePointer(
+              child: Container(
+                color: Colors.red,
+                child: Row(
+                  children: <Widget>[
+                    checkbox(filter),
+                    Text(filter, style: filterTextStyle),
+                  ],
+                ),
+              ),
+            ),
           ),
         );
       },
@@ -187,5 +227,58 @@ class _DropdownButton extends StatelessWidget {
         },
       );
 }
+// class _DropdownButton extends StatelessWidget {
+//   static const filterTextStyle = TextStyle(fontSize: 20);
+//   static const hintTextStyle = TextStyle(fontSize: 20);
+//   static const hintTitle = Text("Filter", style: hintTextStyle);
+//
+//   final IMap<String, bool> filters;
+//   final void Function(String newFilter) updateFilters;
+//
+//   _DropdownButton(this.filters, this.updateFilters);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return DropdownButton<String>(
+//       hint: hintTitle,
+//       items: items().toList(),
+//       onChanged: updateFilters,
+//     );
+//   }
+//
+//   Iterable<DropdownMenuItem<String>> items() {
+//     return filters.keys.map<DropdownMenuItem<String>>(
+//       (String filter) {
+//         return DropdownMenuItem<String>(
+//           value: filter,
+//           child: GestureDetector(
+//               onTap:null,
+//             // onTap: () {
+//             //   print('_DropdownButton.items --------------------------------');
+//             // },
+//             child: IgnorePointer(
+//               child: Container(
+//                 color: Colors.red,
+//                 child: Row(
+//                   children: <Widget>[
+//                     checkbox(filter),
+//                     Text(filter, style: filterTextStyle),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+//
+//   Checkbox checkbox(String filter) => Checkbox(
+//         value: filters[filter],
+//         onChanged: (bool value) {
+//           updateFilters(filter);
+//         },
+//       );
+// }
 
 // ////////////////////////////////////////////////////////////////////////////
