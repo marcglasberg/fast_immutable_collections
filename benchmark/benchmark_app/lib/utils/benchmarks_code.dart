@@ -1,5 +1,3 @@
-import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
-
 abstract class ListCode {
   static final Map<String, String> add = {
     "List (Mutable)": "for (int i = 0; i < innerRuns; i++)\n" "  _list.add(i);",
