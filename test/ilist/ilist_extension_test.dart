@@ -1009,6 +1009,13 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("reversedView.join", () {
+    expect([1, 2, 3, 4, 5, 6].reversedView.join(","), "6,5,4,3,2,1");
+    expect([].reversedView.join(","), "");
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("reversedView.lastWhere", () {
     final List<int> reversed = [1, 2, 3, 4, 5, 6].reversedView;
     expect(reversed.lastWhere((int v) => v < 2, orElse: () => 100), 1);
