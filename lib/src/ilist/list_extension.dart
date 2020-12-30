@@ -323,8 +323,24 @@ extension FicListExtension<T> on List<T> {
     list4 ??= const [];
     list5 ??= const [];
 
+    var totalLength = list1.length + list2.length + list3.length + list4.length + list5.length;
+
+    if (totalLength == 0) return const [];
+
+    T anyItem = list1.isNotEmpty
+        ? list1.first
+        : list2.isNotEmpty
+            ? list2.first
+            : list3.isNotEmpty
+                ? list3.first
+                : list4.isNotEmpty
+                    ? list4.first
+                    : list5.isNotEmpty
+                        ? list5.first
+                        : null;
+
     /// Preallocate the necessary number of items, and then copy directly into place.
-    return List<T>(list1.length + list2.length + list3.length + list4.length + list5.length)
+    return List<T>.filled(totalLength, anyItem)
       ..setAll(0, list1)
       ..setAll(list1.length, list2)
       ..setAll(list1.length + list2.length, list3)
