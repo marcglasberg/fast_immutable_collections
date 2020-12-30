@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
@@ -20,6 +22,8 @@ class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListReadBenchmark extends ListBenchmarkBase {
   MutableListReadBenchmark({@required TableScoreEmitter emitter})
@@ -38,6 +42,8 @@ class MutableListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = list[config.size ~/ 2];
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IListReadBenchmark extends ListBenchmarkBase {
   IListReadBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IList", emitter: emitter);
@@ -54,6 +60,8 @@ class IListReadBenchmark extends ListBenchmarkBase {
   @override
   void run() => newVar = iList[config.size ~/ 2];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtListReadBenchmark extends ListBenchmarkBase {
   KtListReadBenchmark({@required TableScoreEmitter emitter})
@@ -73,6 +81,8 @@ class KtListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = ktList[config.size ~/ 2];
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltListReadBenchmark extends ListBenchmarkBase {
   BuiltListReadBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList", emitter: emitter);
@@ -90,3 +100,5 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
   @override
   void run() => newVar = builtList[config.size ~/ 2];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

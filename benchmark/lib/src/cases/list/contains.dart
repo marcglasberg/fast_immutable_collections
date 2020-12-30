@@ -8,6 +8,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
@@ -21,6 +23,8 @@ class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListContainsBenchmark extends ListBenchmarkBase {
   MutableListContainsBenchmark({@required TableScoreEmitter emitter})
@@ -62,6 +66,8 @@ class MutableListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IListContainsBenchmark extends ListBenchmarkBase {
   IListContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IList", emitter: emitter);
@@ -80,6 +86,8 @@ class IListContainsBenchmark extends ListBenchmarkBase {
     for (int i = 0; i < _iList.length + 1; i++) contains = _iList.contains(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtListContainsBenchmark extends ListBenchmarkBase {
   KtListContainsBenchmark({@required TableScoreEmitter emitter})
@@ -100,6 +108,8 @@ class KtListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltListContainsBenchmark extends ListBenchmarkBase {
   BuiltListContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList", emitter: emitter);
@@ -119,3 +129,5 @@ class BuiltListContainsBenchmark extends ListBenchmarkBase {
     for (int i = 0; i < _builtList.length + 1; i++) contains = _builtList.contains(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

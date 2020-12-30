@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   static const String keyToRead = "10";
 
@@ -22,6 +24,8 @@ class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapReadBenchmark extends MapBenchmarkBase {
   MutableMapReadBenchmark({@required TableScoreEmitter emitter})
@@ -40,6 +44,8 @@ class MutableMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = _map[MapReadBenchmark.keyToRead];
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IMapReadBenchmark extends MapBenchmarkBase {
   IMapReadBenchmark({@required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
 
@@ -55,6 +61,8 @@ class IMapReadBenchmark extends MapBenchmarkBase {
   @override
   void run() => newVar = iMap[MapReadBenchmark.keyToRead];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapReadBenchmark extends MapBenchmarkBase {
   KtMapReadBenchmark({@required TableScoreEmitter emitter})
@@ -74,6 +82,8 @@ class KtMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = ktMap[MapReadBenchmark.keyToRead];
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltMapReadBenchmark extends MapBenchmarkBase {
   BuiltMapReadBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap", emitter: emitter);
@@ -91,3 +101,5 @@ class BuiltMapReadBenchmark extends MapBenchmarkBase {
   @override
   void run() => newVar = builtMap[MapReadBenchmark.keyToRead];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

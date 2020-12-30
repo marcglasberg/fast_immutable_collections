@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   static const Set<int> baseSet = {1, 2, 3}, setToAdd = {1, 2, 3, 4, 5, 6};
 
@@ -22,6 +24,8 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableSetAddAllBenchmark extends SetBenchmarkBase {
   MutableSetAddAllBenchmark({@required TableScoreEmitter emitter})
@@ -43,6 +47,8 @@ class MutableSetAddAllBenchmark extends SetBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ISetAddAllBenchmark extends SetBenchmarkBase {
   ISetAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "ISet", emitter: emitter);
@@ -59,6 +65,8 @@ class ISetAddAllBenchmark extends SetBenchmarkBase {
   @override
   void run() => iSet = fixedISet.addAll(SetAddAllBenchmark.setToAdd);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtSetAddAllBenchmark extends SetBenchmarkBase {
   KtSetAddAllBenchmark({@required TableScoreEmitter emitter})
@@ -77,6 +85,8 @@ class KtSetAddAllBenchmark extends SetBenchmarkBase {
   void run() => ktSet = fixedISet.plus(SetAddAllBenchmark.setToAdd.toImmutableSet()).toSet();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
   BuiltSetAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
@@ -94,3 +104,5 @@ class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
   void run() => builtSet = fixedISet
       .rebuild((SetBuilder<int> setBuilder) => setBuilder.addAll(SetAddAllBenchmark.setToAdd));
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
@@ -20,6 +22,8 @@ class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase>
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
   MutableMapContainsValueBenchmark({@required TableScoreEmitter emitter})
@@ -39,6 +43,8 @@ class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
     for (int i = 0; i < map.length + 1; i++) contains = map.containsValue(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapContainsValueBenchmark extends MapBenchmarkBase {
   IMapContainsValueBenchmark({@required TableScoreEmitter emitter})
@@ -60,6 +66,8 @@ class IMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KtMapContainsValueBenchmark extends MapBenchmarkBase {
   KtMapContainsValueBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtMap", emitter: emitter);
@@ -78,6 +86,8 @@ class KtMapContainsValueBenchmark extends MapBenchmarkBase {
     for (int i = 0; i < _ktMap.size + 1; i++) contains = _ktMap.containsValue(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
   BuiltMapContainsValueBenchmark({@required TableScoreEmitter emitter})
@@ -98,3 +108,5 @@ class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
     for (int i = 0; i < _builtMap.length + 1; i++) contains = _builtMap.containsValue(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

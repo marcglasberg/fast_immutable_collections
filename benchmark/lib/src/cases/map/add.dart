@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MapAddBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   static const int innerRuns = 100;
 
@@ -23,6 +25,8 @@ class MapAddBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapAddBenchmark extends MapBenchmarkBase {
   MutableMapAddBenchmark({@required TableScoreEmitter emitter})
@@ -43,6 +47,8 @@ class MutableMapAddBenchmark extends MapBenchmarkBase {
     for (int i = 0; i < MapAddBenchmark.innerRuns; i++) map.addAll({i.toString(): i});
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapAddBenchmark extends MapBenchmarkBase {
   IMapAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
@@ -66,6 +72,8 @@ class IMapAddBenchmark extends MapBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KtMapAddBenchmark extends MapBenchmarkBase {
   KtMapAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "KtMap", emitter: emitter);
 
@@ -85,6 +93,8 @@ class KtMapAddBenchmark extends MapBenchmarkBase {
       result = result.plus(<String, int>{i.toString(): i}.toImmutableMap());
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
@@ -109,6 +119,8 @@ class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithListBuilderBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap with ListBuilder", emitter: emitter);
@@ -131,3 +143,5 @@ class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
     result = mapBuilder.build();
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

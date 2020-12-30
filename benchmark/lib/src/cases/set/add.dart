@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SetAddBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   static const int innerRuns = 100;
 
@@ -23,6 +25,8 @@ class SetAddBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableSetAddBenchmark extends SetBenchmarkBase {
   MutableSetAddBenchmark({@required TableScoreEmitter emitter})
@@ -44,6 +48,8 @@ class MutableSetAddBenchmark extends SetBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ISetAddBenchmark extends SetBenchmarkBase {
   ISetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
@@ -63,6 +69,8 @@ class ISetAddBenchmark extends SetBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KtSetAddBenchmark extends SetBenchmarkBase {
   KtSetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "KtSet", emitter: emitter);
 
@@ -81,6 +89,8 @@ class KtSetAddBenchmark extends SetBenchmarkBase {
     for (int i = 0; i < SetAddBenchmark.innerRuns; i++) result = result.plusElement(i).toSet();
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
   BuiltSetAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
@@ -103,6 +113,8 @@ class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
   BuiltSetAddWithSetBuilderBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet with ListBuilder", emitter: emitter);
@@ -123,3 +135,5 @@ class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
     result = setBuilder.build();
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

@@ -5,6 +5,8 @@ import "package:kt_dart/kt.dart";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ListInsertBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
@@ -18,6 +20,8 @@ class ListInsertBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListInsertBenchmark extends ListBenchmarkBase {
   final int seed;
@@ -61,6 +65,8 @@ class MutableListInsertBenchmark extends ListBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IListInsertBenchmark extends ListBenchmarkBase {
   final int seed;
 
@@ -84,6 +90,8 @@ class IListInsertBenchmark extends ListBenchmarkBase {
     result = iList.insert(randomInt, randomInt);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtListInsertBenchmark extends ListBenchmarkBase {
   final int seed;
@@ -111,6 +119,8 @@ class KtListInsertBenchmark extends ListBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltListInsertBenchmark extends ListBenchmarkBase {
   final int seed;
 
@@ -135,3 +145,5 @@ class BuiltListInsertBenchmark extends ListBenchmarkBase {
     result = listBuilder.build();
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

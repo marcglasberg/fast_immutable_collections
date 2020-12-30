@@ -2,6 +2,8 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 @immutable
 class Config {
   final int size;
@@ -11,6 +13,8 @@ class Config {
   @override
   String toString() => "Config: (size: $size)";
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class StopwatchRecord {
@@ -35,6 +39,8 @@ class StopwatchRecord {
   @override
   String toString() => "$runtimeType: (collectionName: $collectionName, record: $record)";
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class RecordsColumn {
@@ -101,6 +107,8 @@ class RecordsColumn {
   String toString() => "$runtimeType: ${records.toString()}";
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 @immutable
 class LeftLegend {
   final RecordsColumn _results;
@@ -114,6 +122,8 @@ class LeftLegend {
     return collections;
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class RecordsTable {
@@ -194,3 +204,5 @@ class RecordsTable {
     return newLine.substring(0, newLine.length - 1) + "\n";
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

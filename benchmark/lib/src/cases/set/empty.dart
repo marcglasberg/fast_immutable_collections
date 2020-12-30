@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
@@ -21,6 +23,8 @@ class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         super(emitter: emitter);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MutableSetEmptyBenchmark extends SetBenchmarkBase {
   MutableSetEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
@@ -34,6 +38,8 @@ class MutableSetEmptyBenchmark extends SetBenchmarkBase {
   void run() => set = <int>{};
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ISetEmptyBenchmark extends SetBenchmarkBase {
   ISetEmptyBenchmark({@required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
@@ -45,6 +51,8 @@ class ISetEmptyBenchmark extends SetBenchmarkBase {
   @override
   void run() => iSet = ISet<int>();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtSetEmptyBenchmark extends SetBenchmarkBase {
   KtSetEmptyBenchmark({@required TableScoreEmitter emitter})
@@ -59,6 +67,8 @@ class KtSetEmptyBenchmark extends SetBenchmarkBase {
   void run() => ktSet = KtSet<int>.empty();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
   BuiltSetEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
@@ -71,3 +81,5 @@ class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
   @override
   void run() => builtSet = BuiltSet<int>();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

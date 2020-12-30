@@ -4,6 +4,8 @@ import "package:kt_dart/collection.dart";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
@@ -17,6 +19,8 @@ class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableSetRemoveBenchmark extends SetBenchmarkBase {
   MutableSetRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -33,6 +37,8 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
   @override
   void run() => set.remove(1);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ISetRemoveBenchmark extends SetBenchmarkBase {
   ISetRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -51,6 +57,8 @@ class ISetRemoveBenchmark extends SetBenchmarkBase {
   void run() => iSet = fixedSet.remove(1);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KtSetRemoveBenchmark extends SetBenchmarkBase {
   KtSetRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtSet", emitter: emitter);
@@ -68,6 +76,8 @@ class KtSetRemoveBenchmark extends SetBenchmarkBase {
   void run() => ktSet = fixedSet.minusElement(1).toSet();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
   BuiltSetRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
@@ -84,3 +94,5 @@ class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
   @override
   void run() => builtSet = fixedSet.rebuild((SetBuilder<int> setBuilder) => setBuilder.remove(1));
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

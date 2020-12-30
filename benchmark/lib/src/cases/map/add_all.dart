@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   static const Map<String, int> baseMap = {"1": 1, "2": 3}, mapToAdd = {"4": 4, "5": 5, "6": 6};
 
@@ -22,6 +24,8 @@ class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapAddAllBenchmark extends MapBenchmarkBase {
   MutableMapAddAllBenchmark({@required TableScoreEmitter emitter})
@@ -43,6 +47,8 @@ class MutableMapAddAllBenchmark extends MapBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IMapAddAllBenchmark extends MapBenchmarkBase {
   IMapAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IMap", emitter: emitter);
@@ -59,6 +65,8 @@ class IMapAddAllBenchmark extends MapBenchmarkBase {
   @override
   void run() => result = iMap.addAll(MapAddAllBenchmark.mapToAdd.lock);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapAddAllBenchmark extends MapBenchmarkBase {
   KtMapAddAllBenchmark({@required TableScoreEmitter emitter})
@@ -77,6 +85,8 @@ class KtMapAddAllBenchmark extends MapBenchmarkBase {
   void run() => result = ktMap.plus(KtMap<String, int>.from(MapAddAllBenchmark.mapToAdd));
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
   BuiltMapAddAllBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap", emitter: emitter);
@@ -94,3 +104,5 @@ class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
   void run() => result = builtMap.rebuild(
       (MapBuilder<String, int> mapBuilder) => mapBuilder.addAll(MapAddAllBenchmark.mapToAdd));
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

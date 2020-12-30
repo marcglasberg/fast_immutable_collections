@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MapEmptyBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
@@ -21,6 +23,8 @@ class MapEmptyBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         super(emitter: emitter);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MutableMapEmptyBenchmark extends MapBenchmarkBase {
   MutableMapEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Map (Mutable)", emitter: emitter);
@@ -34,6 +38,8 @@ class MutableMapEmptyBenchmark extends MapBenchmarkBase {
   void run() => map = <String, int>{};
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IMapEmptyBenchmark extends MapBenchmarkBase {
   IMapEmptyBenchmark({@required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
 
@@ -45,6 +51,8 @@ class IMapEmptyBenchmark extends MapBenchmarkBase {
   @override
   void run() => iMap = IMap<String, int>();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapEmptyBenchmark extends MapBenchmarkBase {
   KtMapEmptyBenchmark({@required TableScoreEmitter emitter})
@@ -59,6 +67,8 @@ class KtMapEmptyBenchmark extends MapBenchmarkBase {
   void run() => ktMap = KtMap<String, int>.empty();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltMapEmptyBenchmark extends MapBenchmarkBase {
   BuiltMapEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap", emitter: emitter);
@@ -71,3 +81,5 @@ class BuiltMapEmptyBenchmark extends MapBenchmarkBase {
   @override
   void run() => builtMap = BuiltMap<String, int>();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

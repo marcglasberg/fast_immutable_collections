@@ -8,6 +8,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
@@ -21,6 +23,8 @@ class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListRemoveBenchmark extends ListBenchmarkBase {
   MutableListRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -61,6 +65,8 @@ class MutableListRemoveBenchmark extends ListBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IListRemoveBenchmark extends ListBenchmarkBase {
   IListRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IList", emitter: emitter);
@@ -76,6 +82,8 @@ class IListRemoveBenchmark extends ListBenchmarkBase {
   @override
   void run() => iList = iList.remove(config.size ~/ 2);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtListRemoveBenchmark extends ListBenchmarkBase {
   KtListRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -94,6 +102,8 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
   void run() => ktList = ktList.minusElement(config.size ~/ 2);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   BuiltListRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList", emitter: emitter);
@@ -111,3 +121,5 @@ class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   void run() => builtList =
       builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(config.size ~/ 2));
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

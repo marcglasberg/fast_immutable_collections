@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
@@ -20,6 +22,8 @@ class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapRemoveBenchmark extends MapBenchmarkBase {
   MutableMapRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -36,6 +40,8 @@ class MutableMapRemoveBenchmark extends MapBenchmarkBase {
   @override
   void run() => map.remove("1");
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapRemoveBenchmark extends MapBenchmarkBase {
   IMapRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -54,6 +60,8 @@ class IMapRemoveBenchmark extends MapBenchmarkBase {
   void run() => iMap = iMap.remove("1");
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KtMapRemoveBenchmark extends MapBenchmarkBase {
   KtMapRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtMap", emitter: emitter);
@@ -70,6 +78,8 @@ class KtMapRemoveBenchmark extends MapBenchmarkBase {
   @override
   void run() => ktMap = ktMap.minus("1");
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   BuiltMapMapRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -88,3 +98,5 @@ class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   void run() =>
       builtMap = builtMap.rebuild((MapBuilder<String, int> mapBuilder) => mapBuilder.remove("1"));
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
