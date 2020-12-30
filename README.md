@@ -11,25 +11,11 @@
 
 # 1. Fast Immutable Collections
 
-[codecov]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/
-
-[codecov_badge]: https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg
-
 [example]: benchmark/example/
 
 [gif]: benchmark/assets/demo.gif
 
-[github_actions]: https://github.com/marcglasberg/fast_immutable_collections/actions
-
 [github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
-
-[github_home]: https://github.com/marcglasberg/fast_immutable_collections
-
-[gitter_svg]: https://badges.gitter.im/Fast-Immutable-Collections/community.svg
-
-[gitter_badge]: https://gitter.im/Fast-Immutable-Collections/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
-[logo]: assets/logo.png
 
 ## 1.1. Introduction
 
@@ -80,7 +66,7 @@ so that you can compare speeds
 </p>
 
 <p align="center">
-  <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> app for comparing this package's collections to others. Use it preferably in *release mode*.</sub>
+  <sub>The <a href="benchmark/example/"><code>benchmark_example</code></a> app for comparing this package's collections to others. Use it preferably in <em>release mode</em>.</sub>
 </p>
 
 [built_collection]: https://pub.dev/packages/built_collection
@@ -1486,8 +1472,6 @@ with `// TODO: Still needs to implement efficiently` and will be updated in futu
 [benchmark]: benchmark/
 
 [benchmark_docs]: benchmark/README.md
-
-[example]: benchmark/example/
 
 <br>
 
