@@ -696,7 +696,6 @@ void main() {
   test("reversedView.+", () {
     List<int> list = [1, 2, 3].reversedView;
 
-    // TODO
     expect(list + [4, 5, 6], [3, 2, 1, 4, 5, 6]);
     expect(list + [4], [3, 2, 1, 4]);
     expect(list + [null], [3, 2, 1, null]);
