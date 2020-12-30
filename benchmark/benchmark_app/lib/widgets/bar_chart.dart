@@ -15,23 +15,33 @@ class BarChart extends StatelessWidget {
           domainFn: (StopwatchRecord record, _) => record.collectionName,
           measureFn: (StopwatchRecord record, _) => record.record,
           data: _normalizedAgainstMaxPrefixedByAbs(recordsTable),
+            displayName: "Xaxaxaxa"
         ),
       ];
 
   List<StopwatchRecord> _normalizedAgainstMaxPrefixedByAbs(RecordsTable table) {
-    final List<StopwatchRecord> records = [];
-    final RecordsColumn resultsColumn = table.resultsColumn;
-    final RecordsColumn normalizedAgainstMaxColumn = table.normalizedAgainstMax;
+    List<StopwatchRecord> records = [];
+    RecordsColumn resultsColumn = table.resultsColumn;
+    RecordsColumn normalizedAgainstMaxColumn = table.normalizedAgainstMax;
+
     for (int i = 0; i < resultsColumn.records.length; i++) {
-      final StopwatchRecord stopwatchRecord = StopwatchRecord(
-        collectionName: resultsColumn.records[i].record.round().toString() +
-            " μs | " +
-            normalizedAgainstMaxColumn.records[i].collectionName,
-        record: normalizedAgainstMaxColumn.records[i].record,
-      );
-      records.add(stopwatchRecord);
+      records.add(_stopwatchRecord(resultsColumn, i, normalizedAgainstMaxColumn));
     }
     return records;
+  }
+
+  StopwatchRecord _stopwatchRecord(
+    RecordsColumn resultsColumn,
+    int i,
+    RecordsColumn normalizedAgainstMaxColumn,
+  ) {
+    var millis = resultsColumn.records[i].record.round();
+    var collectionName = normalizedAgainstMaxColumn.records[i].collectionName;
+
+    return StopwatchRecord(
+      collectionName: "$millis μs | $collectionName",
+      record: normalizedAgainstMaxColumn.records[i].record,
+    );
   }
 
   @override
