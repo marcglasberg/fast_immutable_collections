@@ -10,13 +10,12 @@ class BarChart extends StatelessWidget {
 
   List<charts.Series<StopwatchRecord, String>> get _seriesList => [
         charts.Series<StopwatchRecord, String>(
-          id: "Normalized Against\nthe Maximum Value",
-          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-          domainFn: (StopwatchRecord record, _) => record.collectionName,
-          measureFn: (StopwatchRecord record, _) => record.record,
-          data: _normalizedAgainstMaxPrefixedByAbs(recordsTable),
-            displayName: "Xaxaxaxa"
-        ),
+            id: "Normalized Against\nthe Maximum Value",
+            colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+            domainFn: (StopwatchRecord record, _) => record.collectionName,
+            measureFn: (StopwatchRecord record, _) => record.record,
+            data: _normalizedAgainstMaxPrefixedByAbs(recordsTable),
+            displayName: "Xaxaxaxa"),
       ];
 
   List<StopwatchRecord> _normalizedAgainstMaxPrefixedByAbs(RecordsTable table) {

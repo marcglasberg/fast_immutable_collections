@@ -31,7 +31,7 @@ class MutableMapRemoveBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => map;
 
   @override
-  void setup() => map = MapBenchmarkBase.getDummyGeneratedMap();
+  void setup() => map = MapBenchmarkBase.getDummyGeneratedMap(size: config.size);
 
   @override
   void run() => map.remove("1");
@@ -47,7 +47,8 @@ class IMapRemoveBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => iMap.unlock;
 
   @override
-  void setup() => iMap = IMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap());
+  void setup() =>
+      iMap = IMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() => iMap = iMap.remove("1");
@@ -63,7 +64,8 @@ class KtMapRemoveBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => ktMap.asMap();
 
   @override
-  void setup() => ktMap = KtMap<String, int>.from(MapBenchmarkBase.getDummyGeneratedMap());
+  void setup() =>
+      ktMap = KtMap<String, int>.from(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() => ktMap = ktMap.minus("1");
@@ -79,7 +81,8 @@ class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => builtMap.asMap();
 
   @override
-  void setup() => builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap());
+  void setup() =>
+      builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() =>

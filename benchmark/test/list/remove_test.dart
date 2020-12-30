@@ -12,7 +12,8 @@ void main() {
 
       listRemoveBenchmark.report();
 
-      expect(listRemoveBenchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
+      expect(listRemoveBenchmark.toMutable(),
+          ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
     });
 
     test("IList", () {
@@ -23,8 +24,8 @@ void main() {
 
       iListRemoveBenchmark.report();
 
-      expect(
-          iListRemoveBenchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
+      expect(iListRemoveBenchmark.toMutable(),
+          ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
     });
 
     test("KtList", () {
@@ -35,8 +36,8 @@ void main() {
 
       ktListRemoveBenchmark.report();
 
-      expect(
-          ktListRemoveBenchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
+      expect(ktListRemoveBenchmark.toMutable(),
+          ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
     });
 
     test("BuiltList", () {
@@ -60,8 +61,8 @@ void main() {
 
       removeBenchmark.report();
 
-      removeBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50)));
+      removeBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) => expect(
+          benchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50)));
     });
   });
 }

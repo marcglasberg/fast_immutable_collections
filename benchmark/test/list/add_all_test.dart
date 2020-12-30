@@ -6,7 +6,7 @@ void main() {
   group("Separate Benchmarks |", () {
     test("List (Mutable)", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_list_mutable", config: Config(size: 10));
+          TableScoreEmitter(prefixName: "add_all_list_mutable", config: Config(size: 100));
       final MutableListAddAllBenchmark listAddAllBenchmark =
           MutableListAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -19,7 +19,7 @@ void main() {
 
     test("IList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_iList", config: Config(size: 10));
+          TableScoreEmitter(prefixName: "add_all_iList", config: Config(size: 100));
       final IListAddAllBenchmark iListAddAllBenchmark =
           IListAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -32,7 +32,7 @@ void main() {
 
     test("KtList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_ktList", config: Config(size: 10));
+          TableScoreEmitter(prefixName: "add_all_ktList", config: Config(size: 100));
       final KtListAddAllBenchmark ktListAddAllBenchmark =
           KtListAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -45,7 +45,7 @@ void main() {
 
     test("BuiltList", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_builtList", config: Config(size: 10));
+          TableScoreEmitter(prefixName: "add_all_builtList", config: Config(size: 100));
       final BuiltListAddAllBenchmark builtListAddAllBenchmark =
           BuiltListAddAllBenchmark(emitter: tableScoreEmitter);
 
@@ -60,7 +60,7 @@ void main() {
   group("Multiple Benchmarks |", () {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all", config: Config(size: 10));
+          TableScoreEmitter(prefixName: "add_all", config: Config(size: 100));
       final ListAddAllBenchmark addAllBenchmark = ListAddAllBenchmark(emitter: tableScoreEmitter);
 
       addAllBenchmark.report();

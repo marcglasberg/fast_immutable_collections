@@ -13,7 +13,7 @@ void main() {
       listAddBenchmark.report();
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index) +
-          List<int>.generate(100, (int index) => index);
+          List<int>.generate(10, (int index) => index);
       expect(listAddBenchmark.toMutable(), expectedList);
     });
 
@@ -25,7 +25,7 @@ void main() {
       iListAddBenchmark.report();
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index) +
-          List<int>.generate(100, (int index) => index);
+          List<int>.generate(10, (int index) => index);
       expect(iListAddBenchmark.toMutable(), expectedList);
     });
 
@@ -37,7 +37,7 @@ void main() {
       ktListAddBenchmark.report();
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index) +
-          List<int>.generate(100, (int index) => index);
+          List<int>.generate(10, (int index) => index);
       expect(ktListAddBenchmark.toMutable(), expectedList);
     });
 
@@ -50,7 +50,7 @@ void main() {
       builtListAddWithRebuildBenchmark.report();
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index) +
-          List<int>.generate(100, (int index) => index);
+          List<int>.generate(10, (int index) => index);
       expect(builtListAddWithRebuildBenchmark.toMutable(), expectedList);
     });
 
@@ -63,7 +63,7 @@ void main() {
       builtListAddWithListBuilderBenchmark.report();
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index) +
-          List<int>.generate(100, (int index) => index);
+          List<int>.generate(10, (int index) => index);
       expect(builtListAddWithListBuilderBenchmark.toMutable(), expectedList);
     });
   });
@@ -77,7 +77,7 @@ void main() {
       addBenchmark.report();
 
       final List<int> expectedList = List<int>.generate(100, (int index) => index) +
-          List<int>.generate(100, (int index) => index);
+          List<int>.generate(10, (int index) => index);
       addBenchmark.benchmarks
           .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
     });

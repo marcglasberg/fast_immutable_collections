@@ -9,9 +9,6 @@ final Matcher throwsAssertionError = throwsA(isAssertionError);
 
 void main() {
   group("Config |", () {
-    test("Only accepts runs bigger than 0",
-        () => expect(() => Config(size: 10), throwsAssertionError), skip: true);
-
     test("Only accepts sizes bigger or equal than 0",
         () => expect(() => Config(size: -1), throwsAssertionError));
 
@@ -19,7 +16,7 @@ void main() {
       const Config config = Config(size: 10);
 
       expect(config.toString(), "Config: (size: 10)");
-    }, skip: true);
+    });
   });
 
   group("StopwatchRecord |", () {
@@ -31,12 +28,6 @@ void main() {
 
     test("The collection name has to have length bigger than 0",
         () => expect(() => StopwatchRecord(collectionName: "", record: 10), throwsAssertionError));
-
-    test(
-        "The record has to be bigger than 0",
-        () =>
-            expect(() => StopwatchRecord(collectionName: "asdf", record: 0), throwsAssertionError),
-        skip: true);
 
     test("Simple usage", () {
       const StopwatchRecord stopwatchRecord = StopwatchRecord(collectionName: "list", record: 10);
@@ -287,15 +278,15 @@ void main() {
           RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
 
       const String correctTableAsString =
-          "Collection,Time (μs),x Max Time,x Min Time,x Mutable Time,Time (μs) / Runs,Time (μs) / Size\n"
-          "List (Mutable),10.0,0.33,1.0,1.0,0.1,0.01\n"
-          "IList,15.0,0.5,1.5,1.5,0.15,0.01\n"
-          "KtList,20.0,0.67,2.0,2.0,0.2,0.02\n"
-          "BuiltList,30.0,1.0,3.0,3.0,0.3,0.03\n"
+          "Collection,Time (μs),x Max Time,x Min Time,x Mutable Time,Time (μs) / Size\n"
+          "List (Mutable),10.0,0.33,1.0,1.0,0.01\n"
+          "IList,15.0,0.5,1.5,1.5,0.01\n"
+          "KtList,20.0,0.67,2.0,2.0,0.02\n"
+          "BuiltList,30.0,1.0,3.0,3.0,0.03\n"
           "";
 
       expect(recordsTable.toString(), correctTableAsString);
-    }, skip: true);
+    });
 
     test("Filter", () {
       RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
