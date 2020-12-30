@@ -88,7 +88,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_add_all",
-            config: Config(size: 100),
+            config: Config(size: 10000),
           ),
         ),
       ],
@@ -100,7 +100,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListContainsBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_contains",
-            config: Config(size: 100),
+            config: Config(size: 10000),
           ),
         ),
       ],
@@ -136,7 +136,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListReadBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_read",
-            config: Config(size: 100),
+            config: Config(size: 100000),
           ),
         ),
       ],

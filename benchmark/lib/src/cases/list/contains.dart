@@ -1,3 +1,4 @@
+import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/kt.dart";
 import "package:meta/meta.dart";
@@ -28,15 +29,36 @@ class MutableListContainsBenchmark extends ListBenchmarkBase {
   List<int> list;
   bool contains;
 
+  // Saves many copies of the initial list (created during setup).
+  List<List<int>> initialLists;
+
+  int count;
+
   @override
   List<int> toMutable() => list;
 
+  /// Since List is mutable, we have to create many copied of the original list during setup.
+  /// Note the setup does not count for the measurements.
   @override
-  void setup() => list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+  void setup() {
+    count = 0;
+    initialLists = [];
+    for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
+      initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  }
 
   @override
   void run() {
+    list = getNextList();
     for (int i = 0; i < list.length + 1; i++) contains = list.contains(i);
+  }
+
+  List<int> getNextList() {
+    if (count >= initialLists.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialLists[count];
   }
 }
 

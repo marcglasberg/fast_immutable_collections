@@ -1,3 +1,4 @@
+import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
 import "package:meta/meta.dart";
@@ -27,14 +28,37 @@ class MutableListRemoveBenchmark extends ListBenchmarkBase {
 
   List<int> list;
 
+  // Saves many copies of the initial list (created during setup).
+  List<List<int>> initialLists;
+
+  int count;
+
   @override
   List<int> toMutable() => list;
 
+  /// Since List is mutable, we have to create many copied of the original list during setup.
+  /// Note the setup does not count for the measurements.
   @override
-  void setup() => list = ListBenchmarkBase.getDummyGeneratedList();
+  void setup() {
+    count = 0;
+    initialLists = [];
+    for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
+      initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  }
 
   @override
-  void run() => list.remove(1);
+  void run() {
+    list = getNextList();
+    list.remove(config.size ~/ 2);
+  }
+
+  List<int> getNextList() {
+    if (count >= initialLists.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialLists[count];
+  }
 }
 
 class IListRemoveBenchmark extends ListBenchmarkBase {
@@ -47,10 +71,10 @@ class IListRemoveBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => iList.unlock;
 
   @override
-  void setup() => iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() => iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => iList = iList.remove(1);
+  void run() => iList = iList.remove(config.size ~/ 2);
 }
 
 class KtListRemoveBenchmark extends ListBenchmarkBase {
@@ -63,10 +87,11 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => ktList.asList();
 
   @override
-  void setup() => ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() =>
+      ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => ktList = ktList.minusElement(1);
+  void run() => ktList = ktList.minusElement(config.size ~/ 2);
 }
 
 class BuiltListRemoveBenchmark extends ListBenchmarkBase {
@@ -79,9 +104,10 @@ class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => builtList.asList();
 
   @override
-  void setup() => builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList());
+  void setup() =>
+      builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() =>
-      builtList = builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(1));
+  void run() => builtList =
+      builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(config.size ~/ 2));
 }

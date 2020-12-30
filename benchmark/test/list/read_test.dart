@@ -12,8 +12,7 @@ void main() {
 
       listReadBenchmark.report();
 
-      expect(listReadBenchmark.newVar,
-          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+      expect(listReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
     });
 
     test("IList", () {
@@ -23,8 +22,7 @@ void main() {
 
       iListReadBenchmark.report();
 
-      expect(iListReadBenchmark.newVar,
-          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+      expect(iListReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
     });
 
     test("KtList", () {
@@ -35,8 +33,7 @@ void main() {
 
       ktListReadBenchmark.report();
 
-      expect(ktListReadBenchmark.newVar,
-          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+      expect(ktListReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
     });
 
     test("BuiltList", () {
@@ -47,8 +44,8 @@ void main() {
 
       builtListReadBenchmark.report();
 
-      expect(builtListReadBenchmark.newVar,
-          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]);
+      expect(
+          builtListReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
     });
   });
 
@@ -61,8 +58,7 @@ void main() {
       readBenchmark.report();
 
       readBenchmark.benchmarks.forEach((ListBenchmarkBase benchmark) => expect(
-          benchmark.toMutable()[ListReadBenchmark.indexToRead],
-          ListBenchmarkBase.getDummyGeneratedList(size: 1000)[ListReadBenchmark.indexToRead]));
+          benchmark.toMutable()[500], ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]));
     });
   });
 }

@@ -8,8 +8,6 @@ import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
 class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-  static const int indexToRead = 10;
-
   @override
   final List<ListBenchmarkBase> benchmarks;
 
@@ -37,7 +35,7 @@ class MutableListReadBenchmark extends ListBenchmarkBase {
   void setup() => list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
 
   @override
-  void run() => newVar = list[ListReadBenchmark.indexToRead];
+  void run() => newVar = list[config.size ~/ 2];
 }
 
 class IListReadBenchmark extends ListBenchmarkBase {
@@ -54,7 +52,7 @@ class IListReadBenchmark extends ListBenchmarkBase {
   void setup() => iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => newVar = iList[ListReadBenchmark.indexToRead];
+  void run() => newVar = iList[config.size ~/ 2];
 }
 
 class KtListReadBenchmark extends ListBenchmarkBase {
@@ -72,7 +70,7 @@ class KtListReadBenchmark extends ListBenchmarkBase {
       ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => newVar = ktList[ListReadBenchmark.indexToRead];
+  void run() => newVar = ktList[config.size ~/ 2];
 }
 
 class BuiltListReadBenchmark extends ListBenchmarkBase {
@@ -90,5 +88,5 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
       builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => newVar = builtList[ListReadBenchmark.indexToRead];
+  void run() => newVar = builtList[config.size ~/ 2];
 }

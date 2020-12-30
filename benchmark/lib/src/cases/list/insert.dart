@@ -9,41 +9,63 @@ class ListInsertBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListInsertBenchmark({@required TableScoreEmitter emitter})
+  ListInsertBenchmark({@required TableScoreEmitter emitter, int seed})
       : benchmarks = <ListBenchmarkBase>[
-          MutableListInsertBenchmark(emitter: emitter),
-          IListInsertBenchmark(emitter: emitter),
-          KtListInsertBenchmark(emitter: emitter),
-          BuiltListInsertBenchmark(emitter: emitter),
+          MutableListInsertBenchmark(emitter: emitter, seed: seed),
+          IListInsertBenchmark(emitter: emitter, seed: seed),
+          KtListInsertBenchmark(emitter: emitter, seed: seed),
+          BuiltListInsertBenchmark(emitter: emitter, seed: seed),
         ],
         super(emitter: emitter);
 }
 
 class MutableListInsertBenchmark extends ListBenchmarkBase {
-  final int randomInt;
+  final int seed;
 
-  MutableListInsertBenchmark({@required TableScoreEmitter emitter})
-      : randomInt = Random(0).nextInt(emitter.config.size),
-        super(name: "List (Mutable)", emitter: emitter);
+  MutableListInsertBenchmark({@required TableScoreEmitter emitter, this.seed})
+      : super(name: "List (Mutable)", emitter: emitter);
 
   List<int> list;
+
+  // Saves many copies of the initial list (created during setup).
+  List<List<int>> initialLists;
+
+  int count;
 
   @override
   List<int> toMutable() => list;
 
+  /// Since List is mutable, we have to create many copied of the original list during setup.
+  /// Note the setup does not count for the measurements.
+  @override
+  void setup() {
+    count = 0;
+    initialLists = [];
+    for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
+      initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  }
+
   @override
   void run() {
-    list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+    list = getNextList();
+    final int randomInt = Random(seed).nextInt(emitter.config.size);
     list.insert(randomInt, randomInt);
+  }
+
+  List<int> getNextList() {
+    if (count >= initialLists.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialLists[count];
   }
 }
 
 class IListInsertBenchmark extends ListBenchmarkBase {
-  final int randomInt;
+  final int seed;
 
-  IListInsertBenchmark({@required TableScoreEmitter emitter})
-      : randomInt = Random(0).nextInt(emitter.config.size),
-        super(name: "IList", emitter: emitter);
+  IListInsertBenchmark({@required TableScoreEmitter emitter, this.seed})
+      : super(name: "IList", emitter: emitter);
 
   IList<int> iList;
   IList<int> result;
@@ -52,18 +74,22 @@ class IListInsertBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => result.unlock;
 
   @override
+  void setup() {
+    iList = ListBenchmarkBase.getDummyGeneratedList(size: config.size).lock;
+  }
+
+  @override
   void run() {
-    result = ListBenchmarkBase.getDummyGeneratedList(size: config.size).lock;
-    result = result.insert(randomInt, randomInt);
+    final int randomInt = Random(seed).nextInt(emitter.config.size);
+    result = iList.insert(randomInt, randomInt);
   }
 }
 
 class KtListInsertBenchmark extends ListBenchmarkBase {
-  final int randomInt;
+  final int seed;
 
-  KtListInsertBenchmark({@required TableScoreEmitter emitter})
-      : randomInt = Random(0).nextInt(emitter.config.size),
-        super(name: "KtList", emitter: emitter);
+  KtListInsertBenchmark({@required TableScoreEmitter emitter, this.seed})
+      : super(name: "KtList", emitter: emitter);
 
   KtList<int> ktList;
   KtList<int> result;
@@ -72,20 +98,24 @@ class KtListInsertBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => result.asList();
 
   @override
+  void setup() {
+    ktList = ListBenchmarkBase.getDummyGeneratedList(size: config.size).toImmutableList();
+  }
+
+  @override
   void run() {
-    result = ListBenchmarkBase.getDummyGeneratedList(size: config.size).toImmutableList();
-    final KtMutableList<int> mutable = result.toMutableList();
+    final int randomInt = Random(seed).nextInt(emitter.config.size);
+    final KtMutableList<int> mutable = ktList.toMutableList();
     mutable.addAt(randomInt, randomInt);
     result = KtList<int>.from(mutable.iter);
   }
 }
 
 class BuiltListInsertBenchmark extends ListBenchmarkBase {
-  final int randomInt;
+  final int seed;
 
-  BuiltListInsertBenchmark({@required TableScoreEmitter emitter})
-      : randomInt = Random(0).nextInt(emitter.config.size),
-        super(name: "BuiltList", emitter: emitter);
+  BuiltListInsertBenchmark({@required TableScoreEmitter emitter, this.seed})
+      : super(name: "BuiltList", emitter: emitter);
 
   BuiltList<int> builtList;
   BuiltList<int> result;
@@ -99,6 +129,7 @@ class BuiltListInsertBenchmark extends ListBenchmarkBase {
 
   @override
   void run() {
+    final int randomInt = Random(seed).nextInt(emitter.config.size);
     final ListBuilder<int> listBuilder = builtList.toBuilder();
     listBuilder.insert(randomInt, randomInt);
     result = listBuilder.build();

@@ -10,7 +10,7 @@ void main() {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "insert_list_mutable", config: Config(size: 100));
       final MutableListInsertBenchmark listInsertBenchmark =
-          MutableListInsertBenchmark(emitter: tableScoreEmitter);
+          MutableListInsertBenchmark(emitter: tableScoreEmitter, seed: 0);
 
       listInsertBenchmark.report();
 
@@ -24,7 +24,7 @@ void main() {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "insert_ilist", config: Config(size: 100));
       final IListInsertBenchmark ilistInsertBenchmark =
-          IListInsertBenchmark(emitter: tableScoreEmitter);
+          IListInsertBenchmark(emitter: tableScoreEmitter, seed: 0);
 
       ilistInsertBenchmark.report();
 
@@ -38,7 +38,7 @@ void main() {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "insert_ktlist", config: Config(size: 100));
       final KtListInsertBenchmark ktListInsertBenchmark =
-          KtListInsertBenchmark(emitter: tableScoreEmitter);
+          KtListInsertBenchmark(emitter: tableScoreEmitter, seed: 0);
 
       ktListInsertBenchmark.report();
 
@@ -52,7 +52,7 @@ void main() {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "insert_builtlist", config: Config(size: 100));
       final BuiltListInsertBenchmark builtListInsertBenchmark =
-          BuiltListInsertBenchmark(emitter: tableScoreEmitter);
+          BuiltListInsertBenchmark(emitter: tableScoreEmitter, seed: 0);
 
       builtListInsertBenchmark.report();
 
@@ -67,7 +67,8 @@ void main() {
     test("Simple run", () {
       final TableScoreEmitter tableScoreEmitter =
           TableScoreEmitter(prefixName: "insert", config: Config(size: 100));
-      final ListInsertBenchmark insertBenchmark = ListInsertBenchmark(emitter: tableScoreEmitter);
+      final ListInsertBenchmark insertBenchmark =
+          ListInsertBenchmark(emitter: tableScoreEmitter, seed: 0);
 
       insertBenchmark.report();
 

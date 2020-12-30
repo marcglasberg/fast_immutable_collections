@@ -12,7 +12,8 @@ void main() {
 
       listAddAllBenchmark.report();
 
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
+      final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+          List<int>.generate(10, (int index) => index);
       expect(listAddAllBenchmark.toMutable(), expectedList);
     });
 
@@ -24,7 +25,8 @@ void main() {
 
       iListAddAllBenchmark.report();
 
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
+      final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+          List<int>.generate(10, (int index) => index);
       expect(iListAddAllBenchmark.toMutable(), expectedList);
     });
 
@@ -36,7 +38,8 @@ void main() {
 
       ktListAddAllBenchmark.report();
 
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
+      final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+          List<int>.generate(10, (int index) => index);
       expect(ktListAddAllBenchmark.toMutable(), expectedList);
     });
 
@@ -48,7 +51,8 @@ void main() {
 
       builtListAddAllBenchmark.report();
 
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
+      final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+          List<int>.generate(10, (int index) => index);
       expect(builtListAddAllBenchmark.toMutable(), expectedList);
     });
   });
@@ -61,7 +65,8 @@ void main() {
 
       addAllBenchmark.report();
 
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
+      final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+          List<int>.generate(10, (int index) => index);
       addAllBenchmark.benchmarks
           .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
     });
