@@ -1250,8 +1250,8 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("fillRange", () {
-    expect(List<int>(3).lock.fillRange(0, 2, 1), [1, 1, null]);
-    expect(List<int>(3).lock, [null, null, null]);
+    expect(List<int>.filled(3, null).lock.fillRange(0, 2, 1), [1, 1, null]);
+    expect(List<int>.filled(3, null).lock, [null, null, null]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
