@@ -4,6 +4,8 @@ import "../widgets/release_mode_warning.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
+// ////////////////////////////////////////////////////////////////////////////
+
 class MultiBenchmarkScreen extends StatelessWidget {
   final Type collectionType;
 
@@ -49,6 +51,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
         throw UnimplementedError("No benchmarks for this collection type.");
     }
   }
+
+  // ////////////////////////////////////////////////////////////////////////////
 
   static final List<Widget> _listBenchmarks = [
     BenchWidget(
@@ -155,6 +159,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
     ),
   ];
 
+  // ////////////////////////////////////////////////////////////////////////////
+
   static final List<Widget> _setBenchmarks = [
     BenchWidget(
       title: "Add",
@@ -229,6 +235,8 @@ class MultiBenchmarkScreen extends StatelessWidget {
       ],
     ),
   ];
+
+  // ////////////////////////////////////////////////////////////////////////////
 
   static final List<Widget> _mapBenchmarks = [
     BenchWidget(
@@ -317,3 +325,5 @@ class MultiBenchmarkScreen extends StatelessWidget {
     ),
   ];
 }
+
+// ////////////////////////////////////////////////////////////////////////////

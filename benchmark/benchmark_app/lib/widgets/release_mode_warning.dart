@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter/foundation.dart";
 
+// ////////////////////////////////////////////////////////////////////////////
+
 class ReleaseModeWarning extends StatelessWidget {
   const ReleaseModeWarning();
 
@@ -26,3 +28,5 @@ class ReleaseModeWarning extends StatelessWidget {
     );
   }
 }
+
+// ////////////////////////////////////////////////////////////////////////////

@@ -2,6 +2,8 @@ import "dart:io";
 import "../widgets/collection_button.dart";
 import "package:flutter/material.dart";
 
+// ////////////////////////////////////////////////////////////////////////////
+
 class CodeScreen extends StatelessWidget {
   final String description;
   final Map<String, String> code;
@@ -105,3 +107,5 @@ class _CodeBlock extends StatelessWidget {
     );
   }
 }
+
+// ////////////////////////////////////////////////////////////////////////////

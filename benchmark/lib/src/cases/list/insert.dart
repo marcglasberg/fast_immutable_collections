@@ -45,7 +45,7 @@ class MutableListInsertBenchmark extends ListBenchmarkBase {
   void setup() {
     count = 0;
     initialLists = [];
-    for (int i = 0; i <= max(1, 1000000000 ~/ config.size); i++)
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
       initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
   }
 
