@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/kt.dart";
 import "package:meta/meta.dart";
@@ -10,8 +12,6 @@ import "../../utils/collection_benchmark_base.dart";
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
-  static const Map<String, int> baseMap = {"1": 1, "2": 3}, mapToAdd = {"4": 4, "5": 5, "6": 6};
-
   @override
   final List<MapBenchmarkBase> benchmarks;
 
@@ -32,18 +32,37 @@ class MutableMapAddAllBenchmark extends MapBenchmarkBase {
       : super(name: "Map (Mutable)", emitter: emitter);
 
   Map<String, int> map;
-  Map<String, int> fixedMap;
+  Map<String, int> toBeAdded;
+
+  int count;
+
+  // Saves many copies of the initial list (created during setup).
+  List<Map<String, int>> initialMaps;
 
   @override
   Map<String, int> toMutable() => map;
 
   @override
-  void setup() => fixedMap = Map<String, int>.of(MapAddAllBenchmark.baseMap);
+  void setup() {
+    count = 0;
+    initialMaps = [];
+    toBeAdded = MapBenchmarkBase.getDummyGeneratedMap(size: config.size + config.size ~/ 10);
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
+      initialMaps.add(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  }
 
   @override
   void run() {
-    map = Map<String, int>.of(fixedMap);
-    map.addAll(MapAddAllBenchmark.mapToAdd);
+    map = getNextMap();
+    map.addAll(toBeAdded);
+  }
+
+  Map<String, int> getNextMap() {
+    if (count >= initialMaps.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialMaps[count];
   }
 }
 
@@ -55,15 +74,19 @@ class IMapAddAllBenchmark extends MapBenchmarkBase {
 
   IMap<String, int> iMap;
   IMap<String, int> result;
+  IMap<String, int> toBeAdded;
 
   @override
   Map<String, int> toMutable() => result.unlock;
 
   @override
-  void setup() => iMap = IMap<String, int>(MapAddAllBenchmark.baseMap);
+  void setup() {
+    toBeAdded = MapBenchmarkBase.getDummyGeneratedMap(size: config.size + config.size ~/ 10).lock;
+    iMap = IMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  }
 
   @override
-  void run() => result = iMap.addAll(MapAddAllBenchmark.mapToAdd.lock);
+  void run() => result = iMap.addAll(toBeAdded);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,15 +97,20 @@ class KtMapAddAllBenchmark extends MapBenchmarkBase {
 
   KtMap<String, int> ktMap;
   KtMap<String, int> result;
+  KtMap<String, int> toBeAdded;
 
   @override
   Map<String, int> toMutable() => result.asMap();
 
   @override
-  void setup() => ktMap = KtMap<String, int>.from(MapAddAllBenchmark.baseMap);
+  void setup() {
+    toBeAdded = KtMap<String, int>.from(
+        MapBenchmarkBase.getDummyGeneratedMap(size: config.size + config.size ~/ 10));
+    ktMap = KtMap<String, int>.from(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  }
 
   @override
-  void run() => result = ktMap.plus(KtMap<String, int>.from(MapAddAllBenchmark.mapToAdd));
+  void run() => result = ktMap.plus(toBeAdded);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,16 +121,21 @@ class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
 
   BuiltMap<String, int> builtMap;
   BuiltMap<String, int> result;
+  BuiltMap<String, int> toBeAdded;
 
   @override
   Map<String, int> toMutable() => result.asMap();
 
   @override
-  void setup() => builtMap = BuiltMap<String, int>.of(MapAddAllBenchmark.baseMap);
+  void setup() {
+    toBeAdded = BuiltMap<String, int>.of(
+        MapBenchmarkBase.getDummyGeneratedMap(size: config.size + config.size ~/ 10));
+    builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  }
 
   @override
-  void run() => result = builtMap.rebuild(
-      (MapBuilder<String, int> mapBuilder) => mapBuilder.addAll(MapAddAllBenchmark.mapToAdd));
+  void run() => result = builtMap
+      .rebuild((MapBuilder<String, int> mapBuilder) => mapBuilder.addAll(toBeAdded.asMap()));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

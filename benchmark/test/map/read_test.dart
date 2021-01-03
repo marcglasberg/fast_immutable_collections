@@ -13,8 +13,8 @@ void main() {
 
     mutableMapReadBenchmark.report();
 
-    expect(mutableMapReadBenchmark.newVar,
-        MapBenchmarkBase.getDummyGeneratedMap(size: 1000)[MapReadBenchmark.keyToRead]);
+    expect(
+        mutableMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,8 +26,7 @@ void main() {
 
     iMapReadBenchmark.report();
 
-    expect(iMapReadBenchmark.newVar,
-        MapBenchmarkBase.getDummyGeneratedMap(size: 1000)[MapReadBenchmark.keyToRead]);
+    expect(iMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,8 +38,7 @@ void main() {
 
     ktMapReadBenchmark.report();
 
-    expect(ktMapReadBenchmark.newVar,
-        MapBenchmarkBase.getDummyGeneratedMap(size: 1000)[MapReadBenchmark.keyToRead]);
+    expect(ktMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,8 +51,7 @@ void main() {
 
     builtMapReadBenchmark.report();
 
-    expect(builtMapReadBenchmark.newVar,
-        MapBenchmarkBase.getDummyGeneratedMap(size: 1000)[MapReadBenchmark.keyToRead]);
+    expect(builtMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,8 +64,7 @@ void main() {
     readBenchmark.report();
 
     readBenchmark.benchmarks.forEach((MapBenchmarkBase benchmark) => expect(
-        benchmark.toMutable()[MapReadBenchmark.keyToRead],
-        MapBenchmarkBase.getDummyGeneratedMap(size: 1000)[MapReadBenchmark.keyToRead]));
+        benchmark.toMutable()["500"], MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,7 +14,7 @@ void main() {
     mutableMapRemoveBenchmark.report();
 
     expect(mutableMapRemoveBenchmark.toMutable(),
-        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("1"));
+        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("50"));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ void main() {
     iMapRemoveBenchmark.report();
 
     expect(iMapRemoveBenchmark.toMutable(),
-        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("1"));
+        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("50"));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ void main() {
     ktMapRemoveBenchmark.report();
 
     expect(ktMapRemoveBenchmark.toMutable(),
-        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("1"));
+        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("50"));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ void main() {
     builtMapRemoveBenchmark.report();
 
     expect(builtMapRemoveBenchmark.toMutable(),
-        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("1"));
+        MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("50"));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void main() {
     removeBenchmark.report();
 
     removeBenchmark.benchmarks.forEach((MapBenchmarkBase benchmark) => expect(
-        benchmark.toMutable(), MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("1")));
+        benchmark.toMutable(), MapBenchmarkBase.getDummyGeneratedMap(size: 100)..remove("50")));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

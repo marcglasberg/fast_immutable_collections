@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/kt.dart";
 import "package:meta/meta.dart";
@@ -10,8 +12,6 @@ import "../../utils/collection_benchmark_base.dart";
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MapAddBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
-  static const int innerRuns = 100;
-
   @override
   final List<MapBenchmarkBase> benchmarks;
 
@@ -33,18 +33,36 @@ class MutableMapAddBenchmark extends MapBenchmarkBase {
       : super(name: "Map (Mutable)", emitter: emitter);
 
   Map<String, int> map;
-  Map<String, int> fixedMap;
+
+  int count;
+
+  // Saves many copies of the initial list (created during setup).
+  List<Map<String, int>> initialMaps;
 
   @override
   Map<String, int> toMutable() => map;
 
   @override
-  void setup() => fixedMap = MapBenchmarkBase.getDummyGeneratedMap(size: config.size);
+  void setup() {
+    count = 0;
+    initialMaps = [];
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
+      initialMaps.add(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  }
 
   @override
   void run() {
-    map = Map<String, int>.of(fixedMap);
-    for (int i = 0; i < MapAddBenchmark.innerRuns; i++) map.addAll({i.toString(): i});
+    map = getNextMap();
+    final int initialLength = map.length;
+    for (int i = initialLength; i < initialLength + innerRuns(); i++) map.addAll({i.toString(): i});
+  }
+
+  Map<String, int> getNextMap() {
+    if (count >= initialMaps.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialMaps[count];
   }
 }
 
@@ -68,7 +86,9 @@ class IMapAddBenchmark extends MapBenchmarkBase {
   @override
   void run() {
     result = iMap;
-    for (int i = 0; i < MapAddBenchmark.innerRuns; i++) result = result.add(i.toString(), i);
+    final int initialLength = iMap.length;
+    for (int i = initialLength; i < initialLength + innerRuns(); i++)
+      result = result.add(i.toString(), i);
   }
 }
 
@@ -89,7 +109,8 @@ class KtMapAddBenchmark extends MapBenchmarkBase {
   @override
   void run() {
     result = ktMap;
-    for (int i = 0; i < MapAddBenchmark.innerRuns; i++)
+    final int initialLength = ktMap.size;
+    for (int i = initialLength; i < initialLength + innerRuns(); i++)
       result = result.plus(<String, int>{i.toString(): i}.toImmutableMap());
   }
 }
@@ -98,7 +119,7 @@ class KtMapAddBenchmark extends MapBenchmarkBase {
 
 class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "BuiltMap with Rebuild", emitter: emitter);
+      : super(name: "BuiltMap (Rebuild)", emitter: emitter);
 
   BuiltMap<String, int> builtMap;
   BuiltMap<String, int> result;
@@ -113,7 +134,8 @@ class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   @override
   void run() {
     result = builtMap;
-    for (int i = 0; i < MapAddBenchmark.innerRuns; i++)
+    final int initialLength = builtMap.length;
+    for (int i = initialLength; i < initialLength + innerRuns(); i++)
       result = result.rebuild((MapBuilder<String, int> mapBuilder) =>
           mapBuilder.addAll(<String, int>{i.toString(): i}));
   }
@@ -123,7 +145,7 @@ class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
 
 class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithListBuilderBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "BuiltMap with ListBuilder", emitter: emitter);
+      : super(name: "BuiltMap (ListBuilder)", emitter: emitter);
 
   BuiltMap<String, int> builtMap;
   BuiltMap<String, int> result;
@@ -138,7 +160,8 @@ class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
   @override
   void run() {
     final MapBuilder<String, int> mapBuilder = builtMap.toBuilder();
-    for (int i = 0; i < MapAddBenchmark.innerRuns; i++)
+    final int initialLength = builtMap.length;
+    for (int i = initialLength; i < initialLength + innerRuns(); i++)
       mapBuilder.addAll(<String, int>{i.toString(): i});
     result = mapBuilder.build();
   }

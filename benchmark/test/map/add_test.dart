@@ -13,8 +13,7 @@ void main() {
 
     mapAddBenchmark.report();
 
-    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 100);
-    expectedMap.addAll(MapBenchmarkBase.getDummyGeneratedMap(size: 100));
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(mapAddBenchmark.toMutable(), expectedMap);
   });
 
@@ -27,8 +26,7 @@ void main() {
 
     iMapAddBenchmark.report();
 
-    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 100);
-    expectedMap.addAll(MapBenchmarkBase.getDummyGeneratedMap(size: 100));
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(iMapAddBenchmark.toMutable(), expectedMap);
   });
 
@@ -41,8 +39,7 @@ void main() {
 
     ktMapAddBenchmark.report();
 
-    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 100);
-    expectedMap.addAll(MapBenchmarkBase.getDummyGeneratedMap(size: 100));
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(ktMapAddBenchmark.toMutable(), expectedMap);
   });
 
@@ -56,8 +53,7 @@ void main() {
 
     builtMapAddWithRebuildBenchmark.report();
 
-    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 100);
-    expectedMap.addAll(MapBenchmarkBase.getDummyGeneratedMap(size: 100));
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(builtMapAddWithRebuildBenchmark.toMutable(), expectedMap);
   });
 
@@ -71,8 +67,7 @@ void main() {
 
     builtMapAddWithListBuilderBenchmark.report();
 
-    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 100);
-    expectedMap.addAll(MapBenchmarkBase.getDummyGeneratedMap(size: 100));
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(builtMapAddWithListBuilderBenchmark.toMutable(), expectedMap);
   });
 
@@ -85,8 +80,7 @@ void main() {
 
     addBenchmark.report();
 
-    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 100);
-    expectedMap.addAll(MapBenchmarkBase.getDummyGeneratedMap(size: 100));
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     addBenchmark.benchmarks
         .forEach((MapBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedMap));
   });

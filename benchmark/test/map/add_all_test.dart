@@ -7,14 +7,13 @@ void main() {
 
   test("Map (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(prefixName: "add_map_mutable", config: Config(size: 10));
+        TableScoreEmitter(prefixName: "add_map_mutable", config: Config(size: 100));
     final MutableMapAddAllBenchmark mapAddAllBenchmark =
         MutableMapAddAllBenchmark(emitter: tableScoreEmitter);
 
     mapAddAllBenchmark.report();
 
-    final Map<String, int> expectedMap = Map.of(MapAddAllBenchmark.baseMap)
-      ..addAll(MapAddAllBenchmark.mapToAdd);
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(mapAddAllBenchmark.toMutable(), expectedMap);
   });
 
@@ -22,13 +21,12 @@ void main() {
 
   test("IMap", () {
     final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(prefixName: "add_map_iMap", config: Config(size: 10));
+        TableScoreEmitter(prefixName: "add_map_iMap", config: Config(size: 100));
     final IMapAddAllBenchmark iMapAddAllBenchmark = IMapAddAllBenchmark(emitter: tableScoreEmitter);
 
     iMapAddAllBenchmark.report();
 
-    final Map<String, int> expectedMap = Map.of(MapAddAllBenchmark.baseMap)
-      ..addAll(MapAddAllBenchmark.mapToAdd);
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(iMapAddAllBenchmark.toMutable(), expectedMap);
   });
 
@@ -36,14 +34,13 @@ void main() {
 
   test("KtMap", () {
     final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(prefixName: "add_map_ktMap", config: Config(size: 10));
+        TableScoreEmitter(prefixName: "add_map_ktMap", config: Config(size: 100));
     final KtMapAddAllBenchmark ktMapAddAllBenchmark =
         KtMapAddAllBenchmark(emitter: tableScoreEmitter);
 
     ktMapAddAllBenchmark.report();
 
-    final Map<String, int> expectedMap = Map.of(MapAddAllBenchmark.baseMap)
-      ..addAll(MapAddAllBenchmark.mapToAdd);
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(ktMapAddAllBenchmark.toMutable(), expectedMap);
   });
 
@@ -51,14 +48,13 @@ void main() {
 
   test("BuiltMap", () {
     final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(prefixName: "add_map_builtMap", config: Config(size: 10));
+        TableScoreEmitter(prefixName: "add_map_builtMap", config: Config(size: 100));
     final BuiltMapAddAllBenchmark builtMapAddAllBenchmark =
         BuiltMapAddAllBenchmark(emitter: tableScoreEmitter);
 
     builtMapAddAllBenchmark.report();
 
-    final Map<String, int> expectedMap = Map.of(MapAddAllBenchmark.baseMap)
-      ..addAll(MapAddAllBenchmark.mapToAdd);
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     expect(builtMapAddAllBenchmark.toMutable(), expectedMap);
   });
 
@@ -66,13 +62,12 @@ void main() {
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(prefixName: "add_map", config: Config(size: 10));
+        TableScoreEmitter(prefixName: "add_map", config: Config(size: 100));
     final MapAddAllBenchmark addAllBenchmark = MapAddAllBenchmark(emitter: tableScoreEmitter);
 
     addAllBenchmark.report();
 
-    final Map<String, int> expectedMap = Map.of(MapAddAllBenchmark.baseMap)
-      ..addAll(MapAddAllBenchmark.mapToAdd);
+    final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
     addAllBenchmark.benchmarks
         .forEach((MapBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedMap));
   });

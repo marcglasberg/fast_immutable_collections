@@ -1,5 +1,6 @@
 import "package:charts_flutter/flutter.dart" as charts;
 import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
@@ -37,8 +38,9 @@ class BarChart extends StatelessWidget {
     int i,
     RecordsColumn normalizedAgainstMaxColumn,
   ) {
-    var millis = resultsColumn.records[i].record.round();
-    var collectionName = normalizedAgainstMaxColumn.records[i].collectionName;
+    final NumberFormat formatter = NumberFormat("#,##0", "en_US");
+    final String millis = formatter.format(resultsColumn.records[i].record.round());
+    final String collectionName = normalizedAgainstMaxColumn.records[i].collectionName;
 
     return StopwatchRecord(
       collectionName: "$millis μs | $collectionName",

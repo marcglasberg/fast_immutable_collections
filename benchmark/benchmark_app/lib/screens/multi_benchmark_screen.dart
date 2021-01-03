@@ -252,13 +252,13 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_2",
-            config: Config(size: 100),
+            config: Config(size: 1000),
           ),
         ),
         MapAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_3",
-            config: Config(size: 500),
+            config: Config(size: 10000),
           ),
         ),
       ],
@@ -270,7 +270,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapAddAllBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_add_all",
-            config: Config(size: 10),
+            config: Config(size: 100000),
           ),
         ),
       ],
@@ -282,7 +282,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapContainsValueBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_contains_value",
-            config: Config(size: 10),
+            config: Config(size: 10000),
           ),
         ),
       ],
@@ -306,7 +306,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapReadBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_read",
-            config: Config(size: 1000),
+            config: Config(size: 100000),
           ),
         ),
       ],
@@ -318,7 +318,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         MapRemoveBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "map_remove",
-            config: Config(size: 1000),
+            config: Config(size: 100000),
           ),
         ),
       ],
