@@ -100,8 +100,8 @@ class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => builtMap.asMap();
 
   @override
-  void setup() => builtMap =
-      BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  void setup() =>
+      builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() {
