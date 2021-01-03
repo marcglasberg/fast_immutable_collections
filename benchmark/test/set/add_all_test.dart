@@ -13,8 +13,7 @@ void main() {
 
     mutableSetAddAllBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
-      ..addAll(SetAddAllBenchmark.setToAdd);
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(mutableSetAddAllBenchmark.toMutable(), expectedSet);
   });
 
@@ -27,8 +26,7 @@ void main() {
 
     iSetAddAllBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
-      ..addAll(SetAddAllBenchmark.setToAdd);
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(iSetAddAllBenchmark.toMutable(), expectedSet);
   });
 
@@ -42,8 +40,7 @@ void main() {
 
     ktSetAddAllBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
-      ..addAll(SetAddAllBenchmark.setToAdd);
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(ktSetAddAllBenchmark.toMutable(), expectedSet);
   });
 
@@ -57,8 +54,7 @@ void main() {
 
     builtSetAddAllBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
-      ..addAll(SetAddAllBenchmark.setToAdd);
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(builtSetAddAllBenchmark.toMutable(), expectedSet);
   });
 
@@ -71,8 +67,7 @@ void main() {
 
     setAddAllBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(SetAddAllBenchmark.baseSet)
-      ..addAll(SetAddAllBenchmark.setToAdd);
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     setAddAllBenchmark.benchmarks
         .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
   });

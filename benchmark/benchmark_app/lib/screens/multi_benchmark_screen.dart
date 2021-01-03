@@ -116,7 +116,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         ListEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "list_empty",
-            config: Config(size: 100),
+            config: Config(size: 0),
           ),
         ),
       ],
@@ -175,13 +175,13 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_2",
-            config: Config(size: 50),
+            config: Config(size: 1000),
           ),
         ),
         SetAddBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_add_3",
-            config: Config(size: 100),
+            config: Config(size: 10000),
           ),
         ),
       ],
@@ -192,8 +192,14 @@ class MultiBenchmarkScreen extends StatelessWidget {
       benchmarks: () => [
         SetAddAllBenchmark(
           emitter: TableScoreEmitter(
-            prefixName: "set_add_all",
-            config: Config(size: 100),
+            prefixName: "set_add_all_1",
+            config: Config(size: 10000),
+          ),
+        ),
+        SetAddAllBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_add_all_2",
+            config: Config(size: 100000),
           ),
         ),
       ],
@@ -205,7 +211,13 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetContainsBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_contains",
-            config: Config(size: 100),
+            config: Config(size: 1000),
+          ),
+        ),
+        SetContainsBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_contains",
+            config: Config(size: 10000),
           ),
         ),
       ],
@@ -217,7 +229,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
         SetEmptyBenchmark(
           emitter: TableScoreEmitter(
             prefixName: "set_empty",
-            config: Config(size: 100),
+            config: Config(size: 0),
           ),
         ),
       ],
@@ -228,8 +240,26 @@ class MultiBenchmarkScreen extends StatelessWidget {
       benchmarks: () => [
         SetRemoveBenchmark(
           emitter: TableScoreEmitter(
-            prefixName: "set_remove",
+            prefixName: "set_remove_1",
             config: Config(size: 100),
+          ),
+        ),
+        SetRemoveBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_remove_2",
+            config: Config(size: 1000),
+          ),
+        ),
+        SetRemoveBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_remove_3",
+            config: Config(size: 10000),
+          ),
+        ),
+        SetRemoveBenchmark(
+          emitter: TableScoreEmitter(
+            prefixName: "set_remove_4",
+            config: Config(size: 100000),
           ),
         ),
       ],

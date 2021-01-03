@@ -13,9 +13,7 @@ void main() {
 
     mutableSetAddBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
-            List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(mutableSetAddBenchmark.toMutable(), expectedSet);
   });
 
@@ -28,9 +26,7 @@ void main() {
 
     iSetAddBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
-            List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(iSetAddBenchmark.toMutable(), expectedSet);
   });
 
@@ -43,9 +39,7 @@ void main() {
 
     ktSetAddBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
-            List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(ktSetAddBenchmark.toMutable(), expectedSet);
   });
 
@@ -59,9 +53,7 @@ void main() {
 
     builtSetAddWithRebuildBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
-            List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(builtSetAddWithRebuildBenchmark.toMutable(), expectedSet);
   });
 
@@ -75,9 +67,7 @@ void main() {
 
     builtSetAddWithListBuilderBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
-            List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     expect(builtSetAddWithListBuilderBenchmark.toMutable(), expectedSet);
   });
 
@@ -90,9 +80,7 @@ void main() {
 
     setAddBenchmark.report();
 
-    final Set<int> expectedSet = Set<int>.of(
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100).toList() +
-            List<int>.generate(SetAddBenchmark.innerRuns, (int index) => index));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 110);
     setAddBenchmark.benchmarks
         .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
   });

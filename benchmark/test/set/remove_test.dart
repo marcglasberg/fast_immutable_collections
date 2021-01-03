@@ -13,8 +13,9 @@ void main() {
 
     mutableSetRemoveBenchmark.report();
 
-    expect(mutableSetRemoveBenchmark.toMutable(),
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(mutableSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,8 +27,9 @@ void main() {
 
     iSetRemoveBenchmark.report();
 
-    expect(iSetRemoveBenchmark.toMutable(),
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(iSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,8 +42,9 @@ void main() {
 
     ktSetRemoveBenchmark.report();
 
-    expect(ktSetRemoveBenchmark.toMutable(),
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(ktSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,8 +57,9 @@ void main() {
 
     builtSetRemoveBenchmark.report();
 
-    expect(builtSetRemoveBenchmark.toMutable(),
-        SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(builtSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,8 +71,10 @@ void main() {
 
     setRemoveBenchmark.report();
 
-    setRemoveBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
-        expect(benchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1)));
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    setRemoveBenchmark.benchmarks
+        .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

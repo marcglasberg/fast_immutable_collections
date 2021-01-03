@@ -71,18 +71,13 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   @override
   List<int> toMutable();
 
-  int _innerRuns;
-
-  /// Inner runs is half of the config.size.
-  /// For example, we can measure adding 5 items to a list of 10 items,
-  /// or adding 50 items to a list of 100 items.
-  int innerRuns() => _innerRuns ??= min(1000, max(1, config.size ~/ 10));
+  int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
-  const SetBenchmarkBase({
+  SetBenchmarkBase({
     @required String name,
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
@@ -94,6 +89,8 @@ abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   @visibleForOverriding
   @override
   Set<int> toMutable();
+
+  int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,12 +110,7 @@ abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>
   @override
   Map<String, int> toMutable();
 
-  int _innerRuns;
-
-  /// Inner runs is half of the config.size.
-  /// For example, we can measure adding 5 items to a list of 10 items,
-  /// or adding 50 items to a list of 100 items.
-  int innerRuns() => _innerRuns ??= min(1000, max(1, config.size ~/ 10));
+  int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
