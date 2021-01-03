@@ -6,6 +6,7 @@
         - `add`
         - `contains`
         - `empty`
+        - `insert`
         - `read`
         - `remove`
     - `Set`s
@@ -14,7 +15,14 @@
         - `contains`
         - `empty`
         - `remove`
-- Added an [`example`][example] app for testing and graphing the benchmarks on devices.
+    - `Map`s
+        - `add_all`
+        - `add`
+        - `contains_value`
+        - `empty`
+        - `read`
+        - `remove`
+- Added an [app][benchmark_app] app for testing and graphing the benchmarks on devices.
 
 
-[example]: example/
+[benchmark_app]: benchmark_app/
