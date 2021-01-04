@@ -110,9 +110,9 @@ void main() {
     final Students students = Students([james, sara, lucy]);
 
     expect(students.expand((Student student) => [student, student]),
-        allOf(isA<IList<Student>>(), <Student>[james, james, sara, sara, lucy, lucy].lock));
+        allOf(isA<Iterable<Student>>(), <Student>[james, james, sara, sara, lucy, lucy].lock));
     expect(students.expand((Student student) => <Student>[]),
-        allOf(<Student>[].lock, isA<IList<Student>>()));
+        allOf(<Student>[].lock, isA<Iterable<Student>>()));
   });
 
   //////////////////////////////////////////////////////////////////////////////

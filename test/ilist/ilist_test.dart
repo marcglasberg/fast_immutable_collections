@@ -717,7 +717,7 @@ void main() {
     final Matcher throwsTypeError = throwsA(isTypeError);
 
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.cast<num>(), allOf(isA<IList<num>>(), [1, 2, 3, 4, 5, 6]));
+    expect(ilist.cast<num>(), allOf(isA<Iterable<num>>(), [1, 2, 3, 4, 5, 6]));
     expect(() => ilist.cast<String>(), throwsTypeError);
   });
 
@@ -762,8 +762,8 @@ void main() {
   test("expand", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
     expect(ilist.expand((int v) => [v, v]),
-        allOf(isA<IList<int>>(), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6].lock));
-    expect(ilist.expand((int v) => <int>[]), allOf(isA<IList<int>>(), <int>[].lock));
+        allOf(isA<Iterable<int>>(), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6].lock));
+    expect(ilist.expand((int v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[].lock));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -818,9 +818,8 @@ void main() {
 
   test("followedBy", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(
-        ilist.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(ilist.followedBy([7, 8]), [1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(ilist.followedBy(<int>[].lock.add(7).addAll([8, 9])), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -853,8 +852,8 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("map", () {
-    expect([1, 2, 3].lock.map((int v) => v + 1).unlock, [2, 3, 4]);
-    expect([1, 2, 3, 4, 5, 6].lock.map((int v) => v + 1).unlock, [2, 3, 4, 5, 6, 7]);
+    expect([1, 2, 3].lock.map((int v) => v + 1), [2, 3, 4]);
+    expect([1, 2, 3, 4, 5, 6].lock.map((int v) => v + 1), [2, 3, 4, 5, 6, 7]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -885,44 +884,44 @@ void main() {
 
   test("skip", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.skip(1).unlock, [2, 3, 4, 5, 6]);
-    expect(ilist.skip(3).unlock, [4, 5, 6]);
-    expect(ilist.skip(5).unlock, [6]);
-    expect(ilist.skip(10).unlock, <int>[]);
-    expect(() => ilist.skip(-1).unlock, throwsRangeError);
+    expect(ilist.skip(1), [2, 3, 4, 5, 6]);
+    expect(ilist.skip(3), [4, 5, 6]);
+    expect(ilist.skip(5), [6]);
+    expect(ilist.skip(10), <int>[]);
+    expect(() => ilist.skip(-1), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("skipWhile", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.skipWhile((int v) => v < 3).unlock, [3, 4, 5, 6]);
-    expect(ilist.skipWhile((int v) => v < 5).unlock, [5, 6]);
-    expect(ilist.skipWhile((int v) => v < 6).unlock, [6]);
-    expect(ilist.skipWhile((int v) => v < 100).unlock, []);
+    expect(ilist.skipWhile((int v) => v < 3), [3, 4, 5, 6]);
+    expect(ilist.skipWhile((int v) => v < 5), [5, 6]);
+    expect(ilist.skipWhile((int v) => v < 6), [6]);
+    expect(ilist.skipWhile((int v) => v < 100), []);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("take", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.take(0).unlock, []);
-    expect(ilist.take(1).unlock, [1]);
-    expect(ilist.take(3).unlock, [1, 2, 3]);
-    expect(ilist.take(5).unlock, [1, 2, 3, 4, 5]);
-    expect(ilist.take(10).unlock, [1, 2, 3, 4, 5, 6]);
-    expect(() => ilist.take(-1).unlock, throwsRangeError);
-    expect(() => ilist.take(-100).unlock, throwsRangeError);
+    expect(ilist.take(0), []);
+    expect(ilist.take(1), [1]);
+    expect(ilist.take(3), [1, 2, 3]);
+    expect(ilist.take(5), [1, 2, 3, 4, 5]);
+    expect(ilist.take(10), [1, 2, 3, 4, 5, 6]);
+    expect(() => ilist.take(-1), throwsRangeError);
+    expect(() => ilist.take(-100), throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("takeWhile", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.takeWhile((int v) => v < 3).unlock, [1, 2]);
-    expect(ilist.takeWhile((int v) => v < 5).unlock, [1, 2, 3, 4]);
-    expect(ilist.takeWhile((int v) => v < 6).unlock, [1, 2, 3, 4, 5]);
-    expect(ilist.takeWhile((int v) => v < 100).unlock, [1, 2, 3, 4, 5, 6]);
+    expect(ilist.takeWhile((int v) => v < 3), [1, 2]);
+    expect(ilist.takeWhile((int v) => v < 5), [1, 2, 3, 4]);
+    expect(ilist.takeWhile((int v) => v < 6), [1, 2, 3, 4, 5]);
+    expect(ilist.takeWhile((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -965,7 +964,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("whereType", () {
-    expect((<num>[1, 2, 1.5].lock.whereType<double>()).unlock, [1.5]);
+    expect((<num>[1, 2, 1.5].lock.whereType<double>()), [1.5]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1524,12 +1523,11 @@ void main() {
 
     // -------------
 
-    // 2) To do lazy processing with IList you must explicitly get an Iterable
-    // from IList.iter().
+    // 2) IList methods that return an Iterable do lazy processing.
 
     int count2 = 0;
 
-    var iterableFromIList = ilist.iter.where((x) {
+    var iterableFromIList = ilist.where((x) {
       count2++;
       return x != null;
     }).take(3);
@@ -1541,27 +1539,6 @@ void main() {
     // Now it's 6 (= 3+3) because we did it lazily AGAIN.
     iterableFromIList.join();
     expect(count2, 6);
-
-    // -------------
-
-    // 3) Otherwise, IList methods all return an IList, which is not lazy.
-
-    int count3 = 0;
-
-    var directIList = ilist.where((x) {
-      count3++;
-      return x != null;
-    }).take(3);
-
-    // Method `where` runs 7 times, before `take` is called.
-    // For this reason we get a 7.
-    directIList.join();
-    expect(count3, 7);
-
-    // We already have an IList, so no further processing is necessary.
-    // We keep at 7.
-    directIList.join();
-    expect(count3, 7);
 
     // -------------
   });
