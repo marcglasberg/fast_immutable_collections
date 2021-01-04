@@ -40,7 +40,7 @@ void main() {
   test("cast", () {
     final Students students = Students([Student("James")]);
 
-    expect(students.cast<ProtoStudent>(), isA<ISet<ProtoStudent>>());
+    expect(students.cast<ProtoStudent>(), isA<Iterable<ProtoStudent>>());
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -95,20 +95,32 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.expand((Student student) => [student, student]),
-        allOf(isA<ISet<Student>>(), <Student>{james, sara, lucy}.lock));
+    expect(
+        students.expand((Student student) => [student, student]),
+        allOf(
+          isA<Iterable<Student>>(),
+          <Student>[james, james, sara, sara, lucy, lucy],
+        ));
+
+    expect(
+        students.expand((Student student) => [student, student]).toISet(),
+        allOf(
+          isA<Iterable<Student>>(),
+          <Student>{james, sara, lucy}.lock,
+        ));
+
     expect(
         students.expand((Student student) => [student, Student(student.name + "2")]),
         allOf(
-            isA<ISet<Student>>(),
-            <Student>{
+            isA<Iterable<Student>>(),
+            <Student>[
               james,
-              sara,
-              lucy,
               const Student("James2"),
+              sara,
               const Student("Sara2"),
+              lucy,
               const Student("Lucy2")
-            }.lock));
+            ]));
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -176,8 +188,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.followedBy([const Student("Bob")]).unlock,
-        {james, sara, lucy, const Student("Bob")});
+    expect(students.followedBy([const Student("Bob")]), {james, sara, lucy, const Student("Bob")});
   });
 
   /////////////////////////////////////////////////////////////////////////////

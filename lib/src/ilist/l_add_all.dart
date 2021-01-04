@@ -2,6 +2,8 @@ import "ilist.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// First we have the items in [_l] and then the items in [_listOrL].
+///
 class LAddAll<T> extends L<T> {
   final L<T> _l;
 
@@ -30,18 +32,18 @@ class LAddAll<T> extends L<T> {
 
   @override
   T operator [](int index) {
-    var lLength = _l.length;
-    var listOrLLength = _listOrL.length;
-    var length = lLength + listOrLLength;
+    var length1 = _l.length;
+    var length2 = _listOrL.length;
+    var length = length1 + length2;
 
     if (index < 0 || index >= length) {
       return throw RangeError.range(index, 0, length - 1, "index");
     } else {
-      return index < lLength
+      return index < length1
           ? _l[index]
           : (_listOrL is List<T>)
-              ? (_listOrL as List<T>)[index-lLength]
-              : (_listOrL as L<T>)[index-lLength];
+              ? (_listOrL as List<T>)[index-length1]
+              : (_listOrL as L<T>)[index-length1];
     }
   }
 

@@ -569,7 +569,7 @@ void main() {
 
   test("cast", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.cast<num>(), isA<ISet<num>>());
+    expect(iset.cast<num>(), isA<Iterable<num>>());
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -726,8 +726,8 @@ void main() {
 
   test("followedBy", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.followedBy({7, 8}).unlock, {1, 2, 3, 4, 5, 6, 7, 8});
-    expect(iset.followedBy(<int>{}.lock.add(7).addAll({8, 9})).unlock, {1, 2, 3, 4, 5, 6, 7, 8, 9});
+    expect(iset.followedBy({7, 8}), {1, 2, 3, 4, 5, 6, 7, 8});
+    expect(iset.followedBy(<int>{}.lock.add(7).addAll({8, 9})), {1, 2, 3, 4, 5, 6, 7, 8, 9});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -763,8 +763,8 @@ void main() {
 
   test("map", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect({1, 2, 3}.lock.map((int v) => v + 1).unlock, {2, 3, 4});
-    expect(iset.map((int v) => v + 1).unlock, {2, 3, 4, 5, 6, 7});
+    expect({1, 2, 3}.lock.map((int v) => v + 1), {2, 3, 4});
+    expect(iset.map((int v) => v + 1), {2, 3, 4, 5, 6, 7});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -796,41 +796,41 @@ void main() {
 
   test("skip", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.skip(1).unlock, {2, 3, 4, 5, 6});
-    expect(iset.skip(3).unlock, {4, 5, 6});
-    expect(iset.skip(5).unlock, {6});
-    expect(iset.skip(10).unlock, <int>{});
+    expect(iset.skip(1), {2, 3, 4, 5, 6});
+    expect(iset.skip(3), {4, 5, 6});
+    expect(iset.skip(5), {6});
+    expect(iset.skip(10), <int>{});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("skipWhile", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.skipWhile((int v) => v < 3).unlock, {3, 4, 5, 6});
-    expect(iset.skipWhile((int v) => v < 5).unlock, {5, 6});
-    expect(iset.skipWhile((int v) => v < 6).unlock, {6});
-    expect(iset.skipWhile((int v) => v < 100).unlock, <int>{});
+    expect(iset.skipWhile((int v) => v < 3), {3, 4, 5, 6});
+    expect(iset.skipWhile((int v) => v < 5), {5, 6});
+    expect(iset.skipWhile((int v) => v < 6), {6});
+    expect(iset.skipWhile((int v) => v < 100), <int>{});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("take", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.take(0).unlock, <int>{});
-    expect(iset.take(1).unlock, {1});
-    expect(iset.take(3).unlock, {1, 2, 3});
-    expect(iset.take(5).unlock, {1, 2, 3, 4, 5});
-    expect(iset.take(10).unlock, {1, 2, 3, 4, 5, 6});
+    expect(iset.take(0), <int>{});
+    expect(iset.take(1), {1});
+    expect(iset.take(3), {1, 2, 3});
+    expect(iset.take(5), {1, 2, 3, 4, 5});
+    expect(iset.take(10), {1, 2, 3, 4, 5, 6});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("takeWhile", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.takeWhile((int v) => v < 3).unlock, {1, 2});
-    expect(iset.takeWhile((int v) => v < 5).unlock, {1, 2, 3, 4});
-    expect(iset.takeWhile((int v) => v < 6).unlock, {1, 2, 3, 4, 5});
-    expect(iset.takeWhile((int v) => v < 100).unlock, {1, 2, 3, 4, 5, 6});
+    expect(iset.takeWhile((int v) => v < 3), {1, 2});
+    expect(iset.takeWhile((int v) => v < 5), {1, 2, 3, 4});
+    expect(iset.takeWhile((int v) => v < 6), {1, 2, 3, 4, 5});
+    expect(iset.takeWhile((int v) => v < 100), {1, 2, 3, 4, 5, 6});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -839,7 +839,7 @@ void main() {
     // 1) Regular usage
     ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
-    expect(iset.unlock, [1, 2, 3, 4, 5, 6]);
+    expect(iset, [1, 2, 3, 4, 5, 6]);
 
     // 2) With compare
     expect({1, 2, 3}.lock.add(10).add(5).toList(compare: (int a, int b) => -a.compareTo(b)),
@@ -862,7 +862,7 @@ void main() {
   test("toSet", () {
     ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
-    expect(iset.unlock, [1, 2, 3, 4, 5, 6]);
+    expect(iset, [1, 2, 3, 4, 5, 6]);
 
     // 2) With compare
     final Set<int> set = {1, 2, 3, 10, 5}.lock.toSet(compare: (int a, int b) => -a.compareTo(b));
@@ -874,16 +874,16 @@ void main() {
 
   test("where", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.where((int v) => v < 0).unlock, <int>{});
-    expect(iset.where((int v) => v < 3).unlock, {1, 2});
-    expect(iset.where((int v) => v < 5).unlock, {1, 2, 3, 4});
-    expect(iset.where((int v) => v < 100).unlock, {1, 2, 3, 4, 5, 6});
+    expect(iset.where((int v) => v < 0), <int>{});
+    expect(iset.where((int v) => v < 3), {1, 2});
+    expect(iset.where((int v) => v < 5), {1, 2, 3, 4});
+    expect(iset.where((int v) => v < 100), {1, 2, 3, 4, 5, 6});
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("whereType", () {
-    expect((<num>{1, 2, 1.5}.lock.whereType<double>()).unlock, {1.5});
+    expect((<num>{1, 2, 1.5}.lock.whereType<double>()), {1.5});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -1165,7 +1165,7 @@ void main() {
 
     // -------------
 
-    // 1) List methods that return an Iterable do lazy processing.
+    // 1) Set methods that return an Iterable do lazy processing.
 
     int count1 = 0;
 
@@ -1184,12 +1184,11 @@ void main() {
 
     // -------------
 
-    // 2) To do lazy processing with IList you must explicitly get an Iterable
-    // from IList.iter().
+    // 2) ISet methods that return an Iterable do lazy processing.
 
     int count2 = 0;
 
-    var iterableFromIList = iset.iter.where((x) {
+    var iterableFromIList = iset.where((x) {
       count2++;
       return x != null;
     }).take(3);
@@ -1201,27 +1200,6 @@ void main() {
     // Now it's 6 (= 3+3) because we did it lazily AGAIN.
     iterableFromIList.join();
     expect(count2, 6);
-
-    // -------------
-
-    // 3) Otherwise, IList methods all return an IList, which is not lazy.
-
-    int count3 = 0;
-
-    var directIList = iset.where((x) {
-      count3++;
-      return x != null;
-    }).take(3);
-
-    // Method `where` runs 7 times, before `take` is called.
-    // For this reason we get a 7.
-    directIList.join();
-    expect(count3, 7);
-
-    // We already have an IList, so no further processing is necessary.
-    // We keep at 7.
-    directIList.join();
-    expect(count3, 7);
 
     // -------------
   });

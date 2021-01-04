@@ -218,24 +218,6 @@ class ISet<T> // ignore: must_be_immutable
   ISet._unsafeFromSet(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
-  /// Explicitly get a simple [Iterable] from the [ISet].
-  ///
-  /// While many [List] methods, like [map] and [where] return an [Iterable],
-  /// the equivalent [ISet] methods return another [ISet]. As a result,
-  /// if you want to do lazy processing from an [ISet] you must first use
-  /// [iter] to get a regular [Iterable] which is not an [ISet].
-  ///
-  /// Example:
-  ///
-  /// ```dart
-  /// // Direct ISet use:
-  /// ISet iset = iset.where((x) => x != null).take(3);
-  ///
-  /// // Lazy processing:
-  /// ISet iset = iset.iter.where((x) => x != null).take(3).toISet();
-  /// ```
-  Iterable<T> get iter => iterator.toIterable();
-
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
   ISet<T> get withIdentityEquals =>
       config.isDeepEquals ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false)) : this;
@@ -484,14 +466,11 @@ class ISet<T> // ignore: must_be_immutable
     return _s.any(test);
   }
 
-  /// Returns a set of [R] instances.
+  /// Returns an iterable of [R] instances.
   /// If this set contains instances which cannot be cast to [R],
   /// it will throw an error.
   @override
-  ISet<R> cast<R>() {
-    var result = _s.cast<R>();
-    return (result is S<R>) ? ISet._unsafe(result, config: config) : ISet._(result, config: config);
-  }
+  Iterable<R> cast<R>() => _s.cast<R>();
 
   /// Returns `true` if the collection contains an element equal to [element], `false` otherwise.
   @override
@@ -513,8 +492,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Expands each element of this [ISet] into zero or more elements.
   @override
-  ISet<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet config}) =>
-      ISet._(_s.expand(f), config: config ?? (T == E ? this.config : defaultConfig));
+  Iterable<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet config}) => _s.expand(f);
 
   /// The number of objects in this set.
   @override
@@ -630,9 +608,9 @@ class ISet<T> // ignore: must_be_immutable
     return _s.fold(initialValue, combine);
   }
 
-  /// Returns the lazy concatentation of this iterable and [other].
+  /// Returns the lazy concatenation of this iterable and [other].
   @override
-  ISet<T> followedBy(Iterable<T> other) => ISet._(_s.followedBy(other), config: config);
+  Iterable<T> followedBy(Iterable<T> other) => _s.followedBy(other);
 
   /// Applies the function [f] to each element of this collection in iteration order.
   @override
@@ -654,12 +632,12 @@ class ISet<T> // ignore: must_be_immutable
     return _s.lastWhere(test, orElse: orElse);
   }
 
-  /// Returns a new lazy [ISet] with elements that are created by calling [f] on each element of
-  /// this [ISet] in iteration order.
+  /// Returns an [Iterable] with elements that are created by calling [f]
+  /// on each element of this [ISet] in iteration order.
   @override
-  ISet<E> map<E>(E Function(T element) f, {ConfigSet config}) {
+  Iterable<E> map<E>(E Function(T element) f, {ConfigSet config}) {
     _count();
-    return ISet._(_s.map(f), config: config ?? (T == E ? this.config : defaultConfig));
+    return _s.map(f);
   }
 
   /// Reduces a collection to a single value by iteratively combining elements of the collection
@@ -679,27 +657,27 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns an [ISet] that provides all but the first [count] elements.
   @override
-  ISet<T> skip(int count) => ISet._(_s.skip(count), config: config);
+  Iterable<T> skip(int count) => _s.skip(count);
 
   /// Returns an [ISet] that skips leading elements while [test] is satisfied.
   @override
-  ISet<T> skipWhile(bool Function(T value) test) => ISet._(_s.skipWhile(test), config: config);
+  Iterable<T> skipWhile(bool Function(T value) test) => _s.skipWhile(test);
 
   /// Returns an [ISet] of the [count] first elements of this iterable.
   @override
-  ISet<T> take(int count) => ISet._(_s.take(count), config: config);
+  Iterable<T> take(int count) => _s.take(count);
 
   /// Returns an [ISet] of the leading elements satisfying [test].
   @override
-  ISet<T> takeWhile(bool Function(T value) test) => ISet._(_s.takeWhile(test), config: config);
+  Iterable<T> takeWhile(bool Function(T value) test) => _s.takeWhile(test);
 
   /// Returns an [ISet] with all elements that satisfy the predicate [test].
   @override
-  ISet<T> where(bool Function(T element) test) => ISet._(_s.where(test), config: config);
+  Iterable<T> where(bool Function(T element) test) => _s.where(test);
 
   /// Returns an [ISet] with all elements that have type [E].
   @override
-  ISet<E> whereType<E>() => ISet._(_s.whereType<E>(), config: config);
+  Iterable<E> whereType<E>() => _s.whereType<E>();
 
   /// Returns a [List] with all items from the set.
   ///
@@ -919,6 +897,14 @@ abstract class S<T> implements Iterable<T> {
   @override
   Iterator<T> get iterator;
 
+  @override
+  bool get isEmpty => iter.isEmpty;
+
+  @override
+  bool get isNotEmpty => !isEmpty;
+
+  Iterable<T> get iter;
+
   /// Returns any item from the set.
   T get anyItem;
 
@@ -942,86 +928,80 @@ abstract class S<T> implements Iterable<T> {
   S<T> remove(T element) => !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 
   @override
-  bool get isEmpty => getFlushed.isEmpty;
+  bool any(bool Function(T) test) => iter.any(test);
 
   @override
-  bool get isNotEmpty => !isEmpty;
-
-  @override
-  bool any(bool Function(T) test) => getFlushed.any(test);
-
-  @override
-  Iterable<R> cast<R>() => getFlushed.cast<R>();
+  Iterable<R> cast<R>() => iter.cast<R>();
 
   @override
   bool contains(Object element);
 
   @override
-  bool every(bool Function(T) test) => getFlushed.every(test);
+  bool every(bool Function(T) test) => iter.every(test);
 
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f) => getFlushed.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
   @override
-  int get length => getFlushed.length;
+  int get length => iter.length;
 
   @override
-  T get first => getFlushed.first;
+  T get first => iter.first;
 
   @override
-  T get last => getFlushed.last;
+  T get last => iter.last;
 
   @override
-  T get single => getFlushed.single;
+  T get single => iter.single;
 
   @override
   T firstWhere(bool Function(T) test, {T Function() orElse}) =>
-      getFlushed.firstWhere(test, orElse: orElse);
+      iter.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
-      getFlushed.fold(initialValue, combine);
+      iter.fold(initialValue, combine);
 
   @override
-  Iterable<T> followedBy(Iterable<T> other) => getFlushed.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => iter.followedBy(other);
 
   @override
-  void forEach(void Function(T element) f) => getFlushed.forEach(f);
+  void forEach(void Function(T element) f) => iter.forEach(f);
 
   @override
-  String join([String separator = ""]) => getFlushed.join(separator);
+  String join([String separator = ""]) => iter.join(separator);
 
   @override
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
-      getFlushed.lastWhere(test, orElse: orElse);
+      iter.lastWhere(test, orElse: orElse);
 
   @override
-  Iterable<E> map<E>(E Function(T element) f) => getFlushed.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
   @override
-  T reduce(T Function(T value, T element) combine) => getFlushed.reduce(combine);
+  T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
   @override
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
-      getFlushed.singleWhere(test, orElse: orElse);
+      iter.singleWhere(test, orElse: orElse);
 
   @override
-  Iterable<T> skip(int count) => getFlushed.skip(count);
+  Iterable<T> skip(int count) => iter.skip(count);
 
   @override
-  Iterable<T> skipWhile(bool Function(T value) test) => getFlushed.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) => iter.skipWhile(test);
 
   @override
-  Iterable<T> take(int count) => getFlushed.take(count);
+  Iterable<T> take(int count) => iter.take(count);
 
   @override
-  Iterable<T> takeWhile(bool Function(T value) test) => getFlushed.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => getFlushed.where(test);
+  Iterable<T> where(bool Function(T element) test) => iter.where(test);
 
   @override
-  Iterable<E> whereType<E>() => getFlushed.whereType<E>();
+  Iterable<E> whereType<E>() => iter.whereType<E>();
 
   @override
   List<T> toList({bool growable = true}) => List.of(this, growable: growable);

@@ -51,6 +51,9 @@ class SExample<T> extends S<T> {
   SExample([Iterable<T> iterable]) : _iset = ISet(iterable);
 
   @override
+  Iterable<T> get iter => _iset;
+
+  @override
   Iterator<T> get iterator => _iset.iterator;
 
   @override

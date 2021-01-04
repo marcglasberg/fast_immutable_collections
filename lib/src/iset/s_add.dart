@@ -2,16 +2,15 @@ import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// Note that adding repeated members won't work as the expected behavior for regular [Set]s,
-/// because that behavior is implemented elsewhere ([S]).
+/// The [SAdd] class does not check for duplicate elements. In other words,
+/// it's up to the caller (in this case [S]) to make sure [_s] does not
+/// contain [_item].
+///
 class SAdd<T> extends S<T> {
   final S<T> _s;
   final T _item;
 
   SAdd(this._s, this._item) : assert(_s != null);
-
-  @override
-  bool contains(Object element) => _item == element ? true : _s.contains(element);
 
   @override
   bool get isEmpty => false;
@@ -20,10 +19,25 @@ class SAdd<T> extends S<T> {
   Iterator<T> get iterator => IteratorSAdd(_s.iterator, _item);
 
   @override
+  Iterable<T> get iter => _s.followedBy([_item]);
+
+  @override
+  bool contains(Object element) => _s.contains(element) ? true : _item == element;
+
+  @override
   int get length => _s.length + 1;
 
   @override
   T get anyItem => _item;
+
+  @override
+  T get first => _s.isEmpty ? _item : _s.first;
+
+  @override
+  T get last => _item;
+
+  @override
+  T get single => _s.isEmpty ? _item : throw StateError("Too many elements");
 }
 
 // /////////////////////////////////////////////////////////////////////////////

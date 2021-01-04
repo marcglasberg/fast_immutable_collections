@@ -89,7 +89,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  ISet<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(bool Function(T element) test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 

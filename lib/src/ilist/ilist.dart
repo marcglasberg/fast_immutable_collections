@@ -1397,6 +1397,14 @@ abstract class L<T> implements Iterable<T> {
   @override
   Iterator<T> get iterator;
 
+  @override
+  bool get isEmpty => iter.isEmpty;
+
+  @override
+  bool get isNotEmpty => !isEmpty;
+
+  Iterable<T> get iter;
+
   L<T> add(T item) {
     return LAdd<T>(this, item);
   }
@@ -1467,14 +1475,6 @@ abstract class L<T> implements Iterable<T> {
     result.addAll(difference);
     return LFlat<T>.unsafe(result);
   }
-
-  @override
-  bool get isEmpty => iter.isEmpty;
-
-  @override
-  bool get isNotEmpty => !isEmpty;
-
-  Iterable<T> get iter;
 
   @override
   bool any(bool Function(T) test) => iter.any(test);
