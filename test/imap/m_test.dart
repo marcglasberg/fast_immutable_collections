@@ -104,6 +104,15 @@ class MExample<K, V> extends M<K, V> {
 
   @override
   int get length => _imap.length;
+
+  @override
+  Iterable<K> get keys => _imap.keys;
+
+  @override
+  Iterable<V> get values => _imap.values;
+
+  @override
+  Iterator<MapEntry<K, V>> get iterator => _imap.iterator;
 }
 
 //////////////////////////////////////////////////////////////////////////////

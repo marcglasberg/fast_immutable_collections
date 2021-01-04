@@ -11,10 +11,7 @@ class MAdd<K, V> extends M<K, V> {
   bool get isEmpty => false;
 
   @override
-  Iterable<MapEntry<K, V>> get entries {
-    final Iterable<MapEntry<K, V>> nextEntry = [MapEntry<K, V>(_key, _value)];
-    return _m.entries.followedBy(nextEntry);
-  }
+  Iterable<MapEntry<K, V>> get entries => _m.entries.followedBy([MapEntry<K, V>(_key, _value)]);
 
   @override
   Iterable<K> get keys => _m.keys.followedBy(<K>[_key]);

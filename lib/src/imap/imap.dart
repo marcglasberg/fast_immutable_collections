@@ -1016,11 +1016,11 @@ abstract class M<K, V> {
 
   Iterable<MapEntry<K, V>> get entries;
 
-  Iterable<K> get keys => getFlushed.keys;
+  Iterable<K> get keys;
 
-  Iterable<V> get values => getFlushed.values;
+  Iterable<V> get values;
 
-  Iterator<MapEntry<K, V>> get iterator => getFlushed.entries.iterator;
+  Iterator<MapEntry<K, V>> get iterator;
 
   int get length;
 

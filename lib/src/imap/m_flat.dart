@@ -16,14 +16,13 @@ class MFlat<K, V> extends M<K, V> {
   MFlat.unsafe(this._map) : assert(_map != null);
 
   @override
-  Iterable<MapEntry<K, V>> get entries =>
-      _map.entries.map((entry) => MapEntry(entry.key, entry.value));
+  Iterable<MapEntry<K, V>> get entries => _map.entries;
 
   @override
-  Iterable<K> get keys => IList(_map.keys);
+  Iterable<K> get keys => _map.keys;
 
   @override
-  Iterable<V> get values => IList(_map.values);
+  Iterable<V> get values => _map.values;
 
   @override
   bool get isEmpty => _map.isEmpty;
@@ -50,6 +49,9 @@ class MFlat<K, V> extends M<K, V> {
 
   @override
   int get length => _map.length;
+
+  @override
+  Iterator<MapEntry<K, V>> get iterator => entries.iterator;
 
   /// Map equality but with an [Iterable] of [MapEntry].
   /// Like the other [Map] equalities, it doesn't  take order into consideration.
