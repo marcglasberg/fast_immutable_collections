@@ -46,13 +46,13 @@ extension FicIterableExtension<T> on Iterable<T> {
     }
   }
 
-  /// Finds duplicates and then returns a [Set] with the elements which were duplicated.
+  /// Finds duplicates and then returns a [Set] with the duplicated elements.
   /// If there are no duplicates, an empty [Set] is returned.
   Set<T> findDuplicates() {
     final Set<T> duplicates = <T>{};
     final Set<T> auxSet = HashSet<T>();
-    for (T elements in this) {
-      if (!auxSet.add(elements)) duplicates.add(elements);
+    for (final T element in this) {
+      if (!auxSet.add(element)) duplicates.add(element);
     }
     return duplicates;
   }

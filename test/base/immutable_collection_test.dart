@@ -363,8 +363,11 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("findDuplicates", () {
-    expect(["A", "B", "C", "C", "A", "E"].findDuplicates(), ["A", "C"]);
-    expect(["A", "B", "C", "E"].findDuplicates(), []);
+    expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), {"C", "A"});
+    expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), ["C", "A"]);
+    expect(["A", "B", "C", "E"].findDuplicates(), <String>{});
+    expect(["A", "B", "C", "E"].findDuplicates(), <String>[]);
+    expect(["A", "B", "B", "B"].findDuplicates(), {"B"});
     expect(["A", "B", "B", "B"].findDuplicates(), ["B"]);
   });
 
