@@ -326,7 +326,7 @@ class IList<T> // ignore: must_be_immutable
     if (other is List<T>)
       return const ListEquality().equals(UnmodifiableListFromIList(this), other);
 
-    if (other is HashSet || other is ISet) throw StateError("Can't compare to unordered set.");
+    if (other is HashSet) throw StateError("Can't compare to HashSet (which is unordered).");
 
     return const IterableEquality().equals(_l, other);
   }
@@ -1560,14 +1560,16 @@ abstract class L<T> implements Iterable<T> {
   @override
   List<T> toList({bool growable = true}) => List.of(iter, growable: growable);
 
+  /// Ordered set.
   @override
   Set<T> toSet() => Set.of(iter);
 
-  /// Ordered set.
-  LinkedHashSet<T> toLinkedHashSet() => LinkedHashSet.of(this);
+  /// Ordered set. Same as [toSet].
+  LinkedHashSet<T> toLinkedHashSet() => LinkedHashSet.of(iter);
 
-  /// Unordered set.
-  HashSet<T> toHashSet() => HashSet.of(this);
+  /// Unordered set. Returns a [HashSet], which is faster than [LinkedHashSet]
+  /// and consumes less memory.
+  HashSet<T> toHashSet() => HashSet.of(iter);
 }
 
 // /////////////////////////////////////////////////////////////////////////////
