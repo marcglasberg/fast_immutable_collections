@@ -715,11 +715,10 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("firstWhere", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
+    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({10, 6});
     expect(iset.firstWhere((int v) => v > 1, orElse: () => 100), 2);
-    expect(iset.firstWhere((int v) => v > 4, orElse: () => 100), 5);
-    expect(iset.firstWhere((int v) => v > 5, orElse: () => 100), 6);
-    expect(iset.firstWhere((int v) => v > 6, orElse: () => 100), 100);
+    expect(iset.firstWhere((int v) => v > 4, orElse: () => 100), 10);
+    expect(iset.firstWhere((int v) => v > 100, orElse: () => 100), 100);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -844,9 +843,9 @@ void main() {
 
   test("toList", () {
     // 1) Regular usage
-    ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
-    expect(iset.toList()..add(7), [1, 2, 3, 4, 5, 6, 7]);
-    expect(iset, [1, 2, 3, 4, 5, 6]);
+    ISet<int> iset = {1, 10, 11}.lock.add(4).addAll({5, 6});
+    expect(iset.toList()..add(7), [1, 10, 11, 4, 5, 6, 7]);
+    expect(iset, [1, 10, 11, 4, 5, 6]);
 
     // 2) With compare
     expect({1, 2, 3}.lock.add(10).add(5).toList(compare: (int a, int b) => -a.compareTo(b)),
@@ -900,17 +899,17 @@ void main() {
     ImmutableCollection.prettyPrint = false;
     expect({}.lock.toString(), "{}");
     expect({1}.lock.toString(), "{1}");
-    expect({1, 2, 3}.lock.toString(), "{1, 2, 3}");
+    expect({1, 10, 3}.lock.toString(), "{1, 10, 3}");
 
     // 2) Global configuration prettyPrint == true
     ImmutableCollection.prettyPrint = true;
     expect({}.lock.toString(), "{}");
     expect({1}.lock.toString(), "{1}");
     expect(
-        {1, 2, 3}.lock.toString(),
+        {1, 10, 3}.lock.toString(),
         "{\n"
         "   1,\n"
-        "   2,\n"
+        "   10,\n"
         "   3\n"
         "}");
 
@@ -918,17 +917,17 @@ void main() {
     ImmutableCollection.prettyPrint = true;
     expect({}.lock.toString(false), "{}");
     expect({1}.lock.toString(false), "{1}");
-    expect({1, 2, 3}.lock.toString(false), "{1, 2, 3}");
+    expect({1, 10, 3}.lock.toString(false), "{1, 10, 3}");
 
     // 4) Local prettyPrint = true
     ImmutableCollection.prettyPrint = false;
     expect({}.lock.toString(true), "{}");
     expect({1}.lock.toString(true), "{1}");
     expect(
-        {1, 2, 3}.lock.toString(true),
+        {1, 10, 3}.lock.toString(true),
         "{\n"
         "   1,\n"
-        "   2,\n"
+        "   10,\n"
         "   3\n"
         "}");
   });

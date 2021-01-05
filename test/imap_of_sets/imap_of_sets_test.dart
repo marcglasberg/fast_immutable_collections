@@ -708,16 +708,16 @@ void main() {
       "b": {1, 2, 3},
     });
     expect(iMapOfSets1.config.isDeepEquals, isTrue);
-    expect(iMapOfSets1.config.sortKeys, isTrue);
-    expect(iMapOfSets1.config.sortValues, isTrue);
+    expect(iMapOfSets1.config.sortKeys, isFalse);
+    expect(iMapOfSets1.config.sortValues, isFalse);
 
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
+        ConfigMapOfSets(isDeepEquals: false, sortKeys: true, sortValues: true);
     final IMapOfSets<String, int> iMapOfSets2 = iMapOfSets1.withConfig(configMapOfSets);
 
     expect(iMapOfSets2.config.isDeepEquals, isFalse);
-    expect(iMapOfSets2.config.sortKeys, isFalse);
-    expect(iMapOfSets2.config.sortValues, isFalse);
+    expect(iMapOfSets2.config.sortKeys, isTrue);
+    expect(iMapOfSets2.config.sortValues, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
