@@ -56,15 +56,15 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   bool any(bool Function(T) test) => iter.any(test);
 
-  ISet<R> cast<R>() => iter.cast<R>();
+  Iterable<R> cast<R>() => iter.cast<R>();
 
-  bool contains(Object element) => iter.contains(element);
+  bool contains(T element) => iter.contains(element);
 
   T elementAt(int index) => throw UnsupportedError("elementAt in ${runtimeType} is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 
-  ISet<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
   int get length => iter.length;
 
@@ -80,7 +80,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);
 
-  ISet<T> followedBy(Iterable<T> other) => iter.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => iter.followedBy(other);
 
   void forEach(void Function(T element) f) => iter.forEach(f);
 
@@ -89,24 +89,24 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
-  ISet<E> map<E>(E Function(T element) f) => iter.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
   T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
-  ISet<T> skip(int count) => iter.skip(count);
+  Iterable<T> skip(int count) => iter.skip(count);
 
-  ISet<T> skipWhile(bool Function(T value) test) => iter.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) => iter.skipWhile(test);
 
-  ISet<T> take(int count) => iter.take(count);
+  Iterable<T> take(int count) => iter.take(count);
 
-  ISet<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  ISet<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(bool Function(T element) test) => iter.where(test);
 
-  ISet<E> whereType<E>() => iter.whereType<E>();
+  Iterable<E> whereType<E>() => iter.whereType<E>();
 
   @override
   bool get isEmpty => iter.isEmpty;

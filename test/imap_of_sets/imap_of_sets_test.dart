@@ -1528,7 +1528,7 @@ void main() {
     });
     final IMapOfSets<num, num> mappedIMapOfSets = iMapOfSets.map<num, num>(
         (String key, ISet<int> set) =>
-            MapEntry<num, ISet<num>>(num.parse(key + key), set.cast<num>()));
+            MapEntry<num, ISet<num>>(num.parse(key + key), set.cast<num>().toISet()));
 
     expect(mappedIMapOfSets, isA<IMapOfSets<num, num>>());
     expect(

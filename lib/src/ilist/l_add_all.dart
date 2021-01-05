@@ -2,6 +2,8 @@ import "ilist.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
+/// First we have the items in [_l] and then the items in [_listOrL].
+///
 class LAddAll<T> extends L<T> {
   final L<T> _l;
 
@@ -22,14 +24,40 @@ class LAddAll<T> extends L<T> {
   @override
   Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _listOrL);
 
-  // TODO: Still need to implement efficiently.
   @override
-  T operator [](int index) => index < 0 || index >= length
-      ? throw RangeError.range(index, 0, length - 1, "index")
-      : super[index];
+  Iterable<T> get iter => _l.followedBy(_listOrL);
+
+  @override
+  bool contains(covariant T element) => _l.contains(element) ? true : _listOrL.contains(element);
+
+  @override
+  T operator [](int index) {
+    var length1 = _l.length;
+    var length2 = _listOrL.length;
+    var length = length1 + length2;
+
+    if (index < 0 || index >= length) {
+      return throw RangeError.range(index, 0, length - 1, "index");
+    } else {
+      return index < length1
+          ? _l[index]
+          : (_listOrL is List<T>)
+              ? (_listOrL as List<T>)[index-length1]
+              : (_listOrL as L<T>)[index-length1];
+    }
+  }
 
   @override
   int get length => _l.length + _listOrL.length;
+
+  @override
+  T get first => _l.isNotEmpty ? _l.first : _listOrL.first;
+
+  @override
+  T get last => _listOrL.isNotEmpty ? _listOrL.last : _l.last;
+
+  @override
+  T get single => _l.isNotEmpty ? _l.single : _listOrL.single;
 }
 
 // /////////////////////////////////////////////////////////////////////////////

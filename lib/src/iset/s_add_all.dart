@@ -2,8 +2,12 @@ import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// Note that adding repeated members won't work as the expected behavior for regular [Set]s,
-/// because that behavior is implemented elsewhere ([S]).
+/// First we have the items in [_s] and then the items in [_setOrS].
+///
+/// The [SAddAll] class does not check for duplicate elements. In other words,
+/// it's up to the caller (in this case [S]) to make sure [_s] and [_setOrS]
+/// do not contain any same elements.
+///
 class SAddAll<T> extends S<T> {
   final S<T> _s;
 
@@ -31,10 +35,12 @@ class SAddAll<T> extends S<T> {
   Iterator<T> get iterator => IteratorSAddAll(_s.iterator, _setOrS);
 
   @override
-  bool contains(Object element) {
-    // Check the real set first (It's faster).
-    if (_setOrS.contains(element)) return true;
-    return _s.contains(element);
+  Iterable<T> get iter => _s.followedBy(_setOrS);
+
+  @override
+  bool contains(covariant T element) {
+    // Check the real set first (It's probably faster).
+    return _setOrS.contains(element) || _s.contains(element);
   }
 
   @override
@@ -42,6 +48,15 @@ class SAddAll<T> extends S<T> {
 
   @override
   T get anyItem => _s.first;
+
+  @override
+  T get first => _s.isNotEmpty ? _s.first : _setOrS.first;
+
+  @override
+  T get last => _setOrS.isNotEmpty ? _setOrS.last : _s.last;
+
+  @override
+  T get single => _s.isNotEmpty ? _s.single : _setOrS.single;
 }
 
 // /////////////////////////////////////////////////////////////////////////////

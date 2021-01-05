@@ -5,10 +5,11 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 extension FicIterableExtension<T> on Iterable<T> {
   //
   /// Creates an *immutable* list ([IList]) from the iterable.
-  IList<T> toIList() => (this == null) ? null : IList<T>(this);
+  IList<T> toIList([ConfigList config]) =>
+      (this == null) ? null : IList<T>.withConfig(this, config);
 
   /// Creates an *immutable* set ([ISet]) from the iterable.
-  ISet<T> toISet() => (this == null) ? null : ISet<T>(this);
+  ISet<T> toISet([ConfigSet config]) => (this == null) ? null : ISet<T>.withConfig(this, config);
 
   bool get isNullOrEmpty => this == null || isEmpty;
 

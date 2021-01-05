@@ -1,13 +1,9 @@
 import "dart:math";
-
 import "package:built_collection/built_collection.dart";
-import "package:kt_dart/collection.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:kt_dart/kt.dart";
 import "package:meta/meta.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-
-import "../../utils/table_score_emitter.dart";
-import "../../utils/collection_benchmark_base.dart";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +29,8 @@ class MutableSetAddBenchmark extends SetBenchmarkBase {
       : super(name: "Set (Mutable)", emitter: emitter);
 
   Set<int> set;
+
+  // Saves many copies of the initial set (created during setup).
   List<Set<int>> initialSet;
 
   int count;
@@ -51,8 +49,10 @@ class MutableSetAddBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     set = getNextSet();
+
     final int initialLength = set.length;
-    for (int i = initialLength; i < initialLength + innerRuns(); i++) set.add(i);
+    final int finalLength = initialLength + innerRuns();
+    for (int i = initialLength; i < finalLength; i++) set.add(i);
   }
 
   Set<int> getNextSet() {
@@ -81,8 +81,11 @@ class ISetAddBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     result = iSet;
+
     final int initialLength = iSet.length;
-    for (int i = 0; i < initialLength + innerRuns(); i++) result = result.add(i);
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++) result = result.add(i);
   }
 }
 
@@ -103,8 +106,11 @@ class KtSetAddBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     result = ktSet;
+
     final int initialLength = ktSet.size;
-    for (int i = 0; i < initialLength + innerRuns(); i++) result = result.plusElement(i).toSet();
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++) result = result.plusElement(i).toSet();
   }
 }
 
@@ -126,8 +132,11 @@ class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     result = builtSet;
+
     final int initialLength = builtSet.length;
-    for (int i = 0; i < initialLength + innerRuns(); i++)
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++)
       result = result.rebuild((SetBuilder<int> setBuilder) => setBuilder.add(i));
   }
 }
@@ -151,7 +160,10 @@ class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
   void run() {
     final SetBuilder<int> setBuilder = builtSet.toBuilder();
     final int initialLength = builtSet.length;
-    for (int i = 0; i < initialLength + innerRuns(); i++) setBuilder.add(i);
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++) setBuilder.add(i);
+
     result = setBuilder.build();
   }
 }

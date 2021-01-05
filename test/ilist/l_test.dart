@@ -286,6 +286,24 @@ class LExample<T> extends L<T> {
 
   @override
   Iterator<T> get iterator => _ilist.iterator;
+
+  @override
+  T operator [](int index) => _ilist[index];
+
+  @override
+  Iterable<T> get iter => _ilist;
+
+  @override
+  T get first => _ilist.first;
+
+  @override
+  T get last => _ilist.last;
+
+  @override
+  int get length => _ilist.length;
+
+  @override
+  T get single => _ilist.single;
 }
 
 //////////////////////////////////////////////////////////////////////////////
