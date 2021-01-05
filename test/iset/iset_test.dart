@@ -307,14 +307,14 @@ void main() {
     final ISet<int> iset = ISet({1, 2});
 
     expect(iset.isDeepEquals, isTrue);
-    expect(iset.config.sort, isTrue);
+    expect(iset.config.sort, isFalse);
 
     final ISet<int> iSetWithCompare = iset.withConfig(
-      iset.config.copyWith(sort: false),
+      iset.config.copyWith(sort: true),
     );
 
     expect(iSetWithCompare.isDeepEquals, isTrue);
-    expect(iSetWithCompare.config.sort, isFalse);
+    expect(iSetWithCompare.config.sort, isTrue);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -620,11 +620,14 @@ void main() {
   test("first", () {
     // 1) Regular usage
     expect({1, 2, 3, 4, 5, 6}.lock.first, 1);
-    expect({3, 6, 4, 1, 2, 5}.lock.first, 1);
+    expect({3, 6, 4, 1, 2, 5}.lock.first, 3);
 
     // 2) Without sorting
     final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
     expect(iset.first, 100);
+
+    // 3) With sorting
+    expect({3, 6, 4, 1, 2, 5}.lock.withConfig(ConfigSet(sort: true)).first, 1);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -632,11 +635,15 @@ void main() {
   test("last", () {
     // 1) Regular usage
     expect({1, 2, 3, 4, 5, 6}.lock.last, 6);
-    expect({3, 6, 4, 1, 2, 5}.lock.last, 6);
+    expect({3, 6, 4, 1, 2, 5}.lock.last, 5);
 
     // 2) Without sorting
     final ISet<int> iset = {100, 2, 3}.lock.add(1).add(5).withConfig(ConfigSet(sort: false));
     expect(iset.last, 5);
+    expect({3, 6, 4, 1, 2, 5}.lock.withConfig(ConfigSet(sort: true)).first, 1);
+
+    // 3) With sorting
+    expect({3, 6, 4, 1, 2, 5}.lock.withConfig(ConfigSet(sort: true)).last, 6);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -952,26 +959,27 @@ void main() {
 
   test("iterator", () {
     ISet<int> iset = {2, 5, 3, 7, 9, 6, 1}.lock;
-    expect(iset.config.sort, isTrue);
+    expect(iset.config.sort, isFalse);
 
-    // The regular iterator is SORTED.
-    expect(iset.iterator.toList(), [1, 2, 3, 5, 6, 7, 9]);
+    // The regular iterator is NOT SORTED.
+    expect(iset.iterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
 
-    // The for loop uses the SORTED iterator.
+    // The for loop uses the UNSORTED iterator (if the config says so).
     var result = [];
     for (int value in iset) result.add(value);
-    expect(iset.iterator.toList(), [1, 2, 3, 5, 6, 7, 9]);
+    expect(result, [2, 5, 3, 7, 9, 6, 1]);
 
     // You can also use a fast iterator which will NOT sort the result.
     expect(iset.fastIterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
 
-    // But you can configure the set NOT to sort the iterator.
-    iset = iset.withConfig(const ConfigSet(sort: false));
-    expect(iset.config.sort, isFalse);
-    expect(iset.iterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
+    // But you can configure the set to sort the iterator.
+    iset = iset.withConfig(const ConfigSet(sort: true));
+    expect(iset.config.sort, isTrue);
+    expect(iset.fastIterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
+    expect(iset.iterator.toList(), [1, 2, 3, 5, 6, 7, 9]);
     result = [];
     for (int value in iset) result.add(value);
-    expect(iset.iterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
+    expect(result, [1, 2, 3, 5, 6, 7, 9]);
   });
 
   /////////////////////////////////////////////////////////////////////////////

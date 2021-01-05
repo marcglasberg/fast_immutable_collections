@@ -111,16 +111,14 @@ void main() {
 
     expect(
         students.expand((Student student) => [student, Student(student.name + "2")]),
-        allOf(
-            isA<Iterable<Student>>(),
-            <Student>[
-              james,
-              const Student("James2"),
-              sara,
-              const Student("Sara2"),
-              lucy,
-              const Student("Lucy2")
-            ]));
+        allOf(isA<Iterable<Student>>(), <Student>[
+          james,
+          const Student("James2"),
+          sara,
+          const Student("Sara2"),
+          lucy,
+          const Student("Lucy2")
+        ]));
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -135,7 +133,7 @@ void main() {
     // (when ConfigSet.sort is `true`)
     expect(students.length, 3);
     expect(students.first, Student("James"));
-    expect(students.last, Student("Sara"));
+    expect(students.last, Student("Lucy"));
     expect(() => students.single, throwsStateError);
 
     // single
@@ -215,7 +213,7 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     // Join will respect the sort order (when ConfigSet.sort is `true`)
-    expect(students.join(", "), "Student: James, Student: Lucy, Student: Sara");
+    expect(students.join(", "), "Student: James, Student: Sara, Student: Lucy");
     expect(Students([]).join(", "), "");
   });
 
@@ -389,9 +387,9 @@ void main() {
     expect(iterator.moveNext(), isTrue);
     expect(iterator.current, james);
     expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, lucy);
-    expect(iterator.moveNext(), isTrue);
     expect(iterator.current, sara);
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current, lucy);
     expect(iterator.moveNext(), isFalse);
     expect(iterator.current, isNull);
   });
@@ -408,8 +406,8 @@ void main() {
     // (when ConfigSet.sort is `true`)
     expect(students.toList(), [
       const Student("James"),
-      const Student("Lucy"),
       const Student("Sara"),
+      const Student("Lucy"),
     ]);
   });
 
