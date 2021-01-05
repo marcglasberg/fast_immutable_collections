@@ -28,7 +28,7 @@ class LAddAll<T> extends L<T> {
   Iterable<T> get iter => _l.followedBy(_listOrL);
 
   @override
-  bool contains(Object element) => _l.contains(element) ? true : _listOrL.contains(element);
+  bool contains(covariant T element) => _l.contains(element) ? true : _listOrL.contains(element);
 
   @override
   T operator [](int index) {

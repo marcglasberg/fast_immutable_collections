@@ -38,7 +38,7 @@ class SAddAll<T> extends S<T> {
   Iterable<T> get iter => _s.followedBy(_setOrS);
 
   @override
-  bool contains(Object element) {
+  bool contains(covariant T element) {
     // Check the real set first (It's probably faster).
     return _setOrS.contains(element) || _s.contains(element);
   }

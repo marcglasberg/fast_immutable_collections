@@ -57,7 +57,7 @@ class SExample<T> extends S<T> {
   Iterator<T> get iterator => _iset.iterator;
 
   @override
-  bool contains(covariant Object element) => _iset.contains(element);
+  bool contains(covariant T element) => _iset.contains(element);
 
   @override
   T get anyItem => _iset.anyItem;

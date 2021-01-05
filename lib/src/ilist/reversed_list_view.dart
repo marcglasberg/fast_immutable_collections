@@ -75,7 +75,7 @@ class ReversedListView<T> implements List<T> {
   void clear() => list.clear();
 
   @override
-  bool contains(Object element) => list.contains(element);
+  bool contains(covariant T element) => list.contains(element);
 
   @override
   T elementAt(int index) => this[index];

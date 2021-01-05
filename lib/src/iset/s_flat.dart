@@ -28,7 +28,7 @@ class SFlat<T> extends S<T> {
   T get anyItem => _set.first;
 
   @override
-  bool contains(Object element) => _set.contains(element);
+  bool contains(covariant T element) => _set.contains(element);
 
   @override
   int get length => _set.length;

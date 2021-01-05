@@ -58,7 +58,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   Iterable<R> cast<R>() => iter.cast<R>();
 
-  bool contains(Object element) => iter.contains(element);
+  bool contains(T element) => iter.contains(element);
 
   T elementAt(int index) => throw UnsupportedError("elementAt in ${runtimeType} is not allowed");
 

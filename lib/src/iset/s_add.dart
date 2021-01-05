@@ -22,7 +22,7 @@ class SAdd<T> extends S<T> {
   Iterable<T> get iter => _s.followedBy([_item]);
 
   @override
-  bool contains(Object element) => _s.contains(element) ? true : _item == element;
+  bool contains(covariant T element) => _s.contains(element) ? true : _item == element;
 
   @override
   int get length => _s.length + 1;

@@ -47,7 +47,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
-  bool contains(Object element) => iter.contains(element);
+  bool contains(T element) => iter.contains(element);
 
   T operator [](int index) => iter[index];
 

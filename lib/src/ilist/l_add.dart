@@ -20,7 +20,7 @@ class LAdd<T> extends L<T> {
   Iterable<T> get iter => _l.followedBy([_item]);
 
   @override
-  bool contains(Object element) => _l.contains(element) ? true : _item == element;
+  bool contains(covariant T element) => _l.contains(element) ? true : _item == element;
 
   /// Implicitly uniting the list and the item.
   @override
