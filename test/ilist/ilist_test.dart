@@ -300,7 +300,8 @@ void main() {
     final IList<int> ilist = IList([1, 2]);
 
     // 1) Regular usage
-    expect(() => ilist.equalItems(ISet([1, 2])), throwsStateError);
+    expect(ilist.equalItems(ISet([1, 2])), isTrue);
+    expect(ilist.equalItems({}..add(1)..add(2)), isTrue);
     expect(() => ilist.equalItems(HashSet()..add(1)..add(2)), throwsStateError);
 
     // 2) Identity

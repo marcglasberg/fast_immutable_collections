@@ -85,8 +85,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Creates a map of sets instance in which the keys and values are
   /// computed from the [iterable].
   ///
-  /// For each element of the [iterable] this constructor computes a key/value
-  /// pair, by applying [keyMapper] and [valueMapper] respectively. When the key
+  /// For each element of the [iterable] it computes a key/value pair,
+  /// by applying [keyMapper] and [valueMapper] respectively. When the key
   /// is new, it will be created with a set containing the value. When the key
   /// already exists, each following value will be added to the existing set.
   ///
@@ -163,8 +163,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
   }
 
-  /// Unlocks the map, returning a regular (mutable, unordered) `Map<K, Set<V>` of type
-  /// [HashMap]. This map is "safe", in the sense that is independent from
+  /// Unlocks the map, returning a regular (mutable, ordered) `Map<K, Set<V>` of type
+  /// [LinkedHashMap]. This map is "safe", in the sense that is independent from
   /// the original [IMap].
   Map<K, Set<V>> get unlock {
     Map<K, Set<V>> result = {};
@@ -228,14 +228,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ISet<ISet<V>> get setsAsSet => ISet(sets).withDeepEquals;
 
   /// Return all [values] of all [sets], removing duplicates.
-  ISet<V> get valuesAsSet {
-    var result = HashSet<V>();
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      var set = entry.value;
-      result.addAll(set);
-    }
-    return ISet<V>(result).withDeepEquals;
-  }
+  ISet<V> get valuesAsSet =>
+      ISet.fromIterable(_mapOfSets.entries, mapper: ((MapEntry<K, ISet<V>> e) => e.value));
 
   /// Order is undefined.
   IList<K> get keysAsList => IList(keys).withDeepEquals;

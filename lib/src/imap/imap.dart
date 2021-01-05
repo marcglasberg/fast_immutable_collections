@@ -67,7 +67,7 @@ class IMap<K, V> // ignore: must_be_immutable
     if (entries is IMap<K, V>)
       return IMap._unsafe((entries as IMap<K, V>)._m, config: config ?? defaultConfig);
     else {
-      var map = HashMap<K, V>();
+      var map = <K, V>{};
       map.addEntries(entries);
       return IMap._unsafe(MFlat.unsafe(map), config: config ?? defaultConfig);
     }
@@ -90,7 +90,7 @@ class IMap<K, V> // ignore: must_be_immutable
     assert(keys != null);
     assert(valueMapper != null);
 
-    var map = HashMap<K, V>();
+    var map = <K, V>{};
 
     for (K key in keys) {
       map[key] = valueMapper(key);
@@ -116,7 +116,7 @@ class IMap<K, V> // ignore: must_be_immutable
     assert(keyMapper != null);
     assert(values != null);
 
-    var map = HashMap<K, V>();
+    var map = <K, V>{};
 
     for (V value in values) {
       map[keyMapper(value)] = value;
@@ -128,8 +128,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Creates a Map instance in which the [keys] and [values] are computed
   /// from the [iterable].
   ///
-  /// For each element of the [iterable] this constructor computes a key/value
-  /// pair, by applying [keyMapper] and [valueMapper] respectively.
+  /// For each element of the [iterable] it computes a key/value pair,
+  /// by applying [keyMapper] and [valueMapper] respectively.
   ///
   /// The example below creates a new [Map] from a [List]. The keys of `map` are
   /// `list` values converted to strings, and the values of the `map` are the
@@ -514,8 +514,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// order, no matter what the map configuration is.
   Iterator<MapEntry<K, V>> get fastIterator => _m.iterator;
 
-  /// Unlocks the map, returning a regular (mutable, unordered) [Map] of type
-  /// [HashMap]. This map is "safe", in the sense that is independent from
+  /// Unlocks the map, returning a regular (mutable, ordered) [Map] of type
+  /// [LinkedHashMap]. This map is "safe", in the sense that is independent from
   /// the original [IMap].
   Map<K, V> get unlock => _m.unlock;
 
@@ -1005,14 +1005,12 @@ abstract class M<K, V> {
   /// Returns the flushed map (flushes it only once).
   /// **It is an error to use the flushed map outside of the [M] class.**
   Map<K, V> get getFlushed {
-    // Note: Flush must be of type LinkedHashMap. It can't sort, but
-    // the flush is not suppose to change the order of the items.
     _flushed ??= <K, V>{}..addEntries(entries);
     return _flushed;
   }
 
   /// Returns a regular Dart (*mutable*) Map.
-  Map<K, V> get unlock => HashMap<K, V>()..addEntries(entries);
+  Map<K, V> get unlock => <K, V>{}..addEntries(entries);
 
   Iterable<MapEntry<K, V>> get entries;
 

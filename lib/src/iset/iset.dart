@@ -9,7 +9,9 @@ import "s_add.dart";
 import "s_add_all.dart";
 import "unmodifiable_set_from_iset.dart";
 
-/// An **immutable**, **unordered** set.
+/// An **immutable** set, **ordered** by insertion order.
+/// It can be configured to sort automatically.
+///
 @immutable
 class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
@@ -40,6 +42,27 @@ class ISet<T> // ignore: must_be_immutable
         : ((iterable == null) || iterable.isEmpty)
             ? ISet.empty<T>(config)
             : ISet<T>._unsafe(SFlat<T>(iterable), config: config);
+  }
+
+  /// Creates a set in which the items are computed from the [iterable].
+  ///
+  /// For each element of the [iterable] it computes another iterable of items
+  /// by applying [mapper]. The items of this resulting iterable will be added
+  /// to the set.
+  ///
+  static ISet<T> fromIterable<T, I>(
+    Iterable<I> iterable, {
+    @required Iterable<T> Function(I) mapper,
+    ConfigSet config,
+  }) {
+    assert(mapper != null);
+
+    var result = <T>{};
+    for (I item in iterable) {
+      Iterable<T> ts = mapper(item);
+      result.addAll(ts);
+    }
+    return ISet<T>._unsafeFromSet(result, config: config ?? defaultConfig);
   }
 
   /// Creates a new set with the given [config].
@@ -102,7 +125,7 @@ class ISet<T> // ignore: must_be_immutable
   /// use equality or identity for their [operator ==].
   ///
   /// By default `isDeepEquals: true` (sets are compared by equality)
-  /// and `sort: true` (certain sets outputs are sorted).
+  /// and `sort: false` (when `true`, certain outputs are sorted).
   static ConfigSet get defaultConfig => _defaultConfig;
 
   /// Indicates the number of operations an [ISet] may perform
@@ -212,11 +235,12 @@ class ISet<T> // ignore: must_be_immutable
                 : SFlat<T>(iterable);
 
   /// **Unsafe**.
-  ISet._unsafe(this._s, {@required this.config});
+  ISet._unsafe(this._s, {@required this.config}) : assert(config != null);
 
   /// **Unsafe**.
   ISet._unsafeFromSet(Set<T> set, {@required this.config})
-      : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
+      : assert(config != null),
+        _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
   ISet<T> get withIdentityEquals =>
@@ -232,8 +256,8 @@ class ISet<T> // ignore: must_be_immutable
   /// See also: [ConfigList]
   bool get isIdentityEquals => !config.isDeepEquals;
 
-  /// Unlocks the set, returning a regular (*mutable, unordered*) [Set]
-  /// of type [HashSet]. This set is "safe", in the sense that is independent
+  /// Unlocks the set, returning a regular (*mutable, ordered*) [Set]
+  /// of type [LinkedHashSet]. This set is "safe", in the sense that is independent
   /// from the original [ISet].
   Set<T> get unlock => _s.unlock;
 
@@ -267,11 +291,11 @@ class ISet<T> // ignore: must_be_immutable
   /// See also: [ModifiableSetFromISet]
   Set<T> get unlockLazy => ModifiableSetFromISet(this);
 
-  /// 1. If the set's [config] has [ConfigSet.sort] `true` (the default),
-  /// it will iterate in the natural order of items. In other words, if the
-  /// items are [Comparable], they will be sorted by `a.compareTo(b)`.
-  /// 2. If the set's [config] has [ConfigSet.sort] `false`, or if the items
-  /// are not [Comparable], the [iterator] order is undefined.
+  /// 1. If the set's [config] has [ConfigSet.sort] `true`, it will iterate in
+  /// the natural order of items. In other words, if the items are [Comparable],
+  /// they will be sorted by `a.compareTo(b)`.
+  /// 2. If the set's [config] has [ConfigSet.sort] `false` (the default), or
+  /// if the items are not [Comparable], the [iterator] order is the insertion order.
   ///
   @override
   Iterator<T> get iterator {
@@ -516,12 +540,12 @@ class ISet<T> // ignore: must_be_immutable
     return _s.anyItem;
   }
 
-  /// 1. If the set's [config] has [ConfigSet.sort] `true` (the default),
-  /// will return the first element in the natural order of items.
-  /// 2. If the set's [config] has [ConfigSet.sort] `false`, or if the items
-  /// are not [Comparable], any item may be returned.
+  /// 1. If the set's [config] has [ConfigSet.sort] `true`, will return the first
+  /// element in the natural order of items. Note: This is not a fast operation,
+  /// as [ISet]s are not naturally sorted.
+  /// 2. If the set's [config] has [ConfigSet.sort] `false` (the default), or if
+  /// the items are not [Comparable], the first item by insertion will be returned.
   ///
-  /// Note: This method is not efficient, as [ISet]s are not naturally sorted.
   @override
   T get first {
     _count();
@@ -540,12 +564,12 @@ class ISet<T> // ignore: must_be_immutable
       return _s.first;
   }
 
-  /// 1. If the set's [config] has [ConfigSet.sort] `true` (the default),
-  /// will return the last element in the natural order of items.
-  /// 2. If the set's [config] has [ConfigSet.sort] `false`, or if the items
-  /// are not [Comparable], any item may be returned.
+  /// 1. If the set's [config] has [ConfigSet.sort] `true`, will return the last
+  /// element in the natural order of items. Note: This is not a fast operation,
+  /// as [ISet]s are not naturally sorted.
+  /// 2. If the set's [config] has [ConfigSet.sort] `false` (the default), or if
+  /// the items are not [Comparable], the last item by insertion will be returned.
   ///
-  /// Note: This method is not efficient, as `ISets` are not naturally sorted.
   @override
   T get last {
     _count();
@@ -685,10 +709,10 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// 2. If no [compare] function is provided, the list will be sorted according to the
   /// set's [config] field:
-  ///     - If [ConfigSet.sort] is `true` (the default), the list will be sorted with
-  ///     `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
-  ///     items implement [Comparable]. Otherwise, the list order is undefined.
-  ///     - If [ConfigSet.sort] is `false`, the list order is undefined.
+  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
+  ///     in other words, with the natural order of items. This assumes the items implement
+  ///     [Comparable]. Otherwise, the list order is by insertion order.
+  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
   ///
   @override
   List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
@@ -710,11 +734,10 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// 2. If no [compare] function is provided, the list will be sorted
   /// according to the set's [ISet.config] field:
-  ///     - If [ConfigSet.sort] is `true` (the default), the list will be sorted
-  ///     with `a.compareTo(b)`, in other words, with the natural order of items.
-  ///     This assumes the items implement [Comparable]. Otherwise, the list order
-  ///     is undefined.
-  ///     - If [ConfigSet.sort] is `false`, the list order is undefined.
+  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
+  ///     in other words, with the natural order of items. This assumes the items implement
+  ///     [Comparable]. Otherwise, the list order is by insertion order.
+  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
   ///
   /// You can also provide a [config] for the [IList].
   ///
@@ -731,14 +754,11 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// 2. If no [compare] function is provided, the list will be sorted according to the
   /// set's [ISet.config] field:
-  ///     - If [ConfigSet.sort] is `true` (the default), the set will be sorted with
-  ///     `a.compareTo(b)`, in other words, with the natural order of items. This assumes the
-  ///     items implement [Comparable]. Otherwise, the set order is undefined.
-  ///     The set will be a [LinkedHashSet], which is ORDERED, meaning further iteration of
-  ///     its items will maintain insertion order.
-  ///     - If [ConfigSet.sort] is `false`, the set order is undefined. The set will
-  ///     be a [HashSet], which is NOT ordered. Note this is the same as unlocking the
-  ///     set with [ISet.unlock].
+  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
+  ///     in other words, with the natural order of items. This assumes the items implement
+  ///     [Comparable]. Otherwise, the list order is by insertion order.
+  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
+  ///     Note this is the same as unlocking the set with [ISet.unlock].
   ///
   @override
   Set<T> toSet({int Function(T a, T b) compare}) {
@@ -752,7 +772,7 @@ class ISet<T> // ignore: must_be_immutable
         var orderedList = toList(growable: false);
         return LinkedHashSet.of(orderedList);
       } else {
-        return HashSet.of(_s);
+        return LinkedHashSet.of(_s);
       }
     }
   }
@@ -884,14 +904,12 @@ abstract class S<T> implements Iterable<T> {
   /// Returns the flushed set (flushes it only once).
   /// It is an error to use the flushed set outside of the [S] class.
   Set<T> get getFlushed {
-    // Note: Flush must be of type LinkedHashSet. It can't sort, but
-    // the flush is not suppose to change the order of the items.
     _flushed ??= LinkedHashSet.of(this);
     return _flushed;
   }
 
   /// Returns a Dart [Set] (*mutable, unordered, of type [HashSet]*).
-  HashSet<T> get unlock => HashSet.of(this);
+  Set<T> get unlock => LinkedHashSet.of(this);
 
   /// Returns a new [Iterator] that allows iterating the items of the [ISet].
   @override
@@ -1007,7 +1025,7 @@ abstract class S<T> implements Iterable<T> {
   List<T> toList({bool growable = true}) => List.of(this, growable: growable);
 
   @override
-  Set<T> toSet() => HashSet.of(this);
+  Set<T> toSet() => LinkedHashSet.of(this);
 
   @override
   T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");

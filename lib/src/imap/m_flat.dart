@@ -11,7 +11,7 @@ class MFlat<K, V> extends M<K, V> {
 
   MFlat(Map<K, V> _map)
       : assert(_map != null),
-        _map = HashMap<K, V>.of(_map);
+        _map = LinkedHashMap<K, V>.of(_map);
 
   MFlat.unsafe(this._map) : assert(_map != null);
 
