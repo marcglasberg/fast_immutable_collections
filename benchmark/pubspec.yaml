@@ -18,8 +18,7 @@ dependencies:
   path: ^1.7.0
 
   built_collection: ^4.3.2
-  kt_dart: 
-    path: ../../kt.dart/
+  kt_dart: ^0.7.0+1
   # Depends on much older versions of Dart: `>=0.8.10+6 <2.0.0`,
   # So its use will be either postponed or rejected entirely.
   # vacuum_persistent:
