@@ -39,9 +39,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("length", () {
-    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
+  test("length, first, last, single", () {
+    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([5, 2]), [3, 4, 1]);
     expect(lAddAll.length, 5);
+    expect(lAddAll.first, 5);
+    expect(lAddAll.last, 1);
+    expect(() => lAddAll.single, throwsStateError);
+    expect(LAddAll(LFlat<int>([]), [1]).single, 1);
   });
 
   //////////////////////////////////////////////////////////////////////////////

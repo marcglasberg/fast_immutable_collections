@@ -38,9 +38,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("length", () {
-    final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
+  test("length, first, last, single", () {
+    final LAdd<int> lAdd = LAdd<int>(LFlat<int>([4, 2, 3]), 1);
     expect(lAdd.length, 4);
+    expect(lAdd.first, 4);
+    expect(lAdd.last, 1);
+    expect(() => lAdd.single, throwsStateError);
+    expect(LAdd<int>(LFlat<int>([]), 1).single, 1);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -64,6 +68,14 @@ void main() {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd.contains(1), isTrue);
     expect(lAdd.contains(5), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("iter", () {
+    final LAdd<int> lAdd = LAdd<int>(LFlat<int>([4, 2, 3]), 1);
+    expect(lAdd.iter, isA<Iterable<int>>());
+    expect(lAdd.iter, [4, 2, 3, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

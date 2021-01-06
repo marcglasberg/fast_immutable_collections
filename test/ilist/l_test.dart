@@ -73,6 +73,14 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("contains", () {
+    final LExample<String> lExample = LExample(["a", "b", "c", "e", "d", "f"]);
+    expect(lExample.contains("a"), isTrue);
+    expect(lExample.contains("z"), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("elementAt", () {
     final LExample<String> lExample = LExample(["a", "b", "c", "d", "e", "f"]);
     expect(lExample.elementAt(0), "a");

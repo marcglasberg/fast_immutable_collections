@@ -39,9 +39,11 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("length", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+  test("length, first, last", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({3, 4}), {1, 2, 5});
     expect(sAddAll.length, 5);
+    expect(sAddAll.first, 3);
+    expect(sAddAll.last, 5);
   });
 
   //////////////////////////////////////////////////////////////////////////////
