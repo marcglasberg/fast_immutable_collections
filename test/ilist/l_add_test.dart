@@ -74,8 +74,7 @@ void main() {
 
   test("iter", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([4, 2, 3]), 1);
-    expect(lAdd.iter, isA<Iterable<int>>());
-    expect(lAdd.iter, [4, 2, 3, 1]);
+    expect(lAdd.iter, allOf(isA<Iterable<int>>(), [4, 2, 3, 1]));
   });
 
   //////////////////////////////////////////////////////////////////////////////

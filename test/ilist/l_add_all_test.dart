@@ -95,6 +95,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("iter", () {
+    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 3]), [2, 4, 5]);
+    expect(lAddAll, allOf(isA<Iterable<int>>(), [1, 3, 2, 4, 5]));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   group("Combining various LAddAlls, LAdds, LFlats and Lists |", () {
     test("Runtime Type", () {
       final lAddAll =
