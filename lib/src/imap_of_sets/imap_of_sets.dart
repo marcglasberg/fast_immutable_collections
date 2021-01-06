@@ -186,7 +186,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return iterable of entries, where each entry is the key:set pair.
   ///
   /// For example, if the map is `{1: {a, b}, 2: {x, y}}`,
-  /// it will return [(1:{a,b}), 2:{x, y}].
+  /// it will return `[(1:{a,b}), 2:{x, y}]`.
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
   /// Returns an [Iterable] of the map keys. Note this is always fast

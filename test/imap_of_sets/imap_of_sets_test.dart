@@ -878,7 +878,7 @@ void main() {
 
   test("entries", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     final ISet<MapEntry<String, ISet<int>>> entries = iMapOfSets.entriesAsSet;
     expect(
         entries,
@@ -892,20 +892,20 @@ void main() {
 
   test("keys", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     expect(iMapOfSets.keys, isA<Iterable<String>>());
-    expect(iMapOfSets.keys, ["a", "b"]);
+    expect(iMapOfSets.keys, ["b", "a"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("sets", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     expect(iMapOfSets.sets, isA<Iterable<ISet<int>>>());
     expect(iMapOfSets.sets, [
-      ISet<int>({1, 2}),
       ISet<int>({3}),
+      ISet<int>({1, 2}),
     ]);
   });
 
@@ -913,8 +913,8 @@ void main() {
 
   test("values", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
-    expect(iMapOfSets.values, ISet<int>({1, 2, 3}));
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+    expect(iMapOfSets.values.toList(), allOf(isA<Iterable<int>>(), [3, 1, 2]));
   });
 
   //////////////////////////////////////////////////////////////////////////////

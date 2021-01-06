@@ -388,14 +388,14 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("flush", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6}).add(7).addAll({}).addAll({8, 9});
+    final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({10, 11}).add(7).addAll({}).addAll({8, 9});
 
     expect(iset.isFlushed, isFalse);
 
     iset.flush;
 
     expect(iset.isFlushed, isTrue);
-    expect(iset.unlock, {1, 2, 3, 4, 5, 6, 7, 8, 9});
+    expect(iset.unlock, {1, 2, 3, 4, 10, 11, 7, 8, 9});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -1017,7 +1017,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("elementAt", () {
-    final ISet<int> iset = {1, 2, 3}.lock;
+    final ISet<int> iset = {1, 20, 3}.lock;
     expect(() => iset.elementAt(0), throwsUnsupportedError);
   });
 
