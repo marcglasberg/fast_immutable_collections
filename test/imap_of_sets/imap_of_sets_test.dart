@@ -893,8 +893,9 @@ void main() {
   test("keys", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
-    expect(iMapOfSets.keys, isA<Iterable<String>>());
-    expect(iMapOfSets.keys, ["b", "a"]);
+    expect(iMapOfSets.keys, allOf(isA<Iterable<String>>(), ["b", "a"]));
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keys,
+        allOf(isA<Iterable<String>>(), ["a", "b"]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -913,8 +914,10 @@ void main() {
 
   test("values", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
-    expect(iMapOfSets.values.toList(), allOf(isA<Iterable<int>>(), [3, 1, 2]));
+        IMapOfSets.empty<String, int>().add("b", 3).add("b", 1).add("a", 2).add("a", 1);
+    expect(iMapOfSets.values, allOf(isA<Iterable<int>>(), [3, 1, 2]));
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).values,
+        allOf(isA<Iterable<int>>(), [1, 2, 3]));
   });
 
   //////////////////////////////////////////////////////////////////////////////

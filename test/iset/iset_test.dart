@@ -842,7 +842,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("toList", () {
-    // 1) Regular usage
+    // 1) Regular usage (no insertion order)
     ISet<int> iset = {1, 10, 11}.lock.add(4).addAll({5, 6});
     expect(iset.toList()..add(7), [1, 10, 11, 4, 5, 6, 7]);
     expect(iset, [1, 10, 11, 4, 5, 6]);
@@ -854,6 +854,11 @@ void main() {
     // 3) Unsupported operation
     iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(() => iset.toList(growable: false)..add(7), throwsUnsupportedError);
+
+    // 4) With Config: sort
+    iset = {1, 10, 11}.lock.add(4).addAll({5, 6});
+    ISet<int> isetWithSort = iset.withConfig(ConfigSet(sort: true));
+    expect(isetWithSort.toList(), [1, 4, 5, 6, 10, 11]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
