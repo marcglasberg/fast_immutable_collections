@@ -190,20 +190,54 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
   /// Returns an [Iterable] of the map keys. Note this is always fast
-  /// and **UNORDERED**. If you need order, please use [keyList].
+  /// and **UNORDERED**, even is [sortKeys] is true. If you need order,
+  /// please use [keyList].
   Iterable<K> get keys => _mapOfSets.keys;
 
+  /// Returns an [IList] of the map keys.
+  ///
+  /// Optionally, you may provide a [config] for the list.
+  ///
+  /// The list will be sorted if the map's [sortKeys] configuration is `true`,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  IList<K> keyList({
+    int Function(K a, K b) compare,
+    ConfigList config,
+  }) {
+    var result = IList.withConfig(keys, config);
+    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    return result;
+  }
+
   /// Returns an [Iterable] of the map values. Note this is always fast
-  /// and **UNORDERED**. If you need order, please use [valueList].
+  /// and **UNORDERED**.
   Iterable<ISet<V>> get sets => _mapOfSets.values;
 
   /// Return all values of all sets, including duplicates.
+  /// Note this is always **UNORDERED**, even is [sortValues] is true.
   Iterable<V> get values sync* {
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       for (V value in entry.value) {
         yield value;
       }
     }
+  }
+
+  /// Returns an [IList] of the all values in all sets.
+  ///
+  /// Optionally, you may provide a [config] for the list.
+  ///
+  /// The list will be sorted if the map's [sortValues] configuration is `true`,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  IList<V> valueList({
+    int Function(V a, V b) compare,
+    ConfigList config,
+  }) {
+    var result = IList.withConfig(values, config);
+    if (compare != null || this.config.sortValues) result = result.sort(compare);
+    return result;
   }
 
   /// Return a flattened iterable of <K, V> entries (including eventual duplicates),

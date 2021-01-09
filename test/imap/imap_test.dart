@@ -845,7 +845,10 @@ void main() {
     const List<String> keys = ["a", "b", "c", "d", "e", "f"];
     expect(imap.keys, keys.toSet());
     expect(imap.keys, ["a", "b", "c", "d", "f", "e"]);
+
+    // Keys is not sorted! If you need sorted, use keyList.
     expect(imap.withConfig(ConfigMap(sortKeys: true)).keys, ["a", "b", "c", "d", "f", "e"]);
+    expect(imap.withConfig(ConfigMap(sortKeys: true)).keyList(), ["a", "b", "c", "d", "e", "f"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -856,7 +859,10 @@ void main() {
     const List<int> values = [1, 2, 3, 4, 5, 6];
     expect(imap.values, values.toSet());
     expect(imap.values, [1, 2, 3, 4, 6, 5]);
-    expect(imap.withConfig(ConfigMap(sortValues: true)).values, [1, 2, 3, 4, 5, 6]);
+
+    // Values is not sorted! If you need sorted, use valueList.
+    expect(imap.withConfig(ConfigMap(sortValues: true)).values, [1, 2, 3, 4, 6, 5]);
+    expect(imap.withConfig(ConfigMap(sortValues: true)).valueList(), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

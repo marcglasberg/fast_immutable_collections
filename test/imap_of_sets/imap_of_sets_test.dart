@@ -894,7 +894,11 @@ void main() {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     expect(iMapOfSets.keys, allOf(isA<Iterable<String>>(), ["b", "a"]));
+
+    // Keys is not sorted! If you need sorted, use keyList.
     expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keys,
+        allOf(isA<Iterable<String>>(), ["b", "a"]));
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keyList(),
         allOf(isA<Iterable<String>>(), ["a", "b"]));
   });
 
@@ -915,9 +919,13 @@ void main() {
   test("values", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("b", 3).add("b", 1).add("a", 2).add("a", 1);
-    expect(iMapOfSets.values, allOf(isA<Iterable<int>>(), [3, 1, 2]));
+    expect(iMapOfSets.values, allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
+
+    // Values is not sorted! If you need sorted, use valueList.
     expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).values,
-        allOf(isA<Iterable<int>>(), [1, 2, 3]));
+        allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).valueList(),
+        allOf(isA<Iterable<int>>(), [1, 1, 2, 3]));
   });
 
   //////////////////////////////////////////////////////////////////////////////

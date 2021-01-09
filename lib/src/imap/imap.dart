@@ -347,14 +347,16 @@ class IMap<K, V> // ignore: must_be_immutable
   Iterable<Entry<K, V>> get comparableEntries => _m.entries.map((e) => e.asEntry);
 
   /// Returns an [Iterable] of the map keys. Note this is always fast
-  /// and **UNORDERED**. If you need order, please use [keyList].
+  /// and **UNORDERED**, even is [sortKeys] is true. If you need order,
+  /// please use [keyList].
   Iterable<K> get keys {
     _count();
     return _m.keys;
   }
 
   /// Returns an [Iterable] of the map values. Note this is always fast
-  /// and **UNORDERED**. If you need order, please use [valueList].
+  /// and **UNORDERED**, even is [sortValues] is true. If you need order,
+  /// please use [valueList].
   Iterable<V> get values {
     _count();
     return _m.values;
