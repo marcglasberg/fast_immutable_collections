@@ -189,6 +189,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// it will return `[(1:{a,b}), 2:{x, y}]`.
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
+  /// Return the [MapEntry] for the given [key].
+  MapEntry<K, ISet<V>> entry(K key) => _mapOfSets.entry(key);
+
   /// Returns an [Iterable] of the map keys. Note this is always fast
   /// and **UNORDERED**, even is [sortKeys] is true. If you need order,
   /// please use [keyList].
@@ -265,7 +268,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ISet<V> get valuesAsSet =>
       ISet.fromIterable(_mapOfSets.entries, mapper: ((MapEntry<K, ISet<V>> e) => e.value));
 
-  /// Order is undefined.
+  /// Return all [keys].
   IList<K> get keysAsList => IList(keys).withDeepEquals;
 
   /// Returns a list of the internal sets.

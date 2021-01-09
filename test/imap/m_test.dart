@@ -113,6 +113,12 @@ class MExample<K, V> extends M<K, V> {
 
   @override
   Iterator<MapEntry<K, V>> get iterator => _imap.iterator;
+
+  @override
+  bool containsKey(K key) => _imap.containsKey(key);
+
+  @override
+  bool containsValue(V value) => _imap.containsValue(value);
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -51,7 +51,7 @@ void main() {
   test("cast", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final mFlatAsNum = mFlat.cast<String, num>();
+    final mFlatAsNum = mFlat.cast<String, num>(IMap.defaultConfig);
     expect(mFlatAsNum, isA<Map<String, num>>());
   });
 

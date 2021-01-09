@@ -12,6 +12,10 @@ import "package:fast_immutable_collections/src/list_set/list_set_view.dart";
 /// Also, you can directly get its items by index. The disadvantage, of course, is that [ListSet]
 /// has a fixed size, while a [LinkedHashSet] does not.
 ///
+/// The [ListSet] is efficient both as a [List] and as a [Set]. So, for example, it has an
+/// efficient [sort] method, while a [LinkedHashSet] would force you to turn it into a [List],
+/// then sort it, than turn it back into a [Set].
+///
 class ListSet<T> implements Set<T>, List<T> {
   Set<T> _set;
   List<T> _list;

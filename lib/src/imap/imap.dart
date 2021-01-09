@@ -2,6 +2,7 @@ import "dart:collection";
 import "dart:math";
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
+import "package:fast_immutable_collections/src/list_map/list_map.dart";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "entry.dart";
@@ -52,7 +53,18 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   IMap<K, V> withConfig(ConfigMap config) {
     assert(config != null);
-    return (config == this.config) ? this : IMap._unsafe(_m, config: config);
+    if (config == this.config)
+      return this;
+    else {
+      // If the new config is not sorted it can use sorted or not sorted.
+      // If the new config is sorted it can only use sorted.
+      if (!config.sortKeys || this.config.sortKeys)
+        return IMap._unsafe(_m, config: config);
+      //
+      // If the new config is sorted and the previous is not, it must sort.
+      else
+        return IMap._unsafe(MFlat.from(_m, config: config), config: config);
+    }
   }
 
   /// Returns a new map with the contents of the present [IMap],
@@ -337,18 +349,17 @@ class IMap<K, V> // ignore: must_be_immutable
   bool get isIdentityEquals => !config.isDeepEquals;
 
   /// Returns an [Iterable] of the map entries of type [MapEntry].
-  /// Note this is always fast and **UNORDERED**.
-  /// If you need order, please use [entryList].
   Iterable<MapEntry<K, V>> get entries => _m.entries;
+
+  /// Return the [MapEntry] for the given [key].
+  MapEntry<K, V> entry(K key) => MapEntry(key, _m[key]);
 
   /// Returns an [Iterable] of the map entries of type [Entry]. Contrary to
   /// [MapEntry], [Entry] is comparable and implements equals (`==`) and [hashcode] by
   /// using its key and value. Note this is always fast and **UNORDERED**.
   Iterable<Entry<K, V>> get comparableEntries => _m.entries.map((e) => e.asEntry);
 
-  /// Returns an [Iterable] of the map keys. Note this is always fast
-  /// and **UNORDERED**, even is [sortKeys] is true. If you need order,
-  /// please use [keyList].
+  /// Returns an [Iterable] of the map keys.
   Iterable<K> get keys {
     _count();
     return _m.keys;
@@ -375,7 +386,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = IList<MapEntry<K, V>>.withConfig(entries, config);
-    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    if (compare != null && this.config.sortKeys) result = result.sort(compare);
     return result;
   }
 
@@ -392,7 +403,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = IList.withConfig(keys, config);
-    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    if (compare != null && this.config.sortKeys) result = result.sort(compare);
     return result;
   }
 
@@ -446,7 +457,7 @@ class IMap<K, V> // ignore: must_be_immutable
   List<MapEntry<K, V>> toEntryList([int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare]) {
     _count();
     var result = List<MapEntry<K, V>>.of(entries);
-    if (compare != null || config.sortKeys) result.sort(compare ?? compareObject);
+    if (compare != null && config.sortKeys) result.sort(compare ?? compareObject);
     return result;
   }
 
@@ -458,7 +469,7 @@ class IMap<K, V> // ignore: must_be_immutable
   List<K> toKeyList([int Function(K a, K b) compare]) {
     _count();
     var result = List.of(keys);
-    if (compare != null || config.sortKeys) result.sort(compare);
+    if (compare != null && config.sortKeys) result.sort(compare);
     return result;
   }
 
@@ -479,7 +490,12 @@ class IMap<K, V> // ignore: must_be_immutable
   /// or if you explicitly provide a [compare] method.
   Set<MapEntry<K, V>> toEntrySet([int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare]) {
     _count();
-    return toEntryList(compare).toSet();
+
+    if (compare == null) {
+      return Set<MapEntry<K, V>>.of(entries);
+    } else {
+      return toEntryList(compare).toSet();
+    }
   }
 
   /// Returns a [Set] of the map keys.
@@ -488,7 +504,12 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   Set<K> toKeySet([int Function(K a, K b) compare]) {
     _count();
-    return toKeyList(compare).toSet();
+
+    if (compare == null) {
+      return Set<K>.of(keys);
+    } else {
+      return toKeyList(compare).toSet();
+    }
   }
 
   /// Returns a [Set] of the map values.
@@ -508,13 +529,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// `keyA.compareTo(keyB)` and then by `valueA.compareTo(valueB)`.
   ///
   /// 2. If the map's [config] has [ConfigMap.sortKeys] `false`, or if the
-  /// keys/values are not [Comparable], the iterator order is **undefined**.
+  /// keys/values are not [Comparable], the iterator order is by insertion order.
   ///
-  Iterator<MapEntry<K, V>> get iterator => config.sortKeys ? toEntryList().iterator : _m.iterator;
-
-  /// This [Iterator] is very fast to create, but won't iterate in any particular
-  /// order, no matter what the map configuration is.
-  Iterator<MapEntry<K, V>> get fastIterator => _m.iterator;
+  Iterator<MapEntry<K, V>> get iterator => _m.iterator;
 
   /// Unlocks the map, returning a regular (mutable, ordered) [Map] of type
   /// [LinkedHashMap]. This map is "safe", in the sense that is independent from
@@ -662,7 +679,7 @@ class IMap<K, V> // ignore: must_be_immutable
     if (!isFlushed) {
       // Flushes the original _m because maybe it's used elsewhere.
       // Or maybe it was flushed already, and we can use it as is.
-      _m = MFlat<K, V>.unsafe(_m.getFlushed);
+      _m = MFlat<K, V>.unsafe(_m.getFlushed(config));
       _counter = 0;
     }
     return this;
@@ -769,7 +786,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Entries added to the map must be valid for both an `IMap<K, V>` and an
   /// `IMap<RK, RV>`.
   IMap<RK, RV> cast<RK, RV>() {
-    Object result = _m.cast<RK, RV>();
+    Object result = _m.cast<RK, RV>(config);
     if (result is M<RK, RV>)
       return IMap._unsafe(result, config: config);
     else if (result is Map<RK, RV>)
@@ -1006,8 +1023,8 @@ abstract class M<K, V> {
 
   /// Returns the flushed map (flushes it only once).
   /// **It is an error to use the flushed map outside of the [M] class.**
-  Map<K, V> get getFlushed {
-    _flushed ??= <K, V>{}..addEntries(entries);
+  Map<K, V> getFlushed(ConfigMap config) {
+    _flushed ??= ListMap.fromEntries(entries, sort: (config ?? IMap.defaultConfig).sortKeys);
     return _flushed;
   }
 
@@ -1056,7 +1073,7 @@ abstract class M<K, V> {
 
   // TODO: Still need to implement efficiently.
   M<K, V> remove(K key) {
-    return !containsKey(key) ? this : MFlat<K, V>.unsafe(Map<K, V>.of(getFlushed)..remove(key));
+    return !containsKey(key) ? this : MFlat<K, V>.unsafe(unlock..remove(key));
   }
 
   /// Removes all entries of this map that satisfy the given [predicate].
@@ -1069,10 +1086,11 @@ abstract class M<K, V> {
 
   /// Provides a view of this map as having [RK] keys and [RV] instances.
   /// May return `M<RK, RV>` or `Map<RK, RV>`.
-  Object cast<RK, RV>() => (RK == K && RV == V) ? this : getFlushed.cast<RK, RV>();
+  Map<RK, RV> cast<RK, RV>(ConfigMap config) =>
+      (RK == K && RV == V) ? (this as Map<RK, RV>) : getFlushed(config).cast<RK, RV>();
 
   /// Returns `true` if there is no key/value pair in the map.
-  bool get isEmpty => getFlushed.isEmpty;
+  bool get isEmpty => length == 0;
 
   /// Returns `true` if there is at least one key/value pair in the map.
   bool get isNotEmpty => !isEmpty;
@@ -1081,30 +1099,30 @@ abstract class M<K, V> {
 
   /// Returns `true` if this map contains the given [key] with the given [value].
   bool contains(K key, V value) {
-    var _value = getFlushed[key];
-    return (_value == null) ? _flushed.containsKey(key) : (_value == value);
+    var _value = this[key];
+    return (_value == null) ? containsKey(key) : (_value == value);
   }
 
   /// Returns `true` if this map contains the given [key].
   ///
   /// Returns `true` if any of the keys in the map are equal to `key`
   /// according to the equality used by the map.
-  bool containsKey(K key) => getFlushed.containsKey(key);
+  bool containsKey(K key);
 
   /// Returns `true` if this map contains the given [value].
   ///
   /// Returns `true` if any of the values in the map are equal to `value`
   /// according to the `==` operator.
-  bool containsValue(V value) => getFlushed.containsValue(value);
+  bool containsValue(V value);
 
   bool containsEntry(MapEntry<K, V> entry) => contains(entry.key, entry.value);
 
   bool any(bool Function(K key, V value) test) =>
-      getFlushed.entries.any((entry) => test(entry.key, entry.value));
+      entries.any((entry) => test(entry.key, entry.value));
 
-  bool anyEntry(bool Function(MapEntry<K, V>) test) => getFlushed.entries.any(test);
+  bool anyEntry(bool Function(MapEntry<K, V>) test) => entries.any(test);
 
-  bool everyEntry(bool Function(MapEntry<K, V>) test) => getFlushed.entries.every(test);
+  bool everyEntry(bool Function(MapEntry<K, V>) test) => entries.every(test);
 
   void forEach(void Function(K key, V value) f) =>
       entries.forEach((entry) => f(entry.key, entry.value));
@@ -1118,7 +1136,7 @@ abstract class M<K, V> {
   }
 
   Map<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
-      getFlushed.map(mapper);
+      LinkedHashMap.fromEntries(entries.map((entry) => mapper(entry.key, entry.value)));
 }
 
 // /////////////////////////////////////////////////////////////////////////////

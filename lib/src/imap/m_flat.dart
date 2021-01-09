@@ -1,6 +1,6 @@
-import "dart:collection";
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/list_map/list_map.dart";
 import "imap.dart";
 
 class MFlat<K, V> extends M<K, V> {
@@ -9,11 +9,17 @@ class MFlat<K, V> extends M<K, V> {
 
   final Map<K, V> _map;
 
-  MFlat(Map<K, V> _map)
+  MFlat(Map<K, V> _map, {ConfigMap config})
       : assert(_map != null),
-        _map = LinkedHashMap<K, V>.of(_map);
+        _map = ListMap<K, V>.of(_map, sort: (config ?? IMap.defaultConfig).sortKeys);
 
-  MFlat.unsafe(this._map) : assert(_map != null);
+  MFlat.from(M<K, V> _m, {ConfigMap config})
+      : assert(_m != null),
+        _map = ListMap<K, V>.fromEntries(_m.entries, sort: (config ?? IMap.defaultConfig).sortKeys);
+
+  MFlat.unsafe(Map<K, V> map)
+      : assert(map != null),
+        _map = ListMap.unsafeView(map);
 
   @override
   Iterable<MapEntry<K, V>> get entries => _map.entries;
@@ -28,7 +34,7 @@ class MFlat<K, V> extends M<K, V> {
   bool get isEmpty => _map.isEmpty;
 
   @override
-  Map<RK, RV> cast<RK, RV>() => _map.cast<RK, RV>();
+  Map<RK, RV> cast<RK, RV>(ConfigMap config) => _map.cast<RK, RV>();
 
   @override
   bool any(bool Function(K, V) test) => _map.entries.any((entry) => test(entry.key, entry.value));

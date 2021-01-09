@@ -847,7 +847,7 @@ void main() {
     expect(imap.keys, ["a", "b", "c", "d", "f", "e"]);
 
     // Keys is not sorted! If you need sorted, use keyList.
-    expect(imap.withConfig(ConfigMap(sortKeys: true)).keys, ["a", "b", "c", "d", "f", "e"]);
+    expect(imap.withConfig(ConfigMap(sortKeys: true)).keys, ["a", "b", "c", "d", "e", "f"]);
     expect(imap.withConfig(ConfigMap(sortKeys: true)).keyList(), ["a", "b", "c", "d", "e", "f"]);
   });
 
@@ -983,19 +983,6 @@ void main() {
     expect(iterator2.moveNext(), isTrue);
     expect(iterator2.current.asEntry, Entry<String, int>("f", 6));
     expect(iterator2.moveNext(), isFalse);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("fastIterator", () {
-    final IMap<String, int> imap =
-        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6};
-
-    final Iterator<MapEntry<String, int>> fastIterator = imap.fastIterator;
-    final Map<String, int> result = fastIterator.toMap();
-
-    expect(result, finalMap);
   });
 
   //////////////////////////////////////////////////////////////////////////////

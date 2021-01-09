@@ -38,5 +38,6 @@ export "src/iset/unmodifiable_set_from_iset.dart";
 export "src/iset/from_iset_mixin.dart";
 export "src/iset/from_iterable_iset_mixin.dart";
 
-// Set:
+// ListSet and ListMap:
 export "src/list_set/list_set.dart";
+export "src/list_map/list_map.dart";
