@@ -41,7 +41,7 @@ class ISet<T> // ignore: must_be_immutable
                 : ISet<T>._(iterable, config: config)
         : ((iterable == null) || iterable.isEmpty)
             ? ISet.empty<T>(config)
-            : ISet<T>._unsafe(SFlat<T>(iterable), config: config);
+            : ISet<T>._unsafe(SFlat<T>(iterable, config: config), config: config);
   }
 
   /// Creates a set in which the items are computed from the [iterable].
@@ -232,7 +232,7 @@ class ISet<T> // ignore: must_be_immutable
             ? iterable._s
             : iterable == null
                 ? SFlat.empty<T>()
-                : SFlat<T>(iterable);
+                : SFlat<T>(iterable, config: config);
 
   /// **Unsafe**.
   ISet._unsafe(this._s, {@required this.config}) : assert(config != null);
@@ -899,16 +899,16 @@ abstract class S<T> implements Iterable<T> {
   ///
   /// Note these fallback methods need to calculate the flushed set, but
   /// because that's immutable, we **cache** it.
-  Set<T> _flushed;
+  ListSet<T> _flushed;
 
   /// Returns the flushed set (flushes it only once).
   /// It is an error to use the flushed set outside of the [S] class.
-  Set<T> get getFlushed {
-    _flushed ??= LinkedHashSet.of(this);
+  ListSet<T> get getFlushed {
+    _flushed ??= ListSet.of(this);
     return _flushed;
   }
 
-  /// Returns a Dart [Set] (*mutable, unordered, of type [HashSet]*).
+  /// Returns a Dart [Set] (*mutable, ordered, of type [LinkedHashSet]*).
   Set<T> get unlock => LinkedHashSet.of(this);
 
   /// Returns a new [Iterator] that allows iterating the items of the [ISet].

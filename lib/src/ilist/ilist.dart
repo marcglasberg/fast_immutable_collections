@@ -1567,6 +1567,11 @@ abstract class L<T> implements Iterable<T> {
   /// Ordered set. Same as [toSet].
   LinkedHashSet<T> toLinkedHashSet() => LinkedHashSet.of(iter);
 
+  /// Ordered set which is also a list.
+  /// Returns a [ListSet], which has the same performance and needs
+  /// less memory than a [LinkedHashSet], but can't change size.
+  ListSet<T> toListSet() => ListSet.of(iter);
+
   /// Unordered set. Returns a [HashSet], which is faster than [LinkedHashSet]
   /// and consumes less memory.
   HashSet<T> toHashSet() => HashSet.of(iter);

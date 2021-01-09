@@ -2,18 +2,20 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 class SFlat<T> extends S<T> {
-  final Set<T> _set;
+  final ListSet<T> _set;
 
-  static S<T> empty<T>() => SFlat.unsafe(<T>{});
+  static S<T> empty<T>() => SFlat.unsafe(ListSet<T>.empty());
 
-  SFlat(Iterable<T> iterable)
+  SFlat(Iterable<T> iterable, {ConfigSet config})
       : assert(iterable != null),
-        _set = Set.of(iterable);
+        _set = ListSet.of(iterable, sort: (config ?? ISet.defaultConfig).sort);
 
-  SFlat.unsafe(this._set) : assert(_set != null);
+  SFlat.unsafe(Set<T> set)
+      : assert(set != null),
+        _set = ListSet.unsafeView(set);
 
   @override
-  Set<T> get getFlushed => _set;
+  ListSet<T> get getFlushed => _set;
 
   @override
   Iterator<T> get iterator => _set.iterator;
