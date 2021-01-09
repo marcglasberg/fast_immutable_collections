@@ -37,12 +37,12 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   bool add(T value) {
-    throw UnsupportedError("Can't add to a FixedSizeSet.");
+    throw UnsupportedError("Can't add to a ListSet.");
   }
 
   @override
   void addAll(Iterable<T> elements) {
-    throw UnsupportedError("Can't add to a FixedSizeSet.");
+    throw UnsupportedError("Can't add to a ListSet.");
   }
 
   @override
@@ -50,12 +50,12 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   ListSet<E> cast<E>() {
-    throw UnsupportedError("Can't cast a FixedSizeSet.");
+    throw UnsupportedError("Can't cast a ListSet.");
   }
 
   @override
   void clear() {
-    throw UnsupportedError("Can't clear a FixedSizeSet.");
+    throw UnsupportedError("Can't clear a ListSet.");
   }
 
   @override
@@ -129,27 +129,27 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   bool remove(Object value) {
-    throw UnsupportedError("Can't remove from a FixedSizeSet.");
+    throw UnsupportedError("Can't remove from a ListSet.");
   }
 
   @override
   void removeAll(Iterable<Object> elements) {
-    throw UnsupportedError("Can't removeAll from a FixedSizeSet.");
+    throw UnsupportedError("Can't removeAll from a ListSet.");
   }
 
   @override
   void removeWhere(bool Function(T element) test) {
-    throw UnsupportedError("Can't removeWhere from a FixedSizeSet.");
+    throw UnsupportedError("Can't removeWhere from a ListSet.");
   }
 
   @override
   void retainAll(Iterable<Object> elements) {
-    throw UnsupportedError("Can't retainAll from a FixedSizeSet.");
+    throw UnsupportedError("Can't retainAll from a ListSet.");
   }
 
   @override
   void retainWhere(bool Function(T element) test) {
-    throw UnsupportedError("Can't retainWhere from a FixedSizeSet.");
+    throw UnsupportedError("Can't retainWhere from a ListSet.");
   }
 
   @override
@@ -202,7 +202,7 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   void fillRange(int start, int end, [T fillValue]) {
-    throw UnsupportedError("Can't fillRange from a FixedSizeSet.");
+    throw UnsupportedError("Can't fillRange from a ListSet.");
   }
 
   @override
@@ -221,12 +221,12 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   void insert(int index, T element) {
-    throw UnsupportedError("Can't insert in a FixedSizeSet.");
+    throw UnsupportedError("Can't insert in a ListSet.");
   }
 
   @override
   void insertAll(int index, Iterable<T> iterable) {
-    throw UnsupportedError("Can't insertAll in a FixedSizeSet.");
+    throw UnsupportedError("Can't insertAll in a ListSet.");
   }
 
   @override
@@ -243,22 +243,22 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   set length(int newLength) {
-    throw UnsupportedError("Can't set the length of a FixedSizeSet.");
+    throw UnsupportedError("Can't set the length of a ListSet.");
   }
 
   @override
   T removeAt(int index) {
-    throw UnsupportedError("Can't removeAt from a FixedSizeSet.");
+    throw UnsupportedError("Can't removeAt from a ListSet.");
   }
 
   @override
   T removeLast() {
-    throw UnsupportedError("Can't removeLast from a FixedSizeSet.");
+    throw UnsupportedError("Can't removeLast from a ListSet.");
   }
 
   @override
   void removeRange(int start, int end) {
-    throw UnsupportedError("Can't removeRange from a FixedSizeSet.");
+    throw UnsupportedError("Can't removeRange from a ListSet.");
   }
 
   @override
