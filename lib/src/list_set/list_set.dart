@@ -67,7 +67,7 @@ class ListSet<T> implements Set<T>, List<T> {
   Set<T> difference(Set<Object> other) => _set.difference(other);
 
   @override
-  T elementAt(int index) => _list.elementAt(index);
+  T elementAt(int index) => _list[index];
 
   @override
   bool every(bool Function(T element) test) => _list.every(test);

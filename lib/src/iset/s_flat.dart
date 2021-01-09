@@ -44,6 +44,9 @@ class SFlat<T> extends S<T> {
   @override
   T get single => _set.single;
 
+  @override
+  T operator [](int index) => _set[index];
+
   bool deepSetEquals_toIterable(Iterable<T> other) {
     if (other == null) return false;
     Set<T> set = (other is Set<T>) ? other : Set<T>.of(other);

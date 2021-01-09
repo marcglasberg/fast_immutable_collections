@@ -39,8 +39,19 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("elementAt", () {
-    final SExample<int> sExample = SExample({1, 2, 3});
-    expect(() => sExample.elementAt(0), throwsUnsupportedError);
+    final SExample<int> iset = SExample({1, 20, 3});
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 20);
+    expect(iset.elementAt(2), 3);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(3), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 20);
+    expect(iset[2], 3);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[3], throwsRangeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -65,6 +76,9 @@ class SExample<T> extends S<T> {
 
   @override
   T get anyItem => _iset.anyItem;
+
+  @override
+  T operator [](int index) => _iset[index];
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -12,6 +12,9 @@ import "unmodifiable_set_from_iset.dart";
 /// An **immutable**, **ordered** set.
 /// It can be configured to order by insertion order, or sort.
 ///
+/// You can access its items by index, as efficiently as with a [List],
+/// by calling `ISet.elementAt(index)` or by using the `[]` operator.
+///
 @immutable
 class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
@@ -498,7 +501,10 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns the [index]th element.
   @override
-  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) => _s.elementAt(index);
+
+  /// Returns the [index]th element.
+  T operator [](int index) => _s[index];
 
   /// Checks whether every element of this iterable satisfies [test].
   @override
@@ -998,7 +1004,9 @@ abstract class S<T> implements Iterable<T> {
   Set<T> toSet() => LinkedHashSet.of(this);
 
   @override
-  T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
+  T elementAt(int index) => this[index];
+
+  T operator [](int index);
 }
 
 // /////////////////////////////////////////////////////////////////////////////

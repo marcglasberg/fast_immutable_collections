@@ -38,6 +38,9 @@ class SAdd<T> extends S<T> {
 
   @override
   T get single => _s.isEmpty ? _item : throw StateError("Too many elements");
+
+  @override
+  T operator [](int index) => (index < _s.length) ? _s[index] : _item;
 }
 
 // /////////////////////////////////////////////////////////////////////////////

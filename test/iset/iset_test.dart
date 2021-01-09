@@ -1011,7 +1011,18 @@ void main() {
 
   test("elementAt", () {
     final ISet<int> iset = {1, 20, 3}.lock;
-    expect(() => iset.elementAt(0), throwsUnsupportedError);
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 20);
+    expect(iset.elementAt(2), 3);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(3), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 20);
+    expect(iset[2], 3);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[3], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
