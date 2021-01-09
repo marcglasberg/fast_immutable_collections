@@ -24,9 +24,9 @@ class ListSet<T> implements Set<T>, List<T> {
   /// If [sort] is true, it will sort the items. Otherwise, it will keep the [items] order.
   /// If [compare] is provided, it will use it to sort the items.
   ///
-  ListSet.from(Iterable<T> items, {bool sort = false, int Function(T a, T b) compare}) {
+  ListSet.of(Iterable<T> items, {bool sort = false, int Function(T a, T b) compare}) {
     _set = HashSet();
-    _list = List.from(items.where((item) => _set.add(item)), growable: false);
+    _list = List.of(items.where((item) => _set.add(item)), growable: false);
     if (sort) _list.sort(compare);
   }
 
@@ -187,7 +187,7 @@ class ListSet<T> implements Set<T>, List<T> {
   Iterable<E> whereType<E>() => _list.whereType();
 
   @override
-  ListSet<T> operator +(List<T> other) => ListSet.from(_list.followedBy(other));
+  ListSet<T> operator +(List<T> other) => ListSet.of(_list.followedBy(other));
 
   @override
   T operator [](int index) => _list[index];
