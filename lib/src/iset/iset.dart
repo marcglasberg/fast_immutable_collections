@@ -9,8 +9,8 @@ import "s_add.dart";
 import "s_add_all.dart";
 import "unmodifiable_set_from_iset.dart";
 
-/// An **immutable** set, **ordered** by insertion order.
-/// It can be configured to sort automatically.
+/// An **immutable**, **ordered** set.
+/// It can be configured to order by insertion order, or sort.
 ///
 @immutable
 class ISet<T> // ignore: must_be_immutable
@@ -83,7 +83,18 @@ class ISet<T> // ignore: must_be_immutable
   ///
   ISet<T> withConfig(ConfigSet config) {
     assert(config != null);
-    return (config == this.config) ? this : ISet._unsafe(_s, config: config);
+    if (config == this.config)
+      return this;
+    else {
+      // If the new config is not sorted it can use sorted or not sorted.
+      // If the new config is sorted it can only use sorted.
+      if (!config.sort || this.config.sort)
+        return ISet._unsafe(_s, config: config);
+      //
+      // If the new config is sorted and the previous is not, it must sort.
+      else
+        return ISet._unsafe(SFlat(_s, config: config), config: config);
+    }
   }
 
   /// Returns a new set with the contents of the present [ISet],
@@ -261,14 +272,6 @@ class ISet<T> // ignore: must_be_immutable
   /// from the original [ISet].
   Set<T> get unlock => _s.unlock;
 
-  /// Unlocks the map, returning a regular (*mutable, ordered, sorted*) [Set]
-  /// of type [LinkedHashSet]. This map is "safe", in the sense that is independent
-  /// from the original [ISet].
-  Set<T> get unlockSorted {
-    var orderedList = toList(growable: false, compare: compareObject);
-    return LinkedHashSet.of(orderedList);
-  }
-
   /// Unlocks the set, returning a safe, unmodifiable (immutable) [Set] view.
   /// The word "view" means the set is backed by the original [ISet].
   /// Using this is very fast, since it makes no copies of the [ISet] items.
@@ -298,17 +301,7 @@ class ISet<T> // ignore: must_be_immutable
   /// if the items are not [Comparable], the [iterator] order is the insertion order.
   ///
   @override
-  Iterator<T> get iterator {
-    if (config.sort) {
-      var sortedList = _s.toList(growable: false)..sort(compareObject);
-      return sortedList.iterator;
-    } else
-      return _s.iterator;
-  }
-
-  /// This [iterator] is very fast to create, but won't iterate in any particular
-  /// order, no matter what the set configuration is.
-  Iterator<T> get fastIterator => _s.iterator;
+  Iterator<T> get iterator => _s.iterator;
 
   /// Returns `true` if there are no elements in this collection.
   @override
@@ -421,7 +414,7 @@ class ISet<T> // ignore: must_be_immutable
     if (!isFlushed) {
       // Flushes the original _s because maybe it's used elsewhere.
       // Or maybe it was flushed already, and we can use it as is.
-      _s = SFlat<T>.unsafe(_s.getFlushed);
+      _s = SFlat<T>.unsafe(_s.getFlushed(config));
       _counter = 0;
     }
     return this;
@@ -549,19 +542,7 @@ class ISet<T> // ignore: must_be_immutable
   @override
   T get first {
     _count();
-
-    if (config.sort) {
-      bool initial = true;
-      T result;
-      for (T item in _s) {
-        if (initial) {
-          initial = false;
-          result = item;
-        } else if (compareObject(result, item) > 0) result = item;
-      }
-      return result;
-    } else
-      return _s.first;
+    return config.sort ? (flush._s as SFlat<T>).first : _s.first;
   }
 
   /// 1. If the set's [config] has [ConfigSet.sort] `true`, will return the last
@@ -573,19 +554,7 @@ class ISet<T> // ignore: must_be_immutable
   @override
   T get last {
     _count();
-
-    if (config.sort) {
-      bool initial = true;
-      T result;
-      for (T item in _s) {
-        if (initial) {
-          initial = false;
-          result = item;
-        } else if (compareObject(result, item) < 0) result = item;
-      }
-      return result;
-    } else
-      return _s.last;
+    return config.sort ? (flush._s as SFlat<T>).last : _s.last;
   }
 
   /// Checks that this iterable has only one element, and returns that element.
@@ -647,7 +616,7 @@ class ISet<T> // ignore: must_be_immutable
   /// in-between each concatenation.
   @override
   String join([String separator = ""]) =>
-      config.sort ? toSet().join(separator) : _s.join(separator);
+      config.sort ? (flush._s as SFlat<T>).join(separator) : _s.join(separator);
 
   /// Returns the last element that satisfies the given predicate [test].
   @override
@@ -717,15 +686,16 @@ class ISet<T> // ignore: must_be_immutable
   @override
   List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
     _count();
-    var result = _s.toList(growable: growable);
 
-    if (compare != null) {
-      result.sort(compare);
+    if (config.sort && compare == null) {
+      return (flush._s as SFlat<T>).toList(growable: growable);
     } else {
-      if (config.sort) result.sort(compare ?? compareObject);
+      var result = _s.toList(growable: growable);
+      if (compare != null) {
+        result.sort(compare);
+      }
+      return result;
     }
-
-    return result;
   }
 
   /// Returns a [IList] with all items from the set.
@@ -764,12 +734,12 @@ class ISet<T> // ignore: must_be_immutable
   Set<T> toSet({int Function(T a, T b) compare}) {
     _count();
 
-    if (compare != null) {
-      var orderedList = toList(growable: false, compare: compare);
+    if (config.sort && compare == null) {
+      var orderedList = (flush._s as SFlat<T>).toList(growable: false);
       return LinkedHashSet.of(orderedList);
     } else {
-      if (config.sort) {
-        var orderedList = toList(growable: false);
+      if (compare != null) {
+        var orderedList = toList(growable: false, compare: compare);
         return LinkedHashSet.of(orderedList);
       } else {
         return LinkedHashSet.of(_s);
@@ -903,8 +873,8 @@ abstract class S<T> implements Iterable<T> {
 
   /// Returns the flushed set (flushes it only once).
   /// It is an error to use the flushed set outside of the [S] class.
-  ListSet<T> get getFlushed {
-    _flushed ??= ListSet.of(this);
+  ListSet<T> getFlushed(ConfigSet config) {
+    _flushed ??= ListSet.of(this, sort: (config ?? ISet.defaultConfig).sort);
     return _flushed;
   }
 

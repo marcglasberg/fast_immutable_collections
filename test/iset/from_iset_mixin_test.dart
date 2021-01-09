@@ -567,15 +567,6 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("unlockSorted", () {
-    final Ints students = Ints([3, 2, 1, 3]);
-
-    expect(students.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3}));
-    expect(students.unlockSorted.toList(), [1, 2, 3]);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
   test("unlockView", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");

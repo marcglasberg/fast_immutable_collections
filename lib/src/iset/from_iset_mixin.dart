@@ -142,8 +142,6 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   Set<T> get unlock => iter.unlock;
 
-  Set<T> get unlockSorted => iter.unlockSorted;
-
   Set<T> get unlockView => iter.unlockView;
 
   bool containsAll(Iterable<T> other) => iter.containsAll(other);

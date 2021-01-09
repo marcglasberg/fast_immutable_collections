@@ -15,7 +15,7 @@ class SFlat<T> extends S<T> {
         _set = ListSet.unsafeView(set);
 
   @override
-  ListSet<T> get getFlushed => _set;
+  ListSet<T> getFlushed(ConfigSet config) => _set;
 
   @override
   Iterator<T> get iterator => _set.iterator;

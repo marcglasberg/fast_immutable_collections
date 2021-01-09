@@ -867,10 +867,9 @@ read the IList explanation first, before trying to understand ISet.
   set.
 
     ```
-    ISet<int> iset = {1, 2, 3}.lock;       // Safe
-    ISet<int> iset = {1, 2, 3}.lockUnsafe; // Only this way to lock a set is dangerous
-    Set<int> set = iset.unlock;            // Safe, mutable and unordered
-    Set<int> set = iset.unlockSorted;      // Safe, mutable and ordered 
+    ISet<int> iset = {1, 2, 3}.lock;       // Safe, immutable
+    ISet<int> iset = {1, 2, 3}.lockUnsafe; // Safe, immutable, but dangerous!
+    Set<int> set = iset.unlock;            // Safe, mutable, defensive copy
     Set<int> set = iset.unlockView;        // Safe, fast and immutable
     Set<int> set = iset.unlockLazy;        // Safe, fast and mutable
     ```
@@ -994,11 +993,8 @@ read the IList explanation first, before trying to understand IMap.
     Set<K> toKeySet();
     Set<V> toValueSet();
                                                 
-    /// Ordered (or not, according to the configuration)
-    Iterator<MapEntry<K, V>> get iterator;
-                 
-    /// Unordered, but fast
-    Iterator<MapEntry<K, V>> get fastIterator;
+    /// Sorted or not, according to the configuration
+    Iterator<MapEntry<K, V>> get iterator;                     
     ```
 
 - `IMap` has **all** the methods of `Map`, plus some other new and useful ones.

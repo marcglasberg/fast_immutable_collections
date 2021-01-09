@@ -937,14 +937,6 @@ void main() {
         "}");
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("unlockSorted", () {
-    final ISet<int> iset = {1, 2, 3}.lock.add(10).add(5);
-
-    expect(iset.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
-  });
-
   /////////////////////////////////////////////////////////////////////////////
 
   test("unlockView", () {
@@ -973,13 +965,9 @@ void main() {
     for (int value in iset) result.add(value);
     expect(result, [2, 5, 3, 7, 9, 6, 1]);
 
-    // You can also use a fast iterator which will NOT sort the result.
-    expect(iset.fastIterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
-
     // But you can configure the set to sort the iterator.
     iset = iset.withConfig(const ConfigSet(sort: true));
     expect(iset.config.sort, isTrue);
-    expect(iset.fastIterator.toList(), [2, 5, 3, 7, 9, 6, 1]);
     expect(iset.iterator.toList(), [1, 2, 3, 5, 6, 7, 9]);
     result = [];
     for (int value in iset) result.add(value);

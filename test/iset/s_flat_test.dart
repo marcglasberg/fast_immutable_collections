@@ -14,7 +14,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("getFlushed", () {
-    expect(SFlat({1, 2, 3}).getFlushed, allOf(isA<Set<int>>(), {1, 2, 3}));
+    expect(SFlat({1, 2, 3}).getFlushed(ISet.defaultConfig), allOf(isA<Set<int>>(), {1, 2, 3}));
   });
 
   /////////////////////////////////////////////////////////////////////////////

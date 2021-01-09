@@ -28,7 +28,7 @@ class ListSet<T> implements Set<T>, List<T> {
   ListSet.of(Iterable<T> items, {bool sort = false, int Function(T a, T b) compare}) {
     _set = HashSet();
     _list = List.of(items.where((item) => _set.add(item)), growable: false);
-    if (sort) _list.sort(compare);
+    if (sort) _list.sort(compare ?? compareObject);
   }
 
   ListSet._(this._set, this._list)
