@@ -64,7 +64,8 @@ void main() {
     expect(sAddAll[1], 2);
     expect(sAddAll[2], 3);
     expect(sAddAll[3], 4);
-    expect(() => sAddAll[4], throwsRangeError);
+    expect(sAddAll[4], 5);
+    expect(() => sAddAll[5], throwsRangeError);
     expect(() => sAddAll[100], throwsRangeError);
   });
 
