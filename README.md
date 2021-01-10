@@ -1868,7 +1868,7 @@ collections in this package keep performing as well as possible.
 
 # 13. Implementation details
 
-I haven't checked the source code of the native Dart collections, but I am assuming here they work similarly to their
+I haven't been able to check the source code of the native Dart collections, but I am assuming here they work similarly to their
 corresponding Java collections of the same name. A `HashMap` has no fixed order of elements. To add order to it, an
 internal linked list is used, thus creating a `LinkedHashMap`. In other words, a `LinkedHashMap` has both a `HashMap`
 and a linked-list, internally. In fact, even though we just iterate the map in ascending order, it has to maintain a
@@ -1883,11 +1883,18 @@ the map keys).
 
 With the goal of allowing the `ISet` to be both sorted and insertion-ordered (depending on its configuration), we have
 developed the `ListSet` class in this package, which has both a `HashMap` and an **array-list**, internally (not a
-linked-list). The `ListSet` is used internally by the `ISet`.
+linked-list). The `ListSet` is used internally by the `ISet`. An analogous data structure for maps was also created, 
+called `ListMap`.
 
-* Java LinkedHashSet: https://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashSet.html
-* Java LinkedHashMap implementation details: https://www.geeksforgeeks.org/linkedhashmap-class-java-examples/
-* Java LinkedHashSet implementation details: https://javaconceptoftheday.com/how-linkedhashset-works-internally-in-java/
+* [Java `LinkedHashSet`][java_linkedHashSet] 
+* [Java `LinkedHashMap` implementation details][java_linkedHashMap]
+* [Java `LinkedHashSet` implementation details][java_linkedHashSet_details]
+
+[java_linkedHashSet]: https://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashSet.html
+
+[java_linkedHashMap]: https://www.geeksforgeeks.org/linkedhashmap-class-java-examples/
+
+[java_linkedHashSet_details]: https://javaconceptoftheday.com/how-linkedhashset-works-internally-in-java/
 
 ***************************
 
