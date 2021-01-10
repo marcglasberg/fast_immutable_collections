@@ -824,6 +824,19 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("entry", () {
+    final IMap<String, int> imap =
+        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+
+    expect(imap.entry("a").key, "a");
+    expect(imap.entry("a").value, 1);
+
+    expect(imap.entry("z").key, "z");
+    expect(imap.entry("z").value, null);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("comparableEntries", () {
     final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));

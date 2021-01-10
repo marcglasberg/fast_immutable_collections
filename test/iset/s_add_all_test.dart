@@ -56,6 +56,20 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("[]", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    expect(() => sAddAll[-100], throwsRangeError);
+    expect(() => sAddAll[-1], throwsRangeError);
+    expect(sAddAll[0], 1);
+    expect(sAddAll[1], 2);
+    expect(sAddAll[2], 3);
+    expect(sAddAll[3], 4);
+    expect(() => sAddAll[4], throwsRangeError);
+    expect(() => sAddAll[100], throwsRangeError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("iterator (IteratorSAddAll)", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     final Iterator<int> iter = sAddAll.iterator;

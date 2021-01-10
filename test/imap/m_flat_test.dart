@@ -117,6 +117,8 @@ void main() {
 
     expect(original, {"a": 1, "b": 2, "c": 3, "d": 4});
     expect(mFlat.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
+
+    expect(() => MFlat.from(null), throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////

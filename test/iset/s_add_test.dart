@@ -71,6 +71,20 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("[]", () {
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    expect(() => sAdd[-100], throwsRangeError);
+    expect(() => sAdd[-1], throwsRangeError);
+    expect(sAdd[0], 1);
+    expect(sAdd[1], 2);
+    expect(sAdd[2], 3);
+    expect(sAdd[3], 4);
+    expect(() => sAdd[4], throwsRangeError);
+    expect(() => sAdd[100], throwsRangeError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("Ensuring Immutability", () {
     // 1) add
 
