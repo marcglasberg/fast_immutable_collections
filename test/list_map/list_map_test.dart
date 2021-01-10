@@ -4,6 +4,33 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 void main() {
   /////////////////////////////////////////////////////////////////////////////
 
+  test("empty", () {
+    final ListMap<String, int> map = ListMap.empty();
+    expect(map.isEmpty, isTrue);
+    expect(map.isNotEmpty, isFalse);
+    expect(map.length, 0);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("of", () {
+    // TODO: test
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("fromEntries", () {
+    // TODO: test
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("unsafe", () {
+    // TODO: test
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("[]=", () {
     // TODO: Complete specification
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10})["a"] = 100, throwsUnsupportedError);

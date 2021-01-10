@@ -11,16 +11,19 @@ class ListMapView<K, V> implements ListMap<K, V> {
 
   @override
   void operator []=(key, value) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void addAll(Map other) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void addEntries(Iterable<MapEntry> newEntries) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
@@ -79,11 +82,13 @@ class ListMapView<K, V> implements ListMap<K, V> {
 
   @override
   V update(key, Function(V value) update, {Function() ifAbsent}) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
-  void updateAll(Function(K key, V value) update) {
+  void updateAll(V Function(K key, V value) update) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
@@ -101,11 +106,13 @@ class ListMapView<K, V> implements ListMap<K, V> {
 
   @override
   void shuffle([Random random]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void sort([int Function(K a, K b) compare]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 }
