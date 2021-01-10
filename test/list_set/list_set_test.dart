@@ -14,9 +14,36 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("From iterable", () {
+    // 1) Regular usage
     var set = ListSet.of([1, 10, 50, -2, 8, 10, -2, 20]);
     expect(set, [1, 10, 50, -2, 8, 20]);
     expect(set.length, 6);
+
+    set = ListSet.of([1, 10, 50, -2, 8, 10, -2, 20], sort: true);
+    expect(set, [-2, 1, 8, 10, 20, 50]);
+    expect(set.length, 6);
+
+    set = ListSet.of([1, 10, 50, -2, 8, 10, -2, 20],
+        sort: true, compare: (int a, int b) => -a.compareTo(b));
+    expect(set, [50, 20, 10, 8, 1, -2]);
+    expect(set.length, 6);
+
+    // 2) Nulls and other edge cases
+    set = ListSet.of(null);
+    expect(set, []);
+    expect(set.length, 0);
+
+    set = ListSet.of([]);
+    expect(set, []);
+    expect(set.length, 0);
+
+    set = ListSet.of([2, 1, 3], sort: null);
+    expect(set, [2, 1, 3]);
+    expect(set.length, 3);
+
+    set = ListSet.of([2, 1, 3], compare: null);
+    expect(set, [2, 1, 3]);
+    expect(set.length, 3);
   });
 
   /////////////////////////////////////////////////////////////////////////////
