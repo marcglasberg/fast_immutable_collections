@@ -67,9 +67,10 @@ void main() {
   test("[]=", () {
     // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view[1] = 100;
-    expect(view[1], 100);
-  }, skip: true);
+//    view[1] = 100;
+//    expect(view[1], 100);
+    expect(() => view[1] = 100, throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -82,17 +83,19 @@ void main() {
   test("first", () {
     // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.first = 100;
-    expect(view.first, 100);
-  }, skip: true);
+//    view.first = 100;
+//    expect(view.first, 100);
+    expect(() => view.first = 100, throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("indexWhere", () {
     // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    expect(view.indexWhere((int value) => value == 10), 1);
-  }, skip: true);
+//    expect(view.indexWhere((int value) => value == 10), 1);
+    expect(() => view.indexWhere((int value) => value == 10), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -112,25 +115,28 @@ void main() {
   test("last", () {
     // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.last = 100;
-    expect(view.last, 100);
-  }, skip: true);
+//    view.last = 100;
+//    expect(view.last, 100);
+    expect(() => view.last = 100, throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("lastIndexOf", () {
     // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    expect(view.lastIndexOf(-2), 3);
-  }, skip: true);
+//    expect(view.lastIndexOf(-2), 3);
+    expect(() => view.lastIndexOf(-2), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("lastIndexWhere", () {
     // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    expect(view.lastIndexWhere((int value) => value == -2), 3);
-  }, skip: true);
+//    expect(view.lastIndexWhere((int value) => value == -2), 3);
+    expect(() => view.lastIndexWhere((int value) => value == -2), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -160,66 +166,75 @@ void main() {
 
   test("replaceRange", () {
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.replaceRange(1, 3, [100, 1000]);
-    expect(view, [1, 100, 1000, -2, 8, 20]);
-  }, skip: true);
+//    view.replaceRange(1, 3, [100, 1000]);
+//    expect(view, [1, 100, 1000, -2, 8, 20]);
+    expect(() => view.replaceRange(1, 3, [100, 1000]), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("reversed", () {
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    expect(view.reversed, allOf(isA<Iterable<int>>(), [20, 8, -2, 50, 10, 1]));
-  }, skip: true);
+//    expect(view.reversed, allOf(isA<Iterable<int>>(), [20, 8, -2, 50, 10, 1]));
+    expect(() => view.reversed, throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("reversedView", () {
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    expect(view.reversedView, allOf(isA<ListSetView<int>>(), [20, 8, -2, 50, 10, 1]));
-  }, skip: true);
+//    expect(view.reversedView, allOf(isA<ListSetView<int>>(), [20, 8, -2, 50, 10, 1]));
+    expect(() => view.reversedView, throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("setAll", () {
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.setAll(1, [100, 1000]);
-    expect(view, [1, 100, 1000, 10, 50, -2, 8, 20]);
-  }, skip: true);
+//    view.setAll(1, [100, 1000]);
+//    expect(view, [1, 100, 1000, 10, 50, -2, 8, 20]);
+    expect(() => view.setAll(1, [100, 1000]), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("setRange", () {
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.setRange(1, 5, [100, 1000]);
-    expect(view, [1, 100, 1000, -2, 8, 20]);
-  }, skip: true);
+//    view.setRange(1, 5, [100, 1000]);
+//    expect(view, [1, 100, 1000, -2, 8, 20]);
+    expect(() => view.setRange(1, 5, [100, 1000]), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("shuffle", () {
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.shuffle(Random(0));
-    expect(view, [1, 10, 50, -2, 8, 20]);
-  }, skip: true);
+//    view.shuffle(Random(0));
+//    expect(view, [1, 10, 50, -2, 8, 20]);
+    expect(() => view.shuffle(Random(0)), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("sort", () {
     ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.sort();
-    expect(view, [-2, 1, 8, 10, 20, 50]);
+//    view.sort();
+//    expect(view, [-2, 1, 8, 10, 20, 50]);
+    expect(() => view.sort(), throwsUnsupportedError);
 
     view = ListSetView({1, 10, 50, -2, 8, 20});
-    view.sort((int a, int b) => -a.compareTo(b));
-    expect(view, [50, 20, 10, 8, 1, -2]);
-  }, skip: true);
+//    view.sort((int a, int b) => -a.compareTo(b));
+//    expect(view, [50, 20, 10, 8, 1, -2]);
+    expect(() => view.sort(), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("sublist", () {
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-    expect(view.sublist(1, 3), allOf(isA<List<int>>(), [10, 50]));
-  }, skip: true);
+//    expect(view.sublist(1, 3), allOf(isA<List<int>>(), [10, 50]));
+    expect(() => view.sublist(1, 3), throwsUnsupportedError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 }
