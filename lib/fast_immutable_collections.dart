@@ -40,4 +40,6 @@ export "src/iset/from_iterable_iset_mixin.dart";
 
 // ListSet and ListMap:
 export "src/list_set/list_set.dart";
+export "src/list_set/list_set_view.dart";
 export "src/list_map/list_map.dart";
+export "src/list_map/list_map_view.dart";
