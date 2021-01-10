@@ -55,22 +55,26 @@ class ListMap<K, V> implements Map<K, V> {
 
   @override
   void operator []=(K key, V value) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void addAll(Map<K, V> other) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void addEntries(Iterable<MapEntry<K, V>> newEntries) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   ListMap<RK, RV> cast<RK, RV>() => ListMap<RK, RV>._(_map.cast<RK, RV>(), _list.cast<RK>());
 
+  // TODO: Implement
   @override
   void clear() => throw UnsupportedError("Can't clear a ListMap.");
 
@@ -106,31 +110,37 @@ class ListMap<K, V> implements Map<K, V> {
   @override
   Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(K key, V value) f) => _map.map(f);
 
+  // TODO: Implement
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
     throw UnsupportedError("Can't putIfAbsent into a ListMap.");
   }
 
+  // TODO: Implement
   @override
   V remove(Object key) {
     throw UnsupportedError("Can't remove from a ListMap.");
   }
 
+  // TODO: Implement
   @override
   void removeWhere(bool Function(K key, V value) predicate) {
     throw UnsupportedError("Can't removeWhere from a ListMap.");
   }
 
+  // TODO: Implement
   @override
   V update(K key, V Function(V value) update, {V Function() ifAbsent}) {
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
+  // TODO: Implement
   @override
   void updateAll(V Function(K key, V value) update) {
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
+  // TODO: Implement
   /// Shuffles the keys of this map randomly.
   void shuffle([Random random]) {
     _list.shuffle(random);

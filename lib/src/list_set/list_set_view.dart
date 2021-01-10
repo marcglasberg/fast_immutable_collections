@@ -10,12 +10,12 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   bool add(T value) {
-    throw UnsupportedError("Can't add to a ListSet.");
+    throw UnsupportedError("Can't add to a ListSetView.");
   }
 
   @override
   void addAll(Iterable<T> elements) {
-    throw UnsupportedError("Can't add to a ListSet.");
+    throw UnsupportedError("Can't add to a ListSetView.");
   }
 
   @override
@@ -23,12 +23,12 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   ListSet<E> cast<E>() {
-    throw UnsupportedError("Can't cast a ListSet.");
+    throw UnsupportedError("Can't cast a ListSetView.");
   }
 
   @override
   void clear() {
-    throw UnsupportedError("Can't clear a ListSet.");
+    throw UnsupportedError("Can't clear a ListSetView.");
   }
 
   @override
@@ -102,27 +102,27 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   bool remove(Object value) {
-    throw UnsupportedError("Can't remove from a ListSet.");
+    throw UnsupportedError("Can't remove from a ListSetView.");
   }
 
   @override
   void removeAll(Iterable<Object> elements) {
-    throw UnsupportedError("Can't removeAll from a ListSet.");
+    throw UnsupportedError("Can't removeAll from a ListSetView.");
   }
 
   @override
   void removeWhere(bool Function(T element) test) {
-    throw UnsupportedError("Can't removeWhere from a ListSet.");
+    throw UnsupportedError("Can't removeWhere from a ListSetView.");
   }
 
   @override
   void retainAll(Iterable<Object> elements) {
-    throw UnsupportedError("Can't retainAll from a ListSet.");
+    throw UnsupportedError("Can't retainAll from a ListSetView.");
   }
 
   @override
   void retainWhere(bool Function(T element) test) {
-    throw UnsupportedError("Can't retainWhere from a ListSet.");
+    throw UnsupportedError("Can't retainWhere from a ListSetView.");
   }
 
   @override
@@ -167,6 +167,7 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   void operator []=(int index, T value) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
@@ -180,6 +181,7 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   set first(T value) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
@@ -191,91 +193,104 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   int indexWhere(bool Function(T element) test, [int start = 0]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void insert(int index, T element) {
+    // TODO: Implement
     throw UnsupportedError("Can't insert in a ListSet.");
   }
 
   @override
   void insertAll(int index, Iterable<T> iterable) {
-    throw UnsupportedError("Can't insertAll in a ListSet.");
+    throw UnsupportedError("Can't insertAll in a ListSetView.");
   }
 
   @override
   set last(T value) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   int lastIndexOf(T element, [int start]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   int lastIndexWhere(bool Function(T element) test, [int start]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   set length(int newLength) {
-    throw UnsupportedError("Can't set the length of a ListSet.");
+    throw UnsupportedError("Can't set the length of a ListSetView.");
   }
 
   @override
   T removeAt(int index) {
-    throw UnsupportedError("Can't removeAt from a ListSet.");
+    throw UnsupportedError("Can't removeAt from a ListSetView.");
   }
 
   @override
   T removeLast() {
-    throw UnsupportedError("Can't removeLast from a ListSet.");
+    throw UnsupportedError("Can't removeLast from a ListSetView.");
   }
 
   @override
   void removeRange(int start, int end) {
-    throw UnsupportedError("Can't removeRange from a ListSet.");
+    throw UnsupportedError("Can't removeRange from a ListSetView.");
   }
 
   @override
   void replaceRange(int start, int end, Iterable<T> replacement) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   Iterable<T> get reversed {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   ListSet<T> get reversedView {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void setAll(int index, Iterable<T> iterable) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void setRange(int start, int end, Iterable<T> iterable, [int skipCount = 0]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void shuffle([Random random]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void sort([int Function(T a, T b) compare]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   List<T> sublist(int start, [int end]) {
+    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 }
