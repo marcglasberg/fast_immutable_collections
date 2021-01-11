@@ -23,6 +23,18 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("fromIterable", () {
+    // 1) Null checks
+    expect(() => ISet.fromIterable([1, 2, 3], mapper: null), throwsAssertionError);
+
+    // 2) Regular usage
+    final ISet<int> iset =
+        ISet.fromIterable<int, String>(["a", "b", "c"], mapper: (String char) => char.codeUnits);
+    expect(iset, {97, 98, 99});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("isEmpty | isNotEmpty", () {
     expect(ISet().isEmpty, isTrue);
     expect(ISet({}).isEmpty, isTrue);
