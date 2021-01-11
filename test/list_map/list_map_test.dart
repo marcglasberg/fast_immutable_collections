@@ -69,9 +69,6 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("fromEntries", () {
-    // TODO: Marcelo, se vc substituir `HashMap` por `LinkedHashMap`
-    // na implementação, funcionaria...
-
     // 1) Simple
     ListMap<String, int> listMap = ListMap.fromEntries([
       MapEntry<String, int>("a", 1),
@@ -140,7 +137,7 @@ void main() {
     expect(listMap.entryAt(4).value, 2);
     expect(listMap.entryAt(5).key, "a");
     expect(listMap.entryAt(5).value, 1);
-  }, skip: true);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -165,7 +162,7 @@ void main() {
     expect(() => listMap.entryAt(6).key, throwsRangeError);
 
     initialMap.addAll({"z": 100});
-
+    listMap = ListMap.unsafe(initialMap);
     expect(listMap.entryAt(6).key, "z");
     expect(listMap.entryAt(6).value, 100);
 
@@ -189,7 +186,7 @@ void main() {
     expect(() => listMap.entryAt(6).key, throwsRangeError);
 
     initialMap.addAll({"z": 100});
-
+    listMap = ListMap.unsafe(initialMap);
     expect(listMap.entryAt(6).key, "z");
     expect(listMap.entryAt(6).value, 100);
 
@@ -214,10 +211,10 @@ void main() {
     expect(() => listMap.entryAt(6).key, throwsRangeError);
 
     initialMap.addAll({"z": 100});
-
+    listMap = ListMap.unsafe(initialMap);
     expect(listMap.entryAt(6).key, "z");
     expect(listMap.entryAt(6).value, 100);
-  }, skip: true);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 

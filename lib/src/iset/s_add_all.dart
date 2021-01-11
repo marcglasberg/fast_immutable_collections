@@ -80,7 +80,10 @@ class SAddAll<T> extends S<T> {
   T get single => _s.isNotEmpty ? _s.single : _setOrS.single;
 
   @override
-  T operator [](int index) => (index < _s.length) ? _s[index] : _setOrS.elementAt(index);
+  T operator [](int index) {
+    var sLength = _s.length;
+    return (index < sLength) ? _s[index] : _setOrS.elementAt(index - sLength);
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////

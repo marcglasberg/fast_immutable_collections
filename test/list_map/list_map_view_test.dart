@@ -1,6 +1,5 @@
 import "dart:math";
-
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
@@ -24,15 +23,14 @@ void main() {
     expect(listMapView.entryAt(5).key, "f");
     expect(listMapView.entryAt(5).value, 6);
 
-    // 2) Nulls and other edge cases
-    listMapView = ListMapView(null);
-    expect(listMapView, {});
-    expect(listMapView.length, 0);
-
+    // 2) Empty
     listMapView = ListMapView({});
     expect(listMapView, {});
     expect(listMapView.length, 0);
-  }, skip: true);
+
+    // 3) Null
+    expect(() => ListMapView(null), throwsAssertionError);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 

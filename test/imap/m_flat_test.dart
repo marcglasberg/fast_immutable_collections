@@ -116,7 +116,7 @@ void main() {
 
     final MFlat<String, int> mFlat = MFlat.from(mFlat1);
 
-    expect(mFlat1.keys, ["a", "c", "b"]);
+    expect(mFlat.keys, ["a", "c", "b"]);
 
     // 2) Nulls and other edge cases
     expect(() => MFlat.from(null), throwsAssertionError);

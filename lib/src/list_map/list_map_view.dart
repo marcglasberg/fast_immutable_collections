@@ -4,7 +4,7 @@ import "list_map.dart";
 class ListMapView<K, V> implements ListMap<K, V> {
   final Map<K, V> _map;
 
-  ListMapView(this._map);
+  ListMapView(this._map) : assert(_map != null);
 
   @override
   V operator [](Object key) => _map[key];

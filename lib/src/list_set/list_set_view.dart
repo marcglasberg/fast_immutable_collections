@@ -6,7 +6,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 class ListSetView<T> implements ListSet<T> {
   final Set<T> _set;
 
-  ListSetView(this._set);
+  ListSetView(this._set) : assert(_set != null);
 
   @override
   bool add(T value) {
@@ -167,7 +167,6 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   void operator []=(int index, T value) {
-    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
@@ -181,7 +180,6 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   set first(T value) {
-    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
@@ -193,13 +191,11 @@ class ListSetView<T> implements ListSet<T> {
 
   @override
   int indexWhere(bool Function(T element) test, [int start = 0]) {
-    // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
   void insert(int index, T element) {
-    // TODO: Implement
     throw UnsupportedError("Can't insert in a ListSet.");
   }
 

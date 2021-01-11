@@ -1,6 +1,5 @@
 import "dart:math";
-
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
@@ -13,9 +12,7 @@ void main() {
     expect(set.length, 6);
 
     // 2) Nulls and other edge cases
-    set = ListSetView(null);
-    expect(set, []);
-    expect(set.length, 0);
+    expect(() => ListSetView(null), throwsAssertionError);
 
     set = ListSetView({});
     expect(set, []);
@@ -28,7 +25,7 @@ void main() {
     set = ListSetView({2, 1, 3});
     expect(set, [2, 1, 3]);
     expect(set.length, 3);
-  }, skip: true);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -293,11 +290,10 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("[]=", () {
-    // TODO: Complete specification
-    // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-//    view[1] = 100;
-//    expect(view[1], 100);
+    // TODO: This is not yet supported, but will be in the future.
+    //    view[1] = 100;
+    //    expect(view[1], 100);
     expect(() => view[1] = 100, throwsUnsupportedError);
   });
 
@@ -326,11 +322,11 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("first setter", () {
-    // TODO: Complete specification
-    // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-//    view.first = 100;
-//    expect(view.first, 100);
+
+    // TODO: This is not yet supported, but will be in the future.
+    //    view.first = 100;
+    //    expect(view.first, 100);
     expect(() => view.first = 100, throwsUnsupportedError);
   });
 
@@ -382,19 +378,17 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
-    expect(ListSetView(null).isEmpty, isTrue);
     expect(ListSetView({}).isEmpty, isTrue);
     expect(ListSetView<String>({}).isEmpty, isTrue);
     expect(ListSetView({1}).isEmpty, isFalse);
     expect(ListSetView({1, 2, 3}).isEmpty, isFalse);
     expect(<int>{}.lock.isEmpty, isTrue);
 
-    expect(ListSetView(null).isNotEmpty, isFalse);
     expect(ListSetView({}).isNotEmpty, isFalse);
     expect(ListSetView<String>({}).isNotEmpty, isFalse);
     expect(ListSetView({1, 2, 3}).isNotEmpty, isTrue);
     expect(<int>{}.lock.isNotEmpty, isFalse);
-  }, skip: true);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -435,11 +429,11 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("first setter", () {
-    // TODO: Complete specification
-    // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-//    view.first = 100;
-//    expect(view.first, 100);
+
+    // TODO: This is not yet supported, but will be in the future.
+    //    view.first = 100;
+    //    expect(view.first, 100);
     expect(() => view.last = 100, throwsUnsupportedError);
   });
 
@@ -454,16 +448,17 @@ void main() {
     expect(listSetView.indexOf("fa"), -1);
 
     // 2) Argument error
-    expect(() => listSetView.indexOf("re", -1), throwsArgumentError);
-    expect(() => listSetView.indexOf("re", 4), throwsArgumentError);
-  }, skip: true);
+    expect(listSetView.indexOf("re", -1), 1);
+    expect(listSetView.indexOf("re", 4), -1);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("indexWhere", () {
-    // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-//    expect(view.indexWhere((int value) => value == 10), 1);
+
+    // TODO: This is not yet supported, but will be in the future.
+    // expect(view.indexWhere((int value) => value == 10), 1);
     expect(() => view.indexWhere((int value) => value == 10), throwsUnsupportedError);
   });
 
@@ -483,30 +478,31 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("last", () {
-    // TODO: Complete specification
-    // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-//    view.last = 100;
-//    expect(view.last, 100);
+
+    // TODO: This is not yet supported, but will be in the future.
+    //    view.last = 100;
+    //    expect(view.last, 100);
     expect(() => view.last = 100, throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("lastIndexOf", () {
-    // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-//    expect(view.lastIndexOf(-2), 3);
+
+    // TODO: This is not yet supported, but will be in the future.
+    //    expect(view.lastIndexOf(-2), 3);
     expect(() => view.lastIndexOf(-2), throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("lastIndexWhere", () {
-    // TODO: Complete specification
-    // This is not yet supported, but will be in the future.
     final ListSetView<int> view = ListSetView({1, 10, 50, -2, 8, 20});
-//    expect(view.lastIndexWhere((int value) => value == -2), 3);
+
+    // TODO: This is not yet supported, but will be in the future.
+    //    expect(view.lastIndexWhere((int value) => value == -2), 3);
     expect(() => view.lastIndexWhere((int value) => value == -2), throwsUnsupportedError);
   });
 

@@ -515,7 +515,7 @@ void main() {
 
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
 
-    // 2) addAll to the same keys overwrites them
+    // 2) addAll to the same keys overwrites them.
     imap = IMap.empty<String, int>().withDeepEquals;
     IMap<String, int> newMap = imap.addAll({"a": 1}.lock);
     newMap = newMap.addAll({"b": 2}.lock);

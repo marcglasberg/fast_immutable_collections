@@ -33,12 +33,19 @@ class ListMap<K, V> implements Map<K, V> {
     if (sort) _list.sort(compare ?? compareObject);
   }
 
-  ListMap.fromEntries(Iterable<MapEntry<K, V>> entries,
-      {bool sort = false, int Function(K a, K b) compare}) {
-    // TODO: Marcelo, parece que, com essa implementação, deveria ser LinkedHashMap
-    _map = HashMap();
-    _map.addEntries(entries);
-    _list = List.of(_map.keys, growable: false);
+  /// Creates a [ListMap] from [entries].
+  /// If [entries] contains the same keys multiple times, the last occurrence
+  /// overwrites the previous value.
+  ///
+  ListMap.fromEntries(
+    Iterable<MapEntry<K, V>> entries, {
+    bool sort = false,
+    int Function(K a, K b) compare,
+  }) {
+    Map<K, V> map = LinkedHashMap<K, V>.fromEntries(entries);
+    _map = HashMap.of(map);
+    _list = map.entries.map((entry) => entry.key).toList(growable: false);
+
     if (sort) _list.sort(compare ?? compareObject);
   }
 

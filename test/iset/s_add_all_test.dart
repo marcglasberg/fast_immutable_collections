@@ -67,7 +67,7 @@ void main() {
     expect(sAddAll[4], 5);
     expect(() => sAddAll[5], throwsRangeError);
     expect(() => sAddAll[100], throwsRangeError);
-  }, skip: true);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 

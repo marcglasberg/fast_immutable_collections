@@ -33,7 +33,9 @@ class SAdd<T> extends S<T> {
   }
 
   @override
-  Set<T> difference(covariant Set<T> other) => _s.difference(other)..remove(_item);
+  Set<T> difference(covariant Set<T> other) =>
+      _s.difference(other)
+        ..remove(_item);
 
   @override
   Set<T> intersection(covariant Set<T> other) {
@@ -44,7 +46,9 @@ class SAdd<T> extends S<T> {
   }
 
   @override
-  Set<T> union(covariant Set<T> other) => _s.union({_item})..addAll(other);
+  Set<T> union(covariant Set<T> other) =>
+      _s.union({_item})
+        ..addAll(other);
 
   @override
   int get length => _s.length + 1;
@@ -62,7 +66,11 @@ class SAdd<T> extends S<T> {
   T get single => _s.isEmpty ? _item : throw StateError("Too many elements");
 
   @override
-  T operator [](int index) => (index < _s.length) ? _s[index] : _item;
+  T operator [](int index) {
+    var sLength = _s.length;
+    if (index < 0 || index >= sLength + 1) throw RangeError.range(index, 0, sLength + 1, "index");
+    return (index < sLength) ? _s[index] : _item;
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////

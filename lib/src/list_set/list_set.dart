@@ -29,7 +29,12 @@ class ListSet<T> implements Set<T>, List<T> {
   /// If [sort] is true, it will sort the items. Otherwise, it will keep the [items] order.
   /// If [compare] is provided, it will use it to sort the items.
   ///
-  ListSet.of(Iterable<T> items, {bool sort = false, int Function(T a, T b) compare}) {
+  ListSet.of(
+    Iterable<T> items, {
+    bool sort = false,
+    int Function(T a, T b) compare,
+  })  : assert(items != null),
+        assert(sort != null) {
     _set = HashSet();
     _list = List.of(items.where((item) => _set.add(item)), growable: false);
     if (sort) _list.sort(compare ?? compareObject);

@@ -1,6 +1,5 @@
 import "dart:math";
-
-import "package:test/test.dart";
+import "package:flutter_test/flutter_test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
@@ -31,22 +30,18 @@ void main() {
     expect(set.length, 6);
 
     // 2) Nulls and other edge cases
-    set = ListSet.of(null);
-    expect(set, []);
-    expect(set.length, 0);
+    expect(() => ListSet.of(null), throwsAssertionError);
 
     set = ListSet.of([]);
     expect(set, []);
     expect(set.length, 0);
 
-    set = ListSet.of([2, 1, 3], sort: null);
-    expect(set, [2, 1, 3]);
-    expect(set.length, 3);
+    expect(() => ListSet.of([2, 1, 3], sort: null), throwsAssertionError);
 
     set = ListSet.of([2, 1, 3], compare: null);
     expect(set, [2, 1, 3]);
     expect(set.length, 3);
-  }, skip: true);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -191,11 +186,10 @@ void main() {
     expect(listSet.indexOf("re", 2), -1);
     expect(listSet.indexOf("fa"), -1);
 
-    // 2) Argument error
-    // TODO: Marcelo, ao que parece, o indexOf do IList e List são ligeiramente diferentes?
-    expect(() => listSet.indexOf("re", -1), throwsArgumentError);
-    expect(() => listSet.indexOf("re", 4), throwsArgumentError);
-  }, skip: true);
+    // 2) Start is out of range
+    expect(listSet.indexOf("re", -1), 1);
+    expect(listSet.indexOf("re", 4), -1);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -206,10 +200,10 @@ void main() {
     expect(listSet.lastIndexOf("re"), 1);
     expect(listSet.lastIndexOf("fa"), -1);
 
-    // 2) Start cannot be smaller than zero
-    // TODO: Marcelo, ao que parece, o indexOf do IList e List são ligeiramente diferentes?
-    expect(() => listSet.lastIndexOf("do", -1), throwsArgumentError);
-  }, skip: true);
+    // 2) Start is out of range
+    expect(listSet.lastIndexOf("do", -1), -1);
+    expect(listSet.lastIndexOf("do", 4), 0);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -220,9 +214,12 @@ void main() {
     expect(listSet.lastIndexWhere((String note) => note.startsWith("r"), 2), 1);
     expect(listSet.lastIndexWhere((String note) => note.startsWith("k")), -1);
 
-    // 2) Start cannot be smaller than zero
-    expect(() => listSet.lastIndexWhere((String element) => false, -1), throwsArgumentError);
-  }, skip: true);
+    // 2) Start is out of range
+    expect(listSet.lastIndexWhere((String note) => false, -1), -1);
+    expect(listSet.lastIndexWhere((String note) => false, 4), -1);
+    expect(listSet.lastIndexWhere((String note) => note.startsWith("d"), -1), -1);
+    expect(listSet.lastIndexWhere((String note) => note.startsWith("d"), 4), 0);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
