@@ -890,6 +890,22 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("entry", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+
+    expect(iMapOfSets.entry("a").key, "a");
+    expect(iMapOfSets.entry("a").value, {1, 2});
+
+    expect(iMapOfSets.entry("b").key, "b");
+    expect(iMapOfSets.entry("b").value, {3});
+
+    expect(iMapOfSets.entry("z").key, "z");
+    expect(iMapOfSets.entry("z").value, null);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("keys", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);

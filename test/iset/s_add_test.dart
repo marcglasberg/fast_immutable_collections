@@ -81,7 +81,7 @@ void main() {
     expect(sAdd[3], 4);
     expect(() => sAdd[4], throwsRangeError);
     expect(() => sAdd[100], throwsRangeError);
-  });
+  }, skip: true);
 
   /////////////////////////////////////////////////////////////////////////////
 
