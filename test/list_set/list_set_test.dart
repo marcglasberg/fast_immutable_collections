@@ -99,6 +99,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("intersection", () {
+    final ListSet<int> iset = ListSet.of({1, 2, 3, 4});
+    expect(iset.intersection({1, 2, 5}), {1, 2});
+    expect(iset.intersection({10, 20, 50}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("difference", () {
     final ListSet<int> listSet = ListSet.of([1, 2, 3, 4]);
     expect(listSet.difference({1, 2, 5}), {3, 4});

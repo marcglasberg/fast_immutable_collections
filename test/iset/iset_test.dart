@@ -854,7 +854,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("toList", () {
-    // 1) Regular usage (no insertion order)
+    // 1) Regular usage
     ISet<int> iset = {1, 10, 11}.lock.add(4).addAll({5, 6});
     expect(iset.toList()..add(7), [1, 10, 11, 4, 5, 6, 7]);
     expect(iset, [1, 10, 11, 4, 5, 6]);
