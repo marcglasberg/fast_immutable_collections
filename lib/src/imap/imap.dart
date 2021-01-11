@@ -386,7 +386,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = IList<MapEntry<K, V>>.withConfig(entries, config);
-    if (compare != null && this.config.sortKeys) result = result.sort(compare);
+    if (compare != null || this.config.sortKeys) result = result.sort(compare);
     return result;
   }
 
@@ -403,7 +403,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = IList.withConfig(keys, config);
-    if (compare != null && this.config.sortKeys) result = result.sort(compare);
+    if (compare != null || this.config.sortKeys) result = result.sort(compare);
     return result;
   }
 
@@ -454,10 +454,10 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  List<MapEntry<K, V>> toEntryList([int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare]) {
+  List<MapEntry<K, V>> toEntryList({int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare}) {
     _count();
     var result = List<MapEntry<K, V>>.of(entries);
-    if (compare != null && config.sortKeys) result.sort(compare ?? compareObject);
+    if (compare != null || config.sortKeys) result.sort(compare ?? compareObject);
     return result;
   }
 
@@ -466,10 +466,10 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  List<K> toKeyList([int Function(K a, K b) compare]) {
+  List<K> toKeyList({int Function(K a, K b) compare}) {
     _count();
     var result = List.of(keys);
-    if (compare != null && config.sortKeys) result.sort(compare);
+    if (compare != null || config.sortKeys) result.sort(compare);
     return result;
   }
 
@@ -478,7 +478,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The list will be sorted if the map's [sortValues] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  List<V> toValueList([int Function(V a, V b) compare]) {
+  List<V> toValueList({int Function(V a, V b) compare}) {
     _count();
     var result = List.of(values);
     if (compare != null || config.sortValues) result.sort(compare);
@@ -488,13 +488,13 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a [Set] of the map entries.
   /// The set will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
-  Set<MapEntry<K, V>> toEntrySet([int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare]) {
+  Set<MapEntry<K, V>> toEntrySet({int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare}) {
     _count();
 
     if (compare == null) {
       return Set<MapEntry<K, V>>.of(entries);
     } else {
-      return toEntryList(compare).toSet();
+      return toEntryList(compare: compare).toSet();
     }
   }
 
@@ -502,13 +502,13 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The set will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  Set<K> toKeySet([int Function(K a, K b) compare]) {
+  Set<K> toKeySet({int Function(K a, K b) compare}) {
     _count();
 
     if (compare == null) {
       return Set<K>.of(keys);
     } else {
-      return toKeyList(compare).toSet();
+      return toKeyList(compare: compare).toSet();
     }
   }
 
@@ -516,9 +516,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The set will be sorted if the map's [sortValues] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  Set<V> toValueSet([int Function(V a, V b) compare]) {
+  Set<V> toValueSet({int Function(V a, V b) compare}) {
     _count();
-    return toValueList(compare).toSet();
+    return toValueList(compare: compare).toSet();
   }
 
   /// Returns a new `Iterator` that allows iterating the entries of the [IMap].

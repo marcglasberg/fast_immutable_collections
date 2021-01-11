@@ -24,8 +24,8 @@ void main() {
 
   test("length, first, last, single", () {
     expect(SExample({1, 2, 3}).length, 3);
-    expect(SExample({3}).add(1).first, 3);
-    expect(SExample({3}).add(1).last, 1);
+    expect(SExample({1, 3}).first, 1);
+    expect(SExample({1, 3}).last, 3);
     expect(SExample({3}).single, 3);
     expect(() => SExample({3}).add(1).single, throwsStateError);
   });

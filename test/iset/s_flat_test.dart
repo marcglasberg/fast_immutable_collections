@@ -232,6 +232,8 @@ void main() {
 
     expect(original, {1, 2, 3, 4});
     expect(sFlat, {1, 2, 3, 4});
+
+    expect(() => SFlat.unsafe(null), throwsAssertionError);
   });
 
   /////////////////////////////////////////////////////////////////////////////

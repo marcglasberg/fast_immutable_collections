@@ -74,6 +74,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("iter", () {
+    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
+    expect(lAddAll.iter, allOf(isA<Iterable<int>>(), [1, 2, 3, 4, 5]));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("iterator", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     final Iterator<int> iter = lAddAll.iterator;

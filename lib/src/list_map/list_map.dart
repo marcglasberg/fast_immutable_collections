@@ -19,6 +19,7 @@ class ListMap<K, V> implements Map<K, V> {
 
   ListMap.empty() {
     _map = HashMap();
+    // TODO: Marcelo, List será depreciado, a sugestão é utilizar List.filled
     _list = List(0);
   }
 
@@ -34,6 +35,7 @@ class ListMap<K, V> implements Map<K, V> {
 
   ListMap.fromEntries(Iterable<MapEntry<K, V>> entries,
       {bool sort = false, int Function(K a, K b) compare}) {
+    // TODO: Marcelo, parece que, com essa implementação, deveria ser LinkedHashMap
     _map = HashMap();
     _map.addEntries(entries);
     _list = List.of(_map.keys, growable: false);

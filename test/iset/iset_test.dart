@@ -23,6 +23,18 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("fromIterable", () {
+    // 1) Null checks
+    expect(() => ISet.fromIterable([1, 2, 3], mapper: null), throwsAssertionError);
+
+    // 2) Regular usage
+    final ISet<int> iset =
+        ISet.fromIterable<int, String>(["a", "b", "c"], mapper: (String char) => char.codeUnits);
+    expect(iset, {97, 98, 99});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("isEmpty | isNotEmpty", () {
     expect(ISet().isEmpty, isTrue);
     expect(ISet({}).isEmpty, isTrue);
@@ -842,7 +854,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("toList", () {
-    // 1) Regular usage (no insertion order)
+    // 1) Regular usage
     ISet<int> iset = {1, 10, 11}.lock.add(4).addAll({5, 6});
     expect(iset.toList()..add(7), [1, 10, 11, 4, 5, 6, 7]);
     expect(iset, [1, 10, 11, 4, 5, 6]);

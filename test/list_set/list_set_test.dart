@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -65,6 +67,173 @@ void main() {
 
   test("clear", () {
     expect(() => ListSet.of([1, 10, 50, -2, 8, 10, -2, 20]).clear(), throwsUnsupportedError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("containsAll", () {
+    final ListSet<int> listSet = ListSet.of([4, 2, 3, 1]);
+    expect(listSet.containsAll([2, 2, 3]), isTrue);
+    expect(listSet.containsAll({1, 2, 3, 4}), isTrue);
+    expect(listSet.containsAll({1, 2, 3, 4}.lock), isTrue);
+    expect(listSet.containsAll({10, 20, 30, 40}), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("difference", () {
+    final ListSet<int> listSet = ListSet.of([4, 2, 3, 1]);
+    expect(listSet.difference({1, 2, 5}), {3, 4});
+    expect(listSet.difference({1, 2, 3, 4}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("elementAt", () {
+    final ListSet<int> listSet = ListSet.of([4, 2, 3, 1]);
+    expect(listSet.elementAt(0), 4);
+    expect(listSet.elementAt(1), 2);
+    expect(listSet.elementAt(2), 3);
+    expect(listSet.elementAt(3), 1);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("intersection", () {
+    final ListSet<int> iset = ListSet.of({1, 2, 3, 4});
+    expect(iset.intersection({1, 2, 5}), {1, 2});
+    expect(iset.intersection({10, 20, 50}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("difference", () {
+    final ListSet<int> listSet = ListSet.of([1, 2, 3, 4]);
+    expect(listSet.difference({1, 2, 5}), {3, 4});
+    expect(listSet.difference({1, 2, 3, 4}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("lookup", () {
+    final ListSet<int> listSet = ListSet.of([1, 2, 3, 4]);
+    expect(listSet.lookup(1), 1);
+    expect(listSet.lookup(10), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("toList", () {
+    final ListSet<int> listSet = ListSet.of([1, 10, 11]);
+    expect(listSet.toList(), [1, 10, 11]);
+    expect(listSet, [1, 10, 11]);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("union", () {
+    final ListSet<int> listSet = ListSet.of({1, 2, 3, 4});
+    expect(listSet.union({1}), {1, 2, 3, 4});
+    expect(listSet.union({1, 2, 5}), {1, 2, 3, 4, 5});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("+", () {
+    // 1) Simple example
+    expect(ListSet.of({1, 2, 3}) + [1, 2, 4], {1, 2, 3, 4});
+
+    // 2) Regular Usage
+    expect(ListSet.of(<int>{}) + [1, 2], {1, 2});
+    expect(ListSet.of(<int>{null}) + ListSet.of({1, 2}), {null, 1, 2});
+    expect(ListSet.of(<int>{1}) + ListSet.of({2, 3}), {1, 2, 3});
+    expect(ListSet.of(<int>{null, 1, 3}) + ListSet.of({10, 11}), {null, 1, 3, 10, 11});
+    expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({5, 6}), {1, 2, 3, 4, 5, 6});
+
+    // 3) Adding nulls
+    expect(ListSet.of(<int>{}) + ListSet.of({null}), {null});
+    expect(ListSet.of(<int>{null}) + ListSet.of({null}), {null});
+    expect(ListSet.of(<int>{1}) + ListSet.of({null}), {1, null});
+    expect(ListSet.of(<int>{null, 1, 3}) + ListSet.of({null}), {null, 1, 3});
+    expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({null}), {1, 2, 3, 4, null});
+
+    // 4) Adding null and an item
+    expect(ListSet.of(<int>{}) + ListSet.of({null, 1}), {null, 1});
+    expect(ListSet.of(<int>{null}) + ListSet.of({null, 1}), {null, 1});
+    expect(ListSet.of(<int>{1}) + ListSet.of({null, 2}), {1, null, 2});
+    expect(ListSet.of(<int>{null, 1, 3}) + ListSet.of({null, 1}), {null, 1, 3});
+    expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({null, 1}), {1, 2, 3, 4, null});
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("asMap", () {
+    expect(ListSet.of(["hel", "lo", "there"]).asMap(), isA<Map<int, String>>());
+    expect(ListSet.of(["hel", "lo", "there"]).asMap(), {0: "hel", 1: "lo", 2: "there"});
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("getRange", () {
+    final ListSet<String> colors = ListSet.of(["red", "green", "blue", "orange", "pink"]);
+    final Iterable<String> range = colors.getRange(1, 4);
+    expect(range, ["green", "blue", "orange"]);
+    expect(colors, ["red", "green", "blue", "orange", "pink"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("indexOf", () {
+    var listSet = ListSet.of(["do", "re", "mi", "re"]);
+
+    // 1) Regular usage
+    expect(listSet.indexOf("re"), 1);
+    expect(listSet.indexOf("re", 2), -1);
+    expect(listSet.indexOf("fa"), -1);
+
+    // 2) Argument error
+    // TODO: Marcelo, ao que parece, o indexOf do IList e List são ligeiramente diferentes?
+    expect(() => listSet.indexOf("re", -1), throwsArgumentError);
+    expect(() => listSet.indexOf("re", 4), throwsArgumentError);
+  }, skip: true);
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("lastIndexOf", () {
+    // 1) Regular Usage
+    final ListSet<String> listSet = ListSet.of(["do", "re", "mi", "re"]);
+    expect(listSet.lastIndexOf("re", 2), 1);
+    expect(listSet.lastIndexOf("re"), 1);
+    expect(listSet.lastIndexOf("fa"), -1);
+
+    // 2) Start cannot be smaller than zero
+    // TODO: Marcelo, ao que parece, o indexOf do IList e List são ligeiramente diferentes?
+    expect(() => listSet.lastIndexOf("do", -1), throwsArgumentError);
+  }, skip: true);
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("lastIndexWhere", () {
+    // 1) Regular usage
+    final ListSet<String> listSet = ListSet.of(["do", "re", "mi", "re"]);
+    expect(listSet.lastIndexWhere((String note) => note.startsWith("r")), 1);
+    expect(listSet.lastIndexWhere((String note) => note.startsWith("r"), 2), 1);
+    expect(listSet.lastIndexWhere((String note) => note.startsWith("k")), -1);
+
+    // 2) Start cannot be smaller than zero
+    expect(() => listSet.lastIndexWhere((String element) => false, -1), throwsArgumentError);
+  }, skip: true);
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversed", () {
+    expect(ListSet.of(["do", "re", "mi", "re"]).reversed, ["mi", "re", "do"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("reversedView", () {
+    expect(ListSet.of(["do", "re", "mi", "re"]).reversedView, ["mi", "re", "do"]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -193,6 +362,36 @@ void main() {
   test("setRange", () {
     expect(() => ListSet.of([1, 10, 50, -2, 8, 10, -2, 20]).setRange(1, 5, [100, 1000]),
         throwsUnsupportedError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("shuffle", () {
+    final ListSet<int> listSet = ListSet.of([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(listSet, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    listSet.shuffle(Random(0));
+    expect(listSet, [1, 5, 3, 9, 6, 8, 7, 2, 4]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("sort", () {
+    ListSet<int> listSet = ListSet.of([10, 2, 4, 6, 5]);
+    listSet.sort();
+    expect(listSet, [2, 4, 5, 6, 10]);
+
+    listSet = ListSet.of([10, 2, 4, 6, 5]);
+    listSet.sort((int a, int b) => -a.compareTo(b));
+    expect(listSet, [10, 6, 5, 4, 2]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("sublist", () {
+    final ListSet<String> colors = ListSet.of(["red", "green", "blue", "orange", "pink"]);
+    expect(colors.sublist(1, 3), ["green", "blue"]);
+    expect(colors.sublist(1), ["green", "blue", "orange", "pink"]);
+    expect(colors, ["red", "green", "blue", "orange", "pink"]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
