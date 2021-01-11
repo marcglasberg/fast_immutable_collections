@@ -25,6 +25,28 @@ class SAdd<T> extends S<T> {
   bool contains(covariant T element) => _s.contains(element) ? true : _item == element;
 
   @override
+  bool containsAll(Iterable<T> other) {
+    for (var o in other) {
+      if ((_item != o) && (!_s.contains(o))) return false;
+    }
+    return true;
+  }
+
+  @override
+  Set<T> difference(covariant Set<T> other) => _s.difference(other)..remove(_item);
+
+  @override
+  Set<T> intersection(covariant Set<T> other) {
+    var containsItem = other.contains(_item);
+    var result = _s.intersection(other);
+    if (containsItem) result.add(_item);
+    return result;
+  }
+
+  @override
+  Set<T> union(covariant Set<T> other) => _s.union({_item})..addAll(other);
+
+  @override
   int get length => _s.length + 1;
 
   @override

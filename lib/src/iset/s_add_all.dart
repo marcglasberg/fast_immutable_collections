@@ -44,6 +44,27 @@ class SAddAll<T> extends S<T> {
   }
 
   @override
+  bool containsAll(Iterable<T> other) {
+    for (var o in other) {
+      if ((!_setOrS.contains(o)) && (!_s.contains(o))) return false;
+    }
+    return true;
+  }
+
+  @override
+  Set<T> difference(covariant Set<T> other) => _s.difference(other)..removeAll(_setOrS);
+
+  @override
+  Set<T> intersection(covariant Set<T> other) {
+    var result = _s.intersection(other);
+    result = result.intersection(_setOrS.toSet());
+    return result;
+  }
+
+  @override
+  Set<T> union(covariant Set<T> other) => _s.union(_setOrS.toSet())..addAll(other);
+
+  @override
   int get length => _s.length + _setOrS.length;
 
   @override

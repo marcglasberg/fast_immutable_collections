@@ -33,6 +33,18 @@ class SFlat<T> extends S<T> {
   bool contains(covariant T element) => _set.contains(element);
 
   @override
+  bool containsAll(Iterable<T> element) => _set.containsAll(element);
+
+  @override
+  Set<T> difference(covariant Set<T> other) => _set.difference(other);
+
+  @override
+  Set<T> intersection(covariant Set<T> other) => _set.intersection(other);
+
+  @override
+  Set<T> union(covariant Set<T> other) => _set.union(other);
+
+  @override
   int get length => _set.length;
 
   @override

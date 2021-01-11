@@ -781,8 +781,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Returns whether this [ISet] contains all the elements of [other].
   bool containsAll(Iterable<T> other) {
     _count();
-    // TODO: Still need to implement efficiently.
-    return unlock.containsAll(other);
+    return _s.containsAll(other);
   }
 
   /// Returns a new set with the elements of this that are not in [other].
@@ -929,6 +928,14 @@ abstract class S<T> implements Iterable<T> {
 
   @override
   bool contains(covariant T element);
+
+  bool containsAll(Iterable<T> other);
+
+  Set<T> difference(Set<Object> other);
+
+  Set<T> intersection(Set<Object> other);
+
+  Set<T> union(Set<T> other);
 
   @override
   bool every(bool Function(T) test) => iter.every(test);

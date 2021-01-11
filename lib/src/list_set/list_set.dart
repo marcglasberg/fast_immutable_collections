@@ -68,7 +68,13 @@ class ListSet<T> implements Set<T>, List<T> {
   bool containsAll(covariant Iterable<T> other) => _set.containsAll(other);
 
   @override
-  Set<T> difference(Set<Object> other) => _set.difference(other);
+  Set<T> difference(covariant Set<T> other) => _set.difference(other);
+
+  @override
+  Set<T> intersection(covariant Set<T> other) => _set.intersection(other);
+
+  @override
+  Set<T> union(covariant Set<T> other) => _set.union(other);
 
   @override
   T elementAt(int index) => _list[index];
@@ -102,9 +108,6 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   void forEach(void Function(T element) f) => _list.forEach(f);
-
-  @override
-  Set<T> intersection(Set<Object> other) => _set.intersection(other);
 
   @override
   bool get isEmpty => _list.isEmpty;
@@ -179,9 +182,6 @@ class ListSet<T> implements Set<T>, List<T> {
 
   @override
   Set<T> toSet() => _list.toSet();
-
-  @override
-  Set<T> union(Set<T> other) => _set.union(other);
 
   @override
   Iterable<T> where(bool Function(T element) test) => _list.where(test);

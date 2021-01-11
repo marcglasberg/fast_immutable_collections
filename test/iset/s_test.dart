@@ -75,10 +75,22 @@ class SExample<T> extends S<T> {
   bool contains(covariant T element) => _iset.contains(element);
 
   @override
+  bool containsAll(Iterable<T> other) => _iset.containsAll(other);
+
+  @override
   T get anyItem => _iset.anyItem;
 
   @override
   T operator [](int index) => _iset[index];
+
+  @override
+  Set<T> difference(Set<Object> other) => _iset.difference(other).unlockLazy;
+
+  @override
+  Set<T> intersection(Set<Object> other) => _iset.intersection(other).unlockLazy;
+
+  @override
+  Set<T> union(Set<T> other) => _iset.union(other).unlockLazy;
 }
 
 //////////////////////////////////////////////////////////////////////////////
