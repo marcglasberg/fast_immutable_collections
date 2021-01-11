@@ -84,13 +84,16 @@ class SExample<T> extends S<T> {
   T operator [](int index) => _iset[index];
 
   @override
-  Set<T> difference(Set<Object> other) => _iset.difference(other).unlockLazy;
+  Set<T> difference(Set<T> other) => _iset.difference(other).unlockLazy;
 
   @override
-  Set<T> intersection(Set<Object> other) => _iset.intersection(other).unlockLazy;
+  Set<T> intersection(Set<T> other) => _iset.intersection(other).unlockLazy;
 
   @override
   Set<T> union(Set<T> other) => _iset.union(other).unlockLazy;
+
+  @override
+  T lookup(T element) => _iset.lookup(element);
 }
 
 //////////////////////////////////////////////////////////////////////////////

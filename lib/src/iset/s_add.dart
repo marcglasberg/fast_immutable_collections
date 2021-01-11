@@ -33,12 +33,17 @@ class SAdd<T> extends S<T> {
   }
 
   @override
-  Set<T> difference(covariant Set<T> other) =>
-      _s.difference(other)
-        ..remove(_item);
+  T lookup(T element) {
+    T result = _s.lookup(element);
+    result ??= (_item == element) ? _item : null;
+    return result;
+  }
 
   @override
-  Set<T> intersection(covariant Set<T> other) {
+  Set<T> difference(Set<T> other) => _s.difference(other)..remove(_item);
+
+  @override
+  Set<T> intersection(Set<T> other) {
     var containsItem = other.contains(_item);
     var result = _s.intersection(other);
     if (containsItem) result.add(_item);
@@ -46,9 +51,7 @@ class SAdd<T> extends S<T> {
   }
 
   @override
-  Set<T> union(covariant Set<T> other) =>
-      _s.union({_item})
-        ..addAll(other);
+  Set<T> union(Set<T> other) => _s.union({_item})..addAll(other);
 
   @override
   int get length => _s.length + 1;

@@ -19,7 +19,6 @@ class ListMap<K, V> implements Map<K, V> {
 
   ListMap.empty() {
     _map = HashMap();
-    // TODO: Marcelo, List será depreciado, a sugestão é utilizar List.filled
     _list = List(0);
   }
 

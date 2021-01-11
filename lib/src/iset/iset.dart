@@ -788,20 +788,18 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are not elements of [other] according to `other.contains`.
-  ISet<T> difference(Set<Object> other) {
+  ISet<T> difference(Set<T> other) {
     _count();
-    // TODO: Still need to implement efficiently.
-    return ISet._unsafeFromSet(unlock.difference(other), config: config);
+    return ISet._unsafeFromSet(_s.difference(other), config: config);
   }
 
   /// Returns a new set which is the intersection between this set and [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are also elements of [other] according to `other.contains`.
-  ISet<T> intersection(Set<Object> other) {
+  ISet<T> intersection(Set<T> other) {
     _count();
-    // TODO: Still need to implement efficiently.
-    return ISet._unsafeFromSet(unlock.intersection(other), config: config);
+    return ISet._unsafeFromSet(_s.intersection(other), config: config);
   }
 
   /// Returns a new set which contains all the elements of this set and [other].
@@ -810,8 +808,7 @@ class ISet<T> // ignore: must_be_immutable
   /// all the elements of [other].
   ISet<T> union(Set<T> other) {
     _count();
-    // TODO: Still need to implement efficiently.
-    return ISet._unsafeFromSet(unlock.union(other), config: config);
+    return ISet._unsafeFromSet(_s.union(other), config: config);
   }
 
   /// If an object equal to [object] is in the set, return it.
@@ -827,21 +824,18 @@ class ISet<T> // ignore: must_be_immutable
   /// rather than being based on an actual object instance,
   /// then there may not be a specific object instance representing the
   /// set element.
-  T lookup(Object object) {
+  T lookup(T element) {
     _count();
-    // TODO: Still need to implement efficiently.
-    return unlock.lookup(object);
+    return _s.lookup(element);
   }
 
   /// Removes each element of [elements] from this set.
   ISet<T> removeAll(Iterable<Object> elements) {
-    // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..removeAll(elements), config: config);
   }
 
   /// Removes all elements of this set that satisfy [test].
   ISet<T> removeWhere(bool Function(T element) test) {
-    // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..removeWhere(test), config: config);
   }
 
@@ -852,13 +846,11 @@ class ISet<T> // ignore: must_be_immutable
   /// equal element in this set is retained, and elements that are not equal
   /// to any element in `elements` are removed.
   ISet<T> retainAll(Iterable<Object> elements) {
-    // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..retainAll(elements), config: config);
   }
 
   /// Removes all elements of this set that fail to satisfy [test].
   ISet<T> retainWhere(bool Function(T element) test) {
-    // TODO: Still need to implement efficiently.
     return ISet._unsafeFromSet(unlock..retainWhere(test), config: config);
   }
 }
@@ -931,9 +923,11 @@ abstract class S<T> implements Iterable<T> {
 
   bool containsAll(Iterable<T> other);
 
-  Set<T> difference(Set<Object> other);
+  T lookup(T element);
 
-  Set<T> intersection(Set<Object> other);
+  Set<T> difference(Set<T> other);
+
+  Set<T> intersection(Set<T> other);
 
   Set<T> union(Set<T> other);
 

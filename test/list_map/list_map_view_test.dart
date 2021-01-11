@@ -35,26 +35,27 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("[]=", () {
-    // TODO: Specify
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
-//    view["a"] = 2;
-//    expect(view, {}                           );
+
+    // TODO: This is not yet supported, but will be in the future.
+    //    view["a"] = 2;
+    //    expect(view, {}                           );
     expect(() => view["a"] = 2, throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("addAll", () {
-    // TODO: Specify
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => view.addAll({"a": 3, "d": 10}), throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("addAll", () {
-    // TODO: Specify
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => view.addEntries([MapEntry("a", 3), MapEntry("d", 10)]), throwsUnsupportedError);
   });
 
@@ -141,24 +142,24 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("update", () {
-    // TODO: Specify
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => view.update("a", (int value) => 2 * value), throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("updateAll", () {
-    // TODO: Specify
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => view.updateAll((String key, int value) => 2 * value), throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("shuffle", () {
-    // TODO: Specify
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => view.shuffle(Random(0)), throwsUnsupportedError);
   });
 
@@ -222,8 +223,8 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("sort", () {
-    // TODO: Specify
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => view.sort(), throwsUnsupportedError);
   });
 

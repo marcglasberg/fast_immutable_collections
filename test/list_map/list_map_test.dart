@@ -219,14 +219,14 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("[]=", () {
-    // TODO: Complete specification
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10})["a"] = 100, throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("addAll", () {
-    // TODO: Complete specification
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).addAll({"a": 3, "d": 10}),
         throwsUnsupportedError);
   });
@@ -234,7 +234,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("addAll", () {
-    // TODO: Complete specification
+    // TODO: This is not yet supported, but will be in the future.
     expect(
         () =>
             ListMap.of({"b": 1, "a": 2, "c": 10}).addEntries([MapEntry("a", 3), MapEntry("d", 10)]),
@@ -292,7 +292,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("update", () {
-    // TODO: Complete specification
+    // TODO: This is not yet supported, but will be in the future.
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).update("d", (int value) => 2 * value),
         throwsUnsupportedError);
   });
@@ -405,7 +405,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("updateAll", () {
-    // TODO: Complete specification
+    // TODO: This is not yet supported, but will be in the future.
     expect(
         () => ListMap.of({"b": 1, "a": 2, "c": 10}).updateAll((String key, int value) => 2 * value),
         throwsUnsupportedError);

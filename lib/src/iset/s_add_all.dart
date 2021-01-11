@@ -52,17 +52,31 @@ class SAddAll<T> extends S<T> {
   }
 
   @override
-  Set<T> difference(covariant Set<T> other) => _s.difference(other)..removeAll(_setOrS);
+  T lookup(T element) {
+    T result = _s.lookup(element);
+
+    if (result != null)
+      return result;
+    else if (_setOrS is S)
+      return (_setOrS as S<T>).lookup(element);
+    else if (_setOrS is Set)
+      return (_setOrS as Set<T>).lookup(element);
+    else
+      throw AssertionError();
+  }
 
   @override
-  Set<T> intersection(covariant Set<T> other) {
+  Set<T> difference(Set<T> other) => _s.difference(other)..removeAll(_setOrS);
+
+  @override
+  Set<T> intersection(Set<T> other) {
     var result = _s.intersection(other);
     result = result.intersection(_setOrS.toSet());
     return result;
   }
 
   @override
-  Set<T> union(covariant Set<T> other) => _s.union(_setOrS.toSet())..addAll(other);
+  Set<T> union(Set<T> other) => _s.union(_setOrS.toSet())..addAll(other);
 
   @override
   int get length => _s.length + _setOrS.length;

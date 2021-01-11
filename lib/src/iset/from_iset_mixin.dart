@@ -146,15 +146,15 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   bool containsAll(Iterable<T> other) => iter.containsAll(other);
 
-  ISet<T> difference(Set<Object> other) => iter.difference(other);
+  ISet<T> difference(Set<T> other) => iter.difference(other);
 
-  ISet<T> intersection(Set<Object> other) => iter.intersection(other);
+  ISet<T> intersection(Set<T> other) => iter.intersection(other);
 
-  T lookup(Object object) => iter.lookup(object);
+  T lookup(T element) => iter.lookup(element);
 
-  ISet<T> removeAll(Iterable<Object> elements) => iter.removeAll(elements);
+  ISet<T> removeAll(Iterable<T> elements) => iter.removeAll(elements);
 
-  ISet<T> retainAll(Iterable<Object> elements) => iter.retainAll(elements);
+  ISet<T> retainAll(Iterable<T> elements) => iter.retainAll(elements);
 
   ISet<T> union(Set<T> other) => iter.union(other);
 
