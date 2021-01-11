@@ -39,7 +39,7 @@ class ListMapView<K, V> implements ListMap<K, V> {
   bool containsKey(covariant K key) => _map.containsKey(key);
 
   @override
-  bool containsValue(covariant V value) => _map.containsKey(value);
+  bool containsValue(covariant V value) => _map.containsValue(value);
 
   @override
   Iterable<MapEntry<K, V>> get entries => _map.entries;
