@@ -136,7 +136,7 @@ void main() {
     expect(mFlat.unlock, {"a": 1, "c": 3, "b": 2, "d": 4});
     expect(mFlat.keys.toList(), ["a", "c", "b", "d"]);
 
-    expect(() => MFlat.from(null), throwsAssertionError);
+    expect(() => MFlat.unsafe(null), throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////

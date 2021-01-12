@@ -426,6 +426,13 @@ void main() {
     expect(() => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
   });
 
+  test("first, last", () {
+    final ListSetView<int> view = ListSetView({10, 1, 50, -2, 8, 20});
+
+    expect(view.first, 10);
+    expect(view.last, 20);
+  });
+
   /////////////////////////////////////////////////////////////////////////////
 
   test("first setter", () {

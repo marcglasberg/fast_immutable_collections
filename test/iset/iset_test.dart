@@ -1055,6 +1055,7 @@ void main() {
     expect(iset.containsAll([2, 2, 3]), isTrue);
     expect(iset.containsAll({1, 2, 3, 4}), isTrue);
     expect(iset.containsAll({1, 2, 3, 4}.lock), isTrue);
+    expect(iset.containsAll({1, 2, 3, 4, 10}.lock), isFalse);
     expect(iset.containsAll({10, 20, 30, 40}), isFalse);
   });
 
@@ -1077,9 +1078,9 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("union", () {
-    final ISet<int> iSet1 = {1, 2, 3, 4}.lock;
-    expect(iSet1.union({1}), {1, 2, 3, 4});
-    expect(iSet1.union({1, 2, 5}), {1, 2, 3, 4, 5});
+    final ISet<int> iSet = {1, 2, 3, 4}.lock;
+    expect(iSet.union({1}), {1, 2, 3, 4});
+    expect(iSet.union({1, 2, 5}), {1, 2, 3, 4, 5});
   });
 
   /////////////////////////////////////////////////////////////////////////////

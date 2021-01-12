@@ -193,6 +193,29 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("indexWhere", () {
+    final ListSet<String> listSet = ListSet.of(["do", "re", "mi", "re"]);
+
+    // 1) Start negative or bigger than the length
+    expect(listSet.indexWhere((String element) => true, -1), 0);
+    expect(listSet.indexWhere((String element) => true, listSet.length + 1), -1);
+
+    // 2) Regular usage
+    expect(listSet.indexWhere((String element) => element == "re"), 1);
+    expect(listSet.indexWhere((String element) => element == "re", 2), -1);
+    expect(listSet.indexWhere((String element) => element == "fa"), -1);
+
+    // 3) Empty list or list with a single item
+    var emptyIlist = IList.empty<String>();
+    expect(emptyIlist.indexWhere((String element) => element == "x"), -1);
+
+    emptyIlist = ["do"].lock;
+    expect(emptyIlist.indexWhere((String element) => element == "x"), -1);
+    expect(emptyIlist.indexWhere((String element) => element == "do"), 0);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("lastIndexOf", () {
     // 1) Regular Usage
     final ListSet<String> listSet = ListSet.of(["do", "re", "mi", "re"]);

@@ -54,6 +54,41 @@ void main() {
     expect(sAddAll.contains(6), isFalse);
   });
 
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("containsAll", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    expect(sAddAll.containsAll([2, 2, 3]), isTrue);
+    expect(sAddAll.containsAll({1, 2, 3, 4}), isTrue);
+    expect(sAddAll.containsAll({1, 2, 3, 4}.lock), isTrue);
+    expect(sAddAll.containsAll({1, 2, 3, 4, 10}.lock), isFalse);
+    expect(sAddAll.containsAll({10, 20, 30, 40}), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("difference", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    expect(sAddAll.difference({3, 4, 10, 11}), {1, 2});
+    expect(sAddAll.difference({1, 2, 3, 4}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("intersection", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    expect(sAddAll.intersection({1, 2, 5, 10, 11}), {1, 2, 5});
+    expect(sAddAll.intersection({10, 20, 50}), <int>{});
+  }, skip: true);
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("union", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    expect(sAddAll.union({1}), {1, 2, 3, 4, 5});
+    expect(sAddAll.union({1, 2, 5, 10, 11}), {1, 2, 3, 4, 5, 10, 11});
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {

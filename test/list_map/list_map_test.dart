@@ -144,7 +144,7 @@ void main() {
   test("unsafe", () {
     // 1) Simple
     Map<String, int> initialMap = {"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6};
-    ListMap<String, int> listMap = ListMap.of(initialMap);
+    ListMap<String, int> listMap = ListMap.unsafe(initialMap);
 
     expect(listMap.entryAt(0).key, "a");
     expect(listMap.entryAt(0).value, 1);
@@ -168,7 +168,7 @@ void main() {
 
     // 2) With sort
     initialMap = {"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6};
-    listMap = ListMap.of(initialMap, sort: true);
+    listMap = ListMap.unsafe(initialMap, sort: true);
 
     expect(listMap.entryAt(0).key, "a");
     expect(listMap.entryAt(0).value, 1);
@@ -192,7 +192,7 @@ void main() {
 
     // 3) With sort and compare
     initialMap = {"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6};
-    listMap = ListMap.of(initialMap,
+    listMap = ListMap.unsafe(initialMap,
         sort: true, compare: (String keyA, String keyB) => -keyA.compareTo(keyB));
 
     expect(listMap.entryAt(0).key, "f");

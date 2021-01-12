@@ -52,6 +52,41 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("containsAll", () {
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    expect(sAdd.containsAll([2, 2, 3]), isTrue);
+    expect(sAdd.containsAll({1, 2, 3, 4}), isTrue);
+    expect(sAdd.containsAll({1, 2, 3, 4}.lock), isTrue);
+    expect(sAdd.containsAll({1, 2, 3, 4, 10}.lock), isFalse);
+    expect(sAdd.containsAll({10, 20, 30, 40}), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("difference", () {
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    expect(sAdd.difference({1, 2, 5}), {3, 4});
+    expect(sAdd.difference({1, 2, 3, 4}), <int>{});
+  }, skip: true);
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("intersection", () {
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    expect(sAdd.intersection({1, 2, 5, 10}), {1, 2});
+    expect(sAdd.intersection({10, 20, 50}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("union", () {
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    expect(sAdd.union({1}), {1, 2, 3, 4});
+    expect(sAdd.union({1, 2, 5}), {1, 2, 3, 4, 5});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("iterator (IteratorSAdd)", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     final Iterator<int> iter = sAdd.iterator;
