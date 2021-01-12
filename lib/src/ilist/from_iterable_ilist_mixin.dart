@@ -47,7 +47,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
-  bool contains(Object element) => iter.contains(element);
+  bool contains(T element) => iter.contains(element);
 
   T operator [](int index) => iter[index];
 
@@ -95,7 +95,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  IList<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(bool Function(T element) test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 

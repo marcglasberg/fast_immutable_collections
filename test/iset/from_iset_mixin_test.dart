@@ -1,8 +1,5 @@
-import "dart:collection";
-
 import "package:meta/meta.dart";
 import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
@@ -40,7 +37,7 @@ void main() {
   test("cast", () {
     final Students students = Students([Student("James")]);
 
-    expect(students.cast<ProtoStudent>(), isA<ISet<ProtoStudent>>());
+    expect(students.cast<ProtoStudent>(), isA<Iterable<ProtoStudent>>());
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -95,20 +92,30 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.expand((Student student) => [student, student]),
-        allOf(isA<ISet<Student>>(), <Student>{james, sara, lucy}.lock));
+    expect(
+        students.expand((Student student) => [student, student]),
+        allOf(
+          isA<Iterable<Student>>(),
+          <Student>[james, james, sara, sara, lucy, lucy],
+        ));
+
+    expect(
+        students.expand((Student student) => [student, student]).toISet(),
+        allOf(
+          isA<Iterable<Student>>(),
+          <Student>{james, sara, lucy}.lock,
+        ));
+
     expect(
         students.expand((Student student) => [student, Student(student.name + "2")]),
-        allOf(
-            isA<ISet<Student>>(),
-            <Student>{
-              james,
-              sara,
-              lucy,
-              const Student("James2"),
-              const Student("Sara2"),
-              const Student("Lucy2")
-            }.lock));
+        allOf(isA<Iterable<Student>>(), <Student>[
+          james,
+          const Student("James2"),
+          sara,
+          const Student("Sara2"),
+          lucy,
+          const Student("Lucy2")
+        ]));
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -123,7 +130,7 @@ void main() {
     // (when ConfigSet.sort is `true`)
     expect(students.length, 3);
     expect(students.first, Student("James"));
-    expect(students.last, Student("Sara"));
+    expect(students.last, Student("Lucy"));
     expect(() => students.single, throwsStateError);
 
     // single
@@ -178,7 +185,7 @@ void main() {
 
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.followedBy([bob]).unlock, {james, sara, lucy, bob});
+    expect(students.followedBy([bob]), {james, sara, lucy, bob});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -205,7 +212,7 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     // Join will respect the sort order (when ConfigSet.sort is `true`)
-    expect(students.join(", "), "Student: James, Student: Lucy, Student: Sara");
+    expect(students.join(", "), "Student: James, Student: Sara, Student: Lucy");
     expect(Students([]).join(", "), "");
   });
 
@@ -379,9 +386,9 @@ void main() {
     expect(iterator.moveNext(), isTrue);
     expect(iterator.current, james);
     expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, lucy);
-    expect(iterator.moveNext(), isTrue);
     expect(iterator.current, sara);
+    expect(iterator.moveNext(), isTrue);
+    expect(iterator.current, lucy);
     expect(iterator.moveNext(), isFalse);
     expect(iterator.current, isNull);
   });
@@ -398,8 +405,8 @@ void main() {
     // (when ConfigSet.sort is `true`)
     expect(students.toList(), [
       const Student("James"),
-      const Student("Lucy"),
       const Student("Sara"),
+      const Student("Lucy"),
     ]);
   });
 
@@ -555,15 +562,6 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     expect(students.unlock, allOf(isA<Set<Student>>(), {james, sara, lucy}));
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("unlockSorted", () {
-    final Ints students = Ints([3, 2, 1, 3]);
-
-    expect(students.unlockSorted, allOf(isA<LinkedHashSet>(), {1, 2, 3}));
-    expect(students.unlockSorted.toList(), [1, 2, 3]);
   });
 
   /////////////////////////////////////////////////////////////////////////////

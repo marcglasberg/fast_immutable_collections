@@ -4,6 +4,8 @@ import "package:meta/meta.dart";
 import "records.dart";
 import "table_score_emitter.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   final TableScoreEmitter emitter;
 
@@ -16,6 +18,8 @@ abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
 
   void saveReports() => benchmarks.forEach((B benchmark) => benchmark.emitter.saveReport());
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   @override
@@ -51,13 +55,15 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   ListBenchmarkBase({
     @required String name,
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 
-  static List<int> getDummyGeneratedList({int size}) =>
+  static List<int> getDummyGeneratedList({@required int size}) =>
       List<int>.generate(size, (int index) => index);
 
   @visibleForTesting
@@ -65,36 +71,37 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   @override
   List<int> toMutable();
 
-  int _innerRuns;
-
-  /// Inner runs is half of the config.size.
-  /// For example, we can measure adding 5 items to a list of 10 items,
-  /// or adding 50 items to a list of 100 items.
-  int innerRuns() => _innerRuns ??= min(1000, max(1, config.size ~/ 10));
+  int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
-  const SetBenchmarkBase({
+  SetBenchmarkBase({
     @required String name,
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 
-  static Set<int> getDummyGeneratedSet({int size}) =>
+  static Set<int> getDummyGeneratedSet({@required int size}) =>
       Set<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: size));
 
   @visibleForTesting
   @visibleForOverriding
   @override
   Set<int> toMutable();
+
+  int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>> {
-  const MapBenchmarkBase({
+  MapBenchmarkBase({
     @required String name,
     @required TableScoreEmitter emitter,
   }) : super(name: name, emitter: emitter);
 
-  static Map<String, int> getDummyGeneratedMap({int size}) =>
+  static Map<String, int> getDummyGeneratedMap({@required int size}) =>
       Map<String, int>.fromEntries(List<MapEntry<String, int>>.generate(
           size, (int index) => MapEntry<String, int>(index.toString(), index)));
 
@@ -102,4 +109,8 @@ abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>
   @visibleForOverriding
   @override
   Map<String, int> toMutable();
+
+  int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

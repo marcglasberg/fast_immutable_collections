@@ -8,8 +8,7 @@ import "hash.dart";
 /// - If [isDeepEquals] is `true` (the default), the [IList] equals operator (`==`) compares all
 /// items, ordered.
 /// - If [cacheHashCode] is `true` (the default), the [IList] will only calculate the [hashCode]
-/// once, when it is asked — initially, internally `null`. Otherwise, it will always
-/// recalculate it.
+/// once, when it is asked — initially, internally `null`. Otherwise, it will always recalculate it.
 @immutable
 class ConfigList {
   //
@@ -60,11 +59,12 @@ class ConfigList {
 
 /// The set configuration.
 /// - If [isDeepEquals] is `false`, the [ISet] equals operator (`==`) compares by identity.
-/// - If [isDeepEquals] is `true` (the default), the [ISet] equals operator (`==`) compares all items, unordered.
-/// - If the [compare] function is defined, sorted outputs will use it as a comparator.
+/// - If [isDeepEquals] is `true` (the default), the [ISet] equals operator (`==`) compares all
+/// items, unordered.
+/// - If [sort] is false (the default) it will keep the insertion order. Otherwise, some outputs
+/// that return lists will be sorted with the item's natural ordering.
 /// - If [cacheHashCode] is `true` (the default), the [ISet] will only calculate the [hashCode]
-/// once, when it is asked — initially, internally `null`. Otherwise, it will always
-/// recalculate it.
+/// once, when it is asked — initially, internally `null`. Otherwise, it will always recalculate it.
 @immutable
 class ConfigSet {
   //
@@ -72,6 +72,7 @@ class ConfigSet {
   /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
+  /// If `false` (the default), will keep insertion order.
   /// If `true`, will sort the list output of items.
   final bool sort;
 
@@ -83,7 +84,7 @@ class ConfigSet {
 
   const ConfigSet({
     this.isDeepEquals = true,
-    this.sort = true,
+    this.sort = false,
     this.cacheHashCode = true,
   });
 
@@ -123,11 +124,10 @@ class ConfigSet {
 
 /// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
-/// - If [sortKeys] is `true` (the default), will sort the list output of keys.
-/// - If [sortValues] is `true` (the default), will sort the list output of values.
+/// - If [sortKeys] is `true`, will sort the list output of keys. Otherwise, it will keep the insertion order (the default).
+/// - If [sortValues] is `true`, will sort the list output of values. Otherwise, it will keep the insertion order (the default).
 /// - If [cacheHashCode] is `true` (the default), the [IMap] will only calculate the [hashCode]
-/// once, when it is asked — initially, internally `null`. Otherwise, it will always
-/// recalculate it.
+/// once, when it is asked — initially, internally `null`. Otherwise, it will always recalculate it.
 @immutable
 class ConfigMap {
   //
@@ -135,10 +135,12 @@ class ConfigMap {
   /// If `true` (the default), the equals operator (`==`) compares all items, ordered.
   final bool isDeepEquals;
 
+  /// If `false` (the default), will keep the insertion order.
   /// If `true` (the default), will sort the list output of keys.
   final bool sortKeys;
 
-  /// If `true` (the default), will sort the list output of values.
+  /// If `false` (the default), will keep the insertion order.
+  /// If `true`, will sort the list output of values.
   final bool sortValues;
 
   /// If `false`, the [hashCode] will be calculated each time it's used.
@@ -149,8 +151,8 @@ class ConfigMap {
 
   const ConfigMap({
     this.isDeepEquals = true,
-    this.sortKeys = true,
-    this.sortValues = true,
+    this.sortKeys = false,
+    this.sortValues = false,
     this.cacheHashCode = true,
   });
 
@@ -194,11 +196,10 @@ class ConfigMap {
 
 /// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
-/// - If [sortKeys] is `true` (the default), will sort the list output of keys.
-/// - If [sortValues] is `true` (the default), will sort the list output of values.
+/// - If [sortKeys] is `true`, will sort the list output of keys. Otherwise, it will keep the insertion order (the default).
+/// - If [sortValues] is `true`, will sort the list output of values. Otherwise, it will keep the insertion order (the default).
 /// - If [cacheHashCode] is `true` (the default), the [IMapOfSets] will only calculate the
-/// [hashCode] once, when it is asked — initially, internally `null`. Otherwise, it will
-/// always recalculate it.
+/// [hashCode] once, when it is asked — initially, internally `null`. Otherwise, it will always recalculate it.
 @immutable
 class ConfigMapOfSets {
   //
@@ -225,8 +226,8 @@ class ConfigMapOfSets {
 
   const ConfigMapOfSets({
     this.isDeepEquals = true,
-    this.sortKeys = true,
-    this.sortValues = true,
+    this.sortKeys = false,
+    this.sortValues = false,
     this.removeEmptySets = true,
     this.cacheHashCode = true,
   });

@@ -39,9 +39,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("length", () {
-    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
+  test("length, first, last, single", () {
+    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([5, 2]), [3, 4, 1]);
     expect(lAddAll.length, 5);
+    expect(lAddAll.first, 5);
+    expect(lAddAll.last, 1);
+    expect(() => lAddAll.single, throwsStateError);
+    expect(LAddAll(LFlat<int>([]), [1]).single, 1);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -70,6 +74,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("iter", () {
+    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
+    expect(lAddAll.iter, allOf(isA<Iterable<int>>(), [1, 2, 3, 4, 5]));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("iterator", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     final Iterator<int> iter = lAddAll.iterator;
@@ -87,6 +98,13 @@ void main() {
     expect(iter.current, 5);
     expect(iter.moveNext(), isFalse);
     expect(iter.current, isNull);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("iter", () {
+    final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 3]), [2, 4, 5]);
+    expect(lAddAll, allOf(isA<Iterable<int>>(), [1, 3, 2, 4, 5]));
   });
 
   //////////////////////////////////////////////////////////////////////////////

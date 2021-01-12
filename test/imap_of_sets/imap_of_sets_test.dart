@@ -708,16 +708,16 @@ void main() {
       "b": {1, 2, 3},
     });
     expect(iMapOfSets1.config.isDeepEquals, isTrue);
-    expect(iMapOfSets1.config.sortKeys, isTrue);
-    expect(iMapOfSets1.config.sortValues, isTrue);
+    expect(iMapOfSets1.config.sortKeys, isFalse);
+    expect(iMapOfSets1.config.sortValues, isFalse);
 
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
+        ConfigMapOfSets(isDeepEquals: false, sortKeys: true, sortValues: true);
     final IMapOfSets<String, int> iMapOfSets2 = iMapOfSets1.withConfig(configMapOfSets);
 
     expect(iMapOfSets2.config.isDeepEquals, isFalse);
-    expect(iMapOfSets2.config.sortKeys, isFalse);
-    expect(iMapOfSets2.config.sortValues, isFalse);
+    expect(iMapOfSets2.config.sortKeys, isTrue);
+    expect(iMapOfSets2.config.sortValues, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -878,7 +878,7 @@ void main() {
 
   test("entries", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     final ISet<MapEntry<String, ISet<int>>> entries = iMapOfSets.entriesAsSet;
     expect(
         entries,
@@ -890,22 +890,43 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("entry", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+
+    expect(iMapOfSets.entry("a").key, "a");
+    expect(iMapOfSets.entry("a").value, {1, 2});
+
+    expect(iMapOfSets.entry("b").key, "b");
+    expect(iMapOfSets.entry("b").value, {3});
+
+    expect(iMapOfSets.entry("z").key, "z");
+    expect(iMapOfSets.entry("z").value, null);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("keys", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
-    expect(iMapOfSets.keys, isA<Iterable<String>>());
-    expect(iMapOfSets.keys, ["a", "b"]);
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+    expect(iMapOfSets.keys, allOf(isA<Iterable<String>>(), ["b", "a"]));
+
+    // Keys is not sorted! If you need sorted, use keyList.
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keys,
+        allOf(isA<Iterable<String>>(), ["b", "a"]));
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keyList(),
+        allOf(isA<Iterable<String>>(), ["a", "b"]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("sets", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     expect(iMapOfSets.sets, isA<Iterable<ISet<int>>>());
     expect(iMapOfSets.sets, [
-      ISet<int>({1, 2}),
       ISet<int>({3}),
+      ISet<int>({1, 2}),
     ]);
   });
 
@@ -913,8 +934,14 @@ void main() {
 
   test("values", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
-    expect(iMapOfSets.values, ISet<int>({1, 2, 3}));
+        IMapOfSets.empty<String, int>().add("b", 3).add("b", 1).add("a", 2).add("a", 1);
+    expect(iMapOfSets.values, allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
+
+    // Values is not sorted! If you need sorted, use valueList.
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).values,
+        allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).valueList(),
+        allOf(isA<Iterable<int>>(), [1, 1, 2, 3]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1528,7 +1555,7 @@ void main() {
     });
     final IMapOfSets<num, num> mappedIMapOfSets = iMapOfSets.map<num, num>(
         (String key, ISet<int> set) =>
-            MapEntry<num, ISet<num>>(num.parse(key + key), set.cast<num>()));
+            MapEntry<num, ISet<num>>(num.parse(key + key), set.cast<num>().toISet()));
 
     expect(mappedIMapOfSets, isA<IMapOfSets<num, num>>());
     expect(

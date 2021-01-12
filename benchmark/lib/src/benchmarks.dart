@@ -1,13 +1,13 @@
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
-/// Run the benchmarks with, for example — from the top of the project
-/// —:
+/// Run the benchmarks with, for example — from the top of the project —:
 ///
 /// ```sh
 /// dart benchmark/lib/src/benchmarks.dart
 /// ```
 ///
-/// The complete benchmark run should take around 7-10 min on a good computer at most.
+/// The complete benchmark run should take around 7-10 min on a good computer at most, depending on
+/// the parameters.
 void main() {
   ListAddBenchmark(emitter: TableScoreEmitter(prefixName: "list_add", config: Config(size: 100)))
     ..report()

@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SetContainsBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
@@ -20,6 +22,8 @@ class SetContainsBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableSetContainsBenchmark extends SetBenchmarkBase {
   MutableSetContainsBenchmark({@required TableScoreEmitter emitter})
@@ -40,6 +44,8 @@ class MutableSetContainsBenchmark extends SetBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ISetContainsBenchmark extends SetBenchmarkBase {
   ISetContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "ISet", emitter: emitter);
@@ -58,6 +64,8 @@ class ISetContainsBenchmark extends SetBenchmarkBase {
     for (int i = 0; i < iSet.length + 1; i++) contains = iSet.contains(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtSetContainsBenchmark extends SetBenchmarkBase {
   KtSetContainsBenchmark({@required TableScoreEmitter emitter})
@@ -78,6 +86,8 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltSetContainsBenchmark extends SetBenchmarkBase {
   BuiltSetContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
@@ -97,3 +107,5 @@ class BuiltSetContainsBenchmark extends SetBenchmarkBase {
     for (int i = 0; i < builtSet.length + 1; i++) contains = builtSet.contains(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

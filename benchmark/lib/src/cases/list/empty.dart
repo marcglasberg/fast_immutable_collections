@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
@@ -21,6 +23,8 @@ class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         super(emitter: emitter);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MutableListEmptyBenchmark extends ListBenchmarkBase {
   MutableListEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "List (Mutable)", emitter: emitter);
@@ -33,6 +37,8 @@ class MutableListEmptyBenchmark extends ListBenchmarkBase {
   @override
   void run() => list = <int>[];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IListEmptyBenchmark extends ListBenchmarkBase {
   IListEmptyBenchmark({@required TableScoreEmitter emitter})
@@ -47,6 +53,8 @@ class IListEmptyBenchmark extends ListBenchmarkBase {
   void run() => iList = IList<int>();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KtListEmptyBenchmark extends ListBenchmarkBase {
   KtListEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtList", emitter: emitter);
@@ -60,6 +68,8 @@ class KtListEmptyBenchmark extends ListBenchmarkBase {
   void run() => ktList = KtList<int>.empty();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltListEmptyBenchmark extends ListBenchmarkBase {
   BuiltListEmptyBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltList", emitter: emitter);
@@ -72,3 +82,5 @@ class BuiltListEmptyBenchmark extends ListBenchmarkBase {
   @override
   void run() => builtList = BuiltList<int>();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

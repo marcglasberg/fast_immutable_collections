@@ -1,3 +1,4 @@
+import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/kt.dart";
 import "package:meta/meta.dart";
@@ -6,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
@@ -21,6 +24,8 @@ class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         super(emitter: emitter);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MutableListContainsBenchmark extends ListBenchmarkBase {
   MutableListContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "List (Mutable)", emitter: emitter);
@@ -28,17 +33,40 @@ class MutableListContainsBenchmark extends ListBenchmarkBase {
   List<int> list;
   bool contains;
 
+  // Saves many copies of the initial list (created during setup).
+  List<List<int>> initialLists;
+
+  int count;
+
   @override
   List<int> toMutable() => list;
 
+  /// Since List is mutable, we have to create many copied of the original list during setup.
+  /// Note the setup does not count for the measurements.
   @override
-  void setup() => list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+  void setup() {
+    count = 0;
+    initialLists = [];
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
+      initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+  }
 
   @override
   void run() {
+    list = getNextList();
     for (int i = 0; i < list.length + 1; i++) contains = list.contains(i);
   }
+
+  List<int> getNextList() {
+    if (count >= initialLists.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialLists[count];
+  }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IListContainsBenchmark extends ListBenchmarkBase {
   IListContainsBenchmark({@required TableScoreEmitter emitter})
@@ -59,6 +87,8 @@ class IListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class KtListContainsBenchmark extends ListBenchmarkBase {
   KtListContainsBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtList", emitter: emitter);
@@ -77,6 +107,8 @@ class KtListContainsBenchmark extends ListBenchmarkBase {
     for (int i = 0; i < _ktList.size + 1; i++) contains = _ktList.contains(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltListContainsBenchmark extends ListBenchmarkBase {
   BuiltListContainsBenchmark({@required TableScoreEmitter emitter})
@@ -97,3 +129,5 @@ class BuiltListContainsBenchmark extends ListBenchmarkBase {
     for (int i = 0; i < _builtList.length + 1; i++) contains = _builtList.contains(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

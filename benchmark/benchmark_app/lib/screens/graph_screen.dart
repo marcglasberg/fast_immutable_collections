@@ -191,6 +191,8 @@ class _FilterDialog extends StatefulWidget {
   _FilterDialogState createState() => _FilterDialogState();
 }
 
+// ////////////////////////////////////////////////////////////////////////////
+
 class _FilterDialogState extends State<_FilterDialog> {
   //
   Map<String, bool> get filters => widget.filters;

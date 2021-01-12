@@ -13,8 +13,8 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("sort", () {
-    expect(ConfigSet().sort, isTrue);
-    expect(ConfigSet(sort: false).sort, isFalse);
+    expect(ConfigSet().sort, isFalse);
+    expect(ConfigSet(sort: true).sort, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -29,11 +29,11 @@ void main() {
   test("==", () {
     const ConfigSet configSet1 = ConfigSet(),
         configSet2 = ConfigSet(isDeepEquals: false),
-        configSet3 = ConfigSet(sort: false),
+        configSet3 = ConfigSet(sort: true),
         configSet4 = ConfigSet(cacheHashCode: false);
     final ConfigSet configSet5 = ConfigSet(),
         configSet6 = ConfigSet(isDeepEquals: false),
-        configSet7 = ConfigSet(sort: false),
+        configSet7 = ConfigSet(sort: true),
         configSet8 = ConfigSet(cacheHashCode: false);
 
     expect(configSet1 == configSet1, isTrue);
@@ -79,10 +79,10 @@ void main() {
     const ConfigSet configSet1 = ConfigSet();
     final ConfigSet configSetIdentical = configSet1.copyWith(),
         configSet1WithDeepFalse = configSet1.copyWith(isDeepEquals: false),
-        configSet1WithSortFalse = configSet1.copyWith(sort: false),
+        configSet1WithSortFalse = configSet1.copyWith(sort: true),
         configSet1WithCacheHashCode = configSet1.copyWith(cacheHashCode: false),
         configSet1WithDeepAndSortFalse =
-            configSet1.copyWith(isDeepEquals: false, sort: false, cacheHashCode: false);
+            configSet1.copyWith(isDeepEquals: false, sort: true, cacheHashCode: false);
 
     expect(identical(configSet1, configSetIdentical), isTrue);
 
@@ -112,12 +112,12 @@ void main() {
   test("hashCode", () {
     const ConfigSet configSet1 = ConfigSet(),
         configSet2 = ConfigSet(isDeepEquals: false),
-        configSet3 = ConfigSet(sort: false),
+        configSet3 = ConfigSet(sort: true),
         configSet4 = ConfigSet(cacheHashCode: false);
 
     expect(configSet1.hashCode, ConfigSet().hashCode);
     expect(configSet2.hashCode, ConfigSet(isDeepEquals: false).hashCode);
-    expect(configSet3.hashCode, ConfigSet(sort: false).hashCode);
+    expect(configSet3.hashCode, ConfigSet(sort: true).hashCode);
     expect(configSet4.hashCode, ConfigSet(cacheHashCode: false).hashCode);
     expect(configSet1.hashCode, isNot(configSet2.hashCode));
     expect(configSet1.hashCode, isNot(configSet3.hashCode));
@@ -129,13 +129,13 @@ void main() {
 
   test("toString", () {
     expect(
-        ConfigSet().toString(), "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: true}");
+        ConfigSet().toString(), "ConfigSet{isDeepEquals: true, sort: false, cacheHashCode: true}");
     expect(ConfigSet(isDeepEquals: false).toString(),
-        "ConfigSet{isDeepEquals: false, sort: true, cacheHashCode: true}");
-    expect(ConfigSet(sort: false).toString(),
-        "ConfigSet{isDeepEquals: true, sort: false, cacheHashCode: true}");
+        "ConfigSet{isDeepEquals: false, sort: false, cacheHashCode: true}");
+    expect(ConfigSet(sort: true).toString(),
+        "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: true}");
     expect(ConfigSet(cacheHashCode: false).toString(),
-        "ConfigSet{isDeepEquals: true, sort: true, cacheHashCode: false}");
+        "ConfigSet{isDeepEquals: true, sort: false, cacheHashCode: false}");
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -144,13 +144,13 @@ void main() {
     // 1) Is initially a ConfigSet with isDeepEquals = true and sort = true
     expect(ISet.defaultConfig, const ConfigSet());
     expect(ISet.defaultConfig.isDeepEquals, isTrue);
-    expect(ISet.defaultConfig.sort, isTrue);
+    expect(ISet.defaultConfig.sort, isFalse);
     expect(ISet.defaultConfig.cacheHashCode, isTrue);
 
     // 2) Can modify the default
-    ISet.defaultConfig = ConfigSet(isDeepEquals: false, sort: false, cacheHashCode: false);
-    expect(ISet.defaultConfig,
-        const ConfigSet(isDeepEquals: false, sort: false, cacheHashCode: false));
+    ISet.defaultConfig = ConfigSet(isDeepEquals: false, sort: true, cacheHashCode: false);
+    expect(
+        ISet.defaultConfig, const ConfigSet(isDeepEquals: false, sort: true, cacheHashCode: false));
   });
 
   //////////////////////////////////////////////////////////////////////////////

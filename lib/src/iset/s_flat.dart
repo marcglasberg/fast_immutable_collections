@@ -2,24 +2,20 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 class SFlat<T> extends S<T> {
-  final Set<T> _set;
+  final ListSet<T> _set;
 
-  static S<T> empty<T>() => SFlat.unsafe(<T>{});
+  static S<T> empty<T>() => SFlat.unsafe(ListSet<T>.empty());
 
-  SFlat(Iterable<T> iterable)
+  SFlat(Iterable<T> iterable, {ConfigSet config})
       : assert(iterable != null),
-        _set = Set.of(iterable);
+        _set = ListSet.of(iterable, sort: (config ?? ISet.defaultConfig).sort);
 
-  SFlat.unsafe(this._set) : assert(_set != null);
-
-  @override
-  Set<T> get getFlushed => _set;
-
-  @override
-  T get anyItem => _set.first;
+  SFlat.unsafe(Set<T> set)
+      : assert(set != null),
+        _set = ListSet.unsafeView(set);
 
   @override
-  bool contains(Object element) => _set.contains(element);
+  ListSet<T> getFlushed(ConfigSet config) => _set;
 
   @override
   Iterator<T> get iterator => _set.iterator;
@@ -28,16 +24,28 @@ class SFlat<T> extends S<T> {
   bool get isEmpty => _set.isEmpty;
 
   @override
-  bool any(bool Function(T) test) => _set.any(test);
+  Iterable<T> get iter => _set;
 
   @override
-  Iterable<R> cast<R>() => _set.cast<R>();
+  T get anyItem => _set.first;
 
   @override
-  bool every(bool Function(T) test) => _set.every(test);
+  bool contains(covariant T element) => _set.contains(element);
 
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f) => _set.expand(f);
+  bool containsAll(Iterable<T> element) => _set.containsAll(element);
+
+  @override
+  T lookup(Object object) => _set.lookup(object);
+
+  @override
+  Set<T> difference(Set<T> other) => _set.difference(other);
+
+  @override
+  Set<T> intersection(Set<T> other) => _set.intersection(other);
+
+  @override
+  Set<T> union(Set<T> other) => _set.union(other);
 
   @override
   int get length => _set.length;
@@ -52,59 +60,7 @@ class SFlat<T> extends S<T> {
   T get single => _set.single;
 
   @override
-  T firstWhere(bool Function(T) test, {T Function() orElse}) =>
-      _set.firstWhere(test, orElse: orElse);
-
-  @override
-  E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
-      _set.fold(initialValue, combine);
-
-  @override
-  Iterable<T> followedBy(Iterable<T> other) => _set.followedBy(other);
-
-  @override
-  void forEach(void Function(T element) f) => _set.forEach(f);
-
-  @override
-  String join([String separator = ""]) => _set.join(separator);
-
-  @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _set.lastWhere(test, orElse: orElse);
-
-  @override
-  Iterable<E> map<E>(E Function(T element) f) => ISet(_set.map(f));
-
-  @override
-  T reduce(T Function(T value, T element) combine) => _set.reduce(combine);
-
-  @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _set.singleWhere(test, orElse: orElse);
-
-  @override
-  Iterable<T> skip(int count) => _set.skip(count);
-
-  @override
-  Iterable<T> skipWhile(bool Function(T value) test) => _set.skipWhile(test);
-
-  @override
-  Iterable<T> take(int count) => _set.take(count);
-
-  @override
-  Iterable<T> takeWhile(bool Function(T value) test) => _set.takeWhile(test);
-
-  @override
-  List<T> toList({bool growable = true}) => _set.toList(growable: growable);
-
-  @override
-  Set<T> toSet() => _set.toSet();
-
-  @override
-  Iterable<T> where(bool Function(T element) test) => _set.where(test);
-
-  @override
-  Iterable<E> whereType<E>() => ISet(_set.whereType<E>());
+  T operator [](int index) => _set[index];
 
   bool deepSetEquals_toIterable(Iterable<T> other) {
     if (other == null) return false;

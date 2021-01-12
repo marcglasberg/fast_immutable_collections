@@ -2,16 +2,15 @@ import "iset.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// Note that adding repeated members won't work as the expected behavior for regular [Set]s,
-/// because that behavior is implemented elsewhere ([S]).
+/// The [SAdd] class does not check for duplicate elements. In other words,
+/// it's up to the caller (in this case [S]) to make sure [_s] does not
+/// contain [_item].
+///
 class SAdd<T> extends S<T> {
   final S<T> _s;
   final T _item;
 
   SAdd(this._s, this._item) : assert(_s != null);
-
-  @override
-  bool contains(Object element) => _item == element ? true : _s.contains(element);
 
   @override
   bool get isEmpty => false;
@@ -20,10 +19,61 @@ class SAdd<T> extends S<T> {
   Iterator<T> get iterator => IteratorSAdd(_s.iterator, _item);
 
   @override
+  Iterable<T> get iter => _s.followedBy([_item]);
+
+  @override
+  bool contains(covariant T element) => _s.contains(element) ? true : _item == element;
+
+  @override
+  bool containsAll(Iterable<T> other) {
+    for (var o in other) {
+      if ((_item != o) && (!_s.contains(o))) return false;
+    }
+    return true;
+  }
+
+  @override
+  T lookup(T element) {
+    T result = _s.lookup(element);
+    result ??= (_item == element) ? _item : null;
+    return result;
+  }
+
+  @override
+  Set<T> difference(Set<T> other) => _s.difference(other)..remove(_item);
+
+  @override
+  Set<T> intersection(Set<T> other) {
+    var containsItem = other.contains(_item);
+    var result = _s.intersection(other);
+    if (containsItem) result.add(_item);
+    return result;
+  }
+
+  @override
+  Set<T> union(Set<T> other) => _s.union({_item})..addAll(other);
+
+  @override
   int get length => _s.length + 1;
 
   @override
   T get anyItem => _item;
+
+  @override
+  T get first => _s.isEmpty ? _item : _s.first;
+
+  @override
+  T get last => _item;
+
+  @override
+  T get single => _s.isEmpty ? _item : throw StateError("Too many elements");
+
+  @override
+  T operator [](int index) {
+    var sLength = _s.length;
+    if (index < 0 || index >= sLength + 1) throw RangeError.range(index, 0, sLength + 1, "index");
+    return (index < sLength) ? _s[index] : _item;
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////

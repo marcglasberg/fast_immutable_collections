@@ -2,6 +2,8 @@ import "../widgets/collection_button.dart";
 import "package:flutter/material.dart";
 import "multi_benchmark_screen.dart";
 
+// ////////////////////////////////////////////////////////////////////////////
+
 class CollectionChoiceScreen extends StatelessWidget {
   const CollectionChoiceScreen();
 
@@ -17,7 +19,7 @@ class CollectionChoiceScreen extends StatelessWidget {
           const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
+            children: <Widget>[
               Text(
                 "Choose a\ncollection type\nto benchmark:",
                 style: TextStyle(
@@ -69,3 +71,5 @@ class CollectionChoiceScreen extends StatelessWidget {
     );
   }
 }
+
+// ////////////////////////////////////////////////////////////////////////////

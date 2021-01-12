@@ -3,69 +3,76 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  group("Separate Benchmarks |", () {
-    test("Set (Mutable)", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_set_mutable", config: Config(size: 100));
-      final MutableSetContainsBenchmark mutableSetContainsBenchmark =
-          MutableSetContainsBenchmark(emitter: tableScoreEmitter);
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-      mutableSetContainsBenchmark.report();
+  test("Set (Mutable)", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "read_set_mutable", config: Config(size: 100));
+    final MutableSetContainsBenchmark mutableSetContainsBenchmark =
+        MutableSetContainsBenchmark(emitter: tableScoreEmitter);
 
-      expect(mutableSetContainsBenchmark.toMutable(),
-          SetBenchmarkBase.getDummyGeneratedSet(size: 100));
-      expect(mutableSetContainsBenchmark.contains, isFalse);
-    });
+    mutableSetContainsBenchmark.report();
 
-    test("ISet", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_iSet", config: Config(size: 100));
-      final ISetContainsBenchmark iSetContainsBenchmark =
-          ISetContainsBenchmark(emitter: tableScoreEmitter);
-
-      iSetContainsBenchmark.report();
-
-      expect(iSetContainsBenchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100));
-      expect(iSetContainsBenchmark.contains, isFalse);
-    });
-
-    test("KtSet", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_ktSet", config: Config(size: 100));
-      final KtSetContainsBenchmark ktSetContainsBenchmark =
-          KtSetContainsBenchmark(emitter: tableScoreEmitter);
-
-      ktSetContainsBenchmark.report();
-
-      expect(ktSetContainsBenchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100));
-      expect(ktSetContainsBenchmark.contains, isFalse);
-    });
-
-    test("BuiltSet", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read_builtSet", config: Config(size: 100));
-      final BuiltSetContainsBenchmark builtSetContainsBenchmark =
-          BuiltSetContainsBenchmark(emitter: tableScoreEmitter);
-
-      builtSetContainsBenchmark.report();
-
-      expect(
-          builtSetContainsBenchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100));
-      expect(builtSetContainsBenchmark.contains, isFalse);
-    });
+    expect(
+        mutableSetContainsBenchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100));
+    expect(mutableSetContainsBenchmark.contains, isFalse);
   });
 
-  group("Multiple Benchmarks |", () {
-    test("Simple run", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "read", config: Config(size: 100));
-      final SetContainsBenchmark setContainsBenchmark =
-          SetContainsBenchmark(emitter: tableScoreEmitter);
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-      setContainsBenchmark.report();
+  test("ISet", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "read_iSet", config: Config(size: 100));
+    final ISetContainsBenchmark iSetContainsBenchmark =
+        ISetContainsBenchmark(emitter: tableScoreEmitter);
 
-      setContainsBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
-          expect(benchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100)));
-    });
+    iSetContainsBenchmark.report();
+
+    expect(iSetContainsBenchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100));
+    expect(iSetContainsBenchmark.contains, isFalse);
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("KtSet", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "read_ktSet", config: Config(size: 100));
+    final KtSetContainsBenchmark ktSetContainsBenchmark =
+        KtSetContainsBenchmark(emitter: tableScoreEmitter);
+
+    ktSetContainsBenchmark.report();
+
+    expect(ktSetContainsBenchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100));
+    expect(ktSetContainsBenchmark.contains, isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("BuiltSet", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "read_builtSet", config: Config(size: 100));
+    final BuiltSetContainsBenchmark builtSetContainsBenchmark =
+        BuiltSetContainsBenchmark(emitter: tableScoreEmitter);
+
+    builtSetContainsBenchmark.report();
+
+    expect(builtSetContainsBenchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100));
+    expect(builtSetContainsBenchmark.contains, isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("Multiple Benchmarks", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "read", config: Config(size: 100));
+    final SetContainsBenchmark setContainsBenchmark =
+        SetContainsBenchmark(emitter: tableScoreEmitter);
+
+    setContainsBenchmark.report();
+
+    setContainsBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) =>
+        expect(benchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100)));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

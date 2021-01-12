@@ -3,67 +3,80 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  group("Separate Benchmarks |", () {
-    test("List (Mutable)", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_list_mutable", config: Config(size: 10));
-      final MutableListAddAllBenchmark listAddAllBenchmark =
-          MutableListAddAllBenchmark(emitter: tableScoreEmitter);
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-      listAddAllBenchmark.report();
+  test("List (Mutable)", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "add_all_list_mutable", config: Config(size: 100));
+    final MutableListAddAllBenchmark listAddAllBenchmark =
+        MutableListAddAllBenchmark(emitter: tableScoreEmitter);
 
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
-      expect(listAddAllBenchmark.toMutable(), expectedList);
-    });
+    listAddAllBenchmark.report();
 
-    test("IList", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_iList", config: Config(size: 10));
-      final IListAddAllBenchmark iListAddAllBenchmark =
-          IListAddAllBenchmark(emitter: tableScoreEmitter);
-
-      iListAddAllBenchmark.report();
-
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
-      expect(iListAddAllBenchmark.toMutable(), expectedList);
-    });
-
-    test("KtList", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_ktList", config: Config(size: 10));
-      final KtListAddAllBenchmark ktListAddAllBenchmark =
-          KtListAddAllBenchmark(emitter: tableScoreEmitter);
-
-      ktListAddAllBenchmark.report();
-
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
-      expect(ktListAddAllBenchmark.toMutable(), expectedList);
-    });
-
-    test("BuiltList", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all_builtList", config: Config(size: 10));
-      final BuiltListAddAllBenchmark builtListAddAllBenchmark =
-          BuiltListAddAllBenchmark(emitter: tableScoreEmitter);
-
-      builtListAddAllBenchmark.report();
-
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
-      expect(builtListAddAllBenchmark.toMutable(), expectedList);
-    });
+    final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+        List<int>.generate(10, (int index) => index);
+    expect(listAddAllBenchmark.toMutable(), expectedList);
   });
 
-  group("Multiple Benchmarks |", () {
-    test("Simple run", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "add_all", config: Config(size: 10));
-      final ListAddAllBenchmark addAllBenchmark = ListAddAllBenchmark(emitter: tableScoreEmitter);
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-      addAllBenchmark.report();
+  test("IList", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "add_all_iList", config: Config(size: 100));
+    final IListAddAllBenchmark iListAddAllBenchmark =
+        IListAddAllBenchmark(emitter: tableScoreEmitter);
 
-      final List<int> expectedList = ListAddAllBenchmark.baseList + ListAddAllBenchmark.listToAdd;
-      addAllBenchmark.benchmarks
-          .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
-    });
+    iListAddAllBenchmark.report();
+
+    final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+        List<int>.generate(10, (int index) => index);
+    expect(iListAddAllBenchmark.toMutable(), expectedList);
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("KtList", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "add_all_ktList", config: Config(size: 100));
+    final KtListAddAllBenchmark ktListAddAllBenchmark =
+        KtListAddAllBenchmark(emitter: tableScoreEmitter);
+
+    ktListAddAllBenchmark.report();
+
+    final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+        List<int>.generate(10, (int index) => index);
+    expect(ktListAddAllBenchmark.toMutable(), expectedList);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("BuiltList", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "add_all_builtList", config: Config(size: 100));
+    final BuiltListAddAllBenchmark builtListAddAllBenchmark =
+        BuiltListAddAllBenchmark(emitter: tableScoreEmitter);
+
+    builtListAddAllBenchmark.report();
+
+    final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+        List<int>.generate(10, (int index) => index);
+    expect(builtListAddAllBenchmark.toMutable(), expectedList);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("Multiple Benchmarks", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "add_all", config: Config(size: 100));
+    final ListAddAllBenchmark addAllBenchmark = ListAddAllBenchmark(emitter: tableScoreEmitter);
+
+    addAllBenchmark.report();
+
+    final List<int> expectedList = List<int>.generate(100, (int index) => index) +
+        List<int>.generate(10, (int index) => index);
+    addAllBenchmark.benchmarks
+        .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

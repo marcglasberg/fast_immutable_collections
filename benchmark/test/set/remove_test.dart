@@ -3,66 +3,79 @@ import "package:test/test.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
 void main() {
-  group("Separate Benchmarks |", () {
-    test("Set (Mutable)", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_set_mutable", config: Config(size: 100));
-      final MutableSetRemoveBenchmark mutableSetRemoveBenchmark =
-          MutableSetRemoveBenchmark(emitter: tableScoreEmitter);
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-      mutableSetRemoveBenchmark.report();
+  test("Set (Mutable)", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "remove_set_mutable", config: Config(size: 100));
+    final MutableSetRemoveBenchmark mutableSetRemoveBenchmark =
+        MutableSetRemoveBenchmark(emitter: tableScoreEmitter);
 
-      expect(mutableSetRemoveBenchmark.toMutable(),
-          SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
-    });
+    mutableSetRemoveBenchmark.report();
 
-    test("ISet", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_iSet", config: Config(size: 100));
-      final ISetRemoveBenchmark iSetRemoveBenchmark =
-          ISetRemoveBenchmark(emitter: tableScoreEmitter);
-
-      iSetRemoveBenchmark.report();
-
-      expect(iSetRemoveBenchmark.toMutable(),
-          SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
-    });
-
-    test("KtSet", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_ktSet", config: Config(size: 100));
-      final KtSetRemoveBenchmark ktSetRemoveBenchmark =
-          KtSetRemoveBenchmark(emitter: tableScoreEmitter);
-
-      ktSetRemoveBenchmark.report();
-
-      expect(ktSetRemoveBenchmark.toMutable(),
-          SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
-    });
-
-    test("BuiltSet", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove_builtSet", config: Config(size: 100));
-      final BuiltSetRemoveBenchmark builtSetRemoveBenchmark =
-          BuiltSetRemoveBenchmark(emitter: tableScoreEmitter);
-
-      builtSetRemoveBenchmark.report();
-
-      expect(builtSetRemoveBenchmark.toMutable(),
-          SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1));
-    });
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(mutableSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
-  group("Multiple Benchmarks |", () {
-    test("Simple run", () {
-      final TableScoreEmitter tableScoreEmitter =
-          TableScoreEmitter(prefixName: "remove", config: Config(size: 100));
-      final SetRemoveBenchmark setRemoveBenchmark = SetRemoveBenchmark(emitter: tableScoreEmitter);
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-      setRemoveBenchmark.report();
+  test("ISet", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "remove_iSet", config: Config(size: 100));
+    final ISetRemoveBenchmark iSetRemoveBenchmark = ISetRemoveBenchmark(emitter: tableScoreEmitter);
 
-      setRemoveBenchmark.benchmarks.forEach((SetBenchmarkBase benchmark) => expect(
-          benchmark.toMutable(), SetBenchmarkBase.getDummyGeneratedSet(size: 100)..remove(1)));
-    });
+    iSetRemoveBenchmark.report();
+
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(iSetRemoveBenchmark.toMutable(), expectedSet);
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("KtSet", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "remove_ktSet", config: Config(size: 100));
+    final KtSetRemoveBenchmark ktSetRemoveBenchmark =
+        KtSetRemoveBenchmark(emitter: tableScoreEmitter);
+
+    ktSetRemoveBenchmark.report();
+
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(ktSetRemoveBenchmark.toMutable(), expectedSet);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("BuiltSet", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "remove_builtSet", config: Config(size: 100));
+    final BuiltSetRemoveBenchmark builtSetRemoveBenchmark =
+        BuiltSetRemoveBenchmark(emitter: tableScoreEmitter);
+
+    builtSetRemoveBenchmark.report();
+
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    expect(builtSetRemoveBenchmark.toMutable(), expectedSet);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("Multiple Benchmarks", () {
+    final TableScoreEmitter tableScoreEmitter =
+        TableScoreEmitter(prefixName: "remove", config: Config(size: 100));
+    final SetRemoveBenchmark setRemoveBenchmark = SetRemoveBenchmark(emitter: tableScoreEmitter);
+
+    setRemoveBenchmark.report();
+
+    final Set<int> expectedSet = SetBenchmarkBase.getDummyGeneratedSet(size: 100);
+    expectedSet.remove(50);
+    setRemoveBenchmark.benchmarks
+        .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 }

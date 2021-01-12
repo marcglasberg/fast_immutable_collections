@@ -51,7 +51,7 @@ void main() {
   test("cast", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final mFlatAsNum = mFlat.cast<String, num>();
+    final mFlatAsNum = mFlat.cast<String, num>(IMap.defaultConfig);
     expect(mFlatAsNum, isA<Map<String, num>>());
   });
 
@@ -107,16 +107,36 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("from", () {
+    // 1) Regular usage
+    final Map<String, int> original = {"a": 1, "c": 3, "b": 2};
+    final MFlat<String, int> mFlat1 = MFlat.unsafe(original);
+
+    expect(mFlat1.keys.toList(), ["a", "c", "b"]);
+
+    final MFlat<String, int> mFlat = MFlat.from(mFlat1);
+
+    expect(mFlat.keys, ["a", "c", "b"]);
+
+    // 2) Nulls and other edge cases
+    expect(() => MFlat.from(null), throwsAssertionError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("unsafe", () {
-    final Map<String, int> original = {"a": 1, "b": 2, "c": 3};
+    final Map<String, int> original = {"a": 1, "c": 3, "b": 2};
     final MFlat<String, int> mFlat = MFlat.unsafe(original);
 
     expect(mFlat.unlock, original);
 
     original.addAll({"d": 4});
 
-    expect(original, {"a": 1, "b": 2, "c": 3, "d": 4});
-    expect(mFlat.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
+    expect(original, {"a": 1, "c": 3, "b": 2, "d": 4});
+    expect(mFlat.unlock, {"a": 1, "c": 3, "b": 2, "d": 4});
+    expect(mFlat.keys.toList(), ["a", "c", "b", "d"]);
+
+    expect(() => MFlat.unsafe(null), throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////

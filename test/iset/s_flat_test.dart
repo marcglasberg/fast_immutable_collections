@@ -14,7 +14,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("getFlushed", () {
-    expect(SFlat({1, 2, 3}).getFlushed, allOf(isA<Set<int>>(), {1, 2, 3}));
+    expect(SFlat({1, 2, 3}).getFlushed(ISet.defaultConfig), allOf(isA<Set<int>>(), {1, 2, 3}));
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -232,6 +232,8 @@ void main() {
 
     expect(original, {1, 2, 3, 4});
     expect(sFlat, {1, 2, 3, 4});
+
+    expect(() => SFlat.unsafe(null), throwsAssertionError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -250,6 +252,41 @@ void main() {
     expect(sFlat.contains(4), isTrue);
     expect(sFlat.contains(5), isTrue);
     expect(sFlat.contains(100), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("containsAll", () {
+    final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
+    expect(sFlat.containsAll([2, 2, 3]), isTrue);
+    expect(sFlat.containsAll({1, 2, 3, 4}), isTrue);
+    expect(sFlat.containsAll({1, 2, 3, 4}.lock), isTrue);
+    expect(sFlat.containsAll({1, 2, 3, 4, 10}.lock), isFalse);
+    expect(sFlat.containsAll({10, 20, 30, 40}), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("difference", () {
+    final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
+    expect(sFlat.difference({1, 2, 5}), {3, 4, 6});
+    expect(sFlat.difference({1, 2, 3, 4, 5, 6}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("intersection", () {
+    final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
+    expect(sFlat.intersection({1, 2, 5}), {1, 2, 5});
+    expect(sFlat.intersection({10, 20, 50}), <int>{});
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("union", () {
+    final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
+    expect(sFlat.union({1}), {1, 2, 3, 4, 5, 6});
+    expect(sFlat.union({1, 2, 10}), {1, 2, 3, 4, 5, 6, 10});
   });
 
   /////////////////////////////////////////////////////////////////////////////

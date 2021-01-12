@@ -31,6 +31,3 @@ jobs:
 
       - name: Upload Results to Codecov.io
         run: bash tool/codecov.sh
-
-      - name: Formattting
-        run: dartfmt -l 100 -n --set-exit-if-changed .

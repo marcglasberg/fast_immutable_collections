@@ -7,6 +7,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
@@ -20,6 +22,8 @@ class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase>
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
   MutableMapContainsValueBenchmark({@required TableScoreEmitter emitter})
@@ -40,61 +44,69 @@ class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IMapContainsValueBenchmark extends MapBenchmarkBase {
   IMapContainsValueBenchmark({@required TableScoreEmitter emitter})
       : super(name: "IMap", emitter: emitter);
 
-  IMap<String, int> _iMap;
+  IMap<String, int> iMap;
   bool contains;
 
   @override
-  Map<String, int> toMutable() => _iMap.unlock;
+  Map<String, int> toMutable() => iMap.unlock;
 
   @override
   void setup() =>
-      _iMap = IMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+      iMap = IMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() {
-    for (int i = 0; i < _iMap.length + 1; i++) contains = _iMap.containsValue(i);
+    for (int i = 0; i < iMap.length + 1; i++) contains = iMap.containsValue(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapContainsValueBenchmark extends MapBenchmarkBase {
   KtMapContainsValueBenchmark({@required TableScoreEmitter emitter})
       : super(name: "KtMap", emitter: emitter);
 
-  KtMap<String, int> _ktMap;
+  KtMap<String, int> ktMap;
   bool contains;
 
   @override
-  Map<String, int> toMutable() => _ktMap.asMap();
+  Map<String, int> toMutable() => ktMap.asMap();
 
   @override
-  void setup() => _ktMap = KtMap.from(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  void setup() => ktMap = KtMap.from(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() {
-    for (int i = 0; i < _ktMap.size + 1; i++) contains = _ktMap.containsValue(i);
+    for (int i = 0; i < ktMap.size + 1; i++) contains = ktMap.containsValue(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
   BuiltMapContainsValueBenchmark({@required TableScoreEmitter emitter})
       : super(name: "BuiltMap", emitter: emitter);
 
-  BuiltMap<String, int> _builtMap;
+  BuiltMap<String, int> builtMap;
   bool contains;
 
   @override
-  Map<String, int> toMutable() => _builtMap.asMap();
+  Map<String, int> toMutable() => builtMap.asMap();
 
   @override
-  void setup() => _builtMap =
-      BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  void setup() =>
+      builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
   void run() {
-    for (int i = 0; i < _builtMap.length + 1; i++) contains = _builtMap.containsValue(i);
+    for (int i = 0; i < builtMap.length + 1; i++) contains = builtMap.containsValue(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

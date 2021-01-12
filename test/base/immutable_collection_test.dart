@@ -289,6 +289,34 @@ void main() {
     expect(obj1 == obj2, true);
     expect([obj1].deepEqualsByIdentity([obj2]), false);
     expect([obj1, obj2].deepEqualsByIdentity([obj1, obj2]), true);
+
+    // Comparing to non-list objects
+    expect([].deepEqualsByIdentity({}), true);
+    expect([1].deepEqualsByIdentity({1}), true);
+    expect([1].deepEqualsByIdentity({2}), false);
+    expect([1, 2].deepEqualsByIdentity({1, 2}), true);
+    expect([1, 2].deepEqualsByIdentity({3, 4}), false);
+    expect([1, 2].deepEqualsByIdentity({1, 3}), false);
+    expect([1, 2].deepEqualsByIdentity([1, 2, 2].iterator.toIterable()), false);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("FicIterableExtension | isNullOrEmpty | isNotNullOrEmpty", () {
+    final Iterable<int> iter1 = [1, 2, 3].iterator.toIterable();
+
+    expect(iter1.isNullOrEmpty, isFalse);
+    expect(iter1.isNotNullOrEmpty, isTrue);
+
+    final Iterable<int> iter2 = <int>[].iterator.toIterable();
+
+    expect(iter2.isNullOrEmpty, isTrue);
+    expect(iter2.isNotNullOrEmpty, isFalse);
+
+    Iterable<int> iter3;
+
+    expect(iter3.isNullOrEmpty, isTrue);
+    expect(iter3.isNotNullOrEmpty, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,8 +363,11 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("findDuplicates", () {
-    expect(["A", "B", "C", "C", "A", "E"].findDuplicates(), ["A", "C"]);
-    expect(["A", "B", "C", "E"].findDuplicates(), []);
+    expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), {"C", "A"});
+    expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), ["C", "A"]);
+    expect(["A", "B", "C", "E"].findDuplicates(), <String>{});
+    expect(["A", "B", "C", "E"].findDuplicates(), <String>[]);
+    expect(["A", "B", "B", "B"].findDuplicates(), {"B"});
     expect(["A", "B", "B", "B"].findDuplicates(), ["B"]);
   });
 

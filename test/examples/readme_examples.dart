@@ -63,12 +63,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  testAndPrint("IList methods return IList", () {
+  testAndPrint("Some IList methods (like map and take) return Iterable", () {
     IList<int> ilist = ["Bob", "Alice", "Dominic", "Carl"]
         .lock
         .sort() // Alice, Bob, Carl, Dominic
         .map((name) => name.length) // 5, 3, 4, 7
         .take(3) // 5, 3, 4
+        .toIList()
         .sort() // 3, 4, 5
         .toggle(4) // 3, 5,
         .toggle(2); // 3, 5, 2;

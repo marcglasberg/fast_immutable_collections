@@ -73,6 +73,14 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("contains", () {
+    final LExample<String> lExample = LExample(["a", "b", "c", "e", "d", "f"]);
+    expect(lExample.contains("a"), isTrue);
+    expect(lExample.contains("z"), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("elementAt", () {
     final LExample<String> lExample = LExample(["a", "b", "c", "d", "e", "f"]);
     expect(lExample.elementAt(0), "a");
@@ -274,6 +282,13 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("toListSet", () {
+    final LExample<int> lExample = LExample([1, 2, 3, 3, 4, 5, 6]);
+    expect(lExample.toListSet(), allOf(isA<ListSet<int>>(), {1, 2, 3, 4, 5, 6}));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -286,6 +301,24 @@ class LExample<T> extends L<T> {
 
   @override
   Iterator<T> get iterator => _ilist.iterator;
+
+  @override
+  T operator [](int index) => _ilist[index];
+
+  @override
+  Iterable<T> get iter => _ilist;
+
+  @override
+  T get first => _ilist.first;
+
+  @override
+  T get last => _ilist.last;
+
+  @override
+  int get length => _ilist.length;
+
+  @override
+  T get single => _ilist.single;
 }
 
 //////////////////////////////////////////////////////////////////////////////

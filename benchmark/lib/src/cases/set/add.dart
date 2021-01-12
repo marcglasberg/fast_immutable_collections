@@ -1,15 +1,13 @@
+import "dart:math";
 import "package:built_collection/built_collection.dart";
-import "package:kt_dart/collection.dart";
+import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:kt_dart/kt.dart";
 import "package:meta/meta.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "../../utils/table_score_emitter.dart";
-import "../../utils/collection_benchmark_base.dart";
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SetAddBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
-  static const int innerRuns = 100;
-
   @override
   final List<SetBenchmarkBase> benchmarks;
 
@@ -24,25 +22,49 @@ class SetAddBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         super(emitter: emitter);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MutableSetAddBenchmark extends SetBenchmarkBase {
   MutableSetAddBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
   Set<int> set;
-  Set<int> fixedSet;
+
+  // Saves many copies of the initial set (created during setup).
+  List<Set<int>> initialSet;
+
+  int count;
 
   @override
   Set<int> toMutable() => set;
 
   @override
-  void setup() => fixedSet = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+  void setup() {
+    count = 0;
+    initialSet = [];
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
+      initialSet.add(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+  }
 
   @override
   void run() {
-    set = Set<int>.of(fixedSet);
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) set.add(i);
+    set = getNextSet();
+
+    final int initialLength = set.length;
+    final int finalLength = initialLength + innerRuns();
+    for (int i = initialLength; i < finalLength; i++) set.add(i);
+  }
+
+  Set<int> getNextSet() {
+    if (count >= initialSet.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialSet[count];
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ISetAddBenchmark extends SetBenchmarkBase {
   ISetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
@@ -59,9 +81,15 @@ class ISetAddBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     result = iSet;
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) result = result.add(i);
+
+    final int initialLength = iSet.length;
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++) result = result.add(i);
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtSetAddBenchmark extends SetBenchmarkBase {
   KtSetAddBenchmark({@required TableScoreEmitter emitter}) : super(name: "KtSet", emitter: emitter);
@@ -78,13 +106,19 @@ class KtSetAddBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     result = ktSet;
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) result = result.plusElement(i).toSet();
+
+    final int initialLength = ktSet.size;
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++) result = result.plusElement(i).toSet();
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
   BuiltSetAddWithRebuildBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "BuiltSet with Rebuild", emitter: emitter);
+      : super(name: "BuiltSet (Rebuild)", emitter: emitter);
 
   BuiltSet<int> builtSet;
   BuiltSet<int> result;
@@ -98,14 +132,20 @@ class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     result = builtSet;
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++)
+
+    final int initialLength = builtSet.length;
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++)
       result = result.rebuild((SetBuilder<int> setBuilder) => setBuilder.add(i));
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
   BuiltSetAddWithSetBuilderBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "BuiltSet with ListBuilder", emitter: emitter);
+      : super(name: "BuiltSet (ListBuilder)", emitter: emitter);
 
   BuiltSet<int> builtSet;
   BuiltSet<int> result;
@@ -119,7 +159,13 @@ class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     final SetBuilder<int> setBuilder = builtSet.toBuilder();
-    for (int i = 0; i < SetAddBenchmark.innerRuns; i++) setBuilder.add(i);
+    final int initialLength = builtSet.length;
+    final int finalLength = initialLength + innerRuns();
+
+    for (int i = 0; i < finalLength; i++) setBuilder.add(i);
+
     result = setBuilder.build();
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

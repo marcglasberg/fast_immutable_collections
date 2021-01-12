@@ -7,9 +7,9 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
-class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
-  static const String keyToRead = "10";
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
+class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
 
@@ -22,6 +22,8 @@ class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapReadBenchmark extends MapBenchmarkBase {
   MutableMapReadBenchmark({@required TableScoreEmitter emitter})
@@ -37,8 +39,10 @@ class MutableMapReadBenchmark extends MapBenchmarkBase {
   void setup() => _map = MapBenchmarkBase.getDummyGeneratedMap(size: config.size);
 
   @override
-  void run() => newVar = _map[MapReadBenchmark.keyToRead];
+  void run() => newVar = _map[(config.size ~/ 2).toString()];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapReadBenchmark extends MapBenchmarkBase {
   IMapReadBenchmark({@required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
@@ -53,8 +57,10 @@ class IMapReadBenchmark extends MapBenchmarkBase {
   void setup() => iMap = IMap(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
-  void run() => newVar = iMap[MapReadBenchmark.keyToRead];
+  void run() => newVar = iMap[(config.size ~/ 2).toString()];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapReadBenchmark extends MapBenchmarkBase {
   KtMapReadBenchmark({@required TableScoreEmitter emitter})
@@ -71,8 +77,10 @@ class KtMapReadBenchmark extends MapBenchmarkBase {
       ktMap = KtMap<String, int>.from(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
-  void run() => newVar = ktMap[MapReadBenchmark.keyToRead];
+  void run() => newVar = ktMap[(config.size ~/ 2).toString()];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapReadBenchmark extends MapBenchmarkBase {
   BuiltMapReadBenchmark({@required TableScoreEmitter emitter})
@@ -89,5 +97,7 @@ class BuiltMapReadBenchmark extends MapBenchmarkBase {
       builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
-  void run() => newVar = builtMap[MapReadBenchmark.keyToRead];
+  void run() => newVar = builtMap[(config.size ~/ 2).toString()];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

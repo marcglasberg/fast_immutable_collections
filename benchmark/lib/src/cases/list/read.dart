@@ -7,9 +7,9 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
 
-class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
-  static const int indexToRead = 10;
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
+class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
@@ -22,6 +22,8 @@ class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         ],
         super(emitter: emitter);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListReadBenchmark extends ListBenchmarkBase {
   MutableListReadBenchmark({@required TableScoreEmitter emitter})
@@ -37,8 +39,10 @@ class MutableListReadBenchmark extends ListBenchmarkBase {
   void setup() => list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
 
   @override
-  void run() => newVar = list[ListReadBenchmark.indexToRead];
+  void run() => newVar = list[config.size ~/ 2];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IListReadBenchmark extends ListBenchmarkBase {
   IListReadBenchmark({@required TableScoreEmitter emitter})
@@ -54,8 +58,10 @@ class IListReadBenchmark extends ListBenchmarkBase {
   void setup() => iList = IList<int>(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => newVar = iList[ListReadBenchmark.indexToRead];
+  void run() => newVar = iList[config.size ~/ 2];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtListReadBenchmark extends ListBenchmarkBase {
   KtListReadBenchmark({@required TableScoreEmitter emitter})
@@ -72,8 +78,10 @@ class KtListReadBenchmark extends ListBenchmarkBase {
       ktList = KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => newVar = ktList[ListReadBenchmark.indexToRead];
+  void run() => newVar = ktList[config.size ~/ 2];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltListReadBenchmark extends ListBenchmarkBase {
   BuiltListReadBenchmark({@required TableScoreEmitter emitter})
@@ -90,5 +98,7 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
       builtList = BuiltList<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
 
   @override
-  void run() => newVar = builtList[ListReadBenchmark.indexToRead];
+  void run() => newVar = builtList[config.size ~/ 2];
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

@@ -85,8 +85,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Creates a map of sets instance in which the keys and values are
   /// computed from the [iterable].
   ///
-  /// For each element of the [iterable] this constructor computes a key/value
-  /// pair, by applying [keyMapper] and [valueMapper] respectively. When the key
+  /// For each element of the [iterable] it computes a key/value pair,
+  /// by applying [keyMapper] and [valueMapper] respectively. When the key
   /// is new, it will be created with a set containing the value. When the key
   /// already exists, each following value will be added to the existing set.
   ///
@@ -163,8 +163,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
   }
 
-  /// Unlocks the map, returning a regular (mutable, unordered) `Map<K, Set<V>` of type
-  /// [HashMap]. This map is "safe", in the sense that is independent from
+  /// Unlocks the map, returning a regular (mutable, ordered) `Map<K, Set<V>` of type
+  /// [LinkedHashMap]. This map is "safe", in the sense that is independent from
   /// the original [IMap].
   Map<K, Set<V>> get unlock {
     Map<K, Set<V>> result = {};
@@ -186,24 +186,61 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return iterable of entries, where each entry is the key:set pair.
   ///
   /// For example, if the map is `{1: {a, b}, 2: {x, y}}`,
-  /// it will return [(1:{a,b}), 2:{x, y}].
+  /// it will return `[(1:{a,b}), 2:{x, y}]`.
   Iterable<MapEntry<K, ISet<V>>> get entries => _mapOfSets.entries;
 
+  /// Return the [MapEntry] for the given [key].
+  MapEntry<K, ISet<V>> entry(K key) => _mapOfSets.entry(key);
+
   /// Returns an [Iterable] of the map keys. Note this is always fast
-  /// and **UNORDERED**. If you need order, please use [keyList].
+  /// and **UNORDERED**, even is [sortKeys] is true. If you need order,
+  /// please use [keyList].
   Iterable<K> get keys => _mapOfSets.keys;
 
+  /// Returns an [IList] of the map keys.
+  ///
+  /// Optionally, you may provide a [config] for the list.
+  ///
+  /// The list will be sorted if the map's [sortKeys] configuration is `true`,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  IList<K> keyList({
+    int Function(K a, K b) compare,
+    ConfigList config,
+  }) {
+    var result = IList.withConfig(keys, config);
+    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    return result;
+  }
+
   /// Returns an [Iterable] of the map values. Note this is always fast
-  /// and **UNORDERED**. If you need order, please use [valueList].
+  /// and **UNORDERED**.
   Iterable<ISet<V>> get sets => _mapOfSets.values;
 
   /// Return all values of all sets, including duplicates.
+  /// Note this is always **UNORDERED**, even is [sortValues] is true.
   Iterable<V> get values sync* {
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       for (V value in entry.value) {
         yield value;
       }
     }
+  }
+
+  /// Returns an [IList] of the all values in all sets.
+  ///
+  /// Optionally, you may provide a [config] for the list.
+  ///
+  /// The list will be sorted if the map's [sortValues] configuration is `true`,
+  /// or if you explicitly provide a [compare] method.
+  ///
+  IList<V> valueList({
+    int Function(V a, V b) compare,
+    ConfigList config,
+  }) {
+    var result = IList.withConfig(values, config);
+    if (compare != null || this.config.sortValues) result = result.sort(compare);
+    return result;
   }
 
   /// Return a flattened iterable of <K, V> entries (including eventual duplicates),
@@ -228,16 +265,10 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ISet<ISet<V>> get setsAsSet => ISet(sets).withDeepEquals;
 
   /// Return all [values] of all [sets], removing duplicates.
-  ISet<V> get valuesAsSet {
-    var result = HashSet<V>();
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      var set = entry.value;
-      result.addAll(set);
-    }
-    return ISet<V>(result).withDeepEquals;
-  }
+  ISet<V> get valuesAsSet =>
+      ISet.fromIterable(_mapOfSets.entries, mapper: ((MapEntry<K, ISet<V>> e) => e.value));
 
-  /// Order is undefined.
+  /// Return all [keys].
   IList<K> get keysAsList => IList(keys).withDeepEquals;
 
   /// Returns a list of the internal sets.

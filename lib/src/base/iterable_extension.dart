@@ -5,10 +5,11 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 extension FicIterableExtension<T> on Iterable<T> {
   //
   /// Creates an *immutable* list ([IList]) from the iterable.
-  IList<T> toIList() => (this == null) ? null : IList<T>(this);
+  IList<T> toIList([ConfigList config]) =>
+      (this == null) ? null : IList<T>.withConfig(this, config);
 
   /// Creates an *immutable* set ([ISet]) from the iterable.
-  ISet<T> toISet() => (this == null) ? null : ISet<T>(this);
+  ISet<T> toISet([ConfigSet config]) => (this == null) ? null : ISet<T>.withConfig(this, config);
 
   bool get isNullOrEmpty => this == null || isEmpty;
 
@@ -45,13 +46,13 @@ extension FicIterableExtension<T> on Iterable<T> {
     }
   }
 
-  /// Finds duplicates and then returns a [Set] with the elements which were duplicated.
+  /// Finds duplicates and then returns a [Set] with the duplicated elements.
   /// If there are no duplicates, an empty [Set] is returned.
   Set<T> findDuplicates() {
-    final Set<T> duplicates = HashSet<T>();
+    final Set<T> duplicates = <T>{};
     final Set<T> auxSet = HashSet<T>();
-    for (T elements in this) {
-      if (!auxSet.add(elements)) duplicates.add(elements);
+    for (final T element in this) {
+      if (!auxSet.add(element)) duplicates.add(element);
     }
     return duplicates;
   }

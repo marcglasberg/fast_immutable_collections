@@ -44,14 +44,15 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
   void setup() {
     count = 0;
     initialLists = [];
-    for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
       initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
   }
 
   @override
   void run() {
     list = getNextList();
-    for (int i = 0; i < innerRuns(); i++) list.add(i);
+    var _innerRuns = innerRuns();
+    for (int i = 0; i < _innerRuns; i++) list.add(i);
   }
 
   List<int> getNextList() {
@@ -83,7 +84,8 @@ class IListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = iList;
-    for (int i = 0; i < innerRuns(); i++) result = result.add(i);
+    var _innerRuns = innerRuns();
+    for (int i = 0; i < _innerRuns; i++) result = result.add(i);
   }
 }
 
@@ -106,7 +108,8 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = ktList;
-    for (int i = 0; i < innerRuns(); i++) result = result.plusElement(i);
+    var _innerRuns = innerRuns();
+    for (int i = 0; i < _innerRuns; i++) result = result.plusElement(i);
   }
 }
 
@@ -129,7 +132,8 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = builtList;
-    for (int i = 0; i < innerRuns(); i++)
+    var _innerRuns = innerRuns();
+    for (int i = 0; i < _innerRuns; i++)
       result = result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
   }
 }
@@ -153,7 +157,8 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     final ListBuilder<int> listBuilder = builtList.toBuilder();
-    for (int i = 0; i < innerRuns(); i++) listBuilder.add(i);
+    var _innerRuns = innerRuns();
+    for (int i = 0; i < _innerRuns; i++) listBuilder.add(i);
     result = listBuilder.build();
   }
 }

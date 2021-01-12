@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
 import "package:meta/meta.dart";
@@ -6,6 +8,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "../../utils/table_score_emitter.dart";
 import "../../utils/collection_benchmark_base.dart";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
@@ -21,21 +25,46 @@ class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         super(emitter: emitter);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MutableMapRemoveBenchmark extends MapBenchmarkBase {
   MutableMapRemoveBenchmark({@required TableScoreEmitter emitter})
       : super(name: "Map (Mutable)", emitter: emitter);
 
   Map<String, int> map;
 
+  int count;
+
+  // Saves many copies of the initial list (created during setup).
+  List<Map<String, int>> initialMaps;
+
   @override
   Map<String, int> toMutable() => map;
 
   @override
-  void setup() => map = MapBenchmarkBase.getDummyGeneratedMap();
+  void setup() {
+    count = 0;
+    initialMaps = [];
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
+      initialMaps.add(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+  }
 
   @override
-  void run() => map.remove("1");
+  void run() {
+    map = getNextMap();
+    map.remove((config.size ~/ 2).toString());
+  }
+
+  Map<String, int> getNextMap() {
+    if (count >= initialMaps.length - 1)
+      count = 0;
+    else
+      count++;
+    return initialMaps[count];
+  }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapRemoveBenchmark extends MapBenchmarkBase {
   IMapRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -47,11 +76,14 @@ class IMapRemoveBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => iMap.unlock;
 
   @override
-  void setup() => iMap = IMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap());
+  void setup() =>
+      iMap = IMap<String, int>(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
-  void run() => iMap = iMap.remove("1");
+  void run() => iMap = iMap.remove((config.size ~/ 2).toString());
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapRemoveBenchmark extends MapBenchmarkBase {
   KtMapRemoveBenchmark({@required TableScoreEmitter emitter})
@@ -63,15 +95,18 @@ class KtMapRemoveBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => ktMap.asMap();
 
   @override
-  void setup() => ktMap = KtMap<String, int>.from(MapBenchmarkBase.getDummyGeneratedMap());
+  void setup() =>
+      ktMap = KtMap<String, int>.from(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
-  void run() => ktMap = ktMap.minus("1");
+  void run() => ktMap = ktMap.minus((config.size ~/ 2).toString());
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   BuiltMapMapRemoveBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+      : super(name: "BuiltMap", emitter: emitter);
 
   BuiltMap<String, int> builtMap;
 
@@ -79,9 +114,12 @@ class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   Map<String, int> toMutable() => builtMap.asMap();
 
   @override
-  void setup() => builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap());
+  void setup() =>
+      builtMap = BuiltMap<String, int>.of(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
 
   @override
-  void run() =>
-      builtMap = builtMap.rebuild((MapBuilder<String, int> mapBuilder) => mapBuilder.remove("1"));
+  void run() => builtMap = builtMap.rebuild(
+      (MapBuilder<String, int> mapBuilder) => mapBuilder.remove((config.size ~/ 2).toString()));
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

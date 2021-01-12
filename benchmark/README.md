@@ -1,27 +1,14 @@
 # Benchmarks for the `Fast Immutable Collections` Package
 
-[![GIF][gif]][example]
+[![GIF][gif]][benchmark_app]
 
 This is a separate package for the benchmarking of the [`fast_immutable_collections`][fast_immutable_collections] package.
 
-Note that there are no tests (TDD), but the code is simple enough and just a simple client on the overarching project. Use the [`example`][example] project to run the benchmarks on a mobile device, preferably on `release` mode.
+This package uses TDD to check the results of the benchmarks, and the [benchmark_harness][benchmark_harness] package to create the benchmarks. There's additional code in the [`utils`][utils] folder, and you could add more benchmarks by checking examples in the [cases][cases] folder.
 
 
-[example]: example/
+[benchmark_app]: benchmark_app/
+[cases]: lib/src/cases/
 [gif]: assets/demo.gif
 [fast_immutable_collections]: ../
-
-# 1. Resources and Documentation
-
-| File                                                        | Purpose                                                       |
-| ----------------------------------------------------------- | ------------------------------------------------------------- |
-| [`how_to_create_a_benchmark.md`][how_to_create_a_benchmark] | How to create a benchmark in the context of this project      |
-| [`benchmarks_specifications.md`][benchmarks_specifications] | Summarized specifications of the benchmarks                   |
-| [`uml.puml`][uml]                                           | The UML diagram for this package (Uses [PlantUML][plant_uml]) |
-
-
-[benchmarks_specifications]: docs/benchmarks_specifications.md
-[example]: example/
-[how_to_create_a_benchmark]: docs/how_to_create_a_benchmark.md
-[plant_uml]: https://plantuml.com/
-[uml]: docs/uml.puml
+[utils]: lib/src/utils/

@@ -4,6 +4,8 @@ import "../screens/code_screen.dart";
 import "../screens/graph_screen.dart";
 import "collection_button.dart";
 
+// ////////////////////////////////////////////////////////////////////////////
+
 class BenchWidget extends StatefulWidget {
   final String title;
   final Map<String, String> code;
@@ -12,7 +14,7 @@ class BenchWidget extends StatefulWidget {
   // of data being appended to previous runs.
   final List<MultiBenchmarkReporter> Function() benchmarks;
 
-  BenchWidget({
+  const BenchWidget({
     this.title,
     this.code,
     @required this.benchmarks,
@@ -21,6 +23,8 @@ class BenchWidget extends StatefulWidget {
   @override
   _BenchWidgetState createState() => _BenchWidgetState();
 }
+
+// ////////////////////////////////////////////////////////////////////////////
 
 class _BenchWidgetState extends State<BenchWidget> {
   bool _isRunning = false;
@@ -122,6 +126,8 @@ class _BenchWidgetState extends State<BenchWidget> {
   }
 }
 
+// ////////////////////////////////////////////////////////////////////////////
+
 class _PleaseWait extends StatelessWidget {
   const _PleaseWait({Key key}) : super(key: key);
 
@@ -150,3 +156,5 @@ class _PleaseWait extends StatelessWidget {
     );
   }
 }
+
+// ////////////////////////////////////////////////////////////////////////////
