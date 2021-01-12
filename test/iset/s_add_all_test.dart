@@ -56,6 +56,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("lookup", () {
+    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    expect(sAddAll.lookup(1), 1);
+    expect(sAddAll.lookup(10), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("containsAll", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.containsAll([2, 2, 3]), isTrue);

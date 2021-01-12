@@ -52,6 +52,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("lookup", () {
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    expect(sAdd.lookup(1), 1);
+    expect(sAdd.lookup(10), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("containsAll", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.containsAll([2, 2, 3]), isTrue);
@@ -73,7 +81,7 @@ void main() {
 
   test("intersection", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
-    expect(sAdd.intersection({1, 2, 5, 10}), {1, 2});
+    expect(sAdd.intersection({1, 2, 4, 5, 10}), {1, 2, 4});
     expect(sAdd.intersection({10, 20, 50}), <int>{});
   });
 
