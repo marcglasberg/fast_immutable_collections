@@ -727,6 +727,7 @@ void main() {
   test("followedBy", () {
     final ISet<int> iset = {1, 2, 3}.lock.add(4).addAll({5, 6});
     expect(iset.followedBy({7, 8}).unlock, {1, 2, 3, 4, 5, 6, 7, 8});
+    expect(iset.followedBy({7, 8}.lock).unlock, {1, 2, 3, 4, 5, 6, 7, 8});
     expect(iset.followedBy(<int>{}.lock.add(7).addAll({8, 9})).unlock, {1, 2, 3, 4, 5, 6, 7, 8, 9});
   });
 

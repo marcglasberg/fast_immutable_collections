@@ -819,8 +819,8 @@ void main() {
   test("followedBy", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
     expect(ilist.followedBy([7, 8]).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(
-        ilist.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(ilist.followedBy([7, 8].lock).unlock, [1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(ilist.followedBy(<int>[].lock.add(7).addAll([8, 9])).unlock, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

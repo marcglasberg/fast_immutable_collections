@@ -207,9 +207,13 @@ void main() {
     const Student james = Student("James");
     const Student sara = Student("Sara");
     const Student lucy = Student("Lucy");
+    const Student bob = Student("Bob");
+    const Student charles = Student("Charles");
+
     final Students students = Students([james, sara, lucy]);
 
-    expect(students.followedBy([const Student("Bob")]), [james, sara, lucy, const Student("Bob")]);
+    expect(students.followedBy([bob]), [james, sara, lucy, bob]);
+    expect(students.followedBy([bob, charles].lock), [james, sara, lucy, bob, charles]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
