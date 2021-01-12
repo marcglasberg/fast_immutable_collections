@@ -43,7 +43,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
-  bool contains(T element) => iter.contains(element);
+  bool contains(covariant T element) => iter.contains(element);
 
   T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
 
