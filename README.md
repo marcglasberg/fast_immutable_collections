@@ -300,7 +300,8 @@ var ilist = [1, 2, 3, 4].lock;
 for (int value in ilist) print(value);  
 ```
 
-`IList` methods always return a new `IList`, instead of modifying the original one. For example:
+`IList` methods to add and remove items return a new `IList`, instead of modifying the original one.
+For example:
 
 ```
 var ilist1 = [1, 2].lock;
@@ -341,32 +342,19 @@ ilist = ilist.add(3);
 print(ilist); // 1, 2, 3                        
 ```
 
-`IList` has **all** the methods of `List`, plus some other new and useful ones. However, `IList`
-methods always return a new `IList`, instead of modifying the original list or returning iterables.
-
-For example:
+`IList` has **all** the methods of `List`, plus some other new and useful ones. Those `List` methods
+that return iterables also return iterables for the `IList`. You can turn an `Iterable` into
+a `List` by calling `.toList()`, and into an `IList` by calling `.toIList()`. For example:
 
 ```
 IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl'].lock   
    .sort() // Alice, Bob, Carl, Dominic
    .map((name) => name.length) // 5, 3, 4, 7
-   .take(3) // 5, 3, 4   
-   .sort(); // 3, 4, 5
-   .toggle(4) // 3, 5
-   .toggle(2) // 3, 5, 2
-```
-
-While many `List` methods, like `map()` and `where()` return an `Iterable`, the equivalent `IList`
-methods return another `IList`. As a result, if you want to do lazy processing from an `IList` you
-must first use `iter`
-to get a regular `Iterable` which is not an `IList`. For example:
-
-```
-// Direct IList use:
-IList ilist = ilist.where((x) => x != null).take(3);
-
-// Lazy processing:
-IList ilist = ilist.iter.where((x) => x != null).take(3).toIList();
+   .take(3) // 5, 3, 4
+   .toIList()
+   .sort() // 3, 4, 5
+   .toggle(4) // 3, 5,
+   .toggle(2); // 3, 5, 2;
 ```
 
 `IList` constructors:
@@ -764,7 +752,7 @@ safety.
 
 ```
 IList<int> ilist = [1, 2, 3].lock;       // Safe
-IList<int> ilist = [1, 2, 3].lockUnsafe; // Only this way to lock a list is dangerous
+IList<int> ilist = [1, 2, 3].lockUnsafe; // Unsafe, fast
 
 List<int> list = ilist.unlock;           // Safe and mutable
 List<int> list = ilist.unlockView;       // Safe, fast and immutable
@@ -804,9 +792,8 @@ These are your options to obtain a regular `List` back from an `IList`:
 
 # 3. ISet
 
-An `ISet` is an immutable set, meaning once it's created it cannot be modified. An `ISet` is
-always **unordered**
-(though, as we'll see, it can be automatically sorted when you use it).
+An `ISet` is an immutable set, meaning once it's created it cannot be modified. An `ISet` may keep
+the insertion order, or it may be sorted, depending on its configuration.
 
 You can create an `ISet` by passing an iterable to its constructor, or you can simply "lock" a
 regular set. Other iterables (which are not sets) can also be locked as sets:
@@ -838,20 +825,8 @@ Set<String> set = Set.of(iset);
 Set<String> set = iset.unlock; 
 ```
 
-While many `Set` methods, like `map()` and `where()` return an `Iterable`, the equivalent `ISet`
-methods return another `ISet`. As a result, if you want to do lazy processing from an `ISet` you
-must first use `iter`
-to get a regular `Iterable`, which is not an `ISet`. For example:
+`ISet` constructors:
 
-```
-// Direct ISet use:
-ISet iset = iset.where((x) => x != null).take(3);
-
-// Lazy processing:
-ISet iset = iset.iter.where((x) => x != null).take(3).toISet();
-```
-
-ISet constructors:
 `ISet()`,
 `ISet.withConfig()`,
 `ISet.unsafe()`.
@@ -859,14 +834,14 @@ ISet constructors:
 ## 3.1. Similarities and Differences to the IList
 
 Since I don't want to repeat myself, all the topics below are explained in much less detail here
-than for IList. Please read the IList explanation first, before trying to understand ISet.
+than for `IList`. Please read the `IList` explanation first, before trying to understand `ISet`.
 
 - An `ISet` is an `Iterable`, so you can iterate over it.
 
 - `ISet` has **all** the methods of `Set`, plus some other new and useful ones.
-  `ISet` methods always return a new `ISet`, instead of modifying the original one. Because of that,
-  you can easily chain methods. But since `ISet` methods always return a new `ISet`, it is an
-  **error** to call a method on it and then discard the result.
+  `ISet` methods to add or remove items return a new `ISet`, instead of modifying the original one.
+  Because of that, you can easily chain methods. But since `ISet` methods return a new `ISet`, it is
+  an **error** to call a method on it and then discard the result.
 
 - `ISet`s with "deep equals" configuration are equal if they have the same items in **any** order.
   They can be used as **map keys**, which is a very useful property in itself, but can also help
@@ -905,7 +880,7 @@ than for IList. Please read the IList explanation first, before trying to unders
 
     ```
     ISet<int> iset = {1, 2, 3}.lock;       // Safe, immutable
-    ISet<int> iset = {1, 2, 3}.lockUnsafe; // Safe, immutable, but dangerous!
+    ISet<int> iset = {1, 2, 3}.lockUnsafe; // Unsafe, fast
     Set<int> set = iset.unlock;            // Safe, mutable, defensive copy
     Set<int> set = iset.unlockView;        // Safe, fast and immutable
     Set<int> set = iset.unlockLazy;        // Safe, fast and mutable
@@ -919,10 +894,10 @@ is `ConfigSet(isDeepEquals: true, sort: false, cacheHashCode: true)`:
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same items in the
    same order.
 
-2. `sort: true` means `ISet.iterator`, and methods `ISet.toList`, `ISet.toIList` and `ISet.toSet`
-   will return sorted outputs.
+2. `sort: false` means it keeps insertion order. But `sort: true` means it will iterate in sorted
+   order.
 
-3. `cacheHashCode: true` means the hashCode is cached. It's not recommended to turn this cache off
+3. `cacheHashCode: true` means the hashCode is cached. It's not recommended turning this cache off
    for sets.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
@@ -940,16 +915,15 @@ var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: false));
 print(iset.join(","));
 ```
 
-As previously discussed with `IList`, the global configuration is meant to be decided during your
-app's initialization, and then not changed ever again. We strongly suggest you prohibit further
+As previously discussed with the `IList`, the global configuration is meant to be decided during
+your app's initialization, and then not changed ever again. We strongly suggest you prohibit further
 changes to the global configuration by calling `ImmutableCollection.lockConfig();`
 after you set your desired configuration.
 
 # 4. IMap
 
-An `IMap` is an immutable map, meaning once it's created it cannot be modified. An `IMap` is
-always **unordered**
-— though, as we'll see, it can be automatically sorted when you use it.
+An `IMap` is an immutable map, meaning once it's created it cannot be modified. An `IMap` may keep
+the insertion order, or it may be sorted, depending on its configuration.
 
 You can create an `IMap` by passing a regular map to its constructor, or you can simply "lock" a
 regular map. There are also a few other specialized constructors:
@@ -1008,39 +982,39 @@ than for IList. Please read the IList explanation first, before trying to unders
   entries, keys and values:
 
     ```
-    /// Unordered
+    /// To Iterable (lazy)
     Iterable<MapEntry<K, V>> get entries;  
     Iterable<K> get keys;
     Iterable<V> get values;
     
-    /// Ordered (or not, according to the configuration)
-    IList<MapEntry<K, V>> entryList();
-    IList<K> keyList();
-    IList<V> valueList();                       
+    /// To IList
+    IList<MapEntry<K, V>> toEntryIList();
+    IList<K> toKeyIList();
+    IList<V> toValueIList();                       
                  
-    /// Unordered
-    ISet<MapEntry<K, V>> entrySet();
-    ISet<K> keySet();
-    ISet<V> valueSet();
+    /// To ISet
+    ISet<MapEntry<K, V>> toEntryISet();
+    ISet<K> toKeyISet();
+    ISet<V> toValueISet();
     
-    /// Ordered (or not, according to the configuration)
+    /// To List
     List<MapEntry<K, V>> toEntryList();
     List<K> toKeyList();
     List<V> toValueList();
     
-    /// Ordered (or not, according to the configuration)
+    /// To Set
     Set<MapEntry<K, V>> toEntrySet();
     Set<K> toKeySet();
     Set<V> toValueSet();
                                                 
-    /// Sorted or not, according to the configuration
+    /// To Iterator
     Iterator<MapEntry<K, V>> get iterator;                     
     ```
 
 - `IMap` has **all** the methods of `Map`, plus some other new and useful ones.
-  `IMap` methods always return a new `IMap`, instead of modifying the original one. Because of that,
-  you can easily chain methods. But since `IMap` methods always return a new `IMap`, it is an
-  **error** to call some method and then discard the result.
+  `IMap` methods to add and remove entries return a new `IMap`, instead of modifying the original
+  one. Because of that, you can easily chain methods. But since `IMap` methods return a new `IMap`,
+  it is an **error** to call some method and then discard the result.
 
 - `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order.
   These maps can be used as **map keys** themselves.
@@ -1055,10 +1029,7 @@ than for IList. Please read the IList explanation first, before trying to unders
 
 - The configuration affects how the `== operator` works, but you can also choose how to compare sets
   by using the following `IMap` methods:
-  `equalItems`, `equalItemsAndConfig`, `equalItemsToIMap` and `same`. Note, however, there is
-  no `unorderedEqualItems`
-  like in the `IList`, because since `IMaps` are unordered the `equalItems`
-  method already disregards the order.
+  `equalItems`, `equalItemsAndConfig`, `unorderedEqualItems`, `equalItemsToIMap` and `same`.
 
 - You can flush an `IMap` by using the getter `.flush`. Note flush just optimizes the map **
   internally**, and no external difference will be visible. Depending on the global configuration,
@@ -1075,7 +1046,7 @@ than for IList. Please read the IList explanation first, before trying to unders
 
     ```
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;        // Safe
-    IMap<String, int> imap = {"a": 1, "b": 2}.lockUnsafe;  // Only this way to lock a map is dangerous
+    IMap<String, int> imap = {"a": 1, "b": 2}.lockUnsafe;  // Unsafe and fast
   
     Map<String, int> set = imap.unlock;                    // Safe, mutable and unordered
     Map<String, int> set = imap.unlockSorted;              // Safe, mutable and ordered 
@@ -1091,22 +1062,20 @@ The **default** configuration of the `IMap` is
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in
    the same order.
 
-2. `sortKeys: true` means `IMap.iterator`, and methods `IMap.entryList`, `IMap.keyList`
-   , `IMap.toEntryList`,
-   `IMap.toKeyList`, `IMap.toEntrySet` and `IMap.toKeySet` will return sorted outputs.
+2. `sortKeys: false` means it keeps insertion order. But `sortKeys: true` means it will iterate in
+   sorted order.
 
 3. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet`
    will return sorted outputs.
 
-4. `cacheHashCode: true` means the `hashCode` is cached. It's not recommended to turn this cache off
+4. `cacheHashCode: true` means the `hashCode` is cached. It's not recommended turning this cache off
    for maps.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
 `defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: true, sortValues: true, cacheHashCode: false);`
 
 Note that `ConfigMap` is similar to `ConfigSet`, but has separate sort parameters for keys and
-values: `sortKeys`
-and `sortValues`:
+values: `sortKeys` and `sortValues`:
 
 ```
 /// Prints sorted: "1,2,4,9"
@@ -1137,7 +1106,8 @@ IMap<K, V> map = {'a': 1, 'b': 2}.lock;
 IMapOfSets<K, V> map = {'a': {1, 2}, 'b': {3, 4}}.lock;
 ```
 
-The `IMapOfSets` lets you add / remove **values**, without having to think about the **sets** that
+A "map of sets" is a type of **<a href="https://en.wikipedia.org/wiki/Multimap">multimap</a>**.
+The `IMapOfSets` lets you add and remove **values**, without having to think about the **sets** that
 contain them. For example:
 
 ```
@@ -1221,8 +1191,8 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
        .withConfig(ConfigMapOfSets(removeEmptySets: false));
 ```
 
-Note: A `MapOfSets` is an immutable <a href="https://en.wikipedia.org/wiki/Multimap">multimap</a>.
-If you need it, <a href="https://pub.dev/packages/quiver">Quiver</a> provides a mutable multimap.
+Note: The `IMapOfSets` is an immutable multimap. If you need a mutable, check
+<a href="https://pub.dev/packages/quiver">Quiver</a>.
 
 # 6. ListSet
 

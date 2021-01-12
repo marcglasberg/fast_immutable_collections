@@ -367,7 +367,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns an [Iterable] of the map values. Note this is always fast
   /// and **UNORDERED**, even is [sortValues] is true. If you need order,
-  /// please use [valueList].
+  /// please use [toValueIList].
   Iterable<V> get values {
     _count();
     return _m.values;
@@ -380,7 +380,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  IList<MapEntry<K, V>> entryList({
+  IList<MapEntry<K, V>> toEntryIList({
     int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare,
     ConfigList config,
   }) {
@@ -397,7 +397,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The list will be sorted if the map's [sortKeys] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  IList<K> keyList({
+  IList<K> toKeyIList({
     int Function(K a, K b) compare,
     ConfigList config,
   }) {
@@ -414,7 +414,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The list will be sorted if the map's [sortValues] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  IList<V> valueList({
+  IList<V> toValueIList({
     int Function(V a, V b) compare,
     ConfigList config,
   }) {
@@ -426,14 +426,14 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns an [ISet] of the map entries.
   /// Optionally, you may provide a [config] for the set.
-  ISet<MapEntry<K, V>> entrySet({
+  ISet<MapEntry<K, V>> toEntryISet({
     ConfigSet config,
   }) =>
       ISet.withConfig(entries, config);
 
   /// Returns an [ISet] of the map keys.
   /// Optionally, you may provide a [config] for the set.
-  ISet<K> keySet({
+  ISet<K> toKeyISet({
     ConfigSet config,
   }) {
     _count();
@@ -442,7 +442,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns an [ISet] of the map values.
   /// Optionally, you may provide a [config] for the set.
-  ISet<V> valueSet({
+  ISet<V> toValueISet({
     ConfigSet config,
   }) {
     _count();
@@ -541,7 +541,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Unlocks the map, returning a regular, *mutable, ordered, sorted*, [Map]
   /// of type [LinkedHashMap]. This map is "safe", in the sense that is
   /// independent from the original [IMap].
-  Map<K, V> get unlockSorted => <K, V>{}..addEntries(entryList());
+  Map<K, V> get unlockSorted => <K, V>{}..addEntries(toEntryIList());
 
   /// Unlocks the map, returning a safe, unmodifiable (immutable) [Map] view.
   /// The word "view" means the set is backed by the original [IMap].
