@@ -69,11 +69,8 @@ class SAddAll<T> extends S<T> {
   Set<T> difference(Set<T> other) => _s.difference(other)..removeAll(_setOrS);
 
   @override
-  Set<T> intersection(Set<T> other) {
-    var result = _s.intersection(other);
-    result = result.intersection(_setOrS.toSet());
-    return result;
-  }
+  Set<T> intersection(Set<T> other) =>
+      _s.intersection(other)..addAll(_setOrS.toSet().intersection(other));
 
   @override
   Set<T> union(Set<T> other) => _s.union(_setOrS.toSet())..addAll(other);

@@ -74,6 +74,8 @@ void main() {
   test("difference", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.difference({1, 2, 5}), {3, 4});
+    expect(sAdd.difference({4}), {1, 2, 3});
+    expect(sAdd.difference({2, 4}), {1, 3});
     expect(sAdd.difference({1, 2, 3, 4}), <int>{});
   });
 

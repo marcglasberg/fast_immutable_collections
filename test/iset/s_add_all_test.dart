@@ -86,8 +86,11 @@ void main() {
   test("intersection", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.intersection({1, 2, 5, 10, 11}), {1, 2, 5});
-    expect(sAddAll.intersection({10, 20, 50}), <int>{});
-  }, skip: true);
+    expect(sAddAll.intersection({1}), {1});
+    expect(sAddAll.intersection({3}), {3});
+    expect(sAddAll.intersection({}), isEmpty);
+    expect(sAddAll.intersection({10, 20, 50}), isEmpty);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 

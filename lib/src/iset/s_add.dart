@@ -40,7 +40,13 @@ class SAdd<T> extends S<T> {
   }
 
   @override
-  Set<T> difference(Set<T> other) => _s.difference(other)..remove(_item);
+  Set<T> difference(Set<T> other) {
+    if (other.contains(_item)) {
+      return _s.difference(other);
+    } else {
+      return _s.difference(other)..add(_item);
+    }
+  }
 
   @override
   Set<T> intersection(Set<T> other) {
