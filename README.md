@@ -2244,8 +2244,7 @@ so if you find any bugs it's his fault! 😂 — I am only half kidding 😐.
 
 <br>_Marcelo Glasberg:_<br>
 
-_github.com/marcglasberg_<br>
-_twitter.com/glasbergmarcelo_<br>
-_stackoverflow.com/users/3411681/marcg_<br>
-_medium.com/@marcglasberg_<br>
-
+<a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a><br>
+<a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a><br>
+<a href="https://stackoverflow.com/users/3411681/marcg">_stackoverflow.com/users/3411681/marcg_</a><br>
+<a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a><br>
