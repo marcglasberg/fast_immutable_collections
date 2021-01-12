@@ -86,7 +86,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("deepMapEquals_toIterable", () {
+  test("deepMapEqualsToIterable", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
 
@@ -100,9 +100,9 @@ void main() {
           MapEntry<String, int>("b", 2),
         ];
 
-    expect(mFlat.deepMapEquals_toIterable(null), isFalse);
-    expect(mFlat.deepMapEquals_toIterable(entries1), isTrue);
-    expect(mFlat.deepMapEquals_toIterable(entries2), isFalse);
+    expect(mFlat.deepMapEqualsToIterable(null), isFalse);
+    expect(mFlat.deepMapEqualsToIterable(entries1), isTrue);
+    expect(mFlat.deepMapEqualsToIterable(entries2), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

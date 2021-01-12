@@ -60,7 +60,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   bool contains(T element) => iter.contains(element);
 
-  T elementAt(int index) => throw UnsupportedError("elementAt in ${runtimeType} is not allowed");
+  T elementAt(int index) => throw UnsupportedError("elementAt in $runtimeType is not allowed");
 
   bool every(bool Function(T) test) => iter.every(test);
 

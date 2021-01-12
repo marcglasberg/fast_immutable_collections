@@ -602,7 +602,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// method [equalItemsToMap] or [equalItemsToIMap].
   @override
   bool equalItems(covariant Iterable<MapEntry<K, V>> other) {
-    return (other == null) ? false : (flush._m as MFlat<K, V>).deepMapEquals_toIterable(other);
+    return (other == null) ? false : (flush._m as MFlat<K, V>).deepMapEqualsToIterable(other);
   }
 
   /// Will return `true` only if the two maps have the same number of entries, and
