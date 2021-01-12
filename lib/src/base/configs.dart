@@ -182,7 +182,12 @@ class ConfigMap {
           cacheHashCode == other.cacheHashCode;
 
   @override
-  int get hashCode => hashObj4(isDeepEquals, sortKeys, sortValues, cacheHashCode);
+  int get hashCode => hashObj4(
+        isDeepEquals,
+        sortKeys,
+        sortValues,
+        cacheHashCode,
+      );
 
   @override
   String toString() => "ConfigMap{"
@@ -274,7 +279,13 @@ class ConfigMapOfSets {
           cacheHashCode == other.cacheHashCode;
 
   @override
-  int get hashCode => hashObj5(isDeepEquals, sortKeys, sortValues, removeEmptySets, cacheHashCode);
+  int get hashCode => hashObj5(
+        isDeepEquals,
+        sortKeys,
+        sortValues,
+        removeEmptySets,
+        cacheHashCode,
+      );
 
   @override
   String toString() => "ConfigMapOfSets{"

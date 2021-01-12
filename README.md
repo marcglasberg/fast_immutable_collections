@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  [![pub package](https://img.shields.io/pub/v/fast_immutable_collections.svg)](https://pub.dartlang.org/packages/fast_immutable_collections)
   <a href="https://github.com/marcglasberg/fast_immutable_collections/actions"><img src="https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?" alt="Github CI"></a>
   <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
 </p>
