@@ -1,8 +1,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 
-// TODO: Update this whole code once the implementations have been settled down.
 abstract class ListCode {
-  static final Map<String, String> add = {
+  static const Map<String, String> add = {
     "List (Mutable)": "for (int i = 0; i < innerRuns; i++)\n" "  _list.add(i);",
     "IList": "for (int i = 0; i < innerRuns; i++)\n" "  _result = _result.add(i);",
     "KtList": "for (int i = 0; i < innerRuns; i++)\n"
@@ -14,16 +13,18 @@ abstract class ListCode {
         "  _result = listBuilder.build();",
   };
 
-  static final Map<String, String> addAll = {
+  static const Map<String, String> addAll = {
     "List (Mutable)":
-        "_list = List<int>.of(_fixedList);\n" "  _list.addAll(ListAddAllBenchmark.listToAdd);",
-    "IList": "_result = _iList.addAll(ListAddAllBenchmark.listToAdd);",
-    "KtList": "_result = _ktList.plus(KtList<int>.from(ListAddAllBenchmark.listToAdd));",
+        "list.addAll(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10));",
+    "IList":
+        "result = iList.addAll(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10));",
+    "KtList":
+        "ktList.plus(KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10)));",
     "BuiltList": "_builtList.rebuild((ListBuilder<int> listBuilder) => "
-        "listBuilder.addAll(ListAddAllBenchmark.listToAdd));",
+        "listBuilder.addAll(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10)));",
   };
 
-  static final Map<String, String> contains = {
+  static const Map<String, String> contains = {
     "List (Mutable)":
         "for (int i = 0; i < _list.length + 1; i++)\n" "  _contains = _list.contains(i);",
     "IList": "for (int i = 0; i < _iList.length + 1; i++)\n" " _contains = _iList.contains(i);",
@@ -32,48 +33,44 @@ abstract class ListCode {
         "for (int i = 0; i < _builtList.length + 1; i++)\n" " _contains = _builtList.contains(i);",
   };
 
-  static final Map<String, String> empty = {
+  static const Map<String, String> empty = {
     "List (Mutable)": "_list = <int>[];",
     "IList": "_iList = IList<int>();",
     "KtList": "_ktList = KtList<int>.empty();",
     "BuiltList": "_builtList = BuiltList<int>();",
   };
 
-  static final Map<String, String> insert = {
-    "List (Mutable)": "list = ListBenchmarkBase.getDummyGeneratedList(size: config.size);\n"
-        "  list.insert(randomInt, randomInt);",
-    "IList": "result = ListBenchmarkBase.getDummyGeneratedList(size: config.size).lock;\n"
-        "  result = result.insert(randomInt, randomInt);",
-    "KtList":
-        "result = ListBenchmarkBase.getDummyGeneratedList(size: config.size).toImmutableList();\n"
-            "  final KtMutableList<int> mutable = result.toMutableList();\n"
-            "  mutable.addAt(randomInt, randomInt);\n"
-            "  result = KtList<int>.from(mutable.iter);",
+  static const Map<String, String> insert = {
+    "List (Mutable)": "list.insert(randomInt, randomInt);",
+    "IList": "result = result.insert(randomInt, randomInt);",
+    "KtList": "  final KtMutableList<int> mutable = result.toMutableList();\n"
+        "  mutable.addAt(randomInt, randomInt);\n"
+        "  result = KtList<int>.from(mutable.iter);",
     "BuiltList": "final ListBuilder<int> listBuilder = builtList.toBuilder();\n"
         "  listBuilder.insert(randomInt, randomInt);\n"
         "  result = listBuilder.build();",
   };
 
-  static final Map<String, String> read = {
-    "List (Mutable)": "newVar = _list[ListReadBenchmark.indexToRead];",
-    "IList": "newVar = _iList[ListReadBenchmark.indexToRead];",
-    "KtList": "newVar = _ktList[ListReadBenchmark.indexToRead];",
-    "BuiltList": "newVar = _builtList[ListReadBenchmark.indexToRead];",
+  static const Map<String, String> read = {
+    "List (Mutable)": "newVar = _list[config.size ~/ 2];",
+    "IList": "newVar = _iList[config.size ~/ 2];",
+    "KtList": "newVar = _ktList[config.size ~/ 2];",
+    "BuiltList": "newVar = _builtList[config.size ~/ 2];",
   };
 
-  static final Map<String, String> remove = {
-    "List (Mutable)": "_list.remove(1);",
-    "IList": "_iList = _iList.remove(1);",
-    "KtList": "_ktList = _ktList.minusElement(1);",
-    "BuiltList":
-        "_builtList = _builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(1));",
+  static const Map<String, String> remove = {
+    "List (Mutable)": "_list.remove(config.size ~/ 2);",
+    "IList": "_iList = _iList.remove(config.size ~/ 2);",
+    "KtList": "_ktList = _ktList.minusElement(config.size ~/ 2);",
+    "BuiltList": "_builtList = _builtList.rebuild((ListBuilder<int> listBuilder) =>\n"
+        "  listBuilder.remove(config.size ~/ 2));",
   };
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 
 abstract class SetCode {
-  static final Map<String, String> add = {
+  static const Map<String, String> add = {
     "Set (Mutable)": "_set = Set<int>.of(_fixedSet);\n"
         "for (int i = 0; i < SetAddBenchmark.innerRuns; i++)\n"
         "  _set.add(i);",
@@ -91,16 +88,15 @@ abstract class SetCode {
         "  _result = setBuilder.build();",
   };
 
-  static final Map<String, String> addAll = {
-    "Set (Mutable)":
-        "_set = Set<int>.of(_fixedSet);\n" "  _set.addAll(SetAddAllBenchmark.setToAdd);",
-    "ISet": "_iSet = _fixedISet.addAll(SetAddAllBenchmark.setToAdd);",
-    "KtSet": "_ktSet = _fixedISet.plus(SetAddAllBenchmark.setToAdd.toImmutableSet()).toSet();",
+  static const Map<String, String> addAll = {
+    "Set (Mutable)": "_set.addAll(toBeAdded);",
+    "ISet": "_iSet = _fixedISet.addAll(toBeAdded);",
+    "KtSet": "_ktSet = _fixedISet.plus(toBeAdded.toImmutableSet()).toSet();",
     "BuiltSet": "_builtSet = _fixedISet.rebuild((SetBuilder<int> setBuilder) =>\n"
-        "  setBuilder.addAll(SetAddAllBenchmark.setToAdd));",
+        "  setBuilder.addAll(toBeAdded));",
   };
 
-  static final Map<String, String> contains = {
+  static const Map<String, String> contains = {
     "Set (Mutable)":
         "for (int i = 0; i < _set.length + 1; i++)\n" "  _contains = _set.contains(i);",
     "ISet": "for (int i = 0; i < _iSet.length + 1; i++)\n" "  _contains = _iSet.contains(i);",
@@ -109,50 +105,49 @@ abstract class SetCode {
         "for (int i = 0; i < _builtSet.length + 1; i++)\n" "  _contains = _builtSet.contains(i);",
   };
 
-  static final Map<String, String> empty = {
+  static const Map<String, String> empty = {
     "Set (Mutable)": "_set = <int>{};",
     "ISet": "_iSet = ISet<int>();",
     "KtSet": "_ktSet = KtSet<int>.empty();",
     "BuiltSet": "_builtSet = BuiltSet<int>();",
   };
 
-  static final Map<String, String> remove = {
-    "Set (Mutable)": "_set.remove(1);",
-    "ISet": "_iSet = _fixedSet.remove(1);",
-    "KtSet": "_ktSet = _fixedSet.minusElement(1).toSet();",
+  static const Map<String, String> remove = {
+    "Set (Mutable)": "_set.remove(config.size ~/ 2);",
+    "ISet": "_iSet = _fixedSet.remove(config.size ~/ 2);",
+    "KtSet": "_ktSet = _fixedSet.minusElement(config.size ~/ 2).toSet();",
     "BuiltSet": "_builtSet = _fixedSet.rebuild((SetBuilder<int> setBuilder) =>\n"
-        "  setBuilder.remove(1));",
+        "  setBuilder.remove(config.size ~/ 2));",
   };
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 
 abstract class MapCode {
-  static final Map<String, String> add = {
-    "Map (Mutable)":
-        "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n" "  _map.addAll({i.toString(): i});",
-    "Map": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+  static const Map<String, String> add = {
+    "Map (Mutable)": "for (int i = 0; i < initialLength + innerRuns(); i++)\n"
+        "  _map.addAll({i.toString(): i});",
+    "Map": "for (int i = 0; i < initialLength + innerRuns(); i++)\n"
         "  _result = _result.add(i.toString(), i);",
-    "KtMap": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+    "KtMap": "for (int i = 0; i < initialLength + innerRuns(); i++)\n"
         "  _result = _result.plus(<String, int>{i.toString(): i}.toImmutableMap());",
-    "BuiltMap with Rebuild": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+    "BuiltMap with Rebuild": "for (int i = 0; i < initialLength + innerRuns(); i++)\n"
         "  _result = _result.rebuild((MapBuilder<String, int> mapBuilder) =>\n"
         "  mapBuilder.addAll(<String, int>{i.toString(): i}));",
-    "BuiltMap with ListBuilder": "for (int i = 0; i < MapAddBenchmark.innerRuns; i++)\n"
+    "BuiltMap with ListBuilder": "for (int i = 0; i < initialLength + innerRuns(); i++)\n"
         "  mapBuilder.addAll(<String, int>{i.toString(): i});\n"
         "  _result = mapBuilder.build();"
   };
 
-  static final Map<String, String> addAll = {
-    "Map (Mutable)":
-        "_map = Map<String, int>.of(_fixedMap);\n" "_map.addAll(MapAddAllBenchmark.mapToAdd);",
-    "Map": "_result = _Map.addAll(MapAddAllBenchmark.mapToAdd);",
-    "KtMap": "_result = _ktMap.plus(KtMap<String, int>.from(MapAddAllBenchmark.mapToAdd));",
+  static const Map<String, String> addAll = {
+    "Map (Mutable)": "_map = Map<String, int>.of(_fixedMap);\n" "_map.addAll(toBeAdded);",
+    "Map": "_result = _Map.addAll(toBeAdded);",
+    "KtMap": "_result = _ktMap.plus(KtMap<String, int>.from(toBeAdded));",
     "BuiltMap": "_result = _builtMap.rebuild((MapBuilder<String, int> mapBuilder) => "
-        "mapBuilder.addAll(MapAddAllBenchmark.mapToAdd));",
+        "mapBuilder.addAll(toBeAdded));",
   };
 
-  static final Map<String, String> containsValue = {
+  static const Map<String, String> containsValue = {
     "Map (Mutable)":
         "for (int i = 0; i < _map.length + 1; i++)\n" "  _contains = _map.containsValue(i);",
     "Map": "for (int i = 0; i < _Map.length + 1; i++)\n" "  _contains = _Map.containsValue(i);",
@@ -161,26 +156,26 @@ abstract class MapCode {
         "  _contains = _builtMap.containsValue(i);",
   };
 
-  static final Map<String, String> empty = {
+  static const Map<String, String> empty = {
     "Map (Mutable)": "_map = <String, int>{};",
     "Map": "_Map = Map<String, int>();",
     "KtMap": "_ktMap = KtMap<String, int>.empty();",
     "BuiltMap": "_builtMap = BuiltMap<String, int>();",
   };
 
-  static final Map<String, String> read = {
-    "Map (Mutable)": "_newVar = _map[MapReadBenchmark.keyToRead];",
-    "Map": "_newVar = _Map[MapReadBenchmark.keyToRead];",
-    "KtMap": "_newVar = _ktMap[MapReadBenchmark.keyToRead];",
-    "BuiltMap": "_newVar = _builtMap[MapReadBenchmark.keyToRead];",
+  static const Map<String, String> read = {
+    "Map (Mutable)": "_newVar = _map[(config.size ~/ 2).toString()];",
+    "Map": "_newVar = _Map[(config.size ~/ 2).toString()];",
+    "KtMap": "_newVar = _ktMap[(config.size ~/ 2).toString()];",
+    "BuiltMap": "_newVar = _builtMap[(config.size ~/ 2).toString()];",
   };
 
-  static final Map<String, String> remove = {
-    "Map (Mutable)": "_map.remove('1');",
-    "Map": "_Map = _Map.remove('1');",
-    "KtMap": "_ktMap = _ktMap.minus('1');",
+  static const Map<String, String> remove = {
+    "Map (Mutable)": "_map.remove((config.size ~/ 2).toString());",
+    "Map": "_Map = _Map.remove((config.size ~/ 2).toString());",
+    "KtMap": "_ktMap = _ktMap.minus((config.size ~/ 2).toString());",
     "BuiltMap": "_builtMap = _builtMap.rebuild((MapBuilder<String, int> mapBuilder)\n"
-        " => mapBuilder.remove('1'));",
+        " => mapBuilder.remove((config.size ~/ 2).toString()));",
   };
 }
 

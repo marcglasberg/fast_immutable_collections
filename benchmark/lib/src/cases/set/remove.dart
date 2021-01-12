@@ -46,7 +46,7 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     set = getNextSet();
-    set.remove((config.size ~/ 2));
+    set.remove(config.size ~/ 2);
   }
 
   Set<int> getNextSet() {
@@ -76,7 +76,7 @@ class ISetRemoveBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     iSet = fixedSet;
-    iSet = iSet.remove((config.size ~/ 2));
+    iSet = iSet.remove(config.size ~/ 2);
   }
 }
 
@@ -98,7 +98,7 @@ class KtSetRemoveBenchmark extends SetBenchmarkBase {
   @override
   void run() {
     ktSet = fixedSet;
-    ktSet = ktSet.minusElement((config.size ~/ 2)).toSet();
+    ktSet = ktSet.minusElement(config.size ~/ 2).toSet();
   }
 }
 
@@ -121,7 +121,7 @@ class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
   void run() {
     builtSet = fixedSet;
     builtSet =
-        fixedSet.rebuild((SetBuilder<int> setBuilder) => setBuilder.remove((config.size ~/ 2)));
+        fixedSet.rebuild((SetBuilder<int> setBuilder) => setBuilder.remove(config.size ~/ 2));
   }
 }
 
