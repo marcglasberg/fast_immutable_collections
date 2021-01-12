@@ -11,6 +11,10 @@
 
 # 1. Fast Immutable Collections
 
+_This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
+myself,
+<a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
+
 [example]: benchmark/example/
 
 [gif]: benchmark/assets/demo.gif
@@ -1191,8 +1195,8 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
        .withConfig(ConfigMapOfSets(removeEmptySets: false));
 ```
 
-Note: The `IMapOfSets` is an immutable multimap. If you need a mutable, check
-<a href="https://pub.dev/packages/quiver">Quiver</a>.
+Note: The `IMapOfSets` is an immutable multimap. If you need a mutable one, check the
+<a href="https://pub.dev/packages/quiver">Quiver</a> package.
 
 # 6. ListSet
 
@@ -1220,14 +1224,14 @@ just like a list. Also, you can directly get its items by index, very efficientl
 The disadvantage, of course, is that `ListSet` has a fixed size, while a `LinkedHashSet` does not.
 The `ListSet` is efficient both as a `List` and as a `Set`. So, for example, it has an
 efficient `sort` method, while a `LinkedHashSet` would force you to turn it into a `List`, then sort
-it, than turn it back into a `Set`.
+it, then turn it back into a `Set`.
 
 # 6. ListMap
 
 A `ListMap`  is a mutable, fixed-sized, and ordered map.
 
-Compared to a `LinkedHashMap`, a `ListMap` is also ordered and has a slightly worse performance. But
-a `ListMap` takes less memory, and has some very efficient `List` methods, like `sort` and
+Compared to a `LinkedHashMap`, a `ListMap` is also ordered, has a slightly worse performance, but
+uses less memory. It is not a `List`, but has some very efficient list methods, like `sort` and
 `shuffle`.
 
 Also, you can efficiently read its information by index, by using the `entryAt`, `keyAt`
@@ -1236,9 +1240,9 @@ a `LinkedHashMap` does not.
 
 # 6. Comparators
 
-To help you sort collections, we provide the global comparator functions `compareObject`, `sortBy`
-and `sortLike`, as well as the `compareObjectTo` and `if0` extensions. These make it easy for you to
-create other complex comparators, as described below.
+To help you sort collections (from FIC or any other), we provide the global comparator
+functions `compareObject`, `sortBy` and `sortLike`, as well as the `compareObjectTo` and `if0`
+extensions. These make it easy for you to create other complex comparators, as described below.
 
 ## 6.1. CompareObject function
 
@@ -1504,8 +1508,8 @@ which you can use as a valid collection, and then it publishes automatically (fl
 async gap (when so configured).
 
 As discussed, the default is to have auto-flush turned on, but you can turn it off. If you leave it
-on, you can tweak the `flushFactor` for lists, sets and maps. Usually, lists should have a
-higher `flushFactor` because they are generally still very efficient when unflushed.
+on, you can tweak the `flushFactor` for lists, sets and maps, separately. Usually, lists should have
+a higher `flushFactor` because they are generally still very efficient when unflushed.
 
 The minimum `flushFactor` you can choose is `1`, which means the collections will always flush in
 the next async gap after they are touched.
@@ -1568,7 +1572,7 @@ appear:
 <br />
 <br />
 
-If you wish for larger parameters, you can modify them in the [benchmark_app][benchmark_app]
+If you wish to use larger parameters, you can modify them in the [benchmark_app][benchmark_app]
 project.
 
 <br />
@@ -1589,6 +1593,9 @@ project.
 #### 8.1.5. List Insert
 
 <img src="assets/benchmark_screenshots/list_insert_1k.png" height="500px"/>
+
+*Note: We haven't implemented the fast code for list inserts yet. When we do, it will became faster
+than the mutable List insert.*
 
 #### 8.1.6. List Read
 
@@ -2262,3 +2269,54 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 [funkia]: https://funkia.github.io/list/benchmarks/
 
 [intro_dart_vm]: https://mrale.ph/dartvm/
+
+<br>
+
+## 15. Final note:
+
+This package is very complex and it's still fairly new. I am using it myself in important projects
+of mine, so you can say I trust it, but bugs are still possible. In special, Philippe was
+responsible for creating the tests, so if you find any bugs it's his fault! 😂 (I am only half
+kidding 😐).
+
+***
+
+*The Flutter packages I've authored:*
+
+* <a href="https://pub.dev/packages/async_redux">async_redux</a>
+* <a href="https://pub.dev/packages/provider_for_redux">provider_for_redux</a>
+* <a href="https://pub.dev/packages/i18n_extension">i18n_extension</a>
+* <a href="https://pub.dev/packages/align_positioned">align_positioned</a>
+* <a href="https://pub.dev/packages/network_to_file_image">network_to_file_image</a>
+* <a href="https://pub.dev/packages/image_pixels">image_pixels</a>
+* <a href="https://pub.dev/packages/matrix4_transform">matrix4_transform</a>
+* <a href="https://pub.dev/packages/back_button_interceptor">back_button_interceptor</a>
+* <a href="https://pub.dev/packages/indexed_list_view">indexed_list_view</a>
+* <a href="https://pub.dev/packages/animated_size_and_fade">animated_size_and_fade</a>
+* <a href="https://pub.dev/packages/assorted_layout_widgets">assorted_layout_widgets</a>
+* <a href="https://pub.dev/packages/weak_map">weak_map</a>
+
+*My Medium Articles:*
+
+* <a href="https://medium.com/flutter-community/https-medium-com-marcglasberg-async-redux-33ac5e27d5f6">
+  Async Redux: Flutter’s non-boilerplate version of Redux</a> (
+  versions: <a href="https://medium.com/flutterando/async-redux-pt-brasil-e783ceb13c43">
+  Português</a>)
+* <a href="https://medium.com/flutter-community/i18n-extension-flutter-b966f4c65df9">
+  i18n_extension</a> (
+  versions: <a href="https://medium.com/flutterando/qual-a-forma-f%C3%A1cil-de-traduzir-seu-app-flutter-para-outros-idiomas-ab5178cf0336">
+  Português</a>)
+* <a href="https://medium.com/flutter-community/flutter-the-advanced-layout-rule-even-beginners-must-know-edc9516d1a2">
+  Flutter: The Advanced Layout Rule Even Beginners Must Know</a> (
+  versions: <a href="https://habr.com/ru/post/500210/">русский</a>)
+
+*My article in the official Flutter documentation*:
+
+* <a href="https://flutter.dev/docs/development/ui/layout/constraints">Understanding constraints</a>
+
+<br>_Marcelo Glasberg:_<br>
+_https://github.com/marcglasberg_<br>
+_https://twitter.com/glasbergmarcelo_<br>
+_https://stackoverflow.com/users/3411681/marcg_<br>
+_https://medium.com/@marcglasberg_<br>
+
