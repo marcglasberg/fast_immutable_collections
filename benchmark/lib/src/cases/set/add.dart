@@ -42,7 +42,7 @@ class MutableSetAddBenchmark extends SetBenchmarkBase {
   void setup() {
     count = 0;
     initialSet = [];
-    for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
+    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
       initialSet.add(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
   }
 

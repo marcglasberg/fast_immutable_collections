@@ -106,7 +106,7 @@ class KtMapRemoveBenchmark extends MapBenchmarkBase {
 
 class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   BuiltMapMapRemoveBenchmark({@required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+      : super(name: "BuiltMap", emitter: emitter);
 
   BuiltMap<String, int> builtMap;
 

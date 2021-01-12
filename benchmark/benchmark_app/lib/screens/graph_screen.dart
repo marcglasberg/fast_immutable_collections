@@ -66,7 +66,7 @@ class _GraphScreenState extends State<GraphScreen> {
         children: [
           _DropdownButton(showFilterDialog),
           Container(
-            height: 460,
+            height: 600,
             child: BarChart(recordsTable: filterNTimes(currentTable)),
           ),
         ],

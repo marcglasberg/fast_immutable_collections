@@ -1481,40 +1481,32 @@ marked with `// TODO: Still needs to implement efficiently` and will be updated 
 
 Run the benchmarks preferably in *release mode*, and a green message on the snackbar will then appear:
 
-<img src="assets/benchmark_screenshots/example_run.png" height="500px"/>
+<img src="assets/benchmark_screenshots/FIC Opening.png" height="500px"/>
+<img src="assets/benchmark_screenshots/Example Run.png" height="500px"/>
 
 ### 8.1. List Benchmarks
 
 #### 8.1.1. List Add
 
-<img src="assets/benchmark_screenshots/list_add_10.png" height="500px"/>
-<img src="assets/benchmark_screenshots/list_add_100.png" height="500px"/>
-<img src="assets/benchmark_screenshots/list_add_500.png" height="500px"/>
-<img src="assets/benchmark_screenshots/list_add_all.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_add_1k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_add_10k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_add_100k.png" height="500px"/>
 
 <br />
 <br />
 
 If you wish for larger parameters, you can modify them in the [benchmark_app][benchmark_app] project.
 
-Here we add 10,000 items to a list with 10,000 integers of size:
-
-<img src="assets/benchmark_screenshots/list_add_10000_adds_10000.png" height="500px"/>
-
 <br />
 <br />
-
-And here we add 100 items to a list of 1,000,000 items:
-
-<img src="assets/benchmark_screenshots/list_add_1000000.png" height="500px"/>
 
 #### 8.1.2. List AddAll
 
-<img src="assets/benchmark_screenshots/list_addall.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_addAll_10k.png" height="500px"/>
 
 #### 8.1.3. List Contains
 
-<img src="assets/benchmark_screenshots/list_contains_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_contains_10k.png" height="500px"/>
 
 #### 8.1.4. List Empty
 
@@ -1522,32 +1514,31 @@ And here we add 100 items to a list of 1,000,000 items:
 
 #### 8.1.5. List Insert
 
-<img src="assets/benchmark_screenshots/list_insert.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_insert_1k.png" height="500px"/>
 
 #### 8.1.6. List Read
 
-<img src="assets/benchmark_screenshots/list_read_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_read_100k.png" height="500px"/>
 
 #### 8.1.7. List Remove
 
-<img src="assets/benchmark_screenshots/list_remove_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/list_remove_10k.png" height="500px"/>
 
 ### 8.2. Map Benchmarks
 
 #### 8.2.1. Map Add
 
 <img src="assets/benchmark_screenshots/map_add_10.png" height="500px"/>
-<img src="assets/benchmark_screenshots/map_add_100.png" height="500px"/>
-<img src="assets/benchmark_screenshots/map_add_500.png" height="500px"/>
-<img src="assets/benchmark_screenshots/map_add_all.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_add_1k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_add_10k.png" height="500px"/>
 
 #### 8.2.2. Map AddAll
 
-<img src="assets/benchmark_screenshots/map_addall_10.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_addall_100k.png" height="500px"/>
 
 #### 8.2.3. Map ContainsValue
 
-<img src="assets/benchmark_screenshots/map_containsvalue.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_containsValue_10k.png" height="500px"/>
 
 #### 8.2.4. Map Empty
 
@@ -1555,28 +1546,29 @@ And here we add 100 items to a list of 1,000,000 items:
 
 #### 8.2.5. Map Read
 
-<img src="assets/benchmark_screenshots/map_read_1000.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_read_100k.png" height="500px"/>
 
 #### 8.2.5. Map Remove
 
-<img src="assets/benchmark_screenshots/map_remove_1000.png" height="500px"/>
+<img src="assets/benchmark_screenshots/map_remove_100k.png" height="500px"/>
 
 ### 8.3. Set Benchmarks
 
 #### 8.2.5. Set Add
 
 <img src="assets/benchmark_screenshots/set_add_10.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_add_50.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_add_100.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_add_all.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_add_1k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_add_10k.png" height="500px"/>
 
 #### 8.2.6. Set AddAll
 
-<img src="assets/benchmark_screenshots/set_addall_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_addAll_10k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_addAll_100k.png" height="500px"/>
 
 #### 8.2.6. Set Contains
 
-<img src="assets/benchmark_screenshots/set_contains_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_contains_1k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_contains_10k.png" height="500px"/>
 
 #### 8.2.6. Set Empty
 
@@ -1585,6 +1577,9 @@ And here we add 100 items to a list of 1,000,000 items:
 #### 8.2.6. Set Remove
 
 <img src="assets/benchmark_screenshots/set_remove_100.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_remove_1k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_remove_10k.png" height="500px"/>
+<img src="assets/benchmark_screenshots/set_remove_100k.png" height="500px"/>
 
 ---
 

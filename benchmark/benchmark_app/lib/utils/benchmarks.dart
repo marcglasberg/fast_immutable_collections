@@ -108,7 +108,7 @@ final List<Widget> listBenchmarks = [
       ListRemoveBenchmark(
         emitter: TableScoreEmitter(
           prefixName: "list_remove",
-          config: Config(size: 100),
+          config: Config(size: 10000),
         ),
       ),
     ],
