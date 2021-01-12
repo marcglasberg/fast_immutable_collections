@@ -215,7 +215,7 @@ void main() {
     final Students students = Students([james, sara, lucy]);
 
     expect(students.followedBy([bob]), [james, sara, lucy, bob]);
-    expect(students.followedBy([bob, charles].lock).unlock, [james, sara, lucy, bob, charles]);
+    expect(students.followedBy([bob, charles].lock), [james, sara, lucy, bob, charles]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

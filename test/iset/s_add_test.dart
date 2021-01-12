@@ -75,7 +75,7 @@ void main() {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.difference({1, 2, 5}), {3, 4});
     expect(sAdd.difference({1, 2, 3, 4}), <int>{});
-  }, skip: true);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
