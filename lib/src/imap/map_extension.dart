@@ -22,6 +22,10 @@ extension FicMapExtension<K, V> on Map<K, V> {
   ///
   /// See also: [ImmutableCollection]
   IMap<K, V> get lockUnsafe => IMap<K, V>.unsafe(this, config: IMap.defaultConfig);
+
+  /// Creates an *immutable* map ([IMap]) from the map.
+  IMap<K, V> toIMap([ConfigMap config]) =>
+      (this == null) ? null : IMap<K, V>.withConfig(this, config);
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -30,6 +34,10 @@ extension FicMapExtension<K, V> on Map<K, V> {
 extension FicMapOfSetsExtension<K, V> on Map<K, Set<V>> {
   /// Locks the map of sets, returning an *immutable* map ([IMapOfSets]).
   IMapOfSets<K, V> get lock => IMapOfSets<K, V>(this);
+
+  /// Creates an *immutable* map of sets ([IMapOfSets]) from the map.
+  IMapOfSets<K, V> toIMapOfSets([ConfigMapOfSets config]) =>
+      (this == null) ? null : IMapOfSets<K, V>.withConfig(this, config);
 }
 
 // /////////////////////////////////////////////////////////////////////////////
