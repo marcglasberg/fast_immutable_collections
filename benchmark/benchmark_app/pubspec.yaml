@@ -1,10 +1,6 @@
 name: benchmark_app
 description: The example project for the fast_immutable_collections package.
 version: 0.0.1
-authors:
-  - Philippe Fanaro <philippefanaro@gmail.com>
-  - glasberg.dev
-  - Marcelo Glasberg
 
 environment:
   flutter: ">=1.17.0 <=1.25.0"
