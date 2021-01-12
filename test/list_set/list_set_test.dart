@@ -414,5 +414,20 @@ void main() {
     expect(colors, ["red", "green", "blue", "orange", "pink"]);
   });
 
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("Example used in the readme", () {
+    ListSet<int> listSet = ListSet.of([1, 2, 3]);
+    expect(listSet[2], 3);
+    expect(listSet.contains(2), isTrue);
+
+    List<int> list = listSet;
+    Set<int> set = listSet;
+
+    expect(list[2], 3);
+    expect(set.contains(2), isTrue);
+  });
+
   /////////////////////////////////////////////////////////////////////////////
 }

@@ -3,12 +3,12 @@ import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/list_map/list_map_view.dart";
 
-/// A [ListMap] which is mutable, fixed-sized, and ordered.
+/// A [ListMap] is a mutable, fixed-sized, and ordered map.
 ///
 /// Compared to a [LinkedHashMap], a [ListMap] is also ordered and has a slightly worse
 /// performance. But a [ListMap] takes less memory, and has some [List] methods like [sort] and
-/// [shuffle]. Also, you can efficiently read items by index, by using the [entryAt], [keyAt] and
-/// [valueAt] methods.
+/// [shuffle]. Also, you can efficiently read its information by index, by using the [entryAt],
+/// [keyAt] and [valueAt] methods.
 ///
 /// The disadvantage, of course, is that [ListMap] has a fixed size,
 /// while a [LinkedHashMap] does not.

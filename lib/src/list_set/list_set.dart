@@ -7,7 +7,7 @@ import "package:fast_immutable_collections/src/list_set/list_set_view.dart";
 /// 1) A mutable, fixed-sized, ordered, [Set].
 /// 2) A mutable, fixed-sized, [List], in which values can't repeat.
 ///
-/// When view as a [Set] and compared to a [LinkedHashSet], a [ListSet] is also ordered and has a
+/// When viewed as a [Set] and compared to a [LinkedHashSet], a [ListSet] is also ordered and has a
 /// similar performance. But a [ListSet] takes less memory and can be sorted, just like a list.
 /// Also, you can directly get its items by index. The disadvantage, of course, is that [ListSet]
 /// has a fixed size, while a [LinkedHashSet] does not.
