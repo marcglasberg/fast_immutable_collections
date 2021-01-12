@@ -19,7 +19,7 @@ class ListMap<K, V> implements Map<K, V> {
 
   ListMap.empty() {
     _map = HashMap();
-    _list = List(0);
+    _list = List.empty(growable: false);
   }
 
   /// Create a [ListMap] from the [map].

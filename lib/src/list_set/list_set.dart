@@ -22,7 +22,7 @@ class ListSet<T> implements Set<T>, List<T> {
 
   ListSet.empty() {
     _set = HashSet();
-    _list = List(0);
+    _list = List.empty(growable: false);
   }
 
   /// Create a [ListSet] from the [items] iterable.

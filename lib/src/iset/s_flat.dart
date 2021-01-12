@@ -62,7 +62,7 @@ class SFlat<T> extends S<T> {
   @override
   T operator [](int index) => _set[index];
 
-  bool deepSetEquals_toIterable(Iterable<T> other) {
+  bool deepSetEqualsToIterable(Iterable<T> other) {
     if (other == null) return false;
     Set<T> set = (other is Set<T>) ? other : Set<T>.of(other);
     return const SetEquality(MapEntryEquality()).equals(_set, set);

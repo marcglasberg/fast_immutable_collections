@@ -97,14 +97,14 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("deepSetEquals_toIterable", () {
+  test("deepSetEqualsToIterable", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 3]);
     final Iterable<int> iterable1 = [3, 2, 1];
     final Iterable<int> iterable2 = [1, 2];
 
-    expect(sFlat.deepSetEquals_toIterable(null), isFalse);
-    expect(sFlat.deepSetEquals_toIterable(iterable1), isTrue);
-    expect(sFlat.deepSetEquals_toIterable(iterable2), isFalse);
+    expect(sFlat.deepSetEqualsToIterable(null), isFalse);
+    expect(sFlat.deepSetEqualsToIterable(iterable1), isTrue);
+    expect(sFlat.deepSetEqualsToIterable(iterable2), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////

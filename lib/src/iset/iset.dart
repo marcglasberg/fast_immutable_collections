@@ -353,7 +353,7 @@ class ISet<T> // ignore: must_be_immutable
       return (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
     }
 
-    return (other == null) ? false : (flush._s as SFlat<T>).deepSetEquals_toIterable(other);
+    return (other == null) ? false : (flush._s as SFlat<T>).deepSetEqualsToIterable(other);
   }
 
   /// Will return `true` only if the list items are equal and the list configurations are equal.
