@@ -47,11 +47,11 @@ Other valuable features are:
   methods, like `sort` and `shuffle`, and lets you efficiently read its information by index.
 
 - General purpose extensions to the native collections: `List`, `Set`, `Map`. See
-  classes `ListExtension`
-  , `SetExtension`, and `MapExtension`. For example: `[1, 2, 1].removeDuplicates()`
+  classes `FicListExtension`, `FicSetExtension`, and `FicMapExtension`. For
+  example: `[1, 2, 1].removeDuplicates()`
 
 - Other extensions: `IterableExtension`, `IteratorExtension`, `MapIteratorExtension`,
-  `ComparatorExtension`, `ComparableExtension` and `BooleanExtension`. For example:
+  `FicComparatorExtension`, `FicComparableExtension` and `FicBooleanExtension`. For example:
   `false.compareTo(true)`
 
 - Comparators and related helpers to be used with native or immutable collections, or any sort
