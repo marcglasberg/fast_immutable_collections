@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="Logo" />
+  <img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/logo.png" alt="Logo" />
 </p>
 
 <p align="center">
