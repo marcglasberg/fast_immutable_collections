@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://img.shields.io/pub/v/fast_immutable_collections.svg"><img src="https://pub.dartlang.org/packages/fast_immutable_collections"></a>
+  <a href="https://pub.dartlang.org/packages/fast_immutable_collections"><img src="https://img.shields.io/pub/v/fast_immutable_collections.svg"></a>
   <a href="https://github.com/marcglasberg/fast_immutable_collections/actions"><img src="https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?" alt="Github CI"></a>
   <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
 </p>
@@ -1481,16 +1481,16 @@ be updated in future versions.
 Run the benchmarks preferably in *release mode*, and a green message on the snackbar will then
 appear:
 
-<img src="assets/benchmark_screenshots/FIC Opening.png" height="500px"/>
-<img src="assets/benchmark_screenshots/Example Run.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/Example%20Run.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/FIC%20Opening.png" height="500px"/>
 
 ### 10.1. List Benchmarks
 
 #### 10.1.1. List Add
 
-<img src="assets/benchmark_screenshots/list_add_1k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/list_add_10k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/list_add_100k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_add_1k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_add_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_add_100k.png" height="500px"/>
 
 <br />
 <br />
@@ -1503,87 +1503,87 @@ project.
 
 #### 10.1.2. List AddAll
 
-<img src="assets/benchmark_screenshots/list_addAll_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_addAll_10k.png" height="500px"/>
 
 #### 10.1.3. List Contains
 
-<img src="assets/benchmark_screenshots/list_contains_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_contains_10k.png" height="500px"/>
 
 #### 10.1.4. List Empty
 
-<img src="assets/benchmark_screenshots/list_empty.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_empty.png" height="500px"/>
 
 #### 10.1.5. List Insert
 
-<img src="assets/benchmark_screenshots/list_insert_1k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_insert_1k.png" height="500px"/>
 
 *Note: We haven't implemented the fast code for list inserts yet. When we do, it will became faster
 than the mutable List insert.*
 
 #### 10.1.6. List Read
 
-<img src="assets/benchmark_screenshots/list_read_100k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_read_100k.png" height="500px"/>
 
 #### 10.1.7. List Remove
 
-<img src="assets/benchmark_screenshots/list_remove_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/list_remove_10k.png" height="500px"/>
 
 ### 10.2. Map Benchmarks
 
 #### 10.2.1. Map Add
 
-<img src="assets/benchmark_screenshots/map_add_10.png" height="500px"/>
-<img src="assets/benchmark_screenshots/map_add_1k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/map_add_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_add_10.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_add_1k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_add_10k.png" height="500px"/>
 
 #### 10.2.2. Map AddAll
 
-<img src="assets/benchmark_screenshots/map_addall_100k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_addall_100k.png" height="500px"/>
 
 #### 10.2.3. Map ContainsValue
 
-<img src="assets/benchmark_screenshots/map_containsValue_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_containsValue_10k.png" height="500px"/>
 
 #### 10.2.4. Map Empty
 
-<img src="assets/benchmark_screenshots/map_empty.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_empty.png" height="500px"/>
 
 #### 10.2.5. Map Read
 
-<img src="assets/benchmark_screenshots/map_read_100k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_read_100k.png" height="500px"/>
 
 #### 10.2.5. Map Remove
 
-<img src="assets/benchmark_screenshots/map_remove_100k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/map_remove_100k.png" height="500px"/>
 
 ### 10.3. Set Benchmarks
 
 #### 10.2.5. Set Add
 
-<img src="assets/benchmark_screenshots/set_add_10.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_add_1k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_add_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_add_10.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_add_1k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_add_10k.png" height="500px"/>
 
 #### 10.2.6. Set AddAll
 
-<img src="assets/benchmark_screenshots/set_addAll_10k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_addAll_100k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_addAll_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_addAll_100k.png" height="500px"/>
 
 #### 10.2.6. Set Contains
 
-<img src="assets/benchmark_screenshots/set_contains_1k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_contains_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_contains_1k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_contains_10k.png" height="500px"/>
 
 #### 10.2.6. Set Empty
 
-<img src="assets/benchmark_screenshots/set_empty.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_empty.png" height="500px"/>
 
 #### 10.2.6. Set Remove
 
-<img src="assets/benchmark_screenshots/set_remove_100.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_remove_1k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_remove_10k.png" height="500px"/>
-<img src="assets/benchmark_screenshots/set_remove_100k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_remove_100.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_remove_1k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_remove_10k.png" height="500px"/>
+<img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/benchmark_screenshots/set_remove_100k.png" height="500px"/>
 
 ---
 
