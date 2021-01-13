@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="assets/logo.png" alt="Logo" />
+  <img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/assets/logo.png" alt="Logo" />
 </p>
 
 <p align="center">
-  [![pub package](https://img.shields.io/pub/v/fast_immutable_collections.svg)](https://pub.dartlang.org/packages/fast_immutable_collections)
+  <a href="https://img.shields.io/pub/v/fast_immutable_collections.svg"><img src="https://pub.dartlang.org/packages/fast_immutable_collections"></a>
   <a href="https://github.com/marcglasberg/fast_immutable_collections/actions"><img src="https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?" alt="Github CI"></a>
   <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
 </p>
@@ -12,15 +12,9 @@
 
 # 1. Fast Immutable Collections
 
-_This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
+> _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
 myself,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
-
-[example]: benchmark/example/
-
-[gif]: benchmark/assets/demo.gif
-
-[github_ci_badge]: https://github.com/marcglasberg/fast_immutable_collections/workflows/Dart%20%7C%7C%20Tests%20%7C%20Formatting%20%7C%20Analyzer/badge.svg?branch=master
 
 ## 1.1. Introduction
 
@@ -75,7 +69,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
 — and you can also run the benchmarks yourself.
 
 <p align="center">
-  <img src="benchmark/assets/demo.gif" alt="Benckmarks GIF" />
+  <img src="https://github.com/marcglasberg/fast_immutable_collections/blob/master/benchmark/assets/demo.gif" alt="Benckmarks GIF" />
 </p>
 
 <p align="center">
