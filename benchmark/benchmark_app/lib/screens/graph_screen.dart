@@ -57,7 +57,7 @@ class _GraphScreenState extends State<GraphScreen> {
     );
   }
 
-  Text title() => Text("${widget.title} Benchmark Graph Results");
+  Text title() => Text("${widget.title}");
 
   Container body() {
     return Container(

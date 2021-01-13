@@ -12,7 +12,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 
 final List<Widget> listBenchmarks = [
   BenchWidget(
-    title: "Add",
+    title: "List.add",
     code: ListCode.add,
     benchmarks: () => [
       ListAddBenchmark(
@@ -42,7 +42,7 @@ final List<Widget> listBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "AddAll",
+    title: "List.addAll",
     code: ListCode.addAll,
     benchmarks: () => [
       ListAddAllBenchmark(
@@ -54,7 +54,7 @@ final List<Widget> listBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Contains",
+    title: "List.contains",
     code: ListCode.contains,
     benchmarks: () => [
       ListContainsBenchmark(
@@ -66,7 +66,7 @@ final List<Widget> listBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Empty",
+    title: "List.empty",
     code: ListCode.empty,
     benchmarks: () => [
       ListEmptyBenchmark(
@@ -78,7 +78,7 @@ final List<Widget> listBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Insert",
+    title: "List.insert",
     code: ListCode.insert,
     benchmarks: () => [
       ListInsertBenchmark(
@@ -90,7 +90,7 @@ final List<Widget> listBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Read",
+    title: "List.read",
     code: ListCode.read,
     benchmarks: () => [
       ListReadBenchmark(
@@ -102,7 +102,7 @@ final List<Widget> listBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Remove",
+    title: "List.remove",
     code: ListCode.remove,
     benchmarks: () => [
       ListRemoveBenchmark(
@@ -119,7 +119,7 @@ final List<Widget> listBenchmarks = [
 
 final List<Widget> setBenchmarks = [
   BenchWidget(
-    title: "Add",
+    title: "Set.add",
     code: SetCode.add,
     benchmarks: () => [
       SetAddBenchmark(
@@ -143,7 +143,7 @@ final List<Widget> setBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "AddAll",
+    title: "Set.addAll",
     code: SetCode.addAll,
     benchmarks: () => [
       SetAddAllBenchmark(
@@ -161,7 +161,7 @@ final List<Widget> setBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Contains",
+    title: "Set.contains",
     code: SetCode.contains,
     benchmarks: () => [
       SetContainsBenchmark(
@@ -179,7 +179,7 @@ final List<Widget> setBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Empty",
+    title: "Set.empty",
     code: SetCode.contains,
     benchmarks: () => [
       SetEmptyBenchmark(
@@ -191,7 +191,7 @@ final List<Widget> setBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Remove",
+    title: "Set.remove",
     code: SetCode.contains,
     benchmarks: () => [
       SetRemoveBenchmark(
@@ -226,7 +226,7 @@ final List<Widget> setBenchmarks = [
 
 final List<Widget> mapBenchmarks = [
   BenchWidget(
-    title: "Add",
+    title: "Map.add",
     code: MapCode.add,
     benchmarks: () => [
       MapAddBenchmark(
@@ -250,7 +250,7 @@ final List<Widget> mapBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "AddAll",
+    title: "Map.addAll",
     code: MapCode.addAll,
     benchmarks: () => [
       MapAddAllBenchmark(
@@ -262,7 +262,7 @@ final List<Widget> mapBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "ContainsValue",
+    title: "Map.containsValue",
     code: MapCode.containsValue,
     benchmarks: () => [
       MapContainsValueBenchmark(
@@ -274,7 +274,7 @@ final List<Widget> mapBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Empty",
+    title: "Map.empty",
     code: MapCode.empty,
     benchmarks: () => [
       MapEmptyBenchmark(
@@ -286,7 +286,7 @@ final List<Widget> mapBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Read",
+    title: "Map.read",
     code: MapCode.read,
     benchmarks: () => [
       MapReadBenchmark(
@@ -298,7 +298,7 @@ final List<Widget> mapBenchmarks = [
     ],
   ),
   BenchWidget(
-    title: "Remove",
+    title: "Map.remove",
     code: MapCode.remove,
     benchmarks: () => [
       MapRemoveBenchmark(
