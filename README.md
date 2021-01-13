@@ -12,8 +12,7 @@
 
 # 1. Fast Immutable Collections
 
-> _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
-myself,
+> _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and myself,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
 
 ## 1.1. Introduction
@@ -31,12 +30,12 @@ This package, called **FIC** for short, provides:
 - Optional deep equalities and cached `hashCodes`, which let you treat your collections as
   value-objects
 - Mixins for you to build your own immutable collections or objects
-- Collection views so you can work with immutable objects as if they were the mutable ones
+- View wrappers, so that you can work with immutable collection as if they were mutable
 
 Other valuable features are:
 
-- `ListSet`, a very efficient fixed-size collection which is at the same time an ordered `Set` and
-  a `List`.
+- `ListSet`, a very efficient fixed-size mutable collection which is at the same time an
+  ordered `Set` and a `List`.
 
 - `ListMap`  is a mutable, fixed-sized, and ordered map which has some very efficient `List`
   methods, like `sort` and `shuffle`, and lets you efficiently read its information by index.
@@ -2197,10 +2196,10 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 ## 17. Final Note
 
-This package is very complex and still fairly new. I am using it myself in important projects
-of mine, so you can say I trust it, but bugs are still possible. 
-<a href="https://github.com/psygo">Philippe Fanaro</a> was responsible for creating the tests, 
-so if you find any bugs it's his fault! 😂 — I am only half kidding 😐.
+This package is very complex and still fairly new. I am using it myself in important projects of
+mine, so you can say I trust it, but bugs are still possible.
+<a href="https://github.com/psygo">Philippe Fanaro</a> was responsible for creating the tests, so if
+you find any bugs it's his fault! 😂 — I am only half kidding 😐.
 
 ***
 
@@ -2241,5 +2240,6 @@ so if you find any bugs it's his fault! 😂 — I am only half kidding 😐.
 
 <a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a><br>
 <a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a><br>
-<a href="https://stackoverflow.com/users/3411681/marcg">_stackoverflow.com/users/3411681/marcg_</a><br>
+<a href="https://stackoverflow.com/users/3411681/marcg">_
+stackoverflow.com/users/3411681/marcg_</a><br>
 <a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a><br>
