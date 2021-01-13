@@ -288,7 +288,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// [set], nothing happens.
   ///
   IMapOfSets<K, V> add(K key, V value) {
-    ISet<V> set = _mapOfSets[key] ?? ISet<V>();
+    ISet<V> set = _mapOfSets[key] ?? ISet.empty<V>(config.asConfigSet);
     ISet<V> newSet = set.add(value);
     return set.same(newSet) ? this : replaceSet(key, newSet);
   }
@@ -298,7 +298,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// and then add the [values] to it.
   ///
   IMapOfSets<K, V> addValues(K key, Iterable<V> values) {
-    ISet<V> set = _mapOfSets[key] ?? ISet<V>();
+    ISet<V> set = _mapOfSets[key] ?? ISet.empty<V>(config.asConfigSet);
     ISet<V> newSet = set.addAll(values);
     return set.same(newSet) ? this : replaceSet(key, newSet);
   }
