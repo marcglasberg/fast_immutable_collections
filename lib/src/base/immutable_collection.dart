@@ -145,10 +145,33 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 /// `identical`, but will give **less false negatives**. So it is almost always
 /// recommended to use `same` instead of `identical`.
 ///
-bool sameCollection<C extends ImmutableCollection>(C c1, C c2) {
-  if (c1 == null && c2 == null) return true;
+bool areSameImmutableCollection<C extends ImmutableCollection>(C c1, C c2) {
+  if (identical(c1, c2)) return true;
   if (c1 == null || c2 == null) return false;
-  return identical(c1, c2) || c1.same(c2);
+
+  if ((c1 is IList && c2 is IList) ||
+      (c1 is ISet && c2 is ISet) ||
+      (c1 is IMap && c2 is IMap) ||
+      (c1 is IMapOfSets && c2 is IMapOfSets))
+    return c1.same(c2);
+  else
+    return false;
+}
+
+/// Will return `true` only if the collection items are equal, and the collections
+/// are of the same type. If the collection is ordered, it will also check if the items are
+/// in the same order. This may be slow for very large collection, since it
+/// compares each item, one by one. If you can/try to compare ordered and unordered
+/// collections, it will throw a [StateError]. Note this will **not** compare the
+/// configurations.
+///
+bool areImmutableCollectionsWithEqualItems<C extends ImmutableCollection>(C c1, C c2) {
+  if (identical(c1, c2)) return true;
+  if (c1 is IList && c2 is IList) return c1.equalItems(c2);
+  if (c1 is ISet && c2 is ISet) return c1.equalItems(c2);
+  if (c1 is IMap && c2 is IMap) return c1.equalItemsToIMap(c2);
+  if (c1 is IMapOfSets && c2 is IMapOfSets) return c1.equalItemsToIMapOfSets(c2);
+  return false;
 }
 
 // /////////////////////////////////////////////////////////////////////////////

@@ -13,20 +13,50 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("sameCollection()", () {
+  test("areSameImmutableCollection()", () {
     // 1) If both are null, then true
-    expect(sameCollection(null, null), isTrue);
+    expect(areSameImmutableCollection(null, null), isTrue);
 
     // 2) If one of them is not null, then false
-    expect(sameCollection(IList(), null), isFalse);
-    expect(sameCollection(null, IList()), isFalse);
+    expect(areSameImmutableCollection(IList(), null), isFalse);
+    expect(areSameImmutableCollection(null, IList()), isFalse);
 
     // 3) If none of them is null, then use .same()
-    final IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]);
-    final IList<int> iList3 = iList1.remove(3);
+    IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]);
+    IList<int> iList3 = iList1.remove(3);
 
-    expect(sameCollection(iList1, iList2), isFalse);
-    expect(sameCollection(iList1, iList3), isTrue);
+    expect(areSameImmutableCollection(iList1, iList2), isFalse);
+    expect(areSameImmutableCollection(iList1, iList3), isTrue);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("areImmutableCollectionsWithEqualItems()", () {
+    // 1) If both are null, then true
+    expect(areImmutableCollectionsWithEqualItems(null, null), isTrue);
+
+    // 2) If one of them is not null, then false
+    expect(areImmutableCollectionsWithEqualItems(IList(), null), isFalse);
+    expect(areImmutableCollectionsWithEqualItems(null, IList()), isFalse);
+
+    // 3) If none of them is null, then use .same()
+    IList<int> iList1 = IList([1, 2]);
+    IList<int> iList2 = IList([1]).add(2);
+    IList<int> iList3 = iList1.remove(3);
+    IList<int> iList4 = IList([1, 3]);
+    ISet<int> iSet1 = ISet([1, 2]);
+
+    expect(areImmutableCollectionsWithEqualItems(iList1, iList2), isTrue);
+    expect(areImmutableCollectionsWithEqualItems(iList1, iList3), isTrue);
+    expect(areImmutableCollectionsWithEqualItems(iList1, iList4), isFalse);
+
+    expect(
+        areImmutableCollectionsWithEqualItems(
+            // ignore: unnecessary_cast
+            iList1 as ImmutableCollection,
+            // ignore: unnecessary_cast
+            iSet1 as ImmutableCollection),
+        isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
