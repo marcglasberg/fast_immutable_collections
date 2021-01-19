@@ -784,31 +784,46 @@ class ISet<T> // ignore: must_be_immutable
     return _s.containsAll(other);
   }
 
+  Set<T> _setFromIterable(Iterable<T> other) {
+    Set<T> otherSet;
+    if (other is Set<T>)
+      otherSet = other;
+    else if (other is ISet<T>)
+      otherSet = other.unlockView;
+    else
+      otherSet = Set.of(other);
+    return otherSet;
+  }
+
   /// Returns a new set with the elements of this that are not in [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are not elements of [other] according to `other.contains`.
-  ISet<T> difference(Set<T> other) {
+  ISet<T> difference(Iterable<T> other) {
     _count();
-    return ISet._unsafeFromSet(_s.difference(other), config: config);
+    Set<T> otherSet = _setFromIterable(other);
+    return ISet._unsafeFromSet(_s.difference(otherSet), config: config);
   }
+
 
   /// Returns a new set which is the intersection between this set and [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are also elements of [other] according to `other.contains`.
-  ISet<T> intersection(Set<T> other) {
+  ISet<T> intersection(Iterable<T> other) {
     _count();
-    return ISet._unsafeFromSet(_s.intersection(other), config: config);
+    Set<T> otherSet = _setFromIterable(other);
+    return ISet._unsafeFromSet(_s.intersection(otherSet), config: config);
   }
 
   /// Returns a new set which contains all the elements of this set and [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] and
   /// all the elements of [other].
-  ISet<T> union(Set<T> other) {
+  ISet<T> union(Iterable<T> other) {
     _count();
-    return ISet._unsafeFromSet(_s.union(other), config: config);
+    Set<T> otherSet = _setFromIterable(other);
+    return ISet._unsafeFromSet(_s.union(otherSet), config: config);
   }
 
   /// If an object equal to [object] is in the set, return it.
