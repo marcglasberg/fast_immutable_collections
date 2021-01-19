@@ -15,6 +15,8 @@ extension FicIterableExtension<T> on Iterable<T> {
 
   bool get isNotNullOrEmpty => this != null && isNotEmpty;
 
+  bool get isEmptyButNotNull => (this != null) && isEmpty;
+
   /// Compare all items, in order, using [identical].
   /// Return true if they are all the same, in the same order.
   ///

@@ -1,4 +1,3 @@
-import "package:meta/meta.dart";
 import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -213,38 +212,152 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("CanBeEmptyExtension.isNullOrEmpty", () {
-    const CanBeEmptyExample exampleNull = null;
-    const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(true, null);
-    const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(false, null);
+  test("isNullOrEmpty", () {
+    // List:
+    expect([].isNullOrEmpty, isTrue);
+    expect([1].isNullOrEmpty, isFalse);
+    List<int> list;
+    expect(list.isNullOrEmpty, isTrue);
 
-    expect(exampleNull.isNullOrEmpty, isTrue);
-    expect(exampleIsEmpty.isNullOrEmpty, isTrue);
-    expect(exampleIsNotEmpty.isNullOrEmpty, isFalse);
+    // Set:
+    expect(<Set>{}.isNullOrEmpty, isTrue);
+    expect({1}.isNullOrEmpty, isFalse);
+    Set<int> set;
+    expect(set.isNullOrEmpty, isTrue);
+
+    // IMap:
+    expect(<Map>{}.isNullOrEmpty, isTrue);
+    expect({1: 2}.isNullOrEmpty, isFalse);
+    Map<int, int> map;
+    expect(map.isNullOrEmpty, isTrue);
+
+    // IList:
+    expect(IList().isNullOrEmpty, isTrue);
+    expect(IList([1]).isNullOrEmpty, isFalse);
+    IList<int> ilist;
+    expect(ilist.isNullOrEmpty, isTrue);
+
+    // ISet:
+    expect(ISet().isNullOrEmpty, isTrue);
+    expect(ISet([1]).isNullOrEmpty, isFalse);
+    ISet<int> iset;
+    expect(iset.isNullOrEmpty, isTrue);
+
+    // IMap:
+    expect(IMap().isNullOrEmpty, isTrue);
+    expect(IMap({1: 2}).isNullOrEmpty, isFalse);
+    IMap<int, int> imap;
+    expect(imap.isNullOrEmpty, isTrue);
+
+    // IMapOfSets:
+    expect(IMapOfSets().isNullOrEmpty, isTrue);
+    expect(
+        IMapOfSets({
+          1: {2}
+        }).isNullOrEmpty,
+        isFalse);
+    IMapOfSets<int, int> imapOfSets;
+    expect(imapOfSets.isNullOrEmpty, isTrue);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("CanBeEmptyExtension.isNotNullOrEmpty", () {
-    const CanBeEmptyExample exampleNull = null;
-    const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(null, true);
-    const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(null, false);
+  test("isNotNullOrEmpty", () {
+    // List:
+    expect([].isNotNullOrEmpty, isFalse);
+    expect([1].isNotNullOrEmpty, isTrue);
+    List<int> list;
+    expect(list.isNotNullOrEmpty, isFalse);
 
-    expect(exampleNull.isNotNullOrEmpty, isFalse);
-    expect(exampleIsNotEmpty.isNotNullOrEmpty, isTrue);
-    expect(exampleIsEmpty.isNotNullOrEmpty, isFalse);
+    // Set:
+    expect(<Set>{}.isNotNullOrEmpty, isFalse);
+    expect({1}.isNotNullOrEmpty, isTrue);
+    Set<int> set;
+    expect(set.isNotNullOrEmpty, isFalse);
+
+    // IMap:
+    expect(<Map>{}.isNotNullOrEmpty, isFalse);
+    expect({1: 2}.isNotNullOrEmpty, isTrue);
+    Map<int, int> map;
+    expect(map.isNotNullOrEmpty, isFalse);
+
+    // IList:
+    expect(IList().isNotNullOrEmpty, isFalse);
+    expect(IList([1]).isNotNullOrEmpty, isTrue);
+    IList<int> ilist;
+    expect(ilist.isNotNullOrEmpty, isFalse);
+
+    // ISet:
+    expect(ISet().isNotNullOrEmpty, isFalse);
+    expect(ISet([1]).isNotNullOrEmpty, isTrue);
+    ISet<int> iset;
+    expect(iset.isNotNullOrEmpty, isFalse);
+
+    // IMap:
+    expect(IMap().isNotNullOrEmpty, isFalse);
+    expect(IMap({1: 2}).isNotNullOrEmpty, isTrue);
+    IMap<int, int> imap;
+    expect(imap.isNotNullOrEmpty, isFalse);
+
+    // IMapOfSets:
+    expect(IMapOfSets().isNotNullOrEmpty, isFalse);
+    expect(
+        IMapOfSets({
+          1: {2}
+        }).isNotNullOrEmpty,
+        isTrue);
+    IMapOfSets<int, int> imapOfSets;
+    expect(imapOfSets.isNotNullOrEmpty, isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("CanBeEmptyExtension.isEmptyButNotNull", () {
-    const CanBeEmptyExample exampleNull = null;
-    const CanBeEmptyExample exampleIsEmpty = CanBeEmptyExample(true, null);
-    const CanBeEmptyExample exampleIsNotEmpty = CanBeEmptyExample(false, null);
+  test("isEmptyButNotNull", () {
+    // List:
+    expect([].isEmptyButNotNull, isTrue);
+    expect([1].isEmptyButNotNull, isFalse);
+    List<int> list;
+    expect(list.isEmptyButNotNull, isFalse);
 
-    expect(exampleNull.isEmptyButNotNull, isFalse);
-    expect(exampleIsEmpty.isEmptyButNotNull, isTrue);
-    expect(exampleIsNotEmpty.isEmptyButNotNull, isFalse);
+    // Set:
+    expect(<Set>{}.isEmptyButNotNull, isTrue);
+    expect({1}.isEmptyButNotNull, isFalse);
+    Set<int> set;
+    expect(set.isEmptyButNotNull, isFalse);
+
+    // IMap:
+    expect(<Map>{}.isEmptyButNotNull, isTrue);
+    expect({1: 2}.isEmptyButNotNull, isFalse);
+    Map<int, int> map;
+    expect(map.isEmptyButNotNull, isFalse);
+
+    // IList:
+    expect(IList().isEmptyButNotNull, isTrue);
+    expect(IList([1]).isEmptyButNotNull, isFalse);
+    IList<int> ilist;
+    expect(ilist.isEmptyButNotNull, isFalse);
+
+    // ISet:
+    expect(ISet().isEmptyButNotNull, isTrue);
+    expect(ISet([1]).isEmptyButNotNull, isFalse);
+    ISet<int> iset;
+    expect(iset.isEmptyButNotNull, isFalse);
+
+    // IMap:
+    expect(IMap().isEmptyButNotNull, isTrue);
+    expect(IMap({1: 2}).isEmptyButNotNull, isFalse);
+    IMap<int, int> imap;
+    expect(imap.isEmptyButNotNull, isFalse);
+
+    // IMapOfSets:
+    expect(IMapOfSets().isEmptyButNotNull, isTrue);
+    expect(
+        IMapOfSets({
+          1: {2}
+        }).isEmptyButNotNull,
+        isFalse);
+    IMapOfSets<int, int> imapOfSets;
+    expect(imapOfSets.isEmptyButNotNull, isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
@@ -414,11 +527,3 @@ class _ClassEqualsByValue {
 }
 
 // /////////////////////////////////////////////////////////////////////////////
-
-@immutable
-class CanBeEmptyExample implements CanBeEmpty {
-  @override
-  final bool isEmpty, isNotEmpty;
-
-  const CanBeEmptyExample(this.isEmpty, this.isNotEmpty);
-}

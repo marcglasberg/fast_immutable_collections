@@ -26,6 +26,15 @@ extension FicMapExtension<K, V> on Map<K, V> {
   /// Creates an *immutable* map ([IMap]) from the map.
   IMap<K, V> toIMap([ConfigMap config]) =>
       (this == null) ? null : IMap<K, V>.withConfig(this, config);
+
+  /// Checks if `this` is `null` or `[isEmpty].
+  bool get isNullOrEmpty => (this == null) || isEmpty;
+
+  /// Checks if `this` is **not** `null` and **not** `[isEmpty].
+  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
+
+  /// Checks if `this` is [isEmpty] but **not** `null`.
+  bool get isEmptyButNotNull => (this != null) && isEmpty;
 }
 
 // /////////////////////////////////////////////////////////////////////////////

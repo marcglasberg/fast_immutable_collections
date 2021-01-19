@@ -1,4 +1,4 @@
-## [1.0.12] - 2021/01/19
+## [1.0.13] - 2021/01/19
 
 * `IList.replace()`.
 * `ISet.difference()`, `intersection`, `union` now accept iterables.
