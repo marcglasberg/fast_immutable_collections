@@ -359,6 +359,15 @@ IList<int> ilist = ['Bob', 'Alice', 'Dominic', 'Carl'].lock
    .toggle(2); // 3, 5, 2;
 ```
 
+The `replace` method is the equivalent of `operator []=` for the `IList`. For example:
+
+```
+IList<int> ilist = ['Bob', 'Alice', 'Dominic'].lock;
+
+// Results in ['Bob', 'John', 'Dominic'] 
+ilist = ilist.replace(1, 'John');     
+```
+
 ## 2.1. IList Equality
 
 By default, `IList`s are equal if they have the same items in the same order.

@@ -13,6 +13,8 @@ import "modifiable_list_from_ilist.dart";
 import "unmodifiable_list_from_ilist.dart";
 
 /// An **immutable** list.
+/// Note The [replace] method is the equivalent of `operator []=` for the [IList].
+///
 @immutable
 class IList<T> // ignore: must_be_immutable
     extends ImmutableCollection<IList<T>> implements Iterable<T> {
@@ -1203,6 +1205,14 @@ class IList<T> // ignore: must_be_immutable
   IList<T> sublist(int start, [int end]) {
     // TODO: Still need to implement efficiently.
     return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
+  }
+
+  /// The [replace] method is the equivalent of `operator []=` for the [IList].
+  IList<T> replace(int index, T value) {
+    // TODO: Still need to implement efficiently.
+    var newList = toList(growable: false);
+    newList[index] = value;
+    return IList._unsafeFromList(newList, config: config);
   }
 
   /// Inserts the object at position [index] in this list and returns a new immutable list.
