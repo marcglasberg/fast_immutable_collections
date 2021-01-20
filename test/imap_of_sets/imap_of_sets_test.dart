@@ -790,8 +790,7 @@ void main() {
         iMapOfSets2.configMap,
         const ConfigMap(
           isDeepEquals: false,
-          sortKeys: false,
-          sortValues: false,
+          sort: false,
         ));
   });
 
@@ -1179,9 +1178,9 @@ void main() {
       "b": {3},
       "d": {1}
     }.lock;
-    expect(iMapOfSets.getEntryWithValue(1).asEntry, Entry("a", ISet<int>({1, 2})));
-    expect(iMapOfSets.getEntryWithValue(2).asEntry, Entry("a", ISet<int>({1, 2})));
-    expect(iMapOfSets.getEntryWithValue(3).asEntry, Entry("b", ISet<int>({3})));
+    expect(iMapOfSets.getEntryWithValue(1).asComparableEntry, Entry("a", ISet<int>({1, 2})));
+    expect(iMapOfSets.getEntryWithValue(2).asComparableEntry, Entry("a", ISet<int>({1, 2})));
+    expect(iMapOfSets.getEntryWithValue(3).asComparableEntry, Entry("b", ISet<int>({3})));
     expect(iMapOfSets.getEntryWithValue(4), isNull);
   });
 
@@ -1271,8 +1270,9 @@ void main() {
     ];
 
     for (int i = 0; i < correctFlattenedMap.length; i++) {
-      expect(flattenedIMap[i].asEntry.key, correctFlattenedMap[i].asEntry.key);
-      expect(flattenedIMap[i].asEntry.value, correctFlattenedMap[i].asEntry.value);
+      expect(flattenedIMap[i].asComparableEntry.key, correctFlattenedMap[i].asComparableEntry.key);
+      expect(
+          flattenedIMap[i].asComparableEntry.value, correctFlattenedMap[i].asComparableEntry.value);
     }
   });
 

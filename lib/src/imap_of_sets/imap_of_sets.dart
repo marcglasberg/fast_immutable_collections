@@ -193,7 +193,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   MapEntry<K, ISet<V>> entry(K key) => _mapOfSets.entry(key);
 
   /// Returns an [Iterable] of the map keys. Note this is always fast
-  /// and **UNORDERED**, even is [sortKeys] is true. If you need order,
+  /// and **UNORDERED**, even is [sort] is true. If you need order,
   /// please use [keyList].
   Iterable<K> get keys => _mapOfSets.keys;
 
@@ -201,7 +201,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// Optionally, you may provide a [config] for the list.
   ///
-  /// The list will be sorted if the map's [sortKeys] configuration is `true`,
+  /// The list will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
   IList<K> keyList({

@@ -992,25 +992,19 @@ than for IList. Please read the IList explanation first, before trying to unders
 ## 4.2. Global IMap Configuration
 
 The **default** configuration of the `IMap` is
-`ConfigMap(isDeepEquals: true, sortKeys: false, sortValues: false, cacheHashCode: true)`:
+`ConfigMap(isDeepEquals: true, sort: false, cacheHashCode: true)`:
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in
    the same order.
 
-2. `sortKeys: false` means it keeps insertion order. But `sortKeys: true` means it will iterate in
-   sorted order.
-
-3. `sortValues: true` means methods `IMap.valueList`, `IMap.toValueList`, and `IMap.toValueSet`
-   will return sorted outputs.
+2. `sort: false` means it keeps insertion order, while `sort: true` means it will sort by
+   keys.
 
 4. `cacheHashCode: true` means the `hashCode` is cached. It's not recommended turning this cache off
    for maps.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:
-`defaultConfig = ConfigMap(isDeepEquals: false, sortKeys: true, sortValues: true, cacheHashCode: false);`
-
-Note that `ConfigMap` is similar to `ConfigSet`, but has separate sort parameters for keys and
-values: `sortKeys` and `sortValues`:
+`defaultConfig = ConfigMap(isDeepEquals: false, sort: true, cacheHashCode: false);`
 
 ```
 /// Prints sorted: "1,2,4,9"
@@ -1018,7 +1012,7 @@ var imap = {2: "a", 4: "x", 1: "z", 9: "k"}.lock;
 print(imap.keyList.join(","));
 
 /// Prints in any order: "2,4,1,9"
-var imap = {2: "a", 4: "x", 1: "z", 9: "k"}.lock.withConfig(ConfigMap(sortKeys: false));  
+var imap = {2: "a", 4: "x", 1: "z", 9: "k"}.lock.withConfig(ConfigMap(sort: false));  
 print(imap.keyList.join(","));
 ```
 

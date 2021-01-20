@@ -124,8 +124,7 @@ class ConfigSet {
 
 /// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
-/// - If [sortKeys] is `true`, will sort the list output of keys. Otherwise, it will keep the insertion order (the default).
-/// - If [sortValues] is `true`, will sort the list output of values. Otherwise, it will keep the insertion order (the default).
+/// - If [sort] is `true`, will sort the list output of keys. Otherwise, it will keep the insertion order (the default).
 /// - If [cacheHashCode] is `true` (the default), the [IMap] will only calculate the [hashCode]
 /// once, when it is asked — initially, internally `null`. Otherwise, it will always recalculate it.
 @immutable
@@ -137,11 +136,7 @@ class ConfigMap {
 
   /// If `false` (the default), will keep the insertion order.
   /// If `true` (the default), will sort the list output of keys.
-  final bool sortKeys;
-
-  /// If `false` (the default), will keep the insertion order.
-  /// If `true`, will sort the list output of values.
-  final bool sortValues;
+  final bool sort;
 
   /// If `false`, the [hashCode] will be calculated each time it's used.
   /// If `true` (the default), the [hashCode] will be cached.
@@ -151,21 +146,18 @@ class ConfigMap {
 
   const ConfigMap({
     this.isDeepEquals = true,
-    this.sortKeys = false,
-    this.sortValues = false,
+    this.sort = false,
     this.cacheHashCode = true,
   });
 
   ConfigMap copyWith({
     bool isDeepEquals,
-    bool sortKeys,
-    bool sortValues,
+    bool sort,
     bool cacheHashCode,
   }) {
     var config = ConfigMap(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
-      sortKeys: sortKeys ?? this.sortKeys,
-      sortValues: sortValues ?? this.sortValues,
+      sort: sort ?? this.sort,
       cacheHashCode: cacheHashCode ?? this.cacheHashCode,
     );
     return (config == this) ? this : config;
@@ -177,23 +169,20 @@ class ConfigMap {
       other is ConfigMap &&
           runtimeType == other.runtimeType &&
           isDeepEquals == other.isDeepEquals &&
-          sortKeys == other.sortKeys &&
-          sortValues == other.sortValues &&
+          sort == other.sort &&
           cacheHashCode == other.cacheHashCode;
 
   @override
-  int get hashCode => hashObj4(
+  int get hashCode => hashObj3(
         isDeepEquals,
-        sortKeys,
-        sortValues,
+        sort,
         cacheHashCode,
       );
 
   @override
   String toString() => "ConfigMap{"
       "isDeepEquals: $isDeepEquals, "
-      "sortKeys: $sortKeys, "
-      "sortValues: $sortValues, "
+      "sort: $sort, "
       "cacheHashCode: $cacheHashCode}";
 }
 
@@ -202,7 +191,6 @@ class ConfigMap {
 /// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
 /// - If [sortKeys] is `true`, will sort the list output of keys. Otherwise, it will keep the insertion order (the default).
-/// - If [sortValues] is `true`, will sort the list output of values. Otherwise, it will keep the insertion order (the default).
 /// - If [cacheHashCode] is `true` (the default), the [IMapOfSets] will only calculate the
 /// [hashCode] once, when it is asked — initially, internally `null`. Otherwise, it will always recalculate it.
 @immutable
@@ -239,8 +227,7 @@ class ConfigMapOfSets {
 
   ConfigMap get asConfigMap => ConfigMap(
         isDeepEquals: isDeepEquals,
-        sortKeys: sortValues,
-        sortValues: sortValues,
+        sort: sortKeys,
         cacheHashCode: cacheHashCode,
       );
 

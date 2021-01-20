@@ -49,8 +49,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("unlockSorted", () {
-    final IMap<String, int> imap =
-        {"c": 3, "a": 1, "b": 2}.lock.withConfig(ConfigMap(sortKeys: false));
+    final IMap<String, int> imap = {"c": 3, "a": 1, "b": 2}.lock.withConfig(ConfigMap(sort: false));
 
     expect(imap.unlockSorted, allOf(isA<LinkedHashMap<String, int>>(), {"a": 1, "b": 2, "c": 3}));
   });
@@ -360,17 +359,14 @@ void main() {
     final IMap<String, int> imap = IMap({"a": 1, "b": 2});
 
     expect(imap.isDeepEquals, isTrue);
-    expect(imap.config.sortKeys, isFalse);
-    expect(imap.config.sortValues, isFalse);
+    expect(imap.config.sort, isFalse);
 
     final IMap<String, int> iMapWithCompare = imap.withConfig(imap.config.copyWith(
-      sortKeys: true,
-      sortValues: true,
+      sort: true,
     ));
 
     expect(iMapWithCompare.isDeepEquals, isTrue);
-    expect(iMapWithCompare.config.sortKeys, isTrue);
-    expect(iMapWithCompare.config.sortValues, isTrue);
+    expect(iMapWithCompare.config.sort, isTrue);
 
     // 2) Config cannot be null
     expect(() => IMap({"a": 1, "b": 2}).withConfig(null), throwsAssertionError);
@@ -398,18 +394,15 @@ void main() {
         IMap.withConfig({"a": 1, "b": 2}, ConfigMap(isDeepEquals: false));
 
     expect(iMap1.isDeepEquals, isTrue);
-    expect(iMap1.config.sortKeys, isFalse);
-    expect(iMap1.config.sortValues, isFalse);
+    expect(iMap1.config.sort, isFalse);
 
     expect(iMap2.isDeepEquals, isFalse);
-    expect(iMap2.config.sortKeys, isFalse);
-    expect(iMap2.config.sortValues, isFalse);
+    expect(iMap2.config.sort, isFalse);
 
     final IMap<String, int> iMap3 = iMap1.withConfigFrom(iMap2);
 
     expect(iMap3.isDeepEquals, isFalse);
-    expect(iMap3.config.sortKeys, isFalse);
-    expect(iMap3.config.sortValues, isFalse);
+    expect(iMap3.config.sort, isFalse);
 
     expect(iMap1.unlock, {"a": 1, "b": 2});
     expect(iMap2.unlock, {"a": 1, "b": 2});
@@ -508,13 +501,13 @@ void main() {
     // 3) Guaranteeing non-repeated additions to the IMap
     imap = {"a": 1, "z": 100}.lock.addEntry(MapEntry("a", 40));
 
-    expect(imap.keys, ["z", "a"]);
+    expect(imap.keys, ["a", "z"]);
     expect(imap.values, [40, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("addAll", () {
+  test("addAll | set with insertion order", () {
     // 1) Regular usage
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;
     final IMap<String, int> newIMap = imap.addAll({"c": 3, "d": 4}.lock);
@@ -589,10 +582,42 @@ void main() {
         {"a": 1, "b": 2, "c": 3, "d": 4, "e": null, "f": 1});
 
     // 4) Guaranteeing non-repeated additions to the IMap
-    imap = {"a": 1, "z": 100}.lock.addAll({"a": 40}.lock);
-
-    expect(imap.keys, ["z", "a"]);
+    imap = {"a": 1, "z": 100}.lock.addAll({"a": 40}.lock, keepOrder: true);
+    expect(imap.keys, ["a", "z"]);
     expect(imap.values, [40, 100]);
+
+    imap = {"a": 1, "z": 100}.lock.addAll({"a": 40}.lock, keepOrder: false);
+    expect(imap.keys, ["z", "a"]);
+    expect(imap.values, [100, 40]);
+
+    // 5) keepOrder = false
+    imap = <String, int>{}
+        .lock
+        .addAll({"z": 100, "a": 1}.lock)
+        .addAll({"z": 40, "c": 3}.lock, keepOrder: false);
+    expect(imap.keys, ["a", "z", "c"]);
+    expect(imap.values, [1, 40, 3]);
+
+    // keepOrder = true
+    imap = <String, int>{}
+        .lock
+        .addAll({"z": 100, "a": 1}.lock)
+        .addAll({"z": 40, "c": 3}.lock, keepOrder: true);
+    expect(imap.keys, ["z", "a", "c"]);
+    expect(imap.values, [40, 1, 3]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addAll | sorted set", () {
+    // 1) sortKeys
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
+        .addAll({"z": 100, "a": 1}.lock)
+        .addAll({"a": 40, "c": 3}.lock);
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -616,7 +641,7 @@ void main() {
     // 3) Guaranteeing non-repeated additions to the IMap
     imap = {"a": 1, "z": 100}.lock.addMap({"a": 40});
 
-    expect(imap.keys, ["z", "a"]);
+    expect(imap.keys, ["a", "z"]);
     expect(imap.values, [40, 100]);
   });
 
@@ -642,7 +667,7 @@ void main() {
     // 3) Guaranteeing non-repeated additions to the IMap
     imap = {"a": 1, "z": 100}.lock.addEntries([MapEntry("a", 40)]);
 
-    expect(imap.keys, ["z", "a"]);
+    expect(imap.keys, ["a", "z"]);
     expect(imap.values, [40, 100]);
   });
 
@@ -651,39 +676,19 @@ void main() {
   test(
       "Guarantees sorting after adding entries, if sort == true | "
       "and also guarantees that repeated keys get updated with all the last key insertion", () {
-    // 1) sortKeys
+    // 1) sort
     IMap<String, int> imap = <String, int>{}
         .lock
-        .withConfig(const ConfigMap(sortKeys: true))
+        .withConfig(const ConfigMap(sort: true))
         .addEntries([MapEntry("z", 100), MapEntry("a", 1)])
         .add("k", 20)
         .addAll({"a": 40, "c": 3, "f": 10}.lock)
         .addMap({"g": 200})
         .addEntry(MapEntry("y", 1000));
 
-    expect(imap.config, const ConfigMap(sortKeys: true));
-
-    // O método IMap.toKeyIList ordena ao retirar a lista de chaves,
-    // então não é o ideal para este tipo de teste.
+    expect(imap.config, const ConfigMap(sort: true));
     expect(imap.keys, ["a", "c", "f", "g", "k", "y", "z"]);
     expect(imap.values, [40, 3, 10, 200, 20, 1000, 100]);
-
-    // 2) sortValues
-    imap = <String, int>{}
-        .lock
-        .withConfig(const ConfigMap(sortValues: true))
-        .addEntries([MapEntry("z", 100), MapEntry("a", 1)])
-        .add("k", 20)
-        .addAll({"a": 40, "c": 3, "f": 10}.lock)
-        .addMap({"g": 200})
-        .addEntry(MapEntry("y", 1000));
-
-    expect(imap.config, const ConfigMap(sortValues: true));
-
-    // O método IMap.toValueIList ordena ao retirar a lista de chaves,
-    // então não é o ideal para este tipo de teste.
-    expect(imap.keys, ["c", "f", "k", "a", "z", "g", "y"]);
-    expect(imap.values, [3, 10, 20, 40, 100, 200, 1000]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -924,8 +929,8 @@ void main() {
     expect(imap.keys, ["a", "b", "c", "d", "f", "e"]);
 
     // Keys is not sorted! If you need sorted, use keyList.
-    expect(imap.withConfig(ConfigMap(sortKeys: true)).keys, ["a", "b", "c", "d", "e", "f"]);
-    expect(imap.withConfig(ConfigMap(sortKeys: true)).toKeyIList(), ["a", "b", "c", "d", "e", "f"]);
+    expect(imap.withConfig(ConfigMap(sort: true)).keys, ["a", "b", "c", "d", "e", "f"]);
+    expect(imap.withConfig(ConfigMap(sort: true)).toKeyIList(), ["a", "b", "c", "d", "e", "f"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -936,10 +941,6 @@ void main() {
     const List<int> values = [1, 2, 3, 4, 5, 6];
     expect(imap.values, values.toSet());
     expect(imap.values, [1, 2, 3, 4, 6, 5]);
-
-    // Values is not sorted! If you need sorted, use valueList.
-    expect(imap.withConfig(ConfigMap(sortValues: true)).values, [1, 2, 3, 4, 6, 5]);
-    expect(imap.withConfig(ConfigMap(sortValues: true)).toValueIList(), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -966,7 +967,7 @@ void main() {
       MapEntry<String, int>("e", 5),
       MapEntry<String, int>("f", 6)
     ].lock;
-    final orderedEntries = imap2.withConfig(ConfigMap(sortKeys: false)).toEntryIList(
+    final orderedEntries = imap2.withConfig(ConfigMap(sort: false)).toEntryIList(
         compare: (MapEntry<String, int> a, MapEntry<String, int> b) => a.key.compareTo(b.key));
 
     for (int i = 0; i < orderedEntries.length; i++) {
@@ -975,7 +976,7 @@ void main() {
     }
 
     // 2.2) Sorting with sortKeys
-    final orderedEntriesFromConfig = imap2.withConfig(ConfigMap(sortKeys: true)).toEntryIList();
+    final orderedEntriesFromConfig = imap2.withConfig(ConfigMap(sort: true)).toEntryIList();
 
     for (int i = 0; i < orderedEntries.length; i++) {
       expect(orderedEntriesFromConfig[i].key, correctEntries[i].key);
@@ -992,10 +993,10 @@ void main() {
 
     expect(
         imap
-            .withConfig(ConfigMap(sortKeys: false))
+            .withConfig(ConfigMap(sort: false))
             .toKeyIList(compare: (String a, String b) => a.compareTo(b)),
         ["a", "b", "c", "d", "e", "f"]);
-    expect(imap.withConfig(ConfigMap(sortKeys: true)).toKeyIList(), ["a", "b", "c", "d", "e", "f"]);
+    expect(imap.withConfig(ConfigMap(sort: true)).toKeyIList(), ["a", "b", "c", "d", "e", "f"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1005,12 +1006,9 @@ void main() {
         {"a": 1, "c": 3, "b": 2}.lock.add("d", 4).addAll(IMap({"f": 6, "e": 5}));
     expect(imap.toValueIList(), allOf(isA<IList<int>>(), [1, 3, 2, 4, 6, 5]));
 
-    expect(
-        imap
-            .withConfig(ConfigMap(sortValues: false))
-            .toValueIList(compare: (int a, int b) => a.compareTo(b)),
+    expect(imap.toValueIList(sort: false, compare: (int a, int b) => a.compareTo(b)),
         [1, 2, 3, 4, 5, 6]);
-    expect(imap.withConfig(ConfigMap(sortValues: true)).toValueIList(), [1, 2, 3, 4, 5, 6]);
+    expect(imap.toValueIList(sort: true), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1069,7 +1067,7 @@ void main() {
       MapEntry<String, int>("e", 5),
       MapEntry<String, int>("f", 6)
     ];
-    final orderedEntries = imap2.withConfig(ConfigMap(sortKeys: false)).toEntryList(
+    final orderedEntries = imap2.withConfig(ConfigMap(sort: false)).toEntryList(
         compare: (MapEntry<String, int> a, MapEntry<String, int> b) => a.key.compareTo(b.key));
 
     for (int i = 0; i < orderedEntries.length; i++) {
@@ -1078,7 +1076,7 @@ void main() {
     }
 
     // 2.2) Sorting with sortKeys
-    final orderedEntriesFromConfig = imap2.withConfig(ConfigMap(sortKeys: true)).toEntryList();
+    final orderedEntriesFromConfig = imap2.withConfig(ConfigMap(sort: true)).toEntryList();
 
     for (int i = 0; i < orderedEntries.length; i++) {
       expect(orderedEntriesFromConfig[i].key, correctEntries[i].key);
@@ -1095,10 +1093,10 @@ void main() {
 
     expect(
         imap
-            .withConfig(ConfigMap(sortKeys: false))
+            .withConfig(ConfigMap(sort: false))
             .toKeyList(compare: (String a, String b) => a.compareTo(b)),
         ["a", "b", "c", "d", "e", "f"]);
-    expect(imap.withConfig(ConfigMap(sortKeys: true)).toKeyList(), ["a", "b", "c", "d", "e", "f"]);
+    expect(imap.withConfig(ConfigMap(sort: true)).toKeyList(), ["a", "b", "c", "d", "e", "f"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1108,12 +1106,9 @@ void main() {
         {"a": 1, "c": 3, "b": 2}.lock.add("d", 4).addAll(IMap({"f": 6, "e": 5}));
     expect(imap.toValueList(), allOf(isA<List<int>>(), [1, 3, 2, 4, 6, 5]));
 
-    expect(
-        imap
-            .withConfig(ConfigMap(sortValues: false))
-            .toValueList(compare: (int a, int b) => a.compareTo(b)),
+    expect(imap.toValueList(compare: (int a, int b) => a.compareTo(b), sort: false),
         [1, 2, 3, 4, 5, 6]);
-    expect(imap.withConfig(ConfigMap(sortValues: true)).toValueList(), [1, 2, 3, 4, 5, 6]);
+    expect(imap.toValueList(sort: true), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1154,7 +1149,7 @@ void main() {
         .lock
         .add("c", 3)
         .addAll(IMap({"e": 5, "f": 6}))
-        .withConfig(ConfigMap(sortKeys: false));
+        .withConfig(ConfigMap(sort: false));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "d": 4, "c": 3, "e": 5, "f": 6};
 
     Iterator<MapEntry<String, int>> iterator1 = imap1.iterator;
@@ -1166,17 +1161,17 @@ void main() {
 
     expect(iterator1.current, isNull);
     expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asEntry, Entry<String, int>("a", 1));
+    expect(iterator1.current.asComparableEntry, Entry<String, int>("a", 1));
     expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asEntry, Entry<String, int>("b", 2));
+    expect(iterator1.current.asComparableEntry, Entry<String, int>("b", 2));
     expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asEntry, Entry<String, int>("d", 4));
+    expect(iterator1.current.asComparableEntry, Entry<String, int>("d", 4));
     expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asEntry, Entry<String, int>("c", 3));
+    expect(iterator1.current.asComparableEntry, Entry<String, int>("c", 3));
     expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asEntry, Entry<String, int>("e", 5));
+    expect(iterator1.current.asComparableEntry, Entry<String, int>("e", 5));
     expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asEntry, Entry<String, int>("f", 6));
+    expect(iterator1.current.asComparableEntry, Entry<String, int>("f", 6));
     expect(iterator1.moveNext(), isFalse);
     expect(iterator1.current, isNull);
 
@@ -1187,17 +1182,17 @@ void main() {
 
     expect(iterator2.current, isNull);
     expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current.asEntry, Entry<String, int>("a", 1));
+    expect(iterator2.current.asComparableEntry, Entry<String, int>("a", 1));
     expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current.asEntry, Entry<String, int>("b", 2));
+    expect(iterator2.current.asComparableEntry, Entry<String, int>("b", 2));
     expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current.asEntry, Entry<String, int>("c", 3));
+    expect(iterator2.current.asComparableEntry, Entry<String, int>("c", 3));
     expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current.asEntry, Entry<String, int>("d", 4));
+    expect(iterator2.current.asComparableEntry, Entry<String, int>("d", 4));
     expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current.asEntry, Entry<String, int>("e", 5));
+    expect(iterator2.current.asComparableEntry, Entry<String, int>("e", 5));
     expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current.asEntry, Entry<String, int>("f", 6));
+    expect(iterator2.current.asComparableEntry, Entry<String, int>("f", 6));
     expect(iterator2.moveNext(), isFalse);
   });
 
@@ -1353,7 +1348,7 @@ void main() {
     ];
     final List<MapEntry<String, int>> mapEntryList = imap.toEntryList();
     for (int i = 0; i < mapEntryList.length; i++)
-      expect(mapEntryList[i].asEntry, correctEntryList[i]);
+      expect(mapEntryList[i].asComparableEntry, correctEntryList[i]);
 
     // 2) With sort
     final List<Entry<String, int>> correctEntryListSorted = [
@@ -1365,9 +1360,9 @@ void main() {
       Entry("f", 6)
     ];
     final List<MapEntry<String, int>> mapEntryListSorted =
-        imap.withConfig(ConfigMap(sortKeys: true)).toEntryList();
+        imap.withConfig(ConfigMap(sort: true)).toEntryList();
     for (int i = 0; i < mapEntryListSorted.length; i++)
-      expect(mapEntryListSorted[i].asEntry, correctEntryListSorted[i]);
+      expect(mapEntryListSorted[i].asComparableEntry, correctEntryListSorted[i]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1379,7 +1374,7 @@ void main() {
     expect(imap.toKeyList(), ["a", "c", "b", "d", "f", "e"]);
 
     // 2) With sorting
-    expect(imap.withConfig(ConfigMap(sortKeys: true)).toKeyList(), ["a", "b", "c", "d", "e", "f"]);
+    expect(imap.withConfig(ConfigMap(sort: true)).toKeyList(), ["a", "b", "c", "d", "e", "f"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1391,7 +1386,7 @@ void main() {
     expect(imap.toValueList(), [1, 3, 2, 4, 6, 5]);
 
     // 2) With sorting
-    expect(imap.withConfig(ConfigMap(sortValues: true)).toValueList(), [1, 2, 3, 4, 5, 6]);
+    expect(imap.toValueList(sort: true), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

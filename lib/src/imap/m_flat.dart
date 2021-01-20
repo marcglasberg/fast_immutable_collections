@@ -11,11 +11,15 @@ class MFlat<K, V> extends M<K, V> {
 
   MFlat(Map<K, V> _map, {ConfigMap config})
       : assert(_map != null),
-        _map = ListMap<K, V>.of(_map, sort: (config ?? IMap.defaultConfig).sortKeys);
+        _map = ListMap<K, V>.of(_map, sort: (config ?? IMap.defaultConfig).sort);
+
+  MFlat.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap config})
+      : assert(entries != null),
+        _map = ListMap<K, V>.fromEntries(entries, sort: (config ?? IMap.defaultConfig).sort);
 
   MFlat.from(M<K, V> _m, {ConfigMap config})
       : assert(_m != null),
-        _map = ListMap<K, V>.fromEntries(_m.entries, sort: (config ?? IMap.defaultConfig).sortKeys);
+        _map = ListMap<K, V>.fromEntries(_m.entries, sort: (config ?? IMap.defaultConfig).sort);
 
   MFlat.unsafe(Map<K, V> map)
       : assert(map != null),

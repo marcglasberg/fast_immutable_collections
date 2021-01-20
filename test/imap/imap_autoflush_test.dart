@@ -1,4 +1,3 @@
-import "dart:math";
 import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -347,19 +346,23 @@ void main() {
 
     /// imap3 has counter 3.
     /// imap4 has counter 4.
-    /// Both imap5 and imap6 will have counter = max(3, 4) + 1.
+    /// Both imap5 and imap6 will have counter greater than those of imap3 and imap4.
+    expect(imap3.counter, 3);
+    expect(imap4.counter, 4);
     var imap5 = imap3.addAll(imap4);
     var imap6 = imap4.addAll(imap3);
-    expect(imap5.counter, max(3, 4) + 1);
-    expect(imap6.counter, max(3, 4) + 1);
+    expect(imap5.counter > imap3.counter, isTrue);
+    expect(imap5.counter > imap4.counter, isTrue);
+    expect(imap6.counter > imap3.counter, isTrue);
+    expect(imap6.counter > imap4.counter, isTrue);
 
-    /// imap7 will have counter = max(3, 3) + 1.
+    /// imap7 will have counter greater than imap3.
     var imap7 = imap3.addAll(imap3);
-    expect(imap7.counter, max(3, 3) + 1);
+    expect(imap7.counter > imap3.counter, isTrue);
 
-    /// imap7 will have counter = max(4, 4) + 1.
+    /// imap8 will have counter greater than imap4.
     var imap8 = imap4.addAll(imap4);
-    expect(imap8.counter, max(4, 4) + 1);
+    expect(imap8.counter > imap4.counter, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////

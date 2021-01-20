@@ -58,7 +58,7 @@ class IMap<K, V> // ignore: must_be_immutable
     else {
       // If the new config is not sorted it can use sorted or not sorted.
       // If the new config is sorted it can only use sorted.
-      if (!config.sortKeys || this.config.sortKeys)
+      if (!config.sort || this.config.sort)
         return IMap._unsafe(_m, config: config);
       //
       // If the new config is sorted and the previous is not, it must sort.
@@ -76,13 +76,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// later occurrences overwrite the earlier ones.
   ///
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap config}) {
-    if (entries is IMap<K, V>)
-      return IMap._unsafe((entries as IMap<K, V>)._m, config: config ?? defaultConfig);
-    else {
-      var map = <K, V>{};
-      map.addEntries(entries);
-      return IMap._unsafe(MFlat.unsafe(map), config: config ?? defaultConfig);
-    }
+    var map = <K, V>{}..addEntries(entries);
+    return IMap._unsafe(MFlat.unsafe(map), config: config ?? defaultConfig);
   }
 
   /// Create an [IMap] from the given [keys].
@@ -356,8 +351,8 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns an [Iterable] of the map entries of type [Entry]. Contrary to
   /// [MapEntry], [Entry] is comparable and implements equals (`==`) and [hashcode] by
-  /// using its key and value. Note this is always fast and **UNORDERED**.
-  Iterable<Entry<K, V>> get comparableEntries => _m.entries.map((e) => e.asEntry);
+  /// using its key and value.
+  Iterable<Entry<K, V>> get comparableEntries => _m.entries.map((e) => e.asComparableEntry);
 
   /// Returns an [Iterable] of the map keys.
   Iterable<K> get keys {
@@ -365,9 +360,8 @@ class IMap<K, V> // ignore: must_be_immutable
     return _m.keys;
   }
 
-  /// Returns an [Iterable] of the map values. Note this is always fast
-  /// and **UNORDERED**, even is [sortValues] is true. If you need order,
-  /// please use [toValueIList].
+  /// Returns an [Iterable] of the map values, in the same order as the keys.
+  /// If you need to sort the values, please use [toValueIList].
   Iterable<V> get values {
     _count();
     return _m.values;
@@ -377,7 +371,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Optionally, you may provide a [config] for the list.
   ///
-  /// The list will be sorted if the map's [sortKeys] configuration is `true`,
+  /// The list will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
   IList<MapEntry<K, V>> toEntryIList({
@@ -386,7 +380,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = IList<MapEntry<K, V>>.withConfig(entries, config);
-    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    if (compare != null || this.config.sort) result = result.sort(compare);
     return result;
   }
 
@@ -394,7 +388,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Optionally, you may provide a [config] for the list.
   ///
-  /// The list will be sorted if the map's [sortKeys] configuration is `true`,
+  /// The list will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
   IList<K> toKeyIList({
@@ -403,7 +397,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = IList.withConfig(keys, config);
-    if (compare != null || this.config.sortKeys) result = result.sort(compare);
+    if (compare != null || this.config.sort) result = result.sort(compare);
     return result;
   }
 
@@ -411,16 +405,16 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Optionally, you may provide a [config] for the list.
   ///
-  /// The list will be sorted if the map's [sortValues] configuration is `true`,
-  /// or if you explicitly provide a [compare] method.
+  /// The list will be sorted if [sort] is true, or if you explicitly provide a [compare] method.
   ///
   IList<V> toValueIList({
+    bool sort = false,
     int Function(V a, V b) compare,
     ConfigList config,
   }) {
     _count();
     var result = IList.withConfig(values, config);
-    if (compare != null || this.config.sortValues) result = result.sort(compare);
+    if (sort || compare != null) result = result.sort(compare);
     return result;
   }
 
@@ -451,42 +445,44 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a [List] of the map entries.
   ///
-  /// The list will be sorted if the map's [sortKeys] configuration is `true`,
+  /// The list will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
   List<MapEntry<K, V>> toEntryList({int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare}) {
     _count();
     var result = List<MapEntry<K, V>>.of(entries);
-    if (compare != null || config.sortKeys) result.sort(compare ?? compareObject);
+    if (compare != null || config.sort) result.sort(compare ?? compareObject);
     return result;
   }
 
   /// Returns a [List] of the map keys.
   ///
-  /// The list will be sorted if the map's [sortKeys] configuration is `true`,
+  /// The list will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
   List<K> toKeyList({int Function(K a, K b) compare}) {
     _count();
     var result = List.of(keys);
-    if (compare != null || config.sortKeys) result.sort(compare);
+    if (compare != null || config.sort) result.sort(compare);
     return result;
   }
 
   /// Returns a [List] of the map values.
   ///
-  /// The list will be sorted if the map's [sortValues] configuration is `true`,
-  /// or if you explicitly provide a [compare] method.
+  /// The list will be sorted if [sort] is true, or if you explicitly provide a [compare] method.
   ///
-  List<V> toValueList({int Function(V a, V b) compare}) {
+  List<V> toValueList({
+    bool sort = false,
+    int Function(V a, V b) compare,
+  }) {
     _count();
     var result = List.of(values);
-    if (compare != null || config.sortValues) result.sort(compare);
+    if (sort || compare != null) result.sort(compare);
     return result;
   }
 
   /// Returns a [Set] of the map entries.
-  /// The set will be sorted if the map's [sortKeys] configuration is `true`,
+  /// The set will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   Set<MapEntry<K, V>> toEntrySet({int Function(MapEntry<K, V> a, MapEntry<K, V> b) compare}) {
     _count();
@@ -499,7 +495,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns a [Set] of the map keys.
-  /// The set will be sorted if the map's [sortKeys] configuration is `true`,
+  /// The set will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
   Set<K> toKeySet({int Function(K a, K b) compare}) {
@@ -523,12 +519,12 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a new `Iterator` that allows iterating the entries of the [IMap].
   ///
-  /// 1. If the map's [config] has [ConfigMap.sortKeys] `true` (the default),
+  /// 1. If the map's [config] has [ConfigMap.sort] `true` (the default),
   /// it will iterate in the natural order of entries. In other words, if the
   /// keys/values are [Comparable], they will be sorted first by
   /// `keyA.compareTo(keyB)` and then by `valueA.compareTo(valueB)`.
   ///
-  /// 2. If the map's [config] has [ConfigMap.sortKeys] `false`, or if the
+  /// 2. If the map's [config] has [ConfigMap.sort] `false`, or if the
   /// keys/values are not [Comparable], the iterator order is by insertion order.
   ///
   Iterator<MapEntry<K, V>> get iterator => _m.iterator;
@@ -692,7 +688,12 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a new map containing the current map plus the given key:value.
   /// (if necessary, the given key:value pair will override the current).
   IMap<K, V> add(K key, V value) {
-    var result = IMap<K, V>._unsafe(_m.add(key: key, value: value), config: config);
+    IMap<K, V> result;
+    result = config.sort
+        ? IMap._unsafe(
+            MFlat.fromEntries(_m.entries.followedBy([MapEntry(key, value)]), config: config),
+            config: config)
+        : IMap<K, V>._unsafe(_m.add(key: key, value: value), config: config);
 
     // A map created with `add` has a larger counter than its source map.
     // This improves the order in which maps are flushed.
@@ -708,10 +709,22 @@ class IMap<K, V> // ignore: must_be_immutable
   /// (if necessary, the given entry will override the current one).
   IMap<K, V> addEntry(MapEntry<K, V> entry) => add(entry.key, entry.value);
 
-  /// Returns a new map containing the current map plus the given map.
-  /// (if necessary, the given entries will override the current ones).
-  IMap<K, V> addAll(IMap<K, V> imap) {
-    var result = IMap<K, V>._unsafe(_m.addAll(imap), config: config);
+  /// Returns a new map containing the current map plus the ones in the
+  /// given [imap].
+  ///
+  /// Note: [imap] entries that already exist in the original map will overwrite
+  /// those of the original map.
+  ///
+  /// If [keepOrder] is `false` (the default), those entries that already exist
+  /// will go to the end of the new map. If [keepOrder] is `true`, those entries
+  /// that already exist will be replaced in place.
+  ///
+  IMap<K, V> addAll(IMap<K, V> imap, {bool keepOrder = false}) {
+    IMap<K, V> result;
+    result = config.sort
+        ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(imap.entries), config: config),
+            config: config)
+        : IMap<K, V>._unsafe(_m.addAll(imap, keepOrder: keepOrder), config: config);
 
     // A map created with `addAll` has a larger counter than both its source
     // maps. This improves the order in which maps are flushed.
@@ -726,13 +739,19 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a new map containing the current map plus the given map.
   /// (if necessary, the given entries will override the current ones).
   IMap<K, V> addMap(Map<K, V> map) {
-    var result = IMap<K, V>._unsafe(_m.addMap(map), config: config);
+    IMap<K, V> result;
+    result = config.sort
+        ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(map.entries), config: config),
+            config: config)
+        : IMap<K, V>._unsafe(_m.addMap(map), config: config);
+
     result._counter = _counter + 1;
     return result;
   }
 
-  /// Returns a new map containing the current map plus the given map entries.
-  /// (if necessary, the given will override the current).
+  /// Returns a new map containing the current map plus the given [entries].
+  /// Note: [entries] that already exist in the original map will overwrite
+  /// those of the original map, in place (keeping order).
   IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) {
     var result = IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
     result._counter = _counter + 1;
@@ -886,13 +905,13 @@ class IMap<K, V> // ignore: must_be_immutable
         var entry = entries.single;
         return "{${entry.key}: ${entry.value}}";
       } else {
-        Iterable<MapEntry<K, V>> sortedEntries = config.sortKeys
+        Iterable<MapEntry<K, V>> sortedEntries = config.sort
             ? (entries.toList()..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
             : entries;
         return "{\n   ${sortedEntries.map((entry) => entry.print(prettyPrint)).join(",\n   ")}\n}";
       }
     } else {
-      Iterable<MapEntry<K, V>> sortedEntries = config.sortKeys
+      Iterable<MapEntry<K, V>> sortedEntries = config.sort
           ? (entries.toList()..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
           : entries;
       return "{${sortedEntries.map((entry) => entry.print(prettyPrint)).join(", ")}}";
@@ -1024,7 +1043,7 @@ abstract class M<K, V> {
   /// Returns the flushed map (flushes it only once).
   /// **It is an error to use the flushed map outside of the [M] class.**
   Map<K, V> getFlushed(ConfigMap config) {
-    _flushed ??= ListMap.fromEntries(entries, sort: (config ?? IMap.defaultConfig).sortKeys);
+    _flushed ??= ListMap.fromEntries(entries, sort: (config ?? IMap.defaultConfig).sort);
     return _flushed;
   }
 
@@ -1063,13 +1082,54 @@ abstract class M<K, V> {
   ///
   /// The operation is equivalent to doing `this[key] = value` for each key
   /// and associated value in imap.
-  M<K, V> addAll(IMap<K, V> imap) => MAddAll<K, V>.unsafe(this, imap._m);
+  M<K, V> addAll_OLD(IMap<K, V> imap) => MAddAll<K, V>.unsafe(this, imap._m);
 
-  M<K, V> addMap(Map<K, V> map) =>
-      MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.of(map)));
+  /// The entries of the given [imap] will be added to the original map.
+  /// Note: [imap] entries that already exist in the original map will overwrite
+  /// those of the original map.
+  ///
+  /// If the current map is sorted, then if [keepOrder] is `false` (the default),
+  /// those entries that already exist will go to the end of the new map. If
+  /// [keepOrder] is `true`, those entries that already exist will be replaced in
+  /// place.
+  ///
+  /// If the current map is NOT sorted, the [keepOrder] parameter is ignored.
+  ///
+  M<K, V> addAll(IMap<K, V> imap, {bool keepOrder = false}) {
+    if (keepOrder) {
+      Map<K, V> map = Map.fromEntries(entries.followedBy(imap.entries));
+      return MFlat<K, V>.unsafe(map);
+    }
+    //
+    else {
+      // We want the entries being added to overwrite those of the original add.
+      // So we have to remove the entries that are already present in the second map.
+      Map<K, V> firstMap =
+          ListMap.fromEntries(entries.where((entry) => !imap.containsKey(entry.key)));
 
-  M<K, V> addEntries(Iterable<MapEntry<K, V>> entries) =>
-      MAddAll<K, V>.unsafe(this, MFlat<K, V>.unsafe(Map<K, V>.fromEntries(entries)));
+      M<K, V> firstM = MFlat<K, V>.unsafe(firstMap);
+
+      return MAddAll<K, V>.unsafe(firstM, imap._m);
+    }
+  }
+
+  /// The [map] entries will be added to the original map.
+  /// Note: [map] entries that already exist in the original map will overwrite
+  /// those of the original map, in place (keeping order).
+  ///
+  M<K, V> addMap(Map<K, V> map) {
+    Map<K, V> newMap = Map.fromEntries(entries.followedBy(map.entries));
+    return MFlat<K, V>.unsafe(newMap);
+  }
+
+  /// The [entries] will be added to the original map.
+  /// Note: [entries] that already exist in the original map will overwrite
+  /// those of the original map, in place (keeping order).
+  ///
+  M<K, V> addEntries(Iterable<MapEntry<K, V>> entries, {bool keepOrder = false}) {
+    Map<K, V> map = Map.fromEntries(this.entries.followedBy(entries));
+    return MFlat<K, V>.unsafe(map);
+  }
 
   // TODO: Still need to implement efficiently.
   M<K, V> remove(K key) {

@@ -920,6 +920,7 @@ abstract class S<T> implements Iterable<T> {
   /// Returns a new set containing the current set plus all the given items.
   /// However, if all given items already exists in the set,
   /// it will return the current set (same instance).
+  /// Note: The items of [items] which are already in the original set will be ignored.
   S<T> addAll(Iterable<T> items) {
     final Set<T> setToBeAdded = ListSet.of(items.where((item) => !contains(item)));
     return setToBeAdded.isEmpty ? this : SAddAll.unsafe(this, setToBeAdded);
