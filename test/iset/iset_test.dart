@@ -441,6 +441,28 @@ void main() {
     expect(<int>{1}.lock.add(null), {1, null});
     expect(<int>{null, 1, 3}.lock.add(null), {null, 1, 3});
     expect({1, 2, 3}.lock.add(null), {1, 2, 3, null});
+
+    // 4) With sort
+    // TODO: Marcelo
+    //  Ao que parece o ISet.unsafe está somente configurando as propriedades,
+    //  mas não está reordenando os itens.
+    iset = <int>{}.lock.withConfig(ConfigSet(sort: true)).add(1).add(20).add(3);
+    // Isto aqui funcionaria, por exemplo, pois o sort está sendo feito na criação:
+    // iset = ISet<int>.withConfig({1, 20, 3}, ConfigSet(sort: true));
+
+    expect(iset.config, ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 20);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(3), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 3);
+    expect(iset[2], 20);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[3], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -487,6 +509,33 @@ void main() {
     expect(<int>{1}.lock.addAll({null, 2}), {1, null, 2});
     expect(<int>{null, 1, 3}.lock.addAll({null, 1}), {null, 1, 3});
     expect({1, 2, 3, 4}.lock.addAll({null, 1}), {1, 2, 3, 4, null});
+
+    // 4) With sort
+    // TODO: Marcelo
+    iset = <int>{}
+        .lock
+        .withConfig(const ConfigSet(sort: true))
+        .addAll({1, 100})
+        .add(20)
+        .addAll({3, 10});
+
+    expect(iset.config, const ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 10);
+    expect(iset.elementAt(3), 20);
+    expect(iset.elementAt(4), 100);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(3), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 3);
+    expect(iset[2], 10);
+    expect(iset[3], 20);
+    expect(iset[4], 100);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[3], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -1022,8 +1071,9 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("elementAt", () {
-    final ISet<int> iset = {1, 20, 3}.lock;
+  test("elementAt | []", () {
+    // 1) Regular usage
+    ISet<int> iset = {1, 20, 3}.lock;
 
     expect(iset.elementAt(0), 1);
     expect(iset.elementAt(1), 20);
