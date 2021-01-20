@@ -429,7 +429,10 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a new set containing the current set plus the given item.
   ISet<T> add(T item) {
-    var result = ISet<T>._unsafe(_s.add(item), config: config);
+    ISet<T> result;
+    result = config.sort
+        ? ISet._unsafe(SFlat(_s.followedBy([item]), config: config), config: config)
+        : ISet<T>._unsafe(_s.add(item), config: config);
 
     // A set created with `add` has a larger counter than its source set.
     // This improves the order in which sets are flushed.
@@ -443,8 +446,10 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a new set containing the current set plus all the given items.
   ISet<T> addAll(Iterable<T> items) {
-    var added = _s.addAll(items);
-    var result = ISet<T>._unsafe(added, config: config);
+    ISet<T> result;
+    result = config.sort
+        ? ISet._unsafe(SFlat(_s.followedBy(items), config: config), config: config)
+        : ISet<T>._unsafe(_s.addAll(items), config: config);
 
     // A set created with `addAll` has a larger counter than both its source
     // sets. This improves the order in which sets are flushed.
@@ -805,7 +810,6 @@ class ISet<T> // ignore: must_be_immutable
     return ISet._unsafeFromSet(_s.difference(otherSet), config: config);
   }
 
-
   /// Returns a new set which is the intersection between this set and [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
@@ -917,10 +921,7 @@ abstract class S<T> implements Iterable<T> {
   /// However, if all given items already exists in the set,
   /// it will return the current set (same instance).
   S<T> addAll(Iterable<T> items) {
-    final Set<T> setToBeAdded = {};
-    for (T item in items) {
-      if (!contains(item)) setToBeAdded.add(item);
-    }
+    final Set<T> setToBeAdded = ListSet.of(items.where((item) => !contains(item)));
     return setToBeAdded.isEmpty ? this : SAddAll.unsafe(this, setToBeAdded);
   }
 

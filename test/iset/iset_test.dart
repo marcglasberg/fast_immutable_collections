@@ -527,7 +527,7 @@ void main() {
     expect(iset.elementAt(3), 20);
     expect(iset.elementAt(4), 100);
     expect(() => iset.elementAt(-1), throwsRangeError);
-    expect(() => iset.elementAt(3), throwsRangeError);
+    expect(() => iset.elementAt(5), throwsRangeError);
 
     expect(iset[0], 1);
     expect(iset[1], 3);
@@ -535,7 +535,7 @@ void main() {
     expect(iset[3], 20);
     expect(iset[4], 100);
     expect(() => iset[-1], throwsRangeError);
-    expect(() => iset[3], throwsRangeError);
+    expect(() => iset[5], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
