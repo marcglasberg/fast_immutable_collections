@@ -736,8 +736,9 @@ class IMap<K, V> // ignore: must_be_immutable
     return result;
   }
 
-  /// Returns a new map containing the current map plus the given map.
-  /// (if necessary, the given entries will override the current ones).
+  /// Returns a new map containing the current map plus the given [map] entries.
+  /// Note: [map] entries that already exist in the original map will overwrite
+  /// those of the original map, in place (keeping order).
   IMap<K, V> addMap(Map<K, V> map) {
     IMap<K, V> result;
     result = config.sort
