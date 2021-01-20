@@ -11,9 +11,11 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Creates an *immutable* set ([ISet]) from the iterable.
   ISet<T> toISet([ConfigSet config]) => (this == null) ? null : ISet<T>.withConfig(this, config);
 
-  bool get isNullOrEmpty => this == null || isEmpty;
+  bool get isNullOrEmpty => (this == null) || isEmpty;
 
-  bool get isNotNullOrEmpty => this != null && isNotEmpty;
+  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
+
+  bool get isEmptyButNotNull => (this != null) && isEmpty;
 
   /// Compare all items, in order, using [identical].
   /// Return true if they are all the same, in the same order.
