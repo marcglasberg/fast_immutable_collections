@@ -504,6 +504,12 @@ void main() {
     newMap = newMap.addEntry(MapEntry<String, int>("a", 4));
     expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
     expect(newMap.unlock, {"a": 4, "b": 2});
+
+    // 3) Guaranteeing non-repeated additions to the IMap
+    imap = {"a": 1, "z": 100}.lock.addEntry(MapEntry("a", 40));
+
+    expect(imap.keys, ["z", "a"]);
+    expect(imap.values, [40, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -581,6 +587,12 @@ void main() {
         {"a": null, "b": 1, "c": null, "d": 3, "e": null, "f": 1});
     expect({"a": 1, "b": 2, "c": 3, "d": 4}.lock.addAll({"e": null, "f": 1}.lock).unlock,
         {"a": 1, "b": 2, "c": 3, "d": 4, "e": null, "f": 1});
+
+    // 4) Guaranteeing non-repeated additions to the IMap
+    imap = {"a": 1, "z": 100}.lock.addAll({"a": 40}.lock);
+
+    expect(imap.keys, ["z", "a"]);
+    expect(imap.values, [40, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -600,6 +612,12 @@ void main() {
     newMap = newMap.addMap({"a": 4});
     expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
     expect(newMap.unlock, {"a": 4, "b": 2});
+
+    // 3) Guaranteeing non-repeated additions to the IMap
+    imap = {"a": 1, "z": 100}.lock.addMap({"a": 40});
+
+    expect(imap.keys, ["z", "a"]);
+    expect(imap.values, [40, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -620,6 +638,52 @@ void main() {
     newMap = newMap.addEntries([MapEntry<String, int>("a", 4)]);
     expect(newMap, {"a": 4, "b": 2}.lock.withDeepEquals);
     expect(newMap.unlock, {"a": 4, "b": 2});
+
+    // 3) Guaranteeing non-repeated additions to the IMap
+    imap = {"a": 1, "z": 100}.lock.addEntries([MapEntry("a", 40)]);
+
+    expect(imap.keys, ["z", "a"]);
+    expect(imap.values, [40, 100]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test(
+      "Guarantees sorting after adding entries, if sort == true | "
+      "and also guarantees that repeated keys get updated with all the last key insertion", () {
+    // 1) sortKeys
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sortKeys: true))
+        .addEntries([MapEntry("z", 100), MapEntry("a", 1)])
+        .add("k", 20)
+        .addAll({"a": 40, "c": 3, "f": 10}.lock)
+        .addMap({"g": 200})
+        .addEntry(MapEntry("y", 1000));
+
+    expect(imap.config, const ConfigMap(sortKeys: true));
+
+    // O método IMap.toKeyIList ordena ao retirar a lista de chaves,
+    // então não é o ideal para este tipo de teste.
+    expect(imap.keys, ["a", "c", "f", "g", "k", "y", "z"]);
+    expect(imap.values, [40, 3, 10, 200, 20, 1000, 100]);
+
+    // 2) sortValues
+    imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sortValues: true))
+        .addEntries([MapEntry("z", 100), MapEntry("a", 1)])
+        .add("k", 20)
+        .addAll({"a": 40, "c": 3, "f": 10}.lock)
+        .addMap({"g": 200})
+        .addEntry(MapEntry("y", 1000));
+
+    expect(imap.config, const ConfigMap(sortValues: true));
+
+    // O método IMap.toValueIList ordena ao retirar a lista de chaves,
+    // então não é o ideal para este tipo de teste.
+    expect(imap.keys, ["c", "f", "k", "a", "z", "g", "y"]);
+    expect(imap.values, [3, 10, 20, 40, 100, 200, 1000]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
