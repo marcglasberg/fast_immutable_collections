@@ -508,6 +508,8 @@ void main() {
     expect(<int>[null, 1, null, 3].lock.add(10), [null, 1, null, 3, 10]);
     expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]);
 
+    var l = [].lock;
+    l.remove(1);
     // 2) Adding null
     expect(<int>[].lock.add(null), [null]);
     expect(<int>[null].lock.add(null), [null, null]);
