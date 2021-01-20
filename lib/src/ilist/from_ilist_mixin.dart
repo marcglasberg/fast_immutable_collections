@@ -248,3 +248,14 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   @override
   String toString() => "$runtimeType$iter";
 }
+
+extension FromIListMixinExtension on FromIListMixin {
+  /// Checks if `this` is `null` or `[isEmpty].
+  bool get isNullOrEmpty => (this == null) || isEmpty;
+
+  /// Checks if `this` is **not** `null` and **not** `[isEmpty].
+  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
+
+  /// Checks if `this` is [isEmpty] but **not** `null`.
+  bool get isEmptyButNotNull => (this != null) && isEmpty;
+}
