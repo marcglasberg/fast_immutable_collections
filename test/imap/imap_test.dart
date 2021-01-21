@@ -661,7 +661,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("add | sorted set", () {
-    IMap<String, int> imap = <String, int>{}
+    final IMap<String, int> imap = <String, int>{}
         .lock
         .withConfig(const ConfigMap(sort: true))
         .add("z", 100)
@@ -675,7 +675,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("addEntry | sorted set", () {
-    IMap<String, int> imap = <String, int>{}
+    final IMap<String, int> imap = <String, int>{}
         .lock
         .withConfig(const ConfigMap(sort: true))
         .addEntry(MapEntry("z", 100))
@@ -689,7 +689,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("addAll | sorted set", () {
-    IMap<String, int> imap = <String, int>{}
+    final IMap<String, int> imap = <String, int>{}
         .lock
         .withConfig(const ConfigMap(sort: true))
         .addAll({"z": 100, "a": 1}.lock)
@@ -701,7 +701,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("addMap | sorted set", () {
-    IMap<String, int> imap = <String, int>{}
+    final IMap<String, int> imap = <String, int>{}
         .lock
         .withConfig(const ConfigMap(sort: true))
         .addMap({"z": 100, "a": 1}).addMap({"a": 40, "c": 3});
@@ -712,7 +712,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("addEntries | sorted set", () {
-    IMap<String, int> imap = <String, int>{}
+    final IMap<String, int> imap = <String, int>{}
         .lock
         .withConfig(const ConfigMap(sort: true))
         .addEntries([MapEntry("z", 100), MapEntry("a", 1)]).addEntries(
@@ -726,7 +726,7 @@ void main() {
   test(
       "Guarantees sorting after adding entries, if sort == true | "
       "and also guarantees that repeated keys get updated with all the last key insertion", () {
-    IMap<String, int> imap = <String, int>{}
+    final IMap<String, int> imap = <String, int>{}
         .lock
         .withConfig(const ConfigMap(sort: true))
         .add("k", 20)
