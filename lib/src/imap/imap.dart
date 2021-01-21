@@ -432,6 +432,8 @@ class IMap<K, V> // ignore: must_be_immutable
     int Function(V a, V b) compare,
     ConfigList config,
   }) {
+    assert(compare == null || sort == true);
+
     _count();
     var result = IList.withConfig(values, config);
     if (sort) result = result.sort(compare ?? compareObject);
@@ -497,6 +499,8 @@ class IMap<K, V> // ignore: must_be_immutable
     bool sort = false,
     int Function(V a, V b) compare,
   }) {
+    assert(compare == null || sort == true);
+
     _count();
     var result = List.of(values);
     if (sort) result.sort(compare ?? compareObject);

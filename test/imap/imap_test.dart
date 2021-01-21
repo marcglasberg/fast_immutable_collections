@@ -1065,8 +1065,12 @@ void main() {
         {"a": 1, "c": 3, "b": 2}.lock.add("d", 4).addAll(IMap({"f": 6, "e": 5}));
     expect(imap.toValueIList(), allOf(isA<IList<int>>(), [1, 3, 2, 4, 6, 5]));
 
-    expect(imap.toValueIList(sort: false, compare: (int a, int b) => a.compareTo(b)),
+    expect(() => imap.toValueIList(sort: false, compare: (int a, int b) => a.compareTo(b)),
+        throwsAssertionError);
+
+    expect(imap.toValueIList(sort: true, compare: (int a, int b) => a.compareTo(b)),
         [1, 2, 3, 4, 5, 6]);
+
     expect(imap.toValueIList(sort: true), [1, 2, 3, 4, 5, 6]);
   });
 
@@ -1165,8 +1169,12 @@ void main() {
         {"a": 1, "c": 3, "b": 2}.lock.add("d", 4).addAll(IMap({"f": 6, "e": 5}));
     expect(imap.toValueList(), allOf(isA<List<int>>(), [1, 3, 2, 4, 6, 5]));
 
-    expect(imap.toValueList(compare: (int a, int b) => a.compareTo(b), sort: false),
+    expect(() => imap.toValueList(compare: (int a, int b) => a.compareTo(b), sort: false),
+        throwsAssertionError);
+
+    expect(imap.toValueList(compare: (int a, int b) => a.compareTo(b), sort: true),
         [1, 2, 3, 4, 5, 6]);
+
     expect(imap.toValueList(sort: true), [1, 2, 3, 4, 5, 6]);
   });
 
