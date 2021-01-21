@@ -26,8 +26,10 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   /// Create a [ListSet] from the [items] iterable.
-  /// If [sort] is true, it will sort the items. Otherwise, it will keep the [items] order.
-  /// If [compare] is provided, it will use it to sort the items.
+  ///
+  /// If [sort] is true, it will be sorted with [compare], if provided,
+  /// or with [compareObject] if not provided. If [sort] is false,
+  /// [compare] will be ignored.
   ///
   ListSet.of(
     Iterable<T> items, {

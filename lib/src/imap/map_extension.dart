@@ -54,10 +54,12 @@ extension FicMapOfSetsExtension<K, V> on Map<K, Set<V>> {
 /// See also: [FicIterableExtension], [FicIteratorExtension]
 extension FicMapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
   //
+  /// Converts the iterator of map entries into an iterable.
   Iterable<MapEntry<K, V>> toIterable() sync* {
     while (moveNext()) yield current;
   }
 
+  /// Converts the iterator of map entries into a map.
   Map<K, V> toMap() => Map.fromEntries(toIterable());
 }
 

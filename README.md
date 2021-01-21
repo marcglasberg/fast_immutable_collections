@@ -997,8 +997,7 @@ The **default** configuration of the `IMap` is
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in
    the same order.
 
-2. `sort: false` means it keeps insertion order, while `sort: true` means it will sort by
-   keys.
+2. `sort: false` means it keeps insertion order, while `sort: true` means it will sort by keys.
 
 4. `cacheHashCode: true` means the `hashCode` is cached. It's not recommended turning this cache off
    for maps.
@@ -1163,13 +1162,101 @@ Also, you can efficiently read its information by index, by using the `entryAt`,
 and `valueAt` methods. The disadvantage, of course, is that `ListMap` has a fixed size, while
 a `LinkedHashMap` does not.
 
-# 8. Comparators
+# 8. Extensions and helpers
+
+This are some of the provided helpers and extensions:
+
+## 8.1 Iterable helpers and extensions
+
+* `combineIterables` is a top-level function that combines two iterables into one, by applying
+  a `combine` function.
+
+* `Iterable.isNullOrEmpty`, `Iterable.isNotNullOrEmpty` and `Iterable.isEmptyButNotNull`.
+
+* `Iterable.deepEqualsByIdentity` compare all items, in order, using [identical].
+
+* `Iterable.findDuplicates` finds duplicates and then returns a [Set] with the duplicated elements.
+
+* `Iterable.removeNulls` removes `null`s from the [Iterable].
+
+* `Iterable.removeDuplicates` removes all duplicates. Optionally, you can provide an [by] function
+  to compare the items. If you pass [removeNulls] as true, it will also remove the nulls
+
+* `Iterable.sortedLike` returns a list, sorted according to the order specified by the [ordering]
+  iterable. Items which don't appear in [ordering] will be included in the end.
+
+## 8.2 List extensions
+
+* `List.sortOrdered` is similar to `sort`, but uses
+  a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort). Contrary to `sort`,
+  `orderedSort` is stable, meaning distinct objects that compare as equal end up in the same order
+  as they started in.
+
+* `List.sortLike` sorts this list according to the order specified by an `ordering` iterable. Items
+  which don't appear in `ordering` will be included in the end, in no particular order.
+
+* `List.moveToTheFront` moves the first occurrence of the [item] to the start of the list.
+
+* `List.moveToTheEnd` moves the first occurrence of the [item] to the end of the list.
+
+* `List.whereMoveToTheFront` moves all items that satisfy the provided [test] to the start of the
+  list.
+
+* `List.whereMoveToTheEnd` moves all items that satisfy the provided [test] to the end of the list.
+
+* `List.toggle` If the item does not exist in the list, add it and return `true`. If it already
+  exists, remove the first instance of it and return `false`.
+
+* `List.compareAsSets` returns `true` if the lists contain the same items (in any order). Ignores
+  repeated items.
+
+* `List.mapIndexed` maps each element of the list. The [map] function gets both the original [item]
+  and its [index].
+
+* `List.splitList` splits a list, according to a predicate, removing the list item that satisfies
+  the predicate.
+
+* `List.divideList` Search a list for items that satisfy a [test] predicate (matching items), and
+  then divide that list into parts, such as each part contains one matching item. Except maybe for
+  the first matching item, it will keep the matching items as the first item in each part.
+
+* `List.divideListAsMap` searches a list for items that satisfy a [test] predicate (matching items),
+  and then divide that list into a [Map] of parts, such as each part contains one matching item, and
+  the keys are given by the [key] function.
+
+* `List.addBetween` return a new list, adding a separator between the original list items.
+
+* `List.concat` returns an efficient concatenation of up to 5 lists
+
+* `List.splitByLength` cuts the original list into one or more lists with at most `length` items.
+
+* `List.update` returns a list where new items are added or updated, by their id.
+
+* `List.distinct` removes all duplicates, leaving only the distinct items.
+
+* `List.reversedView` returns a list of the objects in this list, in reverse order.
+
+## 8.2 List extensions
+
+* `Set.toggle` If the item doesn't exist in the set, add it and return `true`. Otherwise, if the
+  item already exists in the set, remove it and return `false`.
+
+## 8.3 Iterator extensions
+
+* `toIterable`, `toList`, `toSet`, `toIList`, and `toISet` convert the iterator into an
+  `Iterable`, `List`, `Set`, `IList`, and `ISet`, respectively.
+
+## 8.4 Boolean extensions
+
+* `compareTo` makes `true` > `false`.
+
+# 9. Comparators
 
 To help you sort collections (from FIC or any other), we provide the global comparator
 functions `compareObject`, `sortBy` and `sortLike`, as well as the `compareObjectTo` and `if0`
 extensions. These make it easy for you to create other complex comparators, as described below.
 
-## 8.1. CompareObject function
+## 9.1. CompareObject function
 
 The `compareObject` function lets you easily compare `a` and `b`, as follows:
 
@@ -1188,28 +1275,32 @@ The `compareObject` function lets you easily compare `a` and `b`, as follows:
 You can use the comparator in sorts:
 
 ```
+
 // Results in: [1, 2, null]
 [1, 2, null, 3].sort(compareObject);
 
 // Results in: [null, 1, 2]
 [1, 2, null, 3].sort((a, b) => compareObject(a, b, nullsBefore: true));
+
 ```
 
-## 8.2. CompareObjectTo extension
+## 9.2. CompareObjectTo extension
 
 Besides the `compareObject` function above, you can also use the `compareObjectTo` extension.
 
 For example:
 
 ```
+
 // Results in: [1, 2, null]
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b));
 
 // Results in: [null, 1, 2]
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b, nullsBefore: true));
+
 ```
 
-## 8.3. SortBy function
+## 9.3. SortBy function
 
 The `sortBy` function lets you define a rule, and then possibly nest it with other rules with lower
 priority. For example, suppose you have a list of numbers which you want to sort according to the
@@ -1228,16 +1319,15 @@ the `then` parameter:
 After all the rules are in place you have this:
 
 ```
-int Function(int, int) compareTo = sortBy((x) => x == 14,
-   then: sortBy((x) => x == 15,
-       then: sortBy((x) => x % 2 == 1,
-           then: sortBy((x) => x % 3 == 0,
-               then: sortBy((x) => x % 5 == 0,
-                   then: (int a, int b) => a.compareTo(b),
-               )))));
+
+int Function(int, int) compareTo = sortBy((x) => x == 14, then: sortBy((x) => x == 15, then:
+sortBy((x) => x % 2 == 1, then: sortBy((x) => x % 3 == 0, then: sortBy((x) => x % 5 == 0, then: (int
+a, int b) => a.compareTo(b),
+)))));
+
 ```
 
-## 8.4. SortLike function
+## 9.4. SortLike function
 
 The `sortLike` function lets you define a list with the desired sort order. For example, if you want
 to sort numbers in this order: `[7, 3, 4, 21, 2]`
@@ -1251,10 +1341,11 @@ implement the following rules:
 > 3. Otherwise, numbers come in their natural order.
 
 ```
-int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2],
-   then: sortBy((x) => x % 2 == 1,
-       then: (int a, int b) => a.compareTo(b),
-           ));
+
+int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2], then: sortBy((x) => x % 2 == 1,
+then: (int a, int b) => a.compareTo(b),
+));
+
 ```
 
 Important: When nested comparators are used, make sure you don't create inconsistencies. For
@@ -1269,52 +1360,46 @@ file for more information and runnable examples.
 
 [sort_test]: test/base/sort_test.dart
 
-## 8.5. if0 extension
+## 9.5. if0 extension
 
 The `if0` function lets you nest comparators.
 
 You can think of `if0` as a "then", so that these two comparators are equivalent:
 
 ```
+
 /// This:
-var compareTo = (String a, String b) 
-       => a.length.compareTo(b.length).if0(a.compareTo(b));
+var compareTo = (String a, String b)
+=> a.length.compareTo(b.length).if0(a.compareTo(b));
 
 /// Is the same as this:
-var compareTo = (String a, String b) {
-   int result = a.length.compareTo(b.length);
-   if (result == 0) result = a.compareTo(b);
-   return result;
-}
+var compareTo = (String a, String b) { int result = a.length.compareTo(b.length); if (result == 0)
+result = a.compareTo(b); return result; }
+
 ```
 
 Examples:
 
 ```
+
 var list = ["aaa", "ccc", "b", "c", "bbb", "a", "aa", "bb", "cc"];
-                  
-/// Example 1. 
-/// String come in their natural order.
-var compareTo = (String a, String b) => a.compareTo(b);
-list.sort(compareTo);
-expect(list, ["a", "aa", "aaa", "b", "bb", "bbb", "c", "cc", "ccc"]);
 
-/// Example 2. 
-/// Strings are ordered according to their length.
-/// Otherwise, they come in their natural order.
-compareTo = (String a, String b) => a.length.compareTo(b.length).if0(a.compareTo(b));
-list.sort(compareTo);
-expect(list, ["a", "b", "c", "aa", "bb", "cc", "aaa", "bbb", "ccc"]);
+/// Example 1. /// String come in their natural order. var compareTo = (String a, String b) =>
+a.compareTo(b); list.sort(compareTo); expect(
+list, ["a", "aa", "aaa", "b", "bb", "bbb", "c", "cc", "ccc"]);
 
-/// Example 3. 
-/// Strings are ordered according to their length.
-/// Otherwise, they come in their natural order, inverted.
-compareTo = (String a, String b) => a.length.compareTo(b.length).if0(-a.compareTo(b));
-list.sort(compareTo);
-expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
+/// Example 2. /// Strings are ordered according to their length. /// Otherwise, they come in their
+natural order. compareTo = (String a, String b) => a.length.compareTo(b.length).if0(a.compareTo(b));
+list.sort(compareTo); expect(list, ["a", "b", "c", "aa", "bb", "cc", "aaa", "bbb", "ccc"]);
+
+/// Example 3. /// Strings are ordered according to their length. /// Otherwise, they come in their
+natural order, inverted. compareTo = (String a, String b) => a.length.compareTo(b.length).if0(
+-a.compareTo(b)); list.sort(compareTo); expect(
+list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
+
 ```
 
-# 9. Flushing
+# 10. Flushing
 
 As explained above, **FIC** is fast because it creates a new collection by internally "composing"
 the source collection with some other information, saving only the difference between the source and
@@ -1330,8 +1415,9 @@ If you call `flush` on an immutable collection, it will internally remove all th
 making sure it is perfectly optimized again. For example:
 
 ```
-var ilist = [1.2].lock.add([3, 4]).add(5);
-ilist.flush;
+
+var ilist = [1.2].lock.add([3, 4]).add(5); ilist.flush;
+
 ```
 
 Please note, `flush` is a getter which returns the exact same instance, just so you can chain other
@@ -1344,17 +1430,20 @@ flush the list again. So you don't need to worry about flushing the list more th
 Also, note that flushing just optimizes the list **internally**, and no external difference will be
 visible. So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
-## 9.1. Auto-flush
+## 10.1. Auto-flush
 
 Usually you don't need to flush your collections manually. Depending on the global configuration,
 the collections will flush automatically for you. The global configuration default is to have
 auto-flush on. It's easy to disable it though:
 
 ```
+
 ImmutableCollection.autoFlush = false;
 
-// You can also lock further changes to the global configuration, if desired:                                              
+// You can also lock further changes to the global configuration, if
+desired:                                              
 ImmutableCollection.lockConfig();
+
 ```
 
 If you leave it on, you can configure auto-flush to happen after you use a collection a few times.
@@ -1364,7 +1453,7 @@ Auto-flush is an advanced topic, and you don't need to read the following detail
 all to use the immutable collections. However, in case you want to tweak the auto-flush
 configuration, here it goes...
 
-## 9.2. Sync Auto-flush
+## 10.2. Sync Auto-flush
 
 If your auto-flush is set to occur synchronously:
 
@@ -1372,7 +1461,7 @@ Each collection keeps a `counter` variable which starts at `0`
 and is incremented each time some collection methods are called. As soon as this counter reaches a
 certain value called the `flushFactor`, the collection is flushed.
 
-## 9.3. Async Auto-flush
+## 10.3. Async Auto-flush
 
 If your auto-flush is set to occur asynchronously:
 
@@ -1448,7 +1537,7 @@ IMap.flushFactor = 15;
 ImmutableCollection.lockConfig();
 ```
 
-# 10. Benchmarks
+# 11. Benchmarks
 
 Having benchmarks for this project is necessary for justifying its existence.
 The [`benchmark` package][benchmark] — and its companion app [benchmark_app][benchmark_app] —
@@ -1486,9 +1575,9 @@ appear:
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/Example%20Run.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/FIC%20Opening.png" height="500px"/>
 
-### 10.1. List Benchmarks
+### 11.1. List Benchmarks
 
-#### 10.1.1. List Add
+#### 11.1.1. List Add
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_add_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_add_10k.png" height="500px"/>
@@ -1503,84 +1592,84 @@ project.
 <br />
 <br />
 
-#### 10.1.2. List AddAll
+#### 11.1.2. List AddAll
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_addAll_10k.png" height="500px"/>
 
-#### 10.1.3. List Contains
+#### 11.1.3. List Contains
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_contains_10k.png" height="500px"/>
 
-#### 10.1.4. List Empty
+#### 11.1.4. List Empty
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_empty.png" height="500px"/>
 
-#### 10.1.5. List Insert
+#### 11.1.5. List Insert
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_insert_1k.png" height="500px"/>
 
 *Note: We haven't implemented the fast code for list inserts yet. When we do, it will become faster
 than the mutable List insert.*
 
-#### 10.1.6. List Read
+#### 11.1.6. List Read
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_read_100k.png" height="500px"/>
 
-#### 10.1.7. List Remove
+#### 11.1.7. List Remove
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_remove_10k.png" height="500px"/>
 
-### 10.2. Map Benchmarks
+### 11.2. Map Benchmarks
 
-#### 10.2.1. Map Add
+#### 11.2.1. Map Add
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_add_10.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_add_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_add_10k.png" height="500px"/>
 
-#### 10.2.2. Map AddAll
+#### 11.2.2. Map AddAll
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_addAll_100k.png" height="500px"/>
 
-#### 10.2.3. Map ContainsValue
+#### 11.2.3. Map ContainsValue
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_containsValue_10k.png" height="500px"/>
 
-#### 10.2.4. Map Empty
+#### 11.2.4. Map Empty
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_empty.png" height="500px"/>
 
-#### 10.2.5. Map Read
+#### 11.2.5. Map Read
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_read_100k.png" height="500px"/>
 
-#### 10.2.5. Map Remove
+#### 11.2.5. Map Remove
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_remove_100k.png" height="500px"/>
 
-### 10.3. Set Benchmarks
+### 11.3. Set Benchmarks
 
-#### 10.2.5. Set Add
+#### 11.2.5. Set Add
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_add_10.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_add_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_add_10k.png" height="500px"/>
 
-#### 10.2.6. Set AddAll
+#### 11.2.6. Set AddAll
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_addAll_10k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_addAll_100k.png" height="500px"/>
 
-#### 10.2.6. Set Contains
+#### 11.2.6. Set Contains
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_contains_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_contains_10k.png" height="500px"/>
 
-#### 10.2.6. Set Empty
+#### 11.2.6. Set Empty
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_empty.png" height="500px"/>
 
-#### 10.2.6. Set Remove
+#### 11.2.6. Set Remove
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_remove_100.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_remove_1k.png" height="500px"/>
@@ -1589,7 +1678,7 @@ than the mutable List insert.*
 
 ---
 
-# 11. Immutable Objects
+# 12. Immutable Objects
 
 Immutable objects are those that cannot be changed once created. A Dart `String` is a typical
 example of a commonly used immutable object.
@@ -1655,7 +1744,7 @@ permanent and should not be changed.
 
 <br>
 
-## 11.1. What's the difference between Unmodifiable and Immutable?
+## 12.1. What's the difference between Unmodifiable and Immutable?
 
 Doesn't <a href="https://api.dart.dev/stable/2.10.4/dart-core/List/List.unmodifiable.html">
 `List.unmodifiable()`</a>
@@ -1683,7 +1772,7 @@ unmodifiable list will throw an error. So it makes it harder to reason about the
 For clean-code reasons what is needed is a **different type**, one that guarantees the object can't
 be mutated. That's why `IList` does not extend `List`.
 
-## 11.2. Clean-code
+## 12.2. Clean-code
 
 Late in the evening, exhausted and frustrated you find out that the people who implemented
 
@@ -1718,7 +1807,7 @@ again.
 
 <br>
 
-# 12. Performance and Memory Savings
+# 13. Performance and Memory Savings
 
 Let's start off by stating the obvious. Most mutable collection operations are generally faster than
 their immutable counterparts. That's a basic fact of life. Consider a hash table for example. A
@@ -1818,7 +1907,7 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   If the function parameters are all immutable and equal by identity (which is a very cheap
   comparison) you can return the cached value.
 
-# 13. The above text has about 10% of original content. The rest is shamelessly copied from the following pages. Please, visit them:
+# 14. The above text has about 10% of original content. The rest is shamelessly copied from the following pages. Please, visit them:
 
 * <a href="https://medium.com/dartlang/darts-built-collection-for-immutable-collections-db662f705eff">
   built_collection</a>
@@ -1848,7 +1937,7 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
 * <a href="https://github.com/dart-lang/language/issues/117">Dart-lang issue: Make it easy to create
   immutable collections via literals</a>
 
-# 14. Should I use this package?
+# 15. Should I use this package?
 
 The performance differences discussed above are nearly always dwarfed by bigger concerns like I/O,
 memory leaks, algorithms of the wrong Big-O complexity, sheer coding errors, failure to properly
@@ -1901,7 +1990,7 @@ efficient ones. In any case, if and when better immutable collections arise, we'
 benchmarks again, and if necessary switch the implementation so that the collections in this package
 keep performing as well as possible.
 
-# 15. Implementation details
+# 16. Implementation details
 
 I haven't been able to check the source code of the native Dart collections, but I am assuming here
 they work similarly to their corresponding Java collections of the same name. A `HashMap` has no
@@ -1934,11 +2023,11 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 ***************************
 
-# 16. Bibliography
+# 17. Bibliography
 
-## 16.1. Projects
+## 17.1. Projects
 
-### 16.1.1. Dart
+### 17.1.1. Dart
 
 1. [persistent][persistent_dart]
 
@@ -2003,7 +2092,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [remi_performance_testing_dart]: https://gist.github.com/rrousselGit/5a047bd4ec36515a4cfcc6bd275f05f5
 
-### 16.1.2. Java
+### 17.1.2. Java
 
 1. [Dexx][dexx]
 
@@ -2044,7 +2133,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [performance_java_immutable]: https://github.com/brianburton/java-immutable-collections/wiki/Comparative-Performance
 
-### 16.1.3. JS
+### 17.1.3. JS
 
 1. [immutable-js][immutable_js]
 
@@ -2074,7 +2163,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [immutable_js]: https://github.com/immutable-js/immutable-js
 
-## 16.2. Articles
+## 17.2. Articles
 
 1. [Discussion on the Performance of Immutable Collections][performance_discussion]
 
@@ -2172,7 +2261,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [why_no_immutable_on_java_8]: https://softwareengineering.stackexchange.com/q/221762/344810
 
-## 16.3. Other Resources
+## 17.3. Other Resources
 
 1. [Is Dart Compiled or Interpreted?][dart_compiled_or_interpreted]
 
@@ -2197,7 +2286,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 <br>
 
-## 17. Final Note
+## 18. Final Note
 
 This package is very complex and still fairly new. I am using it myself in important projects of
 mine, so you can say I trust it, but bugs are still possible.

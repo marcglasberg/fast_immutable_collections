@@ -423,7 +423,9 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Optionally, you may provide a [config] for the list.
   ///
-  /// The list will be sorted if [sort] is true, or if you explicitly provide a [compare] method.
+  /// If [sort] is true, then the list will be sorted with [compare], if
+  /// provided, or with [compareObject] if not provided. If [sort] is
+  /// false, [compare] will be ignored.
   ///
   IList<V> toValueIList({
     bool sort = false,
@@ -432,7 +434,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = IList.withConfig(values, config);
-    if (sort || compare != null) result = result.sort(compare);
+    if (sort) result = result.sort(compare ?? compareObject);
     return result;
   }
 
@@ -487,7 +489,9 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a [List] of the map values.
   ///
-  /// The list will be sorted if [sort] is true, or if you explicitly provide a [compare] method.
+  /// If [sort] is true, then the list will be sorted with [compare], if
+  /// provided, or with [compareObject] if not provided. If [sort] is
+  /// false, [compare] will be ignored.
   ///
   List<V> toValueList({
     bool sort = false,
@@ -495,7 +499,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     _count();
     var result = List.of(values);
-    if (sort || compare != null) result.sort(compare);
+    if (sort) result.sort(compare ?? compareObject);
     return result;
   }
 

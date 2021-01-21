@@ -1,19 +1,37 @@
 import "dart:collection";
+import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
 
-/// Combines two iterables into one.
+/// Combines iterables [a] and [b] into one, by applying the [combine] function.
+/// If [allowDifferentSizes] is true, it will stop as soon as one of the
+/// iterables has no more values. If [allowDifferentSizes] is false, it will
+/// throw an error if the iterables have different length.
+///
+/// See also: [IterableZip]
+///
 Iterable<R> combineIterables<A, B, R>(
-    Iterable<A> a, Iterable<B> b, R Function(A, B) combine) sync* {
+  Iterable<A> a,
+  Iterable<B> b,
+  R Function(A, B) combine, {
+  bool allowDifferentSizes = false,
+}) sync* {
   Iterator<A> iterA = a.iterator;
   Iterator<B> iterB = b.iterator;
 
   while (iterA.moveNext()) {
-    if (!iterB.moveNext()) throw StateError("Can't combine iterables of different sizes (a > b).");
+    if (!iterB.moveNext()) {
+      if (allowDifferentSizes)
+        return;
+      else
+        throw StateError("Can't combine iterables of different sizes (a > b).");
+    }
     yield combine(iterA.current, iterB.current);
   }
-  if (iterB.moveNext()) throw StateError("Can't combine iterables of different sizes (a < b).");
+
+  if (iterB.moveNext() && !allowDifferentSizes)
+    throw StateError("Can't combine iterables of different sizes (a < b).");
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -77,8 +95,6 @@ extension FicIterableExtension<T> on Iterable<T> {
   }
 
   /// Removes `null`s from the [Iterable].
-  ///
-  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
   Iterable<T> removeNulls() sync* {
     for (T item in this) {
       if (item != null) yield item;
