@@ -609,19 +609,6 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("addAll | sorted set", () {
-    // 1) sortKeys
-    IMap<String, int> imap = <String, int>{}
-        .lock
-        .withConfig(const ConfigMap(sort: true))
-        .addAll({"z": 100, "a": 1}.lock)
-        .addAll({"a": 40, "c": 3}.lock);
-    expect(imap.keys, ["a", "c", "z"]);
-    expect(imap.values, [40, 3, 100]);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
   test("addMap", () {
     // 1) Regular usage
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;
@@ -673,22 +660,83 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test(
-      "Guarantees sorting after adding entries, if sort == true | "
-      "and also guarantees that repeated keys get updated with all the last key insertion", () {
-    // 1) sort
+  test("add | sorted set", () {
     IMap<String, int> imap = <String, int>{}
         .lock
         .withConfig(const ConfigMap(sort: true))
-        .addEntries([MapEntry("z", 100), MapEntry("a", 1)])
+        .add("z", 100)
+        .add("a", 1)
+        .add("a", 40)
+        .add("c", 3);
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addEntry | sorted set", () {
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
+        .addEntry(MapEntry("z", 100))
+        .addEntry(MapEntry("a", 1))
+        .addEntry(MapEntry("a", 40))
+        .addEntry(MapEntry("c", 3));
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addAll | sorted set", () {
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
+        .addAll({"z": 100, "a": 1}.lock)
+        .addAll({"a": 40, "c": 3}.lock);
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addMap | sorted set", () {
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
+        .addMap({"z": 100, "a": 1}).addMap({"a": 40, "c": 3});
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addEntries | sorted set", () {
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
+        .addEntries([MapEntry("z", 100), MapEntry("a", 1)]).addEntries(
+            [MapEntry("a", 40), MapEntry("c", 3)]);
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test(
+      "Guarantees sorting after adding entries, if sort == true | "
+      "and also guarantees that repeated keys get updated with all the last key insertion", () {
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
         .add("k", 20)
+        .addEntry(MapEntry("y", 1000))
         .addAll({"a": 40, "c": 3, "f": 10}.lock)
-        .addMap({"g": 200})
-        .addEntry(MapEntry("y", 1000));
+        .addMap({"g": 200}).addEntries([MapEntry("z", 100), MapEntry("a", 1)]);
 
     expect(imap.config, const ConfigMap(sort: true));
     expect(imap.keys, ["a", "c", "f", "g", "k", "y", "z"]);
-    expect(imap.values, [40, 3, 10, 200, 20, 1000, 100]);
+    expect(imap.values, [1, 3, 10, 200, 20, 1000, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1541,6 +1589,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("putIfAbsent", () {
+    // 1) Regular usage
     IMap<String, int> scores = {"Bob": 36}.lock;
 
     Output<int> value;
@@ -1553,6 +1602,17 @@ void main() {
     expect(scores["Bob"], 36);
     expect(scores["Rohan"], 5);
     expect(scores["Sophia"], 6);
+
+    // 2) Sorted set
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
+        .putIfAbsent("z", () => 100)
+        .putIfAbsent("a", () => 1)
+        .putIfAbsent("a", () => 40)
+        .putIfAbsent("c", () => 3);
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1604,6 +1664,17 @@ void main() {
 
     // 5) update cannot be null
     expect(() => {"Bob": 36, "Joe": 10}.lock.update("Bob", null), throwsAssertionError);
+
+    // 6) Sorted map
+    IMap<String, int> imap = <String, int>{}
+        .lock
+        .withConfig(const ConfigMap(sort: true))
+        .update("z", (int value) => 0, ifAbsent: () => 100)
+        .update("a", (int value) => 0, ifAbsent: () => 1)
+        .update("a", (int value) => 40, ifAbsent: () => 0)
+        .update("c", (int value) => 0, ifAbsent: () => 3);
+    expect(imap.keys, ["a", "c", "z"]);
+    expect(imap.values, [40, 3, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

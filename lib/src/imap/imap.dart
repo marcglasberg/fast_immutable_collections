@@ -715,10 +715,13 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Note: [imap] entries that already exist in the original map will overwrite
   /// those of the original map.
   ///
-  /// If [keepOrder] is `false` (the default), those entries that already exist
-  /// will go to the end of the new map. If [keepOrder] is `true`, those entries
-  /// that already exist will be replaced in place.
+  /// - If [keepOrder] is `false` (the default), those entries that already exist
+  /// will be replaced at the end of the new map.
+  /// - If [keepOrder] is `true`, the entries which already exist will be replaced
+  /// at their current position.
   ///
+  /// Note: [keepOrder] only makes sense if your map is **NOT** ordered, that is
+  /// `ConfigMap.sort == false`.
   IMap<K, V> addAll(IMap<K, V> imap, {bool keepOrder = false}) {
     IMap<K, V> result;
     result = config.sort
