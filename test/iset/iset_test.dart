@@ -506,7 +506,6 @@ void main() {
     expect({1, 2, 3, 4}.lock.addAll({null, 1}), {1, 2, 3, 4, null});
 
     // 4) With sort
-    // TODO: Marcelo
     iset = <int>{}
         .lock
         .withConfig(const ConfigSet(sort: true))
@@ -1079,6 +1078,33 @@ void main() {
 
     iset = iset.toggle(4);
     expect(iset.contains(4), isFalse);
+
+    // 2) With sort
+    iset = <int>{}
+        .lock
+        .withConfig(ConfigSet(sort: true))
+        .toggle(1)
+        .toggle(20)
+        .toggle(3)
+        .toggle(2)
+        .toggle(10)
+        .toggle(20);
+
+    expect(iset.config, ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 2);
+    expect(iset.elementAt(2), 3);
+    expect(iset.elementAt(3), 10);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(4), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 2);
+    expect(iset[2], 3);
+    expect(iset[3], 10);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[4], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
