@@ -720,7 +720,6 @@ void main() {
       MapEntry("a", 40),
       MapEntry("c", 3),
     ]);
-
     expect(imap.keys, ["a", "c", "z"]);
     expect(imap.values, [40, 3, 100]);
   });
