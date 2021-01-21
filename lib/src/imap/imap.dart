@@ -132,7 +132,7 @@ class IMap<K, V> // ignore: must_be_immutable
     return IMap._(map, config: config ?? defaultConfig);
   }
 
-  /// Creates a Map instance in which the [keys] and [values] are computed
+  /// Creates an IMap instance in which the [keys] and [values] are computed
   /// from the [iterable].
   ///
   /// For each element of the [iterable] it computes a key/value pair,
@@ -163,6 +163,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The keys computed by the source [iterable] do not need to be unique. The
   /// last occurrence of a key will simply overwrite any previous value.
   ///
+  /// See also: [IMap.fromIterables]
+  ///
   static IMap<K, V> fromIterable<K, V, I>(
     Iterable<I> iterable, {
     K Function(I) keyMapper,
@@ -177,9 +179,25 @@ class IMap<K, V> // ignore: must_be_immutable
     return IMap._(map, config: config ?? defaultConfig);
   }
 
+  /// Creates an IMap instance associating the given [keys] to [values].
+  ///
+  /// This constructor iterates over [keys] and [values] and maps each element of
+  /// [keys] to the corresponding element of [values].
+  ///
+  ///     List<String> letters = ['b', 'c'];
+  ///     List<String> words = ['bad', 'cat'];
+  ///     IMap<String, String> map = IMap.fromIterables(letters, words);
+  ///     map['b'] + map['c'];  // badcat
+  ///
+  /// If [keys] contains the same object multiple times, the last occurrence
+  /// overwrites the previous value.
+  ///
+  /// The two [Iterable]s must have the same length.
+  ///
   /// See also: [fromIterable]
+  ///
   factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values, {ConfigMap config}) {
-    Map<K, V> map = Map.fromIterables(keys, values);
+    Map<K, V> map = ListMap.fromIterables(keys, values, sort: (config ?? defaultConfig).sort);
     return IMap._(map, config: config ?? defaultConfig);
   }
 

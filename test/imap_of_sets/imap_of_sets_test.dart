@@ -1929,7 +1929,7 @@ void main() {
       "a": {2, 3},
       "b": {1, 2, 3},
       "c": {4},
-    }.lock.withConfig(const ConfigMapOfSets(sortKeys: true)).invertKeysAndValues();
+    }.lock.invertKeysAndValues(config: const ConfigMapOfSets(sortKeys: true));
     expect(inverted.keys, [1, 2, 3, 4]);
     expect(inverted.sets, [
       {"b"},

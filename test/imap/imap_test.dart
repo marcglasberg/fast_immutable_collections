@@ -146,12 +146,20 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("fromIterables", () {
-    const Iterable<String> keys = ["a", "b"];
-    const Iterable<int> values = [1, 2];
-    final IMap<String, int> fromIterables = IMap.fromIterables(keys, values);
+    Iterable<String> keys = ["a", "c", "b"];
+    Iterable<int> values = [1, 5, 2];
 
-    expect(fromIterables["a"], 1);
-    expect(fromIterables["b"], 2);
+    IMap<String, int> imap = IMap.fromIterables(keys, values, config: ConfigMap(sort: false));
+    expect(imap["a"], 1);
+    expect(imap["c"], 5);
+    expect(imap["b"], 2);
+    expect(imap.keys, ["a", "c", "b"]);
+
+    imap = IMap.fromIterables(keys, values, config: ConfigMap(sort: true));
+    expect(imap["a"], 1);
+    expect(imap["c"], 5);
+    expect(imap["b"], 2);
+    expect(imap.keys, ["a", "b", "c"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

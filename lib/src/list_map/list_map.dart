@@ -62,6 +62,18 @@ class ListMap<K, V> implements Map<K, V> {
     }
   }
 
+  factory ListMap.fromIterables(
+    Iterable<K> keys,
+    Iterable<V> values, {
+    bool sort = false,
+    int Function(K a, K b) compare,
+  }) {
+    Iterable<MapEntry<K, V>> combined =
+        combineIterables(keys, values, (K key, V value) => MapEntry(key, value));
+
+    return ListMap.fromEntries(combined, sort: sort, compare: compare);
+  }
+
   ListMap.unsafe(this._map, {bool sort = false, int Function(K a, K b) compare}) {
     _list = List.of(_map.keys, growable: false);
     if (sort) _list.sort(compare ?? compareObject);

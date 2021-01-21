@@ -1,6 +1,23 @@
 import "dart:collection";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+// ////////////////////////////////////////////////////////////////////////////
+
+/// Combines two iterables into one.
+Iterable<R> combineIterables<A, B, R>(
+    Iterable<A> a, Iterable<B> b, R Function(A, B) combine) sync* {
+  Iterator<A> iterA = a.iterator;
+  Iterator<B> iterB = b.iterator;
+
+  while (iterA.moveNext()) {
+    if (!iterB.moveNext()) throw StateError("Can't combine iterables of different sizes (a > b).");
+    yield combine(iterA.current, iterB.current);
+  }
+  if (iterB.moveNext()) throw StateError("Can't combine iterables of different sizes (a < b).");
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+
 /// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtension<T> on Iterable<T> {
   //
