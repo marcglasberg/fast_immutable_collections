@@ -2332,6 +2332,5 @@ you find any bugs it's his fault! 😂 — I am only half kidding 😐.
 
 <a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a><br>
 <a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a><br>
-<a href="https://stackoverflow.com/users/3411681/marcg">_
-stackoverflow.com/users/3411681/marcg_</a><br>
+<a href="https://stackoverflow.com/users/3411681/marcg">_stackoverflow.com/users/3411681/marcg_</a><br>
 <a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a><br>
