@@ -6,10 +6,12 @@ class SFlat<T> extends S<T> {
 
   static S<T> empty<T>() => SFlat.unsafe(ListSet<T>.empty());
 
+  /// **Safe**. Note: This will sort according to the configuration.
   SFlat(Iterable<T> iterable, {ConfigSet config})
       : assert(iterable != null),
         _set = ListSet.of(iterable, sort: (config ?? ISet.defaultConfig).sort);
 
+  /// **Unsafe**. Note: Does not sort.
   SFlat.unsafe(Set<T> set)
       : assert(set != null),
         _set = ListSet.unsafeView(set);

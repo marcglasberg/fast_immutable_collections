@@ -712,11 +712,15 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("addEntries | sorted set", () {
-    IMap<String, int> imap = <String, int>{}
-        .lock
-        .withConfig(const ConfigMap(sort: true))
-        .addEntries([MapEntry("z", 100), MapEntry("a", 1)]).addEntries(
-            [MapEntry("a", 40), MapEntry("c", 3)]);
+    IMap<String, int> imap =
+        <String, int>{}.lock.withConfig(const ConfigMap(sort: true)).addEntries([
+      MapEntry("z", 100),
+      MapEntry("a", 1),
+    ]).addEntries([
+      MapEntry("a", 40),
+      MapEntry("c", 3),
+    ]);
+
     expect(imap.keys, ["a", "c", "z"]);
     expect(imap.values, [40, 3, 100]);
   });
@@ -1592,12 +1596,17 @@ void main() {
     // 1) Regular usage
     IMap<String, int> scores = {"Bob": 36}.lock;
 
-    Output<int> value;
-    for (String key in ["Bob", "Rohan", "Sophia"]) {
-      value = Output();
-      scores = scores.putIfAbsent(key, () => key.length, previousValue: value);
-      expect(value.value, scores[key]);
-    }
+    var value = Output<int>();
+    scores = scores.putIfAbsent("Bob", () => 3, previousValue: value);
+    expect(value.value, 36);
+
+    value = Output<int>();
+    scores = scores.putIfAbsent("Rohan", () => 5, previousValue: value);
+    expect(value.value, 5);
+
+    value = Output<int>();
+    scores = scores.putIfAbsent("Sophia", () => 6, previousValue: value);
+    expect(value.value, 6);
 
     expect(scores["Bob"], 36);
     expect(scores["Rohan"], 5);
@@ -1612,7 +1621,7 @@ void main() {
         .putIfAbsent("a", () => 40)
         .putIfAbsent("c", () => 3);
     expect(imap.keys, ["a", "c", "z"]);
-    expect(imap.values, [40, 3, 100]);
+    expect(imap.values, [1, 3, 100]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

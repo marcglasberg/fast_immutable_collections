@@ -248,10 +248,10 @@ class ISet<T> // ignore: must_be_immutable
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable, config: config);
 
-  /// **Unsafe**.
+  /// **Unsafe**. Note: Does not sort.
   ISet._unsafe(this._s, {@required this.config}) : assert(config != null);
 
-  /// **Unsafe**.
+  /// **Unsafe**. Note: Does not sort.
   ISet._unsafeFromSet(Set<T> set, {@required this.config})
       : assert(config != null),
         _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
@@ -476,10 +476,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Removes the element, if it exists in the set.
   /// Otherwise, adds it to the set.
-  ISet<T> toggle(T item) => ISet<T>._unsafe(
-        contains(item) ? _s.remove(item) : _s.add(item),
-        config: config,
-      );
+  ISet<T> toggle(T item) => contains(item) ? remove(item) : add(item);
 
   /// Checks whether any element of this iterable satisfies [test].
   ///
@@ -685,61 +682,41 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a [List] with all items from the set.
   ///
-  /// 1. If you provide a [compare] function, the list will be sorted with it.
-  ///
-  /// 2. If no [compare] function is provided, the list will be sorted according to the
-  /// set's [config] field:
-  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
-  ///     in other words, with the natural order of items. This assumes the items implement
-  ///     [Comparable]. Otherwise, the list order is by insertion order.
-  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
+  /// If you provide a [compare] function, the list will be sorted with it.
   ///
   @override
-  List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
+  List<T> toList({
+    bool growable = true,
+    int Function(T a, T b) compare,
+  }) {
     _count();
 
     if (config.sort && compare == null) {
       return (flush._s as SFlat<T>).toList(growable: growable);
     } else {
       var result = _s.toList(growable: growable);
-      if (compare != null) {
-        result.sort(compare);
-      }
+      if (compare != null) result.sort(compare);
       return result;
     }
   }
 
   /// Returns a [IList] with all items from the set.
   ///
-  /// 1. If you provide a [compare] function, the list will be sorted with it.
-  ///
-  /// 2. If no [compare] function is provided, the list will be sorted
-  /// according to the set's [ISet.config] field:
-  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
-  ///     in other words, with the natural order of items. This assumes the items implement
-  ///     [Comparable]. Otherwise, the list order is by insertion order.
-  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
+  /// If you provide a [compare] function, the list will be sorted with it.
   ///
   /// You can also provide a [config] for the [IList].
   ///
-  IList<T> toIList({int Function(T a, T b) compare, ConfigList config}) {
+  IList<T> toIList({
+    int Function(T a, T b) compare,
+    ConfigList config,
+  }) {
     _count();
     return IList.fromISet(this, compare: compare, config: config);
   }
 
   /// Returns a [Set] with all items from the [ISet].
   ///
-  /// 1. If you provide a [compare] function, the resulting set will be sorted with it,
-  /// and it will be a [LinkedHashSet], which is **ORDERED**, meaning further iteration of
-  /// its items will maintain insertion order.
-  ///
-  /// 2. If no [compare] function is provided, the list will be sorted according to the
-  /// set's [ISet.config] field:
-  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
-  ///     in other words, with the natural order of items. This assumes the items implement
-  ///     [Comparable]. Otherwise, the list order is by insertion order.
-  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
-  ///     Note this is the same as unlocking the set with [ISet.unlock].
+  /// If you provide a [compare] function, the resulting set will be sorted with it.
   ///
   @override
   Set<T> toSet({int Function(T a, T b) compare}) {
@@ -824,11 +801,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// That is, the returned set contains all the elements of this [ISet] and
   /// all the elements of [other].
-  ISet<T> union(Iterable<T> other) {
-    _count();
-    Set<T> otherSet = _setFromIterable(other);
-    return ISet._unsafeFromSet(_s.union(otherSet), config: config);
-  }
+  ISet<T> union(Iterable<T> other) => addAll(other);
 
   /// If an object equal to [object] is in the set, return it.
   ///

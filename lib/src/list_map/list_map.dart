@@ -36,16 +36,30 @@ class ListMap<K, V> implements Map<K, V> {
   /// If [entries] contains the same keys multiple times, the last occurrence
   /// overwrites the previous value.
   ///
+  /// If [sort] is true, then the entries will be sorted with [compare],
+  /// if provided, or [compareObject] if not provided. If [sort] is false,
+  /// [compare] will be ignored.
+  ///
   ListMap.fromEntries(
     Iterable<MapEntry<K, V>> entries, {
     bool sort = false,
     int Function(K a, K b) compare,
   }) {
-    Map<K, V> map = LinkedHashMap<K, V>.fromEntries(entries);
-    _map = HashMap.of(map);
-    _list = map.entries.map((entry) => entry.key).toList(growable: false);
-
-    if (sort) _list.sort(compare ?? compareObject);
+    // Sorted:
+    if (sort) {
+      _map = HashMap<K, V>();
+      for (MapEntry<K, V> entry in entries) {
+        _map[entry.key] = entry.value;
+      }
+      _list = _map.entries.map((entry) => entry.key).toList(growable: false);
+      _list.sort(compare ?? compareObject);
+    }
+    // Insertion order:
+    else {
+      Map<K, V> map = LinkedHashMap<K, V>.fromEntries(entries);
+      _map = HashMap.of(map);
+      _list = map.entries.map((entry) => entry.key).toList(growable: false);
+    }
   }
 
   ListMap.unsafe(this._map, {bool sort = false, int Function(K a, K b) compare}) {
@@ -61,10 +75,14 @@ class ListMap<K, V> implements Map<K, V> {
   @override
   V operator [](Object key) => _map[key];
 
+  /// You can replace the value of a key that already exists in the map.
+  /// However, if the key is not already present, this will throw an error.
   @override
   void operator []=(K key, V value) {
-    // TODO: Implement
-    throw UnsupportedError("This is not yet supported, but will be in the future.");
+    if (containsKey(key)) {
+      _map[key] = value;
+    } else
+      throw UnsupportedError("Can't add a new key to the map.");
   }
 
   @override
@@ -118,19 +136,16 @@ class ListMap<K, V> implements Map<K, V> {
   @override
   Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(K key, V value) f) => _map.map(f);
 
-  // TODO: Implement
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
     throw UnsupportedError("Can't putIfAbsent into a ListMap.");
   }
 
-  // TODO: Implement
   @override
   V remove(Object key) {
     throw UnsupportedError("Can't remove from a ListMap.");
   }
 
-  // TODO: Implement
   @override
   void removeWhere(bool Function(K key, V value) predicate) {
     throw UnsupportedError("Can't removeWhere from a ListMap.");

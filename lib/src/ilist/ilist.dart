@@ -73,6 +73,9 @@ class IList<T> // ignore: must_be_immutable
   IList<T> withConfigFrom(IList<T> other) => withConfig(other.config);
 
   /// Special [IList] constructor from [ISet].
+  ///
+  /// If you provide a [compare] function, the resulting list will be sorted with it.
+  ///
   factory IList.fromISet(
     ISet<T> iset, {
     int Function(T a, T b) compare,

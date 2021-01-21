@@ -757,7 +757,12 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Note: [entries] that already exist in the original map will overwrite
   /// those of the original map, in place (keeping order).
   IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) {
-    var result = IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
+    IMap<K, V> result;
+    result = config.sort
+        ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(entries), config: config),
+            config: config)
+        : IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
+
     result._counter = _counter + 1;
     return result;
   }
@@ -954,11 +959,23 @@ class IMap<K, V> // ignore: must_be_immutable
     V Function() ifAbsent, {
     Output<V> previousValue,
   }) {
-    // TODO: Still need to implement efficiently.
-    Map<K, V> map = unlock;
-    var result = map.putIfAbsent(key, ifAbsent);
-    if (previousValue != null) previousValue.save(result);
-    return IMap._unsafeFromMap(map, config: config);
+    // Is present.
+    var value = this[key];
+    if ((value != null) || containsKey(key)) {
+      previousValue?.save(value);
+      return this;
+    }
+    //
+    // Is absent.
+    else {
+      var calculatedValue = ifAbsent();
+      previousValue?.save(calculatedValue);
+      Map<K, V> map = ListMap.fromEntries(
+        entries.followedBy([MapEntry(key, calculatedValue)]),
+        sort: config.sort,
+      );
+      return IMap._unsafeFromMap(map, config: config);
+    }
   }
 
   /// Updates the value for the provided [key].
@@ -987,10 +1004,9 @@ class IMap<K, V> // ignore: must_be_immutable
     assert(update != null);
     // ---
 
-    // TODO: Still need to implement efficiently.
-    Map<K, V> map = unlock;
-
-    if (map.containsKey(key)) {
+    // Contains key.
+    if (containsKey(key)) {
+      Map<K, V> map = unlock;
       var originalValue = map[key];
       var updatedValue = update(originalValue);
       if (ifRemove != null && ifRemove(key, updatedValue)) {
@@ -1008,7 +1024,10 @@ class IMap<K, V> // ignore: must_be_immutable
       if (ifAbsent != null) {
         var updatedValue = ifAbsent();
         if (previousValue != null) previousValue.save(null);
-        map[key] = updatedValue;
+        Map<K, V> map = ListMap.fromEntries(
+          entries.followedBy([MapEntry(key, updatedValue)]),
+          sort: config.sort,
+        );
         return IMap._unsafeFromMap(map, config: config);
       } else {
         if (previousValue != null) previousValue.save(null);
@@ -1099,6 +1118,8 @@ abstract class M<K, V> {
   ///
   /// If the current map is NOT sorted, the [keepOrder] parameter is ignored.
   ///
+  /// Note: This will NOT sort anything.
+  ///
   M<K, V> addAll(IMap<K, V> imap, {bool keepOrder = false}) {
     if (keepOrder) {
       Map<K, V> map = Map.fromEntries(entries.followedBy(imap.entries));
@@ -1121,6 +1142,8 @@ abstract class M<K, V> {
   /// Note: [map] entries that already exist in the original map will overwrite
   /// those of the original map, in place (keeping order).
   ///
+  /// Note: This will NOT sort anything.
+  ///
   M<K, V> addMap(Map<K, V> map) {
     Map<K, V> newMap = Map.fromEntries(entries.followedBy(map.entries));
     return MFlat<K, V>.unsafe(newMap);
@@ -1130,7 +1153,9 @@ abstract class M<K, V> {
   /// Note: [entries] that already exist in the original map will overwrite
   /// those of the original map, in place (keeping order).
   ///
-  M<K, V> addEntries(Iterable<MapEntry<K, V>> entries, {bool keepOrder = false}) {
+  /// Note: This will NOT sort anything.
+  ///
+  M<K, V> addEntries(Iterable<MapEntry<K, V>> entries) {
     Map<K, V> map = Map.fromEntries(this.entries.followedBy(entries));
     return MFlat<K, V>.unsafe(map);
   }
