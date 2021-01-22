@@ -85,7 +85,6 @@ implementation details. Later in this document, we provide benchmarks so that yo
 ---
 
 **Table of Contents**
-
 <div id="user-content-toc">
   <ul>
     <li>
@@ -147,113 +146,127 @@ implementation details. Later in this document, we provide benchmarks so that yo
     <li><a href="#6-listset">6. ListSet</a></li>
     <li><a href="#7-listmap">7. ListMap</a></li>
     <li>
-      <a href="#8-comparators">8. Comparators</a>
+      <a href="#8-extensions-and-helpers">8. Extensions and helpers</a>
       <ul>
         <li>
-          <a href="#81-compareobject-function">8.1. CompareObject function</a>
-        </li>
-        <li>
-          <a href="#82-compareobjectto-extension"
-            >8.2. CompareObjectTo extension</a
+          <a href="#81-iterable-helpers-and-extensions"
+            >8.1 Iterable helpers and extensions</a
           >
         </li>
-        <li><a href="#83-sortby-function">8.3. SortBy function</a></li>
-        <li><a href="#84-sortlike-function">8.4. SortLike function</a></li>
-        <li><a href="#85-if0-extension">8.5. if0 extension</a></li>
+        <li><a href="#82-list-extensions">8.2 List extensions</a></li>
+        <li><a href="#82-list-extensions-1">8.2 List extensions</a></li>
+        <li><a href="#83-iterator-extensions">8.3 Iterator extensions</a></li>
+        <li><a href="#84-boolean-extensions">8.4 Boolean extensions</a></li>
       </ul>
     </li>
     <li>
-      <a href="#9-flushing">9. Flushing</a>
-      <ul>
-        <li><a href="#91-auto-flush">9.1. Auto-flush</a></li>
-        <li><a href="#92-sync-auto-flush">9.2. Sync Auto-flush</a></li>
-        <li><a href="#93-async-auto-flush">9.3. Async Auto-flush</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#10-benchmarks">10. Benchmarks</a>
+      <a href="#9-comparators">9. Comparators</a>
       <ul>
         <li>
-          <a href="#101-list-benchmarks">10.1. List Benchmarks</a>
+          <a href="#91-compareobject-function">9.1. CompareObject function</a>
+        </li>
+        <li>
+          <a href="#92-compareobjectto-extension"
+            >9.2. CompareObjectTo extension</a
+          >
+        </li>
+        <li><a href="#93-sortby-function">9.3. SortBy function</a></li>
+        <li><a href="#94-sortlike-function">9.4. SortLike function</a></li>
+        <li><a href="#95-if0-extension">9.5. if0 extension</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#10-flushing">10. Flushing</a>
+      <ul>
+        <li><a href="#101-auto-flush">10.1. Auto-flush</a></li>
+        <li><a href="#102-sync-auto-flush">10.2. Sync Auto-flush</a></li>
+        <li><a href="#103-async-auto-flush">10.3. Async Auto-flush</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#11-benchmarks">11. Benchmarks</a>
+      <ul>
+        <li>
+          <a href="#111-list-benchmarks">11.1. List Benchmarks</a>
           <ul>
-            <li><a href="#1011-list-add">10.1.1. List Add</a></li>
-            <li><a href="#1012-list-addall">10.1.2. List AddAll</a></li>
-            <li><a href="#1013-list-contains">10.1.3. List Contains</a></li>
-            <li><a href="#1014-list-empty">10.1.4. List Empty</a></li>
-            <li><a href="#1015-list-insert">10.1.5. List Insert</a></li>
-            <li><a href="#1016-list-read">10.1.6. List Read</a></li>
-            <li><a href="#1017-list-remove">10.1.7. List Remove</a></li>
+            <li><a href="#1111-list-add">11.1.1. List Add</a></li>
+            <li><a href="#1112-list-addall">11.1.2. List AddAll</a></li>
+            <li><a href="#1113-list-contains">11.1.3. List Contains</a></li>
+            <li><a href="#1114-list-empty">11.1.4. List Empty</a></li>
+            <li><a href="#1115-list-insert">11.1.5. List Insert</a></li>
+            <li><a href="#1116-list-read">11.1.6. List Read</a></li>
+            <li><a href="#1117-list-remove">11.1.7. List Remove</a></li>
           </ul>
         </li>
         <li>
-          <a href="#102-map-benchmarks">10.2. Map Benchmarks</a>
+          <a href="#112-map-benchmarks">11.2. Map Benchmarks</a>
           <ul>
-            <li><a href="#1021-map-add">10.2.1. Map Add</a></li>
-            <li><a href="#1022-map-addall">10.2.2. Map AddAll</a></li>
+            <li><a href="#1121-map-add">11.2.1. Map Add</a></li>
+            <li><a href="#1122-map-addall">11.2.2. Map AddAll</a></li>
             <li>
-              <a href="#1023-map-containsvalue">10.2.3. Map ContainsValue</a>
+              <a href="#1123-map-containsvalue">11.2.3. Map ContainsValue</a>
             </li>
-            <li><a href="#1024-map-empty">10.2.4. Map Empty</a></li>
-            <li><a href="#1025-map-read">10.2.5. Map Read</a></li>
-            <li><a href="#1025-map-remove">10.2.5. Map Remove</a></li>
+            <li><a href="#1124-map-empty">11.2.4. Map Empty</a></li>
+            <li><a href="#1125-map-read">11.2.5. Map Read</a></li>
+            <li><a href="#1125-map-remove">11.2.5. Map Remove</a></li>
           </ul>
         </li>
         <li>
-          <a href="#103-set-benchmarks">10.3. Set Benchmarks</a>
+          <a href="#113-set-benchmarks">11.3. Set Benchmarks</a>
           <ul>
-            <li><a href="#1025-set-add">10.2.5. Set Add</a></li>
-            <li><a href="#1026-set-addall">10.2.6. Set AddAll</a></li>
-            <li><a href="#1026-set-contains">10.2.6. Set Contains</a></li>
-            <li><a href="#1026-set-empty">10.2.6. Set Empty</a></li>
-            <li><a href="#1026-set-remove">10.2.6. Set Remove</a></li>
+            <li><a href="#1125-set-add">11.2.5. Set Add</a></li>
+            <li><a href="#1126-set-addall">11.2.6. Set AddAll</a></li>
+            <li><a href="#1126-set-contains">11.2.6. Set Contains</a></li>
+            <li><a href="#1126-set-empty">11.2.6. Set Empty</a></li>
+            <li><a href="#1126-set-remove">11.2.6. Set Remove</a></li>
           </ul>
         </li>
       </ul>
     </li>
     <li>
-      <a href="#11-immutable-objects">11. Immutable Objects</a>
+      <a href="#12-immutable-objects">12. Immutable Objects</a>
       <ul>
         <li>
-          <a href="#111-whats-the-difference-between-unmodifiable-and-immutable"
-            >11.1. What&#39;s the difference between Unmodifiable and
+          <a href="#121-whats-the-difference-between-unmodifiable-and-immutable"
+            >12.1. What&#39;s the difference between Unmodifiable and
             Immutable?</a
           >
         </li>
-        <li><a href="#112-clean-code">11.2. Clean-code</a></li>
+        <li><a href="#122-clean-code">12.2. Clean-code</a></li>
       </ul>
     </li>
     <li>
-      <a href="#12-performance-and-memory-savings"
-        >12. Performance and Memory Savings</a
+      <a href="#13-performance-and-memory-savings"
+        >13. Performance and Memory Savings</a
       >
     </li>
     <li>
       <a
-        href="#13-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
-        >13. The above text has about 10% of original content. The rest is
+        href="#14-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
+        >14. The above text has about 10% of original content. The rest is
         shamelessly copied from the following pages. Please, visit them:</a
       >
     </li>
     <li>
-      <a href="#14-should-i-use-this-package">14. Should I use this package?</a>
+      <a href="#15-should-i-use-this-package">15. Should I use this package?</a>
     </li>
-    <li><a href="#15-implementation-details">15. Implementation details</a></li>
+    <li><a href="#16-implementation-details">16. Implementation details</a></li>
     <li>
-      <a href="#16-bibliography">16. Bibliography</a>
+      <a href="#17-bibliography">17. Bibliography</a>
       <ul>
         <li>
-          <a href="#161-projects">16.1. Projects</a>
+          <a href="#171-projects">17.1. Projects</a>
           <ul>
-            <li><a href="#1611-dart">16.1.1. Dart</a></li>
-            <li><a href="#1612-java">16.1.2. Java</a></li>
-            <li><a href="#1613-js">16.1.3. JS</a></li>
+            <li><a href="#1711-dart">17.1.1. Dart</a></li>
+            <li><a href="#1712-java">17.1.2. Java</a></li>
+            <li><a href="#1713-js">17.1.3. JS</a></li>
           </ul>
         </li>
-        <li><a href="#162-articles">16.2. Articles</a></li>
-        <li><a href="#163-other-resources">16.3. Other Resources</a></li>
-        <li><a href="#17-final-note">17. Final Note</a></li>
+        <li><a href="#172-articles">17.2. Articles</a></li>
+        <li><a href="#173-other-resources">17.3. Other Resources</a></li>
       </ul>
     </li>
+    <li><a href="#18-final-note">18. Final Note</a></li>
   </ul>
 </div>
 
@@ -2286,7 +2299,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 <br>
 
-## 18. Final Note
+# 18. Final Note
 
 This package is very complex and still fairly new. I am using it myself in important projects of
 mine, so you can say I trust it, but bugs are still possible.
