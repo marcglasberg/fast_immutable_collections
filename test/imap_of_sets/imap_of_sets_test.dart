@@ -20,8 +20,12 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
-    expect(IMapOfSets.empty().isEmpty, isTrue);
-    expect(IMapOfSets.empty().isNotEmpty, isFalse);
+    expect(IMapOfSets
+        .empty()
+        .isEmpty, isTrue);
+    expect(IMapOfSets
+        .empty()
+        .isNotEmpty, isFalse);
 
     expect(<String, Set<int>>{}.lock.isEmpty, isTrue);
     expect(<String, Set<int>>{}.lock.isNotEmpty, isFalse);
@@ -113,9 +117,9 @@ void main() {
   test("==", () {
     // 1) Default
     IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
-          "a": {1, 2},
-          "b": {1, 2, 3},
-        }),
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    }),
         iMapOfSets2 = IMapOfSets({
           "a": {1, 2},
           "b": {1, 2, 3},
@@ -150,9 +154,9 @@ void main() {
 
   test("same", () {
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
-          "a": {1, 2},
-          "b": {1, 2, 3},
-        }),
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    }),
         iMapOfSets2 = IMapOfSets({
           "a": {1, 2},
           "b": {1, 2, 3},
@@ -175,9 +179,9 @@ void main() {
 
   test("hashCode", () {
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
-          "a": {1, 2},
-          "b": {1, 2, 3},
-        }),
+      "a": {1, 2},
+      "b": {1, 2, 3},
+    }),
         iMapOfSets2 = IMapOfSets({
           "a": {1, 2},
           "b": {1, 2, 3},
@@ -483,7 +487,9 @@ void main() {
     IMapOfSets<String, int> iMapOfSets = original.lock;
 
     // Remove 1 value.
-    expect(iMapOfSets.removeValues([2]).unlock, <String, Set<int>>{
+    expect(iMapOfSets
+        .removeValues([2])
+        .unlock, <String, Set<int>>{
       "a": {1},
       "b": {1, 3},
       "c": {8, 12, 1},
@@ -491,14 +497,18 @@ void main() {
     });
 
     // Remove 2 values.
-    expect(iMapOfSets.removeValues([1, 2]).unlock, <String, Set<int>>{
+    expect(iMapOfSets
+        .removeValues([1, 2])
+        .unlock, <String, Set<int>>{
       "b": {3},
       "c": {8, 12},
       "e": {0},
     });
 
     // Don't remove anything (returns same instance).
-    expect(iMapOfSets.removeValues([32, 47]).unlock, original);
+    expect(iMapOfSets
+        .removeValues([32, 47])
+        .unlock, original);
     expect(iMapOfSets.removeValues([32, 47]).same(iMapOfSets), true);
 
     // 2) Guaranteeing that we remove empty sets
@@ -507,13 +517,17 @@ void main() {
       "b": {1, 2, 3},
     }, const ConfigMapOfSets(removeEmptySets: true));
     final IMapOfSets<String, int> original2 =
-        original1.withConfig(const ConfigMapOfSets(removeEmptySets: false));
+    original1.withConfig(const ConfigMapOfSets(removeEmptySets: false));
 
-    expect(original1.removeValues([1, 2]).unlock, {
+    expect(original1
+        .removeValues([1, 2])
+        .unlock, {
       "b": {3}
     });
     expect(
-        original2.removeValuesWhere((String key, int value) => value == 1 || value == 2).unlock, {
+        original2
+            .removeValuesWhere((String key, int value) => value == 1 || value == 2)
+            .unlock, {
       "a": <int>{},
       "b": {3}
     });
@@ -552,7 +566,9 @@ void main() {
     IMapOfSets<String, int> iMapOfSets = original.lock;
 
     // Removes all odd values.
-    expect(iMapOfSets.removeValuesWhere((key, value) => value % 2 == 0).unlock, <String, Set<int>>{
+    expect(iMapOfSets
+        .removeValuesWhere((key, value) => value % 2 == 0)
+        .unlock, <String, Set<int>>{
       "a": {1},
       "b": {1, 3},
       "c": {1},
@@ -571,7 +587,9 @@ void main() {
         });
 
     // Don't remove anything (returns same instance).
-    expect(iMapOfSets.removeValuesWhere((key, value) => value == 32).unlock, original);
+    expect(iMapOfSets
+        .removeValuesWhere((key, value) => value == 32)
+        .unlock, original);
     expect(iMapOfSets.removeValuesWhere((key, value) => value == 32).same(iMapOfSets), true);
 
     // 2) Guaranteeing that we remove empty sets when the configuration says so
@@ -580,14 +598,18 @@ void main() {
       "b": {1, 2, 3},
     }, const ConfigMapOfSets(removeEmptySets: true));
     final IMapOfSets<String, int> original2 =
-        original1.withConfig(const ConfigMapOfSets(removeEmptySets: false));
+    original1.withConfig(const ConfigMapOfSets(removeEmptySets: false));
 
     expect(
-        original1.removeValuesWhere((String key, int value) => value == 1 || value == 2).unlock, {
+        original1
+            .removeValuesWhere((String key, int value) => value == 1 || value == 2)
+            .unlock, {
       "b": {3}
     });
     expect(
-        original2.removeValuesWhere((String key, int value) => value == 1 || value == 2).unlock, {
+        original2
+            .removeValuesWhere((String key, int value) => value == 1 || value == 2)
+            .unlock, {
       "a": <int>{},
       "b": {3}
     });
@@ -645,6 +667,37 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("from", () {
+    // 1) Regular usage
+    var imapOfSets = IMapOfSets.from({
+      "c": {1, 2, 3}.lock,
+      "a": {1, 2}.lock,
+      "b": {3}.lock,
+    }.lock) ;
+
+    expect(imapOfSets["a"], {1, 2}.lock);
+    expect(imapOfSets["b"], {3}.lock);
+    expect(imapOfSets["c"], {1, 2, 3}.lock);
+
+    // 2) With sorting
+    var imapOfSets1 = IMapOfSets.from({
+      "c": {1, 2, 3}.lock,
+      "a": {1, 2}.lock,
+      "b": {3}.lock,
+    }.lock, config: ConfigMapOfSets(sortKeys: false)) ;
+
+    var imapOfSets2 = IMapOfSets.from({
+      "c": {1, 2, 3}.lock,
+      "a": {1, 2}.lock,
+      "b": {3}.lock,
+    }.lock, config: ConfigMapOfSets(sortKeys: true)) ;
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("fromIterable", () {
     // 1) Regular usage
     final IMapOfSets<String, int> fromIterable = IMapOfSets.fromIterable(
@@ -673,6 +726,42 @@ void main() {
       3: {3}
     });
     expect(fromIterable2.config, const ConfigMapOfSets(cacheHashCode: false));
+
+    // 3) With sorting
+    var imapOfSets1 = IMapOfSets.fromIterable(
+      [3, 1, 2],
+      keyMapper: (value) {
+        if (value == 1)
+          return "a";
+        else if (value == 2)
+          return "b";
+        else if (value == 3)
+          return "c";
+        else
+          throw Exception();
+      },
+      valueMapper: (value) => value,
+      config: ConfigMapOfSets(sortKeys: false),
+    );
+
+    var imapOfSets2 = IMapOfSets.fromIterable(
+      [3, 1, 2],
+      keyMapper: (value) {
+        if (value == 1)
+          return "a";
+        else if (value == 2)
+          return "b";
+        else if (value == 3)
+          return "c";
+        else
+          throw Exception();
+      },
+      valueMapper: (value) => value,
+      config: ConfigMapOfSets(sortKeys: true),
+    );
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -680,11 +769,13 @@ void main() {
   test("withConfig factory", () {
     // 1) Empty initialization
     expect(IMapOfSets.withConfig(null, null), allOf(isA<IMapOfSets>(), IMapOfSets()));
-    expect(IMapOfSets.withConfig(null, null).isEmpty, isTrue);
+    expect(IMapOfSets
+        .withConfig(null, null)
+        .isEmpty, isTrue);
 
     // 2) Regular usage
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
+    ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
     final Map<String, Set<int>> mapOfSets = {
       "a": {1, 2},
       "b": {1, 2, 3},
@@ -694,6 +785,22 @@ void main() {
     expect(iMapOfSets2.config.isDeepEquals, isFalse);
     expect(iMapOfSets2.config.sortKeys, isFalse);
     expect(iMapOfSets2.config.sortValues, isFalse);
+
+    // 3) With sorting
+    var imapOfSets1 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: false));
+
+    var imapOfSets2 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: true));
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -712,12 +819,28 @@ void main() {
     expect(iMapOfSets1.config.sortValues, isFalse);
 
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: true, sortValues: true);
+    ConfigMapOfSets(isDeepEquals: false, sortKeys: true, sortValues: true);
     final IMapOfSets<String, int> iMapOfSets2 = iMapOfSets1.withConfig(configMapOfSets);
 
     expect(iMapOfSets2.config.isDeepEquals, isFalse);
     expect(iMapOfSets2.config.sortKeys, isTrue);
     expect(iMapOfSets2.config.sortValues, isTrue);
+
+    // 3) With sorting
+    var imapOfSets1 = {
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }.lock.withConfig(ConfigMapOfSets(sortKeys: false));
+
+    var imapOfSets2 = {
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }.lock.withConfig(ConfigMapOfSets(sortKeys: true));
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -729,7 +852,7 @@ void main() {
     };
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets(mapOfSets);
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
+    ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
 
     expect(iMapOfSets1.isIdentityEquals, isFalse);
     final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
@@ -744,7 +867,7 @@ void main() {
       "b": {1, 2, 3},
     };
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
+    ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
     final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
 
     expect(
@@ -764,7 +887,7 @@ void main() {
       "b": {1, 2, 3},
     };
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
+    ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
     final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
 
     expect(
@@ -783,7 +906,7 @@ void main() {
       "b": {1, 2, 3},
     };
     final ConfigMapOfSets configMapOfSets =
-        ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
+    ConfigMapOfSets(isDeepEquals: false, sortKeys: false, sortValues: false);
     final IMapOfSets<String, int> iMapOfSets2 = IMapOfSets.withConfig(mapOfSets, configMapOfSets);
 
     expect(
@@ -799,7 +922,7 @@ void main() {
   test("add", () {
     // 1) Regular usage
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     final IMapOfSets<String, int> newSet = iMapOfSets.add("a", 5);
     expect(newSet["a"], ISet({1, 2, 5}));
 
@@ -833,11 +956,11 @@ void main() {
 
   test("add | sorted set", () {
     final IMapOfSets<String, int> imapOfSets =
-        IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
-            .add("z", 100)
-            .add("a", 1)
-            .add("a", 40)
-            .add("c", 3);
+    IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
+        .add("z", 100)
+        .add("a", 1)
+        .add("a", 40)
+        .add("c", 3);
     expect(imapOfSets.keys, ["a", "c", "z"]);
     expect(imapOfSets.sets, [
       {40, 1},
@@ -850,8 +973,8 @@ void main() {
 
   test("addValues | sorted set", () {
     final IMapOfSets<String, int> imapOfSets =
-        IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
-            .addValues("z", {100}).addValues("a", {1}).addValues("a", {40}).addValues("c", {3});
+    IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
+        .addValues("z", {100}).addValues("a", {1}).addValues("a", {40}).addValues("c", {3});
     expect(imapOfSets.keys, ["a", "c", "z"]);
     expect(imapOfSets.sets, [
       {40, 1},
@@ -864,9 +987,9 @@ void main() {
 
   test("addValuesToKeys | sorted set", () {
     final IMapOfSets<String, int> imapOfSets =
-        IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
-            .addValuesToKeys(["z"], {100}).addValuesToKeys(["a"], {1}).addValuesToKeys(
-                ["a", "z"], {40}).addValuesToKeys(["c"], {3});
+    IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
+        .addValuesToKeys(["z"], {100}).addValuesToKeys(["a"], {1}).addValuesToKeys(
+        ["a", "z"], {40}).addValuesToKeys(["c"], {3});
     expect(imapOfSets.keys, ["a", "c", "z"]);
     expect(imapOfSets.sets, [
       {40, 1},
@@ -879,7 +1002,7 @@ void main() {
 
   test("addMap | sorted set", () {
     final IMapOfSets<String, int> imapOfSets =
-        IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true)).addMap({
+    IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true)).addMap({
       "z": {100}
     }).addMap({
       "a": {1}
@@ -901,20 +1024,20 @@ void main() {
 
   test("addIMap | sorted set", () {
     final IMapOfSets<String, int> imapOfSets =
-        IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
-            .addIMap(IMap({
-              "z": {100}
-            }))
-            .addIMap(IMap({
-              "a": {1}
-            }))
-            .addIMap(IMap({
-              "a": {40},
-              "z": {40}
-            }))
-            .addIMap(IMap({
-              "c": {3}
-            }));
+    IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true))
+        .addIMap(IMap({
+      "z": {100}
+    }))
+        .addIMap(IMap({
+      "a": {1}
+    }))
+        .addIMap(IMap({
+      "a": {40},
+      "z": {40}
+    }))
+        .addIMap(IMap({
+      "c": {3}
+    }));
     expect(imapOfSets.keys, ["a", "c", "z"]);
     expect(imapOfSets.sets, [
       {40, 1},
@@ -927,7 +1050,7 @@ void main() {
 
   test("addEntries | sorted set", () {
     final IMapOfSets<String, int> imapOfSets =
-        IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true)).addEntries([
+    IMapOfSets.empty<String, int>(const ConfigMapOfSets(sortKeys: true)).addEntries([
       MapEntry("z", {100})
     ]).addEntries([
       MapEntry("a", {1})
@@ -974,7 +1097,9 @@ void main() {
       "b": {1, 2, 3},
     }, const ConfigMapOfSets(removeEmptySets: false));
 
-    expect(original.remove("a", 1).unlock, {
+    expect(original
+        .remove("a", 1)
+        .unlock, {
       "a": <int>{},
       "b": {1, 2, 3}
     });
@@ -984,7 +1109,7 @@ void main() {
 
   test("[]", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets["a"], ISet({1, 2}));
     expect(iMapOfSets["b"], ISet({3}));
   });
@@ -993,7 +1118,7 @@ void main() {
 
   test("entries", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+    IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     final ISet<MapEntry<String, ISet<int>>> entries = iMapOfSets.entriesAsSet;
     expect(
         entries,
@@ -1007,27 +1132,41 @@ void main() {
 
   test("entry", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+    IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
 
-    expect(iMapOfSets.entry("a").key, "a");
-    expect(iMapOfSets.entry("a").value, {1, 2});
+    expect(iMapOfSets
+        .entry("a")
+        .key, "a");
+    expect(iMapOfSets
+        .entry("a")
+        .value, {1, 2});
 
-    expect(iMapOfSets.entry("b").key, "b");
-    expect(iMapOfSets.entry("b").value, {3});
+    expect(iMapOfSets
+        .entry("b")
+        .key, "b");
+    expect(iMapOfSets
+        .entry("b")
+        .value, {3});
 
-    expect(iMapOfSets.entry("z").key, "z");
-    expect(iMapOfSets.entry("z").value, null);
+    expect(iMapOfSets
+        .entry("z")
+        .key, "z");
+    expect(iMapOfSets
+        .entry("z")
+        .value, null);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("keys", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+    IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     expect(iMapOfSets.keys, allOf(isA<Iterable<String>>(), ["b", "a"]));
 
     // Keys is not sorted! If you need sorted, use keyList.
-    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keys,
+    expect(iMapOfSets
+        .withConfig(ConfigMapOfSets(sortKeys: true))
+        .keys,
         allOf(isA<Iterable<String>>(), ["b", "a"]));
     expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keyList(),
         allOf(isA<Iterable<String>>(), ["a", "b"]));
@@ -1037,7 +1176,7 @@ void main() {
 
   test("sets", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+    IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     expect(iMapOfSets.sets, isA<Iterable<ISet<int>>>());
     expect(iMapOfSets.sets, [
       ISet<int>({3}),
@@ -1049,11 +1188,13 @@ void main() {
 
   test("values", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("b", 3).add("b", 1).add("a", 2).add("a", 1);
+    IMapOfSets.empty<String, int>().add("b", 3).add("b", 1).add("a", 2).add("a", 1);
     expect(iMapOfSets.values, allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
 
     // Values is not sorted! If you need sorted, use valueList.
-    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).values,
+    expect(iMapOfSets
+        .withConfig(ConfigMapOfSets(sortValues: true))
+        .values,
         allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
     expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).valueList(),
         allOf(isA<Iterable<int>>(), [1, 1, 2, 3]));
@@ -1064,7 +1205,7 @@ void main() {
   test("addValues", () {
     // 1) Adding to an existing key
     IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     IMapOfSets<String, int> newMapOfSets = iMapOfSets.addValues("a", [2, 3, 4]);
     expect(newMapOfSets["a"], {1, 2, 3, 4});
 
@@ -1085,9 +1226,9 @@ void main() {
 
   test("addValuesToKeys", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     final IMapOfSets<String, int> iMapOfSetsResult =
-        iMapOfSets.addValuesToKeys(["a", "b", "c"], [4, 5]);
+    iMapOfSets.addValuesToKeys(["a", "b", "c"], [4, 5]);
 
     expect(iMapOfSetsResult["a"], {1, 2, 4, 5});
     expect(iMapOfSetsResult["b"], {3, 4, 5});
@@ -1098,7 +1239,7 @@ void main() {
 
   test("addAll", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     final IMapOfSets<String, int> newIMapOfSets = iMapOfSets.addMap({
       "a": {1, 2, 3},
       "b": {4},
@@ -1116,7 +1257,7 @@ void main() {
 
   test("addEntries", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     const MapEntry<String, Set<int>> entry1 = MapEntry("a", {1, 2, 3}),
         entry2 = MapEntry("b", {3, 4}),
         entry3 = MapEntry("c", {10, 11});
@@ -1133,7 +1274,7 @@ void main() {
 
   test("addIMap", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
 
     expect(iMapOfSets.unlock, {
       "a": {1, 2},
@@ -1142,8 +1283,8 @@ void main() {
     expect(
         iMapOfSets
             .addIMap(IMap<String, Set<int>>({
-              "a": {3, 4}
-            }))
+          "a": {3, 4}
+        }))
             .unlock,
         {
           "a": {1, 2, 3, 4},
@@ -1152,8 +1293,8 @@ void main() {
     expect(
         iMapOfSets
             .addIMap(IMap<String, Set<int>>({
-              "c": {3, 4}
-            }))
+          "c": {3, 4}
+        }))
             .unlock,
         {
           "a": {1, 2},
@@ -1170,7 +1311,7 @@ void main() {
 
     // 2) Adding a new set on a new key
     IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     IMapOfSets<String, int> newSet = iMapOfSets.replaceSet("z", ISet({2, 3, 4}));
     expect(newSet["z"], ISet({2, 3, 4}));
 
@@ -1198,7 +1339,7 @@ void main() {
   test("clearSet", () {
     // 1) nullifies the empty set if removeEmptySets is true
     IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     IMapOfSets<String, int> clearedSet = iMapOfSets.clearSet("a");
     expect(clearedSet["a"], isNull);
     expect(clearedSet["b"], {3});
@@ -1217,7 +1358,7 @@ void main() {
 
   test("removeSet", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     final IMapOfSets<String, int> newSet = iMapOfSets.removeSet("a");
     expect(newSet.keys.length, 1);
   });
@@ -1226,7 +1367,7 @@ void main() {
 
   test("getOrNull", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets.getOrNull("a"), ISet<int>({1, 2}));
     expect(iMapOfSets.getOrNull("b"), ISet<int>({3}));
     expect(iMapOfSets.getOrNull("c"), null);
@@ -1236,7 +1377,7 @@ void main() {
 
   test("get", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets.get("a"), ISet<int>({1, 2}));
     expect(iMapOfSets.get("b"), ISet<int>({3}));
     expect(iMapOfSets.get("c"), ISet<int>());
@@ -1246,7 +1387,7 @@ void main() {
 
   test("containsKey", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets.containsKey("a"), isTrue);
     expect(iMapOfSets.containsKey("b"), isTrue);
     expect(iMapOfSets.containsKey("c"), isFalse);
@@ -1256,7 +1397,7 @@ void main() {
 
   test("containsValue", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets.containsValue(1), isTrue);
     expect(iMapOfSets.containsValue(2), isTrue);
     expect(iMapOfSets.containsValue(3), isTrue);
@@ -1267,7 +1408,7 @@ void main() {
 
   test("contains", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets.contains("a", 1), isTrue);
     expect(iMapOfSets.contains("a", 2), isTrue);
     expect(iMapOfSets.contains("b", 3), isTrue);
@@ -1279,7 +1420,7 @@ void main() {
 
   test("keyWithValue", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets.getKeyWithValue(1), "a");
     expect(iMapOfSets.getKeyWithValue(2), "a");
     expect(iMapOfSets.getKeyWithValue(3), "b");
@@ -1294,9 +1435,15 @@ void main() {
       "b": {3},
       "d": {1}
     }.lock;
-    expect(iMapOfSets.getEntryWithValue(1).asComparableEntry, Entry("a", ISet<int>({1, 2})));
-    expect(iMapOfSets.getEntryWithValue(2).asComparableEntry, Entry("a", ISet<int>({1, 2})));
-    expect(iMapOfSets.getEntryWithValue(3).asComparableEntry, Entry("b", ISet<int>({3})));
+    expect(iMapOfSets
+        .getEntryWithValue(1)
+        .asComparableEntry, Entry("a", ISet<int>({1, 2})));
+    expect(iMapOfSets
+        .getEntryWithValue(2)
+        .asComparableEntry, Entry("a", ISet<int>({1, 2})));
+    expect(iMapOfSets
+        .getEntryWithValue(3)
+        .asComparableEntry, Entry("b", ISet<int>({3})));
     expect(iMapOfSets.getEntryWithValue(4), isNull);
   });
 
@@ -1333,7 +1480,7 @@ void main() {
     // 1) Global configuration prettyPrint == false
     ImmutableCollection.prettyPrint = false;
     IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
+    IMapOfSets.empty<String, int>().add("a", 1).add("a", 2).add("b", 3);
     expect(iMapOfSets.toString(), "{a: {1, 2}, b: {3}}");
 
     // 2) Global configuration prettyPrint == true
@@ -1342,12 +1489,12 @@ void main() {
     expect(
         iMapOfSets.toString(),
         "{\n"
-        "   a: {\n"
-        "   1,\n"
-        "   2\n"
-        "},\n"
-        "   b: {3}\n"
-        "}");
+            "   a: {\n"
+            "   1,\n"
+            "   2\n"
+            "},\n"
+            "   b: {3}\n"
+            "}");
 
     // 3) Local prettyPrint == false
     ImmutableCollection.prettyPrint = true;
@@ -1360,12 +1507,12 @@ void main() {
     expect(
         iMapOfSets.toString(true),
         "{\n"
-        "   a: {\n"
-        "   1,\n"
-        "   2\n"
-        "},\n"
-        "   b: {3}\n"
-        "}");
+            "   a: {\n"
+            "   1,\n"
+            "   2\n"
+            "},\n"
+            "   b: {3}\n"
+            "}");
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1523,7 +1670,9 @@ void main() {
       "b": {1, 2, 3},
     });
 
-    expect(iMapOfSets.toggle("c", 10).unlock, {
+    expect(iMapOfSets
+        .toggle("c", 10)
+        .unlock, {
       "a": {1},
       "b": {1, 2, 3},
       "c": {10}
@@ -1535,26 +1684,36 @@ void main() {
       "b": {1, 2, 3},
     });
 
-    expect(iMapOfSets.toggle("a", 10, state: true).unlock, {
+    expect(iMapOfSets
+        .toggle("a", 10, state: true)
+        .unlock, {
       "a": {1, 10},
       "b": {1, 2, 3},
     });
 
-    expect(iMapOfSets.toggle("a", 10, state: false).unlock, {
+    expect(iMapOfSets
+        .toggle("a", 10, state: false)
+        .unlock, {
       "a": {1},
       "b": {1, 2, 3},
     });
 
-    expect(iMapOfSets.toggle("a", 1, state: false).unlock, {
+    expect(iMapOfSets
+        .toggle("a", 1, state: false)
+        .unlock, {
       "b": {1, 2, 3},
     });
 
-    expect(iMapOfSets.toggle("c", 10, state: false).unlock, {
+    expect(iMapOfSets
+        .toggle("c", 10, state: false)
+        .unlock, {
       "a": {1},
       "b": {1, 2, 3},
     });
 
-    expect(iMapOfSets.toggle("c", 10, state: true).unlock, {
+    expect(iMapOfSets
+        .toggle("c", 10, state: true)
+        .unlock, {
       "a": {1},
       "b": {1, 2, 3},
       "c": {10},
@@ -1566,12 +1725,16 @@ void main() {
       "b": {1, 2, 3},
     });
     final IMapOfSets<String, int> iMapOfSets2 =
-        iMapOfSets1.withConfig(ConfigMapOfSets(removeEmptySets: false));
+    iMapOfSets1.withConfig(ConfigMapOfSets(removeEmptySets: false));
 
-    expect(iMapOfSets1.toggle("a", 1).unlock, {
+    expect(iMapOfSets1
+        .toggle("a", 1)
+        .unlock, {
       "b": {1, 2, 3},
     });
-    expect(iMapOfSets2.toggle("a", 1).unlock, {
+    expect(iMapOfSets2
+        .toggle("a", 1)
+        .unlock, {
       "a": <int>{},
       "b": {1, 2, 3},
     });
@@ -1640,7 +1803,7 @@ void main() {
       "3": {10, 11},
     }).withConfig(const ConfigMapOfSets(removeEmptySets: false));
     final IMapOfSets<String, int> iMapOfSetsClearedButNotRemoved =
-        iMapOfSetsWithoutRemoveEmptySets.clear();
+    iMapOfSetsWithoutRemoveEmptySets.clear();
 
     expect(iMapOfSetsClearedButNotRemoved.unlock, {
       "1": <int>{},
@@ -1670,7 +1833,7 @@ void main() {
       "3": {10, 11},
     });
     final IMapOfSets<num, num> mappedIMapOfSets = iMapOfSets.map<num, num>(
-        (String key, ISet<int> set) =>
+            (String key, ISet<int> set) =>
             MapEntry<num, ISet<num>>(num.parse(key + key), set.cast<num>().toISet()));
 
     expect(mappedIMapOfSets, isA<IMapOfSets<num, num>>());
@@ -1694,12 +1857,16 @@ void main() {
     var dontRemoveEmptySets = ConfigMapOfSets(removeEmptySets: false);
 
     expect(
-      iMapOfSets.map<num, num>(mapper, config: doRemoveEmptySets).unlock,
+      iMapOfSets
+          .map<num, num>(mapper, config: doRemoveEmptySets)
+          .unlock,
       {},
     );
 
     expect(
-      iMapOfSets.map<num, num>(mapper, config: dontRemoveEmptySets).unlock,
+      iMapOfSets
+          .map<num, num>(mapper, config: dontRemoveEmptySets)
+          .unlock,
       {1: <int>{}},
     );
   });
@@ -1713,7 +1880,7 @@ void main() {
       "3": {10, 11},
     });
     final IMapOfSets<String, int> newIMapOfSets =
-        iMapOfSets.removeWhere((String key, ISet<int> set) => set.contains(10));
+    iMapOfSets.removeWhere((String key, ISet<int> set) => set.contains(10));
 
     expect(
         newIMapOfSets,
@@ -1736,7 +1903,7 @@ void main() {
     var previousSet = Output<ISet<int>>();
 
     IMapOfSets<String, int> newIMapOfSets =
-        iMapOfSets.update("1", (ISet<int> set) => {100}.lock, previousSet: previousSet);
+    iMapOfSets.update("1", (ISet<int> set) => {100}.lock, previousSet: previousSet);
 
     expect(
         newIMapOfSets,
@@ -1773,8 +1940,9 @@ void main() {
       "3": {10, 11},
     });
     expect(
-        () => iMapOfSets.update("4", (ISet<int> set) => {100}.lock,
-            ifAbsent: () => throw ArgumentError()),
+            () =>
+            iMapOfSets.update("4", (ISet<int> set) => {100}.lock,
+                ifAbsent: () => throw ArgumentError()),
         throwsArgumentError);
 
     expect(iMapOfSets.update("4", (ISet<int> set) => {100}.lock), iMapOfSets);
@@ -1826,7 +1994,7 @@ void main() {
       "3": {10, 11},
     });
     final IMapOfSets<String, int> newIMapOfSets =
-        iMapOfSets.updateAll((String key, ISet<int> set) => {int.parse(key)}.lock);
+    iMapOfSets.updateAll((String key, ISet<int> set) => {int.parse(key)}.lock);
 
     expect(
         newIMapOfSets,
@@ -1872,7 +2040,9 @@ void main() {
     expect(
         {
           1: {"a"}
-        }.lock.invertKeysAndValues().unlock,
+        }.lock
+            .invertKeysAndValues()
+            .unlock,
         {
           "a": {1}
         });
@@ -1885,7 +2055,9 @@ void main() {
       "e": {12, 5},
     }.lock;
 
-    expect(iMapOfSets.invertKeysAndValues().unlock, {
+    expect(iMapOfSets
+        .invertKeysAndValues()
+        .unlock, {
       1: {"a", "b", "c"},
       2: {"a", "b"},
       3: {"b"},
@@ -1901,7 +2073,9 @@ void main() {
     iMapOfSets = IMapOfSets.withConfig({"a": {}}, ConfigMapOfSets(removeEmptySets: false));
 
     expect(iMapOfSets.unlock, {"a": <int>{}});
-    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: true).unlock, {
+    expect(iMapOfSets
+        .invertKeysAndValues(emptySetsTurnIntoNullKeys: true)
+        .unlock, {
       null: {"a"}
     });
     expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: false), isEmpty);
@@ -1914,12 +2088,16 @@ void main() {
       "e": <int>{1},
     }, ConfigMapOfSets(removeEmptySets: false));
 
-    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: true).unlock, {
+    expect(iMapOfSets
+        .invertKeysAndValues(emptySetsTurnIntoNullKeys: true)
+        .unlock, {
       null: {"a", "b"},
       1: {"c", "e"},
       2: {"d"},
     });
-    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: false).unlock, {
+    expect(iMapOfSets
+        .invertKeysAndValues(emptySetsTurnIntoNullKeys: false)
+        .unlock, {
       1: {"c", "e"},
       2: {"d"},
     });
@@ -1976,16 +2154,20 @@ void main() {
     }.lock;
 
     expect(mapOfSets.asIMap(), isA<IMap<String, ISet<int>>>());
-    expect(mapOfSets.asIMap().unlock, {
+    expect(mapOfSets
+        .asIMap()
+        .unlock, {
       "a": {1, 2},
       "b": {11, 12},
     });
 
     mapOfSets.asIMap().addAll(IMap<String, ISet<int>>({
-          "a": {100, 101}.lock
-        }));
+      "a": {100, 101}.lock
+    }));
 
-    expect(mapOfSets.asIMap().unlock, {
+    expect(mapOfSets
+        .asIMap()
+        .unlock, {
       "a": {1, 2},
       "b": {11, 12},
     });
@@ -2000,7 +2182,9 @@ void main() {
       "b": {11, 12, 13},
     }.lock;
 
-    expect(mapOfSets.removeValuesFromKeyWhere("b", (int value) => value > 11).unlock, {
+    expect(mapOfSets
+        .removeValuesFromKeyWhere("b", (int value) => value > 11)
+        .unlock, {
       "a": {1, 2},
       "b": {11},
     });
@@ -2015,10 +2199,14 @@ void main() {
       "b": {11, 12, 13},
     }.lock.withConfig(ConfigMapOfSets(removeEmptySets: false));
 
-    expect(mapOfSets1.removeValuesFromKeyWhere("b", (int value) => value > 10).unlock, {
+    expect(mapOfSets1
+        .removeValuesFromKeyWhere("b", (int value) => value > 10)
+        .unlock, {
       "a": {1, 2},
     });
-    expect(mapOfSets2.removeValuesFromKeyWhere("b", (int value) => value > 10).unlock, {
+    expect(mapOfSets2
+        .removeValuesFromKeyWhere("b", (int value) => value > 10)
+        .unlock, {
       "a": {1, 2},
       "b": <int>{}
     });
