@@ -56,8 +56,10 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Note: If you want to create an empty immutable collection of the same
   /// type and same configuration as a source collection, simply call [clear]
   /// in the source collection.
-  static IMapOfSets<K, V> empty<K, V>([ConfigMapOfSets config]) =>
-      IMapOfSets<K, V>.from(null, config: config);
+  static IMapOfSets<K, V> empty<K, V>([ConfigMapOfSets config]) {
+    config ??= defaultConfig;
+    return IMapOfSets<K, V>._unsafe(IMap.empty(config.asConfigMap), config);
+  }
 
   factory IMapOfSets([Map<K, Iterable<V>> mapOfSets]) => //
       IMapOfSets.withConfig(mapOfSets, defaultConfig);
@@ -78,7 +80,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
               mapOfSets.values.map((value) => ISet.withConfig(value, configSet)),
               config: configMap,
             ),
-            config: config ?? defaultConfig,
+            config ?? defaultConfig,
           );
   }
 
@@ -107,12 +109,19 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     return IMapOfSets.withConfig(map, config);
   }
 
-  /// If you provide [config], the map and all sets will use it.
-  IMapOfSets.from(IMap<K, ISet<V>> mapOfSets, {ConfigMapOfSets config})
-      : config = config ?? defaultConfig,
-        _mapOfSets = (config == null)
-            ? mapOfSets ?? IMap.empty<K, ISet<V>>()
-            : _setsWithConfig(mapOfSets, config) ?? IMap.empty<K, ISet<V>>(config.asConfigMap);
+  /// **Unsafe**. Note: Does not sort.
+  IMapOfSets._unsafe(this._mapOfSets, this.config)
+      : assert(_mapOfSets != null),
+        assert(config != null);
+
+  /// Creates an [IMapOfSets] from an `IMap` of sets.
+  /// The resulting map and its sets will be sorted according to [config], or,
+  /// if not provided, according to the default configuration for [ConfigMapOfSets].
+  ///
+  IMapOfSets.from(IMap<K, ISet<V>> imap, {ConfigMapOfSets config})
+      : config = config ?? IMapOfSets.defaultConfig,
+        _mapOfSets = _setsWithConfig(imap, config ?? IMapOfSets.defaultConfig) ??
+            IMap.empty<K, ISet<V>>(config.asConfigMap);
 
   static IMap<K, ISet<V>> _setsWithConfig<K, V>(
     IMap<K, ISet<V>> mapOfSets,
@@ -121,14 +130,18 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     if (mapOfSets == null)
       return null;
     else {
+      var configMap = config.asConfigMap;
       var configSet = config.asConfigSet;
-      if (mapOfSets.values.every((set) => set.config == configSet)) return mapOfSets;
-      return mapOfSets.map((key, value) => MapEntry(key, value.withConfig(configSet)),
-          config: config.asConfigMap);
+
+      if ((mapOfSets.config == configMap) &&
+          (mapOfSets.values.every((set) => set.config == configSet))) return mapOfSets;
+
+      return mapOfSets.map(
+        (key, value) => MapEntry(key, value.withConfig(configSet)),
+        config: configMap,
+      );
     }
   }
-
-  IMapOfSets._unsafe(this._mapOfSets, {@required this.config});
 
   /// The internal [ISet] configuration.
   ConfigSet get configSet => config.asConfigSet;
@@ -160,7 +173,19 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   IMapOfSets<K, V> withConfig(ConfigMapOfSets config) {
     assert(config != null);
-    return (config == this.config) ? this : IMapOfSets._unsafe(_mapOfSets, config: config);
+    if (config == this.config)
+      return this;
+    else {
+      // If the new config is not sorted it can use sorted or not sorted.
+      // If the new config is sorted it can only use sorted.
+      if ((!config.sortKeys || this.config.sortKeys) &&
+          (!config.sortValues || this.config.sortValues))
+        return IMapOfSets._unsafe(_mapOfSets, config);
+      //
+      // If the new config is sorted and the previous is not, it must sort.
+      else
+        return IMapOfSets.from(_mapOfSets, config: config);
+    }
   }
 
   /// Unlocks the map, returning a regular (mutable, ordered) `Map<K, Set<V>` of type
@@ -192,36 +217,20 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return the [MapEntry] for the given [key].
   MapEntry<K, ISet<V>> entry(K key) => _mapOfSets.entry(key);
 
-  /// Returns an [Iterable] of the map keys. Note this is always fast
-  /// and **UNORDERED**, even is [sort] is true. If you need order,
-  /// please use [keyList].
+  /// Returns an [Iterable] of the map keys.
   Iterable<K> get keys => _mapOfSets.keys;
 
   /// Returns an [IList] of the map keys.
-  ///
   /// Optionally, you may provide a [config] for the list.
-  ///
-  /// The list will be sorted if the map's [sort] configuration is `true`,
-  /// or if you explicitly provide a [compare] method.
-  ///
-  IList<K> keyList({
-    int Function(K a, K b) compare,
-    ConfigList config,
-  }) {
-    var result = IList.withConfig(keys, config);
-    if (compare != null || this.config.sortKeys) result = result.sort(compare);
-    return result;
-  }
+  IList<K> keyList({ConfigList config}) => IList.withConfig(keys, config);
 
-  /// Returns an [Iterable] of the map values. Note this is always fast
-  /// and **UNORDERED**.
+  /// Returns an [Iterable] of the map values.
   Iterable<ISet<V>> get sets => _mapOfSets.values;
 
-  /// Return all values of all sets, including duplicates.
-  /// Note this is always **UNORDERED**, even is [sortValues] is true.
+  /// Return all values of all sets, in order, including duplicates.
   Iterable<V> get values sync* {
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      for (V value in entry.value) {
+    for (ISet<V> sets in _mapOfSets.values) {
+      for (V value in sets) {
         yield value;
       }
     }
@@ -234,14 +243,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// The list will be sorted if the map's [sortValues] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  IList<V> valueList({
-    int Function(V a, V b) compare,
-    ConfigList config,
-  }) {
-    var result = IList.withConfig(values, config);
-    if (compare != null || this.config.sortValues) result = result.sort(compare);
-    return result;
-  }
+  IList<V> valueList({ConfigList config}) => IList.withConfig(values, config);
 
   /// Return a flattened iterable of <K, V> entries (including eventual duplicates),
   /// where each entry is a key:value pair.
@@ -377,7 +379,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config);
   }
 
   /// Remove, from the given [key] set, all values that satisfy the given [test].
@@ -434,7 +436,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config: config);
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config);
   }
 
   /// Removes the [value] from the set of the corresponding [key],
@@ -462,10 +464,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     assert(set != null);
     return (config.removeEmptySets && set.isEmpty)
         ? removeSet(key)
-        : IMapOfSets<K, V>.from(
-            _mapOfSets.add(key, set),
-            config: config,
-          );
+        : IMapOfSets<K, V>._unsafe(_mapOfSets.add(key, set), config);
   }
 
   /// When [removeEmptySets] is `true`, the given [key] and its corresponding
@@ -481,9 +480,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   IMapOfSets<K, V> removeSet(K key) {
     IMap<K, ISet<V>> newMapOfSets = _mapOfSets.remove(key);
-    return _mapOfSets.same(newMapOfSets)
-        ? this
-        : IMapOfSets<K, V>.from(newMapOfSets, config: config);
+    return _mapOfSets.same(newMapOfSets) ? this : IMapOfSets<K, V>._unsafe(newMapOfSets, config);
   }
 
   /// Return the [set] for the given [key].
@@ -683,7 +680,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// `IMapOfSets<RK, RV>`.
   IMapOfSets<RK, RV> cast<RK, RV>() {
     IMap<RK, ISet<RV>> result = _mapOfSets.cast<RK, ISet<RV>>();
-    return IMapOfSets.from(result, config: config);
+    return IMapOfSets._unsafe(result, config);
   }
 
   /// If [removeEmptySets] is `true`, returns an empty map of sets with the same
@@ -710,13 +707,15 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     bool Function(RK key, ISet<RV> set) ifRemove;
     if ((config ?? defaultConfig).removeEmptySets) ifRemove = (RK key, ISet<RV> set) => set.isEmpty;
 
-    return IMapOfSets<RK, RV>.from(_mapOfSets.map(mapper, ifRemove: ifRemove),
-        config: config ?? defaultConfig);
+    return IMapOfSets<RK, RV>.from(
+      _mapOfSets.map(mapper, ifRemove: ifRemove),
+      config: config ?? defaultConfig,
+    );
   }
 
   /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
   IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>
-      IMapOfSets<K, V>.from(_mapOfSets.removeWhere(predicate), config: config);
+      IMapOfSets<K, V>._unsafe(_mapOfSets.removeWhere(predicate), config);
 
   /// Updates the [set] for the provided [key].
   ///
@@ -742,7 +741,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     bool Function(K key, ISet<V> set) ifRemove;
     if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
 
-    return IMapOfSets<K, V>.from(
+    return IMapOfSets<K, V>._unsafe(
         _mapOfSets.update(
           key,
           update,
@@ -750,7 +749,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
           ifRemove: ifRemove,
           previousValue: previousSet,
         ),
-        config: config);
+        config);
   }
 
   /// Updates all sets.
@@ -761,7 +760,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     bool Function(K key, ISet<V> set) ifRemove;
     if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
 
-    return IMapOfSets<K, V>.from(_mapOfSets.updateAll(update, ifRemove: ifRemove), config: config);
+    return IMapOfSets<K, V>._unsafe(_mapOfSets.updateAll(update, ifRemove: ifRemove), config);
   }
 
   /// Return a map where the keys are the values, and the values are the keys.

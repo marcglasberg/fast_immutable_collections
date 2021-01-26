@@ -9,9 +9,10 @@ class MFlat<K, V> extends M<K, V> {
 
   final Map<K, V> _map;
 
+  /// **Safe**. Note: This will sort according to the configuration.
   MFlat(Map<K, V> _map, {ConfigMap config})
       : assert(_map != null),
-        _map = ListMap<K, V>.of(_map, sort: (config ?? IMap.defaultConfig).sort);
+        _map = ListMap.of(_map, sort: (config ?? IMap.defaultConfig).sort);
 
   MFlat.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap config})
       : assert(entries != null),
@@ -21,6 +22,7 @@ class MFlat<K, V> extends M<K, V> {
       : assert(_m != null),
         _map = ListMap<K, V>.fromEntries(_m.entries, sort: (config ?? IMap.defaultConfig).sort);
 
+  /// **Unsafe**. Note: Does not sort.
   MFlat.unsafe(Map<K, V> map)
       : assert(map != null),
         _map = ListMap.unsafeView(map);

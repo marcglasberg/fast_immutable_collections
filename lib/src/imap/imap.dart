@@ -32,7 +32,7 @@ class IMap<K, V> // ignore: must_be_immutable
     config = config ?? defaultConfig;
     return (map == null || map.isEmpty)
         ? IMap.empty<K, V>(config)
-        : IMap<K, V>._unsafe(MFlat<K, V>(map), config: config);
+        : IMap<K, V>._unsafe(MFlat<K, V>(map, config: config), config: config);
   }
 
   /// Creates a new map with the given [config].
@@ -76,8 +76,12 @@ class IMap<K, V> // ignore: must_be_immutable
   /// later occurrences overwrite the earlier ones.
   ///
   factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap config}) {
-    var map = <K, V>{}..addEntries(entries);
-    return IMap._unsafe(MFlat.unsafe(map), config: config ?? defaultConfig);
+    config ??= defaultConfig;
+    Map<K, V> map = ListMap.fromEntries(
+      entries,
+      sort: config.sort,
+    );
+    return IMap._(map, config: config);
   }
 
   /// Create an [IMap] from the given [keys].
@@ -96,14 +100,14 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     assert(keys != null);
     assert(valueMapper != null);
+    config ??= defaultConfig;
 
-    var map = <K, V>{};
+    Map<K, V> map = ListMap.fromEntries(
+      keys.map((key) => MapEntry(key, valueMapper(key))),
+      sort: config.sort,
+    );
 
-    for (K key in keys) {
-      map[key] = valueMapper(key);
-    }
-
-    return IMap._(map, config: config ?? defaultConfig);
+    return IMap._(map, config: config);
   }
 
   /// Create an [IMap] from the given [values].
@@ -122,14 +126,14 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     assert(keyMapper != null);
     assert(values != null);
+    config ??= defaultConfig;
 
-    var map = <K, V>{};
+    Map<K, V> map = ListMap.fromEntries(
+      values.map((value) => MapEntry(keyMapper(value), value)),
+      sort: config.sort,
+    );
 
-    for (V value in values) {
-      map[keyMapper(value)] = value;
-    }
-
-    return IMap._(map, config: config ?? defaultConfig);
+    return IMap._(map, config: config);
   }
 
   /// Creates an IMap instance in which the [keys] and [values] are computed
@@ -171,12 +175,18 @@ class IMap<K, V> // ignore: must_be_immutable
     V Function(I) valueMapper,
     ConfigMap config,
   }) {
+    config ??= defaultConfig;
     keyMapper ??= (I i) => i as K;
     valueMapper ??= (I i) => i as V;
-    Map<K, V> map = {
-      for (var item in iterable) keyMapper(item): valueMapper(item),
-    };
-    return IMap._(map, config: config ?? defaultConfig);
+
+    Map<K, V> map = ListMap.fromEntries(
+      iterable.map(
+        (item) => MapEntry(keyMapper(item), valueMapper(item)),
+      ),
+      sort: config.sort,
+    );
+
+    return IMap._(map, config: config);
   }
 
   /// Creates an IMap instance associating the given [keys] to [values].
@@ -207,6 +217,12 @@ class IMap<K, V> // ignore: must_be_immutable
   /// However, you should only use this with a new map you've created yourself,
   /// when you are sure no external copies exist. If the original map is modified,
   /// it will break the [IMap] and any other derived maps in unpredictable ways.
+  ///
+  /// Also, if [config] is [ConfigMap.sort] `true`, it assumes you will pass it a
+  /// sorted mao. It will not sort the map for you. In this case, if [map] is
+  /// not sorted, it will break the [IMap] and any other derived sets in unpredictable
+  /// ways.
+  ///
   IMap.unsafe(Map<K, V> map, {@required this.config})
       : assert(config != null),
         _m = (map == null) ? MFlat.empty<K, V>() : MFlat<K, V>.unsafe(map) {
@@ -336,10 +352,10 @@ class IMap<K, V> // ignore: must_be_immutable
     }
   }
 
-  /// **Unsafe**.
+  /// **Unsafe**. Note: Does not sort.
   IMap._(Map<K, V> map, {@required this.config}) : _m = MFlat<K, V>.unsafe(map);
 
-  /// **Unsafe**.
+  /// **Unsafe**. Note: Does not sort.
   IMap._unsafe(this._m, {@required this.config});
 
   /// **Unsafe**.
@@ -918,10 +934,15 @@ class IMap<K, V> // ignore: must_be_immutable
     bool Function(RK key, RV value) ifRemove,
     ConfigMap config,
   }) {
-    Map<RK, RV> map = _m.map(mapper);
-    if (ifRemove != null) map.removeWhere(ifRemove);
-    return IMap<RK, RV>._(map,
-        config: config ?? ((RK == K && RV == V) ? this.config : defaultConfig));
+    config ??= defaultConfig;
+    Map<RK, RV> map = ListMap.fromEntries(
+      entries
+          .map((entry) => mapper(entry.key, entry.value))
+          .where((entry) => ifRemove == null || !ifRemove(entry.key, entry.value)),
+      sort: config.sort,
+    );
+
+    return IMap._unsafeFromMap(map, config: config);
   }
 
   /// Returns a string representation of (some of) the elements of `this`.
@@ -1123,15 +1144,6 @@ abstract class M<K, V> {
           : MReplace<K, V>(this, key, value);
     }
   }
-
-  /// Adds all key/value pairs of [imap] to this map.
-  ///
-  /// If a key of [imap] is already in this map, its value is overwritten
-  /// (the old value is discarded).
-  ///
-  /// The operation is equivalent to doing `this[key] = value` for each key
-  /// and associated value in imap.
-  M<K, V> addAll_OLD(IMap<K, V> imap) => MAddAll<K, V>.unsafe(this, imap._m);
 
   /// The entries of the given [imap] will be added to the original map.
   /// Note: [imap] entries that already exist in the original map will overwrite

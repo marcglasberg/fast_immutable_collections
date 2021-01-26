@@ -60,12 +60,9 @@ class ISet<T> // ignore: must_be_immutable
   }) {
     assert(mapper != null);
 
-    var result = <T>{};
-    for (I item in iterable) {
-      Iterable<T> ts = mapper(item);
-      result.addAll(ts);
-    }
-    return ISet<T>._unsafeFromSet(result, config: config ?? defaultConfig);
+    config ??= defaultConfig;
+    var result = ListSet.of(iterable.expand(mapper), sort: config.sort);
+    return ISet<T>._unsafeFromSet(result, config: config);
   }
 
   /// Creates a new set with the given [config].
@@ -110,6 +107,12 @@ class ISet<T> // ignore: must_be_immutable
   /// However, you should only use this with a new set you've created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
   /// it will break the [ISet] and any other derived sets in unpredictable ways.
+  ///
+  /// Also, if [config] is [ConfigSet.sort] `true`, it assumes you will pass it a
+  /// sorted set. It will not sort the set for you. In this case, if [set] is
+  /// not sorted, it will break the [ISet] and any other derived sets in unpredictable
+  /// ways.
+  ///
   ISet.unsafe(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
     if (ImmutableCollection.disallowUnsafeConstructors)

@@ -440,14 +440,15 @@ void main() {
     expect(set, {1, 2, 3, 4});
     expect(iset, {1, 2, 3, 4});
 
-    // 2) With sort
+    // 2) With sort true, will break the set if it is not already sorted.
     iset = ISet.unsafe({1, 3, 2}, config: const ConfigSet(sort: true));
 
+    // Broken!
     expect(iset.config, const ConfigSet(sort: true));
-    expect(iset, [1, 2, 3]);
+    expect(iset, [1, 3, 2]);
     expect(iset.elementAt(0), 1);
-    expect(iset.elementAt(1), 2);
-    expect(iset.elementAt(2), 3);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 2);
 
     // 3) Disallowing it
     ImmutableCollection.disallowUnsafeConstructors = true;
@@ -477,7 +478,7 @@ void main() {
     expect(iset.elementAt(1), 2);
     expect(iset.elementAt(2), 3);
   });
-  
+
   /////////////////////////////////////////////////////////////////////////////
 
   test("flush", () {

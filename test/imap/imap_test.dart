@@ -142,7 +142,7 @@ void main() {
       config: ConfigMap(sort: true),
     );
 
-    expect(imap1.keys, ["c", "a", "b"]);
+    expect(imap1.keys, ["c", "b", "a"]);
     expect(imap2.keys, ["a", "b", "c"]);
   });
 
@@ -204,7 +204,7 @@ void main() {
     // 1) Regular usage
     const Iterable<int> iterable = [1, 2];
     IMap fromIterable = IMap.fromIterable(iterable,
-        keyMapper: (key) => (key + 1).toString(), valueMapper: (value) => value + 2);
+        keyMapper: (int key) => (key + 1).toString(), valueMapper: (value) => value + 2);
 
     expect(fromIterable["2"], 3);
     expect(fromIterable["3"], 4);
@@ -284,10 +284,8 @@ void main() {
       config: ConfigMap(sort: true),
     );
 
-
-    expect(imap1.keys, ["c", "a", "b"]);
+    expect(imap1.keys, ["c", "b", "a"]);
     expect(imap2.keys, ["a", "b", "c"]);
-
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1695,8 +1693,9 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("forEach", () {
-    final IMap<String, int> imap =
+    IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+
     int result = 100;
     imap.forEach((String k, int v) => result *= 1 + v);
     expect(result, 504000);
@@ -1705,17 +1704,62 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("map", () {
-    final IMap<String, int> imap =
-        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(imap.map<String, int>((String k, int v) => MapEntry(k, v + 1)).unlock,
-        {"a": 2, "b": 3, "c": 4, "d": 5, "e": 6, "f": 7});
+    IMap<String, int> imap =
+        {"x": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+
+    // ---
+
+    var imap1 = imap.map<String, int>(
+      (String k, int v) => MapEntry(k, v + 1),
+      config: ConfigMap(sort: false),
+    );
+    expect(imap1.keys, ["x", "b", "c", "d", "e", "f"]);
+    expect(imap1.values, [2, 3, 4, 5, 6, 7]);
+
+    // ---
+
+    var imap2 = imap.map<String, int>(
+      (String k, int v) => MapEntry(k, v + 1),
+      config: ConfigMap(sort: true),
+    );
+    expect(imap2.keys, ["b", "c", "d", "e", "f", "x"]);
+    expect(imap2.values, [3, 4, 5, 6, 7, 2]);
+
+    // ---
+
+    var imap3 = imap.map<int, String>(
+      (String k, int v) => MapEntry(-v, k),
+      config: ConfigMap(sort: false),
+    );
+    expect(imap3.keys, [-1, -2, -3, -4, -5, -6]);
+    expect(imap3.values, ["x", "b", "c", "d", "e", "f"]);
+
+    // ---
+
+    var imap4 = imap.map<int, String>(
+      (String k, int v) => MapEntry(-v, k),
+      config: ConfigMap(sort: true),
+    );
+    expect(imap4.keys, [-6, -5, -4, -3, -2, -1]);
+    expect(imap4.values, ["f", "e", "d", "c", "b", "x"]);
+
+    // ---
+
+    var imap5 = imap.map<int, String>(
+      (String k, int v) => MapEntry(-v, k),
+      config: ConfigMap(sort: true),
+      ifRemove: (int key, String value) => key == -5 || value == "c",
+    );
+    expect(imap5.keys, [-6, -4, -2, -1]);
+    expect(imap5.values, ["f", "d", "b", "x"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("where", () {
-    final IMap<String, int> imap =
+    IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+
     expect(imap.where((String k, int v) => v < 0).unlock, <String, int>{});
     expect(imap.where((String k, int v) => k == "a" || k == "b").unlock,
         <String, int>{"a": 1, "b": 2});
