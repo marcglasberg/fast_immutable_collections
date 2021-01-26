@@ -785,6 +785,38 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("Changing configs", () {
+    var imapOfSets1 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: true)).withConfig(ConfigMapOfSets(sortKeys: true));
+    expect(imapOfSets1.keys, ["a", "b", "c"]);
+
+    var imapOfSets2 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: true)).withConfig(ConfigMapOfSets(sortKeys: false));
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
+
+    var imapOfSets3 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: false)).withConfig(ConfigMapOfSets(sortKeys: true));
+    expect(imapOfSets3.keys, ["a", "b", "c"]);
+
+    var imapOfSets4 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: false)).withConfig(ConfigMapOfSets(sortKeys: false));
+    expect(imapOfSets4.keys, ["c", "a", "b"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("withConfig", () {
     // 1) config cannot be null
     expect(() => IMapOfSets().withConfig(null), throwsAssertionError);

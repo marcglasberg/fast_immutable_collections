@@ -341,7 +341,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("withConfig", () {
+  test("withConfig factory", () {
     // 1) Regular usage
     final ISet<int> iSet1 = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
     final ISet<int> iSet2 = ISet.withConfig({}, ConfigSet(isDeepEquals: false));
@@ -373,6 +373,37 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("Changing configs", () {
+    var iset1 = ISet.withConfig({1, 3, 2}, ConfigSet(sort: true)).withConfig(ConfigSet(sort: true));
+    expect(iset1, [1, 2, 3]);
+    expect(iset1.elementAt(0), 1);
+    expect(iset1.elementAt(1), 2);
+    expect(iset1.elementAt(2), 3);
+
+    var iset2 =
+        ISet.withConfig({1, 3, 2}, ConfigSet(sort: true)).withConfig(ConfigSet(sort: false));
+    expect(iset2, [1, 2, 3]);
+    expect(iset2.elementAt(0), 1);
+    expect(iset2.elementAt(1), 2);
+    expect(iset2.elementAt(2), 3);
+
+    var iset3 =
+        ISet.withConfig({1, 3, 2}, ConfigSet(sort: false)).withConfig(ConfigSet(sort: true));
+    expect(iset3, [1, 2, 3]);
+    expect(iset3.elementAt(0), 1);
+    expect(iset3.elementAt(1), 2);
+    expect(iset3.elementAt(2), 3);
+
+    var iset4 =
+        ISet.withConfig({1, 3, 2}, ConfigSet(sort: false)).withConfig(ConfigSet(sort: false));
+    expect(iset4, [1, 3, 2]);
+    expect(iset4.elementAt(0), 1);
+    expect(iset4.elementAt(1), 3);
+    expect(iset4.elementAt(2), 2);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("withConfigFrom", () {
     // 1) Regular usage
     ISet<int> iset = {1, 3, 2}.lock;
@@ -395,18 +426,18 @@ void main() {
 
   test("withConfig method", () {
     // 1) Regular usage
-    ISet<int> iset = {1, 3, 2}.lock.withConfig(const ConfigSet(isDeepEquals: false));
+    ISet<int> iset = {1, 3, 2}.lock.withConfig(ConfigSet(isDeepEquals: false));
 
-    expect(iset.config, const ConfigSet(isDeepEquals: false));
+    expect(iset.config, ConfigSet(isDeepEquals: false));
     expect(iset, [1, 3, 2]);
     expect(iset.elementAt(0), 1);
     expect(iset.elementAt(1), 3);
     expect(iset.elementAt(2), 2);
 
     // 2) With sorting
-    iset = {1, 3, 2}.lock.withConfig(const ConfigSet(sort: true));
+    iset = {1, 3, 2}.lock.withConfig(ConfigSet(sort: true));
 
-    expect(iset.config, const ConfigSet(sort: true));
+    expect(iset.config, ConfigSet(sort: true));
     expect(iset, [1, 2, 3]);
     expect(iset.elementAt(0), 1);
     expect(iset.elementAt(1), 2);

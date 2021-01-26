@@ -553,6 +553,30 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("Changing configs", () {
+    var imap1 = IMap.withConfig({"a": 1, "c": 3, "b": 2}, ConfigMap(sort: true))
+        .withConfig(ConfigMap(sort: true));
+    expect(imap1.keys, ["a", "b", "c"]);
+    expect(imap1.values, [1, 2, 3]);
+
+    var imap2 = IMap.withConfig({"a": 1, "c": 3, "b": 2}, ConfigMap(sort: true))
+        .withConfig(ConfigMap(sort: false));
+    expect(imap2.keys, ["a", "b", "c"]);
+    expect(imap2.values, [1, 2, 3]);
+
+    var imap3 = IMap.withConfig({"a": 1, "c": 3, "b": 2}, ConfigMap(sort: false))
+        .withConfig(ConfigMap(sort: true));
+    expect(imap3.keys, ["a", "b", "c"]);
+    expect(imap3.values, [1, 2, 3]);
+
+    var imap4 = IMap.withConfig({"a": 1, "c": 3, "b": 2}, ConfigMap(sort: false))
+        .withConfig(ConfigMap(sort: false));
+    expect(imap4.keys, ["a", "c", "b"]);
+    expect(imap4.values, [1, 3, 2]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("withConfigFrom", () {
     final IMap<String, int> iMap1 = IMap({"a": 1, "b": 2});
     final IMap<String, int> iMap2 =
