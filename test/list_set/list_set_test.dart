@@ -414,7 +414,6 @@ void main() {
     expect(colors, ["red", "green", "blue", "orange", "pink"]);
   });
 
-
   /////////////////////////////////////////////////////////////////////////////
 
   test("Example used in the readme", () {
