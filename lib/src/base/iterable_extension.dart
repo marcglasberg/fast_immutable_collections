@@ -52,8 +52,36 @@ extension FicIterableExtension<T> on Iterable<T> {
 
   bool get isEmptyButNotNull => (this != null) && isEmpty;
 
-  /// Compare all items, in order, using [identical].
+  /// Compare all items, in order or not, according to [ignoreOrder],
+  /// using [operator ==]. Return true if they are all the same,
+  /// in the same order.
+  ///
+  /// Note: Since this is an extension, it works with nulls:
+  /// ```dart
+  /// Iterable iterable1 = null;
+  /// Iterable iterable2 = null;
+  /// iterable1.deepEquals(iterable2) == true;
+  /// ```
+  ///
+  bool deepEquals(Iterable other, {bool ignoreOrder = false}) {
+    if (identical(this, other)) return true;
+    if (this == null || other == null) return false;
+
+    /// Assumes EfficientLengthIterable for these:
+    if ((this is List) ||
+        (this is Set) ||
+        (this is Map) ||
+        (this is ImmutableCollection)) if (length != other.length) return false;
+
+    return ignoreOrder
+        ? const UnorderedIterableEquality(IdentityEquality()).equals(this, other)
+        : const IterableEquality(IdentityEquality()).equals(this, other);
+  }
+
   /// Return true if they are all the same, in the same order.
+  /// Compare all items, in order or not, according to [ignoreOrder],
+  /// using [identical]. Return true if they are all the same,
+  /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
   /// ```dart
@@ -62,25 +90,19 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// iterable1.deepEqualsByIdentity(iterable2) == true;
   /// ```
   ///
-  bool deepEqualsByIdentity(Iterable other) {
+  bool deepEqualsByIdentity(Iterable other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (this == null || other == null) return false;
 
-    if ((this is List) && (other is List)) {
-      List list = this as List;
-      if (length != other.length) return false;
-      for (int i = 0; i < length; i++) {
-        if (!identical(list[i], other[i])) return false;
-      }
-      return true;
-    } else {
-      var iterator1 = iterator;
-      var iterator2 = other.iterator;
-      while (iterator1.moveNext() && iterator2.moveNext()) {
-        if (!identical(iterator1.current, iterator2.current)) return false;
-      }
-      return (iterator1.moveNext() || iterator2.moveNext()) ? false : true;
-    }
+    /// Assumes EfficientLengthIterable for these:
+    if ((this is List) ||
+        (this is Set) ||
+        (this is Map) ||
+        (this is ImmutableCollection)) if (length != other.length) return false;
+
+    return ignoreOrder
+        ? const UnorderedIterableEquality(IdentityEquality()).equals(this, other)
+        : const IterableEquality(IdentityEquality()).equals(this, other);
   }
 
   /// Finds duplicates and then returns a [Set] with the duplicated elements.

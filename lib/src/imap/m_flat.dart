@@ -67,13 +67,13 @@ class MFlat<K, V> extends M<K, V> {
 
   /// Map equality but with an [Iterable] of [MapEntry].
   /// Like the other [Map] equalities, it doesn't  take order into consideration.
-  bool deepMapEqualsToIterable(Iterable<MapEntry<K, V>> entries) {
+  bool deepMapEqualsToIterable(Iterable<MapEntry> entries) {
     if (entries == null) return false;
-    Map<K, V> map = Map<K, V>.fromEntries(entries);
+    Map map = Map.fromEntries(entries);
     return const MapEquality().equals(_map, map);
   }
 
-  bool deepMapEquals(MFlat<K, V> other) =>
+  bool deepMapEquals(MFlat other) =>
       (other == null) ? false : const MapEquality().equals(_map, other._map);
 
   int deepMapHashcode() => const MapEquality().hash(_map);

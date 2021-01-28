@@ -1,3 +1,7 @@
+## [1.0.19] - 2021/01/28
+
+* Better generics compatibility for `equalItemsAndConfig`.
+
 ## [1.0.18] - 2021/01/19
 
 * `IList.replace()`.

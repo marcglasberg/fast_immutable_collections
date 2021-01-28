@@ -44,7 +44,7 @@ class LFlat<T> extends L<T> {
   @override
   T get single => _list.single;
 
-  bool deepListEquals(LFlat<T> other) =>
+  bool deepListEquals(LFlat other) =>
       (other == null) ? false : const ListEquality().equals(_list, other._list);
 
   int deepListHashcode() => const ListEquality().hash(_list);

@@ -1,5 +1,6 @@
 import "dart:collection";
 import "dart:math";
+import 'package:collection/collection.dart';
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
@@ -332,10 +333,10 @@ class ISet<T> // ignore: must_be_immutable
   /// internal state is better, because it will return true more often.
   ///
   @override
-  bool operator ==(Object other) => (other is ISet<T>)
+  bool operator ==(Object other) => (other is ISet)
       ? isDeepEquals
           ? equalItemsAndConfig(other)
-          : same(other)
+          : (other is ISet<T>) && same(other)
       : false;
 
   /// Returns the concatenation of this set and [other].
@@ -348,30 +349,37 @@ class ISet<T> // ignore: must_be_immutable
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
-  bool equalItems(covariant Iterable<T> other) {
+  bool equalItems(covariant Iterable other) {
     if (identical(this, other)) return true;
 
-    if (other is ISet<T>) {
+    if (other is ISet) {
       if (_isUnequalByHashCode(other)) return false;
-      return (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
+      return (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat);
     }
 
     return (other == null) ? false : (flush._s as SFlat<T>).deepSetEqualsToIterable(other);
   }
 
+  /// Will return `true` only if the [ISet] and the iterable items have the same number of elements,
+  /// and the elements of the [ISet] can be paired with the elements of the iterable, so that each
+  /// pair is equal. This may be slow for very large sets, since it compares each item,
+  /// one by one.
+  bool unorderedEqualItems(covariant Iterable other) {
+    if (identical(this, other) || (other is ISet<T> && same(other))) return true;
+    return const UnorderedIterableEquality().equals(_s, other);
+  }
+
   /// Will return `true` only if the list items are equal and the list configurations are equal.
   /// This may be slow for very large sets, since it compares each item, one by one.
   @override
-  bool equalItemsAndConfig(ISet<T> other) {
+  bool equalItemsAndConfig(ISet other) {
     if (identical(this, other)) return true;
 
     // Objects with different hashCodes are not equal.
     if (_isUnequalByHashCode(other)) return false;
 
-    return runtimeType == other.runtimeType &&
-        config == other.config &&
-        (identical(_s, other._s) ||
-            (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>));
+    return config == other.config &&
+        (identical(_s, other._s) || (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCode]s proves the
@@ -382,7 +390,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// Note: We use the **CACHED** hashCodes. If any of the hashCodes is null it
   /// means we don't have this information yet, and we don't calculate it.
-  bool _isUnequalByHashCode(ISet<T> other) {
+  bool _isUnequalByHashCode(ISet other) {
     return (other == null) ||
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }

@@ -563,10 +563,10 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// internal state is better, because it will return `true` more often.
   ///
   @override
-  bool operator ==(Object other) => (other is IMapOfSets<K, V>)
+  bool operator ==(Object other) => (other is IMapOfSets)
       ? isDeepEquals
           ? equalItemsAndConfig(other)
-          : same(other)
+          : (other is IMapOfSets<K, V>) && same(other)
       : false;
 
   /// Will return `true` only if the [ISet] has the same number of items as the
@@ -574,28 +574,26 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
-  bool equalItems(covariant Iterable<MapEntry<K, ISet<V>>> other) => _mapOfSets.equalItems(other);
+  bool equalItems(covariant Iterable<MapEntry> other) => _mapOfSets.equalItems(other);
 
   /// Will return `true` only if the list items are equal, and the map of sets configurations
   /// ([ConfigMapOfSets]) are equal. This may be slow for very large maps, since it compares each
   /// item, one by one.
   @override
-  bool equalItemsAndConfig(IMapOfSets<K, V> other) {
+  bool equalItemsAndConfig(IMapOfSets other) {
     if (identical(this, other)) return true;
 
-    return runtimeType == other.runtimeType &&
-        config == other.config &&
+    return config == other.config &&
         (identical(_mapOfSets, other._mapOfSets) || _mapOfSets.equalItemsToIMap(other._mapOfSets));
   }
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMap(IMap<K, ISet<V>> other) => _mapOfSets.equalItemsToIMap(other);
+  bool equalItemsToIMap<RK, RV>(IMap<RK, ISet<RV>> other) => _mapOfSets.equalItemsToIMap(other);
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMapOfSets(IMapOfSets<K, V> other) =>
-      _mapOfSets.equalItemsToIMap(other._mapOfSets);
+  bool equalItemsToIMapOfSets(IMapOfSets other) => _mapOfSets.equalItemsToIMap(other._mapOfSets);
 
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,

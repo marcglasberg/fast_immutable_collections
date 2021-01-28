@@ -64,13 +64,13 @@ class SFlat<T> extends S<T> {
   @override
   T operator [](int index) => _set[index];
 
-  bool deepSetEqualsToIterable(Iterable<T> other) {
+  bool deepSetEqualsToIterable(Iterable other) {
     if (other == null) return false;
-    Set<T> set = (other is Set<T>) ? other : Set<T>.of(other);
+    Set set = (other is Set) ? other : Set.of(other);
     return const SetEquality(MapEntryEquality()).equals(_set, set);
   }
 
-  bool deepSetEquals(SFlat<T> other) =>
+  bool deepSetEquals(SFlat other) =>
       (other == null) ? false : const SetEquality(MapEntryEquality()).equals(_set, other._set);
 
   int deepSetHashcode() => const SetEquality(MapEntryEquality()).hash(_set);

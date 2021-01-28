@@ -628,10 +628,10 @@ class IMap<K, V> // ignore: must_be_immutable
   /// internal state is better, because it will return `true` more often.
   ///
   @override
-  bool operator ==(Object other) => (other is IMap<K, V>)
+  bool operator ==(Object other) => (other is IMap)
       ? isDeepEquals
           ? equalItemsAndConfig(other)
-          : same(other)
+          : (other is IMap<K, V>) && same(other)
       : false;
 
   /// Will return `true` only if the [IMap] entries are equal to the entries in
@@ -639,36 +639,35 @@ class IMap<K, V> // ignore: must_be_immutable
   /// since it compares each entry, one by one. To compare with a map, use
   /// method [equalItemsToMap] or [equalItemsToIMap].
   @override
-  bool equalItems(covariant Iterable<MapEntry<K, V>> other) {
+  bool equalItems(covariant Iterable<MapEntry> other) {
     return (other == null) ? false : (flush._m as MFlat<K, V>).deepMapEqualsToIterable(other);
   }
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToMap(Map<K, V> other) =>
+  bool equalItemsToMap(Map other) =>
       const MapEquality().equals(UnmodifiableMapFromIMap(this), other);
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMap(IMap<K, V> other) {
+  bool equalItemsToIMap(IMap other) {
     if (_isUnequalByHashCode(other)) return false;
 
-    return (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>);
+    return (flush._m as MFlat).deepMapEquals(other.flush._m as MFlat);
   }
 
   /// Will return `true` only if the list items are equal, and the map configurations are equal.
   /// This may be slow for very large maps, since it compares each item, one by one.
   @override
-  bool equalItemsAndConfig(IMap<K, V> other) {
+  bool equalItemsAndConfig(IMap other) {
     if (identical(this, other)) return true;
 
     // Objects with different hashCodes are not equal.
     if (_isUnequalByHashCode(other)) return false;
 
-    return runtimeType == other.runtimeType &&
-        config == other.config &&
+    return config == other.config &&
         (identical(_m, other._m) ||
-            (flush._m as MFlat<K, V>).deepMapEquals(other.flush._m as MFlat<K, V>));
+            (flush._m as MFlat).deepMapEquals(other.flush._m as MFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCode]s proves the
@@ -679,7 +678,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Note: We use the **CACHED** hashCodes. If any of the hashCodes is `null` it
   /// means we don't have this information yet, and we don't calculate it.
-  bool _isUnequalByHashCode(IMap<K, V> other) {
+  bool _isUnequalByHashCode(IMap other) {
     return (other == null) ||
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
