@@ -24,9 +24,6 @@ jobs:
       - name: Install dependencies
         run: pub get
 
-      - name: Static Analysis (also installs inner packages' dependencies)
-        run: bash tool/static_analysis.sh
-
       - name: Run tests for coverage
         run: bash tool/run_coverage_locally.sh
 
