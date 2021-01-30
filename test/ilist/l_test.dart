@@ -7,7 +7,6 @@ import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "../utils.dart";
 
-
 /// These tests are mainly for coverage purposes, it tests methods inside the [L] class which were
 /// not reached by its implementations.
 void main() {

@@ -666,8 +666,7 @@ class IMap<K, V> // ignore: must_be_immutable
     if (_isUnequalByHashCode(other)) return false;
 
     return config == other.config &&
-        (identical(_m, other._m) ||
-            (flush._m as MFlat).deepMapEquals(other.flush._m as MFlat));
+        (identical(_m, other._m) || (flush._m as MFlat).deepMapEquals(other.flush._m as MFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCode]s proves the
