@@ -18,7 +18,6 @@ dart \
     --disable-service-auth-codes \
     --enable-vm-service=8111 \
     --pause-isolates-on-exit  \
-    --enable-asserts \
     test
 
 pub global run coverage:format_coverage \
