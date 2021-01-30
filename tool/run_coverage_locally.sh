@@ -3,7 +3,6 @@
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 (pub global list | grep coverage) || {
-  # install coverage when not found
   pub global activate coverage
 }
 

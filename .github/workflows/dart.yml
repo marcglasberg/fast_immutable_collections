@@ -19,7 +19,7 @@ jobs:
         run: pub get
 
       - name: Run tests for coverage
-        run: ./tool/run_coverage_locally.sh
+        run: bash tool/run_coverage_locally.sh
 
       - name: Upload Results to Codecov.io
-        run: ./tool/codecov.sh
+        run: bash tool/codecov.sh
