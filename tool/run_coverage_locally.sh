@@ -26,3 +26,5 @@ pub global run coverage:format_coverage \
     --out=out/coverage/lcov.info \
     --packages=.packages \
     --report-on lib
+
+exit 0
