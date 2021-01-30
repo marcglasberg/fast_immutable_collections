@@ -1,22 +1,16 @@
 name: Dart || Tests | Formatting | Analyzer
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+  - push
+  - pull_request
 
 jobs:
-  ci:
-    name: CI
-
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
+  test:
+    timeout-minutes: 5
+    runs-on: ubuntu-18.04
 
     container:
-      image: google/dart:latest
+      image: google/dart:2.9
 
     steps:
       - uses: actions/checkout@v2
