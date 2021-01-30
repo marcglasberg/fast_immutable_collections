@@ -12,22 +12,23 @@ jobs:
   ci:
     name: CI
 
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     container:
-      image: cirrusci/flutter
+      image: google/dart:latest
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: flutter pub get
+        run: pub get
 
       - name: Static Analysis (also installs inner packages' dependencies)
         run: bash tool/static_analysis.sh
 
-      - name: Run tests
-        run: flutter test --coverage --coverage-path=lcov.info
+      - name: Run tests for coverage
+        run: bash tool/run_coverage_locally.sh
 
       - name: Upload Results to Codecov.io
         run: bash tool/codecov.sh
