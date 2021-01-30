@@ -17,7 +17,7 @@ dart \
     --enable-vm-service=8111 \
     --pause-isolates-on-exit  \
     --enable-asserts \
-    test/kt_dart_test.dart
+    test
 
 pub global run coverage:format_coverage \
     --lcov \
