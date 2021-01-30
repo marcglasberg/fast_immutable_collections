@@ -1177,7 +1177,7 @@ a `LinkedHashMap` does not.
 
 # 8. Extensions and helpers
 
-This are some of the provided helpers and extensions:
+These are some of the provided helpers and extensions:
 
 ## 8.1 Iterable helpers and extensions
 
@@ -1186,17 +1186,18 @@ This are some of the provided helpers and extensions:
 
 * `Iterable.isNullOrEmpty`, `Iterable.isNotNullOrEmpty` and `Iterable.isEmptyButNotNull`.
 
-* `Iterable.deepEqualsByIdentity` compare all items, in order, using [identical].
+* `Iterable.deepEquals` compare all items, in order, using `operator ==`.
+* `Iterable.deepEqualsByIdentity` compare all items, in order, using `identical`.
 
-* `Iterable.findDuplicates` finds duplicates and then returns a [Set] with the duplicated elements.
+* `Iterable.findDuplicates` finds duplicates and then returns a set with the duplicated elements.
 
-* `Iterable.removeNulls` removes `null`s from the [Iterable].
+* `Iterable.removeNulls` removes `null`s from the iterable.
 
-* `Iterable.removeDuplicates` removes all duplicates. Optionally, you can provide an [by] function
-  to compare the items. If you pass [removeNulls] as true, it will also remove the nulls
+* `Iterable.removeDuplicates` removes all duplicates. Optionally, you can provide an `by` function
+  to compare the items. If you pass `removeNulls` true, it will also remove the nulls.
 
-* `Iterable.sortedLike` returns a list, sorted according to the order specified by the [ordering]
-  iterable. Items which don't appear in [ordering] will be included in the end.
+* `Iterable.sortedLike` returns a list, sorted according to the order specified by the ordering
+  iterable. Items which don't appear in the ordering iterable will be included in the end.
 
 ## 8.2 List extensions
 
@@ -1208,14 +1209,14 @@ This are some of the provided helpers and extensions:
 * `List.sortLike` sorts this list according to the order specified by an `ordering` iterable. Items
   which don't appear in `ordering` will be included in the end, in no particular order.
 
-* `List.moveToTheFront` moves the first occurrence of the [item] to the start of the list.
+* `List.moveToTheFront` moves the first occurrence of the item to the start of the list.
 
-* `List.moveToTheEnd` moves the first occurrence of the [item] to the end of the list.
+* `List.moveToTheEnd` moves the first occurrence of the item to the end of the list.
 
-* `List.whereMoveToTheFront` moves all items that satisfy the provided [test] to the start of the
+* `List.whereMoveToTheFront` moves all items that satisfy the provided test to the start of the
   list.
 
-* `List.whereMoveToTheEnd` moves all items that satisfy the provided [test] to the end of the list.
+* `List.whereMoveToTheEnd` moves all items that satisfy the provided test to the end of the list.
 
 * `List.toggle` If the item does not exist in the list, add it and return `true`. If it already
   exists, remove the first instance of it and return `false`.
@@ -1223,19 +1224,19 @@ This are some of the provided helpers and extensions:
 * `List.compareAsSets` returns `true` if the lists contain the same items (in any order). Ignores
   repeated items.
 
-* `List.mapIndexed` maps each element of the list. The [map] function gets both the original [item]
-  and its [index].
+* `List.mapIndexed` maps each element of the list. The map function gets both the original item and
+  its index.
 
 * `List.splitList` splits a list, according to a predicate, removing the list item that satisfies
   the predicate.
 
-* `List.divideList` Search a list for items that satisfy a [test] predicate (matching items), and
-  then divide that list into parts, such as each part contains one matching item. Except maybe for
-  the first matching item, it will keep the matching items as the first item in each part.
+* `List.divideList` Search a list for items that satisfy a test predicate (matching items), and then
+  divide that list into parts, such as each part contains one matching item. Except maybe for the
+  first matching item, it will keep the matching items as the first item in each part.
 
-* `List.divideListAsMap` searches a list for items that satisfy a [test] predicate (matching items),
-  and then divide that list into a [Map] of parts, such as each part contains one matching item, and
-  the keys are given by the [key] function.
+* `List.divideListAsMap` searches a list for items that satisfy a test predicate (matching items),
+  and then divide that list into a map of parts, such as each part contains one matching item, and
+  the keys are given by the key function.
 
 * `List.addBetween` return a new list, adding a separator between the original list items.
 
@@ -2345,5 +2346,6 @@ you find any bugs it's his fault! 😂 — I am only half kidding 😐.
 
 <a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a><br>
 <a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a><br>
-<a href="https://stackoverflow.com/users/3411681/marcg">_stackoverflow.com/users/3411681/marcg_</a><br>
+<a href="https://stackoverflow.com/users/3411681/marcg">_
+stackoverflow.com/users/3411681/marcg_</a><br>
 <a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a><br>
