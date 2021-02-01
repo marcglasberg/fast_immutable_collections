@@ -1,7 +1,6 @@
 import "dart:collection";
 
 import "package:test/test.dart";
-import "package:matcher/matcher.dart";
 import "package:meta/meta.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
