@@ -7,4 +7,4 @@ environment:
 
 dependencies:
   fast_immutable_collections:
-    path: ../
+    path: ../../
