@@ -68,7 +68,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
 — and you can also run the benchmarks yourself.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/benchmark/assets/demo.gif" alt="Benckmarks GIF" />
+  <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/demo.gif" alt="Benckmarks GIF" />
 </p>
 
 <p align="center">
