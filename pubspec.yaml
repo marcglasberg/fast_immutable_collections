@@ -22,9 +22,15 @@ dev_dependencies:
   built_collection: ^4.3.2
   kt_dart: ^0.7.0+1
 
+  fast_immutable_collections_benchmarks:
+    path: benchmark/
+
   # 2) From the benchmark app
 
   flutter:
+    sdk: flutter
+
+  flutter_test:
     sdk: flutter
 
   charts_flutter: ^0.9.0
