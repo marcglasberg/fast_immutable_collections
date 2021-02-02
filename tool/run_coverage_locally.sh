@@ -17,7 +17,8 @@ dart \
     --disable-service-auth-codes \
     --enable-vm-service=8111 \
     --pause-isolates-on-exit  \
-    test/ilist/ilist_test.dart
+    --enable-asserts \
+    test/run_all_tests.dart
 
 pub global run coverage:format_coverage \
     --lcov \
