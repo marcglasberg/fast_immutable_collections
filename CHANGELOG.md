@@ -1,4 +1,4 @@
-## [1.0.19] - 2021/01/28
+## [1.0.21] - 2021/01/28
 
 * Better generics compatibility for `equalItemsAndConfig`.
 
