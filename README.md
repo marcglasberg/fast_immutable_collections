@@ -72,7 +72,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
 </p>
 
 <p align="center">
-  <sub>The <a href="benchmark/benchmark_app/"><code>benchmark_app</code></a> app for comparing this package's collections to others. Use it preferably in <em>release mode</em>.</sub>
+  <sub>The <a href="https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark/benchmark_app"><code>benchmark_app</code></a> app for comparing this package's collections to others. Use it preferably in <em>release mode</em>.</sub>
 </p>
 
 [built_collection]: https://pub.dev/packages/built_collection
@@ -1372,7 +1372,7 @@ the case, you can provide a `mapper` function, to convert the values into the `o
 the [`sort_test.dart`][sort_test]
 file for more information and runnable examples.
 
-[sort_test]: test/base/sort_test.dart
+[sort_test]: https://github.com/marcglasberg/fast_immutable_collections/tree/master/test/base/sort_test.dart
 
 ## 9.5. if0 extension
 
@@ -1573,11 +1573,9 @@ many collection operations within **FIC** which are not yet made as efficient as
 these corresponding methods are marked with `// TODO: Still needs to implement efficiently` and will
 be updated in future versions.
 
-[benchmark]: benchmark/
+[benchmark]: https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark
 
-[benchmark_app]: benchmark/benchmark_app/
-
-[benchmark_docs]: benchmark/README.md
+[benchmark_docs]: https://github.com/marcglasberg/fast_immutable_collections/blob/master/example/benchmark/README.md
 
 <br>
 
