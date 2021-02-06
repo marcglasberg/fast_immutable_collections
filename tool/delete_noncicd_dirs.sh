@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rmdir -rf example
+rm -rf example
 
 ls -A
 
