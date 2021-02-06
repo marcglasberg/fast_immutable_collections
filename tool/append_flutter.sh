@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "\n  flutter_test:\n    sdk: flutter" >> pubspec.yaml
+printf "\n  flutter_test:\n    sdk: flutter" >> pubspec.yaml
 
 cat pubspec.yaml
 
