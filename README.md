@@ -854,12 +854,12 @@ You can globally change this default if you want, by using the `defaultConfig` s
 Note that `ConfigSet` is similar to `ConfigList`, but it has the extra parameter `sort`:
 
 ```
-/// Prints sorted: "1,2,3,4,9"
+/// The default is to use insertion order. Prints: "2,4,1,9,3"
 var iset = {2, 4, 1, 9, 3}.lock;  
 print(iset.join(","));
 
-/// Prints in any order: "2,4,1,9,3"
-var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: false));  
+/// Prints sorted: "1,2,3,4,9"
+var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: true));  
 print(iset.join(","));
 ```
 
@@ -1155,7 +1155,7 @@ expect(set.contains(2), isTrue);
 ```
 
 When viewed as a `Set` and compared to a `LinkedHashSet`, a `ListSet` is also ordered and has a
-similar performance. But a `ListSet` takes less memory and can be sorted or otherwise rearanged,
+similar performance. But a `ListSet` takes less memory and can be sorted or otherwise rearranged,
 just like a list. Also, you can directly get its items by index, very efficiently (constant time).
 
 The disadvantage, of course, is that `ListSet` has a fixed size, while a `LinkedHashSet` does not.
