@@ -42,8 +42,8 @@ class LAddAll<T> extends L<T> {
       return index < length1
           ? _l[index]
           : (_listOrL is List<T>)
-              ? (_listOrL as List<T>)[index-length1]
-              : (_listOrL as L<T>)[index-length1];
+              ? (_listOrL as List<T>)[index - length1]
+              : (_listOrL as L<T>)[index - length1];
     }
   }
 

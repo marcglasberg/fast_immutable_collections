@@ -1,16 +1,24 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-/// 1. If [a] and [b] are both `null`, they don't have order. If one of them
+/// The [compareObject] comparator is similar to the *natural comparator*
+/// provided by [Comparable] objects in their [Comparable.compareTo] method,
+/// to sort objects in their "natural order". The difference here is that
+/// [compareObject] is also able to compare some objects which are not
+/// [Comparable], such as [bool], [MapEntry], and nulls.
+///
+/// In more detail:
+///
+/// 1. If [a] and [b] are both `null`, they don't have order. If only one of them
 /// is `null`, it will come later, unless the [nullsBefore] is `true`, in which
 /// case the `null` will come before.
 ///
 /// 2. Otherwise, if [a] and [b] are both of type [Comparable], compare them
-/// with their natural comparator.
+/// with their natural comparator: [Comparable.compareTo].
 ///
-/// 3. Otherwise, if [a] and [b] are map-entries (`MapEntry`), compare their `key`s. If their
-/// `key`s compare as the same, then compare their `value`s.
+/// 3. Otherwise, if [a] and [b] are map-entries ([MapEntry]), compare by their
+/// `key`s. If their `key`s are equal, then compare by their `value`s.
 ///
-/// 4. Otherwise, if [a] and [b] are `bool`eans, compare them such as `true`
+/// 4. Otherwise, if [a] and [b] are booleans, compare them such as `true`
 /// comes after `false`.
 ///
 /// 5. Otherwise, return `0`, which means **unordered**.

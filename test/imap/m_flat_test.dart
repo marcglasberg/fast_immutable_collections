@@ -1,10 +1,15 @@
 import "package:collection/collection.dart";
-import "package:flutter_test/flutter_test.dart";
+import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
+  const TypeMatcher<AssertionError> isTypeError = TypeMatcher<AssertionError>();
+  final Matcher throwsAssertionError = throwsA(isTypeError);
+
   /////////////////////////////////////////////////////////////////////////////
 
   test("Initialization assertion error", () {

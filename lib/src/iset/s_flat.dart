@@ -6,10 +6,12 @@ class SFlat<T> extends S<T> {
 
   static S<T> empty<T>() => SFlat.unsafe(ListSet<T>.empty());
 
+  /// **Safe**. Note: This will sort according to the configuration.
   SFlat(Iterable<T> iterable, {ConfigSet config})
       : assert(iterable != null),
         _set = ListSet.of(iterable, sort: (config ?? ISet.defaultConfig).sort);
 
+  /// **Unsafe**. Note: Does not sort.
   SFlat.unsafe(Set<T> set)
       : assert(set != null),
         _set = ListSet.unsafeView(set);
@@ -62,13 +64,13 @@ class SFlat<T> extends S<T> {
   @override
   T operator [](int index) => _set[index];
 
-  bool deepSetEqualsToIterable(Iterable<T> other) {
+  bool deepSetEqualsToIterable(Iterable other) {
     if (other == null) return false;
-    Set<T> set = (other is Set<T>) ? other : Set<T>.of(other);
+    Set set = (other is Set) ? other : Set.of(other);
     return const SetEquality(MapEntryEquality()).equals(_set, set);
   }
 
-  bool deepSetEquals(SFlat<T> other) =>
+  bool deepSetEquals(SFlat other) =>
       (other == null) ? false : const SetEquality(MapEntryEquality()).equals(_set, other._set);
 
   int deepSetHashcode() => const SetEquality(MapEntryEquality()).hash(_set);

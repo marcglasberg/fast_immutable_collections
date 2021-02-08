@@ -20,6 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Removing CI/CD unnecessary folders
+        run: bash tool/delete_noncicd_dirs.sh
+
+      - name: Adding the Flutter dependency only for CI
+        run: bash tool/append_flutter.sh
+
       - name: Install dependencies
         run: flutter pub get
 

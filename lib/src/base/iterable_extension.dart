@@ -1,5 +1,40 @@
 import "dart:collection";
+import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
+// ////////////////////////////////////////////////////////////////////////////
+
+/// Combines iterables [a] and [b] into one, by applying the [combine] function.
+/// If [allowDifferentSizes] is true, it will stop as soon as one of the
+/// iterables has no more values. If [allowDifferentSizes] is false, it will
+/// throw an error if the iterables have different length.
+///
+/// See also: [IterableZip]
+///
+Iterable<R> combineIterables<A, B, R>(
+  Iterable<A> a,
+  Iterable<B> b,
+  R Function(A, B) combine, {
+  bool allowDifferentSizes = false,
+}) sync* {
+  Iterator<A> iterA = a.iterator;
+  Iterator<B> iterB = b.iterator;
+
+  while (iterA.moveNext()) {
+    if (!iterB.moveNext()) {
+      if (allowDifferentSizes)
+        return;
+      else
+        throw StateError("Can't combine iterables of different sizes (a > b).");
+    }
+    yield combine(iterA.current, iterB.current);
+  }
+
+  if (iterB.moveNext() && !allowDifferentSizes)
+    throw StateError("Can't combine iterables of different sizes (a < b).");
+}
+
+// ////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtension<T> on Iterable<T> {
@@ -11,12 +46,42 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Creates an *immutable* set ([ISet]) from the iterable.
   ISet<T> toISet([ConfigSet config]) => (this == null) ? null : ISet<T>.withConfig(this, config);
 
-  bool get isNullOrEmpty => this == null || isEmpty;
+  bool get isNullOrEmpty => (this == null) || isEmpty;
 
-  bool get isNotNullOrEmpty => this != null && isNotEmpty;
+  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
 
-  /// Compare all items, in order, using [identical].
+  bool get isEmptyButNotNull => (this != null) && isEmpty;
+
+  /// Compare all items, in order or not, according to [ignoreOrder],
+  /// using [operator ==]. Return true if they are all the same,
+  /// in the same order.
+  ///
+  /// Note: Since this is an extension, it works with nulls:
+  /// ```dart
+  /// Iterable iterable1 = null;
+  /// Iterable iterable2 = null;
+  /// iterable1.deepEquals(iterable2) == true;
+  /// ```
+  ///
+  bool deepEquals(Iterable other, {bool ignoreOrder = false}) {
+    if (identical(this, other)) return true;
+    if (this == null || other == null) return false;
+
+    /// Assumes EfficientLengthIterable for these:
+    if ((this is List) ||
+        (this is Set) ||
+        (this is Map) ||
+        (this is ImmutableCollection)) if (length != other.length) return false;
+
+    return ignoreOrder
+        ? const UnorderedIterableEquality(IdentityEquality()).equals(this, other)
+        : const IterableEquality(IdentityEquality()).equals(this, other);
+  }
+
   /// Return true if they are all the same, in the same order.
+  /// Compare all items, in order or not, according to [ignoreOrder],
+  /// using [identical]. Return true if they are all the same,
+  /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
   /// ```dart
@@ -25,25 +90,19 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// iterable1.deepEqualsByIdentity(iterable2) == true;
   /// ```
   ///
-  bool deepEqualsByIdentity(Iterable other) {
+  bool deepEqualsByIdentity(Iterable other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (this == null || other == null) return false;
 
-    if ((this is List) && (other is List)) {
-      List list = this as List;
-      if (length != other.length) return false;
-      for (int i = 0; i < length; i++) {
-        if (!identical(list[i], other[i])) return false;
-      }
-      return true;
-    } else {
-      var iterator1 = iterator;
-      var iterator2 = other.iterator;
-      while (iterator1.moveNext() && iterator2.moveNext()) {
-        if (!identical(iterator1.current, iterator2.current)) return false;
-      }
-      return (iterator1.moveNext() || iterator2.moveNext()) ? false : true;
-    }
+    /// Assumes EfficientLengthIterable for these:
+    if ((this is List) ||
+        (this is Set) ||
+        (this is Map) ||
+        (this is ImmutableCollection)) if (length != other.length) return false;
+
+    return ignoreOrder
+        ? const UnorderedIterableEquality(IdentityEquality()).equals(this, other)
+        : const IterableEquality(IdentityEquality()).equals(this, other);
   }
 
   /// Finds duplicates and then returns a [Set] with the duplicated elements.
@@ -58,8 +117,6 @@ extension FicIterableExtension<T> on Iterable<T> {
   }
 
   /// Removes `null`s from the [Iterable].
-  ///
-  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
   Iterable<T> removeNulls() sync* {
     for (T item in this) {
       if (item != null) yield item;

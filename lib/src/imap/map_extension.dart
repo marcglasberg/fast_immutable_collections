@@ -26,6 +26,15 @@ extension FicMapExtension<K, V> on Map<K, V> {
   /// Creates an *immutable* map ([IMap]) from the map.
   IMap<K, V> toIMap([ConfigMap config]) =>
       (this == null) ? null : IMap<K, V>.withConfig(this, config);
+
+  /// Checks if `this` is `null` or `[isEmpty].
+  bool get isNullOrEmpty => (this == null) || isEmpty;
+
+  /// Checks if `this` is **not** `null` and **not** `[isEmpty].
+  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
+
+  /// Checks if `this` is [isEmpty] but **not** `null`.
+  bool get isEmptyButNotNull => (this != null) && isEmpty;
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -45,10 +54,12 @@ extension FicMapOfSetsExtension<K, V> on Map<K, Set<V>> {
 /// See also: [FicIterableExtension], [FicIteratorExtension]
 extension FicMapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
   //
+  /// Converts the iterator of map entries into an iterable.
   Iterable<MapEntry<K, V>> toIterable() sync* {
     while (moveNext()) yield current;
   }
 
+  /// Converts the iterator of map entries into a map.
   Map<K, V> toMap() => Map.fromEntries(toIterable());
 }
 

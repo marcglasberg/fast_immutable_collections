@@ -23,10 +23,18 @@ class ListMap<K, V> implements Map<K, V> {
   }
 
   /// Create a [ListMap] from the [map].
-  /// If [sort] is true, it will sort the map keys. Otherwise, it will keep the [map] order.
-  /// If [compare] is provided, it will use it to sort the map.
   ///
-  ListMap.of(Map<K, V> map, {bool sort = false, int Function(K a, K b) compare}) {
+  /// If [sort] is true, it will sort with [compare], if provided,
+  /// or with [compareObject] if not provided. If [sort] is false,
+  /// [compare] will be ignored.
+  ///
+  ListMap.of(
+    Map<K, V> map, {
+    bool sort = false,
+    int Function(K a, K b) compare,
+  }) {
+    assert(compare == null || sort == true);
+
     _map = HashMap.from(map);
     _list = List.of(map.keys, growable: false);
     if (sort) _list.sort(compare ?? compareObject);
@@ -36,19 +44,74 @@ class ListMap<K, V> implements Map<K, V> {
   /// If [entries] contains the same keys multiple times, the last occurrence
   /// overwrites the previous value.
   ///
+  /// If [sort] is true, the entries will be sorted with [compare],
+  /// if provided, or with [compareObject] if not provided. If [sort]
+  /// is false, [compare] will be ignored.
+  ///
   ListMap.fromEntries(
     Iterable<MapEntry<K, V>> entries, {
     bool sort = false,
     int Function(K a, K b) compare,
   }) {
-    Map<K, V> map = LinkedHashMap<K, V>.fromEntries(entries);
-    _map = HashMap.of(map);
-    _list = map.entries.map((entry) => entry.key).toList(growable: false);
+    assert(compare == null || sort == true);
 
-    if (sort) _list.sort(compare ?? compareObject);
+    // Sorted:
+    if (sort) {
+      _map = HashMap<K, V>();
+      for (MapEntry<K, V> entry in entries) {
+        _map[entry.key] = entry.value;
+      }
+      _list = _map.entries.map((entry) => entry.key).toList(growable: false);
+      _list.sort(compare ?? compareObject);
+    }
+    // Insertion order:
+    else {
+      Map<K, V> map = LinkedHashMap<K, V>.fromEntries(entries);
+      _map = HashMap.of(map);
+      _list = map.entries.map((entry) => entry.key).toList(growable: false);
+    }
   }
 
-  ListMap.unsafe(this._map, {bool sort = false, int Function(K a, K b) compare}) {
+  /// Creates a [ListMap] from the provided [keys] and [values].
+  /// If a key is repeated, the last occurrence overwrites the previous value.
+  ///
+  /// If [sort] is true, it will be sorted with [compare], if provided,
+  /// or with [compareObject] if not provided. If [sort] is false,
+  /// [compare] will be ignored.
+  ///
+  factory ListMap.fromIterables(
+    Iterable<K> keys,
+    Iterable<V> values, {
+    bool sort = false,
+    int Function(K a, K b) compare,
+  }) {
+    assert(compare == null || sort == true);
+
+    Iterable<MapEntry<K, V>> combined =
+        combineIterables(keys, values, (K key, V value) => MapEntry(key, value));
+
+    return ListMap.fromEntries(combined, sort: sort, compare: compare);
+  }
+
+  /// Creates a [ListMap] backed by the provided map. No defensive copy will be
+  /// made, so you have to make sure that the number of entries of the original
+  /// map won't change after the [ListMap] is created, since this will render
+  /// the [ListMap] in an invalid state.
+  ///
+  /// If [sort] is true, it will be sorted with [compare], if provided,
+  /// or with [compareObject] if not provided. If [sort] is false,
+  /// [compare] will be ignored.
+  ///
+  /// Note: The original map won't be sorted or modified in any way by simply
+  /// calling this constructor, even if [sort] is true.
+  ///
+  ListMap.unsafe(
+    this._map, {
+    bool sort = false,
+    int Function(K a, K b) compare,
+  }) {
+    assert(compare == null || sort == true);
+
     _list = List.of(_map.keys, growable: false);
     if (sort) _list.sort(compare ?? compareObject);
   }
@@ -58,13 +121,18 @@ class ListMap<K, V> implements Map<K, V> {
         assert(_list != null),
         assert(_map.length == _list.length);
 
+  /// Return the corresponding value for the provided [key].
   @override
   V operator [](Object key) => _map[key];
 
+  /// Replaces the [value] of a [key] that already exists in the map.
+  /// However, if the key is not already present, this will throw an error.
   @override
   void operator []=(K key, V value) {
-    // TODO: Implement
-    throw UnsupportedError("This is not yet supported, but will be in the future.");
+    if (containsKey(key)) {
+      _map[key] = value;
+    } else
+      throw UnsupportedError("Can't add a new key to the map.");
   }
 
   @override
@@ -118,19 +186,16 @@ class ListMap<K, V> implements Map<K, V> {
   @override
   Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(K key, V value) f) => _map.map(f);
 
-  // TODO: Implement
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
     throw UnsupportedError("Can't putIfAbsent into a ListMap.");
   }
 
-  // TODO: Implement
   @override
   V remove(Object key) {
     throw UnsupportedError("Can't remove from a ListMap.");
   }
 
-  // TODO: Implement
   @override
   void removeWhere(bool Function(K key, V value) predicate) {
     throw UnsupportedError("Can't removeWhere from a ListMap.");

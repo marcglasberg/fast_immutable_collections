@@ -1,6 +1,8 @@
 import "dart:math";
-import "package:flutter_test/flutter_test.dart";
+import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
+import "../utils.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -413,7 +415,6 @@ void main() {
     expect(colors.sublist(1), ["green", "blue", "orange", "pink"]);
     expect(colors, ["red", "green", "blue", "orange", "pink"]);
   });
-
 
   /////////////////////////////////////////////////////////////////////////////
 

@@ -1,8 +1,13 @@
-import "package:flutter_test/flutter_test.dart";
+import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
+  /////////////////////////////////////////////////////////////////////////////
+
+  const TypeMatcher<AssertionError> isTypeError = TypeMatcher<AssertionError>();
+  final Matcher throwsAssertionError = throwsA(isTypeError);
+
   /////////////////////////////////////////////////////////////////////////////
 
   setUp(() {
@@ -645,6 +650,41 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("from", () {
+    // 1) Regular usage
+    var imapOfSets = IMapOfSets.from({
+      "c": {1, 2, 3}.lock,
+      "a": {1, 2}.lock,
+      "b": {3}.lock,
+    }.lock);
+
+    expect(imapOfSets["a"], {1, 2}.lock);
+    expect(imapOfSets["b"], {3}.lock);
+    expect(imapOfSets["c"], {1, 2, 3}.lock);
+
+    // 2) With sorting
+    var imapOfSets1 = IMapOfSets.from(
+        {
+          "c": {1, 2, 3}.lock,
+          "a": {1, 2}.lock,
+          "b": {3}.lock,
+        }.lock,
+        config: ConfigMapOfSets(sortKeys: false));
+
+    var imapOfSets2 = IMapOfSets.from(
+        {
+          "c": {1, 2, 3}.lock,
+          "a": {1, 2}.lock,
+          "b": {3}.lock,
+        }.lock,
+        config: ConfigMapOfSets(sortKeys: true));
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("fromIterable", () {
     // 1) Regular usage
     final IMapOfSets<String, int> fromIterable = IMapOfSets.fromIterable(
@@ -673,6 +713,42 @@ void main() {
       3: {3}
     });
     expect(fromIterable2.config, const ConfigMapOfSets(cacheHashCode: false));
+
+    // 3) With sorting
+    var imapOfSets1 = IMapOfSets.fromIterable(
+      [3, 1, 2],
+      keyMapper: (value) {
+        if (value == 1)
+          return "a";
+        else if (value == 2)
+          return "b";
+        else if (value == 3)
+          return "c";
+        else
+          throw Exception();
+      },
+      valueMapper: (value) => value,
+      config: ConfigMapOfSets(sortKeys: false),
+    );
+
+    var imapOfSets2 = IMapOfSets.fromIterable(
+      [3, 1, 2],
+      keyMapper: (value) {
+        if (value == 1)
+          return "a";
+        else if (value == 2)
+          return "b";
+        else if (value == 3)
+          return "c";
+        else
+          throw Exception();
+      },
+      valueMapper: (value) => value,
+      config: ConfigMapOfSets(sortKeys: true),
+    );
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -694,6 +770,58 @@ void main() {
     expect(iMapOfSets2.config.isDeepEquals, isFalse);
     expect(iMapOfSets2.config.sortKeys, isFalse);
     expect(iMapOfSets2.config.sortValues, isFalse);
+
+    // 3) With sorting
+    var imapOfSets1 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: false));
+
+    var imapOfSets2 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: true));
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Changing configs", () {
+    var imapOfSets1 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: true))
+        .withConfig(ConfigMapOfSets(sortKeys: true));
+    expect(imapOfSets1.keys, ["a", "b", "c"]);
+
+    var imapOfSets2 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: true))
+        .withConfig(ConfigMapOfSets(sortKeys: false));
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
+
+    var imapOfSets3 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: false))
+        .withConfig(ConfigMapOfSets(sortKeys: true));
+    expect(imapOfSets3.keys, ["a", "b", "c"]);
+
+    var imapOfSets4 = IMapOfSets.withConfig({
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }, ConfigMapOfSets(sortKeys: false))
+        .withConfig(ConfigMapOfSets(sortKeys: false));
+    expect(imapOfSets4.keys, ["c", "a", "b"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -718,6 +846,22 @@ void main() {
     expect(iMapOfSets2.config.isDeepEquals, isFalse);
     expect(iMapOfSets2.config.sortKeys, isTrue);
     expect(iMapOfSets2.config.sortValues, isTrue);
+
+    // 3) With sorting
+    var imapOfSets1 = {
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }.lock.withConfig(ConfigMapOfSets(sortKeys: false));
+
+    var imapOfSets2 = {
+      "c": {1, 2},
+      "a": {1, 2, 3},
+      "b": {1},
+    }.lock.withConfig(ConfigMapOfSets(sortKeys: true));
+
+    expect(imapOfSets1.keys, ["c", "a", "b"]);
+    expect(imapOfSets2.keys, ["a", "b", "c"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -790,8 +934,7 @@ void main() {
         iMapOfSets2.configMap,
         const ConfigMap(
           isDeepEquals: false,
-          sortKeys: false,
-          sortValues: false,
+          sort: false,
         ));
   });
 
@@ -828,6 +971,124 @@ void main() {
     expect(mapOfSets.isNotEmpty, isTrue);
     expect(mapOfSets["a"], ISet<int>([1, 2]));
     expect(mapOfSets["b"], ISet<int>([3]));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("add | sorted set", () {
+    final IMapOfSets<String, int> imapOfSets =
+        IMapOfSets.empty<String, int>(ConfigMapOfSets(sortKeys: true))
+            .add("z", 100)
+            .add("a", 1)
+            .add("a", 40)
+            .add("c", 3);
+
+    expect(imapOfSets.keys, ["a", "c", "z"]);
+
+    expect(imapOfSets.sets, [
+      {40, 1},
+      {3},
+      {100}
+    ]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addValues | sorted set", () {
+    final IMapOfSets<String, int> imapOfSets =
+        IMapOfSets.empty<String, int>(ConfigMapOfSets(sortKeys: true))
+            .addValues("z", {100}).addValues("a", {1}).addValues("a", {40}).addValues("c", {3});
+    expect(imapOfSets.keys, ["a", "c", "z"]);
+    expect(imapOfSets.sets, [
+      {40, 1},
+      {3},
+      {100}
+    ]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addValuesToKeys | sorted set", () {
+    final IMapOfSets<String, int> imapOfSets =
+        IMapOfSets.empty<String, int>(ConfigMapOfSets(sortKeys: true))
+            .addValuesToKeys(["z"], {100}).addValuesToKeys(["a"], {1}).addValuesToKeys(
+                ["a", "z"], {40}).addValuesToKeys(["c"], {3});
+    expect(imapOfSets.keys, ["a", "c", "z"]);
+    expect(imapOfSets.sets, [
+      {40, 1},
+      {3},
+      {100, 40}
+    ]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addMap | sorted set", () {
+    final IMapOfSets<String, int> imapOfSets =
+        IMapOfSets.empty<String, int>(ConfigMapOfSets(sortKeys: true)).addMap({
+      "z": {100}
+    }).addMap({
+      "a": {1}
+    }).addMap({
+      "a": {40},
+      "z": {40}
+    }).addMap({
+      "c": {3}
+    });
+    expect(imapOfSets.keys, ["a", "c", "z"]);
+    expect(imapOfSets.sets, [
+      {40, 1},
+      {3},
+      {100, 40}
+    ]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addIMap | sorted set", () {
+    final IMapOfSets<String, int> imapOfSets =
+        IMapOfSets.empty<String, int>(ConfigMapOfSets(sortKeys: true))
+            .addIMap(IMap({
+              "z": {100}
+            }))
+            .addIMap(IMap({
+              "a": {1}
+            }))
+            .addIMap(IMap({
+              "a": {40},
+              "z": {40}
+            }))
+            .addIMap(IMap({
+              "c": {3}
+            }));
+    expect(imapOfSets.keys, ["a", "c", "z"]);
+    expect(imapOfSets.sets, [
+      {40, 1},
+      {3},
+      {100, 40}
+    ]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("addEntries | sorted set", () {
+    final IMapOfSets<String, int> imapOfSets =
+        IMapOfSets.empty<String, int>(ConfigMapOfSets(sortKeys: true)).addEntries([
+      MapEntry("z", {100})
+    ]).addEntries([
+      MapEntry("a", {1})
+    ]).addEntries([
+      MapEntry("a", {40}),
+      MapEntry("z", {40})
+    ]).addEntries([
+      MapEntry("c", {3})
+    ]);
+    expect(imapOfSets.keys, ["a", "c", "z"]);
+    expect(imapOfSets.sets, [
+      {40, 1},
+      {3},
+      {100, 40}
+    ]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -911,11 +1172,17 @@ void main() {
         IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
     expect(iMapOfSets.keys, allOf(isA<Iterable<String>>(), ["b", "a"]));
 
-    // Keys is not sorted! If you need sorted, use keyList.
     expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keys,
+        allOf(isA<Iterable<String>>(), ["a", "b"]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: false)).keys,
         allOf(isA<Iterable<String>>(), ["b", "a"]));
+
     expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true)).keyList(),
         allOf(isA<Iterable<String>>(), ["a", "b"]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: false)).keyList(),
+        allOf(isA<Iterable<String>>(), ["b", "a"]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -934,14 +1201,42 @@ void main() {
 
   test("values", () {
     final IMapOfSets<String, int> iMapOfSets =
-        IMapOfSets.empty<String, int>().add("b", 3).add("b", 1).add("a", 2).add("a", 1);
-    expect(iMapOfSets.values, allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
+        IMapOfSets.empty<String, int>().add("b", 5).add("b", 1).add("a", 3).add("a", 2).add("a", 5);
 
-    // Values is not sorted! If you need sorted, use valueList.
-    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).values,
-        allOf(isA<Iterable<int>>(), [3, 1, 2, 1]));
-    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortValues: true)).valueList(),
-        allOf(isA<Iterable<int>>(), [1, 1, 2, 3]));
+    expect(
+        iMapOfSets,
+        {
+          "b": {5, 1},
+          "a": {3, 2, 5}
+        }.lock);
+
+    // ---
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: false, sortValues: false)).values,
+        allOf(isA<Iterable<int>>(), [5, 1, 3, 2, 5]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: false, sortValues: true)).values,
+        allOf(isA<Iterable<int>>(), [1, 5, 2, 3, 5]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true, sortValues: false)).values,
+        allOf(isA<Iterable<int>>(), [3, 2, 5, 5, 1]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true, sortValues: true)).values,
+        allOf(isA<Iterable<int>>(), [2, 3, 5, 1, 5]));
+
+    // ---
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: false, sortValues: false)).valueList(),
+        allOf(isA<Iterable<int>>(), [5, 1, 3, 2, 5]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: false, sortValues: true)).valueList(),
+        allOf(isA<Iterable<int>>(), [1, 5, 2, 3, 5]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true, sortValues: false)).valueList(),
+        allOf(isA<Iterable<int>>(), [3, 2, 5, 5, 1]));
+
+    expect(iMapOfSets.withConfig(ConfigMapOfSets(sortKeys: true, sortValues: true)).valueList(),
+        allOf(isA<Iterable<int>>(), [2, 3, 5, 1, 5]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1179,9 +1474,9 @@ void main() {
       "b": {3},
       "d": {1}
     }.lock;
-    expect(iMapOfSets.getEntryWithValue(1).asEntry, Entry("a", ISet<int>({1, 2})));
-    expect(iMapOfSets.getEntryWithValue(2).asEntry, Entry("a", ISet<int>({1, 2})));
-    expect(iMapOfSets.getEntryWithValue(3).asEntry, Entry("b", ISet<int>({3})));
+    expect(iMapOfSets.getEntryWithValue(1).asComparableEntry, Entry("a", ISet<int>({1, 2})));
+    expect(iMapOfSets.getEntryWithValue(2).asComparableEntry, Entry("a", ISet<int>({1, 2})));
+    expect(iMapOfSets.getEntryWithValue(3).asComparableEntry, Entry("b", ISet<int>({3})));
     expect(iMapOfSets.getEntryWithValue(4), isNull);
   });
 
@@ -1271,8 +1566,9 @@ void main() {
     ];
 
     for (int i = 0; i < correctFlattenedMap.length; i++) {
-      expect(flattenedIMap[i].asEntry.key, correctFlattenedMap[i].asEntry.key);
-      expect(flattenedIMap[i].asEntry.value, correctFlattenedMap[i].asEntry.value);
+      expect(flattenedIMap[i].asComparableEntry.key, correctFlattenedMap[i].asComparableEntry.key);
+      expect(
+          flattenedIMap[i].asComparableEntry.value, correctFlattenedMap[i].asComparableEntry.value);
     }
   });
 
@@ -1554,8 +1850,9 @@ void main() {
       "3": {10, 11},
     });
     final IMapOfSets<num, num> mappedIMapOfSets = iMapOfSets.map<num, num>(
-        (String key, ISet<int> set) =>
-            MapEntry<num, ISet<num>>(num.parse(key + key), set.cast<num>().toISet()));
+      (String key, ISet<int> set) =>
+          MapEntry<num, ISet<num>>(num.parse(key + key), set.cast<num>().toISet()),
+    );
 
     expect(mappedIMapOfSets, isA<IMapOfSets<num, num>>());
     expect(
@@ -1685,6 +1982,19 @@ void main() {
           "2": <int>{},
           "3": {10, 11},
         }.lock.withConfig(const ConfigMapOfSets(removeEmptySets: false)));
+
+    // 5) Sorted map of sets
+    iMapOfSets = IMapOfSets.empty<String, int>(ConfigMapOfSets(sortKeys: true))
+        .update("z", (ISet<int> value) => {0}.lock, ifAbsent: () => {100}.lock)
+        .update("a", (ISet<int> value) => {0}.lock, ifAbsent: () => {1}.lock)
+        .update("a", (ISet<int> value) => {40}.lock, ifAbsent: () => {0}.lock)
+        .update("c", (ISet<int> value) => {0}.lock, ifAbsent: () => {3}.lock);
+    expect(iMapOfSets.keys, ["a", "c", "z"]);
+    expect(iMapOfSets.sets, [
+      {40},
+      {3},
+      {100}
+    ]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1794,6 +2104,20 @@ void main() {
       1: {"c", "e"},
       2: {"d"},
     });
+
+    // 4) Sorted map of sets
+    final IMapOfSets<int, String> inverted = {
+      "a": {2, 3},
+      "b": {1, 2, 3},
+      "c": {4},
+    }.lock.invertKeysAndValues(config: ConfigMapOfSets(sortKeys: true));
+    expect(inverted.keys, [1, 2, 3, 4]);
+    expect(inverted.sets, [
+      {"b"},
+      {"a", "b"},
+      {"a", "b"},
+      {"c"}
+    ]);
   });
 
   // //////////////////////////////////////////////////////////////////////////////

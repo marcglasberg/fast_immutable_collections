@@ -3,6 +3,17 @@ import "package:fast_immutable_collections/src/base/hash.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
+extension FicIterableOfMapEntryExtension<K, V> on Iterable<MapEntry<K, V>> {
+  /// [MapEntry] is **not** [Comparable].
+  /// If you need to compare two iterables of [MapEntry] you can do this:
+  ///
+  /// expect(entries1.asComparableEntries, entries2.asComparableEntries);
+  /// ```
+  Iterable<Entry<K, V>> get asComparableEntries => map((entry) => entry.asComparableEntry);
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+
 extension FicMapEntryExtension<K, V> on MapEntry<K, V> {
   //
   /// [MapEntry] is **not** [Comparable].
@@ -16,7 +27,7 @@ extension FicMapEntryExtension<K, V> on MapEntry<K, V> {
   /// expect(mapEntry, MapEntry("a", 1));
   ///
   /// // Works!
-  /// expect(mapEntry.asEntry, Entry("a", 1));
+  /// expect(mapEntry.asComparableEntry, Entry("a", 1));
   /// ```
   ///
   /// Note another alternative is to use [containsPair] matcher in the map:
@@ -25,7 +36,7 @@ extension FicMapEntryExtension<K, V> on MapEntry<K, V> {
   /// // See [`containsPair` Matcher](https://pub.dev/documentation/matcher/latest/matcher/containsPair.html)
   /// expect(map, containsPair("a", 1));
   /// ```
-  Entry<K, V> get asEntry => Entry.from<K, V>(this);
+  Entry<K, V> get asComparableEntry => Entry.from<K, V>(this);
 
   /// Compare the `key`s of the map entries, if they are [Comparable].
   /// If the `key`s are the same or not [Comparable], then compare the values,

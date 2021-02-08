@@ -6,7 +6,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("MapEntryExtension.entry", () {
-    final Entry<String, int> entry = MapEntry("a", 1).asEntry;
+    final Entry<String, int> entry = MapEntry("a", 1).asComparableEntry;
 
     expect(entry.key, "a");
     expect(entry.value, 1);

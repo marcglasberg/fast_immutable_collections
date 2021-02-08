@@ -1,5 +1,6 @@
 import "dart:collection";
 import "dart:math";
+import "package:collection/collection.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
@@ -60,12 +61,9 @@ class ISet<T> // ignore: must_be_immutable
   }) {
     assert(mapper != null);
 
-    var result = <T>{};
-    for (I item in iterable) {
-      Iterable<T> ts = mapper(item);
-      result.addAll(ts);
-    }
-    return ISet<T>._unsafeFromSet(result, config: config ?? defaultConfig);
+    config ??= defaultConfig;
+    var result = ListSet.of(iterable.expand(mapper), sort: config.sort);
+    return ISet<T>._unsafeFromSet(result, config: config);
   }
 
   /// Creates a new set with the given [config].
@@ -110,6 +108,12 @@ class ISet<T> // ignore: must_be_immutable
   /// However, you should only use this with a new set you've created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
   /// it will break the [ISet] and any other derived sets in unpredictable ways.
+  ///
+  /// Also, if [config] is [ConfigSet.sort] `true`, it assumes you will pass it a
+  /// sorted set. It will not sort the set for you. In this case, if [set] is
+  /// not sorted, it will break the [ISet] and any other derived sets in unpredictable
+  /// ways.
+  ///
   ISet.unsafe(Set<T> set, {@required this.config})
       : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
     if (ImmutableCollection.disallowUnsafeConstructors)
@@ -248,10 +252,10 @@ class ISet<T> // ignore: must_be_immutable
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable, config: config);
 
-  /// **Unsafe**.
+  /// **Unsafe**. Note: Does not sort.
   ISet._unsafe(this._s, {@required this.config}) : assert(config != null);
 
-  /// **Unsafe**.
+  /// **Unsafe**. Note: Does not sort.
   ISet._unsafeFromSet(Set<T> set, {@required this.config})
       : assert(config != null),
         _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
@@ -329,10 +333,10 @@ class ISet<T> // ignore: must_be_immutable
   /// internal state is better, because it will return true more often.
   ///
   @override
-  bool operator ==(Object other) => (other is ISet<T>)
+  bool operator ==(Object other) => (other is ISet)
       ? isDeepEquals
           ? equalItemsAndConfig(other)
-          : same(other)
+          : (other is ISet<T>) && same(other)
       : false;
 
   /// Returns the concatenation of this set and [other].
@@ -345,30 +349,37 @@ class ISet<T> // ignore: must_be_immutable
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
-  bool equalItems(covariant Iterable<T> other) {
+  bool equalItems(covariant Iterable other) {
     if (identical(this, other)) return true;
 
-    if (other is ISet<T>) {
+    if (other is ISet) {
       if (_isUnequalByHashCode(other)) return false;
-      return (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>);
+      return (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat);
     }
 
     return (other == null) ? false : (flush._s as SFlat<T>).deepSetEqualsToIterable(other);
   }
 
+  /// Will return `true` only if the [ISet] and the iterable items have the same number of elements,
+  /// and the elements of the [ISet] can be paired with the elements of the iterable, so that each
+  /// pair is equal. This may be slow for very large sets, since it compares each item,
+  /// one by one.
+  bool unorderedEqualItems(covariant Iterable other) {
+    if (identical(this, other) || (other is ISet<T> && same(other))) return true;
+    return const UnorderedIterableEquality().equals(_s, other);
+  }
+
   /// Will return `true` only if the list items are equal and the list configurations are equal.
   /// This may be slow for very large sets, since it compares each item, one by one.
   @override
-  bool equalItemsAndConfig(ISet<T> other) {
+  bool equalItemsAndConfig(ISet other) {
     if (identical(this, other)) return true;
 
     // Objects with different hashCodes are not equal.
     if (_isUnequalByHashCode(other)) return false;
 
-    return runtimeType == other.runtimeType &&
-        config == other.config &&
-        (identical(_s, other._s) ||
-            (flush._s as SFlat<T>).deepSetEquals(other.flush._s as SFlat<T>));
+    return config == other.config &&
+        (identical(_s, other._s) || (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCode]s proves the
@@ -379,7 +390,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// Note: We use the **CACHED** hashCodes. If any of the hashCodes is null it
   /// means we don't have this information yet, and we don't calculate it.
-  bool _isUnequalByHashCode(ISet<T> other) {
+  bool _isUnequalByHashCode(ISet other) {
     return (other == null) ||
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
@@ -429,7 +440,10 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a new set containing the current set plus the given item.
   ISet<T> add(T item) {
-    var result = ISet<T>._unsafe(_s.add(item), config: config);
+    ISet<T> result;
+    result = config.sort
+        ? ISet._unsafe(SFlat(_s.followedBy([item]), config: config), config: config)
+        : ISet<T>._unsafe(_s.add(item), config: config);
 
     // A set created with `add` has a larger counter than its source set.
     // This improves the order in which sets are flushed.
@@ -443,8 +457,10 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a new set containing the current set plus all the given items.
   ISet<T> addAll(Iterable<T> items) {
-    var added = _s.addAll(items);
-    var result = ISet<T>._unsafe(added, config: config);
+    ISet<T> result;
+    result = config.sort
+        ? ISet._unsafe(SFlat(_s.followedBy(items), config: config), config: config)
+        : ISet<T>._unsafe(_s.addAll(items), config: config);
 
     // A set created with `addAll` has a larger counter than both its source
     // sets. This improves the order in which sets are flushed.
@@ -471,10 +487,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Removes the element, if it exists in the set.
   /// Otherwise, adds it to the set.
-  ISet<T> toggle(T item) => ISet<T>._unsafe(
-        contains(item) ? _s.remove(item) : _s.add(item),
-        config: config,
-      );
+  ISet<T> toggle(T item) => contains(item) ? remove(item) : add(item);
 
   /// Checks whether any element of this iterable satisfies [test].
   ///
@@ -680,61 +693,41 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns a [List] with all items from the set.
   ///
-  /// 1. If you provide a [compare] function, the list will be sorted with it.
-  ///
-  /// 2. If no [compare] function is provided, the list will be sorted according to the
-  /// set's [config] field:
-  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
-  ///     in other words, with the natural order of items. This assumes the items implement
-  ///     [Comparable]. Otherwise, the list order is by insertion order.
-  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
+  /// If you provide a [compare] function, the list will be sorted with it.
   ///
   @override
-  List<T> toList({bool growable = true, int Function(T a, T b) compare}) {
+  List<T> toList({
+    bool growable = true,
+    int Function(T a, T b) compare,
+  }) {
     _count();
 
     if (config.sort && compare == null) {
       return (flush._s as SFlat<T>).toList(growable: growable);
     } else {
       var result = _s.toList(growable: growable);
-      if (compare != null) {
-        result.sort(compare);
-      }
+      if (compare != null) result.sort(compare);
       return result;
     }
   }
 
   /// Returns a [IList] with all items from the set.
   ///
-  /// 1. If you provide a [compare] function, the list will be sorted with it.
-  ///
-  /// 2. If no [compare] function is provided, the list will be sorted
-  /// according to the set's [ISet.config] field:
-  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
-  ///     in other words, with the natural order of items. This assumes the items implement
-  ///     [Comparable]. Otherwise, the list order is by insertion order.
-  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
+  /// If you provide a [compare] function, the list will be sorted with it.
   ///
   /// You can also provide a [config] for the [IList].
   ///
-  IList<T> toIList({int Function(T a, T b) compare, ConfigList config}) {
+  IList<T> toIList({
+    int Function(T a, T b) compare,
+    ConfigList config,
+  }) {
     _count();
     return IList.fromISet(this, compare: compare, config: config);
   }
 
   /// Returns a [Set] with all items from the [ISet].
   ///
-  /// 1. If you provide a [compare] function, the resulting set will be sorted with it,
-  /// and it will be a [LinkedHashSet], which is **ORDERED**, meaning further iteration of
-  /// its items will maintain insertion order.
-  ///
-  /// 2. If no [compare] function is provided, the list will be sorted according to the
-  /// set's [ISet.config] field:
-  ///     - If [ConfigSet.sort] is `true`, the list will be sorted with `a.compareTo(b)`,
-  ///     in other words, with the natural order of items. This assumes the items implement
-  ///     [Comparable]. Otherwise, the list order is by insertion order.
-  ///     - If [ConfigSet.sort] is `false` (the default), the list order is by insertion order.
-  ///     Note this is the same as unlocking the set with [ISet.unlock].
+  /// If you provide a [compare] function, the resulting set will be sorted with it.
   ///
   @override
   Set<T> toSet({int Function(T a, T b) compare}) {
@@ -784,32 +777,42 @@ class ISet<T> // ignore: must_be_immutable
     return _s.containsAll(other);
   }
 
+  Set<T> _setFromIterable(Iterable<T> other) {
+    Set<T> otherSet;
+    if (other is Set<T>)
+      otherSet = other;
+    else if (other is ISet<T>)
+      otherSet = other.unlockView;
+    else
+      otherSet = Set.of(other);
+    return otherSet;
+  }
+
   /// Returns a new set with the elements of this that are not in [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are not elements of [other] according to `other.contains`.
-  ISet<T> difference(Set<T> other) {
+  ISet<T> difference(Iterable<T> other) {
     _count();
-    return ISet._unsafeFromSet(_s.difference(other), config: config);
+    Set<T> otherSet = _setFromIterable(other);
+    return ISet._unsafeFromSet(_s.difference(otherSet), config: config);
   }
 
   /// Returns a new set which is the intersection between this set and [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are also elements of [other] according to `other.contains`.
-  ISet<T> intersection(Set<T> other) {
+  ISet<T> intersection(Iterable<T> other) {
     _count();
-    return ISet._unsafeFromSet(_s.intersection(other), config: config);
+    Set<T> otherSet = _setFromIterable(other);
+    return ISet._unsafeFromSet(_s.intersection(otherSet), config: config);
   }
 
   /// Returns a new set which contains all the elements of this set and [other].
   ///
   /// That is, the returned set contains all the elements of this [ISet] and
   /// all the elements of [other].
-  ISet<T> union(Set<T> other) {
-    _count();
-    return ISet._unsafeFromSet(_s.union(other), config: config);
-  }
+  ISet<T> union(Iterable<T> other) => addAll(other);
 
   /// If an object equal to [object] is in the set, return it.
   ///
@@ -901,11 +904,9 @@ abstract class S<T> implements Iterable<T> {
   /// Returns a new set containing the current set plus all the given items.
   /// However, if all given items already exists in the set,
   /// it will return the current set (same instance).
+  /// Note: The items of [items] which are already in the original set will be ignored.
   S<T> addAll(Iterable<T> items) {
-    final Set<T> setToBeAdded = {};
-    for (T item in items) {
-      if (!contains(item)) setToBeAdded.add(item);
-    }
+    final Set<T> setToBeAdded = ListSet.of(items.where((item) => !contains(item)));
     return setToBeAdded.isEmpty ? this : SAddAll.unsafe(this, setToBeAdded);
   }
 

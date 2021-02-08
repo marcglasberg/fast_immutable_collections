@@ -219,8 +219,12 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("[]=", () {
-    // TODO: This is not yet supported, but will be in the future.
-    expect(() => ListMap.of({"b": 1, "a": 2, "c": 10})["a"] = 100, throwsUnsupportedError);
+    var listMap = ListMap.of({"b": 1, "a": 2, "c": 10});
+    listMap["a"] = 100;
+    expect(listMap, {"b": 1, "a": 100, "c": 10});
+
+    // This operator is supported only if the key already exists in the map.
+    expect(() => ListMap.of({"b": 1, "a": 2, "c": 10})["x"] = 100, throwsUnsupportedError);
   });
 
   /////////////////////////////////////////////////////////////////////////////

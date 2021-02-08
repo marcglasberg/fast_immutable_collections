@@ -40,25 +40,36 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("asConfigSet", () {
-    expect(ConfigMapOfSets().asConfigSet, const ConfigSet());
-    expect(ConfigMapOfSets(isDeepEquals: false).asConfigSet, const ConfigSet(isDeepEquals: false));
-    expect(ConfigMapOfSets(sortKeys: false).asConfigSet, const ConfigSet());
-    expect(ConfigMapOfSets(sortValues: false).asConfigSet, const ConfigSet(sort: false));
+  test("asConfigMap", () {
+    expect(ConfigMapOfSets().asConfigMap, const ConfigMap());
+    expect(ConfigMapOfSets(isDeepEquals: false).asConfigMap, const ConfigMap(isDeepEquals: false));
+    expect(ConfigMapOfSets(sortKeys: false).asConfigMap, const ConfigMap(sort: false));
+    expect(ConfigMapOfSets(sortKeys: true).asConfigMap, const ConfigMap(sort: true));
+    expect(ConfigMapOfSets(sortValues: false).asConfigMap, const ConfigMap(sort: false));
+    expect(ConfigMapOfSets(sortValues: true).asConfigMap, const ConfigMap(sort: false));
     expect(
-        ConfigMapOfSets(cacheHashCode: false).asConfigSet, const ConfigSet(cacheHashCode: false));
+        ConfigMapOfSets(sortKeys: true, sortValues: true).asConfigMap, const ConfigMap(sort: true));
+    expect(ConfigMapOfSets(sortKeys: false, sortValues: false).asConfigMap,
+        const ConfigMap(sort: false));
+    expect(
+        ConfigMapOfSets(cacheHashCode: false).asConfigMap, const ConfigMap(cacheHashCode: false));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("asConfigMap", () {
-    expect(ConfigMapOfSets().asConfigMap, const ConfigMap());
-    expect(ConfigMapOfSets(isDeepEquals: false).asConfigMap, const ConfigMap(isDeepEquals: false));
-    expect(ConfigMapOfSets(sortKeys: false).asConfigMap, const ConfigMap());
-    expect(ConfigMapOfSets(sortValues: false).asConfigMap,
-        const ConfigMap(sortKeys: false, sortValues: false));
+  test("asConfigSet", () {
+    expect(ConfigMapOfSets().asConfigSet, const ConfigSet());
+    expect(ConfigMapOfSets(isDeepEquals: false).asConfigSet, const ConfigSet(isDeepEquals: false));
+    expect(ConfigMapOfSets(sortKeys: false).asConfigSet, const ConfigSet(sort: false));
+    expect(ConfigMapOfSets(sortKeys: true).asConfigSet, const ConfigSet(sort: false));
+    expect(ConfigMapOfSets(sortValues: false).asConfigSet, const ConfigSet(sort: false));
+    expect(ConfigMapOfSets(sortValues: true).asConfigSet, const ConfigSet(sort: true));
     expect(
-        ConfigMapOfSets(cacheHashCode: false).asConfigMap, const ConfigMap(cacheHashCode: false));
+        ConfigMapOfSets(sortKeys: true, sortValues: true).asConfigSet, const ConfigSet(sort: true));
+    expect(ConfigMapOfSets(sortKeys: false, sortValues: false).asConfigSet,
+        const ConfigSet(sort: false));
+    expect(
+        ConfigMapOfSets(cacheHashCode: false).asConfigSet, const ConfigSet(cacheHashCode: false));
   });
 
   //////////////////////////////////////////////////////////////////////////////

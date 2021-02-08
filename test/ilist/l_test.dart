@@ -1,10 +1,10 @@
 import "dart:collection";
 
-import "package:flutter_test/flutter_test.dart";
-import "package:matcher/matcher.dart";
+import "package:test/test.dart";
 import "package:meta/meta.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "../utils.dart";
 
 /// These tests are mainly for coverage purposes, it tests methods inside the [L] class which were
 /// not reached by its implementations.

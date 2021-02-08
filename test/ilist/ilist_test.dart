@@ -1,10 +1,11 @@
 import "dart:collection";
 import "dart:math";
 
-import "package:flutter_test/flutter_test.dart";
-import "package:matcher/matcher.dart";
+import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
+import "../utils.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -508,6 +509,8 @@ void main() {
     expect(<int>[null, 1, null, 3].lock.add(10), [null, 1, null, 3, 10]);
     expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]);
 
+    var l = [].lock;
+    l.remove(1);
     // 2) Adding null
     expect(<int>[].lock.add(null), [null]);
     expect(<int>[null].lock.add(null), [null, null]);
@@ -1269,6 +1272,12 @@ void main() {
 
   test("setRange", () {
     expect([1, 2, 3, 4].lock.setRange(1, 3, [5, 6, 7, 8, 9].lock, 3), [1, 8, 9, 4]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("replace", () {
+    expect(["do", "re", "mi", "re"].lock.replace(2, "fa"), ["do", "re", "fa", "re"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

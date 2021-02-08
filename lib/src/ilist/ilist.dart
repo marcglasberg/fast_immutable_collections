@@ -13,6 +13,8 @@ import "modifiable_list_from_ilist.dart";
 import "unmodifiable_list_from_ilist.dart";
 
 /// An **immutable** list.
+/// Note The [replace] method is the equivalent of `operator []=` for the [IList].
+///
 @immutable
 class IList<T> // ignore: must_be_immutable
     extends ImmutableCollection<IList<T>> implements Iterable<T> {
@@ -71,6 +73,9 @@ class IList<T> // ignore: must_be_immutable
   IList<T> withConfigFrom(IList<T> other) => withConfig(other.config);
 
   /// Special [IList] constructor from [ISet].
+  ///
+  /// If you provide a [compare] function, the resulting list will be sorted with it.
+  ///
   factory IList.fromISet(
     ISet<T> iset, {
     int Function(T a, T b) compare,
@@ -303,10 +308,10 @@ class IList<T> // ignore: must_be_immutable
   /// internal state is better, because it will return `true` more often.
   ///
   @override
-  bool operator ==(Object other) => (other is IList<T>)
+  bool operator ==(Object other) => (other is IList)
       ? isDeepEquals
           ? equalItemsAndConfig(other)
-          : same(other)
+          : (other is IList<T>) && same(other)
       : false;
 
   /// Will return `true` only if the [IList] items are equal to the iterable items,
@@ -315,12 +320,12 @@ class IList<T> // ignore: must_be_immutable
   /// sets, but unordered sets will throw a `StateError`. To compare the [IList]
   /// with unordered sets, try the [unorderedEqualItems] method.
   @override
-  bool equalItems(covariant Iterable<T> other) {
+  bool equalItems(covariant Iterable other) {
     if (identical(this, other)) return true;
 
-    if (other is IList<T>) {
+    if (other is IList) {
       if (_isUnequalByHashCode(other)) return false;
-      return (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>);
+      return (flush._l as LFlat).deepListEquals(other.flush._l as LFlat);
     }
 
     if (other is List<T>)
@@ -335,7 +340,7 @@ class IList<T> // ignore: must_be_immutable
   /// and the elements of the [IList] can be paired with the elements of the iterable, so that each
   /// pair is equal. This may be slow for very large lists, since it compares each item,
   /// one by one.
-  bool unorderedEqualItems(covariant Iterable<T> other) {
+  bool unorderedEqualItems(covariant Iterable other) {
     if (identical(this, other) || (other is IList<T> && same(other))) return true;
     return const UnorderedIterableEquality().equals(_l, other);
   }
@@ -344,16 +349,14 @@ class IList<T> // ignore: must_be_immutable
   /// and the list configurations are equal. This may be slow for very
   /// large lists, since it compares each item, one by one.
   @override
-  bool equalItemsAndConfig(IList<T> other) {
+  bool equalItemsAndConfig(IList other) {
     if (identical(this, other)) return true;
 
     // Objects with different hashCodes are not equal.
     if (_isUnequalByHashCode(other)) return false;
 
-    return runtimeType == other.runtimeType &&
-        config == other.config &&
-        (identical(_l, other._l) ||
-            (flush._l as LFlat<T>).deepListEquals(other.flush._l as LFlat<T>));
+    return config == other.config &&
+        (identical(_l, other._l) || (flush._l as LFlat).deepListEquals(other.flush._l as LFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCodes] proves the
@@ -363,7 +366,7 @@ class IList<T> // ignore: must_be_immutable
   /// if the [hashCode]s are the same, then nothing can be said about the equality.
   /// Note: We use the CACHED [hashCode]. If any of the [hashCode] is `null` it
   /// means we don't have this information yet, and we don't calculate it.
-  bool _isUnequalByHashCode(IList<T> other) {
+  bool _isUnequalByHashCode(IList other) {
     return (other == null) ||
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
@@ -1203,6 +1206,14 @@ class IList<T> // ignore: must_be_immutable
   IList<T> sublist(int start, [int end]) {
     // TODO: Still need to implement efficiently.
     return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
+  }
+
+  /// The [replace] method is the equivalent of `operator []=` for the [IList].
+  IList<T> replace(int index, T value) {
+    // TODO: Still need to implement efficiently.
+    var newList = toList(growable: false);
+    newList[index] = value;
+    return IList._unsafeFromList(newList, config: config);
   }
 
   /// Inserts the object at position [index] in this list and returns a new immutable list.

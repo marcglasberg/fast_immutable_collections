@@ -1,0 +1,10 @@
+name: example
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=2.10.0 <3.0.0"
+
+dependencies:
+  fast_immutable_collections:
+    path: ../../

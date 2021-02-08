@@ -1,6 +1,8 @@
 import "dart:collection";
-import "package:flutter_test/flutter_test.dart";
+import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
+import "../utils.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -28,9 +30,19 @@ void main() {
     expect(() => ISet.fromIterable([1, 2, 3], mapper: null), throwsAssertionError);
 
     // 2) Regular usage
-    final ISet<int> iset =
+    ISet<int> iset =
         ISet.fromIterable<int, String>(["a", "b", "c"], mapper: (String char) => char.codeUnits);
     expect(iset, {97, 98, 99});
+
+    // 3) With sorting
+    iset = ISet.fromIterable([1, 3, 2],
+        mapper: (int value) => [2 * value], config: const ConfigSet(sort: true));
+
+    expect(iset.config, const ConfigSet(sort: true));
+    expect(iset, [2, 4, 6]);
+    expect(iset.elementAt(0), 2);
+    expect(iset.elementAt(1), 4);
+    expect(iset.elementAt(2), 6);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -331,7 +343,7 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("withConfig", () {
+  test("withConfig factory", () {
     // 1) Regular usage
     final ISet<int> iSet1 = ISet.withConfig({1, 2, 3}, ConfigSet(isDeepEquals: false));
     final ISet<int> iSet2 = ISet.withConfig({}, ConfigSet(isDeepEquals: false));
@@ -352,17 +364,86 @@ void main() {
 
     // 4) Assertion error
     expect(() => {1, 2, 3}.lock.withConfig(null), throwsAssertionError);
+
+    // 5) With sorting
+    ISet<int> iset = ISet.withConfig({1, 3, 2}, ConfigSet(sort: true));
+    expect(iset, [1, 2, 3]);
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 2);
+    expect(iset.elementAt(2), 3);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("Changing configs", () {
+    var iset1 = ISet.withConfig({1, 3, 2}, ConfigSet(sort: true)).withConfig(ConfigSet(sort: true));
+    expect(iset1, [1, 2, 3]);
+    expect(iset1.elementAt(0), 1);
+    expect(iset1.elementAt(1), 2);
+    expect(iset1.elementAt(2), 3);
+
+    var iset2 =
+        ISet.withConfig({1, 3, 2}, ConfigSet(sort: true)).withConfig(ConfigSet(sort: false));
+    expect(iset2, [1, 2, 3]);
+    expect(iset2.elementAt(0), 1);
+    expect(iset2.elementAt(1), 2);
+    expect(iset2.elementAt(2), 3);
+
+    var iset3 =
+        ISet.withConfig({1, 3, 2}, ConfigSet(sort: false)).withConfig(ConfigSet(sort: true));
+    expect(iset3, [1, 2, 3]);
+    expect(iset3.elementAt(0), 1);
+    expect(iset3.elementAt(1), 2);
+    expect(iset3.elementAt(2), 3);
+
+    var iset4 =
+        ISet.withConfig({1, 3, 2}, ConfigSet(sort: false)).withConfig(ConfigSet(sort: false));
+    expect(iset4, [1, 3, 2]);
+    expect(iset4.elementAt(0), 1);
+    expect(iset4.elementAt(1), 3);
+    expect(iset4.elementAt(2), 2);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("withConfigFrom", () {
-    final ISet<int> iset = {1, 2, 3}.lock;
-    final ISet<int> iSetWithIdentityEquals =
+    // 1) Regular usage
+    ISet<int> iset = {1, 3, 2}.lock;
+    ISet<int> iSetWithIdentityEquals =
         ISet.withConfig({1, 2, 3}, const ConfigSet(isDeepEquals: false));
 
+    expect(iset.withConfigFrom(iSetWithIdentityEquals), [1, 3, 2]);
     expect(
         iset.withConfigFrom(iSetWithIdentityEquals).config, const ConfigSet(isDeepEquals: false));
+
+    // 2) With sorting
+    iset = {1, 3, 2}.lock.withConfigFrom(ISet.withConfig({}, ConfigSet(sort: true)));
+    expect(iset, [1, 2, 3]);
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 2);
+    expect(iset.elementAt(2), 3);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("withConfig method", () {
+    // 1) Regular usage
+    ISet<int> iset = {1, 3, 2}.lock.withConfig(ConfigSet(isDeepEquals: false));
+
+    expect(iset.config, ConfigSet(isDeepEquals: false));
+    expect(iset, [1, 3, 2]);
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 2);
+
+    // 2) With sorting
+    iset = {1, 3, 2}.lock.withConfig(ConfigSet(sort: true));
+
+    expect(iset.config, ConfigSet(sort: true));
+    expect(iset, [1, 2, 3]);
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 2);
+    expect(iset.elementAt(2), 3);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -380,7 +461,9 @@ void main() {
   test("unsafe", () {
     // 1) Regular Usage
     Set<int> set = {1, 2, 3};
-    final ISet<int> iset = ISet.unsafe(set, config: ConfigSet());
+    ISet<int> iset = ISet.unsafe(set, config: ConfigSet(isDeepEquals: true));
+
+    expect(iset.config, ConfigSet(isDeepEquals: true));
 
     expect(set, {1, 2, 3});
     expect(iset, {1, 2, 3});
@@ -390,11 +473,43 @@ void main() {
     expect(set, {1, 2, 3, 4});
     expect(iset, {1, 2, 3, 4});
 
-    // 2) Disallowing it
+    // 2) With sort true, will break the set if it is not already sorted.
+    iset = ISet.unsafe({1, 3, 2}, config: const ConfigSet(sort: true));
+
+    // Broken!
+    expect(iset.config, const ConfigSet(sort: true));
+    expect(iset, [1, 3, 2]);
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 2);
+
+    // 3) Disallowing it
     ImmutableCollection.disallowUnsafeConstructors = true;
     set = {1, 2, 3};
 
     expect(() => ISet.unsafe(set, config: ConfigSet()), throwsUnsupportedError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("empty", () {
+    // 1) Regular usage
+    ISet<int> iset = ISet.empty<int>();
+    iset = iset.addAll({2, 3}).add(1);
+
+    expect(iset, [2, 3, 1]);
+    expect(iset.elementAt(0), 2);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 1);
+
+    // 2) With sorting
+    iset = ISet.empty<int>(const ConfigSet(sort: true));
+    iset = iset.addAll({2, 3}).add(1);
+
+    expect(iset, [1, 2, 3]);
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 2);
+    expect(iset.elementAt(2), 3);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -441,6 +556,23 @@ void main() {
     expect(<int>{1}.lock.add(null), {1, null});
     expect(<int>{null, 1, 3}.lock.add(null), {null, 1, 3});
     expect({1, 2, 3}.lock.add(null), {1, 2, 3, null});
+
+    // 4) With sort
+    iset = <int>{}.lock.withConfig(ConfigSet(sort: true)).add(1).add(20).add(3).add(20);
+
+    expect(iset.config, ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 20);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(3), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 3);
+    expect(iset[2], 20);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[3], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -487,6 +619,32 @@ void main() {
     expect(<int>{1}.lock.addAll({null, 2}), {1, null, 2});
     expect(<int>{null, 1, 3}.lock.addAll({null, 1}), {null, 1, 3});
     expect({1, 2, 3, 4}.lock.addAll({null, 1}), {1, 2, 3, 4, null});
+
+    // 4) With sort
+    iset = <int>{}
+        .lock
+        .withConfig(const ConfigSet(sort: true))
+        .addAll({1, 100})
+        .add(20)
+        .addAll({3, 100, 10});
+
+    expect(iset.config, const ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 10);
+    expect(iset.elementAt(3), 20);
+    expect(iset.elementAt(4), 100);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(5), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 3);
+    expect(iset[2], 10);
+    expect(iset[3], 20);
+    expect(iset[4], 100);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[5], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -515,6 +673,23 @@ void main() {
     expect(<int>{1}.lock + {null, 2}, {1, null, 2});
     expect(<int>{null, 1, 3}.lock + {null, 1}, {null, 1, 3});
     expect({1, 2, 3, 4}.lock + {null, 1}, {1, 2, 3, 4, null});
+
+    // 4) With sort
+    final ISet<int> iset = <int>{}.lock.withConfig(ConfigSet(sort: true)) + {1} + {20, 3} + {20};
+
+    expect(iset.config, ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 20);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(3), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 3);
+    expect(iset[2], 20);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[3], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -1018,12 +1193,40 @@ void main() {
 
     iset = iset.toggle(4);
     expect(iset.contains(4), isFalse);
+
+    // 2) With sort
+    iset = <int>{}
+        .lock
+        .withConfig(ConfigSet(sort: true))
+        .toggle(1)
+        .toggle(20)
+        .toggle(3)
+        .toggle(2)
+        .toggle(10)
+        .toggle(20);
+
+    expect(iset.config, ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 2);
+    expect(iset.elementAt(2), 3);
+    expect(iset.elementAt(3), 10);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(4), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 2);
+    expect(iset[2], 3);
+    expect(iset[3], 10);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[4], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("elementAt", () {
-    final ISet<int> iset = {1, 20, 3}.lock;
+  test("elementAt | []", () {
+    // 1) Regular usage
+    ISet<int> iset = {1, 20, 3}.lock;
 
     expect(iset.elementAt(0), 1);
     expect(iset.elementAt(1), 20);
@@ -1082,6 +1285,27 @@ void main() {
     final ISet<int> iSet = {1, 2, 3, 4}.lock;
     expect(iSet.union({1}), {1, 2, 3, 4});
     expect(iSet.union({1, 2, 5}), {1, 2, 3, 4, 5});
+
+    // With sort == true
+    final ISet<int> iset = <int>{1, 20, 3}.lock.withConfig(ConfigSet(sort: true)).union({10, 4});
+
+    expect(iset.config, ConfigSet(sort: true));
+
+    expect(iset.elementAt(0), 1);
+    expect(iset.elementAt(1), 3);
+    expect(iset.elementAt(2), 4);
+    expect(iset.elementAt(3), 10);
+    expect(iset.elementAt(4), 20);
+    expect(() => iset.elementAt(-1), throwsRangeError);
+    expect(() => iset.elementAt(5), throwsRangeError);
+
+    expect(iset[0], 1);
+    expect(iset[1], 3);
+    expect(iset[2], 4);
+    expect(iset[3], 10);
+    expect(iset[4], 20);
+    expect(() => iset[-1], throwsRangeError);
+    expect(() => iset[5], throwsRangeError);
   });
 
   /////////////////////////////////////////////////////////////////////////////

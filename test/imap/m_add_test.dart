@@ -217,5 +217,35 @@ void main() {
     expect(m.unlock, <String, int>{"a": 1, "b": 2});
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("AddAll", () {
+    // keepOrder: false
+    expect(
+        MFlat({"a": 1, "b": 2, "c": 3})
+            .addAll({"a": 1, "b": 8, "d": 10}.lock)
+            .entries
+            .asComparableEntries,
+        [
+          MapEntry("c", 3),
+          MapEntry("a", 1),
+          MapEntry("b", 8),
+          MapEntry("d", 10),
+        ].asComparableEntries);
+
+    // keepOrder: true
+    expect(
+        MFlat({"a": 1, "b": 2, "c": 3})
+            .addAll({"a": 1, "b": 8, "d": 10}.lock, keepOrder: true)
+            .entries
+            .asComparableEntries,
+        [
+          MapEntry("a", 1),
+          MapEntry("b", 8),
+          MapEntry("c", 3),
+          MapEntry("d", 10),
+        ].asComparableEntries);
+  });
+
   /////////////////////////////////////////////////////////////////////////////
 }
