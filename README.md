@@ -16,6 +16,9 @@
 myself,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
 
+<!-- > Click <a href="https://medium.com/@marcglasberg/5eb091d1e31f">here</a> to check out Marcelo's article on Medium.  -->
+<!-- > Or <a href="https://fanaro.io/articles/fic/fic.html">here</a> to check out Philippe Fanaro's on his website, <a href="https://fanaro.io">fanaro.io</a>. -->
+
 ## 1.1. Introduction
 
 This package, called **FIC** for short, provides:
