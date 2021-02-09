@@ -36,17 +36,17 @@ extension FicSetExtension<T> on Set<T> {
   /// 1) Items of this set which are NOT in [other] (difference this - other), in this set's order.
   /// 2) Items of [other] which are NOT in this set (difference other - this), in [other]'s order.
   /// 3) Items of this set which are also in [other], in this set's order.
-  /// 4) Items of [other] which are also in this set, in [other]'s order.
+  /// 4) Items of this set which are also in [other], in [other]'s order.
   ///
-  IListOf4<List<T>> diffAndIntersect<G extends T>(
-      Set<G> other, {
-        bool diffThisMinusOther = true,
-        bool diffOtherMinusThis = true,
-        bool intersectThisWithOther = true,
-        bool intersectOtherWithThis = true,
-      }) {
+  IListOf4<List> diffAndIntersect<G>(
+    Set<G> other, {
+    bool diffThisMinusOther = true,
+    bool diffOtherMinusThis = true,
+    bool intersectThisWithOther = true,
+    bool intersectOtherWithThis = true,
+  }) {
     List<T> _differenceThisMinusOther = diffThisMinusOther ? [] : null;
-    List<T> _differenceOtherMinusThis = diffOtherMinusThis ? [] : null;
+    List<G> _differenceOtherMinusThis = diffOtherMinusThis ? [] : null;
     List<T> _intersectionOfThisWithOther = intersectThisWithOther ? [] : null;
     List<T> _intersectionOfOtherWithThis = intersectOtherWithThis ? [] : null;
 
@@ -61,7 +61,7 @@ extension FicSetExtension<T> on Set<T> {
     if (diffOtherMinusThis || intersectOtherWithThis)
       for (var element in other) {
         if (contains(element))
-          _intersectionOfOtherWithThis?.add(element);
+          _intersectionOfOtherWithThis?.add(element as T);
         else
           _differenceOtherMinusThis?.add(element);
       }
@@ -73,5 +73,4 @@ extension FicSetExtension<T> on Set<T> {
       _intersectionOfOtherWithThis,
     );
   }
-
 }

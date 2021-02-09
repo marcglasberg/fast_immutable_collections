@@ -1,4 +1,4 @@
-## [1.0.27] - 2021/02/09
+## [1.0.28] - 2021/02/09
 
 * More efficient Iterable.sortedLike() and List.sortLike() extensions.
 * Set.diffAndIntersect(), Iterable.everyIs() and Iterable.anyIs() extensions.

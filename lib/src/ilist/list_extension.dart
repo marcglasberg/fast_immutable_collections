@@ -38,7 +38,7 @@ extension FicListExtension<T> on List<T> {
   /// Items which don't appear in [ordering] will be included in the end, in their original order.
   /// Items of [ordering] which are not found in the original list are ignored.
   ///
-  void sortLike<G extends T>(Iterable<G> ordering) {
+  void sortLike(Iterable ordering) {
     List<T> result = sortedLike(ordering);
     clear();
     addAll(result);
