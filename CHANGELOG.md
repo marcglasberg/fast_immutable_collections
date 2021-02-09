@@ -1,3 +1,8 @@
+## [1.0.27] - 2021/02/09
+
+* More efficient Iterable.sortedLike() and List.sortLike() extensions.
+* Set.diffAndIntersect(), Iterable.everyIs() and Iterable.anyIs() extensions.
+
 ## [1.0.26] - 2021/01/28
 
 * Better generics compatibility for `equalItemsAndConfig`.
