@@ -15,6 +15,9 @@
 > _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and myself,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
 
+<!-- > Click <a href="https://medium.com/@marcglasberg/5eb091d1e31f">here</a> to check out Marcelo's article on Medium, a more succinct straight to the point version of this more thorough documentation.  -->
+<!-- > Or <a href="https://fanaro.io/articles/fic/fic.html">here</a> to check out Philippe Fanaro's on his website, <a href="https://fanaro.io">fanaro.io</a>. -->
+
 ## 1.1. Introduction
 
 This package, called **FIC** for short, provides:
@@ -72,7 +75,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
 </p>
 
 <p align="center">
-  <sub>The <a href="benchmark/benchmark_app/"><code>benchmark_app</code></a> app for comparing this package's collections to others. Use it preferably in <em>release mode</em>.</sub>
+  <sub>The <a href="https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark/benchmark_app"><code>benchmark_app</code></a> app for comparing this package's collections to others. Use it preferably in <em>release mode</em>.</sub>
 </p>
 
 [built_collection]: https://pub.dev/packages/built_collection
@@ -854,12 +857,12 @@ You can globally change this default if you want, by using the `defaultConfig` s
 Note that `ConfigSet` is similar to `ConfigList`, but it has the extra parameter `sort`:
 
 ```
-/// Prints sorted: "1,2,3,4,9"
+/// The default is to use insertion order. Prints: "2,4,1,9,3"
 var iset = {2, 4, 1, 9, 3}.lock;  
 print(iset.join(","));
 
-/// Prints in any order: "2,4,1,9,3"
-var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: false));  
+/// Prints sorted: "1,2,3,4,9"
+var iset = {2, 4, 1, 9, 3}.lock.withConfig(ConfigSet(sort: true));  
 print(iset.join(","));
 ```
 
@@ -1155,7 +1158,7 @@ expect(set.contains(2), isTrue);
 ```
 
 When viewed as a `Set` and compared to a `LinkedHashSet`, a `ListSet` is also ordered and has a
-similar performance. But a `ListSet` takes less memory and can be sorted or otherwise rearanged,
+similar performance. But a `ListSet` takes less memory and can be sorted or otherwise rearranged,
 just like a list. Also, you can directly get its items by index, very efficiently (constant time).
 
 The disadvantage, of course, is that `ListSet` has a fixed size, while a `LinkedHashSet` does not.
@@ -1377,7 +1380,7 @@ the case, you can provide a `mapper` function, to convert the values into the `o
 the [`sort_test.dart`][sort_test]
 file for more information and runnable examples.
 
-[sort_test]: test/base/sort_test.dart
+[sort_test]: https://github.com/marcglasberg/fast_immutable_collections/tree/master/test/base/sort_test.dart
 
 ## 9.5. if0 extension
 
@@ -1578,11 +1581,9 @@ many collection operations within **FIC** which are not yet made as efficient as
 these corresponding methods are marked with `// TODO: Still needs to implement efficiently` and will
 be updated in future versions.
 
-[benchmark]: benchmark/
+[benchmark]: https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark
 
-[benchmark_app]: benchmark/benchmark_app/
-
-[benchmark_docs]: benchmark/README.md
+[benchmark_docs]: https://github.com/marcglasberg/fast_immutable_collections/blob/master/example/benchmark/README.md
 
 <br>
 
