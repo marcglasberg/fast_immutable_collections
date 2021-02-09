@@ -58,9 +58,7 @@ void main() {
 
   test("sortLike", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
-
     list.sortLike([1, 2, 3]);
-
     expect(list, [1, 2, 3, 4, 10, 5]);
   });
 

@@ -498,9 +498,13 @@ void main() {
     expect(<int>[].sortedLike([1, 2, 3]), isEmpty);
     expect([2, 3].sortedLike([1, 2]), [2, 3]);
     expect([3, 4, 5, 6, 7].sortedLike([5, 4, 3, 2, 1]), [5, 4, 3, 6, 7]);
+    expect([3, 4, 5, 7, 6].sortedLike([5, 4, 3, 2, 1]), [5, 4, 3, 7, 6]);
     expect([7, 3, 4, 6].sortedLike([5, 4, 3, 2, 1]), [4, 3, 7, 6]);
-    expect([2, 3, 1].sortedLike([1, 2, 2, 1]), [1, 2, 2, 1, 3]);
-    expect([3, 2].sortedLike([1, 2, 3, 2, 1]), [2, 3, 2]);
+    expect([2, 3, 1].sortedLike([1, 2, 2, 1]), [1, 2, 3]);
+    expect([3, 2].sortedLike([3, 1, 2, 3, 2, 1]), [3, 2]);
+    expect([3, 2].sortedLike([1, 5, 2]), [2, 3]);
+    expect([3, 2].sortedLike([10, 50, 20]), [3, 2]);
+    expect([3, 2].sortedLike([1, 2, 3, 2, 1]), [2, 3]);
   });
 
   // /////////////////////////////////////////////////////////////////////////////

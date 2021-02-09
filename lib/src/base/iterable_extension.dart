@@ -116,6 +116,12 @@ extension FicIterableExtension<T> on Iterable<T> {
     return duplicates;
   }
 
+  /// Returns true if all items are equal to [value].
+  bool everyIs(T value) => every((item) => item == value);
+
+  /// Returns true if any item is equal to [value].
+  bool anyIs(T value) => any((item) => item == value);
+
   /// Removes `null`s from the [Iterable].
   Iterable<T> removeNulls() sync* {
     for (T item in this) {
@@ -164,17 +170,24 @@ extension FicIterableExtension<T> on Iterable<T> {
   }
 
   /// Returns a list, sorted according to the order specified by the [ordering] iterable.
-  /// Items which don't appear in [ordering] will be included in the end, in no particular order.
+  /// Items which don't appear in [ordering] will be included in the end, in their original order.
+  /// Items of [ordering] which are not found in the original list are ignored.
   ///
-  List<T> sortedLike(Iterable<T> ordering) {
-    // TODO: Still need to implement efficiently.
+  List<T> sortedLike<G extends T>(Iterable<G> ordering) {
     assert(ordering != null);
-    Set<T> originalSet = Set.of(ordering);
-    Set<T> newSet = (this is Set<T>) ? (this as Set<T>) : Set.of(this);
-    Set<T> intersection = originalSet.intersection(newSet);
-    Set<T> difference = newSet.difference(originalSet);
-    List<T> result = ordering.where((element) => intersection.contains(element)).toList();
-    result.addAll(difference);
-    return result;
+    Set<T> thisSet = Set.of(this);
+    Set<G> otherSet = Set.of(ordering);
+
+    IListOf4<List<T>> result = thisSet.diffAndIntersect(
+      otherSet,
+      diffThisMinusOther: true,
+      diffOtherMinusThis: false,
+      intersectThisWithOther: false,
+      intersectOtherWithThis: true,
+    );
+
+    List<T> intersectOtherWithThis = result.fourth;
+    List<T> diffThisMinusOther = result.first;
+    return intersectOtherWithThis.followedBy(diffThisMinusOther).toList();
   }
 }

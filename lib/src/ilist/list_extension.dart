@@ -35,13 +35,11 @@ extension FicListExtension<T> on List<T> {
   }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
-  /// Items which don't appear in [ordering] will be included in the end, in no particular order.
+  /// Items which don't appear in [ordering] will be included in the end, in their original order.
+  /// Items of [ordering] which are not found in the original list are ignored.
   ///
-  /// Note: Not very efficient at the moment (will be improved in the future).
-  /// Please use for a small number of items.
-  ///
-  void sortLike(Iterable<T> ordering) {
-    var result = sortedLike(ordering);
+  void sortLike<G extends T>(Iterable<G> ordering) {
+    List<T> result = sortedLike(ordering);
     clear();
     addAll(result);
   }

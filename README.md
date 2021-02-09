@@ -1187,9 +1187,14 @@ These are some of the provided helpers and extensions:
 * `Iterable.isNullOrEmpty`, `Iterable.isNotNullOrEmpty` and `Iterable.isEmptyButNotNull`.
 
 * `Iterable.deepEquals` compare all items, in order, using `operator ==`.
+
 * `Iterable.deepEqualsByIdentity` compare all items, in order, using `identical`.
 
 * `Iterable.findDuplicates` finds duplicates and then returns a set with the duplicated elements.
+
+* `Iterable.everyIs` returns true if all items are equal to some value.
+
+* `Iterable.anyIs` returns true if any item is equal to some value.
 
 * `Iterable.removeNulls` removes `null`s from the iterable.
 
