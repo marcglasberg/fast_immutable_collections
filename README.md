@@ -17,6 +17,7 @@
 
 > Click <a href="https://medium.com/@marcglasberg/5eb091d1e31f">here</a> to check out Marcelo's article on Medium, a more succinct straight to the point version of this more thorough documentation. <br>
 > Or <a href="https://fanaro.io/articles/fic/fic.html">here</a> to check out Philippe Fanaro's own article on his website, <a href="https://fanaro.io">fanaro.io</a>.
+
 ## 1.1. Introduction
 
 This package, called **FIC** for short, provides:
