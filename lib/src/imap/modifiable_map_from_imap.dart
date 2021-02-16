@@ -15,29 +15,29 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 ///
 /// See also: [UnmodifiableMapFromIMap]
 ///
-class ModifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeEmpty {
-  IMap<K, V> _iMap;
-  Map<K, V> _map;
+class ModifiableMapFromIMap<K, V> with MapMixin<K?, V> implements Map<K, V>, CanBeEmpty {
+  IMap<K?, V>? _iMap;
+  Map<K?, V?>? _map;
 
-  ModifiableMapFromIMap(IMap<K, V> imap)
+  ModifiableMapFromIMap(IMap<K, V>? imap)
       : _iMap = imap,
         _map = imap == null ? {} : null;
 
   @override
-  void operator []=(K key, V value) {
+  void operator []=(K? key, V value) {
     _switchToMutableMapIfNecessary();
-    _map[key] = value;
+    _map![key] = value;
   }
 
   void _switchToMutableMapIfNecessary() {
     if (_map == null) {
-      _map = _iMap.unlock;
+      _map = _iMap!.unlock;
       _iMap = null;
     }
   }
 
   @override
-  V operator [](Object key) => _iMap != null ? _iMap[key as K] : _map[key];
+  V? operator [](Object? key) => _iMap != null ? _iMap![key as K?] : _map![key as K?];
 
   @override
   void clear() {
@@ -46,15 +46,15 @@ class ModifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, CanB
   }
 
   @override
-  V remove(Object key) {
+  V? remove(Object? key) {
     _switchToMutableMapIfNecessary();
     return _mapRemove(key);
   }
 
-  V _mapRemove(Object key) {
-    if (_map.containsKey(key)) {
-      final V value = _map[key];
-      _map.remove(key);
+  V? _mapRemove(Object? key) {
+    if (_map!.containsKey(key)) {
+      final V? value = _map![key as K?];
+      _map!.remove(key);
       return value;
     } else {
       return null;
@@ -62,7 +62,7 @@ class ModifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, CanB
   }
 
   @override
-  Iterable<K> get keys => _iMap?.keys ?? _map.keys;
+  Iterable<K?> get keys => _iMap?.keys ?? _map!.keys;
 
-  IMap<K, V> get lock => _iMap ?? _map.lock;
+  IMap<K?, V?> get lock => _iMap ?? _map.lock;
 }

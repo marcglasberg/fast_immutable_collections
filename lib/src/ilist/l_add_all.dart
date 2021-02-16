@@ -1,6 +1,5 @@
 import "ilist.dart";
-
-// /////////////////////////////////////////////////////////////////////////////
+import 'iterator_add_all.dart';
 
 /// First we have the items in [_l] and then the items in [_listOrL].
 ///
@@ -13,16 +12,14 @@ class LAddAll<T> extends L<T> {
   /// **Safe**.
   /// Note: If you need to pass an [IList], pass its [L] instead.
   LAddAll(this._l, Iterable<T> items)
-      : assert(_l != null),
-        assert(items != null),
-        assert(items is! IList),
+      : assert(items is! IList),
         _listOrL = (items is L) ? items : List.of(items, growable: false);
 
   @override
   bool get isEmpty => _l.isEmpty && _listOrL.isEmpty;
 
   @override
-  Iterator<T> get iterator => IteratorLAddAll(_l.iterator, _listOrL);
+  Iterator<T> get iterator => IteratorAddAll(_l.iterator, _listOrL);
 
   @override
   Iterable<T> get iter => _l.followedBy(_listOrL);
@@ -59,38 +56,3 @@ class LAddAll<T> extends L<T> {
   @override
   T get single => _l.isNotEmpty ? _l.single : _listOrL.single;
 }
-
-// /////////////////////////////////////////////////////////////////////////////
-
-class IteratorLAddAll<T> implements Iterator<T> {
-  Iterator<T> iterator, iteratorItems;
-  Iterable<T> items;
-  T _current;
-  int extraMove;
-
-  IteratorLAddAll(this.iterator, this.items)
-      : _current = iterator.current,
-        extraMove = 0;
-
-  @override
-  T get current => _current;
-
-  @override
-  bool moveNext() {
-    bool isMoving = iterator.moveNext();
-    if (isMoving) {
-      _current = iterator.current;
-    } else {
-      iteratorItems ??= items.iterator;
-      isMoving = iteratorItems.moveNext();
-      if (isMoving) {
-        _current = iteratorItems.current;
-      } else {
-        _current = null;
-      }
-    }
-    return isMoving;
-  }
-}
-
-// /////////////////////////////////////////////////////////////////////////////

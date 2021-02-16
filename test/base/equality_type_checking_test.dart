@@ -17,7 +17,7 @@ void main() {
   test("IList deep equality ignores type parameter.", () {
     //
     IList<Supertype> ilist1 = IList(<Subtype>[obj1, obj2, obj3]);
-    IList<Supertype> ilist2 = [obj1, obj2, obj3].lock;
+    IList<Supertype> ilist2 = [obj1, obj2, obj3].lock as IList<Supertype>;
 
     expect(ilist1.runtimeType.toString(), "IList<Supertype>");
     expect(ilist2.runtimeType.toString(), "IList<Subtype>");
@@ -44,7 +44,7 @@ void main() {
   test("ISet deep equality ignores type parameter.", () {
     //
     ISet<Supertype> iset1 = ISet(<Subtype>[obj1, obj2, obj3]);
-    ISet<Supertype> iset2 = {obj1, obj2, obj3}.lock;
+    ISet<Supertype> iset2 = {obj1, obj2, obj3}.lock as ISet<Supertype>;
 
     expect(iset1.runtimeType.toString(), "ISet<Supertype>");
     expect(iset2.runtimeType.toString(), "ISet<Subtype>");
@@ -70,7 +70,7 @@ void main() {
   test("IMap deep equality ignores type parameter of keys", () {
     //
     IMap<Supertype, String> imap1 = IMap(<Subtype, String>{obj1: "a", obj2: "a", obj3: "a"});
-    IMap<Supertype, String> imap2 = {obj1: "a", obj2: "a", obj3: "a"}.lock;
+    IMap<Supertype, String> imap2 = {obj1: "a", obj2: "a", obj3: "a"}.lock as IMap<Supertype, String>;
 
     expect(imap1.runtimeType.toString(), "IMap<Supertype, String>");
     expect(imap2.runtimeType.toString(), "IMap<Subtype, String>");
@@ -96,7 +96,7 @@ void main() {
   test("IMap deep equality ignores type parameter of values", () {
     //
     IMap<String, Supertype> imap1 = IMap(<String, Subtype>{"a": obj1, "b": obj2, "c": obj3});
-    IMap<String, Supertype> imap2 = {"a": obj1, "b": obj2, "c": obj3}.lock;
+    IMap<String, Supertype> imap2 = {"a": obj1, "b": obj2, "c": obj3}.lock as IMap<String, Supertype>;
 
     expect(imap1.runtimeType.toString(), "IMap<String, Supertype>");
     expect(imap2.runtimeType.toString(), "IMap<String, Subtype>");

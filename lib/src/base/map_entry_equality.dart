@@ -8,17 +8,17 @@ class MapEntryEquality<E> implements Equality<E> {
   const MapEntryEquality();
 
   @override
-  bool equals(Object obj1, Object obj2) => //
+  bool equals(Object? obj1, Object? obj2) => //
       (obj1 is MapEntry && obj2 is MapEntry) //
           ? obj1.key == obj2.key && obj1.value == obj2.value
           : obj1 == obj2;
 
   @override
-  int hash(Object obj) => //
+  int hash(Object? obj) => //
       (obj is MapEntry) //
           ? hashObj2(obj.key, obj.value)
           : obj.hashCode;
 
   @override
-  bool isValidKey(Object o) => true;
+  bool isValidKey(Object? o) => true;
 }

@@ -16,7 +16,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The set is flushed. Counter is 0.
-    var iset = {1, 2, 3, 4}.lock;
+    var iset = {1, 2, 3, 4}.lock as ISet<int>;
     expect(iset.isFlushed, isTrue);
     expect(iset.counter, 0);
 
@@ -53,7 +53,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The set is flushed. Counter is 0.
-    var iset = {1, 2, 3, 4}.lock;
+    var iset = {1, 2, 3, 4}.lock as ISet<int>;
     expect(iset.isFlushed, isTrue);
     expect(iset.counter, 0);
 
@@ -90,7 +90,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The set is flushed. Counter is 0.
-    var iset = {1, 2, 3, 4}.lock;
+    var iset = {1, 2, 3, 4}.lock as ISet<int>;
     expect(iset.isFlushed, isTrue);
 
     // We add a value, so that the set is NOT flushed.
@@ -212,7 +212,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The set is flushed. Counter is 0.
-    var iset = {1, 2, 3, 4}.lock;
+    var iset = {1, 2, 3, 4}.lock as ISet<int>;
     expect(iset.isFlushed, isTrue);
 
     // We add a value, so that the set is NOT flushed.
@@ -304,7 +304,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The set is flushed. Counter is 0.
-    var iset1 = {1, 2, 3, 4}.lock;
+    var iset1 = {1, 2, 3, 4}.lock as ISet<int>;
     expect(iset1.isFlushed, isTrue);
 
     var iset2 = iset1.add(1);

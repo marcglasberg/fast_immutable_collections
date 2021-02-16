@@ -256,23 +256,23 @@ void main() {
 
     // 2) Regular Usage
     expect(ListSetView(<int>{}) + [1, 2], {1, 2});
-    expect(ListSetView(<int>{null}) + [1, 2], {null, 1, 2});
+    expect(ListSetView(<int?>{null}) + [1, 2], {null, 1, 2});
     expect(ListSetView(<int>{1}) + [2, 3], {1, 2, 3});
-    expect(ListSetView(<int>{null, 1, 3}) + [10, 11], {null, 1, 3, 10, 11});
+    expect(ListSetView(<int?>{null, 1, 3}) + [10, 11], {null, 1, 3, 10, 11});
     expect(ListSetView({1, 2, 3, 4}) + [5, 6], {1, 2, 3, 4, 5, 6});
 
     // 3) Adding nulls
     expect(ListSetView(<int>{}) + [null], {null});
-    expect(ListSetView(<int>{null}) + [null], {null});
+    expect(ListSetView(<int?>{null}) + [null], {null});
     expect(ListSetView(<int>{1}) + [null], {1, null});
-    expect(ListSetView(<int>{null, 1, 3}) + [null], {null, 1, 3});
+    expect(ListSetView(<int?>{null, 1, 3}) + [null], {null, 1, 3});
     expect(ListSetView({1, 2, 3, 4}) + [null], {1, 2, 3, 4, null});
 
     // 4) Adding null and an item
     expect(ListSetView(<int>{}) + [null, 1], {null, 1});
-    expect(ListSetView(<int>{null}) + [null, 1], {null, 1});
+    expect(ListSetView(<int?>{null}) + [null, 1], {null, 1});
     expect(ListSetView(<int>{1}) + [null, 2], {1, null, 2});
-    expect(ListSetView(<int>{null, 1, 3}) + [null, 1], {null, 1, 3});
+    expect(ListSetView(<int?>{null, 1, 3}) + [null, 1], {null, 1, 3});
     expect(ListSetView({1, 2, 3, 4}) + [null, 1], {1, 2, 3, 4, null});
   });
 
@@ -412,7 +412,7 @@ void main() {
 
   test("map", () {
     final ListSetView<int> listSetView = ListSetView({1, 2, 3, 4, 5, 6});
-    expect({1, 2, 3}.lock.map((int v) => v + 1), {2, 3, 4});
+    expect({1, 2, 3}.lock.map(((int v) => v + 1) as _ Function(int?)), {2, 3, 4});
     expect(listSetView.map((int v) => v + 1), {2, 3, 4, 5, 6, 7});
   });
 
@@ -422,7 +422,7 @@ void main() {
     // 1) Regular usage
     final ListSetView<int> listSetView = ListSetView({1, 2, 3, 4, 5, 6});
     expect(listSetView.reduce((int p, int e) => p * (1 + e)), 2520);
-    expect({5}.lock.reduce((int p, int e) => p * (1 + e)), 5);
+    expect({5}.lock.reduce(((int p, int e) => p * (1 + e)) as int? Function(int?, int?)), 5);
 
     // 2) Exception
     expect(() => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);

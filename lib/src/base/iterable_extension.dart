@@ -37,20 +37,16 @@ Iterable<R> combineIterables<A, B, R>(
 // ////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicListExtension], [FicSetExtension]
-extension FicIterableExtension<T> on Iterable<T> {
+extension FicIterableExtensionNullable<T> on Iterable<T>? {
   //
-  /// Creates an *immutable* list ([IList]) from the iterable.
-  IList<T> toIList([ConfigList config]) =>
-      (this == null) ? null : IList<T>.withConfig(this, config);
-
   /// Creates an *immutable* set ([ISet]) from the iterable.
-  ISet<T> toISet([ConfigSet config]) => (this == null) ? null : ISet<T>.withConfig(this, config);
+  ISet<T>? toISet([ConfigSet? config]) => (this == null) ? null : ISet<T>.withConfig(this, config);
 
-  bool get isNullOrEmpty => (this == null) || isEmpty;
+  bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
-  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
+  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
 
-  bool get isEmptyButNotNull => (this != null) && isEmpty;
+  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
 
   /// Compare all items, in order or not, according to [ignoreOrder],
   /// using [operator ==]. Return true if they are all the same,
@@ -63,7 +59,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// iterable1.deepEquals(iterable2) == true;
   /// ```
   ///
-  bool deepEquals(Iterable other, {bool ignoreOrder = false}) {
+  bool deepEquals(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (this == null || other == null) return false;
 
@@ -71,7 +67,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     if ((this is List) ||
         (this is Set) ||
         (this is Map) ||
-        (this is ImmutableCollection)) if (length != other.length) return false;
+        (this is ImmutableCollection)) if (this!.length != other.length) return false;
 
     return ignoreOrder
         ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
@@ -90,7 +86,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// iterable1.deepEqualsByIdentity(iterable2) == true;
   /// ```
   ///
-  bool deepEqualsByIdentity(Iterable other, {bool ignoreOrder = false}) {
+  bool deepEqualsByIdentity(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (this == null || other == null) return false;
 
@@ -98,12 +94,24 @@ extension FicIterableExtension<T> on Iterable<T> {
     if ((this is List) ||
         (this is Set) ||
         (this is Map) ||
-        (this is ImmutableCollection)) if (length != other.length) return false;
+        (this is ImmutableCollection)) if (this!.length != other.length) return false;
 
     return ignoreOrder
         ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
         : const IterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other);
   }
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+
+/// See also: [FicListExtension], [FicSetExtension]
+extension FicIterableExtension<T> on Iterable<T> {
+  //
+  /// Creates an *immutable* list ([IList]) from the iterable.
+  IList<T> toIList([ConfigList? config]) => IList<T>.withConfig(this, config);
+
+  /// Creates an *immutable* set ([ISet]) from the iterable.
+  ISet<T>? toISet([ConfigSet? config]) => ISet<T>.withConfig(this, config);
 
   /// Finds duplicates and then returns a [Set] with the duplicated elements.
   /// If there are no duplicates, an empty [Set] is returned.
@@ -148,7 +156,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// var newList = list.distinct().sublist(0, 5);
   ///
   Iterable<T> removeDuplicates({
-    dynamic Function(T item) by,
+    dynamic Function(T item)? by,
     bool removeNulls = false,
   }) sync* {
     if (by != null) {
@@ -173,12 +181,11 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Items which don't appear in [ordering] will be included in the end, in their original order.
   /// Items of [ordering] which are not found in the original list are ignored.
   ///
-  List<T> sortedLike(Iterable ordering) {
-    assert(ordering != null);
+  List<T?> sortedLike(Iterable ordering) {
     Set<T> thisSet = Set.of(this);
     Set<dynamic> otherSet = Set<dynamic>.of(ordering);
 
-    IListOf4<List> result = thisSet.diffAndIntersect<dynamic>(
+    IListOf4<List?> result = thisSet.diffAndIntersect<dynamic>(
       otherSet,
       diffThisMinusOther: true,
       diffOtherMinusThis: false,
@@ -186,8 +193,8 @@ extension FicIterableExtension<T> on Iterable<T> {
       intersectOtherWithThis: true,
     );
 
-    List<T> intersectOtherWithThis = result.fourth as List<T>;
-    List<T> diffThisMinusOther = result.first as List<T>;
+    List<T?> intersectOtherWithThis = result.fourth as List<T?>;
+    List<T?> diffThisMinusOther = result.first as List<T?>;
     return intersectOtherWithThis.followedBy(diffThisMinusOther).toList();
   }
 }

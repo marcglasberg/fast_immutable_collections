@@ -63,7 +63,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("empty", () {
-    final M<String, int> empty = MFlat.empty();
+    final M<String, int?> empty = MFlat.empty();
 
     expect(empty.unlock, <String, int>{});
     expect(empty.isEmpty, isTrue);
@@ -119,7 +119,7 @@ void main() {
 
     expect(mFlat1.keys.toList(), ["a", "c", "b"]);
 
-    final MFlat<String, int> mFlat = MFlat.from(mFlat1);
+    final MFlat<String, int?> mFlat = MFlat.from(mFlat1);
 
     expect(mFlat.keys, ["a", "c", "b"]);
 
@@ -148,7 +148,7 @@ void main() {
 
   test("entries", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
-    mFlat.entries.forEach((MapEntry<String, int> entry) => expect(mFlat[entry.key], entry.value));
+    mFlat.entries.forEach((MapEntry<String, int?> entry) => expect(mFlat[entry.key], entry.value));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -169,10 +169,10 @@ void main() {
 
   test("any", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
-    expect(mFlat.any((String key, int value) => key == "a"), isTrue);
-    expect(mFlat.any((String key, int value) => key == "z"), isFalse);
-    expect(mFlat.any((String key, int value) => value == 4), isTrue);
-    expect(mFlat.any((String key, int value) => value == 100), isFalse);
+    expect(mFlat.any((String key, int? value) => key == "a"), isTrue);
+    expect(mFlat.any((String key, int? value) => key == "z"), isFalse);
+    expect(mFlat.any((String key, int? value) => value == 4), isTrue);
+    expect(mFlat.any((String key, int? value) => value == 100), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ void main() {
 
     expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
 
-    M<String, int> m = mFlat.add(key: "c", value: 3);
+    M<String, int?> m = mFlat.add(key: "c", value: 3);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
@@ -258,7 +258,7 @@ void main() {
     expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
     expect(willChange, 5);
     const Map<String, int> finalMap = <String, int>{"a": 1, "b": 2, "c": 4};
-    m.unlock.forEach((String key, int value) => expect(m[key], finalMap[key]));
+    m.unlock.forEach((String key, int? value) => expect(m[key], finalMap[key]));
 
     // 2) addAll
 

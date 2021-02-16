@@ -13,7 +13,7 @@ class MAddAll<K, V> extends M<K, V> {
   bool get isEmpty => _m.isEmpty && _items.isEmpty;
 
   @override
-  Iterable<MapEntry<K, V>> get entries => _m.entries.followedBy(_items.entries);
+  Iterable<MapEntry<K, V?>> get entries => _m.entries.followedBy(_items.entries);
 
   @override
   Iterable<K> get keys => _m.keys.followedBy(_items.keys);
@@ -23,7 +23,7 @@ class MAddAll<K, V> extends M<K, V> {
 
   @override
   // Check the real map first (it's faster).
-  V operator [](K key) => _items[key] ?? _m[key];
+  V? operator [](K key) => _items[key] ?? _m[key];
 
   @override
   bool contains(K key, V value) {
@@ -47,19 +47,19 @@ class MAddAll<K, V> extends M<K, V> {
   int get length => _m.length + _items.length;
 
   @override
-  Iterator<MapEntry<K, V>> get iterator => IteratorMAddAll(_m.iterator, _items.iterator);
+  Iterator<MapEntry<K, V>?> get iterator => IteratorMAddAll(_m.iterator, _items.iterator);
 }
 
 // /////////////////////////////////////////////////////////////////////////////
 
-class IteratorMAddAll<K, V> implements Iterator<MapEntry<K, V>> {
+class IteratorMAddAll<K, V> implements Iterator<MapEntry<K, V>?> {
   Iterator<MapEntry<K, V>> iterator1, iterator2;
   MapEntry<K, V> _current;
 
   IteratorMAddAll(this.iterator1, this.iterator2) : _current = iterator1.current;
 
   @override
-  MapEntry<K, V> get current => _current;
+  MapEntry<K, V>? get current => _current;
 
   @override
   bool moveNext() {

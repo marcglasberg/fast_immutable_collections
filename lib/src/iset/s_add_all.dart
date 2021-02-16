@@ -1,6 +1,5 @@
+import "../ilist/iterator_add_all.dart";
 import "iset.dart";
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// First we have the items in [_s] and then the items in [_setOrS].
 ///
@@ -17,22 +16,17 @@ class SAddAll<T> extends S<T> {
   /// **Safe**.
   /// Note: If you need to pass an [ISet], pass its [S] instead.
   SAddAll(this._s, Iterable<T> items)
-      : assert(_s != null),
-        assert(items != null),
-        assert(items is! ISet),
+      : assert(items is! ISet),
         _setOrS = (items is S) ? items : Set.of(items);
 
   /// **Unsafe**.
-  SAddAll.unsafe(this._s, Set<T> items)
-      : assert(_s != null),
-        assert(items != null),
-        _setOrS = items;
+  SAddAll.unsafe(this._s, Set<T> items) : _setOrS = items;
 
   @override
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorSAddAll(_s.iterator, _setOrS);
+  Iterator<T> get iterator => IteratorAddAll(_s.iterator, _setOrS);
 
   @override
   Iterable<T> get iter => _s.followedBy(_setOrS);
@@ -52,8 +46,8 @@ class SAddAll<T> extends S<T> {
   }
 
   @override
-  T lookup(T element) {
-    T result = _s.lookup(element);
+  T? lookup(T element) {
+    T? result = _s.lookup(element);
 
     if (result != null)
       return result;
@@ -96,38 +90,3 @@ class SAddAll<T> extends S<T> {
     return (index < sLength) ? _s[index] : _setOrS.elementAt(index - sLength);
   }
 }
-
-// /////////////////////////////////////////////////////////////////////////////
-
-class IteratorSAddAll<T> implements Iterator<T> {
-  Iterator<T> iterator, iteratorItems;
-  Iterable<T> items;
-  T _current;
-  int extraMove;
-
-  IteratorSAddAll(this.iterator, this.items)
-      : _current = iterator.current,
-        extraMove = 0;
-
-  @override
-  T get current => _current;
-
-  @override
-  bool moveNext() {
-    bool isMoving = iterator.moveNext();
-    if (isMoving) {
-      _current = iterator.current;
-    } else {
-      iteratorItems ??= items.iterator;
-      isMoving = iteratorItems.moveNext();
-      if (isMoving) {
-        _current = iteratorItems.current;
-      } else {
-        _current = null;
-      }
-    }
-    return isMoving;
-  }
-}
-
-// /////////////////////////////////////////////////////////////////////////////

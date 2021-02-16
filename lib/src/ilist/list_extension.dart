@@ -5,7 +5,7 @@ import "package:fast_immutable_collections/src/ilist/reversed_list_view.dart";
 extension FicListExtension<T> on List<T> {
   //
   /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => IList<T>(this);
+  IList<T?> get lock => IList<T?>(this);
 
   /// Locks the list, returning an *immutable* list ([IList]).
   ///
@@ -21,7 +21,7 @@ extension FicListExtension<T> on List<T> {
   /// preventing further configuration changes by calling `ImmutableCollection.lockConfig()`).
   ///
   /// See also: [ImmutableCollection]
-  IList<T> get lockUnsafe => IList<T>.unsafe(this, config: IList.defaultConfig);
+  IList<T?> get lockUnsafe => IList<T?>.unsafe(this, config: IList.defaultConfig);
 
   /// Sorts this list according to the order specified by the [compare] function.
   ///
@@ -30,8 +30,8 @@ extension FicListExtension<T> on List<T> {
   /// Contrary to [sort], [orderedSort] is stable, meaning distinct objects
   /// that compare as equal end up in the same order as they started in.
   ///
-  void sortOrdered([int Function(T a, T b) compare]) {
-    mergeSort(this, compare: compare);
+  void sortOrdered([int Function(T a, T b)? compare]) {
+    mergeSort<T>(this, compare: compare);
   }
 
   /// Sorts this list according to the order specified by the [ordering] iterable.
@@ -39,7 +39,7 @@ extension FicListExtension<T> on List<T> {
   /// Items of [ordering] which are not found in the original list are ignored.
   ///
   void sortLike(Iterable ordering) {
-    List<T> result = sortedLike(ordering);
+    List<T> result = sortedLike(ordering) as List<T>;
     clear();
     addAll(result);
   }
@@ -64,8 +64,8 @@ extension FicListExtension<T> on List<T> {
 
   /// Moves all items that satisfy the provided [test] to the start of the list.
   /// Keeps the relative order of the moved items.
-  void whereMoveToTheFront(bool Function(T item) test) {
-    int compare(T f1, T f2) {
+  void whereMoveToTheFront(bool Function(T? item) test) {
+    int compare(T? f1, T? f2) {
       bool test1 = test(f1);
       return (test1 == test(f2))
           ? 0
@@ -79,8 +79,8 @@ extension FicListExtension<T> on List<T> {
 
   /// Moves all items that satisfy the provided [test] to the end of the list.
   /// Keeps the relative order of the moved items.
-  void whereMoveToTheEnd(bool Function(T item) test) {
-    int compare(T f1, T f2) {
+  void whereMoveToTheEnd(bool Function(T? item) test) {
+    int compare(T? f1, T? f2) {
       bool test1 = test(f1);
       return (test1 == test(f2))
           ? 0
@@ -105,8 +105,7 @@ extension FicListExtension<T> on List<T> {
 
   /// Return `true` if the lists contain the same items (in any order).
   /// Ignores repeated items.
-  bool compareAsSets(List other) {
-    if (this == null) return other == null;
+  bool compareAsSets(List? other) {
     if (other == null) return false;
     if (identical(this, other)) return true;
     return const SetEquality<dynamic>(MapEntryEquality<dynamic>()).equals(
@@ -119,7 +118,7 @@ extension FicListExtension<T> on List<T> {
   /// The [map] function gets both the original [item] and its [index].
   ///
   /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
-  Iterable<E> mapIndexed<E>(E Function(int index, T item) map) sync* {
+  Iterable<E> mapIndexed<E>(E Function(int index, T? item) map) sync* {
     for (var index = 0; index < length; index++) {
       yield map(index, this[index]);
     }
@@ -133,13 +132,13 @@ extension FicListExtension<T> on List<T> {
   /// ```
   ///
   Iterable<List<T>> splitList(
-    bool Function(T item) test, {
+    bool Function(T? item) test, {
     bool emptyParts = false,
   }) sync* {
     if (isEmpty) return;
     int start = 0;
     for (int i = 0; i < length; i++) {
-      T element = this[i];
+      T? element = this[i];
       if (test(element)) {
         if (start < i || emptyParts) {
           yield sublist(start, i);
@@ -172,12 +171,12 @@ extension FicListExtension<T> on List<T> {
   /// [1,2,3,4,5].divideList((v)=>v==2 || v==4) ➜ [[1,2,3], [4,5]]
   /// ```
   ///
-  List<List<T>> divideList(
-    bool Function(T element) test,
+  List<List<T?>> divideList(
+    bool Function(T? element) test,
   ) {
     if (isEmpty) return [];
 
-    List<List<T>> result = [];
+    List<List<T?>> result = [];
     List<int> indexes = [];
 
     for (int i = 0; i < length; i++) {
@@ -239,21 +238,21 @@ extension FicListExtension<T> on List<T> {
   ///
   /// See also: [groupBy] from `package:collection`
   ///
-  Map<G, List<T>> divideListAsMap<G>(
-    bool Function(T item) test, {
-    G Function(T item) key,
+  Map<G?, List<T?>> divideListAsMap<G>(
+    bool Function(T? item) test, {
+    G Function(T? item)? key,
   }) {
     if (isEmpty) return {};
 
-    Map<G, List<T>> result = {};
+    Map<G?, List<T?>> result = {};
     List<int> indexes = [];
-    List<G> keys = [];
+    List<G?> keys = [];
 
     for (int i = 0; i < length; i++) {
-      T item = this[i];
+      T? item = this[i];
       if (test(item)) {
         indexes.add(i);
-        var _key = (key == null) ? (item as G) : key(item);
+        var _key = (key == null) ? (item as G?) : key(item);
         keys.add(_key);
       }
     }
@@ -287,15 +286,12 @@ extension FicListExtension<T> on List<T> {
   /// [Container(), Container()].addBetween(SizedBox());
   /// ```
   ///
-  List<T> addBetween(T separator) {
-    if (this == null)
-      return null;
-    //
-    else if (length <= 1)
+  List<T?> addBetween(T separator) {
+    if (length <= 1)
       return toList();
     //
     else {
-      List<T> newItems = <T>[];
+      List<T?> newItems = <T?>[];
       for (int i = 0; i < length - 1; i++) {
         newItems.add(this[i]);
         newItems.add(separator);
@@ -319,8 +315,8 @@ extension FicListExtension<T> on List<T> {
   /// ```
   /// list = list1 + list2 + list3 + list4 + list5;
   /// ```
-  List<T> concat(List<T> list2, [List<T> list3, List<T> list4, List<T> list5]) {
-    List<T> list1 = this ?? const [];
+  List<T?> concat(List<T>? list2, [List<T>? list3, List<T>? list4, List<T>? list5]) {
+    List<T?> list1 = this;
     list2 ??= const [];
     list3 ??= const [];
     list4 ??= const [];
@@ -330,7 +326,7 @@ extension FicListExtension<T> on List<T> {
 
     if (totalLength == 0) return const [];
 
-    T anyItem = list1.isNotEmpty
+    T? anyItem = list1.isNotEmpty
         ? list1.first
         : list2.isNotEmpty
             ? list2.first
@@ -343,7 +339,7 @@ extension FicListExtension<T> on List<T> {
                         : null;
 
     /// Preallocate the necessary number of items, and then copy directly into place.
-    return List<T>.filled(totalLength, anyItem)
+    return List<T?>.filled(totalLength, anyItem)
       ..setAll(0, list1)
       ..setAll(list1.length, list2)
       ..setAll(list1.length + list2.length, list3)
@@ -352,9 +348,9 @@ extension FicListExtension<T> on List<T> {
   }
 
   /// Cut the original list into one or more lists with at most [length] items.
-  List<List<T>> splitByLength(int length) {
-    assert(length != null && length > 0);
-    var chunks = <List<T>>[];
+  List<List<T?>> splitByLength(int length) {
+    assert(length > 0);
+    List<List<T?>> chunks = <List<T>>[];
     for (var i = 0; i < this.length; i += length) {
       var end = (i + length < this.length) ? i + length : this.length;
       chunks.add(sublist(i, end));
@@ -375,25 +371,25 @@ extension FicListExtension<T> on List<T> {
   /// Note: All null items in the original list and in [newItems] will
   /// be removed from the result.
   ///
-  List<T> update(
-    List<T> newItems,
+  List<T?> update(
+    List<T?> newItems,
     dynamic Function(T item) id,
   ) {
     int i = 0;
 
     Map<dynamic, int> ids = <dynamic, int>{
-      for (T item in newItems) (item == null) ? null : id(item): i++
+      for (T? item in newItems) (item == null) ? null : id(item): i++
     };
 
-    var newList = map((T item) {
-      int pos = ids[(item == null) ? null : id(item)];
+    var newList = map((T? item) {
+      int? pos = ids[(item == null) ? null : id(item)];
       if (pos == null) return item;
-      T newItem = newItems[pos];
+      T? newItem = newItems[pos];
       newItems[pos] = null;
       return newItem;
     }).where((item) => item != null).toList();
 
-    for (T newItem in newItems) {
+    for (T? newItem in newItems) {
       if (newItem != null) newList.add(newItem);
     }
 
@@ -405,8 +401,8 @@ extension FicListExtension<T> on List<T> {
   ///
   /// See also `Iterable.removeDuplicates()` in [FicIterableExtension] for a lazy version.
   ///
-  List<T> distinct({dynamic Function(T item) by}) => by != null
-      ? removeDuplicates(by: by).toList()
+  List<T?> distinct({dynamic Function(T item)? by}) => by != null
+      ? removeDuplicates(by: by as dynamic Function(T?)?).toList()
       : [
           ...{...this}
         ];
@@ -419,5 +415,5 @@ extension FicListExtension<T> on List<T> {
   /// a `List`. This difference is important because if you do `list.reversed.toList()`
   /// you don't have a view anymore, and it's not efficient.
   ///
-  List<T> get reversedView => ReversedListView<T>(this);
+  List<T?> get reversedView => ReversedListView<T?>(this);
 }

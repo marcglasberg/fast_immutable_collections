@@ -123,7 +123,7 @@ void main() {
     final ListMap<String, int> listMapView =
         ListMapView({"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6});
     final Map<String, int> mapped =
-        listMapView.map<String, int>((String k, int v) => MapEntry(k, v + 1));
+        listMapView.map<String, int>((String k, int? v) => MapEntry(k, v! + 1));
     expect(mapped, {"a": 2, "b": 3, "c": 4, "d": 5, "e": 6, "f": 7});
   });
 

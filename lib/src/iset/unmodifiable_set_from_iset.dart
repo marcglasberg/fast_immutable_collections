@@ -29,11 +29,11 @@ import "set_extension.dart";
 ///
 @immutable
 class UnmodifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
-  final ISet<T> _iSet;
-  final Set<T> _set;
+  final ISet<T>? _iSet;
+  final Set<T>? _set;
 
   /// Create an unmodifiable [Set] view of type [UnmodifiableSetFromISet], from an [iset].
-  UnmodifiableSetFromISet(ISet<T> iset)
+  UnmodifiableSetFromISet(ISet<T>? iset)
       : _iSet = iset ?? ISet.empty<T>(),
         _set = null;
 
@@ -46,25 +46,25 @@ class UnmodifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty 
   bool add(T value) => throw UnsupportedError("Set is unmodifiable.");
 
   @override
-  bool contains(covariant T element) => _iSet?.contains(element) ?? _set.contains(element);
+  bool contains(covariant T element) => _iSet?.contains(element) ?? _set!.contains(element);
 
   @override
-  T lookup(covariant T element) =>
-      _iSet != null && _iSet.contains(element) || _set != null && _set.contains(element)
+  T? lookup(covariant T element) =>
+      _iSet != null && _iSet!.contains(element) || _set != null && _set!.contains(element)
           ? element
           : null;
 
   @override
-  bool remove(Object value) => throw UnsupportedError("Set is unmodifiable.");
+  bool remove(covariant Object value) => throw UnsupportedError("Set is unmodifiable.");
 
   @override
-  Iterator<T> get iterator => _set?.iterator ?? _iSet.iterator;
+  Iterator<T> get iterator => _set?.iterator ?? _iSet!.iterator;
 
   @override
-  Set<T> toSet() => _set ?? _iSet.toSet();
+  Set<T> toSet() => _set ?? _iSet!.toSet();
 
   @override
-  int get length => _iSet?.length ?? _set.length;
+  int get length => _iSet?.length ?? _set!.length;
 
-  ISet<T> get lock => _iSet ?? _set.lock;
+  ISet<T> get lock => _iSet ?? _set!.lock;
 }

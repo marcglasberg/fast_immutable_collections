@@ -17,8 +17,8 @@ import "package:fast_immutable_collections/src/list_set/list_set_view.dart";
 /// then sort it, than turn it back into a [Set].
 ///
 class ListSet<T> implements Set<T>, List<T> {
-  Set<T> _set;
-  List<T> _list;
+  late Set<T> _set;
+  List<T>? _list;
 
   ListSet.empty() {
     _set = HashSet();
@@ -34,16 +34,16 @@ class ListSet<T> implements Set<T>, List<T> {
   ListSet.of(
     Iterable<T> items, {
     bool sort = false,
-    int Function(T a, T b) compare,
+    int Function(T a, T b)? compare,
   })  : assert(items != null),
         assert(sort != null),
         assert(compare == null || sort == true) {
     _set = HashSet();
     _list = List.of(items.where((item) => _set.add(item)), growable: false);
-    if (sort) _list.sort(compare ?? compareObject);
+    if (sort) _list!.sort(compare ?? compareObject);
   }
 
-  ListSet._(this._set, this._list)
+  ListSet._(this._set, List<T> this._list)
       : assert(_set != null),
         assert(_list != null),
         assert(_set.length == _list.length);
@@ -59,10 +59,10 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  bool any(bool Function(T element) test) => _list.any(test);
+  bool any(bool Function(T element) test) => _list!.any(test);
 
   @override
-  ListSet<E> cast<E>() => ListSet<E>._(_set.cast<E>(), _list.cast<E>());
+  ListSet<E> cast<E>() => ListSet<E>._(_set.cast<E>(), _list!.cast<E>());
 
   @override
   void clear() {
@@ -73,81 +73,81 @@ class ListSet<T> implements Set<T>, List<T> {
   bool contains(covariant T value) => _set.contains(value);
 
   @override
-  bool containsAll(covariant Iterable<T> other) => _set.containsAll(other);
+  bool containsAll(covariant Iterable<T?> other) => _set.containsAll(other);
 
   @override
-  Set<T> difference(covariant Set<T> other) => _set.difference(other);
+  Set<T> difference(covariant Set<T?> other) => _set.difference(other);
 
   @override
-  Set<T> intersection(covariant Set<T> other) => _set.intersection(other);
+  Set<T> intersection(covariant Set<T?> other) => _set.intersection(other);
 
   @override
   Set<T> union(covariant Set<T> other) => _set.union(other);
 
   @override
-  T elementAt(int index) => _list[index];
+  T elementAt(int index) => _list![index];
 
   @override
-  bool every(bool Function(T element) test) => _list.every(test);
+  bool every(bool Function(T element) test) => _list!.every(test);
 
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T element) f) => _list.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T element) f) => _list!.expand(f);
 
   @override
-  T get first => _list.first;
+  T get first => _list!.first;
 
   @override
-  T get last => _list.last;
+  T get last => _list!.last;
 
   @override
-  T firstWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _list.firstWhere(test, orElse: orElse);
+  T firstWhere(bool Function(T element) test, {T Function()? orElse}) =>
+      _list!.firstWhere(test, orElse: orElse);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _list.lastWhere(test, orElse: orElse);
+  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+      _list!.lastWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
-      _list.fold(initialValue, combine);
+      _list!.fold(initialValue, combine);
 
   @override
-  Iterable<T> followedBy(Iterable<T> other) => _list.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => _list!.followedBy(other);
 
   @override
-  void forEach(void Function(T element) f) => _list.forEach(f);
+  void forEach(void Function(T element) f) => _list!.forEach(f);
 
   @override
-  bool get isEmpty => _list.isEmpty;
+  bool get isEmpty => _list!.isEmpty;
 
   @override
-  bool get isNotEmpty => _list.isNotEmpty;
+  bool get isNotEmpty => _list!.isNotEmpty;
 
   @override
-  Iterator<T> get iterator => _list.iterator;
+  Iterator<T> get iterator => _list!.iterator;
 
   @override
-  String join([String separator = ""]) => _list.join(separator);
+  String join([String separator = ""]) => _list!.join(separator);
 
   @override
-  int get length => _list.length;
+  int get length => _list!.length;
 
   @override
-  T lookup(Object object) => _set.lookup(object);
+  T? lookup(Object? object) => _set.lookup(object);
 
   @override
-  Iterable<E> map<E>(E Function(T e) f) => _list.map(f);
+  Iterable<E> map<E>(E Function(T e) f) => _list!.map(f);
 
   @override
-  T reduce(T Function(T value, T element) combine) => _list.reduce(combine);
+  T reduce(T Function(T value, T element) combine) => _list!.reduce(combine);
 
   @override
-  bool remove(Object value) {
+  bool remove(Object? value) {
     throw UnsupportedError("Can't remove from a ListSet.");
   }
 
   @override
-  void removeAll(Iterable<Object> elements) {
+  void removeAll(Iterable<Object?> elements) {
     throw UnsupportedError("Can't removeAll from a ListSet.");
   }
 
@@ -157,7 +157,7 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  void retainAll(Iterable<Object> elements) {
+  void retainAll(Iterable<Object?> elements) {
     throw UnsupportedError("Can't retainAll from a ListSet.");
   }
 
@@ -167,41 +167,41 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  T get single => _list.single;
+  T get single => _list!.single;
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
-      _list.singleWhere(test, orElse: orElse);
+  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+      _list!.singleWhere(test, orElse: orElse);
 
   @override
-  Iterable<T> skip(int count) => _list.skip(count);
+  Iterable<T> skip(int count) => _list!.skip(count);
 
   @override
-  Iterable<T> skipWhile(bool Function(T value) test) => _list.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) => _list!.skipWhile(test);
 
   @override
-  Iterable<T> take(int count) => _list.take(count);
+  Iterable<T> take(int count) => _list!.take(count);
 
   @override
-  Iterable<T> takeWhile(bool Function(T value) test) => _list.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) => _list!.takeWhile(test);
 
   @override
-  List<T> toList({bool growable = true}) => _list.toList(growable: growable);
+  List<T> toList({bool growable = true}) => _list!.toList(growable: growable);
 
   @override
-  Set<T> toSet() => _list.toSet();
+  Set<T> toSet() => _list!.toSet();
 
   @override
-  Iterable<T> where(bool Function(T element) test) => _list.where(test);
+  Iterable<T> where(bool Function(T element) test) => _list!.where(test);
 
   @override
-  Iterable<E> whereType<E>() => _list.whereType();
+  Iterable<E> whereType<E>() => _list!.whereType();
 
   @override
-  ListSet<T> operator +(List<T> other) => ListSet.of(_list.followedBy(other));
+  ListSet<T> operator +(List<T> other) => ListSet.of(_list!.followedBy(other));
 
   @override
-  T operator [](int index) => _list[index];
+  T operator [](int index) => _list![index];
 
   @override
   void operator []=(int index, T value) {
@@ -210,10 +210,10 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  Map<int, T> asMap() => _list.asMap();
+  Map<int, T> asMap() => _list!.asMap();
 
   @override
-  void fillRange(int start, int end, [T fillValue]) {
+  void fillRange(int start, int end, [T? fillValue]) {
     throw UnsupportedError("Can't fillRange from a ListSet.");
   }
 
@@ -224,13 +224,13 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  Iterable<T> getRange(int start, int end) => _list.getRange(start, end);
+  Iterable<T> getRange(int start, int end) => _list!.getRange(start, end);
 
   @override
-  int indexOf(T element, [int start = 0]) => _list.indexOf(element, start);
+  int indexOf(T element, [int start = 0]) => _list!.indexOf(element, start);
 
   @override
-  int indexWhere(bool Function(T element) test, [int start = 0]) => _list.indexWhere(test, start);
+  int indexWhere(bool Function(T element) test, [int start = 0]) => _list!.indexWhere(test, start);
 
   @override
   void insert(int index, T element) {
@@ -249,11 +249,11 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  int lastIndexOf(T element, [int start]) => _list.lastIndexOf(element, start);
+  int lastIndexOf(T element, [int? start]) => _list!.lastIndexOf(element, start);
 
   @override
-  int lastIndexWhere(bool Function(T element) test, [int start]) =>
-      _list.lastIndexWhere(test, start);
+  int lastIndexWhere(bool Function(T element) test, [int? start]) =>
+      _list!.lastIndexWhere(test, start);
 
   @override
   set length(int newLength) {
@@ -282,7 +282,7 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  Iterable<T> get reversed => _list.reversed;
+  Iterable<T> get reversed => _list!.reversed;
 
   ListSet<T> get reversedView => ListSet._(_set, ReversedListView(_list));
 
@@ -299,17 +299,17 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  void shuffle([Random random]) {
-    _list.shuffle(random);
+  void shuffle([Random? random]) {
+    _list!.shuffle(random);
   }
 
   @override
-  void sort([int Function(T a, T b) compare]) {
-    _list.sort(compare);
+  void sort([int Function(T a, T b)? compare]) {
+    _list!.sort(compare);
   }
 
   @override
-  List<T> sublist(int start, [int end]) => _list.sublist(start, end);
+  List<T> sublist(int start, [int? end]) => _list!.sublist(start, end);
 
   /// Creates a [ListSet] form the given [set].
   /// If the [set] is already of type [ListSet], return the same instance.

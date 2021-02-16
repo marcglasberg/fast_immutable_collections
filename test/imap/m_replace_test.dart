@@ -11,7 +11,7 @@ void main() {
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     expect(mReplace.isEmpty, isFalse);
     expect(mReplace.isNotEmpty, isTrue);
   });
@@ -22,7 +22,7 @@ void main() {
     // 1) Regular usage
     Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     MFlat<String, int> mFlat = MFlat(originalMap);
-    MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     expect(mReplace.contains("a", 2), isTrue);
     expect(mReplace.contains("a", 1), isFalse);
 
@@ -39,7 +39,7 @@ void main() {
   test("containsKey", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
     mReplace.keys.forEach((String key) => expect(finalMap.containsKey(key), isTrue));
   });
@@ -54,9 +54,9 @@ void main() {
     // 2)
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
-    mReplace.values.forEach((int value) => expect(finalMap.containsValue(value), isTrue));
+    mReplace.values.forEach((int? value) => expect(finalMap.containsValue(value), isTrue));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -64,10 +64,10 @@ void main() {
   test("entries", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
     mReplace.entries
-        .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
+        .forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ void main() {
   test("keys", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
     mReplace.keys.forEach((String key) => expect(finalMap.containsKey(key), isTrue));
   });
@@ -85,9 +85,9 @@ void main() {
   test("values", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
-    mReplace.values.forEach((int value) => expect(finalMap.containsValue(value), isTrue));
+    mReplace.values.forEach((int? value) => expect(finalMap.containsValue(value), isTrue));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -95,9 +95,9 @@ void main() {
   test("[]", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
-    mReplace.forEach((String key, int value) => expect(value, finalMap[key]));
+    mReplace.forEach((String key, int? value) => expect(value, finalMap[key]));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ void main() {
   test("length", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     expect(mReplace.length, 3);
   });
 
@@ -114,10 +114,10 @@ void main() {
   test("iterator", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
-    final Iterator<MapEntry<String, int>> iterator = mReplace.iterator;
-    Map<String, int> result = iterator.toMap();
+    final Iterator<MapEntry<String, int?>> iterator = mReplace.iterator;
+    Map<String, int> result = iterator.toMap() as Map<String, int>;
     expect(result, finalMap);
   });
 
@@ -129,7 +129,7 @@ void main() {
     // 1.1) Changing the passed mutable map doesn't change the MReplace
     Map<String, int> original = {"a": 1, "b": 2};
     MFlat<String, int> mFlat = MFlat(original);
-    MReplace<String, int> mReplace = MReplace(mFlat, "b", 4);
+    MReplace<String, int?> mReplace = MReplace(mFlat, "b", 4);
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
@@ -145,7 +145,7 @@ void main() {
 
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
 
-    M<String, int> m = mReplace.add(key: "c", value: 3);
+    M<String, int?> m = mReplace.add(key: "c", value: 3);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mReplace.unlock, <String, int>{"a": 1, "b": 4});
@@ -187,7 +187,7 @@ void main() {
     // variable
     original = {"a": 1, "b": 2};
     mFlat = MFlat(original);
-    final MReplace<String, int> mReplace1 = MReplace(mFlat, "b", 4),
+    final MReplace<String, int?> mReplace1 = MReplace(mFlat, "b", 4),
         mReplace2 = MReplace(mFlat, "b", 5);
 
     expect(mReplace1.unlock, <String, int>{"a": 1, "b": 4});

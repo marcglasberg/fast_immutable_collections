@@ -145,7 +145,7 @@ void main() {
 
     expect(lFlat, <int>[1, 2, 3]);
 
-    L<int> l = lFlat.add(4);
+    L<int?> l = lFlat.add(4);
 
     expect(original, <int>[1, 2, 3]);
     expect(lFlat, <int>[1, 2, 3]);

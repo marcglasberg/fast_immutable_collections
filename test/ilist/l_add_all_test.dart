@@ -85,7 +85,7 @@ void main() {
 
   test("iterator", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
-    final Iterator<int> iter = lAddAll.iterator;
+    final Iterator<int?> iter = lAddAll.iterator;
 
     expect(iter.current, isNull);
     expect(iter.moveNext(), isTrue);
@@ -177,7 +177,7 @@ void main() {
     test("iterator", () {
       final lAddAll =
           LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
-      final Iterator<int> iter = lAddAll.iterator;
+      final Iterator<int?> iter = lAddAll.iterator;
 
       expect(iter.current, isNull);
       expect(iter.moveNext(), isTrue);
@@ -225,7 +225,7 @@ void main() {
 
     expect(lAddAll, <int>[1, 2, 3, 4, 5]);
 
-    L<int> l = lAddAll.add(6);
+    L<int?> l = lAddAll.add(6);
 
     expect(original, <int>[3, 4, 5]);
     expect(lAddAll, <int>[1, 2, 3, 4, 5]);

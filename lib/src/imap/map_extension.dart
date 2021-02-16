@@ -3,9 +3,9 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 // /////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicMapOfSetsExtension]
-extension FicMapExtension<K, V> on Map<K, V> {
+extension FicMapExtension<K, V> on Map<K?, V?>? {
   /// Locks the map, returning an *immutable* map ([IMap]).
-  IMap<K, V> get lock => IMap<K, V>(this);
+  IMap<K?, V?> get lock => IMap<K?, V?>(this);
 
   /// Locks the map, returning an *immutable* map ([IMap]).
   ///
@@ -21,19 +21,19 @@ extension FicMapExtension<K, V> on Map<K, V> {
   /// preventing further configuration changes by calling `ImmutableCollection.lockConfig()`).
   ///
   /// See also: [ImmutableCollection]
-  IMap<K, V> get lockUnsafe => IMap<K, V>.unsafe(this, config: IMap.defaultConfig);
+  IMap<K?, V?> get lockUnsafe => IMap<K?, V?>.unsafe(this, config: IMap.defaultConfig);
 
   /// Creates an *immutable* map ([IMap]) from the map.
-  IMap<K, V> toIMap([ConfigMap config]) =>
-      (this == null) ? null : IMap<K, V>.withConfig(this, config);
+  IMap<K?, V?>? toIMap([ConfigMap? config]) =>
+      (this == null) ? null : IMap<K?, V?>.withConfig(this, config);
 
-  /// Checks if `this` is `null` or `[isEmpty].
+  /// Checks if `this` is `null` or empty.
   bool get isNullOrEmpty => (this == null) || isEmpty;
 
-  /// Checks if `this` is **not** `null` and **not** `[isEmpty].
+  /// Checks if `this` is **not** `null` and **not** empty.
   bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
 
-  /// Checks if `this` is [isEmpty] but **not** `null`.
+  /// Checks if `this` is empty but **not** `null`.
   bool get isEmptyButNotNull => (this != null) && isEmpty;
 }
 
@@ -45,7 +45,7 @@ extension FicMapOfSetsExtension<K, V> on Map<K, Set<V>> {
   IMapOfSets<K, V> get lock => IMapOfSets<K, V>(this);
 
   /// Creates an *immutable* map of sets ([IMapOfSets]) from the map.
-  IMapOfSets<K, V> toIMapOfSets([ConfigMapOfSets config]) =>
+  IMapOfSets<K, V>? toIMapOfSets([ConfigMapOfSets? config]) =>
       (this == null) ? null : IMapOfSets<K, V>.withConfig(this, config);
 }
 

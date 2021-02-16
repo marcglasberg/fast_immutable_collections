@@ -28,8 +28,8 @@ class ConfigList {
   });
 
   ConfigList copyWith({
-    bool isDeepEquals,
-    bool cacheHashCode,
+    bool? isDeepEquals,
+    bool? cacheHashCode,
   }) {
     var config = ConfigList(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
@@ -89,9 +89,9 @@ class ConfigSet {
   });
 
   ConfigSet copyWith({
-    bool isDeepEquals,
-    bool sort,
-    bool cacheHashCode,
+    bool? isDeepEquals,
+    bool? sort,
+    bool? cacheHashCode,
   }) {
     var config = ConfigSet(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
@@ -151,9 +151,9 @@ class ConfigMap {
   });
 
   ConfigMap copyWith({
-    bool isDeepEquals,
-    bool sort,
-    bool cacheHashCode,
+    bool? isDeepEquals,
+    bool? sort,
+    bool? cacheHashCode,
   }) {
     var config = ConfigMap(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
@@ -238,11 +238,11 @@ class ConfigMapOfSets {
       );
 
   ConfigMapOfSets copyWith({
-    bool isDeepEquals,
-    bool sortKeys,
-    bool sortValues,
-    bool removeEmptySets,
-    bool cacheHashCode,
+    bool? isDeepEquals,
+    bool? sortKeys,
+    bool? sortValues,
+    bool? removeEmptySets,
+    bool? cacheHashCode,
   }) {
     var config = ConfigMapOfSets(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,

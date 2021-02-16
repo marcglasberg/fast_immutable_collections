@@ -15,7 +15,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The map is flushed. Counter is 0.
-    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock;
+    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock as IMap<String, int>;
     expect(imap.isFlushed, isTrue);
     expect(imap.counter, 0);
 
@@ -52,7 +52,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The map is flushed. Counter is 0.
-    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock;
+    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock as IMap<String, int>;
     expect(imap.isFlushed, isTrue);
     expect(imap.counter, 0);
 
@@ -89,7 +89,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The map is flushed. Counter is 0.
-    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock;
+    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock as IMap<String, int>;
     expect(imap.isFlushed, isTrue);
 
     // We add a value, so that the map is NOT flushed.
@@ -211,7 +211,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The map is flushed. Counter is 0.
-    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock;
+    var imap = {"a": 1, "b": 2, "c": 3, "d": 4}.lock as IMap<String, int>;
     expect(imap.isFlushed, isTrue);
 
     // We add a value, so that the map is NOT flushed.
@@ -303,7 +303,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The map is flushed. Counter is 0.
-    var imap1 = {"a": 1, "b": 2, "c": 3, "d": 4}.lock;
+    var imap1 = {"a": 1, "b": 2, "c": 3, "d": 4}.lock as IMap<String, int>;
     expect(imap1.isFlushed, isTrue);
 
     var imap2 = imap1.add("e", 5);
@@ -327,7 +327,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The map is flushed. Counter is 0.
-    var imap1 = {"a": 1, "b": 2, "c": 3, "d": 4}.lock;
+    var imap1 = {"a": 1, "b": 2, "c": 3, "d": 4}.lock as IMap<String, int>;
     expect(imap1.isFlushed, isTrue);
     expect(imap1.counter, 0);
 

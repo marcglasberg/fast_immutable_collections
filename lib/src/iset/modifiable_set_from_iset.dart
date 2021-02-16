@@ -17,10 +17,10 @@ import "iset.dart";
 /// See also: [UnmodifiableSetFromISet]
 ///
 class ModifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
-  ISet<T> _iSet;
-  Set<T> _set;
+  ISet<T>? _iSet;
+  Set<T>? _set;
 
-  ModifiableSetFromISet(ISet<T> iset)
+  ModifiableSetFromISet(ISet<T>? iset)
       : _iSet = iset,
         _set = iset == null ? {} : null;
 
@@ -32,38 +32,35 @@ class ModifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
 
   void _switchToMutableSetIfNecessary() {
     if (_set == null) {
-      _set = _iSet.unlock;
+      _set = _iSet!.unlock;
       _iSet = null;
     }
   }
 
   bool _setAdd(T value) {
-    if (_set.contains(value)) {
+    if (_set!.contains(value)) {
       return false;
     } else {
-      _set.add(value);
+      _set!.add(value);
       return true;
     }
   }
 
   @override
-  bool contains(covariant T element) => _iSet?.contains(element) ?? _set.contains(element);
+  bool contains(covariant T element) => _iSet?.contains(element) ?? _set!.contains(element);
 
   @override
-  T lookup(covariant T element) =>
-      _iSet != null && _iSet.contains(element) || _set != null && _set.contains(element)
-          ? element
-          : null;
+  T? lookup(covariant T element) => contains(element) ? element : null;
 
   @override
-  bool remove(Object value) {
+  bool remove(Object? value) {
     _switchToMutableSetIfNecessary();
     return _setRemove(value);
   }
 
-  bool _setRemove(Object value) {
-    if (_set.contains(value)) {
-      _set.remove(value);
+  bool _setRemove(Object? value) {
+    if (_set!.contains(value)) {
+      _set!.remove(value);
       return true;
     } else {
       return false;
@@ -71,13 +68,13 @@ class ModifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   }
 
   @override
-  Iterator<T> get iterator => _set?.iterator ?? _iSet.iterator;
+  Iterator<T> get iterator => _set?.iterator ?? _iSet!.iterator;
 
   @override
-  Set<T> toSet() => _set ?? _iSet.toSet();
+  Set<T> toSet() => _set ?? _iSet!.toSet();
 
   @override
-  int get length => _iSet?.length ?? _set.length;
+  int get length => _iSet?.length ?? _set!.length;
 
-  ISet<T> get lock => _iSet ?? ISet<T>(_set);
+  ISet<T?> get lock => _iSet ?? ISet<T?>(_set);
 }

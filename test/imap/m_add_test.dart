@@ -10,7 +10,7 @@ void main() {
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.isEmpty, isFalse);
     expect(mAdd.isNotEmpty, isTrue);
   });
@@ -20,7 +20,7 @@ void main() {
   test("contains", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.contains("a", 1), isTrue);
     expect(mAdd.contains("b", 2), isFalse);
     expect(mAdd.contains("d", 4), isTrue);
@@ -31,7 +31,7 @@ void main() {
   test("containsKey", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.containsKey("a"), isTrue);
     expect(mAdd.containsKey("b"), isFalse);
     expect(mAdd.containsKey("d"), isTrue);
@@ -42,7 +42,7 @@ void main() {
   test("containsValue", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.containsValue(1), isTrue);
     expect(mAdd.containsValue(2), isFalse);
     expect(mAdd.containsValue(4), isTrue);
@@ -53,10 +53,10 @@ void main() {
   test("entries", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     const Map<String, int> finalMap = {"a": 1, "d": 4};
 
-    mAdd.entries.forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
+    mAdd.entries.forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ void main() {
   test("keys", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.keys.contains("a"), isTrue);
     expect(mAdd.keys.contains("b"), isFalse);
     expect(mAdd.keys.contains("d"), isTrue);
@@ -75,7 +75,7 @@ void main() {
   test("values", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.values.contains(1), isTrue);
     expect(mAdd.values.contains(2), isFalse);
     expect(mAdd.values.contains(4), isTrue);
@@ -86,7 +86,7 @@ void main() {
   test("[]", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd["a"], 1);
     expect(mAdd["b"], isNull);
     expect(mAdd["d"], 4);
@@ -97,15 +97,15 @@ void main() {
   test("length", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.length, 2);
   });
 
   test("iterator", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
-    final Iterator<MapEntry<String, int>> iterator = mAdd.iterator;
+    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
+    final Iterator<MapEntry<String, int?>?> iterator = mAdd.iterator;
     Map<String, int> result = iterator.toMap();
     expect(result, {"a": 1, "d": 4});
   });
@@ -118,7 +118,7 @@ void main() {
     // 1.1) Changing the passed mutable map doesn't change the MAdd
     Map<String, int> original = {"a": 1, "b": 2};
     MFlat<String, int> mFlat = MFlat(original);
-    MAdd<String, int> mAdd = MAdd(mFlat, "c", 3);
+    MAdd<String, int?> mAdd = MAdd(mFlat, "c", 3);
 
     expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
 
@@ -134,7 +134,7 @@ void main() {
 
     expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
 
-    M<String, int> m = mAdd.add(key: "d", value: 4);
+    M<String, int?> m = mAdd.add(key: "d", value: 4);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
@@ -176,7 +176,7 @@ void main() {
     // variable
     original = {"a": 1, "b": 2};
     mFlat = MFlat(original);
-    final MAdd<String, int> mAdd1 = MAdd(mFlat, "c", 3), mAdd2 = MAdd(mFlat, "d", 4);
+    final MAdd<String, int?> mAdd1 = MAdd(mFlat, "c", 3), mAdd2 = MAdd(mFlat, "d", 4);
 
     expect(mAdd1.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
     expect(mAdd2.unlock, <String, int>{"a": 1, "b": 2, "d": 4});

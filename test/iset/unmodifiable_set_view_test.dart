@@ -14,7 +14,7 @@ void main() {
 
   test("length", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,
@@ -28,7 +28,7 @@ void main() {
 
   test("lock", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,
@@ -43,7 +43,7 @@ void main() {
 
   test("isEmpty | isNotEmpty", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,
@@ -60,7 +60,7 @@ void main() {
 
   test("toSet", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,
@@ -74,7 +74,7 @@ void main() {
 
   test("contains", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,
@@ -93,7 +93,7 @@ void main() {
 
   test("lookup", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,
@@ -112,15 +112,15 @@ void main() {
 
   test("iterator", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
-    final Iterator<int> iterator = unmodifiableSetView.iterator,
+    final Iterator<int?> iterator = unmodifiableSetView.iterator,
         iteratorFromSet = unmodifiableSetViewFromSet.iterator;
-    final List<Iterator<int>> iterators = [iterator, iteratorFromSet];
+    final List<Iterator<int?>> iterators = [iterator, iteratorFromSet];
 
-    iterators.forEach((Iterator<int> iterator) {
+    iterators.forEach((Iterator<int?> iterator) {
       int count = 0;
-      final Set<int> result = {};
+      final Set<int?> result = {};
       while (iterator.moveNext()) {
         count++;
         result.add(iterator.current);
@@ -134,7 +134,7 @@ void main() {
 
   test("add", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,
@@ -147,7 +147,7 @@ void main() {
 
   test("remove", () {
     const Set<int> baseSet = {1, 2, 3};
-    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
+    final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock as ISet<int>?),
         unmodifiableSetViewFromSet = UnmodifiableSetFromISet.fromSet(baseSet);
     final List<UnmodifiableSetFromISet<int>> views = [
       unmodifiableSetView,

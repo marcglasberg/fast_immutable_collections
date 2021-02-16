@@ -56,8 +56,8 @@ void main() {
 
   test("any", () {
     final LExample<int> ilist = LExample([1, 2, 3, 4, 5, 6]);
-    expect(ilist.any((int v) => v == 4), isTrue);
-    expect(ilist.any((int v) => v == 100), isFalse);
+    expect(ilist.any((int? v) => v == 4), isTrue);
+    expect(ilist.any((int? v) => v == 100), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -98,18 +98,18 @@ void main() {
 
   test("every", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.every((int v) => v > 0), isTrue);
-    expect(lExample.every((int v) => v < 0), isFalse);
-    expect(lExample.every((int v) => v != 4), isFalse);
+    expect(lExample.every((int? v) => v! > 0), isTrue);
+    expect(lExample.every((int? v) => v! < 0), isFalse);
+    expect(lExample.every((int? v) => v != 4), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("expand", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.expand((int v) => [v, v]),
+    expect(lExample.expand((int? v) => [v, v]),
         allOf(isA<Iterable<int>>(), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6].lock));
-    expect(lExample.expand((int v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[].lock));
+    expect(lExample.expand((int? v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[].lock));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -126,16 +126,16 @@ void main() {
 
   test("firstWhere", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.firstWhere((int v) => v > 1, orElse: () => 100), 2);
-    expect(lExample.firstWhere((int v) => v > 4, orElse: () => 100), 5);
-    expect(lExample.firstWhere((int v) => v > 5, orElse: () => 100), 6);
-    expect(lExample.firstWhere((int v) => v > 6, orElse: () => 100), 100);
+    expect(lExample.firstWhere((int? v) => v! > 1, orElse: () => 100), 2);
+    expect(lExample.firstWhere((int? v) => v! > 4, orElse: () => 100), 5);
+    expect(lExample.firstWhere((int? v) => v! > 5, orElse: () => 100), 6);
+    expect(lExample.firstWhere((int? v) => v! > 6, orElse: () => 100), 100);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("fold", () {
-    expect(LExample([1, 2, 3, 4, 5, 6]).fold(100, (int p, int e) => p * (1 + e)), 504000);
+    expect(LExample([1, 2, 3, 4, 5, 6]).fold(100, (int p, int? e) => p * (1 + e!)), 504000);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ void main() {
 
   test("forEach", () {
     int result = 100;
-    LExample([1, 2, 3, 4, 5, 6]).forEach((int v) => result *= 1 + v);
+    LExample([1, 2, 3, 4, 5, 6]).forEach((int? v) => result *= 1 + v!);
     expect(result, 504000);
   });
 
@@ -166,34 +166,34 @@ void main() {
 
   test("lastWhere", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.lastWhere((int v) => v < 2, orElse: () => 100), 1);
-    expect(lExample.lastWhere((int v) => v < 5, orElse: () => 100), 4);
-    expect(lExample.lastWhere((int v) => v < 6, orElse: () => 100), 5);
-    expect(lExample.lastWhere((int v) => v < 7, orElse: () => 100), 6);
-    expect(lExample.lastWhere((int v) => v < 50, orElse: () => 100), 6);
-    expect(lExample.lastWhere((int v) => v < 1, orElse: () => 100), 100);
+    expect(lExample.lastWhere((int? v) => v! < 2, orElse: () => 100), 1);
+    expect(lExample.lastWhere((int? v) => v! < 5, orElse: () => 100), 4);
+    expect(lExample.lastWhere((int? v) => v! < 6, orElse: () => 100), 5);
+    expect(lExample.lastWhere((int? v) => v! < 7, orElse: () => 100), 6);
+    expect(lExample.lastWhere((int? v) => v! < 50, orElse: () => 100), 6);
+    expect(lExample.lastWhere((int? v) => v! < 1, orElse: () => 100), 100);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("map", () {
-    expect(LExample([1, 2, 3]).map((int v) => v + 1), [2, 3, 4]);
-    expect(LExample([1, 2, 3, 4, 5, 6]).map((int v) => v + 1), [2, 3, 4, 5, 6, 7]);
+    expect(LExample([1, 2, 3]).map((int? v) => v! + 1), [2, 3, 4]);
+    expect(LExample([1, 2, 3, 4, 5, 6]).map((int? v) => v! + 1), [2, 3, 4, 5, 6, 7]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("reduce", () {
-    expect(LExample([1, 2, 3, 4, 5, 6]).reduce((int p, int e) => p * (1 + e)), 2520);
-    expect(LExample([5]).reduce((int p, int e) => p * (1 + e)), 5);
+    expect(LExample([1, 2, 3, 4, 5, 6]).reduce((int? p, int? e) => p! * (1 + e!)), 2520);
+    expect(LExample([5]).reduce((int? p, int? e) => p! * (1 + e!)), 5);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("singleWhere", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.singleWhere((int v) => v == 4, orElse: () => 100), 4);
-    expect(lExample.singleWhere((int v) => v == 50, orElse: () => 100), 100);
+    expect(lExample.singleWhere((int? v) => v == 4, orElse: () => 100), 4);
+    expect(lExample.singleWhere((int? v) => v == 50, orElse: () => 100), 100);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -210,10 +210,10 @@ void main() {
 
   test("skipWhile", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.skipWhile((int v) => v < 3), [3, 4, 5, 6]);
-    expect(lExample.skipWhile((int v) => v < 5), [5, 6]);
-    expect(lExample.skipWhile((int v) => v < 6), [6]);
-    expect(lExample.skipWhile((int v) => v < 100), []);
+    expect(lExample.skipWhile((int? v) => v! < 3), [3, 4, 5, 6]);
+    expect(lExample.skipWhile((int? v) => v! < 5), [5, 6]);
+    expect(lExample.skipWhile((int? v) => v! < 6), [6]);
+    expect(lExample.skipWhile((int? v) => v! < 100), []);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -231,20 +231,20 @@ void main() {
 
   test("takeWhile", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.takeWhile((int v) => v < 3), [1, 2]);
-    expect(lExample.takeWhile((int v) => v < 5), [1, 2, 3, 4]);
-    expect(lExample.takeWhile((int v) => v < 6), [1, 2, 3, 4, 5]);
-    expect(lExample.takeWhile((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
+    expect(lExample.takeWhile((int? v) => v! < 3), [1, 2]);
+    expect(lExample.takeWhile((int? v) => v! < 5), [1, 2, 3, 4]);
+    expect(lExample.takeWhile((int? v) => v! < 6), [1, 2, 3, 4, 5]);
+    expect(lExample.takeWhile((int? v) => v! < 100), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("where", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.where((int v) => v < 0), []);
-    expect(lExample.where((int v) => v < 3), [1, 2]);
-    expect(lExample.where((int v) => v < 5), [1, 2, 3, 4]);
-    expect(lExample.where((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
+    expect(lExample.where((int? v) => v! < 0), []);
+    expect(lExample.where((int? v) => v! < 3), [1, 2]);
+    expect(lExample.where((int? v) => v! < 5), [1, 2, 3, 4]);
+    expect(lExample.where((int? v) => v! < 100), [1, 2, 3, 4, 5, 6]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -297,28 +297,28 @@ void main() {
 class LExample<T> extends L<T> {
   final IList<T> _ilist;
 
-  LExample([Iterable<T> iterable]) : _ilist = IList(iterable);
+  LExample([Iterable<T>? iterable]) : _ilist = IList(iterable);
 
   @override
-  Iterator<T> get iterator => _ilist.iterator;
+  Iterator<T?> get iterator => _ilist.iterator;
 
   @override
-  T operator [](int index) => _ilist[index];
+  T? operator [](int index) => _ilist[index];
 
   @override
-  Iterable<T> get iter => _ilist;
+  Iterable<T?> get iter => _ilist;
 
   @override
-  T get first => _ilist.first;
+  T? get first => _ilist.first;
 
   @override
-  T get last => _ilist.last;
+  T? get last => _ilist.last;
 
   @override
   int get length => _ilist.length;
 
   @override
-  T get single => _ilist.single;
+  T? get single => _ilist.single;
 }
 
 //////////////////////////////////////////////////////////////////////////////

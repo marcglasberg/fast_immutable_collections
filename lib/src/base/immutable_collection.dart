@@ -61,7 +61,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
     if (_autoFlush == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
-    _autoFlush = value ?? true;
+    _autoFlush = value;
   }
 
   /// Global configuration that specifies if **unsafe constructors** can be used
@@ -70,7 +70,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
     if (_disallowUnsafeConstructors == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
-    _disallowUnsafeConstructors = value ?? false;
+    _disallowUnsafeConstructors = value;
   }
 
   /// Internal use only.
@@ -100,7 +100,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
     if (_prettyPrint == value) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
-    _prettyPrint = value ?? true;
+    _prettyPrint = value;
   }
 
   /// Flushes this collection, if necessary. Chainable method.
@@ -134,7 +134,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   bool same(C other);
 
   @override
-  String toString([bool prettyPrint]);
+  String toString([bool? prettyPrint]);
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 /// `identical`, but will give **less false negatives**. So it is almost always
 /// recommended to use `same` instead of `identical`.
 ///
-bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>>(C c1, C c2) {
+bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>?>(C c1, C c2) {
   if (identical(c1, c2)) return true;
   if (c1 == null || c2 == null) return false;
 
@@ -165,10 +165,10 @@ bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>>(C c1, C 
 /// collections, it will throw a [StateError]. Note this will **not** compare the
 /// configurations.
 ///
-bool areImmutableCollectionsWithEqualItems<C extends ImmutableCollection<dynamic>>(C c1, C c2) {
+bool areImmutableCollectionsWithEqualItems<C extends ImmutableCollection<dynamic>?>(C c1, C c2) {
   if (identical(c1, c2)) return true;
-  if (c1 is IList && c2 is IList) return c1.equalItems(c2);
-  if (c1 is ISet && c2 is ISet) return c1.equalItems(c2);
+  if (c1 is IList && c2 is IList) return (c1).equalItems(c2);
+  if (c1 is ISet && c2 is ISet) return (c1).equalItems(c2);
   if (c1 is IMap && c2 is IMap) return (c1).equalItemsToIMap(c2);
   if (c1 is IMapOfSets && c2 is IMapOfSets) return (c1).equalItemsToIMapOfSets(c2);
   return false;
@@ -191,9 +191,9 @@ abstract class CanBeEmpty {
 /// For an example, see `IList.removeAt()`.
 ///
 class Output<T> {
-  T _value;
+  T? _value;
 
-  T get value => _value;
+  T? get value => _value;
 
   Output();
 

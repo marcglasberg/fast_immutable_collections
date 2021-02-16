@@ -7,7 +7,7 @@ void main() {
 
   test("length", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iset = baseSet.lock;
+    final ISet<int> iset = baseSet.lock as ISet<int>;
     final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet(iset);
     expect(modifiableSetView.length, baseSet.length);
   });
@@ -16,7 +16,7 @@ void main() {
 
   test("lock", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iset = baseSet.lock;
+    final ISet<int> iset = baseSet.lock as ISet<int>;
     final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet(iset);
     expect(modifiableSetView.lock, allOf(isA<ISet<int>>(), baseSet));
   });
@@ -24,7 +24,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
-    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock);
+    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock as ISet<int>);
     expect(modifiableSetView.isEmpty, isFalse);
     expect(modifiableSetView.isNotEmpty, isTrue);
   });
@@ -32,7 +32,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
-    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock);
+    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock as ISet<int>);
     expect(modifiableSetView.contains(1), isTrue);
     expect(modifiableSetView.contains(2), isTrue);
     expect(modifiableSetView.contains(3), isTrue);
@@ -43,12 +43,12 @@ void main() {
 
   test("iterator", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iset = baseSet.lock;
+    final ISet<int> iset = baseSet.lock as ISet<int>;
     final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet(iset);
-    final Iterator<int> iterator = modifiableSetView.iterator;
+    final Iterator<int?> iterator = modifiableSetView.iterator;
 
     int count = 0;
-    final Set<int> result = {};
+    final Set<int?> result = {};
     while (iterator.moveNext()) {
       count++;
       result.add(iterator.current);
@@ -61,7 +61,7 @@ void main() {
 
   test("toSet", () {
     const Set<int> baseSet = {1, 2, 3};
-    final ISet<int> iset = baseSet.lock;
+    final ISet<int> iset = baseSet.lock as ISet<int>;
     final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet(iset);
     expect(modifiableSetView.toSet(), baseSet);
   });
@@ -69,7 +69,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("lookup", () {
-    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock);
+    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock as ISet<int>);
     expect(modifiableSetView.lookup(1), 1);
     expect(modifiableSetView.lookup(2), 2);
     expect(modifiableSetView.lookup(3), 3);
@@ -79,7 +79,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("add", () {
-    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock);
+    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock as ISet<int>);
     expect(modifiableSetView.add(3), isFalse);
     expect(modifiableSetView.add(4), isTrue);
     expect(modifiableSetView.length, 4);
@@ -89,7 +89,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("remove", () {
-    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock);
+    final ModifiableSetFromISet<int> modifiableSetView = ModifiableSetFromISet({1, 2, 3}.lock as ISet<int>);
     expect(modifiableSetView.remove(4), isFalse);
     expect(modifiableSetView.remove(3), isTrue);
     expect(modifiableSetView.length, 2);

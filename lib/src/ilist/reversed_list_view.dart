@@ -38,13 +38,13 @@ class ReversedListView<T> implements List<T> {
   @override
   int indexWhere(bool Function(T element) test, [int start = 0]) {
     var index = list.lastIndexWhere(test, start == 0 ? null : start);
-    return (index == -1) ? null : list.length - index - 1;
+    return (index == -1) ? -1 : list.length - index - 1;
   }
 
   @override
-  int lastIndexWhere(bool Function(T element) test, [int start]) {
+  int lastIndexWhere(bool Function(T element) test, [int? start]) {
     var index = list.indexWhere(test, start ?? 0);
-    return (index == -1) ? null : list.length - index - 1;
+    return (index == -1) ? -1 : list.length - index - 1;
   }
 
   @override
@@ -87,11 +87,11 @@ class ReversedListView<T> implements List<T> {
   Iterable<E> expand<E>(Iterable<E> Function(T element) f) => list.reversed.expand(f);
 
   @override
-  void fillRange(int start, int end, [T fillValue]) =>
+  void fillRange(int start, int end, [T? fillValue]) =>
       list.fillRange(length - end, length - start, fillValue);
 
   @override
-  T firstWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T firstWhere(bool Function(T element) test, {T Function()? orElse}) =>
       list.reversed.firstWhere(test, orElse: orElse);
 
   @override
@@ -117,7 +117,7 @@ class ReversedListView<T> implements List<T> {
   }
 
   @override
-  int lastIndexOf(T element, [int start]) {
+  int lastIndexOf(T element, [int? start]) {
     start ??= length - 1;
     var pos = list.indexOf(element, length - start - 1);
     return (pos == -1) ? -1 : length - pos - 1;
@@ -143,7 +143,7 @@ class ReversedListView<T> implements List<T> {
   String join([String separator = ""]) => list.reversed.join(separator);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
       list.reversed.lastWhere(test, orElse: orElse);
 
   @override
@@ -153,7 +153,7 @@ class ReversedListView<T> implements List<T> {
   T reduce(T Function(T value, T element) combine) => list.reversed.reduce(combine);
 
   @override
-  bool remove(Object value) => list.remove(value);
+  bool remove(Object? value) => list.remove(value);
 
   @override
   T removeAt(int index) => list.removeAt(list.length - 1 - index);
@@ -186,13 +186,13 @@ class ReversedListView<T> implements List<T> {
       length - end, length - start, iterable.skip(skipCount).take(end - start).toList().reversed);
 
   @override
-  void shuffle([Random random]) => list.shuffle(random);
+  void shuffle([Random? random]) => list.shuffle(random);
 
   @override
   T get single => list.single;
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
       list.singleWhere(test, orElse: orElse);
 
   @override
@@ -202,7 +202,7 @@ class ReversedListView<T> implements List<T> {
   Iterable<T> skipWhile(bool Function(T value) test) => list.reversed.skipWhile(test);
 
   @override
-  void sort([int Function(T a, T b) compare]) {
+  void sort([int Function(T a, T b)? compare]) {
     if (compare == null) {
       list.sort();
       for (var i = 0; i < list.length / 2; i++) {
@@ -215,7 +215,7 @@ class ReversedListView<T> implements List<T> {
   }
 
   @override
-  List<T> sublist(int start, [int end]) => list.reversed.toList().sublist(start, end);
+  List<T> sublist(int start, [int? end]) => list.reversed.toList().sublist(start, end);
 
   @override
   Iterable<T> take(int count) => list.reversed.take(count);
@@ -224,7 +224,7 @@ class ReversedListView<T> implements List<T> {
   Iterable<T> takeWhile(bool Function(T value) test) => list.reversed.takeWhile(test);
 
   @override
-  List<T> toList({bool growable = true}) => list.reversed.toList(growable: growable ?? true);
+  List<T> toList({bool growable = true}) => list.reversed.toList(growable: growable);
 
   @override
   Set<T> toSet() => list.reversed.toSet();

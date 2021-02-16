@@ -31,12 +31,12 @@ import "map_extension.dart";
 /// See also: [ModifiableMapFromIMap]
 ///
 @immutable
-class UnmodifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, CanBeEmpty {
-  final IMap<K, V> _iMap;
-  final Map<K, V> _map;
+class UnmodifiableMapFromIMap<K, V> with MapMixin<K?, V> implements Map<K, V>, CanBeEmpty {
+  final IMap<K?, V>? _iMap;
+  final Map<K, V>? _map;
 
   /// Create an unmodifiable [Set] view of type [UnmodifiableSetView], from an [iset].
-  UnmodifiableMapFromIMap(IMap<K, V> imap)
+  UnmodifiableMapFromIMap(IMap<K, V>? imap)
       : _iMap = imap ?? IMap.empty<K, V>(),
         _map = null;
 
@@ -46,19 +46,19 @@ class UnmodifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, Ca
         _map = map;
 
   @override
-  void operator []=(K key, V value) => throw UnsupportedError("Map is unmodifiable.");
+  void operator []=(K? key, V value) => throw UnsupportedError("Map is unmodifiable.");
 
   @override
-  V operator [](Object key) => _iMap != null ? _iMap[key as K] : _map[key];
+  V? operator [](Object? key) => _iMap != null ? _iMap![key as K?] : _map![key as K];
 
   @override
   void clear() => throw UnsupportedError("Map is unmodifiable.");
 
   @override
-  V remove(Object key) => throw UnsupportedError("Map is unmodifiable.");
+  V remove(Object? key) => throw UnsupportedError("Map is unmodifiable.");
 
   @override
-  Iterable<K> get keys => _iMap?.keys ?? _map.keys;
+  Iterable<K?> get keys => _iMap?.keys ?? _map!.keys;
 
-  IMap<K, V> get lock => _iMap ?? _map.lock;
+  IMap<K?, V?> get lock => _iMap ?? _map.lock;
 }

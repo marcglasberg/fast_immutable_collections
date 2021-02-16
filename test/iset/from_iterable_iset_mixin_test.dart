@@ -29,8 +29,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.any((Student student) => student.name == "James"), isTrue);
-    expect(students.any((Student student) => student.name == "John"), isFalse);
+    expect(students.any((Student? student) => student!.name == "James"), isTrue);
+    expect(students.any((Student? student) => student!.name == "John"), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -65,8 +65,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.every((Student student) => student.name.length > 1), isTrue);
-    expect(students.every((Student student) => student.name.length > 4), isFalse);
+    expect(students.every((Student? student) => student!.name.length > 1), isTrue);
+    expect(students.every((Student? student) => student!.name.length > 4), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -78,21 +78,21 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     expect(
-        students.expand((Student student) => [student, student]),
+        students.expand((Student? student) => [student, student]),
         allOf(
           isA<Iterable<Student>>(),
           <Student>[james, james, sara, sara, lucy, lucy],
         ));
 
     expect(
-        students.expand((Student student) => [student, student]).toISet(),
+        students.expand((Student? student) => [student, student]).toISet(),
         allOf(
           isA<Iterable<Student>>(),
           <Student>{james, sara, lucy}.lock,
         ));
 
     expect(
-        students.expand((Student student) => [student, Student(student.name + "2")]),
+        students.expand((Student? student) => [student, Student(student!.name + "2")]),
         allOf(
             isA<Iterable<Student>>(),
             <Student>[
@@ -130,15 +130,15 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     expect(
-        students.firstWhere((Student student) => student.name.length == 5,
+        students.firstWhere((Student? student) => student!.name.length == 5,
             orElse: () => const Student("John")),
         const Student("James"));
     expect(
-        students.firstWhere((Student student) => student.name.length == 4,
+        students.firstWhere((Student? student) => student!.name.length == 4,
             orElse: () => const Student("John")),
         const Student("Sara"));
     expect(
-        students.firstWhere((Student student) => student == const Student("Bob"),
+        students.firstWhere((Student? student) => student == const Student("Bob"),
             orElse: () => const Student("John")),
         const Student("John"));
   });
@@ -154,8 +154,8 @@ void main() {
     expect(
         students.fold(
             Student("Class"),
-            (Student previousStudent, Student currentStudent) =>
-                Student(previousStudent.name + " : " + currentStudent.name)),
+            (Student previousStudent, Student? currentStudent) =>
+                Student(previousStudent.name + " : " + currentStudent!.name)),
         const Student("Class : James : Sara : Lucy"));
   });
 
@@ -181,7 +181,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    students.forEach((Student student) => concatenated += student.name + ", ");
+    students.forEach((Student? student) => concatenated += student!.name + ", ");
 
     expect(concatenated, "James, Sara, Lucy, ");
   });
@@ -208,15 +208,15 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     expect(
-        students.lastWhere((Student student) => student.name.length == 5,
+        students.lastWhere((Student? student) => student!.name.length == 5,
             orElse: () => const Student("John")),
         const Student("James"));
     expect(
-        students.lastWhere((Student student) => student.name.length == 4,
+        students.lastWhere((Student? student) => student!.name.length == 4,
             orElse: () => const Student("John")),
         const Student("Lucy"));
     expect(
-        students.lastWhere((Student student) => student == const Student("Bob"),
+        students.lastWhere((Student? student) => student == const Student("Bob"),
             orElse: () => const Student("John")),
         const Student("John"));
   });
@@ -228,7 +228,7 @@ void main() {
     const Student sara = Student("Sara");
     final Students students = Students([james, sara]);
 
-    expect(students.map((Student student) => Student(student.name + student.name)),
+    expect(students.map((Student? student) => Student(student!.name + student.name)),
         {const Student("JamesJames"), const Student("SaraSara")});
   });
 
@@ -241,8 +241,8 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     expect(
-        students.reduce((Student currentStudent, Student nextStudent) =>
-            Student(currentStudent.name + " " + nextStudent.name)),
+        students.reduce((Student? currentStudent, Student? nextStudent) =>
+            Student(currentStudent!.name + " " + nextStudent!.name)),
         Student("James Sara Lucy"));
   });
 
@@ -255,11 +255,11 @@ void main() {
     final Students students = Students([james, sara, lucy, Student("James")]);
 
     expect(
-        students.singleWhere((Student student) => student.name == "Sara",
+        students.singleWhere((Student? student) => student!.name == "Sara",
             orElse: () => Student("Bob")),
         const Student("Sara"));
     expect(
-        students.singleWhere((Student student) => student.name == "Goat",
+        students.singleWhere((Student? student) => student!.name == "Goat",
             orElse: () => Student("Bob")),
         const Student("Bob"));
   });
@@ -284,7 +284,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.skipWhile((Student student) => student.name.length > 4),
+    expect(students.skipWhile((Student? student) => student!.name.length > 4),
         {const Student("Sara"), const Student("Lucy")});
   });
 
@@ -313,7 +313,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.takeWhile((Student student) => student.name.length >= 5),
+    expect(students.takeWhile((Student? student) => student!.name.length >= 5),
         {const Student("James")});
   });
 
@@ -325,8 +325,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(students.where((Student student) => student.name.length == 5), {const Student("James")});
-    expect(students.where((Student student) => student.name.length == 100), <Student>{});
+    expect(students.where((Student? student) => student!.name.length == 5), {const Student("James")});
+    expect(students.where((Student? student) => student!.name.length == 100), <Student>{});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -364,7 +364,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    final Iterator<Student> iterator = students.iterator;
+    final Iterator<Student?> iterator = students.iterator;
 
     // Iterator will respect the sort order (when ConfigSet.sort is `true`)
     expect(iterator.current, isNull);
@@ -440,7 +440,7 @@ void main() {
 class Students with FromIterableISetMixin<Student> {
   final ISet<Student> _students;
 
-  Students([Iterable<Student> students]) : _students = ISet(students);
+  Students([Iterable<Student>? students]) : _students = ISet(students);
 
   @override
   ISet<Student> get iter => _students;

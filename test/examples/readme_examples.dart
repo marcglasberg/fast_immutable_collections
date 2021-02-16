@@ -21,8 +21,8 @@ void main() {
 
   testAndPrint("Creating IList", () {
     IList<int> ilist1 = IList([1, 2]);
-    IList<int> ilist2 = [1, 2].lock;
-    IList<int> ilist3 = {1, 2}.toIList();
+    IList<int> ilist2 = [1, 2].lock as IList<int>;
+    IList<int>? ilist3 = {1, 2}.toIList();
 
     var list1 = List.of(ilist1);
     var list2 = ilist1.unlock;
@@ -38,7 +38,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Basic IList usage", () {
-    var ilist1 = [1, 2].lock;
+    var ilist1 = [1, 2].lock as IList<int>;
     var ilist2 = ilist1.add(3);
     var ilist3 = ilist2.remove(2);
 
@@ -50,15 +50,15 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Chain methods", () {
-    var ilist = [1, 2].lock.add(3).remove(4);
+    var ilist = [1, 2].lock.add(3).remove(4) as IList<int>;
     print(ilist); // Prints 1, 2
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Iterating", () {
-    var ilist = [1, 2, 3, 4].lock;
-    for (int value in ilist) print(value); // Prints 1, 2, 3, 4.
+    var ilist = [1, 2, 3, 4].lock as IList<int>;
+    for (int? value in ilist) print(value); // Prints 1, 2, 3, 4.
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -67,12 +67,12 @@ void main() {
     IList<int> ilist = ["Bob", "Alice", "Dominic", "Carl"]
         .lock
         .sort() // Alice, Bob, Carl, Dominic
-        .map((name) => name.length) // 5, 3, 4, 7
+        .map(((name) => name.length) as _ Function(String?)) // 5, 3, 4, 7
         .take(3) // 5, 3, 4
-        .toIList()
+        .toIList()!
         .sort() // 3, 4, 5
         .toggle(4) // 3, 5,
-        .toggle(2); // 3, 5, 2;
+        .toggle(2) as IList<int>; // 3, 5, 2;
 
     print(ilist.runtimeType); // Prints: IList<int>
     print(ilist); // Prints [3, 5, 2]
@@ -84,7 +84,7 @@ void main() {
     Map<IList, int> sumResult = {};
 
     String getSum(int a, int b) {
-      var keys = [a, b].lock;
+      var keys = [a, b].lock as IList<int>;
       var sum = sumResult[keys];
       if (sum != null) {
         return "Got from cache: $a + $b = $sum";
@@ -103,10 +103,10 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Getters `withIdentityEquals` and `withDeepEquals`", () {
-    var ilist = [1, 2].lock;
+    var ilist = [1, 2].lock as IList<int>;
 
     // ILists by default use deep equals.
-    var ilist1 = [1, 2].lock;
+    var ilist1 = [1, 2].lock as IList<int>;
 
     // But you can change it to identity equals.
     var ilist2 = ilist.withIdentityEquals;
@@ -123,8 +123,8 @@ void main() {
 
   testAndPrint("Method `withConfig`", () {
     var list = [1, 2];
-    var ilist1 = list.lock.withConfig(ConfigList(isDeepEquals: true));
-    var ilist2 = list.lock.withConfig(ConfigList(isDeepEquals: false));
+    var ilist1 = list.lock.withConfig(ConfigList(isDeepEquals: true)) as IList<int>;
+    var ilist2 = list.lock.withConfig(ConfigList(isDeepEquals: false)) as IList<int>;
 
     print(list.lock == ilist1); // True!
     print(list.lock == ilist2); // False!
@@ -212,7 +212,7 @@ void main() {
     var sara = Student("Sara");
     var lucy = Student("Lucy");
 
-    var students = Students().add(james).addAll([sara, lucy]);
+    Students students = Students().add(james).addAll([sara, lucy]);
 
     expect(students.iter, [james, sara, lucy]);
     expect(students.greetings(), "Hello James, Sara, Lucy.");
@@ -224,7 +224,7 @@ void main() {
     var originalSet = {2, 4, 1, 9, 3};
 
     /// Sorts: "1,2,3,4,9"
-    var iset = originalSet.lock.withConfig(ConfigSet(sort: true));
+    var iset = originalSet.lock.withConfig(ConfigSet(sort: true)) as ISet<int>;
     var result1 = iset.join(",");
     var result2 = iset.iterator.toIterable().join(",");
     var result3 = iset.toList().join(",");
@@ -243,7 +243,7 @@ void main() {
     expect(result5, "1,2,3,4,9");
 
     /// Does not sort, but keeps original order: "2,4,1,9,3"
-    iset = originalSet.lock.withConfig(ConfigSet(sort: false));
+    iset = originalSet.lock.withConfig(ConfigSet(sort: false)) as ISet<int>;
     result1 = iset.join(",");
     result2 = iset.iterator.toIterable().join(",");
     result3 = iset.toList().join(",");
@@ -377,15 +377,15 @@ class Student implements Comparable<Student> {
 }
 
 class Students with FromIListMixin<Student, Students> {
-  final IList<Student> _students;
+  final IList<Student?> _students;
 
-  Students([Iterable<Student> students]) : _students = IList(students);
-
-  @override
-  Students newInstance(IList<Student> ilist) => Students(ilist);
+  Students([Iterable<Student?>? students]) : _students = IList(students);
 
   @override
-  IList<Student> get iter => _students;
+  Students newInstance(IList<Student?>? ilist) => Students(ilist);
+
+  @override
+  IList<Student?> get iter => _students;
 
   String greetings() => "Hello ${_students.join(", ")}.";
 }
@@ -414,21 +414,21 @@ class Course {
 class StudentsPerCourse {
   final IMapOfSets<Course, Student> imap;
 
-  StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
+  StudentsPerCourse([Map<Course, Set<Student>>? studentsPerCourse])
       : imap = (studentsPerCourse ?? {}).lock;
 
   StudentsPerCourse._(this.imap);
 
   ISet<Course> courses() => imap.keysAsSet;
 
-  ISet<Student> students() => imap.valuesAsSet;
+  ISet<Student?> students() => imap.valuesAsSet;
 
   IMapOfSets<Student, Course> getCoursesPerStudent() => imap.invertKeysAndValues();
 
-  IList<Student> studentsInAlphabeticOrder() =>
-      imap.valuesAsSet.toIList(compare: (s1, s2) => s1.name.compareTo(s2.name));
+  IList<Student?> studentsInAlphabeticOrder() =>
+      imap.valuesAsSet.toIList(compare: (s1, s2) => s1!.name.compareTo(s2!.name));
 
-  IList<String> studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s.name).toIList();
+  IList<String>? studentNamesInAlphabeticOrder() => imap.valuesAsSet.map((s) => s!.name).toIList();
 
   StudentsPerCourse addStudentToCourse(Student student, Course course) =>
       StudentsPerCourse._(imap.add(course, student));
@@ -450,7 +450,7 @@ class StudentsPerCourse {
 
   StudentsPerCourse removeCourse(Course course) => StudentsPerCourse._(imap.removeSet(course));
 
-  Map<Course, Set<Student>> toMap() => imap.unlock;
+  Map<Course, Set<Student?>> toMap() => imap.unlock;
 
   int get numberOfCourses => imap.lengthOfKeys;
 

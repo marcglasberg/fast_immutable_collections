@@ -32,11 +32,11 @@ import "list_extension.dart";
 ///
 @immutable
 class UnmodifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEmpty {
-  final IList<T> _iList;
-  final List<T> _list;
+  final IList<T>? _iList;
+  final List<T>? _list;
 
   /// Create an unmodifiable [List] view of type [UnmodifiableListFromIList], from an [ilist].
-  UnmodifiableListFromIList(IList<T> ilist)
+  UnmodifiableListFromIList(IList<T>? ilist)
       : _iList = (ilist != null) ? ilist : IList.empty<T>(),
         _list = null;
 
@@ -46,23 +46,25 @@ class UnmodifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEm
         _list = list;
 
   @override
-  T operator [](int index) => (_iList != null) ? _iList[index] : _list[index];
+  T operator [](int index) {
+    return (_iList != null) ? _iList![index] : _list![index];
+  }
 
   @override
-  void operator []=(int index, T value) => throw UnsupportedError("List in unmodifiable.");
+  void operator []=(int index, T? value) => throw UnsupportedError("List in unmodifiable.");
 
   @override
-  int get length => (_iList != null) ? _iList.length : _list.length;
+  int get length => (_iList != null) ? _iList!.length : _list!.length;
 
   @override
   set length(int newLength) => throw UnsupportedError("List in unmodifiable.");
 
   @override
-  void add(T value) => throw UnsupportedError("List in unmodifiable.");
+  void add(T? value) => throw UnsupportedError("List in unmodifiable.");
 
   @override
   void addAll(Iterable<T> values) => throw UnsupportedError("List in unmodifiable.");
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => (_iList != null) ? _iList : _list.lock;
+  IList<T?>? get lock => (_iList != null) ? _iList : _list!.lock;
 }

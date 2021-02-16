@@ -35,10 +35,10 @@ class ListSetView<T> implements ListSet<T> {
   bool contains(covariant T value) => _set.contains(value);
 
   @override
-  bool containsAll(covariant Iterable<T> other) => _set.containsAll(other);
+  bool containsAll(covariant Iterable<T?> other) => _set.containsAll(other);
 
   @override
-  Set<T> difference(Set<Object> other) => _set.difference(other);
+  Set<T> difference(Set<Object?> other) => _set.difference(other);
 
   @override
   T elementAt(int index) => _set.elementAt(index);
@@ -56,11 +56,11 @@ class ListSetView<T> implements ListSet<T> {
   T get last => _set.last;
 
   @override
-  T firstWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T firstWhere(bool Function(T element) test, {T Function()? orElse}) =>
       _set.firstWhere(test, orElse: orElse);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
       _set.lastWhere(test, orElse: orElse);
 
   @override
@@ -74,7 +74,7 @@ class ListSetView<T> implements ListSet<T> {
   void forEach(void Function(T element) f) => _set.forEach(f);
 
   @override
-  Set<T> intersection(Set<Object> other) => _set.intersection(other);
+  Set<T> intersection(Set<Object?> other) => _set.intersection(other);
 
   @override
   bool get isEmpty => _set.isEmpty;
@@ -92,7 +92,7 @@ class ListSetView<T> implements ListSet<T> {
   int get length => _set.length;
 
   @override
-  T lookup(Object object) => _set.lookup(object);
+  T? lookup(Object? object) => _set.lookup(object);
 
   @override
   Iterable<E> map<E>(E Function(T e) f) => _set.map(f);
@@ -101,12 +101,12 @@ class ListSetView<T> implements ListSet<T> {
   T reduce(T Function(T value, T element) combine) => _set.reduce(combine);
 
   @override
-  bool remove(Object value) {
+  bool remove(Object? value) {
     throw UnsupportedError("Can't remove from a ListSetView.");
   }
 
   @override
-  void removeAll(Iterable<Object> elements) {
+  void removeAll(Iterable<Object?> elements) {
     throw UnsupportedError("Can't removeAll from a ListSetView.");
   }
 
@@ -116,7 +116,7 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  void retainAll(Iterable<Object> elements) {
+  void retainAll(Iterable<Object?> elements) {
     throw UnsupportedError("Can't retainAll from a ListSetView.");
   }
 
@@ -129,7 +129,7 @@ class ListSetView<T> implements ListSet<T> {
   T get single => _set.single;
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
       _set.singleWhere(test, orElse: orElse);
 
   @override
@@ -174,7 +174,7 @@ class ListSetView<T> implements ListSet<T> {
   Map<int, T> asMap() => _set.toList(growable: false).asMap();
 
   @override
-  void fillRange(int start, int end, [T fillValue]) {
+  void fillRange(int start, int end, [T? fillValue]) {
     throw UnsupportedError("Can't fillRange from a ListSet.");
   }
 
@@ -211,13 +211,13 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  int lastIndexOf(T element, [int start]) {
+  int lastIndexOf(T element, [int? start]) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
-  int lastIndexWhere(bool Function(T element) test, [int start]) {
+  int lastIndexWhere(bool Function(T element) test, [int? start]) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
@@ -273,19 +273,19 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  void shuffle([Random random]) {
+  void shuffle([Random? random]) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
-  void sort([int Function(T a, T b) compare]) {
+  void sort([int Function(T a, T b)? compare]) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
   @override
-  List<T> sublist(int start, [int end]) {
+  List<T> sublist(int start, [int? end]) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }

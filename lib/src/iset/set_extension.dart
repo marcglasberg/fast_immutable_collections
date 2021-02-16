@@ -38,17 +38,17 @@ extension FicSetExtension<T> on Set<T> {
   /// 3) Items of this set which are also in [other], in this set's order.
   /// 4) Items of this set which are also in [other], in [other]'s order.
   ///
-  IListOf4<List> diffAndIntersect<G>(
+  IListOf4<List?> diffAndIntersect<G>(
     Set<G> other, {
     bool diffThisMinusOther = true,
     bool diffOtherMinusThis = true,
     bool intersectThisWithOther = true,
     bool intersectOtherWithThis = true,
   }) {
-    List<T> _differenceThisMinusOther = diffThisMinusOther ? [] : null;
-    List<G> _differenceOtherMinusThis = diffOtherMinusThis ? [] : null;
-    List<T> _intersectionOfThisWithOther = intersectThisWithOther ? [] : null;
-    List<T> _intersectionOfOtherWithThis = intersectOtherWithThis ? [] : null;
+    List<T>? _differenceThisMinusOther = diffThisMinusOther ? [] : null;
+    List<G>? _differenceOtherMinusThis = diffOtherMinusThis ? [] : null;
+    List<T>? _intersectionOfThisWithOther = intersectThisWithOther ? [] : null;
+    List<T>? _intersectionOfOtherWithThis = intersectOtherWithThis ? [] : null;
 
     if (diffThisMinusOther || intersectThisWithOther)
       for (var element in this) {

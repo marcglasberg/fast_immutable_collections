@@ -27,14 +27,14 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Create an [ISet] from any [Iterable].
   /// Fast, if the [Iterable] is another [ISet].
-  factory ISet([Iterable<T> iterable]) => //
+  factory ISet([Iterable<T>? iterable]) => //
       ISet.withConfig(iterable, defaultConfig);
 
   /// Create an [ISet] from any [Iterable] and a [ConfigSet].
   /// Fast, if the Iterable is another [ISet].
   factory ISet.withConfig(
-    Iterable<T> iterable,
-    ConfigSet config,
+    Iterable<T>? iterable,
+    ConfigSet? config,
   ) {
     config = config ?? defaultConfig;
     return iterable is ISet<T>
@@ -56,13 +56,11 @@ class ISet<T> // ignore: must_be_immutable
   ///
   static ISet<T> fromIterable<T, I>(
     Iterable<I> iterable, {
-    @required Iterable<T> Function(I) mapper,
-    ConfigSet config,
+    required Iterable<T>? Function(I) mapper,
+    ConfigSet? config,
   }) {
-    assert(mapper != null);
-
     config ??= defaultConfig;
-    var result = ListSet.of(iterable.expand(mapper), sort: config.sort);
+    var result = ListSet.of(iterable.expand(mapper as Iterable<T> Function(I)), sort: config.sort);
     return ISet<T>._unsafeFromSet(result, config: config);
   }
 
@@ -83,7 +81,6 @@ class ISet<T> // ignore: must_be_immutable
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
   ISet<T> withConfig(ConfigSet config) {
-    assert(config != null);
     if (config == this.config)
       return this;
     else {
@@ -114,8 +111,7 @@ class ISet<T> // ignore: must_be_immutable
   /// not sorted, it will break the [ISet] and any other derived sets in unpredictable
   /// ways.
   ///
-  ISet.unsafe(Set<T> set, {@required this.config})
-      : _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set) {
+  ISet.unsafe(Set<T> set, {required this.config}) : _s = SFlat<T>.unsafe(set) {
     if (ImmutableCollection.disallowUnsafeConstructors)
       throw UnsupportedError("ISet.unsafe is disallowed.");
   }
@@ -125,7 +121,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// Note: If you want to create an empty immutable collection of the same type
   /// and same configuration as a source collection, simply call [clear] in the source collection.
-  static ISet<T> empty<T>([ConfigSet config]) => ISet._unsafe(
+  static ISet<T> empty<T>([ConfigSet? config]) => ISet._unsafe(
         SFlat.empty<T>(),
         config: config ?? defaultConfig,
       );
@@ -162,7 +158,7 @@ class ISet<T> // ignore: must_be_immutable
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
-    _defaultConfig = config ?? const ConfigSet();
+    _defaultConfig = config;
   }
 
   /// See also: [ImmutableCollection]
@@ -179,7 +175,7 @@ class ISet<T> // ignore: must_be_immutable
   static set asyncAutoflush(bool value) {
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
-    if (value != null) _asyncAutoflush = value;
+    _asyncAutoflush = value;
   }
 
   static ConfigSet _defaultConfig = const ConfigSet();
@@ -244,8 +240,8 @@ class ISet<T> // ignore: must_be_immutable
 
   /// **Safe**. Fast if the iterable is an [ISet].
   ISet._(
-    Iterable<T> iterable, {
-    @required this.config,
+    Iterable<T>? iterable, {
+    required this.config,
   }) : _s = iterable is ISet<T>
             ? iterable._s
             : iterable == null
@@ -253,12 +249,10 @@ class ISet<T> // ignore: must_be_immutable
                 : SFlat<T>(iterable, config: config);
 
   /// **Unsafe**. Note: Does not sort.
-  ISet._unsafe(this._s, {@required this.config}) : assert(config != null);
+  ISet._unsafe(this._s, {required this.config});
 
   /// **Unsafe**. Note: Does not sort.
-  ISet._unsafeFromSet(Set<T> set, {@required this.config})
-      : assert(config != null),
-        _s = (set == null) ? SFlat.empty<T>() : SFlat<T>.unsafe(set);
+  ISet._unsafeFromSet(Set<T> set, {required this.config}) : _s = SFlat<T>.unsafe(set);
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
   ISet<T> get withIdentityEquals =>
@@ -347,7 +341,8 @@ class ISet<T> // ignore: must_be_immutable
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
-  bool equalItems(covariant Iterable other) {
+  bool equalItems(covariant Iterable? other) {
+    if (other == null) return false;
     if (identical(this, other)) return true;
 
     if (other is ISet) {
@@ -355,14 +350,15 @@ class ISet<T> // ignore: must_be_immutable
       return (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat);
     }
 
-    return (other != null) && (flush._s as SFlat<T>).deepSetEqualsToIterable(other);
+    return (flush._s as SFlat<T>).deepSetEqualsToIterable(other);
   }
 
   /// Will return `true` only if the [ISet] and the iterable items have the same number of elements,
   /// and the elements of the [ISet] can be paired with the elements of the iterable, so that each
   /// pair is equal. This may be slow for very large sets, since it compares each item,
   /// one by one.
-  bool unorderedEqualItems(covariant Iterable other) {
+  bool unorderedEqualItems(covariant Iterable? other) {
+    if (other == null) return false;
     if (identical(this, other) || (other is ISet<T> && same(other))) return true;
     return const UnorderedIterableEquality<dynamic>().equals(_s, other);
   }
@@ -370,13 +366,13 @@ class ISet<T> // ignore: must_be_immutable
   /// Will return `true` only if the list items are equal and the list configurations are equal.
   /// This may be slow for very large sets, since it compares each item, one by one.
   @override
-  bool equalItemsAndConfig(ISet other) {
+  bool equalItemsAndConfig(ISet? other) {
     if (identical(this, other)) return true;
 
     // Objects with different hashCodes are not equal.
     if (_isUnequalByHashCode(other)) return false;
 
-    return config == other.config &&
+    return config == other!.config &&
         (identical(_s, other._s) || (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat));
   }
 
@@ -388,7 +384,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// Note: We use the **CACHED** hashCodes. If any of the hashCodes is null it
   /// means we don't have this information yet, and we don't calculate it.
-  bool _isUnequalByHashCode(ISet other) {
+  bool _isUnequalByHashCode(ISet? other) {
     return (other == null) ||
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
@@ -401,14 +397,15 @@ class ISet<T> // ignore: must_be_immutable
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
   @override
-  bool same(ISet<T> other) => identical(_s, other._s) && (config == other.config);
+  bool same(ISet<T>? other) =>
+      (other != null) && identical(_s, other._s) && (config == other.config);
 
   // HashCode cache. Must be null if hashCode is not cached.
-  int _hashCode;
+  int? _hashCode;
 
   @override
   int get hashCode {
-    if (_hashCode != null) return _hashCode;
+    if (_hashCode != null) return _hashCode!;
 
     var hashCode = isDeepEquals //
         ? hash2((flush._s as SFlat<T>).deepSetHashcode(), config.hashCode)
@@ -454,11 +451,11 @@ class ISet<T> // ignore: must_be_immutable
   }
 
   /// Returns a new set containing the current set plus all the given items.
-  ISet<T> addAll(Iterable<T> items) {
+  ISet<T> addAll(Iterable<T>? items) {
     ISet<T> result;
     result = config.sort
-        ? ISet._unsafe(SFlat(_s.followedBy(items), config: config), config: config)
-        : ISet<T>._unsafe(_s.addAll(items), config: config);
+        ? ISet._unsafe(SFlat(_s.followedBy(items!), config: config), config: config)
+        : ISet<T>._unsafe(_s.addAll(items!), config: config);
 
     // A set created with `addAll` has a larger counter than both its source
     // sets. This improves the order in which sets are flushed.
@@ -526,7 +523,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Expands each element of this [ISet] into zero or more elements.
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet config}) => _s.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet? config}) => _s.expand(f);
 
   /// The number of objects in this set.
   @override
@@ -580,14 +577,14 @@ class ISet<T> // ignore: must_be_immutable
   T get single => _s.single;
 
   /// Returns the first element, or `null` if the set is empty.
-  T get firstOrNull => firstOr(null);
+  T? get firstOrNull => isEmpty ? null : first;
 
   /// Returns the last element, or `null` if the set is empty.
-  T get lastOrNull => lastOr(null);
+  T? get lastOrNull => isEmpty ? null : last;
 
   /// Checks that the set has only one element, and returns that element.
   /// Return `null` if the set is empty or has more than one element.
-  T get singleOrNull => singleOr(null);
+  T? get singleOrNull => isEmpty ? null : single;
 
   /// Returns the first element, or [orElse] if the set is empty.
   T firstOr(T orElse) => isEmpty ? orElse : first;
@@ -605,7 +602,7 @@ class ISet<T> // ignore: must_be_immutable
   /// function is returned.
   /// - If [orElse] is omitted, it defaults to throwing a [StateError].
   @override
-  T firstWhere(bool Function(T) test, {T Function() orElse}) {
+  T firstWhere(bool Function(T) test, {T Function()? orElse}) {
     _count();
     return _s.firstWhere(test, orElse: orElse);
   }
@@ -637,7 +634,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns the last element that satisfies the given predicate [test].
   @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse}) {
+  T lastWhere(bool Function(T element) test, {T Function()? orElse}) {
     _count();
     return _s.lastWhere(test, orElse: orElse);
   }
@@ -645,7 +642,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Returns an [Iterable] with elements that are created by calling [f]
   /// on each element of this [ISet] in iteration order.
   @override
-  Iterable<E> map<E>(E Function(T element) f, {ConfigSet config}) {
+  Iterable<E> map<E>(E Function(T element) f, {ConfigSet? config}) {
     _count();
     return _s.map(f);
   }
@@ -660,7 +657,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns the single element that satisfies [test].
   @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse}) {
+  T singleWhere(bool Function(T element) test, {T Function()? orElse}) {
     _count();
     return _s.singleWhere(test, orElse: orElse);
   }
@@ -696,7 +693,7 @@ class ISet<T> // ignore: must_be_immutable
   @override
   List<T> toList({
     bool growable = true,
-    int Function(T a, T b) compare,
+    int Function(T a, T b)? compare,
   }) {
     _count();
 
@@ -716,8 +713,8 @@ class ISet<T> // ignore: must_be_immutable
   /// You can also provide a [config] for the [IList].
   ///
   IList<T> toIList({
-    int Function(T a, T b) compare,
-    ConfigList config,
+    int Function(T a, T b)? compare,
+    ConfigList? config,
   }) {
     _count();
     return IList.fromISet(this, compare: compare, config: config);
@@ -728,11 +725,11 @@ class ISet<T> // ignore: must_be_immutable
   /// If you provide a [compare] function, the resulting set will be sorted with it.
   ///
   @override
-  Set<T> toSet({int Function(T a, T b) compare}) {
+  Set<T> toSet({int Function(T a, T b)? compare}) {
     _count();
 
     if (config.sort && compare == null) {
-      var orderedList = (flush._s as SFlat<T>).toList(growable: false);
+      List<T> orderedList = (flush._s as SFlat<T>).toList(growable: false);
       return LinkedHashSet.of(orderedList);
     } else {
       if (compare != null) {
@@ -751,7 +748,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// See also: [ImmutableCollection]
   @override
-  String toString([bool prettyPrint]) {
+  String toString([bool? prettyPrint]) {
     if ((prettyPrint ?? ImmutableCollection.prettyPrint)) {
       int length = _s.length;
       if (length == 0) {
@@ -825,13 +822,13 @@ class ISet<T> // ignore: must_be_immutable
   /// rather than being based on an actual object instance,
   /// then there may not be a specific object instance representing the
   /// set element.
-  T lookup(T element) {
+  T? lookup(T element) {
     _count();
     return _s.lookup(element);
   }
 
   /// Removes each element of [elements] from this set.
-  ISet<T> removeAll(Iterable<Object> elements) {
+  ISet<T> removeAll(Iterable<Object?> elements) {
     return ISet._unsafeFromSet(unlock..removeAll(elements), config: config);
   }
 
@@ -846,7 +843,7 @@ class ISet<T> // ignore: must_be_immutable
   /// set that is equal to it (according to `this.contains`), and if so, the
   /// equal element in this set is retained, and elements that are not equal
   /// to any element in `elements` are removed.
-  ISet<T> retainAll(Iterable<Object> elements) {
+  ISet<T> retainAll(Iterable<Object?> elements) {
     return ISet._unsafeFromSet(unlock..retainAll(elements), config: config);
   }
 
@@ -867,13 +864,13 @@ abstract class S<T> implements Iterable<T> {
   ///
   /// Note these fallback methods need to calculate the flushed set, but
   /// because that's immutable, we **cache** it.
-  ListSet<T> _flushed;
+  ListSet<T>? _flushed;
 
   /// Returns the flushed set (flushes it only once).
   /// It is an error to use the flushed set outside of the [S] class.
-  ListSet<T> getFlushed(ConfigSet config) {
+  ListSet<T> getFlushed(ConfigSet? config) {
     _flushed ??= ListSet.of(this, sort: (config ?? ISet.defaultConfig).sort);
-    return _flushed;
+    return _flushed!;
   }
 
   /// Returns a Dart [Set] (*mutable, ordered, of type [LinkedHashSet]*).
@@ -922,7 +919,7 @@ abstract class S<T> implements Iterable<T> {
 
   bool containsAll(Iterable<T> other);
 
-  T lookup(T element);
+  T? lookup(T element);
 
   Set<T> difference(Set<T> other);
 
@@ -949,7 +946,7 @@ abstract class S<T> implements Iterable<T> {
   T get single => iter.single;
 
   @override
-  T firstWhere(bool Function(T) test, {T Function() orElse}) =>
+  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
   @override
@@ -966,7 +963,7 @@ abstract class S<T> implements Iterable<T> {
   String join([String separator = ""]) => iter.join(separator);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
   @override
@@ -976,7 +973,7 @@ abstract class S<T> implements Iterable<T> {
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function() orElse}) =>
+  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
   @override

@@ -12,7 +12,7 @@ void main() {
   test("Initialization Assertion Errors", () {
     expect(() => LAdd<int>(null, 2), throwsAssertionError);
     expect(() => LAdd<int>(null, 2), throwsAssertionError);
-    expect(() => LAdd<int>(null, null), throwsAssertionError);
+    expect(() => LAdd<int?>(null, null), throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ void main() {
 
   test("iterator", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
-    final Iterator<int> iter = lAdd.iterator;
+    final Iterator<int?> iter = lAdd.iterator;
 
     expect(iter.current, isNull);
     expect(iter.moveNext(), isTrue);
@@ -123,7 +123,7 @@ void main() {
 
     expect(lAdd, <int>[1, 2, 3]);
 
-    L<int> l = lAdd.add(4);
+    L<int?> l = lAdd.add(4);
 
     expect(original, <int>[1, 2]);
     expect(lAdd, <int>[1, 2, 3]);

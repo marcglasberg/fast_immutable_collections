@@ -79,10 +79,10 @@ void main() {
 
   test("everyEntry", () {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
-    expect(mExample.everyEntry((MapEntry<String, int> entry) => entry.value < 4), isTrue);
-    expect(mExample.everyEntry((MapEntry<String, int> entry) => entry.key != "z"), isTrue);
-    expect(mExample.everyEntry((MapEntry<String, int> entry) => entry.value > 10), isFalse);
-    expect(mExample.everyEntry((MapEntry<String, int> entry) => entry.key.length == 2), isFalse);
+    expect(mExample.everyEntry((MapEntry<String, int?> entry) => entry.value! < 4), isTrue);
+    expect(mExample.everyEntry((MapEntry<String, int?> entry) => entry.key != "z"), isTrue);
+    expect(mExample.everyEntry((MapEntry<String, int?> entry) => entry.value! > 10), isFalse);
+    expect(mExample.everyEntry((MapEntry<String, int?> entry) => entry.key.length == 2), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -91,16 +91,16 @@ void main() {
 //////////////////////////////////////////////////////////////////////////////
 
 @visibleForTesting
-class MExample<K, V> extends M<K, V> {
-  final IMap<K, V> _imap;
+class MExample<K, V> extends M<K, V?> {
+  final IMap<K, V?> _imap;
 
-  MExample([Map<K, V> map]) : _imap = IMap(map);
-
-  @override
-  V operator [](K key) => _imap[key];
+  MExample([Map<K, V>? map]) : _imap = IMap(map);
 
   @override
-  Iterable<MapEntry<K, V>> get entries => _imap.entries;
+  V? operator [](K key) => _imap[key];
+
+  @override
+  Iterable<MapEntry<K, V?>> get entries => _imap.entries;
 
   @override
   int get length => _imap.length;
@@ -109,16 +109,16 @@ class MExample<K, V> extends M<K, V> {
   Iterable<K> get keys => _imap.keys;
 
   @override
-  Iterable<V> get values => _imap.values;
+  Iterable<V?> get values => _imap.values;
 
   @override
-  Iterator<MapEntry<K, V>> get iterator => _imap.iterator;
+  Iterator<MapEntry<K, V?>?> get iterator => _imap.iterator;
 
   @override
   bool containsKey(K key) => _imap.containsKey(key);
 
   @override
-  bool containsValue(V value) => _imap.containsValue(value);
+  bool containsValue(V? value) => _imap.containsValue(value);
 }
 
 //////////////////////////////////////////////////////////////////////////////

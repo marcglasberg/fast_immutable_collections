@@ -17,55 +17,55 @@ import "ilist.dart";
 /// See also: [UnmodifiableListFromIList]
 ///
 class ModifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEmpty {
-  IList<T> _iList;
-  List<T> _list;
+  IList<T>? _iList;
+  List<T>? _list;
 
-  ModifiableListFromIList(IList<T> ilist)
+  ModifiableListFromIList(IList<T>? ilist)
       : _iList = ilist,
         _list = (ilist == null) ? [] : null;
 
   @override
-  T operator [](int index) => (_list != null) ? _list[index] : _iList[index];
+  T operator [](int index) => (_list != null) ? _list![index] : _iList![index];
 
   @override
   void operator []=(int index, T value) {
     if (_list == null) {
-      _list = _iList.unlock;
+      _list = _iList!.unlock;
       _iList = null; // To allow for garbage-collection.
     }
-    _list[index] = value;
+    _list![index] = value;
   }
 
   @override
-  int get length => (_list != null) ? _list.length : _iList.length;
+  int get length => (_list != null) ? _list!.length : _iList!.length;
 
   @override
   set length(int newLength) {
     if (_list == null) {
-      _list = _iList.unlock;
+      _list = _iList!.unlock;
       _iList = null; // To allow for garbage-collection.
     }
-    _list.length = newLength;
+    _list!.length = newLength;
   }
 
   @override
   void add(T value) {
     if (_list == null) {
-      _list = _iList.unlock;
+      _list = _iList!.unlock;
       _iList = null; // To allow for garbage-collection.
     }
-    _list.add(value);
+    _list!.add(value);
   }
 
   @override
   void addAll(Iterable<T> values) {
     if (_list == null) {
-      _list = _iList.unlock;
+      _list = _iList!.unlock;
       _iList = null; // To allow for garbage-collection.
     }
-    _list.addAll(values);
+    _list!.addAll(values);
   }
 
   /// Locks the list, returning an *immutable* list ([IList]).
-  IList<T> get lock => (_list != null) ? IList<T>(_list) : _iList;
+  IList<T> get lock => (_list != null) ? IList<T>(_list) : _iList!;
 }

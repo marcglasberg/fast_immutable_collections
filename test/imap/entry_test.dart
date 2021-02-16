@@ -16,8 +16,8 @@ void main() {
 
   test("MapEntryExtension.compareKeyAndValue", () {
     expect(
-        MapEntry<String, int>(null, null).compareKeyAndValue(MapEntry<String, int>(null, null)), 0);
-    expect(MapEntry<String, int>(null, null).compareKeyAndValue(null), -1);
+        MapEntry<String?, int?>(null, null).compareKeyAndValue(MapEntry<String?, int?>(null, null)), 0);
+    expect(MapEntry<String?, int?>(null, null).compareKeyAndValue(null), -1);
     expect(MapEntry<String, int>("a", 1).compareKeyAndValue(MapEntry<String, int>("a", 1)), 0);
     expect(MapEntry<String, int>("a", 1).compareKeyAndValue(MapEntry<String, int>("b", 1)), -1);
     expect(MapEntry<String, int>("a", 1).compareKeyAndValue(MapEntry<String, int>("a", 2)), -1);
@@ -34,7 +34,7 @@ void main() {
     expect(simpleEntry.print(false), "a: 1");
 
     // 2) The key is one of the immutable collections
-    final MapEntry<IList<String>, int> entryWithCollectionKeys = MapEntry(["a", "b"].lock, 1);
+    final MapEntry<IList<String>, int> entryWithCollectionKeys = MapEntry(["a", "b"].lock as IList<String>, 1);
 
     expect(entryWithCollectionKeys.print(false), "[a, b]: 1");
     expect(
@@ -44,7 +44,7 @@ void main() {
         "   b\n"
         "]: 1");
     // 3) The value is one of the immutable collections
-    final MapEntry<int, ISet<int>> entryWithCollectionValues = MapEntry(1, {1, 2, 3}.lock);
+    final MapEntry<int, ISet<int>> entryWithCollectionValues = MapEntry(1, {1, 2, 3}.lock as ISet<int>);
 
     expect(entryWithCollectionValues.print(false), "1: {1, 2, 3}");
     expect(
@@ -105,7 +105,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("compareTo", () {
-    expect(Entry<String, int>(null, null).compareTo(Entry<String, int>(null, null)), 0);
+    expect(Entry<String?, int?>(null, null).compareTo(Entry<String?, int?>(null, null)), 0);
     expect(Entry<String, int>("a", 1).compareTo(Entry<String, int>("a", 1)), 0);
     expect(Entry<String, int>("a", 1).compareTo(Entry<String, int>("b", 1)), -1);
     expect(Entry<String, int>("a", 1).compareTo(Entry<String, int>("a", 2)), -1);

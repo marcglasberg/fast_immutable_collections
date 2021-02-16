@@ -123,16 +123,16 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("sortLike", () {
-    IList<int> list = [1, 9, 2, 27, 12, 3, 12, 14, 11, 7, 0, 4].lock;
+    IList<int?> list = [1, 9, 2, 27, 12, 3, 12, 14, 11, 7, 0, 4].lock;
 
     /// Comparator Rules:
     /// 1) Order should be [7, 3, 4, 21, 2] when these values appear.
     /// 2) Otherwise, odd numbers come before even ones.
     /// 3) Otherwise, numbers come in their natural order.
-    int Function(int, int) compareTo = sortLike(const [7, 3, 4, 21, 2],
+    int Function(int?, int?) compareTo = sortLike(const [7, 3, 4, 21, 2],
         then: sortBy(
-          (x) => x % 2 == 1,
-          then: (int a, int b) => a.compareTo(b),
+          (x) => x! % 2 == 1,
+          then: (int? a, int? b) => a!.compareTo(b!),
         ));
 
     for (int i = 1; i < 1000; i++) {
@@ -144,7 +144,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("sortLike with mapper", () {
-    IList<String> list = [
+    IList<String?> list = [
       "1",
       "123456789",
       "12",
@@ -166,49 +166,49 @@ void main() {
     /// 3) Otherwise, string come ordered according to their length.
 
     // `order is List`
-    int Function(String, String) compareToList = sortLike(const [7, 3, 4, 21, 2],
-        mapper: (String text) => text.length,
+    int Function(String?, String?) compareToList = sortLike(const [7, 3, 4, 21, 2],
+        mapper: (String? text) => text!.length,
         then: sortBy(
-          (String x) => x.length % 2 == 1,
-          then: (String a, String b) => a.length.compareTo(b.length),
+          (String? x) => x!.length % 2 == 1,
+          then: (String? a, String? b) => a!.length.compareTo(b!.length),
         ));
 
     for (int i = 1; i < 1000; i++) {
       list = list.shuffle().sort(compareToList);
-      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+      expect(list.map((text) => text!.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
     }
 
     // `order is IList`
-    int Function(String, String) compareToIList = sortLike([7, 3, 4, 21, 2].lock,
-        mapper: (String text) => text.length,
+    int Function(String?, String?) compareToIList = sortLike([7, 3, 4, 21, 2].lock,
+        mapper: (String? text) => text!.length,
         then: sortBy(
-          (String x) => x.length % 2 == 1,
-          then: (String a, String b) => a.length.compareTo(b.length),
+          (String? x) => x!.length % 2 == 1,
+          then: (String? a, String? b) => a!.length.compareTo(b!.length),
         ));
 
     for (int i = 1; i < 1000; i++) {
       list = list.shuffle().sort(compareToIList);
-      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+      expect(list.map((text) => text!.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
     }
 
     // else: any other subtype of `Iterable`
-    int Function(String, String) compareToIterable = sortLike({7, 3, 4, 21, 2},
-        mapper: (String text) => text.length,
+    int Function(String?, String?) compareToIterable = sortLike({7, 3, 4, 21, 2},
+        mapper: (String? text) => text!.length,
         then: sortBy(
-          (String x) => x.length % 2 == 1,
-          then: (String a, String b) => a.length.compareTo(b.length),
+          (String? x) => x!.length % 2 == 1,
+          then: (String? a, String? b) => a!.length.compareTo(b!.length),
         ));
 
     for (int i = 1; i < 1000; i++) {
       list = list.shuffle().sort(compareToIterable);
-      expect(list.map((text) => text.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
+      expect(list.map((text) => text!.length), [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
     }
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("Sort with inconsistencies.", () {
-    IList<int> list = [3, 4, 9].lock;
+    IList<int?> list = [3, 4, 9].lock;
 
     /// Comparator Rules are inconsistent:
     /// 1) Order should be [4, 3] when these values appear.
@@ -220,10 +220,10 @@ void main() {
     /// of its natural order. This may result in 3 being put before 4, thus
     /// breaking the given list order.
     ///
-    int Function(int, int) compareTo = sortLike(const [4, 3],
+    int Function(int?, int?) compareTo = sortLike(const [4, 3],
         then: sortBy(
-          (x) => x % 2 == 1,
-          then: (int a, int b) => a.compareTo(b),
+          (x) => x! % 2 == 1,
+          then: (int? a, int? b) => a!.compareTo(b!),
         ));
 
     bool isInconsistent = false;
@@ -243,7 +243,7 @@ void main() {
 
   test("compareObjectTo", () {
     //
-    int nullValue;
+    int? nullValue;
 
     expect(1.compareObjectTo(2), -1);
     expect(2.compareObjectTo(1), 1);

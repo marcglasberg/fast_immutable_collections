@@ -11,7 +11,7 @@ class MAdd<K, V> extends M<K, V> {
   bool get isEmpty => false;
 
   @override
-  Iterable<MapEntry<K, V>> get entries => _m.entries.followedBy([MapEntry<K, V>(_key, _value)]);
+  Iterable<MapEntry<K, V?>> get entries => _m.entries.followedBy([MapEntry<K, V>(_key, _value)]);
 
   @override
   Iterable<K> get keys => _m.keys.followedBy(<K>[_key]);
@@ -21,7 +21,7 @@ class MAdd<K, V> extends M<K, V> {
 
   /// Implicitly uniting the maps.
   @override
-  V operator [](K key) => (key == _key) ? _value : _m[key];
+  V? operator [](K key) => (key == _key) ? _value : _m[key];
 
   @override
   bool contains(K key, V value) => (key == _key && value == _value) || _m.contains(key, value);
@@ -36,12 +36,12 @@ class MAdd<K, V> extends M<K, V> {
   int get length => _m.length + 1;
 
   @override
-  Iterator<MapEntry<K, V>> get iterator => IteratorMAdd(_m.iterator, MapEntry(_key, _value));
+  Iterator<MapEntry<K, V>?> get iterator => IteratorMAdd(_m.iterator, MapEntry(_key, _value));
 }
 
 // /////////////////////////////////////////////////////////////////////////////
 
-class IteratorMAdd<K, V> implements Iterator<MapEntry<K, V>> {
+class IteratorMAdd<K, V> implements Iterator<MapEntry<K, V>?> {
   Iterator<MapEntry<K, V>> iterator;
   MapEntry<K, V> item, _current;
   int extraMove;
@@ -51,7 +51,7 @@ class IteratorMAdd<K, V> implements Iterator<MapEntry<K, V>> {
         extraMove = 0;
 
   @override
-  MapEntry<K, V> get current => _current;
+  MapEntry<K, V>? get current => _current;
 
   @override
   bool moveNext() {

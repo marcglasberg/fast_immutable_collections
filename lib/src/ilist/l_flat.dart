@@ -9,10 +9,9 @@ class LFlat<T> extends L<T> {
 
   /// **Safe**.
   LFlat(Iterable<T> iterable)
-      : assert(iterable != null),
-        _list = List.of(iterable, growable: false);
+      : _list = List.of(iterable, growable: false);
 
-  LFlat.unsafe(this._list) : assert(_list != null);
+  LFlat.unsafe(this._list);
 
   @override
   List<T> get getFlushed => _list;
@@ -44,7 +43,7 @@ class LFlat<T> extends L<T> {
   @override
   T get single => _list.single;
 
-  bool deepListEquals(LFlat other) =>
+  bool deepListEquals(LFlat? other) =>
       (other != null) && const ListEquality<dynamic>().equals(_list, other._list);
 
   int deepListHashcode() => const ListEquality<dynamic>().hash(_list);

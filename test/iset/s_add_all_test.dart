@@ -19,14 +19,14 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll, isA<SAddAll<int>>());
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.unlock, [1, 2, 3, 4, 5]);
     expect(sAddAll.unlock, isA<Set<int>>());
   });
@@ -34,7 +34,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.isEmpty, isFalse);
     expect(sAddAll.isNotEmpty, isTrue);
   });
@@ -42,7 +42,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("length, first, last", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({3, 4}), {1, 2, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({3, 4}), {1, 2, 5});
     expect(sAddAll.length, 5);
     expect(sAddAll.first, 3);
     expect(sAddAll.last, 5);
@@ -51,7 +51,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.contains(1), isTrue);
     expect(sAddAll.contains(6), isFalse);
   });
@@ -59,7 +59,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("lookup", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.lookup(1), 1);
     expect(sAddAll.lookup(10), isNull);
   });
@@ -67,7 +67,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("containsAll", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.containsAll([2, 2, 3]), isTrue);
     expect(sAddAll.containsAll({1, 2, 3, 4}), isTrue);
     expect(sAddAll.containsAll({1, 2, 3, 4}.lock), isTrue);
@@ -78,7 +78,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("difference", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.difference({3, 4, 10, 11}), {1, 2});
     expect(sAddAll.difference({1, 2, 3, 4}), <int>{});
   });
@@ -86,7 +86,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("intersection", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.intersection({1, 2, 5, 10, 11}), {1, 2, 5});
     expect(sAddAll.intersection({1}), {1});
     expect(sAddAll.intersection({3}), {3});
@@ -97,7 +97,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("union", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.union({1}), {1, 2, 3, 4, 5});
     expect(sAddAll.union({1, 2, 5, 10, 11}), {1, 2, 3, 4, 5, 10, 11});
   });
@@ -105,7 +105,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(() => sAddAll[-100], throwsRangeError);
     expect(() => sAddAll[-1], throwsRangeError);
     expect(sAddAll[0], 1);
@@ -119,9 +119,9 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("iterator (IteratorSAddAll)", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
-    final Iterator<int> iter = sAddAll.iterator;
+  test("iterator (IteratorAddAll)", () {
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final Iterator<int?> iter = sAddAll.iterator;
 
     expect(iter.current, isNull);
     expect(iter.moveNext(), isTrue);
@@ -141,7 +141,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("anyItem", () {
-    final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
+    final SAddAll<int?> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.anyItem, isA<int>());
   });
 
@@ -155,7 +155,7 @@ void main() {
 
     // 2) Regular usage
     final Set<int> set = {3, 4, 5};
-    final SAddAll<int> sAddAll = SAddAll.unsafe(SFlat<int>.unsafe({1, 2}), set);
+    final SAddAll<int?> sAddAll = SAddAll.unsafe(SFlat<int>.unsafe({1, 2}), set);
 
     expect(sAddAll, {1, 2, 3, 4, 5});
 
@@ -209,10 +209,10 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Combining various SAddAlls and SAdds | iterator (IteratorSAddAll)", () {
+  test("Combining various SAddAlls and SAdds | iterator (IteratorAddAll)", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
-    final Iterator<int> iter = sAddAll.iterator;
+    final Iterator<int?> iter = sAddAll.iterator;
 
     expect(iter.current, isNull);
     expect(iter.moveNext(), isTrue);
@@ -242,7 +242,7 @@ void main() {
 
     // 1.1) Changing the passed mutable set doesn't change the SAddAll
     Set<int> original = {3, 4, 5};
-    SAddAll<int> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
+    SAddAll<int?> sAddAll = SAddAll(SFlat<int>({1, 2}), original);
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
@@ -258,8 +258,8 @@ void main() {
 
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
-    final S<int> s1 = sAddAll.add(6);
-    final S<int> s2 = sAddAll.add(5);
+    final S<int?> s1 = sAddAll.add(6);
+    final S<int?> s2 = sAddAll.add(5);
 
     expect(original, <int>{3, 4, 5});
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
@@ -273,7 +273,7 @@ void main() {
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
 
     int willChange = 6;
-    S<int> s = sAddAll.add(willChange);
+    S<int?> s = sAddAll.add(willChange);
 
     willChange = 7;
 
@@ -310,7 +310,7 @@ void main() {
     // 2.3) If the items being passed are from a variable, it shouldn't have a pointer to the
     // variable
     original = {3, 4, 5};
-    final SAddAll<int> sAddAll1 = SAddAll(SFlat<int>({1, 2}), original),
+    final SAddAll<int?> sAddAll1 = SAddAll(SFlat<int>({1, 2}), original),
         sAddAll2 = SAddAll(SFlat<int>({8, 9}), original);
 
     expect(sAddAll1, <int>{1, 2, 3, 4, 5});

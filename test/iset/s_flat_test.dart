@@ -57,7 +57,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
-    final Iterator<int> iter = SFlat([1, 2, 3, 3]).iterator;
+    final Iterator<int?> iter = SFlat([1, 2, 3, 3]).iterator;
 
     expect(iter.current, isNull);
     expect(iter.moveNext(), isTrue);
@@ -73,7 +73,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("empty", () {
-    final S<int> empty = SFlat.empty();
+    final S<int?> empty = SFlat.empty();
 
     expect(empty.unlock, <int>{});
     expect(empty.isEmpty, isTrue);
@@ -132,8 +132,8 @@ void main() {
 
     expect(sFlat, <int>{1, 2, 3});
 
-    final S<int> s1 = sFlat.add(4);
-    final S<int> s2 = sFlat.add(3);
+    final S<int?> s1 = sFlat.add(4);
+    final S<int?> s2 = sFlat.add(3);
 
     expect(original, <int>{1, 2, 3});
     expect(sFlat, <int>{1, 2, 3});
@@ -147,7 +147,7 @@ void main() {
     expect(sFlat, original);
 
     int willChange = 4;
-    S<int> s = sFlat.add(willChange);
+    S<int?> s = sFlat.add(willChange);
 
     willChange = 5;
 
@@ -242,8 +242,8 @@ void main() {
 
   test("any", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.any((int v) => v == 4), isTrue);
-    expect(sFlat.any((int v) => v == 100), isFalse);
+    expect(sFlat.any((int? v) => v == 4), isTrue);
+    expect(sFlat.any((int? v) => v == 100), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -295,17 +295,17 @@ void main() {
 
   test("every", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.every((int v) => v > 0), isTrue);
-    expect(sFlat.every((int v) => v < 0), isFalse);
-    expect(sFlat.every((int v) => v != 4), isFalse);
+    expect(sFlat.every((int? v) => v! > 0), isTrue);
+    expect(sFlat.every((int? v) => v! < 0), isFalse);
+    expect(sFlat.every((int? v) => v != 4), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("expand", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.expand((int v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
-    expect(sFlat.expand((int v) => []), []);
+    expect(sFlat.expand((int? v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
+    expect(sFlat.expand((int? v) => []), []);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -337,17 +337,17 @@ void main() {
 
   test("firstWhere", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.firstWhere((int v) => v > 1, orElse: () => 100), 2);
-    expect(sFlat.firstWhere((int v) => v > 4, orElse: () => 100), 5);
-    expect(sFlat.firstWhere((int v) => v > 5, orElse: () => 100), 6);
-    expect(sFlat.firstWhere((int v) => v > 6, orElse: () => 100), 100);
+    expect(sFlat.firstWhere((int? v) => v! > 1, orElse: () => 100), 2);
+    expect(sFlat.firstWhere((int? v) => v! > 4, orElse: () => 100), 5);
+    expect(sFlat.firstWhere((int? v) => v! > 5, orElse: () => 100), 6);
+    expect(sFlat.firstWhere((int? v) => v! > 6, orElse: () => 100), 100);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("fold", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.fold(100, (int p, int e) => p * (1 + e)), 504000);
+    expect(sFlat.fold(100, (int p, int? e) => p * (1 + e!)), 504000);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -371,7 +371,7 @@ void main() {
   test("forEach", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
     int result = 100;
-    sFlat.forEach((int v) => result *= 1 + v);
+    sFlat.forEach((int? v) => result *= 1 + v!);
     expect(result, 504000);
   });
 
@@ -388,20 +388,20 @@ void main() {
 
   test("lastWhere", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.lastWhere((int v) => v < 2, orElse: () => 100), 1);
-    expect(sFlat.lastWhere((int v) => v < 5, orElse: () => 100), 4);
-    expect(sFlat.lastWhere((int v) => v < 6, orElse: () => 100), 5);
-    expect(sFlat.lastWhere((int v) => v < 7, orElse: () => 100), 6);
-    expect(sFlat.lastWhere((int v) => v < 50, orElse: () => 100), 6);
-    expect(sFlat.lastWhere((int v) => v < 1, orElse: () => 100), 100);
+    expect(sFlat.lastWhere((int? v) => v! < 2, orElse: () => 100), 1);
+    expect(sFlat.lastWhere((int? v) => v! < 5, orElse: () => 100), 4);
+    expect(sFlat.lastWhere((int? v) => v! < 6, orElse: () => 100), 5);
+    expect(sFlat.lastWhere((int? v) => v! < 7, orElse: () => 100), 6);
+    expect(sFlat.lastWhere((int? v) => v! < 50, orElse: () => 100), 6);
+    expect(sFlat.lastWhere((int? v) => v! < 1, orElse: () => 100), 100);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("map", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(SFlat([1, 2, 3]).map((int v) => v + 1), [2, 3, 4]);
-    expect(sFlat.map((int v) => v + 1), [2, 3, 4, 5, 6, 7]);
+    expect(SFlat([1, 2, 3]).map((int? v) => v! + 1), [2, 3, 4]);
+    expect(sFlat.map((int? v) => v! + 1), [2, 3, 4, 5, 6, 7]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -409,8 +409,8 @@ void main() {
   test("reduce", () {
     // 1) Regular usage
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.reduce((int p, int e) => p * (1 + e)), 2520);
-    expect(SFlat([5]).reduce((int p, int e) => p * (1 + e)), 5);
+    expect(sFlat.reduce((int? p, int? e) => p! * (1 + e!)), 2520);
+    expect(SFlat([5]).reduce((int? p, int? e) => p! * (1 + e!)), 5);
 
     // 2) State exception
     expect(() => ISet().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
@@ -421,12 +421,12 @@ void main() {
   test("singleWhere", () {
     // 1) Regular usage
     SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.singleWhere((int v) => v == 4, orElse: () => 100), 4);
-    expect(sFlat.singleWhere((int v) => v == 50, orElse: () => 100), 100);
+    expect(sFlat.singleWhere((int? v) => v == 4, orElse: () => 100), 4);
+    expect(sFlat.singleWhere((int? v) => v == 50, orElse: () => 100), 100);
 
     // 2) State exception
     sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(() => sFlat.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError);
+    expect(() => sFlat.singleWhere((int? v) => v! < 4, orElse: () => 100), throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -443,10 +443,10 @@ void main() {
 
   test("skipWhile", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.skipWhile((int v) => v < 3), [3, 4, 5, 6]);
-    expect(sFlat.skipWhile((int v) => v < 5), [5, 6]);
-    expect(sFlat.skipWhile((int v) => v < 6), [6]);
-    expect(sFlat.skipWhile((int v) => v < 100), []);
+    expect(sFlat.skipWhile((int? v) => v! < 3), [3, 4, 5, 6]);
+    expect(sFlat.skipWhile((int? v) => v! < 5), [5, 6]);
+    expect(sFlat.skipWhile((int? v) => v! < 6), [6]);
+    expect(sFlat.skipWhile((int? v) => v! < 100), []);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -464,10 +464,10 @@ void main() {
 
   test("takeWhile", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.takeWhile((int v) => v < 3), [1, 2]);
-    expect(sFlat.takeWhile((int v) => v < 5), [1, 2, 3, 4]);
-    expect(sFlat.takeWhile((int v) => v < 6), [1, 2, 3, 4, 5]);
-    expect(sFlat.takeWhile((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
+    expect(sFlat.takeWhile((int? v) => v! < 3), [1, 2]);
+    expect(sFlat.takeWhile((int? v) => v! < 5), [1, 2, 3, 4]);
+    expect(sFlat.takeWhile((int? v) => v! < 6), [1, 2, 3, 4, 5]);
+    expect(sFlat.takeWhile((int? v) => v! < 100), [1, 2, 3, 4, 5, 6]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -500,10 +500,10 @@ void main() {
 
   test("where", () {
     final SFlat<int> sFlat = SFlat([1, 2, 3, 4, 5, 6, 5, 6]);
-    expect(sFlat.where((int v) => v < 0), []);
-    expect(sFlat.where((int v) => v < 3), [1, 2]);
-    expect(sFlat.where((int v) => v < 5), [1, 2, 3, 4]);
-    expect(sFlat.where((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
+    expect(sFlat.where((int? v) => v! < 0), []);
+    expect(sFlat.where((int? v) => v! < 3), [1, 2]);
+    expect(sFlat.where((int? v) => v! < 5), [1, 2, 3, 4]);
+    expect(sFlat.where((int? v) => v! < 100), [1, 2, 3, 4, 5, 6]);
   });
 
   /////////////////////////////////////////////////////////////////////////////

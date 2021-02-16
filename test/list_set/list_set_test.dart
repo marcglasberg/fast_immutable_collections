@@ -142,23 +142,23 @@ void main() {
 
     // 2) Regular Usage
     expect(ListSet.of(<int>{}) + [1, 2], {1, 2});
-    expect(ListSet.of(<int>{null}) + ListSet.of({1, 2}), {null, 1, 2});
+    expect(ListSet.of(<int?>{null}) + ListSet.of({1, 2}), {null, 1, 2});
     expect(ListSet.of(<int>{1}) + ListSet.of({2, 3}), {1, 2, 3});
-    expect(ListSet.of(<int>{null, 1, 3}) + ListSet.of({10, 11}), {null, 1, 3, 10, 11});
+    expect(ListSet.of(<int?>{null, 1, 3}) + ListSet.of({10, 11}), {null, 1, 3, 10, 11});
     expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({5, 6}), {1, 2, 3, 4, 5, 6});
 
     // 3) Adding nulls
     expect(ListSet.of(<int>{}) + ListSet.of({null}), {null});
-    expect(ListSet.of(<int>{null}) + ListSet.of({null}), {null});
+    expect(ListSet.of(<int?>{null}) + ListSet.of({null}), {null});
     expect(ListSet.of(<int>{1}) + ListSet.of({null}), {1, null});
-    expect(ListSet.of(<int>{null, 1, 3}) + ListSet.of({null}), {null, 1, 3});
+    expect(ListSet.of(<int?>{null, 1, 3}) + ListSet.of({null}), {null, 1, 3});
     expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({null}), {1, 2, 3, 4, null});
 
     // 4) Adding null and an item
     expect(ListSet.of(<int>{}) + ListSet.of({null, 1}), {null, 1});
-    expect(ListSet.of(<int>{null}) + ListSet.of({null, 1}), {null, 1});
+    expect(ListSet.of(<int?>{null}) + ListSet.of({null, 1}), {null, 1});
     expect(ListSet.of(<int>{1}) + ListSet.of({null, 2}), {1, null, 2});
-    expect(ListSet.of(<int>{null, 1, 3}) + ListSet.of({null, 1}), {null, 1, 3});
+    expect(ListSet.of(<int?>{null, 1, 3}) + ListSet.of({null, 1}), {null, 1, 3});
     expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({null, 1}), {1, 2, 3, 4, null});
   });
 
@@ -209,11 +209,11 @@ void main() {
 
     // 3) Empty list or list with a single item
     var emptyIlist = IList.empty<String>();
-    expect(emptyIlist.indexWhere((String element) => element == "x"), -1);
+    expect(emptyIlist.indexWhere((String? element) => element == "x"), -1);
 
-    emptyIlist = ["do"].lock;
-    expect(emptyIlist.indexWhere((String element) => element == "x"), -1);
-    expect(emptyIlist.indexWhere((String element) => element == "do"), 0);
+    emptyIlist = ["do"].lock as IList<String>;
+    expect(emptyIlist.indexWhere((String? element) => element == "x"), -1);
+    expect(emptyIlist.indexWhere((String? element) => element == "do"), 0);
   });
 
   //////////////////////////////////////////////////////////////////////////////

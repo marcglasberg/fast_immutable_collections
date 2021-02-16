@@ -16,7 +16,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
+    var ilist = [1, 2, 3, 4].lock as IList<int>;
     expect(ilist.isFlushed, isTrue);
     expect(ilist.counter, 0);
 
@@ -53,7 +53,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
+    var ilist = [1, 2, 3, 4].lock as IList<int>;
     expect(ilist.isFlushed, isTrue);
     expect(ilist.counter, 0);
 
@@ -90,7 +90,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
+    var ilist = [1, 2, 3, 4].lock as IList<int>;
     expect(ilist.isFlushed, isTrue);
 
     // We add a value, so that the list is NOT flushed.
@@ -212,7 +212,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The list is flushed. Counter is 0.
-    var ilist = [1, 2, 3, 4].lock;
+    var ilist = [1, 2, 3, 4].lock as IList<int>;
     expect(ilist.isFlushed, isTrue);
 
     // We add a value, so that the list is NOT flushed.
@@ -304,7 +304,7 @@ void main() {
     expect(ImmutableCollection.asyncCounter, 1);
 
     // The list is flushed. Counter is 0.
-    var ilist1 = [1, 2, 3, 4].lock;
+    var ilist1 = [1, 2, 3, 4].lock as IList<int>;
     expect(ilist1.isFlushed, isTrue);
 
     var ilist2 = ilist1.add(1);

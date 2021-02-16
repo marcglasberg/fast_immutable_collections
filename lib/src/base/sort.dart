@@ -36,8 +36,8 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// ```
 ///
 int compareObject<T extends Object>(
-  Object a,
-  Object b, {
+  Object? a,
+  Object? b, {
   bool nullsBefore = false,
 }) {
   if (a == null)
@@ -98,7 +98,7 @@ int compareObject<T extends Object>(
 ///
 int Function(T, T) sortBy<T>(
   bool Function(T) test, {
-  int Function(T, T) then,
+  int Function(T, T)? then,
 }) =>
     (T a, T b) {
       var ta = test(a);
@@ -161,8 +161,8 @@ int Function(T, T) sortBy<T>(
 ///
 int Function(T, T) sortLike<T, E>(
   Iterable<E> order, {
-  E Function(T) mapper,
-  int Function(T, T) then,
+  E Function(T)? mapper,
+  int Function(T, T)? then,
 }) =>
     (T a, T b) {
       if (a == b) return 0;
@@ -176,6 +176,7 @@ int Function(T, T) sortLike<T, E>(
         ma = a as E;
         mb = b as E;
       }
+
       if (order is List<E>) {
         posA = order.indexOf(ma);
         posB = order.indexOf(mb);
@@ -183,8 +184,9 @@ int Function(T, T) sortLike<T, E>(
         posA = order.indexOf(ma);
         posB = order.indexOf(mb);
       } else {
-        posA = order.toList().indexOf(ma);
-        posB = order.toList().indexOf(mb);
+        List<E> _order = order.toList();
+        posA = _order.indexOf(ma);
+        posB = _order.indexOf(mb);
       }
 
       return (posA != -1 && posB != -1)
@@ -196,7 +198,7 @@ int Function(T, T) sortLike<T, E>(
 
 // /////////////////////////////////////////////////////////////////////////////
 
-extension FicComparableExtension on Object {
+extension FicComparableExtension on Object? {
   /// 1. If this object and [other] are both `null`, they don't have order. If
   /// one of them is `null`, it will come later, unless the [nullsBefore] is `true`,
   /// in which case the `null` will come before.
@@ -226,7 +228,7 @@ extension FicComparableExtension on Object {
   /// 5.compareObjectTo(2, nullsBefore: true);
   /// ```
   int compareObjectTo(
-    Object other, {
+    Object? other, {
     bool nullsBefore = false,
     bool compareHashCodes = true,
   }) =>
