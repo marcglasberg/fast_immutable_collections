@@ -10,7 +10,7 @@ class ListMapView<K, V> implements ListMap<K, V> {
   V operator [](Object key) => _map[key];
 
   @override
-  void operator []=(key, value) {
+  void operator []=(K key, V value) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
@@ -45,7 +45,7 @@ class ListMapView<K, V> implements ListMap<K, V> {
   Iterable<MapEntry<K, V>> get entries => _map.entries;
 
   @override
-  MapEntry<K, V> entry(key) => MapEntry(key, _map[key]);
+  MapEntry<K, V> entry(K key) => MapEntry(key, _map[key]);
 
   @override
   void forEach(void Function(K key, V value) f) => _map.forEach(f);
@@ -81,7 +81,7 @@ class ListMapView<K, V> implements ListMap<K, V> {
   }
 
   @override
-  V update(key, Function(V value) update, {Function() ifAbsent}) {
+  V update(K key, Function(V value) update, {Function() ifAbsent}) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }

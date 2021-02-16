@@ -1,8 +1,8 @@
 import "dart:collection";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "list_extension.dart";
 import "ilist.dart";
+import "list_extension.dart";
 
 /// The [UnmodifiableListFromIList] is a relatively safe, unmodifiable [List] view that is built
 /// from an [IList] or another [List]. The construction of the [UnmodifiableListFromIList] is very

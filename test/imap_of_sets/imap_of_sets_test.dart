@@ -1868,8 +1868,8 @@ void main() {
       "1": {1, 2, 3}
     });
 
-    var mapper =
-        (String key, ISet<int> set) => MapEntry<num, ISet<num>>(num.parse(key), <int>{}.lock);
+    MapEntry<num, ISet<num>> mapper(String key, ISet<int> set) =>
+        MapEntry<num, ISet<num>>(num.parse(key), <int>{}.lock);
 
     var doRemoveEmptySets = ConfigMapOfSets(removeEmptySets: true);
     var dontRemoveEmptySets = ConfigMapOfSets(removeEmptySets: false);

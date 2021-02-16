@@ -5,9 +5,9 @@ import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "modifiable_set_from_iset.dart";
-import "s_flat.dart";
 import "s_add.dart";
 import "s_add_all.dart";
+import "s_flat.dart";
 import "unmodifiable_set_from_iset.dart";
 
 /// An **immutable**, **ordered** set.
@@ -333,11 +333,9 @@ class ISet<T> // ignore: must_be_immutable
   /// internal state is better, because it will return true more often.
   ///
   @override
-  bool operator ==(Object other) => (other is ISet)
-      ? isDeepEquals
-          ? equalItemsAndConfig(other)
-          : (other is ISet<T>) && same(other)
-      : false;
+  bool operator ==(Object other) => (other is ISet) && isDeepEquals
+      ? equalItemsAndConfig(other)
+      : (other is ISet<T>) && same(other);
 
   /// Returns the concatenation of this set and [other].
   /// Returns a new set containing the elements of this set followed by
@@ -357,7 +355,7 @@ class ISet<T> // ignore: must_be_immutable
       return (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat);
     }
 
-    return (other == null) ? false : (flush._s as SFlat<T>).deepSetEqualsToIterable(other);
+    return (other != null) && (flush._s as SFlat<T>).deepSetEqualsToIterable(other);
   }
 
   /// Will return `true` only if the [ISet] and the iterable items have the same number of elements,
@@ -366,7 +364,7 @@ class ISet<T> // ignore: must_be_immutable
   /// one by one.
   bool unorderedEqualItems(covariant Iterable other) {
     if (identical(this, other) || (other is ISet<T> && same(other))) return true;
-    return const UnorderedIterableEquality().equals(_s, other);
+    return const UnorderedIterableEquality<dynamic>().equals(_s, other);
   }
 
   /// Will return `true` only if the list items are equal and the list configurations are equal.

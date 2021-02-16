@@ -36,9 +36,8 @@ class ListSet<T> implements Set<T>, List<T> {
     bool sort = false,
     int Function(T a, T b) compare,
   })  : assert(items != null),
-        assert(sort != null) {
-    assert(compare == null || sort == true);
-
+        assert(sort != null),
+        assert(compare == null || sort == true) {
     _set = HashSet();
     _list = List.of(items.where((item) => _set.add(item)), growable: false);
     if (sort) _list.sort(compare ?? compareObject);

@@ -21,7 +21,7 @@ void main() {
     expect(ilist.counter, 0);
 
     // Since the list is flushed, the counter remains at 0.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
 
     expect(ImmutableCollection.asyncCounter, 1);
@@ -38,7 +38,7 @@ void main() {
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
 
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
     expect(ilist, [1, 2, 3, 4]);
@@ -58,7 +58,7 @@ void main() {
     expect(ilist.counter, 0);
 
     // Since the list is flushed, the counter remains at 0.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
 
     expect(ImmutableCollection.asyncCounter, 1);
@@ -75,7 +75,7 @@ void main() {
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
 
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
     expect(ilist, [1, 2, 3, 4]);
@@ -100,12 +100,12 @@ void main() {
     expect(ilist.isFlushed, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 2);
     expect(ilist.isFlushed, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 3);
     expect(ilist.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
@@ -114,14 +114,14 @@ void main() {
     // The counter reached the flushFactor (4), so it turns into
     // negative asyncCounter (-1). Also, the asyncCounter increment
     // is scheduled.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, -1);
     expect(ilist.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isTrue);
 
     // The list is NOT flushed, but since the counter is already negative
     // it doesn't change anymore.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, -1);
     expect(ilist.isFlushed, isFalse);
 
@@ -141,13 +141,13 @@ void main() {
 
     // Now that the counter is negative, but it's NOT equal no negative
     // asyncCounter, the list will be flushed and counter will be reset to 0.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
     expect(ilist, [1, 2, 3, 4, 5]);
 
     // Since the list is now flushed, the counter remains at 0.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ImmutableCollection.asyncCounter, 2);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
@@ -160,13 +160,13 @@ void main() {
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 2);
     expect(ilist.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 3);
     expect(ilist.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
@@ -175,7 +175,7 @@ void main() {
     // The counter again reached the flushFactor (4), so it turns into
     // negative asyncCounter (-2). Also, the asyncCounter increment
     // is scheduled.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, -2);
     expect(ilist.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isTrue);
@@ -197,7 +197,7 @@ void main() {
 
     // Now that the counter is negative, but it's NOT equal no negative
     // asyncCounter, the list will be flushed and counter will be reset to 0.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
     expect(ilist, [1, 2, 3, 4, 5, 6]);
@@ -222,12 +222,12 @@ void main() {
     expect(ilist.isFlushed, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 2);
     expect(ilist.isFlushed, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 3);
     expect(ilist.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
@@ -235,13 +235,13 @@ void main() {
     // Since the list is NOT flushed, the counter grows to 4.
     // The counter reached the flushFactor (4), so it is flushed
     // and counter is reset to zero.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
     // The list is flushed, and counter so the counter is not incremented.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
 
@@ -265,12 +265,12 @@ void main() {
     expect(ilist.isFlushed, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 2.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 2);
     expect(ilist.isFlushed, isFalse);
 
     // Since the list is NOT flushed, the counter grows to 3.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 3);
     expect(ilist.isFlushed, isFalse);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
@@ -278,13 +278,13 @@ void main() {
     // Since the list is NOT flushed, the counter grows to 4.
     // The counter reached the flushFactor (4), so it is flushed
     // and counter is reset to zero.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
     expect(ImmutableCollection.asyncCounterMarkedForIncrement, isFalse);
 
     // The list is flushed, and counter so the counter is not incremented.
-    ilist[0];
+    ilist[0]; // ignore: unnecessary_statements
     expect(ilist.counter, 0);
     expect(ilist.isFlushed, isTrue);
 

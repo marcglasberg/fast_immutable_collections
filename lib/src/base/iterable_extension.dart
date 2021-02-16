@@ -74,8 +74,8 @@ extension FicIterableExtension<T> on Iterable<T> {
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
-        ? const UnorderedIterableEquality(IdentityEquality()).equals(this, other)
-        : const IterableEquality(IdentityEquality()).equals(this, other);
+        ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
+        : const IterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other);
   }
 
   /// Return true if they are all the same, in the same order.
@@ -101,8 +101,8 @@ extension FicIterableExtension<T> on Iterable<T> {
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
-        ? const UnorderedIterableEquality(IdentityEquality()).equals(this, other)
-        : const IterableEquality(IdentityEquality()).equals(this, other);
+        ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
+        : const IterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other);
   }
 
   /// Finds duplicates and then returns a [Set] with the duplicated elements.
@@ -152,10 +152,10 @@ extension FicIterableExtension<T> on Iterable<T> {
     bool removeNulls = false,
   }) sync* {
     if (by != null) {
-      Set<dynamic> ids = {};
+      Set<dynamic> ids = <dynamic>{};
       for (T item in this) {
         if (removeNulls && item == null) continue;
-        var id = by(item);
+        dynamic id = by(item);
         if (!ids.contains(id)) yield item;
         ids.add(id);
       }
@@ -176,9 +176,9 @@ extension FicIterableExtension<T> on Iterable<T> {
   List<T> sortedLike(Iterable ordering) {
     assert(ordering != null);
     Set<T> thisSet = Set.of(this);
-    Set otherSet = Set.of(ordering);
+    Set<dynamic> otherSet = Set<dynamic>.of(ordering);
 
-    IListOf4<List> result = thisSet.diffAndIntersect(
+    IListOf4<List> result = thisSet.diffAndIntersect<dynamic>(
       otherSet,
       diffThisMinusOther: true,
       diffOtherMinusThis: false,

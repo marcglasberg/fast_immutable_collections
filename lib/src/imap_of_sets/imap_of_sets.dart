@@ -563,11 +563,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// internal state is better, because it will return `true` more often.
   ///
   @override
-  bool operator ==(Object other) => (other is IMapOfSets)
-      ? isDeepEquals
-          ? equalItemsAndConfig(other)
-          : (other is IMapOfSets<K, V>) && same(other)
-      : false;
+  bool operator ==(Object other) => (other is IMapOfSets) && isDeepEquals
+      ? equalItemsAndConfig(other)
+      : (other is IMapOfSets<K, V>) && same(other);
 
   /// Will return `true` only if the [ISet] has the same number of items as the
   /// iterable, and the [ISet] items are equal to the iterable items, in whatever

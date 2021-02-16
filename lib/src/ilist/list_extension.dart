@@ -65,28 +65,30 @@ extension FicListExtension<T> on List<T> {
   /// Moves all items that satisfy the provided [test] to the start of the list.
   /// Keeps the relative order of the moved items.
   void whereMoveToTheFront(bool Function(T item) test) {
-    var compare = (T f1, T f2) {
+    int compare(T f1, T f2) {
       bool test1 = test(f1);
       return (test1 == test(f2))
           ? 0
           : test1
               ? -1
               : 1;
-    };
+    }
+
     sortOrdered(compare);
   }
 
   /// Moves all items that satisfy the provided [test] to the end of the list.
   /// Keeps the relative order of the moved items.
   void whereMoveToTheEnd(bool Function(T item) test) {
-    var compare = (T f1, T f2) {
+    int compare(T f1, T f2) {
       bool test1 = test(f1);
       return (test1 == test(f2))
           ? 0
           : test1
               ? 1
               : -1;
-    };
+    }
+
     sortOrdered(compare);
   }
 
@@ -107,7 +109,10 @@ extension FicListExtension<T> on List<T> {
     if (this == null) return other == null;
     if (other == null) return false;
     if (identical(this, other)) return true;
-    return SetEquality(MapEntryEquality()).equals(Set.of(this), Set.of(other));
+    return const SetEquality<dynamic>(MapEntryEquality<dynamic>()).equals(
+      Set<dynamic>.of(this),
+      Set<dynamic>.of(other),
+    );
   }
 
   /// Maps each element of the list.
@@ -376,7 +381,9 @@ extension FicListExtension<T> on List<T> {
   ) {
     int i = 0;
 
-    Map<dynamic, int> ids = {for (var item in newItems) (item == null) ? null : id(item): i++};
+    Map<dynamic, int> ids = <dynamic, int>{
+      for (T item in newItems) (item == null) ? null : id(item): i++
+    };
 
     var newList = map((T item) {
       int pos = ids[(item == null) ? null : id(item)];

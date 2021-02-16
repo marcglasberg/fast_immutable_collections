@@ -1,3 +1,7 @@
+## [1.1.0] - 2021/02/16
+
+* Doc improvements.
+
 ## [1.0.28] - 2021/02/09
 
 * More efficient Iterable.sortedLike() and List.sortLike() extensions.

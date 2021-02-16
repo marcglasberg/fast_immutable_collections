@@ -32,9 +32,7 @@ class ListMap<K, V> implements Map<K, V> {
     Map<K, V> map, {
     bool sort = false,
     int Function(K a, K b) compare,
-  }) {
-    assert(compare == null || sort == true);
-
+  }) : assert(compare == null || sort == true) {
     _map = HashMap.from(map);
     _list = List.of(map.keys, growable: false);
     if (sort) _list.sort(compare ?? compareObject);
@@ -52,9 +50,7 @@ class ListMap<K, V> implements Map<K, V> {
     Iterable<MapEntry<K, V>> entries, {
     bool sort = false,
     int Function(K a, K b) compare,
-  }) {
-    assert(compare == null || sort == true);
-
+  }) : assert(compare == null || sort == true) {
     // Sorted:
     if (sort) {
       _map = HashMap<K, V>();
@@ -109,9 +105,7 @@ class ListMap<K, V> implements Map<K, V> {
     this._map, {
     bool sort = false,
     int Function(K a, K b) compare,
-  }) {
-    assert(compare == null || sort == true);
-
+  }) : assert(compare == null || sort == true) {
     _list = List.of(_map.keys, growable: false);
     if (sort) _list.sort(compare ?? compareObject);
   }

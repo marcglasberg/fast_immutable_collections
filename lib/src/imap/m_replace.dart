@@ -31,7 +31,7 @@ class MReplace<K, V> extends M<K, V> {
       : _m.contains(key, value);
 
   @override
-  bool containsKey(K key) => (key == _key) ? true : _m.containsKey(key);
+  bool containsKey(K key) => (key == _key) || _m.containsKey(key);
 
   @override
   bool containsValue(V value) => entries.any((entry) => entry.value == value);

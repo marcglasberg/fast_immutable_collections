@@ -1506,7 +1506,7 @@ void main() {
     Object error;
     try {
       IMap<String, bool> casted = imap.cast<String, bool>();
-      casted["a"];
+      casted["a"]; // ignore: unnecessary_statements
     } catch (_error) {
       error = _error;
     }

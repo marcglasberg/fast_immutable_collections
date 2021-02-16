@@ -628,11 +628,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// internal state is better, because it will return `true` more often.
   ///
   @override
-  bool operator ==(Object other) => (other is IMap)
-      ? isDeepEquals
-          ? equalItemsAndConfig(other)
-          : (other is IMap<K, V>) && same(other)
-      : false;
+  bool operator ==(Object other) => (other is IMap) && isDeepEquals
+      ? equalItemsAndConfig(other)
+      : (other is IMap<K, V>) && same(other);
 
   /// Will return `true` only if the [IMap] entries are equal to the entries in
   /// the [Iterable]. Order is irrelevant. This may be slow for very large maps,
@@ -640,13 +638,13 @@ class IMap<K, V> // ignore: must_be_immutable
   /// method [equalItemsToMap] or [equalItemsToIMap].
   @override
   bool equalItems(covariant Iterable<MapEntry> other) {
-    return (other == null) ? false : (flush._m as MFlat<K, V>).deepMapEqualsToIterable(other);
+    return (other != null) && (flush._m as MFlat<K, V>).deepMapEqualsToIterable(other);
   }
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToMap(Map other) =>
-      const MapEquality().equals(UnmodifiableMapFromIMap(this), other);
+  bool equalItemsToMap(Map other) => const MapEquality<dynamic, dynamic>()
+      .equals(UnmodifiableMapFromIMap<dynamic, dynamic>(this), other);
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.

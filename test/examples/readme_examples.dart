@@ -3,7 +3,7 @@ import "package:test/test.dart";
 
 int testCount = 0;
 
-void testAndPrint(description, dynamic Function() body) {
+void testAndPrint(dynamic description, dynamic Function() body) {
   test(
     description,
     () {

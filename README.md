@@ -14,9 +14,9 @@
 
 > _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and myself,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
-
-> Click <a href="https://medium.com/@marcglasberg/5eb091d1e31f">here</a> to check out Marcelo's article on Medium, a more succinct straight to the point version of this more thorough documentation. <br>
-> Or <a href="https://fanaro.io/articles/fic/fic.html">here</a> to check out Philippe Fanaro's own article on his website, <a href="https://fanaro.io">fanaro.io</a>.
+> The below documentation is very detailed. For an overview, go to my 
+> <a href="https://medium.com/flutter-community/announcing-fic-fast-immutable-collections-5eb091d1e31f">Medium story</a>. 
+> You may also check <a href="https://fanaro.io/articles/fic/fic.html">Philippe's article</a>.
 
 ## 1.1. Introduction
 
@@ -75,7 +75,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
 </p>
 
 <p align="center">
-  <sub>The <a href="https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark/benchmark_app"><code>benchmark_app</code></a> app for comparing this package's collections to others. Use it preferably in <em>release mode</em>.</sub>
+  <sub>The <a href="https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark/benchmark_app"><code>benchmark_app</code></a> compares the performance of FIC to other packages</sub>
 </p>
 
 [built_collection]: https://pub.dev/packages/built_collection

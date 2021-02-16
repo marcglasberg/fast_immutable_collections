@@ -4,11 +4,11 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "list_extension.dart";
 import "ilist_of_2.dart";
 import "l_add.dart";
 import "l_add_all.dart";
 import "l_flat.dart";
+import "list_extension.dart";
 import "modifiable_list_from_ilist.dart";
 import "unmodifiable_list_from_ilist.dart";
 
@@ -308,11 +308,9 @@ class IList<T> // ignore: must_be_immutable
   /// internal state is better, because it will return `true` more often.
   ///
   @override
-  bool operator ==(Object other) => (other is IList)
-      ? isDeepEquals
-          ? equalItemsAndConfig(other)
-          : (other is IList<T>) && same(other)
-      : false;
+  bool operator ==(Object other) => (other is IList) && isDeepEquals
+      ? equalItemsAndConfig(other)
+      : (other is IList<T>) && same(other);
 
   /// Will return `true` only if the [IList] items are equal to the iterable items,
   /// and in the same order. This may be slow for very large lists, since it
@@ -329,11 +327,11 @@ class IList<T> // ignore: must_be_immutable
     }
 
     if (other is List<T>)
-      return const ListEquality().equals(UnmodifiableListFromIList(this), other);
+      return const ListEquality<dynamic>().equals(UnmodifiableListFromIList<T>(this), other);
 
     if (other is HashSet) throw StateError("Can't compare to HashSet (which is unordered).");
 
-    return const IterableEquality().equals(_l, other);
+    return const IterableEquality<dynamic>().equals(_l, other);
   }
 
   /// Will return `true` only if the [IList] and the iterable items have the same number of elements,
@@ -342,7 +340,7 @@ class IList<T> // ignore: must_be_immutable
   /// one by one.
   bool unorderedEqualItems(covariant Iterable other) {
     if (identical(this, other) || (other is IList<T> && same(other))) return true;
-    return const UnorderedIterableEquality().equals(_l, other);
+    return const UnorderedIterableEquality<dynamic>().equals(_l, other);
   }
 
   /// Will return `true` only if the list items are equal and in the same order,
@@ -985,7 +983,7 @@ class IList<T> // ignore: must_be_immutable
     int _length = length;
     for (int index = 0; index < _length; index++) {
       T item = this[index];
-      var satisfiesTest = (test == null) ? true : test(this, index, item);
+      var satisfiesTest = (test == null) || test(this, index, item);
       if (!satisfiesTest)
         result.add(item);
       else {
