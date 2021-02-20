@@ -1,7 +1,6 @@
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 import "package:test/test.dart";
-
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -13,14 +12,15 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students([james, sara, lucy]);
+    Student james = Student("James");
+    Student sara = Student("Sara");
+    Student lucy = Student("Lucy");
+    Students students = Students([james, sara, lucy]);
 
-    final Iterator<Student?> iterator = students.iterator;
+    Iterator<Student?> iterator = students.iterator;
+    expect(() => iterator.current, throwsStateError);
 
-    expect(iterator.current, isNull);
+    iterator = students.iterator;
     expect(iterator.moveNext(), isTrue);
     expect(iterator.current, james);
     expect(iterator.moveNext(), isTrue);
@@ -369,7 +369,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
 
-    expect(students.where((Student? student) => student!.name.length == 5), [const Student("James")]);
+    expect(
+        students.where((Student? student) => student!.name.length == 5), [const Student("James")]);
     expect(students.where((Student? student) => student!.name.length == 100), <Student>[]);
   });
 

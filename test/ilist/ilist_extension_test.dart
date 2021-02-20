@@ -45,9 +45,7 @@ void main() {
 
   test("sortOrdered", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
-
-    list.sortOrdered(((int a, int b) => a.compareTo(b)) as int Function(int?, int?)?);
-
+    list.sortOrdered((int a, int b) => a.compareTo(b));
     expect(list, [1, 2, 3, 4, 5, 10]);
   });
 

@@ -1,17 +1,23 @@
 class IteratorAdd<T> implements Iterator<T> {
   Iterator<T> iterator;
-  T item, _current;
-  bool extraMove;
+  T item;
+  T? _current;
+  bool extraMove, _pre;
 
   IteratorAdd(this.iterator, this.item)
-      : _current = iterator.current,
+      : _pre = true,
+        _current = null,
         extraMove = false;
 
   @override
-  T get current => _current;
+  T get current {
+    if (_pre) throw StateError("No current value available. Call moveNext() first.");
+    return _current!;
+  }
 
   @override
   bool moveNext() {
+    _pre = false;
     if (iterator.moveNext()) {
       _current = iterator.current;
       return true;
