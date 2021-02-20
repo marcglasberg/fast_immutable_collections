@@ -1,18 +1,9 @@
 import "package:collection/collection.dart";
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/iset/s_flat.dart";
-
-import "../utils.dart";
+import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Initialization Assertion Error", () {
-    expect(() => SFlat(null), throwsAssertionError);
-  });
-
   /////////////////////////////////////////////////////////////////////////////
 
   test("getFlushed", () {
@@ -234,8 +225,6 @@ void main() {
 
     expect(original, {1, 2, 3, 4});
     expect(sFlat, {1, 2, 3, 4});
-
-    expect(() => SFlat.unsafe(null), throwsAssertionError);
   });
 
   /////////////////////////////////////////////////////////////////////////////

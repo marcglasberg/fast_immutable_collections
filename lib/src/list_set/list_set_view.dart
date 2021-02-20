@@ -6,7 +6,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 class ListSetView<T> implements ListSet<T> {
   final Set<T> _set;
 
-  ListSetView(this._set) : assert(_set != null);
+  ListSetView(this._set);
 
   @override
   bool add(T value) {

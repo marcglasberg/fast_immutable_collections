@@ -1,22 +1,11 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/l_add.dart";
 import "package:fast_immutable_collections/src/ilist/l_add_all.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";
-
-import "../utils.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
-
-  test("Initialization Assertion Errors", () {
-    expect(() => LAddAll<int>(null, [1, 2]), throwsAssertionError);
-    expect(() => LAddAll<int>(LFlat<int>([1, 2]), null), throwsAssertionError);
-    expect(() => LAddAll<int>(null, null), throwsAssertionError);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);

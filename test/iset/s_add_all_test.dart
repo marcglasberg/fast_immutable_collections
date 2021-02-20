@@ -1,21 +1,10 @@
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/iset/s_add.dart";
+import "package:fast_immutable_collections/src/iset/s_add_all.dart";
+import "package:fast_immutable_collections/src/iset/s_flat.dart";
 import "package:test/test.dart";
 
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:fast_immutable_collections/src/iset/s_add_all.dart";
-import "package:fast_immutable_collections/src/iset/s_add.dart";
-import "package:fast_immutable_collections/src/iset/s_flat.dart";
-
-import "../utils.dart";
-
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("Initialization assertion errors", () {
-    expect(() => SAddAll(null, {3, 4, 5}), throwsAssertionError);
-    expect(() => SAddAll(SFlat<int>.unsafe({1, 2}), null), throwsAssertionError);
-    expect(() => SAddAll(null, null), throwsAssertionError);
-  });
-
   //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
@@ -148,12 +137,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("unsafe", () {
-    // 1) Parameters cannot be null
-    expect(() => SAddAll.unsafe(null, null), throwsAssertionError);
-    expect(() => SAddAll.unsafe(SFlat<int>.unsafe({1, 2}), null), throwsAssertionError);
-    expect(() => SAddAll.unsafe(null, {3, 4, 5}), throwsAssertionError);
-
-    // 2) Regular usage
+    // 1) Regular usage
     final Set<int> set = {3, 4, 5};
     final SAddAll<int?> sAddAll = SAddAll.unsafe(SFlat<int>.unsafe({1, 2}), set);
 

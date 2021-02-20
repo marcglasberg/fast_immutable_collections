@@ -34,7 +34,7 @@ void main() {
     expect(simpleEntry.print(false), "a: 1");
 
     // 2) The key is one of the immutable collections
-    final MapEntry<IList<String>, int> entryWithCollectionKeys = MapEntry(["a", "b"].lock as IList<String>, 1);
+    final MapEntry<IList<String>, int> entryWithCollectionKeys = MapEntry(["a", "b"].lock, 1);
 
     expect(entryWithCollectionKeys.print(false), "[a, b]: 1");
     expect(
@@ -44,7 +44,7 @@ void main() {
         "   b\n"
         "]: 1");
     // 3) The value is one of the immutable collections
-    final MapEntry<int, ISet<int>> entryWithCollectionValues = MapEntry(1, {1, 2, 3}.lock as ISet<int>);
+    final MapEntry<int, ISet<int>> entryWithCollectionValues = MapEntry(1, {1, 2, 3}.lock);
 
     expect(entryWithCollectionValues.print(false), "1: {1, 2, 3}");
     expect(

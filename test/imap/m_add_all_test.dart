@@ -1,22 +1,10 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-
 import "package:fast_immutable_collections/src/imap/m_add_all.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
-
-import "../utils.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
-
-  test("Initialization Assertion Errors", () {
-    expect(() => MAddAll.unsafe(null, MFlat({"b": 2, "c": 3})), throwsAssertionError);
-    expect(() => MAddAll.unsafe(MFlat({"a": 1}), null), throwsAssertionError);
-    expect(() => MAddAll.unsafe(null, null), throwsAssertionError);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1};
@@ -134,8 +122,8 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
-    final Iterator<MapEntry<String, int?>?> iterator = mAddAll.iterator;
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final Iterator<MapEntry<String, int>> iterator = mAddAll.iterator;
     Map<String, int> result = iterator.toMap();
     expect(result, {"a": 1, "b": 2, "c": 3});
   });

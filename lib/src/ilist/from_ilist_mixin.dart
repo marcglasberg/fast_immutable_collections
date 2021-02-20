@@ -1,5 +1,7 @@
 import "dart:math";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "ilist.dart";
 
 /// This mixin implements all [IList] methods (without `config` ([ConfigList])), plus
@@ -72,14 +74,14 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   //
 
   /// Classes `with` [FromIListMixin] must override this.
-  IList<T?> get iter;
+  IList<T> get iter;
 
   /// Classes `with` [FromIListMixin] must override this.
-  I newInstance(IList<T?>? ilist);
+  I newInstance(IList<T> ilist);
 
-  Iterator<T?> get iterator => iter.iterator;
+  Iterator<T> get iterator => iter.iterator;
 
-  bool any(bool Function(T?) test) => iter.any(test);
+  bool any(bool Function(T) test) => iter.any(test);
 
   Iterable<R> cast<R>() => iter.cast<R>();
 
@@ -89,49 +91,57 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   T? elementAt(int index) => iter[index];
 
-  bool every(bool Function(T?) test) => iter.every(test);
+  bool every(bool Function(T) test) => iter.every(test);
 
-  Iterable<E> expand<E>(Iterable<E> Function(T?) f) => iter.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
   int get length => iter.length;
 
-  T? get first => iter.first;
+  T get first => iter.first;
 
-  T? get last => iter.last;
+  T get last => iter.last;
 
-  T? get single => iter.single;
+  T get single => iter.single;
 
-  T? firstWhere(bool Function(T?) test, {T Function()? orElse}) =>
+  T? get firstOrNull => iter.firstOrNull;
+
+  T? get lastOrNull => iter.lastOrNull;
+
+  T? get singleOrNull => iter.singleOrNull;
+
+  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
-  E fold<E>(E initialValue, E Function(E previousValue, T? element) combine) =>
+  T? firstWhereOrNull(bool Function(T) test) => iter.firstWhereOrNull(test);
+
+  E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);
 
-  Iterable<T?> followedBy(Iterable<T> other) => iter.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => iter.followedBy(other);
 
-  void forEach(void Function(T? element) f) => iter.forEach(f);
+  void forEach(void Function(T element) f) => iter.forEach(f);
 
   String join([String separator = ""]) => iter.join(separator);
 
-  T? lastWhere(bool Function(T? element) test, {T Function()? orElse}) =>
+  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
-  Iterable<E> map<E>(E Function(T? element) f) => iter.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
-  T? reduce(T Function(T? value, T? element) combine) => iter.reduce(combine);
+  T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
-  T? singleWhere(bool Function(T? element) test, {T Function()? orElse}) =>
+  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
-  Iterable<T?> skip(int count) => iter.skip(count);
+  Iterable<T> skip(int count) => iter.skip(count);
 
-  Iterable<T?> skipWhile(bool Function(T? value) test) => iter.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) => iter.skipWhile(test);
 
-  Iterable<T?> take(int count) => iter.take(count);
+  Iterable<T> take(int count) => iter.take(count);
 
-  Iterable<T?> takeWhile(bool Function(T? value) test) => iter.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  Iterable<T?> where(bool Function(T? element) test) => iter.where(test);
+  Iterable<T> where(bool Function(T element) test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 
@@ -141,9 +151,9 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   @override
   bool get isNotEmpty => iter.isNotEmpty;
 
-  List<T?> toList({bool growable = true}) => List.of(iter, growable: growable);
+  List<T> toList({bool growable = true}) => List.of(iter, growable: growable);
 
-  Set<T?> toSet() => Set.of(iter);
+  Set<T> toSet() => Set.of(iter);
 
   I operator +(Iterable<T> other) => newInstance(iter + other);
 
@@ -151,7 +161,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   I addAll(Iterable<T> items) => newInstance(iter.addAll(items));
 
-  IMap<int, T?> asMap() => iter.asMap();
+  IMap<int, T> asMap() => iter.asMap();
 
   I clear() => newInstance(iter.clear());
 
@@ -166,13 +176,11 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   T? firstOr(T orElse) => iter.firstOr(orElse);
 
-  T? get firstOrNull => iter.firstOrNull;
-
-  Iterable<T?> getRange(int start, int end) => iter.getRange(start, end);
+  Iterable<T> getRange(int start, int end) => iter.getRange(start, end);
 
   int indexOf(T element, [int start = 0]) => iter.indexOf(element, start);
 
-  int indexWhere(bool Function(T? element) test, [int start = 0]) => iter.indexWhere(test, start);
+  int indexWhere(bool Function(T element) test, [int start = 0]) => iter.indexWhere(test, start);
 
   I insert(int index, T element) => newInstance(iter.insert(index, element));
 
@@ -180,19 +188,17 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   int lastIndexOf(T element, [int? start]) => iter.lastIndexOf(element, start);
 
-  int lastIndexWhere(bool Function(T? element) test, [int? start]) =>
+  int lastIndexWhere(bool Function(T element) test, [int? start]) =>
       iter.lastIndexWhere(test, start);
 
-  T? lastOr(T orElse) => iter.lastOr(orElse);
+  T lastOr(T orElse) => iter.lastOr(orElse);
 
-  T? get lastOrNull => iter.lastOrNull;
-
-  I maxLength(int maxLength, {int Function(T? a, T? b)? priority}) =>
+  I maxLength(int maxLength, {int Function(T a, T b)? priority}) =>
       newInstance(iter.maxLength(maxLength, priority: priority));
 
   I process(
-          {bool Function(IList<T?> list, int index, T? item)? test,
-          required Iterable<T> Function(IList<T?> list, int index, T? item) apply}) =>
+          {bool Function(IList<T> list, int index, T item)? test,
+          required Iterable<T> Function(IList<T> list, int index, T item) apply}) =>
       newInstance(iter.process(test: test, convert: apply));
 
   I put(int index, T value) => newInstance(iter.put(index, value));
@@ -205,22 +211,24 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   I removeRange(int start, int end) => newInstance(iter.removeRange(start, end));
 
-  I removeWhere(bool Function(T? element) test) => newInstance(iter.removeWhere(test));
+  I removeWhere(bool Function(T element) test) => newInstance(iter.removeWhere(test));
 
-  I replaceAll({T? from, T? to}) => newInstance(iter.replaceAll(from: from, to: to));
+  I replaceAll({required T from, required T to}) =>
+      newInstance(iter.replaceAll(from: from, to: to));
 
-  I replaceAllWhere(bool Function(T? element) test, T to) =>
+  I replaceAllWhere(bool Function(T element) test, T to) =>
       newInstance(iter.replaceAllWhere(test, to));
 
-  I replaceFirst({T? from, T? to}) => newInstance(iter.replaceFirst(from: from, to: to));
+  I replaceFirst({required T from, required T to}) =>
+      newInstance(iter.replaceFirst(from: from, to: to));
 
-  I replaceFirstWhere(bool Function(T? item) test, T to) =>
+  I replaceFirstWhere(bool Function(T item) test, T to) =>
       newInstance(iter.replaceFirstWhere(test, to));
 
   I replaceRange(int start, int end, Iterable<T> replacement) =>
       newInstance(iter.replaceRange(start, end, replacement));
 
-  I retainWhere(bool Function(T? element) test) => newInstance(iter.retainWhere(test));
+  I retainWhere(bool Function(T element) test) => newInstance(iter.retainWhere(test));
 
   I get reversed => newInstance(iter.reversed);
 
@@ -231,19 +239,17 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   I shuffle([Random? random]) => newInstance(iter.shuffle(random));
 
-  T? singleOr(T orElse) => iter.singleOr(orElse);
+  T singleOr(T orElse) => iter.singleOr(orElse);
 
-  T? get singleOrNull => iter.singleOrNull;
-
-  I sort([int Function(T? a, T? b)? compare]) => newInstance(iter.sort(compare));
+  I sort([int Function(T a, T b)? compare]) => newInstance(iter.sort(compare));
 
   I sublist(int start, [int? end]) => newInstance(iter.sublist(start, end));
 
   I toggle(T element) => newInstance(iter.toggle(element));
 
-  List<T?> get unlock => iter.unlock;
+  List<T> get unlock => iter.unlock;
 
-  List<T?> get unlockView => iter.unlockView;
+  List<T> get unlockView => iter.unlockView;
 
   @override
   String toString() => "$runtimeType$iter";

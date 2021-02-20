@@ -7,14 +7,14 @@ void main() {
 
   test("lock", () {
     // 1) Typical example
-    IMap<String, int> imap = {"a": 1, "b": 2}.lock as IMap<String, int>;
+    IMap<String, int> imap = {"a": 1, "b": 2}.lock;
     expect(imap, isA<IMap<String, int>>());
     expect(imap.unlock, {"a": 1, "b": 2});
     expect(imap["a"], 1);
     expect(imap["b"], 2);
 
     // 2) Other Checks
-    imap = {"a": 1}.lock as IMap<String, int>;
+    imap = {"a": 1}.lock;
     expect(imap, isA<IMap<String, int>>());
     expect(imap.isEmpty, isFalse);
     expect(imap.isNotEmpty, isTrue);
@@ -34,7 +34,7 @@ void main() {
     expect(imap.isEmpty, isFalse);
     expect(imap.isNotEmpty, isTrue);
 
-    imap = <String, int>{}.lock as IMap<String, int>;
+    imap = <String, int>{}.lock;
     expect(imap, isA<IMap<String, int>>());
   });
 

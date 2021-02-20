@@ -1,8 +1,7 @@
 import "dart:math";
-import "package:test/test.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "../utils.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -31,14 +30,11 @@ void main() {
     expect(set, [50, 20, 10, 8, 1, -2]);
     expect(set.length, 6);
 
-    // 2) Nulls and other edge cases
-    expect(() => ListSet.of(null), throwsAssertionError);
+    // 2) Other edge cases
 
     set = ListSet.of([]);
     expect(set, []);
     expect(set.length, 0);
-
-    expect(() => ListSet.of([2, 1, 3], sort: null), throwsAssertionError);
 
     set = ListSet.of([2, 1, 3], compare: null);
     expect(set, [2, 1, 3]);
@@ -148,18 +144,12 @@ void main() {
     expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({5, 6}), {1, 2, 3, 4, 5, 6});
 
     // 3) Adding nulls
-    expect(ListSet.of(<int>{}) + ListSet.of({null}), {null});
     expect(ListSet.of(<int?>{null}) + ListSet.of({null}), {null});
-    expect(ListSet.of(<int>{1}) + ListSet.of({null}), {1, null});
     expect(ListSet.of(<int?>{null, 1, 3}) + ListSet.of({null}), {null, 1, 3});
-    expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({null}), {1, 2, 3, 4, null});
 
     // 4) Adding null and an item
-    expect(ListSet.of(<int>{}) + ListSet.of({null, 1}), {null, 1});
     expect(ListSet.of(<int?>{null}) + ListSet.of({null, 1}), {null, 1});
-    expect(ListSet.of(<int>{1}) + ListSet.of({null, 2}), {1, null, 2});
     expect(ListSet.of(<int?>{null, 1, 3}) + ListSet.of({null, 1}), {null, 1, 3});
-    expect(ListSet.of({1, 2, 3, 4}) + ListSet.of({null, 1}), {1, 2, 3, 4, null});
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -211,7 +201,7 @@ void main() {
     var emptyIlist = IList.empty<String>();
     expect(emptyIlist.indexWhere((String? element) => element == "x"), -1);
 
-    emptyIlist = ["do"].lock as IList<String>;
+    emptyIlist = ["do"].lock;
     expect(emptyIlist.indexWhere((String? element) => element == "x"), -1);
     expect(emptyIlist.indexWhere((String? element) => element == "do"), 0);
   });

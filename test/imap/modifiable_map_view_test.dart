@@ -13,7 +13,7 @@ void main() {
 
   test("[]", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> imap = baseMap.lock as IMap<String, int>;
+    final IMap<String, int> imap = baseMap.lock;
     final ModifiableMapFromIMap<String, int> modifiableMapView = ModifiableMapFromIMap(imap);
     expect(modifiableMapView["a"], 1);
     expect(modifiableMapView["b"], 2);
@@ -25,7 +25,7 @@ void main() {
 
   test("lock", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> imap = baseMap.lock as IMap<String, int>;
+    final IMap<String, int> imap = baseMap.lock;
     final ModifiableMapFromIMap<String, int> modifiableMapView = ModifiableMapFromIMap(imap);
     modifiableMapView.lock.forEach((String? key, int? value) => expect(baseMap[key!], value));
   });
@@ -34,7 +34,7 @@ void main() {
 
   test("keys", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> imap = baseMap.lock as IMap<String, int>;
+    final IMap<String, int> imap = baseMap.lock;
     final ModifiableMapFromIMap<String, int> modifiableMapView = ModifiableMapFromIMap(imap);
     modifiableMapView.keys.forEach((String? key) => expect(baseMap.containsKey(key), isTrue));
   });
@@ -43,7 +43,7 @@ void main() {
 
   test("[]=", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> imap = baseMap.lock as IMap<String, int>;
+    final IMap<String, int> imap = baseMap.lock;
     final ModifiableMapFromIMap<String, int> modifiableMapView = ModifiableMapFromIMap(imap);
 
     expect(modifiableMapView["a"], 1);
@@ -59,7 +59,7 @@ void main() {
 
   test("clear", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> imap = baseMap.lock as IMap<String, int>;
+    final IMap<String, int> imap = baseMap.lock;
     final ModifiableMapFromIMap<String, int> modifiableMapView = ModifiableMapFromIMap(imap);
 
     modifiableMapView.clear();
@@ -74,7 +74,7 @@ void main() {
 
   test("remove", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
-    final IMap<String, int> imap = baseMap.lock as IMap<String, int>;
+    final IMap<String, int> imap = baseMap.lock;
     final ModifiableMapFromIMap<String, int> modifiableMapView = ModifiableMapFromIMap(imap);
 
     expect(modifiableMapView["a"], 1);

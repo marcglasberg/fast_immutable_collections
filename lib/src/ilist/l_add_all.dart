@@ -19,7 +19,7 @@ class LAddAll<T> extends L<T> {
   bool get isEmpty => _l.isEmpty && _listOrL.isEmpty;
 
   @override
-  Iterator<T> get iterator => IteratorAddAll(_l.iterator, _listOrL);
+  Iterator<T> get iterator => IteratorAddAll(_l.iterator, _listOrL.iterator);
 
   @override
   Iterable<T> get iter => _l.followedBy(_listOrL);

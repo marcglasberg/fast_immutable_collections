@@ -1,3 +1,5 @@
+import 'package:fast_immutable_collections/src/ilist/iterator_add.dart';
+
 import "imap.dart";
 
 class MAdd<K, V> extends M<K, V> {
@@ -5,13 +7,13 @@ class MAdd<K, V> extends M<K, V> {
   final K _key;
   final V _value;
 
-  MAdd(this._m, this._key, this._value) : assert(_m != null);
+  MAdd(this._m, this._key, this._value);
 
   @override
   bool get isEmpty => false;
 
   @override
-  Iterable<MapEntry<K, V?>> get entries => _m.entries.followedBy([MapEntry<K, V>(_key, _value)]);
+  Iterable<MapEntry<K, V>> get entries => _m.entries.followedBy([MapEntry<K, V>(_key, _value)]);
 
   @override
   Iterable<K> get keys => _m.keys.followedBy(<K>[_key]);
@@ -36,34 +38,5 @@ class MAdd<K, V> extends M<K, V> {
   int get length => _m.length + 1;
 
   @override
-  Iterator<MapEntry<K, V>?> get iterator => IteratorMAdd(_m.iterator, MapEntry(_key, _value));
+  Iterator<MapEntry<K, V>> get iterator => IteratorAdd(_m.iterator, MapEntry(_key, _value));
 }
-
-// /////////////////////////////////////////////////////////////////////////////
-
-class IteratorMAdd<K, V> implements Iterator<MapEntry<K, V>?> {
-  Iterator<MapEntry<K, V>> iterator;
-  MapEntry<K, V> item, _current;
-  int extraMove;
-
-  IteratorMAdd(this.iterator, this.item)
-      : _current = iterator.current,
-        extraMove = 0;
-
-  @override
-  MapEntry<K, V>? get current => _current;
-
-  @override
-  bool moveNext() {
-    final bool isMoving = iterator.moveNext();
-    if (isMoving) {
-      _current = iterator.current;
-    } else {
-      extraMove++;
-      _current = extraMove == 1 ? item : null;
-    }
-    return extraMove <= 1;
-  }
-}
-
-// /////////////////////////////////////////////////////////////////////////////

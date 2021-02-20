@@ -26,7 +26,7 @@ class SAddAll<T> extends S<T> {
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorAddAll(_s.iterator, _setOrS);
+  Iterator<T> get iterator => IteratorAddAll(_s.iterator, _setOrS.iterator);
 
   @override
   Iterable<T> get iter => _s.followedBy(_setOrS);

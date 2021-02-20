@@ -1,5 +1,5 @@
-import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -176,8 +176,8 @@ void main() {
 
   test("List.toIList() / List.toISet()", () {
     const List<int> list = [1, 2, 3, 3];
-    final IList<int>? ilist = list.toIList();
-    final ISet<int>? iset = list.toISet();
+    final IList<int> ilist = list.toIList();
+    final ISet<int> iset = list.toISet();
 
     expect(ilist, [1, 2, 3, 3]);
     expect(iset, {1, 2, 3});
@@ -187,8 +187,8 @@ void main() {
 
   test("Set.toIList() / Set.toISet()", () {
     const Set<int> set = {1, 2, 3};
-    final IList<int>? ilist = set.toIList();
-    final ISet<int>? iset = set.toISet();
+    final IList<int> ilist = set.toIList();
+    final ISet<int> iset = set.toISet();
 
     expect(ilist, [1, 2, 3]);
     expect(iset, [1, 2, 3]);
@@ -216,13 +216,13 @@ void main() {
     // List:
     expect([].isNullOrEmpty, isTrue);
     expect([1].isNullOrEmpty, isFalse);
-    late List<int> list;
+    List<int>? list;
     expect(list.isNullOrEmpty, isTrue);
 
     // Set:
     expect(<Set>{}.isNullOrEmpty, isTrue);
     expect({1}.isNullOrEmpty, isFalse);
-    late Set<int> set;
+    Set<int>? set;
     expect(set.isNullOrEmpty, isTrue);
 
     // IMap:
@@ -234,13 +234,13 @@ void main() {
     // IList:
     expect(IList().isNullOrEmpty, isTrue);
     expect(IList([1]).isNullOrEmpty, isFalse);
-    late IList<int> ilist;
+    IList<int>? ilist;
     expect(ilist.isNullOrEmpty, isTrue);
 
     // ISet:
     expect(ISet().isNullOrEmpty, isTrue);
     expect(ISet([1]).isNullOrEmpty, isFalse);
-    late ISet<int> iset;
+    ISet<int>? iset;
     expect(iset.isNullOrEmpty, isTrue);
 
     // IMap:
@@ -266,13 +266,13 @@ void main() {
     // List:
     expect([].isNotNullOrEmpty, isFalse);
     expect([1].isNotNullOrEmpty, isTrue);
-    late List<int> list;
+    List<int>? list;
     expect(list.isNotNullOrEmpty, isFalse);
 
     // Set:
     expect(<Set>{}.isNotNullOrEmpty, isFalse);
     expect({1}.isNotNullOrEmpty, isTrue);
-    late Set<int> set;
+    Set<int>? set;
     expect(set.isNotNullOrEmpty, isFalse);
 
     // IMap:
@@ -284,13 +284,13 @@ void main() {
     // IList:
     expect(IList().isNotNullOrEmpty, isFalse);
     expect(IList([1]).isNotNullOrEmpty, isTrue);
-    late IList<int> ilist;
+    IList<int>? ilist;
     expect(ilist.isNotNullOrEmpty, isFalse);
 
     // ISet:
     expect(ISet().isNotNullOrEmpty, isFalse);
     expect(ISet([1]).isNotNullOrEmpty, isTrue);
-    late ISet<int> iset;
+    ISet<int>? iset;
     expect(iset.isNotNullOrEmpty, isFalse);
 
     // IMap:
@@ -316,13 +316,13 @@ void main() {
     // List:
     expect([].isEmptyButNotNull, isTrue);
     expect([1].isEmptyButNotNull, isFalse);
-    late List<int> list;
+    List<int>? list;
     expect(list.isEmptyButNotNull, isFalse);
 
     // Set:
     expect(<Set>{}.isEmptyButNotNull, isTrue);
     expect({1}.isEmptyButNotNull, isFalse);
-    late Set<int> set;
+    Set<int>? set;
     expect(set.isEmptyButNotNull, isFalse);
 
     // IMap:
@@ -334,13 +334,13 @@ void main() {
     // IList:
     expect(IList().isEmptyButNotNull, isTrue);
     expect(IList([1]).isEmptyButNotNull, isFalse);
-    late IList<int> ilist;
+    IList<int>? ilist;
     expect(ilist.isEmptyButNotNull, isFalse);
 
     // ISet:
     expect(ISet().isEmptyButNotNull, isTrue);
     expect(ISet([1]).isEmptyButNotNull, isFalse);
-    late ISet<int> iset;
+    ISet<int>? iset;
     expect(iset.isEmptyButNotNull, isFalse);
 
     // IMap:
@@ -411,8 +411,6 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("deepEqualsByIdentity", () {
-    expect(null.deepEqualsByIdentity(null), true);
-    expect(null.deepEqualsByIdentity([]), false);
     expect([].deepEqualsByIdentity(null), false);
     expect([].deepEqualsByIdentity([]), true);
     expect([1].deepEqualsByIdentity([1]), true);
@@ -447,17 +445,14 @@ void main() {
 
   test("FicIterableExtension | isNullOrEmpty | isNotNullOrEmpty", () {
     final Iterable<int> iter1 = [1, 2, 3].iterator.toIterable();
-
     expect(iter1.isNullOrEmpty, isFalse);
     expect(iter1.isNotNullOrEmpty, isTrue);
 
     final Iterable<int> iter2 = <int>[].iterator.toIterable();
-
     expect(iter2.isNullOrEmpty, isTrue);
     expect(iter2.isNotNullOrEmpty, isFalse);
 
-    late Iterable<int> iter3;
-
+    Iterable<int>? iter3;
     expect(iter3.isNullOrEmpty, isTrue);
     expect(iter3.isNotNullOrEmpty, isFalse);
   });
@@ -486,7 +481,7 @@ void main() {
 
     expect(
         ([null, "a", "b", null, "abc", "ab", "def", null]
-            .removeDuplicates(by: ((item) => item.length) as dynamic Function(String?)?, removeNulls: true)),
+            .removeDuplicates(by: ((item) => item?.length), removeNulls: true)),
         ["a", "abc", "ab"]);
   });
 

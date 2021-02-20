@@ -1,4 +1,5 @@
 import "dart:collection";
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -39,14 +40,24 @@ Iterable<R> combineIterables<A, B, R>(
 /// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtensionNullable<T> on Iterable<T>? {
   //
-  /// Creates an *immutable* set ([ISet]) from the iterable.
-  ISet<T>? toISet([ConfigSet? config]) => (this == null) ? null : ISet<T>.withConfig(this, config);
-
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
   bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
 
   bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+
+/// See also: [FicListExtension], [FicSetExtension]
+extension FicIterableExtension<T> on Iterable<T> {
+  //
+  /// Creates an *immutable* set ([ISet]) from the iterable.
+  ISet<T> toISet([ConfigSet? config]) => ISet<T>.withConfig(this, config ?? ISet.defaultConfig);
+
+  /// Creates an *immutable* list ([IList]) from the iterable.
+  IList<T> toIList([ConfigList? config]) =>
+      IList<T>.withConfig(this, config ?? IList.defaultConfig);
 
   /// Compare all items, in order or not, according to [ignoreOrder],
   /// using [operator ==]. Return true if they are all the same,
@@ -61,13 +72,13 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
   ///
   bool deepEquals(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
-    if (this == null || other == null) return false;
+    if (other == null) return false;
 
     /// Assumes EfficientLengthIterable for these:
     if ((this is List) ||
         (this is Set) ||
         (this is Map) ||
-        (this is ImmutableCollection)) if (this!.length != other.length) return false;
+        (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
         ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
@@ -88,30 +99,18 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
   ///
   bool deepEqualsByIdentity(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
-    if (this == null || other == null) return false;
+    if (other == null) return false;
 
     /// Assumes EfficientLengthIterable for these:
     if ((this is List) ||
         (this is Set) ||
         (this is Map) ||
-        (this is ImmutableCollection)) if (this!.length != other.length) return false;
+        (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
         ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
         : const IterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other);
   }
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-
-/// See also: [FicListExtension], [FicSetExtension]
-extension FicIterableExtension<T> on Iterable<T> {
-  //
-  /// Creates an *immutable* list ([IList]) from the iterable.
-  IList<T> toIList([ConfigList? config]) => IList<T>.withConfig(this, config);
-
-  /// Creates an *immutable* set ([ISet]) from the iterable.
-  ISet<T>? toISet([ConfigSet? config]) => ISet<T>.withConfig(this, config);
 
   /// Finds duplicates and then returns a [Set] with the duplicated elements.
   /// If there are no duplicates, an empty [Set] is returned.

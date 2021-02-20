@@ -1,13 +1,11 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("Empty Initialization", () {
     expect(UnmodifiableMapFromIMap({}.lock).isEmpty, isTrue);
-    expect(UnmodifiableMapFromIMap(null).isEmpty, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -15,7 +13,7 @@ void main() {
   test("[]", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
-            UnmodifiableMapFromIMap(baseMap.lock as IMap<String, int>?),
+            UnmodifiableMapFromIMap(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
     final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
@@ -35,7 +33,7 @@ void main() {
   test("keys", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
-            UnmodifiableMapFromIMap(baseMap.lock as IMap<String, int>?),
+            UnmodifiableMapFromIMap(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
     final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
@@ -53,7 +51,7 @@ void main() {
   test("lock", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
-            UnmodifiableMapFromIMap(baseMap.lock as IMap<String, int>?),
+            UnmodifiableMapFromIMap(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
     final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
@@ -68,7 +66,7 @@ void main() {
   test("[]=", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
-            UnmodifiableMapFromIMap(baseMap.lock as IMap<String, int>?),
+            UnmodifiableMapFromIMap(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
     final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
@@ -84,7 +82,7 @@ void main() {
   test("clear", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
-            UnmodifiableMapFromIMap(baseMap.lock as IMap<String, int>?),
+            UnmodifiableMapFromIMap(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
     final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,
@@ -100,7 +98,7 @@ void main() {
   test("remove", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
-            UnmodifiableMapFromIMap(baseMap.lock as IMap<String, int>?),
+            UnmodifiableMapFromIMap(baseMap.lock),
         unmodifiableMapViewFromMap = UnmodifiableMapFromIMap.fromMap(baseMap);
     final List<UnmodifiableMapFromIMap<String, int>> views = [
       unmodifiableMapView,

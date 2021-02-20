@@ -14,7 +14,7 @@ void main() {
   test("[]", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -33,7 +33,7 @@ void main() {
   test("length", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -48,7 +48,7 @@ void main() {
   test("lock", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -64,7 +64,7 @@ void main() {
   test("isEmpty | isNotEmpty", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -82,7 +82,7 @@ void main() {
   test("[]=", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -98,7 +98,7 @@ void main() {
   test("length", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -114,7 +114,7 @@ void main() {
   test("add", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -130,7 +130,7 @@ void main() {
   test("addAll", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,
@@ -146,7 +146,7 @@ void main() {
   test("remove", () {
     const List<int> baseList = [1, 2, 3];
     final UnmodifiableListFromIList<int> unmodifiableListView =
-            UnmodifiableListFromIList(baseList.lock as IList<int>?),
+            UnmodifiableListFromIList(baseList.lock),
         unmodifiableListViewFromList = UnmodifiableListFromIList.fromList(baseList);
     final List<UnmodifiableListFromIList<int>> views = [
       unmodifiableListView,

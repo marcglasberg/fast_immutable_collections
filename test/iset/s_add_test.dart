@@ -1,19 +1,9 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/iset/s_add.dart";
 import "package:fast_immutable_collections/src/iset/s_flat.dart";
-
-import "../utils.dart";
+import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Initialization assertion errors", () {
-    expect(() => SAdd<int>(null, 2), throwsAssertionError);
-    expect(() => SAdd<int?>(null, null), throwsAssertionError);
-  });
-
   /////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {

@@ -1,9 +1,11 @@
 import "dart:collection";
 import "dart:math";
+
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "modifiable_set_from_iset.dart";
 import "s_add.dart";
 import "s_add_all.dart";
@@ -34,9 +36,8 @@ class ISet<T> // ignore: must_be_immutable
   /// Fast, if the Iterable is another [ISet].
   factory ISet.withConfig(
     Iterable<T>? iterable,
-    ConfigSet? config,
+    ConfigSet config,
   ) {
-    config = config ?? defaultConfig;
     return iterable is ISet<T>
         ? (config == iterable.config)
             ? iterable
@@ -607,6 +608,11 @@ class ISet<T> // ignore: must_be_immutable
     return _s.firstWhere(test, orElse: orElse);
   }
 
+  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
+    _count();
+    return _s.firstWhereOrNull(test, orElse: orElse);
+  }
+
   /// Reduces a collection to a single value by iteratively combining eac element of the collection
   /// with an existing value.
   @override
@@ -948,6 +954,14 @@ abstract class S<T> implements Iterable<T> {
   @override
   T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
+
+  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
+    for (T element in iter) {
+      if (test(element)) return element;
+    }
+    if (orElse != null) return orElse();
+    return null;
+  }
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>

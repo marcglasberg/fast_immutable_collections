@@ -1,8 +1,7 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/imap/m_add.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -56,7 +55,8 @@ void main() {
     final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
     const Map<String, int> finalMap = {"a": 1, "d": 4};
 
-    mAdd.entries.forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
+    mAdd.entries
+        .forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -104,8 +104,8 @@ void main() {
   test("iterator", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int?> mAdd = MAdd(mFlat, "d", 4);
-    final Iterator<MapEntry<String, int?>?> iterator = mAdd.iterator;
+    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final Iterator<MapEntry<String, int>> iterator = mAdd.iterator;
     Map<String, int> result = iterator.toMap();
     expect(result, {"a": 1, "d": 4});
   });

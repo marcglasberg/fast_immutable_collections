@@ -1,9 +1,11 @@
 import "dart:collection";
 import "dart:math";
+
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+
 import "ilist_of_2.dart";
 import "l_add.dart";
 import "l_add_all.dart";
@@ -33,9 +35,8 @@ class IList<T> // ignore: must_be_immutable
   /// Fast, if the Iterable is another [IList].
   factory IList.withConfig(
     Iterable<T>? iterable,
-    ConfigList? config,
+    ConfigList config,
   ) {
-    config = config ?? defaultConfig;
     return iterable is IList<T>
         ? (config == iterable.config)
             ? iterable
@@ -619,6 +620,14 @@ class IList<T> // ignore: must_be_immutable
     return _l.firstWhere(test, orElse: orElse);
   }
 
+  /// Iterates through elements and returns the first to satisfy [test].
+  ///
+  /// - If no element satisfies [test], it returns null.
+  T? firstWhereOrNull(bool Function(T) test) {
+    _count();
+    return _l.firstWhereOrNull(test);
+  }
+
   /// Reduces a collection to a single value by iteratively combining eac element of the collection
   /// with an existing value.
   @override
@@ -927,7 +936,7 @@ class IList<T> // ignore: must_be_immutable
   }
 
   /// Finds all occurrences of [from], and replace them with [to].
-  IList<T>? replaceAll({required T from, required T to}) =>
+  IList<T> replaceAll({required T from, required T to}) =>
       map((element) => (element == from) ? to : element).toIList(config);
 
   /// Finds the first item that satisfies the provided [test],
@@ -948,7 +957,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Finds all items that satisfy the provided [test],
   /// and replace it with [to].
-  IList<T>? replaceAllWhere(bool Function(T element) test, T to) =>
+  IList<T> replaceAllWhere(bool Function(T element) test, T to) =>
       map((element) => test(element) ? to : element).toIList(config);
 
   /// Allows for complex processing of a list.

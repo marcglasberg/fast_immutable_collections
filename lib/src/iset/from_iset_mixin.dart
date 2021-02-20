@@ -162,13 +162,13 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   String toString() => "$runtimeType$iter";
 }
 
-extension FromISetMixinExtension on FromISetMixin {
+extension FromISetMixinExtension on FromISetMixin? {
   /// Checks if `this` is `null` or empty.
-  bool get isNullOrEmpty => (this == null) || isEmpty;
+  bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
   /// Checks if `this` is **not** `null` and **not** empty.
-  bool get isNotNullOrEmpty => (this != null) && isNotEmpty;
+  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
 
   /// Checks if `this` is empty but **not** `null`.
-  bool get isEmptyButNotNull => (this != null) && isEmpty;
+  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
 }

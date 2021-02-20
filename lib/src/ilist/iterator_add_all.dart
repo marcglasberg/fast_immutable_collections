@@ -1,13 +1,12 @@
 class IteratorAddAll<T> implements Iterator<T> {
   Iterator<T> iterator, iteratorItems;
-  Iterable<T> items;
+
   T _current;
   int extraMove;
 
-  IteratorAddAll(this.iterator, this.items)
+  IteratorAddAll(this.iterator, this.iteratorItems)
       : _current = iterator.current,
-        extraMove = 0,
-        iteratorItems = items.iterator;
+        extraMove = 0;
 
   @override
   T get current => _current;

@@ -1,10 +1,8 @@
 import "dart:collection";
 
-import "package:test/test.dart";
-import "package:meta/meta.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "../utils.dart";
+import "package:meta/meta.dart";
+import "package:test/test.dart";
 
 /// These tests are mainly for coverage purposes, it tests methods inside the [L] class which were
 /// not reached by its implementations.
@@ -32,11 +30,7 @@ void main() {
   test("sortLike", () {
     final LExample<int> lExample = LExample<int>([1, 3, 5, 4, 2]);
 
-    // 1) Regular usage
     expect(lExample.sortLike([1, 2]), [1, 2, 3, 5, 4]);
-
-    // 2) Assertion error
-    expect(() => lExample.sortLike(null), throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -300,25 +294,25 @@ class LExample<T> extends L<T> {
   LExample([Iterable<T>? iterable]) : _ilist = IList(iterable);
 
   @override
-  Iterator<T?> get iterator => _ilist.iterator;
+  Iterator<T> get iterator => _ilist.iterator;
 
   @override
-  T? operator [](int index) => _ilist[index];
+  T operator [](int index) => _ilist[index];
 
   @override
-  Iterable<T?> get iter => _ilist;
+  Iterable<T> get iter => _ilist;
 
   @override
-  T? get first => _ilist.first;
+  T get first => _ilist.first;
 
   @override
-  T? get last => _ilist.last;
+  T get last => _ilist.last;
 
   @override
   int get length => _ilist.length;
 
   @override
-  T? get single => _ilist.single;
+  T get single => _ilist.single;
 }
 
 //////////////////////////////////////////////////////////////////////////////

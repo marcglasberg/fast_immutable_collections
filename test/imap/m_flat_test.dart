@@ -1,21 +1,9 @@
 import "package:collection/collection.dart";
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
+import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
-  const TypeMatcher<AssertionError> isTypeError = TypeMatcher<AssertionError>();
-  final Matcher throwsAssertionError = throwsA(isTypeError);
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Initialization assertion error", () {
-    expect(() => MFlat(null), throwsAssertionError);
-  });
-
   //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime type", () {
@@ -122,9 +110,6 @@ void main() {
     final MFlat<String, int?> mFlat = MFlat.from(mFlat1);
 
     expect(mFlat.keys, ["a", "c", "b"]);
-
-    // 2) Nulls and other edge cases
-    expect(() => MFlat.from(null), throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -140,8 +125,6 @@ void main() {
     expect(original, {"a": 1, "c": 3, "b": 2, "d": 4});
     expect(mFlat.unlock, {"a": 1, "c": 3, "b": 2, "d": 4});
     expect(mFlat.keys.toList(), ["a", "c", "b", "d"]);
-
-    expect(() => MFlat.unsafe(null), throwsAssertionError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -187,7 +170,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
-    expect(MFlat({"a": 1, "b": 2, "c": 3, "d": 4}).contains("a", null), isFalse);
+    expect(MFlat(<String, int?>{"a": 1, "b": 2, "c": 3, "d": 4}).contains("a", null), isFalse);
     expect(MFlat({"a": 1, "b": 2, "c": 3, "d": null}).contains("d", null), isTrue);
   });
 

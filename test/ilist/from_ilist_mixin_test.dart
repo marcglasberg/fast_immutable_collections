@@ -1,9 +1,8 @@
 import "dart:math";
 
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 import "package:test/test.dart";
-
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -371,7 +370,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
 
-    expect(students.where((Student? student) => student!.name.length == 5), [const Student("James")]);
+    expect(
+        students.where((Student? student) => student!.name.length == 5), [const Student("James")]);
     expect(students.where((Student? student) => student!.name.length == 100), <Student>[]);
   });
 
@@ -843,7 +843,8 @@ void main() {
 
     expect(
         students
-            .replaceFirstWhere((Student? student) => student!.name.length == 5, const Student("Bob"))
+            .replaceFirstWhere(
+                (Student? student) => student!.name.length == 5, const Student("Bob"))
             .iter,
         [const Student("Bob"), sara, lucy, james]);
   });
@@ -868,7 +869,8 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
 
-    expect(students.retainWhere((Student? student) => student!.name.length == 4).iter, [sara, lucy]);
+    expect(
+        students.retainWhere((Student? student) => student!.name.length == 4).iter, [sara, lucy]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1030,15 +1032,15 @@ void main() {
 
 @immutable
 class Students with FromIListMixin<Student, Students> {
-  final IList<Student?> _students;
+  final IList<Student> _students;
 
-  Students([Iterable<Student?>? students]) : _students = IList(students);
-
-  @override
-  Students newInstance(IList<Student?>? ilist) => Students(ilist);
+  Students([Iterable<Student>? students]) : _students = IList(students);
 
   @override
-  IList<Student?> get iter => _students;
+  Students newInstance(IList<Student>? ilist) => Students(ilist);
+
+  @override
+  IList<Student> get iter => _students;
 }
 
 /////////////////////////////////////////////////////////////////////////////

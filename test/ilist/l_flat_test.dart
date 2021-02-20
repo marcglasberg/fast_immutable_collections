@@ -1,18 +1,9 @@
 import "package:collection/collection.dart";
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";
-
-import "../utils.dart";
+import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("Initialization Assertion Errors", () {
-    expect(() => LFlat(null), throwsAssertionError);
-  });
-
   //////////////////////////////////////////////////////////////////////////////
 
   test("getFlushed", () {

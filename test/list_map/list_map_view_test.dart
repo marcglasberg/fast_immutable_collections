@@ -1,8 +1,7 @@
 import "dart:math";
-import "package:test/test.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "../utils.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -29,9 +28,6 @@ void main() {
     listMapView = ListMapView({});
     expect(listMapView, {});
     expect(listMapView.length, 0);
-
-    // 3) Null
-    expect(() => ListMapView(null), throwsAssertionError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
