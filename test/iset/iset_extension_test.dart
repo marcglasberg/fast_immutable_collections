@@ -1,6 +1,5 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -8,7 +7,8 @@ void main() {
   test("lock", () {
     expect(<int>{}.lock, allOf(isA<ISet<int>>(), <int>{}));
     expect(<int>{1}.lock, allOf(isA<ISet<int>>(), {1}));
-    expect(<int?>{null}.lock, allOf(isA<ISet<int>>(), {null}));
+    expect(<int?>{null}.lock, isA<ISet<int?>>());
+    expect(<int?>{null}.lock, {null});
     expect({1, 2, 3}.lock, allOf(isA<ISet<int>>(), {1, 2, 3}));
   });
 

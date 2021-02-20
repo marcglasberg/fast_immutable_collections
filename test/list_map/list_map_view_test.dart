@@ -74,14 +74,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("entry", () {
+  test("entry/entryOrNull", () {
     final ListMapView<String, int> imap = ListMapView({"a": 1, "b": 2, "c": 3});
 
     expect(imap.entry("a").key, "a");
     expect(imap.entry("a").value, 1);
 
-    expect(imap.entry("z").key, "z");
-    expect(imap.entry("z").value, null);
+    expect(imap.entryOrNull("z"), isNull);
   });
 
   //////////////////////////////////////////////////////////////////////////////

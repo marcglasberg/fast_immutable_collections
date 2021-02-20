@@ -10,7 +10,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.isEmpty, isFalse);
     expect(mAddAll.isNotEmpty, isTrue);
   });
@@ -21,7 +21,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.contains("a", 1), isTrue);
     expect(mAddAll.contains("b", 2), isTrue);
     expect(mAddAll.contains("c", 3), isTrue);
@@ -34,7 +34,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.containsKey("a"), isTrue);
     expect(mAddAll.containsKey("b"), isTrue);
     expect(mAddAll.containsKey("c"), isTrue);
@@ -47,7 +47,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.containsValue(1), isTrue);
     expect(mAddAll.containsValue(2), isTrue);
     expect(mAddAll.containsValue(3), isTrue);
@@ -60,11 +60,11 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     const Map<String, int> finalMap = {"a": 1, "b": 2, "c": 3};
 
     mAddAll.entries
-        .forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
+        .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.keys.contains("a"), isTrue);
     expect(mAddAll.keys.contains("b"), isTrue);
     expect(mAddAll.keys.contains("c"), isTrue);
@@ -86,7 +86,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.values.contains(1), isTrue);
     expect(mAddAll.values.contains(2), isTrue);
     expect(mAddAll.values.contains(3), isTrue);
@@ -99,7 +99,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll["a"], 1);
     expect(mAddAll["b"], 2);
     expect(mAddAll["c"], 3);
@@ -112,7 +112,7 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.length, 3);
   });
 
@@ -136,7 +136,7 @@ void main() {
     // 1.1) Changing the passed mutable map doesn't change the MAddAll
     Map<String, int> original = {"a": 1, "b": 2};
     MFlat<String, int> mFlat = MFlat(original);
-    MAddAll<String, int?> mAddAll = MAddAll.unsafe(mFlat, MFlat({"c": 3}));
+    MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, MFlat({"c": 3}));
 
     expect(mAddAll.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
 
@@ -152,7 +152,7 @@ void main() {
 
     expect(mAddAll.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
 
-    M<String, int?> m = mAddAll.add(key: "d", value: 4);
+    M<String, int> m = mAddAll.add(key: "d", value: 4);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mAddAll.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
@@ -194,7 +194,7 @@ void main() {
     // variable
     original = {"a": 1, "b": 2};
     mFlat = MFlat(original);
-    final MAddAll<String, int?> mAddAll1 = MAddAll.unsafe(mFlat, MFlat({"c": 3})),
+    final MAddAll<String, int> mAddAll1 = MAddAll.unsafe(mFlat, MFlat({"c": 3})),
         mAddAll2 = MAddAll.unsafe(mFlat, MFlat({"d": 4}));
 
     expect(mAddAll1.unlock, <String, int>{"a": 1, "b": 2, "c": 3});

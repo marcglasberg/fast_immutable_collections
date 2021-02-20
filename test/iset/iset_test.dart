@@ -1012,12 +1012,7 @@ void main() {
     expect(iset, [1, 10, 11, 4, 5, 6]);
 
     // 2) With compare
-    expect(
-        {1, 2, 3}
-            .lock
-            .add(10)
-            .add(5)
-            .toList(compare: ((int a, int b) => -a.compareTo(b)) as int Function(int?, int?)?),
+    expect({1, 2, 3}.lock.add(10).add(5).toList(compare: (int a, int b) => -a.compareTo(b)),
         [10, 5, 3, 2, 1]);
 
     // 3) Unsupported operation
@@ -1045,9 +1040,7 @@ void main() {
     expect(iset, [1, 2, 3, 4, 5, 6]);
 
     // 2) With compare
-    final Set<int> set = {1, 2, 3, 10, 5}
-        .lock
-        .toSet(compare: ((int a, int b) => -a.compareTo(b)) as int Function(int?, int?)?);
+    final Set<int> set = {1, 2, 3, 10, 5}.lock.toSet(compare: (int a, int b) => -a.compareTo(b));
     expect(set, allOf(isA<LinkedHashSet>(), {1, 2, 3, 5, 10}));
     expect(set.toList(), [10, 5, 3, 2, 1]);
   });

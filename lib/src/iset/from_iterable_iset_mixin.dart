@@ -39,7 +39,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
   /// Classes `with` [FromIterableISetMixin] must override this.
   ISet<T> get iter;
 
-  bool any(bool Function(T?) test) => iter.any(test);
+  bool any(bool Function(T) test) => iter.any(test);
 
   Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
@@ -47,49 +47,49 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
 
-  bool every(bool Function(T?) test) => iter.every(test);
+  bool every(bool Function(T) test) => iter.every(test);
 
-  Iterable<E> expand<E>(Iterable<E> Function(T?) f) => iter.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
   int get length => iter.length;
 
-  T? get first => iter.first;
+  T get first => iter.first;
 
-  T? get last => iter.last;
+  T get last => iter.last;
 
-  T? get single => iter.single;
+  T get single => iter.single;
 
-  T? firstWhere(bool Function(T?) test, {T Function()? orElse}) =>
+  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
-  E fold<E>(E initialValue, E Function(E previousValue, T? element) combine) =>
+  E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);
 
-  Iterable<T?> followedBy(Iterable<T> other) => iter.followedBy(other);
+  Iterable<T> followedBy(Iterable<T> other) => iter.followedBy(other);
 
-  void forEach(void Function(T? element) f) => iter.forEach(f);
+  void forEach(void Function(T element) f) => iter.forEach(f);
 
   String join([String separator = ""]) => iter.join(separator);
 
-  T? lastWhere(bool Function(T? element) test, {T Function()? orElse}) =>
+  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
-  Iterable<E> map<E>(E Function(T? element) f) => iter.map(f);
+  Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
-  T? reduce(T Function(T? value, T? element) combine) => iter.reduce(combine);
+  T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
-  T? singleWhere(bool Function(T? element) test, {T Function()? orElse}) =>
+  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
-  Iterable<T?> skip(int count) => iter.skip(count);
+  Iterable<T> skip(int count) => iter.skip(count);
 
-  Iterable<T?> skipWhile(bool Function(T? value) test) => iter.skipWhile(test);
+  Iterable<T> skipWhile(bool Function(T value) test) => iter.skipWhile(test);
 
-  Iterable<T?> take(int count) => iter.take(count);
+  Iterable<T> take(int count) => iter.take(count);
 
-  Iterable<T?> takeWhile(bool Function(T? value) test) => iter.takeWhile(test);
+  Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  Iterable<T?> where(bool Function(T? element) test) => iter.where(test);
+  Iterable<T> where(bool Function(T element) test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 
@@ -99,11 +99,11 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
   @override
   bool get isNotEmpty => iter.isNotEmpty;
 
-  Iterator<T?> get iterator => iter.iterator;
+  Iterator<T> get iterator => iter.iterator;
 
-  List<T?> toList({bool growable = true}) => List.of(iter, growable: growable);
+  List<T> toList({bool growable = true}) => List.of(iter, growable: growable);
 
-  Set<T?> toSet() => Set.of(iter);
+  Set<T> toSet() => Set.of(iter);
 
   @override
   String toString() => "$runtimeType$iter";

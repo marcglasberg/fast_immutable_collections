@@ -114,10 +114,10 @@ void main() {
   test("iterator", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
+    final MReplace<String, int> mReplace = MReplace(mFlat, "a", 2);
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
-    final Iterator<MapEntry<String, int?>> iterator = mReplace.iterator;
-    Map<String, int> result = iterator.toMap() as Map<String, int>;
+    final Iterator<MapEntry<String, int>> iterator = mReplace.iterator;
+    Map<String, int> result = iterator.toMap();
     expect(result, finalMap);
   });
 

@@ -24,12 +24,12 @@ void main() {
     expect(imapKeyNullable.isNotEmpty, isTrue);
 
     IMap<String, int?> imapValueNullable = {"a": null}.lock;
-    expect(imapValueNullable, isA<IMap<String, int>>());
+    expect(imapValueNullable, isA<IMap<String, int?>>());
     expect(imapValueNullable.isEmpty, isFalse);
     expect(imapValueNullable.isNotEmpty, isTrue);
 
     IMap<String?, int?> imapKeyValueNullable = {null: null}.lock;
-    expect(imapKeyValueNullable, isA<IMap<String, int>>());
+    expect(imapKeyValueNullable, isA<IMap<String?, int?>>());
     expect(imapKeyValueNullable.isEmpty, isFalse);
     expect(imapKeyValueNullable.isNotEmpty, isTrue);
 

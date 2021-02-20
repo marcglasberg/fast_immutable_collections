@@ -48,11 +48,7 @@ class ReversedListView<T> implements List<T> {
   }
 
   @override
-  List<T> operator +(List<T> other) {
-    var reversed = List<T>.of(list.reversed);
-    reversed.addAll(other);
-    return reversed;
-  }
+  List<T> operator +(List<T> other) => [...list.reversed, ...other];
 
   @override
   T operator [](int index) => list[list.length - index - 1];

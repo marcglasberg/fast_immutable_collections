@@ -56,8 +56,22 @@ class ListMapView<K, V> implements ListMap<K, V> {
   @override
   Iterable<MapEntry<K, V>> get entries => _map.entries;
 
+  /// Return the key/value entry for the given [key], or throws if [key] is not in the map.
   @override
-  MapEntry<K, V> entry(K key) => MapEntry(key, _map[key]!);
+  MapEntry<K, V> entry(K key) => _map.containsKey(key) //
+      ? MapEntry(key, _map[key] as V)
+      : throw StateError("Key not found.");
+
+  /// Return the key/value entry for the given [key], or `null` if [key] is not in the map.
+  @override
+  MapEntry<K, V>? entryOrNull(K key) => _map.containsKey(key) //
+      ? MapEntry(key, _map[key] as V)
+      : null;
+
+  /// Return the key/value entry for the given [key].
+  /// If the [key] is not in the map, return `MapEntry(key, null)`.
+  @override
+  MapEntry<K, V?> entryOrNullValue(K key) => MapEntry(key, _map[key]);
 
   @override
   void forEach(void Function(K key, V value) f) => _map.forEach(f);

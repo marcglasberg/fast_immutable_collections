@@ -35,7 +35,7 @@ class SAdd<T> extends S<T> {
   T? lookup(T element) {
     T? result = _s.lookup(element);
     result ??= (_item == element) ? _item : null;
-    return result!;
+    return result;
   }
 
   @override

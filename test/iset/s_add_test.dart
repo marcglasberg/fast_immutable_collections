@@ -7,14 +7,14 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd, isA<SAdd<int>>());
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.unlock, <int>[1, 2, 3, 4]);
     expect(sAdd.unlock, isA<Set<int>>());
   });
@@ -22,7 +22,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.isEmpty, isFalse);
     expect(sAdd.isNotEmpty, isTrue);
   });
@@ -30,14 +30,14 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("length", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.length, 4);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.contains(1), isTrue);
     expect(sAdd.contains(5), isFalse);
   });
@@ -45,7 +45,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("lookup", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.lookup(1), 1);
     expect(sAdd.lookup(10), isNull);
   });
@@ -53,7 +53,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("containsAll", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.containsAll([2, 2, 3]), isTrue);
     expect(sAdd.containsAll({1, 2, 3, 4}), isTrue);
     expect(sAdd.containsAll({1, 2, 3, 4}.lock), isTrue);
@@ -64,7 +64,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("difference", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.difference({1, 2, 5}), {3, 4});
     expect(sAdd.difference({4}), {1, 2, 3});
     expect(sAdd.difference({2, 4}), {1, 3});
@@ -74,7 +74,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("intersection", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.intersection({1, 2, 4, 5, 10}), {1, 2, 4});
     expect(sAdd.intersection({10, 20, 50}), <int>{});
   });
@@ -82,7 +82,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("union", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.union({1}), {1, 2, 3, 4});
     expect(sAdd.union({1, 2, 5}), {1, 2, 3, 4, 5});
   });
@@ -90,7 +90,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("iterator (IteratorSAdd)", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     final Iterator<int?> iter = sAdd.iterator;
 
     // Throws StateError before first moveNext().
@@ -113,7 +113,7 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
-    final SAdd<int?> sAdd = SAdd<int?>(SFlat<int>.unsafe({1, 2, 3}), 4);
+    final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(() => sAdd[-100], throwsRangeError);
     expect(() => sAdd[-1], throwsRangeError);
     expect(sAdd[0], 1);
@@ -205,7 +205,7 @@ void main() {
     // variable
     original = {1, 2};
     sFlat = SFlat(original);
-    final SAdd<int?> sAdd1 = SAdd(sFlat, 3), sAdd2 = SAdd(sFlat, 4);
+    final SAdd<int> sAdd1 = SAdd(sFlat, 3), sAdd2 = SAdd(sFlat, 4);
 
     expect(sAdd1, <int>{1, 2, 3});
     expect(sAdd2, <int>{1, 2, 4});

@@ -993,8 +993,8 @@ void main() {
     final List<int> reversed = list.reversedView;
     var iter = reversed.iterator;
 
-    // Throws StateError before first moveNext().
-    expect(() => iter.current, throwsStateError);
+    // Throws before first moveNext().
+    expect(() => iter.current, throwsA(anything));
 
     expect(iter.moveNext(), isTrue);
     expect(iter.current, reversed[0]);
@@ -1013,8 +1013,8 @@ void main() {
 
     expect(iter.moveNext(), isFalse);
 
-    // Throws StateError after last moveNext().
-    expect(() => iter.current, throwsStateError);
+    // Throws after last moveNext().
+    expect(() => iter.current, throwsA(anything));
   });
 
   /////////////////////////////////////////////////////////////////////////////
