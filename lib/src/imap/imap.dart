@@ -350,7 +350,7 @@ class IMap<K, V> // ignore: must_be_immutable
     }
   }
 
-  /// **Unsafe**. Note: Does not sort.
+  /// **Unsafe**. Note: Does not sort, so the map should already respect config.
   IMap._(Map<K, V> map, {required this.config}) : _m = MFlat<K, V>.unsafe(map);
 
   /// **Unsafe**. Note: Does not sort.
@@ -431,7 +431,7 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigList? config,
   }) {
     _count();
-    var result = IList.withConfig(keys, config!);
+    var result = IList.withConfig(keys, config ?? IList.defaultConfig);
     if (compare != null || this.config.sort) result = result.sort(compare);
     return result;
   }
@@ -452,7 +452,7 @@ class IMap<K, V> // ignore: must_be_immutable
     assert(compare == null || sort == true);
 
     _count();
-    var result = IList.withConfig(values, config!);
+    var result = IList.withConfig(values, config ?? IList.defaultConfig);
     if (sort) result = result.sort(compare ?? compareObject);
     return result;
   }
@@ -462,7 +462,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ISet<MapEntry<K, V>> toEntryISet({
     ConfigSet? config,
   }) =>
-      ISet.withConfig(entries, config!);
+      ISet.withConfig(entries, config ?? ISet.defaultConfig);
 
   /// Returns an [ISet] of the map keys.
   /// Optionally, you may provide a [config] for the set.
@@ -470,7 +470,7 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigSet? config,
   }) {
     _count();
-    return ISet.withConfig(keys, config!);
+    return ISet.withConfig(keys, config ?? ISet.defaultConfig);
   }
 
   /// Returns an [ISet] of the map values.
@@ -479,7 +479,7 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigSet? config,
   }) {
     _count();
-    return ISet.withConfig(values, config!);
+    return ISet.withConfig(values, config ?? ISet.defaultConfig);
   }
 
   /// Returns a [List] of the map entries.
@@ -591,7 +591,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// It is also very fast to lock this map back into an [IMap].
   ///
   /// See also: [UnmodifiableMapFromIMap]
-  Map<K?, V> get unlockView => UnmodifiableMapFromIMap(this);
+  Map<K, V> get unlockView => UnmodifiableMapFromIMap(this);
 
   /// Unlocks the map, returning a safe, modifiable (mutable) [Map].
   ///
@@ -604,7 +604,7 @@ class IMap<K, V> // ignore: must_be_immutable
   /// back into an [IMap].
   ///
   /// See also: [ModifiableMapFromIMap]
-  Map<K?, V> get unlockLazy => ModifiableMapFromIMap(this);
+  Map<K, V> get unlockLazy => ModifiableMapFromIMap(this);
 
   /// Returns `true` if there are no elements in this collection.
   @override

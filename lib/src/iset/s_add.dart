@@ -1,4 +1,4 @@
-import "../ilist/iterator_add.dart";
+import '../iterator/iterator_add.dart';
 import "iset.dart";
 
 /// The [SAdd] class does not check for duplicate elements. In other words,

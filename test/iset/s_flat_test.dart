@@ -50,7 +50,9 @@ void main() {
   test("iterator", () {
     final Iterator<int?> iter = SFlat([1, 2, 3, 3]).iterator;
 
-    expect(iter.current, isNull);
+    // Throws StateError before first moveNext().
+    expect(() => iter.current, throwsStateError);
+
     expect(iter.moveNext(), isTrue);
     expect(iter.current, 1);
     expect(iter.moveNext(), isTrue);
@@ -58,7 +60,9 @@ void main() {
     expect(iter.moveNext(), isTrue);
     expect(iter.current, 3);
     expect(iter.moveNext(), isFalse);
-    expect(iter.current, isNull);
+
+    // Throws StateError after last moveNext().
+    expect(() => iter.current, throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////

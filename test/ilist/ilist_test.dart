@@ -491,6 +491,20 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("Indirectly testing IteratorFlat, IteratorAdd, and IteratorAddAll.", () {
+    // IteratorFlat
+    [null, 1].lock.unlock;
+
+    // IteratorAdd
+    [null, 1].lock.add(1).add(null).add(2).unlock;
+
+    // IteratorAddAll
+    [null, 1].lock.add(1).addAll([null]).addAll([2, 3]).addAll([null, null]).addAll(
+        [1, null]).addAll([null, 1]).unlock;
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("add", () {
     // 1) Regular usage
     expect(<int>[].lock.add(1), [1]);
@@ -736,9 +750,9 @@ void main() {
 
   test("expand", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
-    expect(ilist.expand((int? v) => [v, v]),
+    expect(ilist.expand((int v) => [v, v]),
         allOf(isA<Iterable<int>>(), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6].lock));
-    expect(ilist.expand((int? v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[].lock));
+    expect(ilist.expand((int v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[].lock));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -802,7 +816,7 @@ void main() {
 
   test("forEach", () {
     int result = 100;
-    [1, 2, 3, 4, 5, 6].lock.forEach(((int v) => result *= 1 + v) as void Function(int?));
+    [1, 2, 3, 4, 5, 6].lock.forEach((int v) => result *= 1 + v);
     expect(result, 504000);
   });
 
@@ -946,23 +960,27 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
-    final Iterator<int> iterator = [1, 2, 3, 4, 5, 6].lock.iterator;
+    final Iterator<int> iter = [1, 2, 3, 4, 5, 6].lock.iterator;
 
-    expect(iterator.current, isNull);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, 1);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, 2);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, 3);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, 4);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, 5);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, 6);
-    expect(iterator.moveNext(), isFalse);
-    expect(iterator.current, isNull);
+    // Throws StateError before first moveNext().
+    expect(() => iter.current, throwsStateError);
+
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, 1);
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, 2);
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, 3);
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, 4);
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, 5);
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, 6);
+    expect(iter.moveNext(), isFalse);
+
+    // Throws StateError after last moveNext().
+    expect(() => iter.current, throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1077,21 +1095,13 @@ void main() {
 
   test("sort", () {
     expect([10, 2, 4, 6, 5].lock.sort(), [2, 4, 5, 6, 10]);
-    expect(
-        [10, 2, 4, 6, 5]
-            .lock
-            .sort(((int a, int b) => -a.compareTo(b)) as int Function(int?, int?)?),
-        [10, 6, 5, 4, 2]);
+    expect([10, 2, 4, 6, 5].lock.sort((int a, int b) => -a.compareTo(b)), [10, 6, 5, 4, 2]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("sortOrdered", () {
-    expect(
-        [10, 2, 4, 6, 5]
-            .lock
-            .sortOrdered(((int a, int b) => a.compareTo(b)) as int Function(int?, int?)?),
-        [2, 4, 5, 6, 10]);
+    expect([10, 2, 4, 6, 5].lock.sortOrdered((int a, int b) => a.compareTo(b)), [2, 4, 5, 6, 10]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1302,10 +1312,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("removeWhere", () {
-    expect(
-        ["one", "two", "three", "four"]
-            .lock
-            .removeWhere(((String item) => item.length == 3) as bool Function(String?)),
+    expect(["one", "two", "three", "four"].lock.removeWhere((String item) => item.length == 3),
         ["three", "four"]);
   });
 

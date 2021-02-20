@@ -101,9 +101,9 @@ void main() {
 
   test("expand", () {
     final LExample<int> lExample = LExample([1, 2, 3, 4, 5, 6]);
-    expect(lExample.expand((int? v) => [v, v]),
+    expect(lExample.expand((int v) => [v, v]),
         allOf(isA<Iterable<int>>(), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6].lock));
-    expect(lExample.expand((int? v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[].lock));
+    expect(lExample.expand((int v) => <int>[]), allOf(isA<Iterable<int>>(), <int>[].lock));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -294,7 +294,9 @@ class LExample<T> extends L<T> {
   LExample([Iterable<T>? iterable]) : _ilist = IList(iterable);
 
   @override
-  Iterator<T> get iterator => _ilist.iterator;
+  Iterator<T> get iterator {
+    return _ilist.iterator;
+  }
 
   @override
   T operator [](int index) => _ilist[index];

@@ -1,5 +1,5 @@
 import "package:collection/collection.dart";
-
+import "package:fast_immutable_collections/src/iterator/iterator_flat.dart";
 import "ilist.dart";
 
 class LFlat<T> extends L<T> {
@@ -8,8 +8,7 @@ class LFlat<T> extends L<T> {
   static L<T> empty<T>() => LFlat.unsafe(<T>[]);
 
   /// **Safe**.
-  LFlat(Iterable<T> iterable)
-      : _list = List.of(iterable, growable: false);
+  LFlat(Iterable<T> iterable) : _list = List.of(iterable, growable: false);
 
   LFlat.unsafe(this._list);
 
@@ -17,7 +16,7 @@ class LFlat<T> extends L<T> {
   List<T> get getFlushed => _list;
 
   @override
-  Iterator<T> get iterator => _list.iterator;
+  Iterator<T> get iterator => IteratorFlat(_list.iterator);
 
   @override
   bool get isEmpty => _list.isEmpty;

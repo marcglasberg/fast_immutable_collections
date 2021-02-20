@@ -414,5 +414,13 @@ extension FicListExtension<T> on List<T> {
   /// a `List`. This difference is important because if you do `list.reversed.toList()`
   /// you don't have a view anymore, and it's not efficient.
   ///
+  /// Beware when using [reversedView] with NNBD:
+  ///
+  ///     // The runtimeType here is <int>, not <int?>
+  ///     List<int?> reversed = [1, 2, 3].reversedView;
+  ///
+  ///     // The runtimeType here is <int?>
+  ///     List<int?> reversed = <int ?>[1, 2, 3].reversedView;
+  ///
   List<T> get reversedView => ReversedListView<T>(this);
 }

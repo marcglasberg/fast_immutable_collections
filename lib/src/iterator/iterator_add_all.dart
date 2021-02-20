@@ -1,18 +1,23 @@
 class IteratorAddAll<T> implements Iterator<T> {
   Iterator<T> iterator, iteratorItems;
-
-  T _current;
-  int extraMove;
+  late T _current;
+  bool extraMove, _pre, _hasCurrent;
 
   IteratorAddAll(this.iterator, this.iteratorItems)
-      : _current = iterator.current,
-        extraMove = 0;
+      : _pre = true,
+        _hasCurrent = true,
+        extraMove = false;
 
   @override
-  T get current => _current;
+  T get current {
+    if (_pre) throw StateError("No current value available. Call moveNext() first.");
+    if (!_hasCurrent) throw StateError("No move values available.");
+    return _current;
+  }
 
   @override
   bool moveNext() {
+    _pre = false;
     if (iterator.moveNext()) {
       _current = iterator.current;
       return true;
@@ -21,7 +26,7 @@ class IteratorAddAll<T> implements Iterator<T> {
         _current = iteratorItems.current;
         return true;
       } else
-        return false;
+        return _hasCurrent = false;
     }
   }
 }

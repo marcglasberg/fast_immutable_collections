@@ -1,5 +1,6 @@
 import "dart:collection";
 import "dart:math";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/list_map/list_map_view.dart";
 
@@ -68,9 +69,14 @@ class ListMap<K, V> implements Map<K, V> {
     }
     // Insertion order:
     else {
+      // First create a map in insertion order, removing duplicate keys.
       map = LinkedHashMap<K, V>.fromEntries(entries);
-      map = HashMap.of(map);
+
+      // Then create the list in the insertion order.
       list = map.entries.map((entry) => entry.key).toList(growable: false);
+
+      // Remove the linked-list from the map (by using a HashMap).
+      map = HashMap.of(map);
     }
 
     return ListMap._(map, list);
@@ -118,9 +124,38 @@ class ListMap<K, V> implements Map<K, V> {
     if (sort) _list.sort(compare ?? compareObject);
   }
 
-  /// Return the corresponding value for the provided [key].
+  /// The value for the given [key], or `null` if [key] is not in the map.
+  ///
+  /// Some maps allow `null` as a value.
+  /// For those maps, a lookup using this operator cannot distinguish between a
+  /// key not being in the map, and the key being there with a `null` value.
+  /// Methods like [containsKey] or [putIfAbsent] can be used if the distinction
+  /// is important.
   @override
   V? operator [](covariant K key) => _map[key];
+
+  /// The value for the given [key], or `null` if [key] is not in the map.
+  ///
+  /// Some maps allow `null` as a value.
+  /// For those maps, a lookup using this operator cannot distinguish between a
+  /// key not being in the map, and the key being there with a `null` value.
+  /// Methods like [containsKey] or [putIfAbsent] can be used if the distinction
+  /// is important.
+  V? get(covariant K key) => _map[key];
+
+  /// The value for the given [key], or `null` if [key] is not in the map.
+  ///
+  /// Some maps allow `null` as a value.
+  /// For those maps, a lookup using this operator cannot distinguish between a
+  /// key not being in the map, and the key being there with a `null` value.
+  /// Methods like [containsKey] or [putIfAbsent] can be used if the distinction
+  /// is important.
+  V getOrThrow(K key) {
+    if (containsKey(key)) {
+      return (_map[key] as V);
+    } else
+      throw StateError("Key does not exist: '$key'");
+  }
 
   /// Replaces the [value] of a [key] that already exists in the map.
   /// However, if the key is not already present, this will throw an error.
@@ -172,10 +207,13 @@ class ListMap<K, V> implements Map<K, V> {
   @override
   Iterable<V> get values => _list.map((key) => _map[key]!);
 
-  MapEntry<K, V> entry(K key) => MapEntry(key, _map[key]!);
+  /// Return the key/value entry for the given [key], or `null` if [key] is not in the map.
+  MapEntry<K, V>? entry(K key) => containsKey(key) //
+      ? MapEntry(key, _map[key] as V)
+      : null;
 
   @override
-  Iterable<MapEntry<K, V>> get entries => _list.map((key) => entry(key));
+  Iterable<MapEntry<K, V>> get entries => _list.map((key) => entry(key)!);
 
   @override
   int get length => _list.length;

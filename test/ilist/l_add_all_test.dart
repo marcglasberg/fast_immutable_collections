@@ -76,7 +76,9 @@ void main() {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     final Iterator<int?> iter = lAddAll.iterator;
 
-    expect(iter.current, isNull);
+    // Throws StateError before first moveNext().
+    expect(() => iter.current, throwsStateError);
+
     expect(iter.moveNext(), isTrue);
     expect(iter.current, 1);
     expect(iter.moveNext(), isTrue);
@@ -88,7 +90,9 @@ void main() {
     expect(iter.moveNext(), isTrue);
     expect(iter.current, 5);
     expect(iter.moveNext(), isFalse);
-    expect(iter.current, isNull);
+
+    // Throws StateError after last moveNext().
+    expect(() => iter.current, throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -168,7 +172,9 @@ void main() {
           LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
       final Iterator<int?> iter = lAddAll.iterator;
 
-      expect(iter.current, isNull);
+      // Throws StateError before first moveNext().
+      expect(() => iter.current, throwsStateError);
+
       expect(iter.moveNext(), isTrue);
       expect(iter.current, 1);
       expect(iter.moveNext(), isTrue);
@@ -186,7 +192,9 @@ void main() {
       expect(iter.moveNext(), isTrue);
       expect(iter.current, 8);
       expect(iter.moveNext(), isFalse);
-      expect(iter.current, isNull);
+
+      // Throws StateError after last moveNext().
+      expect(() => iter.current, throwsStateError);
     });
 
     //////////////////////////////////////////////////////////////////////////////

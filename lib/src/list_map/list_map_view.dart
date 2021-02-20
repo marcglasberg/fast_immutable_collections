@@ -1,4 +1,5 @@
 import "dart:math";
+
 import "list_map.dart";
 
 class ListMapView<K, V> implements ListMap<K, V> {
@@ -8,6 +9,17 @@ class ListMapView<K, V> implements ListMap<K, V> {
 
   @override
   V? operator [](covariant K key) => _map[key];
+
+  @override
+  V? get(covariant K key) => _map[key];
+
+  @override
+  V getOrThrow(K key) {
+    if (containsKey(key)) {
+      return (_map[key] as V);
+    } else
+      throw StateError("Key does not exist: '$key'");
+  }
 
   @override
   void operator []=(K key, V? value) {

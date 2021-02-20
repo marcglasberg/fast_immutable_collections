@@ -1,6 +1,5 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -19,20 +18,20 @@ void main() {
     expect(imap.isEmpty, isFalse);
     expect(imap.isNotEmpty, isTrue);
 
-    imap = {null: 1}.lock as IMap<String, int>;
-    expect(imap, isA<IMap<String, int>>());
-    expect(imap.isEmpty, isFalse);
-    expect(imap.isNotEmpty, isTrue);
+    IMap<String?, int> imapKeyNullable = {null: 1}.lock;
+    expect(imapKeyNullable, isA<IMap<String?, int>>());
+    expect(imapKeyNullable.isEmpty, isFalse);
+    expect(imapKeyNullable.isNotEmpty, isTrue);
 
-    imap = {"a": null}.lock as IMap<String, int>;
-    expect(imap, isA<IMap<String, int>>());
-    expect(imap.isEmpty, isFalse);
-    expect(imap.isNotEmpty, isTrue);
+    IMap<String, int?> imapValueNullable = {"a": null}.lock;
+    expect(imapValueNullable, isA<IMap<String, int>>());
+    expect(imapValueNullable.isEmpty, isFalse);
+    expect(imapValueNullable.isNotEmpty, isTrue);
 
-    imap = {null: null}.lock as IMap<String, int>;
-    expect(imap, isA<IMap<String, int>>());
-    expect(imap.isEmpty, isFalse);
-    expect(imap.isNotEmpty, isTrue);
+    IMap<String?, int?> imapKeyValueNullable = {null: null}.lock;
+    expect(imapKeyValueNullable, isA<IMap<String, int>>());
+    expect(imapKeyValueNullable.isEmpty, isFalse);
+    expect(imapKeyValueNullable.isNotEmpty, isTrue);
 
     imap = <String, int>{}.lock;
     expect(imap, isA<IMap<String, int>>());
@@ -42,7 +41,7 @@ void main() {
 
   test("lockUnsafe", () {
     final Map<String, int> map = {"a": 1, "b": 2};
-    final IMap<String, int> imap = map.lockUnsafe as IMap<String, int>;
+    final IMap<String, int> imap = map.lockUnsafe;
 
     expect(map, imap.unlock);
 

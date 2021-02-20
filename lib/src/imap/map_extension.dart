@@ -33,10 +33,10 @@ extension FicMapExtension<K, V> on Map<K, V> {
   /// preventing further configuration changes by calling `ImmutableCollection.lockConfig()`).
   ///
   /// See also: [ImmutableCollection]
-  IMap<K?, V?> get lockUnsafe => IMap<K?, V?>.unsafe(this, config: IMap.defaultConfig);
+  IMap<K, V> get lockUnsafe => IMap<K, V>.unsafe(this, config: IMap.defaultConfig);
 
   /// Creates an *immutable* map ([IMap]) from the map.
-  IMap<K, V>? toIMap([ConfigMap? config]) =>
+  IMap<K, V> toIMap([ConfigMap? config]) =>
       IMap<K, V>.withConfig(this, config ?? IMap.defaultConfig);
 }
 

@@ -59,8 +59,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("unlockView", () {
-    final Map<String, int> unmodifiableMapView =
-        {"a": 1, "b": 2}.lock.unlockView as Map<String, int>;
+    final Map<String, int> unmodifiableMapView = {"a": 1, "b": 2}.lock.unlockView;
 
     expect(
         unmodifiableMapView,
@@ -71,7 +70,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("unlockLazy", () {
-    final Map<String, int> modifiableMapView = {"a": 1, "b": 2}.lock.unlockLazy as Map<String, int>;
+    final Map<String, int> modifiableMapView = {"a": 1, "b": 2}.lock.unlockLazy;
 
     expect(
         modifiableMapView,
@@ -1376,48 +1375,57 @@ void main() {
         .withConfig(ConfigMap(sort: false));
     const Map<String, int> finalMap = {"a": 1, "b": 2, "d": 4, "c": 3, "e": 5, "f": 6};
 
-    Iterator<MapEntry<String, int>> iterator1 = imap1.iterator;
-    final Map<String, int> result = iterator1.toMap();
+    Iterator<MapEntry<String, int>> iter1 = imap1.iterator;
+    final Map<String, int> result = iter1.toMap();
 
     expect(result, finalMap);
 
-    iterator1 = imap1.iterator;
+    iter1 = imap1.iterator;
 
-    expect(iterator1.current, isNull);
-    expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asComparableEntry, Entry<String, int>("a", 1));
-    expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asComparableEntry, Entry<String, int>("b", 2));
-    expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asComparableEntry, Entry<String, int>("d", 4));
-    expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asComparableEntry, Entry<String, int>("c", 3));
-    expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asComparableEntry, Entry<String, int>("e", 5));
-    expect(iterator1.moveNext(), isTrue);
-    expect(iterator1.current.asComparableEntry, Entry<String, int>("f", 6));
-    expect(iterator1.moveNext(), isFalse);
-    expect(iterator1.current, isNull);
+    // Throws StateError before first moveNext().
+    expect(() => iter1.current, throwsStateError);
+
+    expect(iter1.moveNext(), isTrue);
+    expect(iter1.current.asComparableEntry, Entry<String, int>("a", 1));
+    expect(iter1.moveNext(), isTrue);
+    expect(iter1.current.asComparableEntry, Entry<String, int>("b", 2));
+    expect(iter1.moveNext(), isTrue);
+    expect(iter1.current.asComparableEntry, Entry<String, int>("d", 4));
+    expect(iter1.moveNext(), isTrue);
+    expect(iter1.current.asComparableEntry, Entry<String, int>("c", 3));
+    expect(iter1.moveNext(), isTrue);
+    expect(iter1.current.asComparableEntry, Entry<String, int>("e", 5));
+    expect(iter1.moveNext(), isTrue);
+    expect(iter1.current.asComparableEntry, Entry<String, int>("f", 6));
+    expect(iter1.moveNext(), isFalse);
+
+    // Throws StateError after last moveNext().
+    expect(() => iter1.current, throwsStateError);
 
     // 2) With sorted keys
     final IMap<String, int> imap2 =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    final Iterator<MapEntry<String, int?>?> iterator2 = imap2.iterator;
+    final Iterator<MapEntry<String, int>> iter2 = imap2.iterator;
 
-    expect(iterator2.current, isNull);
-    expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current!.asComparableEntry, Entry<String, int>("a", 1));
-    expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current!.asComparableEntry, Entry<String, int>("b", 2));
-    expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current!.asComparableEntry, Entry<String, int>("c", 3));
-    expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current!.asComparableEntry, Entry<String, int>("d", 4));
-    expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current!.asComparableEntry, Entry<String, int>("e", 5));
-    expect(iterator2.moveNext(), isTrue);
-    expect(iterator2.current!.asComparableEntry, Entry<String, int>("f", 6));
-    expect(iterator2.moveNext(), isFalse);
+    // Throws StateError before first moveNext().
+    expect(() => iter2.current, throwsStateError);
+
+    expect(iter2.moveNext(), isTrue);
+    expect(iter2.current.asComparableEntry, Entry<String, int>("a", 1));
+    expect(iter2.moveNext(), isTrue);
+    expect(iter2.current.asComparableEntry, Entry<String, int>("b", 2));
+    expect(iter2.moveNext(), isTrue);
+    expect(iter2.current.asComparableEntry, Entry<String, int>("c", 3));
+    expect(iter2.moveNext(), isTrue);
+    expect(iter2.current.asComparableEntry, Entry<String, int>("d", 4));
+    expect(iter2.moveNext(), isTrue);
+    expect(iter2.current.asComparableEntry, Entry<String, int>("e", 5));
+    expect(iter2.moveNext(), isTrue);
+    expect(iter2.current.asComparableEntry, Entry<String, int>("f", 6));
+    expect(iter2.moveNext(), isFalse);
+
+    // Throws StateError after last moveNext().
+    expect(() => iter2.current, throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1425,10 +1433,10 @@ void main() {
   test("any", () {
     final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
-    expect(imap.any((String k, int? v) => v == 4), isTrue);
-    expect(imap.any((String k, int? v) => k == "f"), isTrue);
-    expect(imap.any((String k, int? v) => v == 100), isFalse);
-    expect(imap.any((String k, int? v) => k == "z"), isFalse);
+    expect(imap.any((String k, int v) => v == 4), isTrue);
+    expect(imap.any((String k, int v) => k == "f"), isTrue);
+    expect(imap.any((String k, int v) => v == 100), isFalse);
+    expect(imap.any((String k, int v) => k == "z"), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1560,7 +1568,7 @@ void main() {
     expect(imap.toEntryList(), isA<List<MapEntry<String, int>>>());
     imap
         .toEntryList()
-        .forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
+        .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
 
     final List<Entry<String, int>> correctEntryList = [
       Entry("a", 1),
@@ -1570,7 +1578,7 @@ void main() {
       Entry("f", 6),
       Entry("e", 5)
     ];
-    final List<MapEntry<String, int?>> mapEntryList = imap.toEntryList();
+    final List<MapEntry<String, int>> mapEntryList = imap.toEntryList();
     for (int i = 0; i < mapEntryList.length; i++)
       expect(mapEntryList[i].asComparableEntry, correctEntryList[i]);
 
@@ -1583,7 +1591,7 @@ void main() {
       Entry("e", 5),
       Entry("f", 6)
     ];
-    final List<MapEntry<String, int?>> mapEntryListSorted =
+    final List<MapEntry<String, int>> mapEntryListSorted =
         imap.withConfig(ConfigMap(sort: true)).toEntryList();
     for (int i = 0; i < mapEntryListSorted.length; i++)
       expect(mapEntryListSorted[i].asComparableEntry, correctEntryListSorted[i]);

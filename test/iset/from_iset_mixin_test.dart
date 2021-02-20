@@ -379,18 +379,24 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    final Iterator<Student?> iterator = students.iterator;
+    final Iterator<Student?> iter = students.iterator;
 
     // Iterator will respect the sort order (when ConfigSet.sort is `true`)
-    expect(iterator.current, isNull);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, james);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, sara);
-    expect(iterator.moveNext(), isTrue);
-    expect(iterator.current, lucy);
-    expect(iterator.moveNext(), isFalse);
-    expect(iterator.current, isNull);
+
+    // Throws StateError before first moveNext().
+    expect(() => iter.current, throwsStateError);
+
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, james);
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, sara);
+    expect(iter.moveNext(), isTrue);
+    expect(iter.current, lucy);
+    expect(iter.moveNext(), isFalse);
+    expect(iter.current, isNull);
+
+    // Throws StateError after last moveNext().
+    expect(() => iter.current, throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////

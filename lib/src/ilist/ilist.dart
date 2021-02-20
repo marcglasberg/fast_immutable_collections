@@ -597,7 +597,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Checks that the list has only one element, and returns that element.
   /// Return `null` if the list is empty or has more than one element.
-  T? get singleOrNull => isEmpty ? null : single;
+  T? get singleOrNull => length != 1 ? null : single;
 
   /// Returns the first element, or [orElse] if the list is empty.
   T firstOr(T orElse) => isEmpty ? orElse : first;

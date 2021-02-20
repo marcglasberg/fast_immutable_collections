@@ -2134,7 +2134,7 @@ void main() {
       "b": {11, 12},
     }.lock;
 
-    expect(mapOfSets.firstValueWhere((int? value) => value! > 100), isNull);
+    expect(mapOfSets.firstValueWhere((int? value) => value! > 100, orElse: () => 650), 650);
   });
 
   //////////////////////////////////////////////////////////////////////////////

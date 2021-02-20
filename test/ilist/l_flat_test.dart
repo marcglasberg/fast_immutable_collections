@@ -79,7 +79,9 @@ void main() {
     final LFlat<int> lFlat = LFlat<int>(original);
     final Iterator<int> iter = lFlat.iterator;
 
-    expect(iter.current, isNull);
+    // Throws StateError before first moveNext().
+    expect(() => iter.current, throwsStateError);
+
     expect(iter.moveNext(), isTrue);
     expect(iter.current, 1);
     expect(iter.moveNext(), isTrue);
@@ -87,7 +89,9 @@ void main() {
     expect(iter.moveNext(), isTrue);
     expect(iter.current, 3);
     expect(iter.moveNext(), isFalse);
-    expect(iter.current, isNull);
+
+    // Throws StateError after last moveNext().
+    expect(() => iter.current, throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////

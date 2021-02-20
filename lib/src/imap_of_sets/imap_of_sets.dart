@@ -790,7 +790,11 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
           destSet.add(key);
         }
     }
-    return IMapOfSets<V, K>.withConfig(result as Map<V, Iterable<K>>, config ?? this.config);
+
+    return IMapOfSets<V, K>.withConfig(
+      result as Map<V, Iterable<K>>,
+      config ?? this.config,
+    );
   }
 
   /// Iterates through all values of all sets, and returns the first value

@@ -1,7 +1,7 @@
 import "dart:collection";
 import "dart:math";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:fast_immutable_collections/src/iterator/iterator_flat.dart";
 import "package:fast_immutable_collections/src/list_set/list_set_view.dart";
 
 /// A [ListSet] is, at the same time:
@@ -120,7 +120,7 @@ class ListSet<T> implements Set<T>, List<T> {
   bool get isNotEmpty => _list.isNotEmpty;
 
   @override
-  Iterator<T> get iterator => _list.iterator;
+  Iterator<T> get iterator => IteratorFlat(_list.iterator);
 
   @override
   String join([String separator = ""]) => _list.join(separator);

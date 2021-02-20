@@ -1,4 +1,4 @@
-import 'package:fast_immutable_collections/src/ilist/iterator_add_all.dart';
+import "package:fast_immutable_collections/src/iterator/iterator_add_all.dart";
 
 import "imap.dart";
 

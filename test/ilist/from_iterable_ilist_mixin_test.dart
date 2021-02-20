@@ -18,6 +18,8 @@ void main() {
     Students students = Students([james, sara, lucy]);
 
     Iterator<Student?> iterator = students.iterator;
+
+    // Throws StateError before first moveNext().
     expect(() => iterator.current, throwsStateError);
 
     iterator = students.iterator;
@@ -28,7 +30,9 @@ void main() {
     expect(iterator.moveNext(), isTrue);
     expect(iterator.current, lucy);
     expect(iterator.moveNext(), isFalse);
-    expect(iterator.current, isNull);
+
+    // Throws StateError after last moveNext().
+    expect(() => iterator.current, throwsStateError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -109,9 +113,10 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy]);
 
-    expect(students.expand((Student? student) => [student, student]),
+    expect(students.expand((Student student) => [student, student]),
         allOf(isA<Iterable<Student>>(), <Student>[james, james, sara, sara, lucy, lucy].lock));
-    expect(students.expand((Student? student) => <Student>[]),
+
+    expect(students.expand((Student student) => <Student>[]),
         allOf(<Student>[].lock, isA<Iterable<Student>>()));
   });
 

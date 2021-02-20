@@ -40,6 +40,9 @@ export "src/iset/modifiable_set_from_iset.dart";
 export "src/iset/set_extension.dart";
 export "src/iset/unmodifiable_set_from_iset.dart";
 
+// Iterator:
+export "src/iterator/iterator_extensions.dart";
+
 // ListSet and ListMap:
 export "src/list_map/list_map.dart";
 export "src/list_map/list_map_view.dart";
