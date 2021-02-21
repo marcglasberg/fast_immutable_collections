@@ -2,6 +2,8 @@ import "package:test/test.dart";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+import '../utils.dart';
+
 void main() {
   /////////////////////////////////////////////////////////////////////////////
 
@@ -59,13 +61,28 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("length setter", () {
+    final IList<int?> nullableIlist = [null, 1, 2, 3].lock;
+    final ModifiableListFromIList<int?> modifiableListViewNullable =
+        ModifiableListFromIList(nullableIlist);
+
+    // Make it smaller.
+    modifiableListViewNullable.length = 2;
+    expect(modifiableListViewNullable.length, 2);
+
+    // Make it bigger.
+    modifiableListViewNullable.length = 4;
+    expect(modifiableListViewNullable.length, 4);
+
+    // ---
     final IList<int> ilist = [1, 2, 3].lock;
-    final ModifiableListFromIList<int> modifiableListView = ModifiableListFromIList(ilist);
+    final ModifiableListFromIList<int?> modifiableListView = ModifiableListFromIList(ilist);
+
+    // Make it smaller.
     modifiableListView.length = 2;
     expect(modifiableListView.length, 2);
 
-    modifiableListView.length = 4;
-    expect(modifiableListView.length, 4);
+    // Try to make it bigger, but fails (not nullable)
+    expect(() => modifiableListView.length = 4, throwsTypeError);
   });
 
   //////////////////////////////////////////////////////////////////////////////

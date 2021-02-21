@@ -2070,11 +2070,7 @@ void main() {
     // 3) with empty sets
     iMapOfSets = IMapOfSets.withConfig({"a": {}}, ConfigMapOfSets(removeEmptySets: false));
 
-    expect(iMapOfSets.unlock, {"a": <int>{}});
-    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: true).unlock, {
-      null: {"a"}
-    });
-    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: false), isEmpty);
+    expect(iMapOfSets.invertKeysAndValues(), isEmpty);
 
     iMapOfSets = IMapOfSets.withConfig({
       "a": <int>{},
@@ -2084,12 +2080,7 @@ void main() {
       "e": <int>{1},
     }, ConfigMapOfSets(removeEmptySets: false));
 
-    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: true).unlock, {
-      null: {"a", "b"},
-      1: {"c", "e"},
-      2: {"d"},
-    });
-    expect(iMapOfSets.invertKeysAndValues(emptySetsTurnIntoNullKeys: false).unlock, {
+    expect(iMapOfSets.invertKeysAndValues().unlock, {
       1: {"c", "e"},
       2: {"d"},
     });
@@ -2099,7 +2090,70 @@ void main() {
       "a": {2, 3},
       "b": {1, 2, 3},
       "c": {4},
-    }.lock.invertKeysAndValues(config: ConfigMapOfSets(sortKeys: true));
+    }.lock.invertKeysAndValues(ConfigMapOfSets(sortKeys: true));
+    expect(inverted.keys, [1, 2, 3, 4]);
+    expect(inverted.sets, [
+      {"b"},
+      {"a", "b"},
+      {"a", "b"},
+      {"c"}
+    ]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("invertKeysAndValuesKeepingNullKeys", () {
+    // 1) regular usage
+
+    IMapOfSets<String, int> iMapOfSets = {
+      "a": {1, 2},
+      "b": {1, 2, 3},
+      "c": {5, 1},
+      "d": {5, 8},
+      "e": {12, 5},
+    }.lock;
+
+    expect(iMapOfSets.invertKeysAndValuesKeepingNullKeys().unlock, {
+      1: {"a", "b", "c"},
+      2: {"a", "b"},
+      3: {"b"},
+      5: {"c", "d", "e"},
+      8: {"d"},
+      12: {"e"},
+    });
+
+    // 2) Invert twice return to normal.
+    expect(iMapOfSets.invertKeysAndValuesKeepingNullKeys().invertKeysAndValuesKeepingNullKeys(),
+        iMapOfSets);
+
+    // 3) with empty sets
+    iMapOfSets = IMapOfSets.withConfig({"a": {}}, ConfigMapOfSets(removeEmptySets: false));
+
+    expect(iMapOfSets.unlock, {"a": <int>{}});
+    expect(iMapOfSets.invertKeysAndValuesKeepingNullKeys().unlock, {
+      null: {"a"}
+    });
+
+    iMapOfSets = IMapOfSets.withConfig({
+      "a": <int>{},
+      "b": <int>{},
+      "c": <int>{1},
+      "d": <int>{2},
+      "e": <int>{1},
+    }, ConfigMapOfSets(removeEmptySets: false));
+
+    expect(iMapOfSets.invertKeysAndValuesKeepingNullKeys().unlock, {
+      null: {"a", "b"},
+      1: {"c", "e"},
+      2: {"d"},
+    });
+
+    // 4) Sorted map of sets
+    final IMapOfSets<int?, String> inverted = {
+      "a": {2, 3},
+      "b": {1, 2, 3},
+      "c": {4},
+    }.lock.invertKeysAndValuesKeepingNullKeys(ConfigMapOfSets(sortKeys: true));
     expect(inverted.keys, [1, 2, 3, 4]);
     expect(inverted.sets, [
       {"b"},

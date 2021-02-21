@@ -39,12 +39,18 @@ class ModifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEmpt
   @override
   int get length => (_list != null) ? _list!.length : _iList!.length;
 
+  /// Changes the length of this list (the list is growable).
+  /// If [newLength] is greater than current length,
+  /// new entries are initialized to `null`,
+  /// so [newLength] must not be greater than the current length
+  /// if the element type [E] is non-nullable.
   @override
   set length(int newLength) {
     if (_list == null) {
       _list = _iList!.unlock;
       _iList = null; // To allow for garbage-collection.
     }
+
     _list!.length = newLength;
   }
 

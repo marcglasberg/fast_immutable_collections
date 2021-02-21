@@ -355,46 +355,6 @@ extension FicListExtension<T> on List<T> {
     return chunks;
   }
 
-  /// Returns a new list where [newItems] are added or updated, by their [id].
-  /// 1) Items with the same [id] will be replaced.
-  /// 2) Items with new [id]s will go to the end of the list.
-  ///
-  /// Note: The original list and the [newItems] list won't change.
-  ///
-  /// Note: If the original list contains more than one item with the same
-  /// [id] as some item in [newItems], the first will be replaced, and the
-  /// others removed.
-  ///
-  /// Note: All null items in the original list and in [newItems] will
-  /// be removed from the result.
-  ///
-  /// Note: The [newItems] list will be destroyed in the process.
-  ///
-  List<T> update(
-    List<T?> newItems,
-    dynamic Function(T item) id,
-  ) {
-    int i = 0;
-
-    Map<dynamic, int> ids = <dynamic, int>{
-      for (T? item in newItems) (item == null) ? null : id(item): i++
-    };
-
-    List<T> newList = map((T item) {
-      int? pos = ids[(item == null) ? null : id(item)];
-      if (pos == null) return item;
-      T? newItem = newItems[pos];
-      newItems[pos] = null;
-      return newItem;
-    }).where((item) => item != null).toList().cast();
-
-    for (T? newItem in newItems) {
-      if (newItem != null) newList.add(newItem);
-    }
-
-    return newList;
-  }
-
   /// Removes all duplicates, leaving only the distinct items.
   /// Optionally, you can provide an [id] function to compare the items.
   ///

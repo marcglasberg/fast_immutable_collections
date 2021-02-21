@@ -196,4 +196,40 @@ extension FicIterableExtension<T> on Iterable<T> {
     List<T?> diffThisMinusOther = result.first as List<T?>;
     return intersectOtherWithThis.followedBy(diffThisMinusOther).toList();
   }
+
+  /// Returns a new list where [newItems] are added or updated, by their [id]
+  /// (and the [id] is a function of the item), like so:
+  ///
+  /// 1) Items with the same [id] will be replaced, in place.
+  /// 2) Items with new [id]s will be added go to the end of the list.
+  ///
+  /// Note: If the original iterable contains more than one item with the
+  /// same [id] as some item in [newItems], the first will be replaced, and
+  /// the others will be left untouched. If [newItems] contains more than
+  /// one item with the same [id], the last one will be used, and the
+  /// previous discarded.
+  ///
+  List<T> updateById(
+    Iterable<T> newItems,
+    dynamic Function(T item) id,
+  ) {
+    List<T> newList = [];
+
+    Map<dynamic, T> idsPerNewItem = <dynamic, T>{for (T item in newItems) id(item): item};
+
+    // Replace those with the same id.
+    for (T item in this) {
+      var itemId = id(item);
+      if (idsPerNewItem.containsKey(itemId)) {
+        T newItem = idsPerNewItem[itemId] as T;
+        newList.add(newItem);
+        idsPerNewItem.remove(itemId);
+      } else
+        newList.add(item);
+    }
+
+    // Add the new ones at the end.
+    newList.addAll(idsPerNewItem.values);
+    return newList;
+  }
 }

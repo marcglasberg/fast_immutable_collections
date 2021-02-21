@@ -758,22 +758,36 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   }
 
   /// Return a map where the keys are the values, and the values are the keys.
-  ///
-  /// If [emptySetsTurnIntoNullKeys] is true, empty sets will become the key `null`.
-  /// Otherwise, keys of empty sets will be removed.
-  ///
+  /// Keys of empty sets will be removed.
   /// You can pass a new [config] for the map.
-  ///
-  IMapOfSets<V?, K> invertKeysAndValues({
-    bool emptySetsTurnIntoNullKeys = false,
-    ConfigMapOfSets? config,
-  }) {
+  IMapOfSets<V, K> invertKeysAndValues([ConfigMapOfSets? config]) {
+    Map<V, Set<K>> result = {};
+    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      K key = entry.key;
+      ISet<V> set = entry.value;
+
+      for (V value in set) {
+        var destSet = result[value];
+        if (destSet == null) {
+          destSet = {};
+          result[value] = destSet;
+        }
+        destSet.add(key);
+      }
+    }
+    return IMapOfSets<V, K>.withConfig(result, config ?? this.config);
+  }
+
+  /// Return a map where the keys are the values, and the values are the keys.
+  /// Empty sets will become the key `null`.
+  /// You can pass a new [config] for the map.
+  IMapOfSets<V?, K> invertKeysAndValuesKeepingNullKeys([ConfigMapOfSets? config]) {
     Map<V?, Set<K>> result = {};
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       K key = entry.key;
       ISet<V> set = entry.value;
 
-      if (emptySetsTurnIntoNullKeys && set.isEmpty) {
+      if (set.isEmpty) {
         var destSet = result[null];
         if (destSet == null) {
           destSet = {};
@@ -791,10 +805,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
         }
     }
 
-    return IMapOfSets<V, K>.withConfig(
-      result as Map<V, Iterable<K>>,
-      config ?? this.config,
-    );
+    return IMapOfSets<V?, K>.withConfig(result, config ?? this.config);
   }
 
   /// Iterates through all values of all sets, and returns the first value

@@ -1,4 +1,4 @@
 import "package:test/test.dart";
 
-const TypeMatcher<AssertionError> isTypeError = TypeMatcher<AssertionError>();
-final Matcher throwsAssertionError = throwsA(isTypeError);
+ final Matcher throwsAssertionError = throwsA(const TypeMatcher<AssertionError>());
+ final Matcher throwsTypeError = throwsA(const TypeMatcher<TypeError>());
