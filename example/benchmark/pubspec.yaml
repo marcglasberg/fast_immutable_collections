@@ -1,11 +1,10 @@
 name: fast_immutable_collections_benchmarks
 description: An isolated package for benchmarking the `fast_immutable_collections` package.
+publish_to: "none"
 version: 0.0.1
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
-
-publish_to: none
 
 dependencies:
   benchmark_harness: ^1.0.5

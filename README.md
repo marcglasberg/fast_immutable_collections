@@ -47,7 +47,7 @@ Other valuable features are:
   classes `FicListExtension`, `FicSetExtension`, and `FicMapExtension`. For
   example: `[1, 2, 1].removeDuplicates()`
 
-- Other extensions: `IterableExtension`, `IteratorExtension`, `MapIteratorExtension`,
+- Other extensions: `FicIterableExtension`, `FicIteratorExtension`, `FicMapIteratorExtension`,
   `FicComparatorExtension`, `FicComparableExtension` and `FicBooleanExtension`. For example:
   `false.compareTo(true)`
 

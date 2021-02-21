@@ -1,4 +1,4 @@
-## [2.0.0-nullsafety.1] - 2021/02/16
+## [2.0.0-nullsafety.2] - 2021/02/16
 
 * Nullsafety.
 

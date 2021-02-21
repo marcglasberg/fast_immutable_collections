@@ -641,14 +641,6 @@ class IList<T> // ignore: must_be_immutable
     return _l.firstWhere(test, orElse: orElse);
   }
 
-  /// Iterates through elements and returns the first to satisfy [test].
-  ///
-  /// - If no element satisfies [test], it returns null.
-  T? firstWhereOrNull(bool Function(T) test) {
-    _count();
-    return _l.firstWhereOrNull(test);
-  }
-
   /// Reduces a collection to a single value by iteratively combining eac element of the collection
   /// with an existing value.
   @override

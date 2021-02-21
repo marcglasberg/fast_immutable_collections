@@ -60,7 +60,7 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("IteratorExtension.toIterable", () {
+  test("FicIteratorExtension.toIterable", () {
     const List<int> list = [1, 2, 3];
     final Iterable<int> iterable = list.iterator.toIterable();
     expect(iterable, [1, 2, 3]);
@@ -68,7 +68,7 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("IteratorExtension.toList", () {
+  test("FicIteratorExtension.toList", () {
     const List<int> list = [1, 2, 3];
     final List<int> mutableList = list.iterator.toList();
     final List<int> unmodifiableList = list.iterator.toList(growable: false);
@@ -82,7 +82,7 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("IteratorExtension.toSet", () {
+  test("FicIteratorExtension.toSet", () {
     const List<int> list = [1, 2, 3];
     final Set<int> mutableSet = list.iterator.toSet();
 
@@ -91,7 +91,7 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("MapIteratorExtension.toIterable", () {
+  test("FicMapIteratorExtension.toIterable", () {
     const List<MapEntry<String, int>> entryList = [
       MapEntry("a", 1),
       MapEntry("b", 2),
@@ -108,7 +108,7 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("MapIteratorExtension.toMap", () {
+  test("FicMapIteratorExtension.toMap", () {
     const List<MapEntry<String, int>> entryList = [
       MapEntry("a", 1),
       MapEntry("b", 2),
@@ -427,13 +427,3 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 }
 
-class _ClassEqualsByValue {
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is _ClassEqualsByValue && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 0;
-}
-
-// /////////////////////////////////////////////////////////////////////////////

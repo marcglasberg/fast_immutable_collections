@@ -1,12 +1,11 @@
 name: benchmark_app
 description: The example project for the fast_immutable_collections package.
+publish_to: "none"
 version: 0.0.1
 
 environment:
   flutter: ">=1.17.0 <=1.25.0"
   sdk: ">=2.7.0 <3.0.0"
-
-publish_to: none
 
 flutter:
   uses-material-design: true

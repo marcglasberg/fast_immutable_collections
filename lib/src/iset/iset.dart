@@ -608,11 +608,6 @@ class ISet<T> // ignore: must_be_immutable
     return _s.firstWhere(test, orElse: orElse);
   }
 
-  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
-    _count();
-    return _s.firstWhereOrNull(test, orElse: orElse);
-  }
-
   /// Reduces a collection to a single value by iteratively combining eac element of the collection
   /// with an existing value.
   @override
@@ -954,14 +949,6 @@ abstract class S<T> implements Iterable<T> {
   @override
   T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
-
-  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
-    for (T element in iter) {
-      if (test(element)) return element;
-    }
-    if (orElse != null) return orElse();
-    return null;
-  }
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
