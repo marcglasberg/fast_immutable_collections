@@ -145,7 +145,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 /// `identical`, but will give **less false negatives**. So it is almost always
 /// recommended to use `same` instead of `identical`.
 ///
-bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>?>(C c1, C c2) {
+bool areSameImmutableCollection<C extends ImmutableCollection?>(C c1, C c2) {
   if (identical(c1, c2)) return true;
   if (c1 == null || c2 == null) return false;
 
@@ -165,7 +165,7 @@ bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>?>(C c1, C
 /// collections, it will throw a [StateError]. Note this will **not** compare the
 /// configurations.
 ///
-bool areImmutableCollectionsWithEqualItems<C extends ImmutableCollection<dynamic>?>(C c1, C c2) {
+bool areImmutableCollectionsWithEqualItems<C extends ImmutableCollection?>(C c1, C c2) {
   if (identical(c1, c2)) return true;
   if (c1 is IList && c2 is IList) return (c1).equalItems(c2);
   if (c1 is ISet && c2 is ISet) return (c1).equalItems(c2);
@@ -188,7 +188,7 @@ abstract class CanBeEmpty {
 /// Meant to be used when you wish to save a value that's going to be tossed
 /// out of an immutable collection.
 ///
-/// For an example, see `IList.removeAt()`.
+/// For an example, see [IList.removeAt()].
 ///
 class Output<T> {
   T? _value;

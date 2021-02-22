@@ -21,11 +21,41 @@ void main() {
     expect(areSameImmutableCollection(null, IList()), isFalse);
 
     // 3) If none of them is null, then use .same()
+
+    // 3.1) IList
     IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]);
     IList<int> iList3 = iList1.remove(3);
 
     expect(areSameImmutableCollection(iList1, iList2), isFalse);
     expect(areSameImmutableCollection(iList1, iList3), isTrue);
+
+    // 3.2) ISet
+    ISet<int> iset1 = ISet([1, 2]), iSet2 = ISet([1, 2]);
+    ISet<int> iset3 = iset1.remove(3);
+
+    expect(areSameImmutableCollection(iset1, iSet2), isFalse);
+    expect(areSameImmutableCollection(iset1, iset3), isTrue);
+
+    // 3.3) IMap
+    IMap<String, int> imap1 = IMap({"a": 1, "b": 2}), imap2 = IMap({"a": 1, "b": 2});
+    IMap<String, int> imap3 = imap1.remove("c");
+
+    expect(areSameImmutableCollection(imap1, imap2), isFalse);
+    expect(areSameImmutableCollection(imap1, imap3), isTrue);
+
+    // 3.3) IMapOfSets
+    IMapOfSets<String, int> imapOfSets1 = IMapOfSets({
+          "a": {1},
+          "b": {1, 2}
+        }),
+        imapOfSets2 = IMapOfSets({
+          "a": {1},
+          "b": {1, 2}
+        });
+    IMapOfSets<String, int> imapOfSets3 = imapOfSets1.removeSet("c");
+
+    expect(areSameImmutableCollection(imapOfSets1, imapOfSets2), isFalse);
+    expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -426,4 +456,3 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 }
-
