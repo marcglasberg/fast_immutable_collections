@@ -110,7 +110,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Iterable iterable2 = null;
   /// iterable1.deepEqualsByIdentity(iterable2) == true;
   /// ```
-  ///
+  /// TODO: Marcelo, same comment as the method above.
   bool deepEqualsByIdentity(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
@@ -118,7 +118,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     /// Assumes EfficientLengthIterable for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) ||
+        (this is Map) || // TODO: Marcelo, can this be a `Map` if `Map` isn't an `Iterable`?
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
