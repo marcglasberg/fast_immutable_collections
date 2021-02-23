@@ -170,6 +170,28 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("firstOrNull | lastOrNull | singleOrNull", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    // 1) firstOrNull
+    expect(Students([]).firstOrNull, isNull);
+    expect(students.firstOrNull, Student("James"));
+
+    // 2) lastOrNull
+    expect(Students([]).lastOrNull, isNull);
+    expect(students.lastOrNull, Student("Lucy"));
+
+    // 3) singleOrNull
+    expect(Students([]).singleOrNull, isNull);
+    expect(students.singleOrNull, isNull);
+    expect(Students([Student("James")]).singleOrNull, Student("James"));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("firstWhere", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");

@@ -258,13 +258,13 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 }
 
 extension FromIListMixinExtension on FromIListMixin? {
-  /// Checks if `this` is `null` or empty.
+  /// Checks if [this] is `null` or empty.
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
-  /// Checks if `this` is **not** `null` and **not** empty.
+  /// Checks if [this] is **not** `null` and **not** empty.
   bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
 
-  /// Checks if `this` is empty but **not** `null`.
+  /// Checks if [this] is empty but **not** `null`.
   bool get isEmptyButNotNull => (this != null) && this!.isEmpty; // TODO: Marcelo, shouldn't it be `this.isEmpty`?
   // TODO: Marcelo, wouldn't it be more in line with what this method does if it were renamed to `isEmptyAndNotNull`?
 }
