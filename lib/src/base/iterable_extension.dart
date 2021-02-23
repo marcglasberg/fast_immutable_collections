@@ -137,10 +137,10 @@ extension FicIterableExtension<T> on Iterable<T> {
     return duplicates;
   }
 
-  /// Returns true if all items are equal to [value].
+  /// Returns `true` if all items are equal to [value].
   bool everyIs(T value) => every((item) => item == value);
 
-  /// Returns true if any item is equal to [value].
+  /// Returns `true` if any item is equal to [value].
   bool anyIs(T value) => any((item) => item == value);
 
   /// Removes `null`s from the [Iterable].

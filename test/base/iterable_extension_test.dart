@@ -11,7 +11,7 @@ void main() {
   });
 
   /////////////////////////////////////////////////////////////////////////////
-  
+
   test("deepEquals", () {
     // *) If both are null, then true
     Iterable? iterable1;
@@ -181,6 +181,18 @@ void main() {
     expect(list.firstWhereOrNull((String value) => value == "C"), "C");
     expect(list.firstWhereOrNull((String value) => value == "D"), null);
     expect(list.firstWhereOrNull((String value) => value == "D", orElse: () => "Z"), "Z");
+  });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("everyIs", () {
+    List<int> list1 = [1, 1, 1];
+    List<int> list2 = [1, 1, 2];
+
+    expect(list1.everyIs(1), isTrue);
+    expect(list1.everyIs(2), isFalse);
+    expect(list2.everyIs(1), isFalse);
+    expect(list2.everyIs(2), isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
