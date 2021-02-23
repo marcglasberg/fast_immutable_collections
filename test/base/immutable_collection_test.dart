@@ -58,7 +58,21 @@ void main() {
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
   });
 
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("areSameImmutableCollection | Different Collections", () {
+    // IList<int> ilistA = IList([1, 2]);
+    // ISet<int> isetA = ISet([1, 2]);
+
+    // This won't even compile, because there is only one generic for both arguments.
+    // Maybe there should be 2 generics, `C` and `K`, both extending [ImmutableCollection].
+    // expect(areSameImmutableCollection(ilistA, isetA), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test(
+      "areSameImmutableCollection | "
       "Trying to verify if Dart implicitly checks for the type of the items inside the "
       "[ImmutableCollection]. If it does, then the print inside the 3rd `if` shouldn't be executed.",
       () {
