@@ -50,4 +50,62 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("diffAndIntersect", () {
+    Set<int> set = {1, 2, 3, 4};
+
+    // 1.1) Diff This Minus Other
+
+    expect(
+        set.diffAndIntersect(
+          {5, 4, 3},
+          diffThisMinusOther: true,
+          diffOtherMinusThis: false,
+          intersectOtherWithThis: false,
+          intersectThisWithOther: false,
+        ),
+        IListOf4([1, 2], null, null, null));
+
+    // 1.2) Diff Other Minus This
+
+    expect(
+        set.diffAndIntersect(
+          {5, 4, 3},
+          diffThisMinusOther: false,
+          diffOtherMinusThis: true,
+          intersectOtherWithThis: false,
+          intersectThisWithOther: false,
+        ),
+        IListOf4(null, [5], null, null));
+
+    // 1.3) Intersect This With Other
+
+    expect(
+        set.diffAndIntersect(
+          {5, 4, 3},
+          diffThisMinusOther: false,
+          diffOtherMinusThis: false,
+          intersectOtherWithThis: true,
+          intersectThisWithOther: false,
+        ),
+        IListOf4(null, null, [3, 4], null));
+
+    // 1.4) Intersect Other With This
+
+    expect(
+        set.diffAndIntersect(
+          {5, 4, 3},
+          diffThisMinusOther: false,
+          diffOtherMinusThis: false,
+          intersectOtherWithThis: false,
+          intersectThisWithOther: true,
+        ),
+        IListOf4(null, null, null, [4, 3]));
+
+    // 2) Complete Example
+
+    expect(set.diffAndIntersect({5, 4, 3}), IListOf4([1, 2], [5], [3, 4], [4, 3]));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

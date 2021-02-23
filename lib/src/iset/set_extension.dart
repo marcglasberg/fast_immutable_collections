@@ -1,4 +1,5 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "../ilist/ilist_of_4.dart";
+import "iset.dart";
 
 /// See also: [FicListExtension]
 extension FicSetExtension<T> on Set<T> {
