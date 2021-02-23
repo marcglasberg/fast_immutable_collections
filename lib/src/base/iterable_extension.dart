@@ -63,7 +63,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   ///
   /// If no element satisfies [test], the result of invoking the [orElse]
   /// function is returned.
-  /// If [orElse] is omitted, return true.
+  /// If [orElse] is omitted, return `true`.
   T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
     for (T element in this) if (test(element)) return element;
     if (orElse != null) return orElse();
