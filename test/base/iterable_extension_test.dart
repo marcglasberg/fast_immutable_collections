@@ -196,6 +196,17 @@ void main() {
   });
 
   // /////////////////////////////////////////////////////////////////////////////
+
+  test("anyIs", () {
+    List<int> list1 = [1, 1, 1];
+    List<int> list2 = [1, 1, 2];
+
+    expect(list1.anyIs(1), isTrue);
+    expect(list1.anyIs(2), isFalse);
+    expect(list2.anyIs(1), isTrue);
+    expect(list2.anyIs(2), isTrue);
+    expect(list2.anyIs(3), isFalse);
+  });
 }
 
 class _ClassEqualsByValue {
