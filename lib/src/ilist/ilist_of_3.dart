@@ -1,4 +1,4 @@
-import "package:fast_immutable_collections/src/base/hash.dart";
+import "../base/hash.dart";
 
 /// An *immutable* list of only 3 items.
 class IListOf3<T> {
@@ -21,4 +21,3 @@ class IListOf3<T> {
   @override
   int get hashCode => hashObj3(first, second, third);
 }
-
