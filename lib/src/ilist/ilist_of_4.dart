@@ -1,6 +1,9 @@
-import "package:fast_immutable_collections/src/base/hash.dart";
+import 'package:meta/meta.dart';
+
+import "../base/hash.dart";
 
 /// An *immutable* list of only 3 items.
+@immutable
 class IListOf4<T> {
   final T first, second, third, fourth;
 
