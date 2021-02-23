@@ -680,6 +680,7 @@ void main() {
   });
 
   /////////////////////////////////////////////////////////////////////////////
+
   test("FromISetMixinExtension", () {
     FromISetMixin? aNull;
     const Student james = Student("James");
@@ -699,6 +700,7 @@ void main() {
     expect(Students({}).isEmptyButNotNull, isTrue);
     expect(students.isEmptyButNotNull, isFalse);
   });
+
   /////////////////////////////////////////////////////////////////////////////
 }
 
