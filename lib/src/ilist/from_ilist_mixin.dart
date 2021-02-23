@@ -265,5 +265,6 @@ extension FromIListMixinExtension on FromIListMixin? {
   bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
 
   /// Checks if `this` is empty but **not** `null`.
-  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
+  bool get isEmptyButNotNull => (this != null) && this!.isEmpty; // TODO: Marcelo, shouldn't it be `this.isEmpty`?
+  // TODO: Marcelo, wouldn't it be more in line with what this method does if it were renamed to `isEmptyAndNotNull`?
 }
