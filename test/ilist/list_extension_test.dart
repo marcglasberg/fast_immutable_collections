@@ -372,9 +372,15 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("Efficiently Concat lists. The resulting list has fixed size.", () {
+  test("concat | Efficiently concatenates lists. The resulting list has fixed size.", () {
     expect([].concat([], []), []);
+    expect([5].concat([1]), [5, 1]);
     expect([5].concat([], []), [5]);
+    expect([5].concat([], [1]), [5, 1]);
+    expect([5].concat([], [], []), [5]);
+    expect([5].concat([], [], [1]), [5, 1]);
+    expect([5].concat([], [], [], []), [5]);
+    expect([5].concat([], [], [], [1]), [5, 1]);
     expect([].concat([6], []), [6]);
     expect([].concat([], [7]), [7]);
     expect([1, 2].concat([3, 4, 5, 6], [7, 8, 9]), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
