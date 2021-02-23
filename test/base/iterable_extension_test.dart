@@ -163,6 +163,136 @@ void main() {
     expect([3, 2].sortedLike([1, 2, 3, 2, 1]), [2, 3]);
   });
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("updateById", () {
+    //
+    List<WithId> list = [];
+    var newItems = [WithId(id: "x", name: "Lyn")];
+    var updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+    expect(updatedList, [WithId(id: "x", name: "Lyn")]);
+
+    //
+    list = [WithId(id: "x", name: "Lyn")];
+    newItems = [];
+    updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+    expect(updatedList, [WithId(id: "x", name: "Lyn")]);
+
+    //
+    list = [WithId(id: "x", name: "Marc")];
+    newItems = [WithId(id: "x", name: "Lyn")];
+    updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+    expect(updatedList, [WithId(id: "x", name: "Lyn")]);
+
+    //
+    list = [WithId(id: "x", name: "Marc")];
+    newItems = [WithId(id: "a", name: "Lyn")];
+    updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+    expect(updatedList, [
+      WithId(id: "x", name: "Marc"),
+      WithId(id: "a", name: "Lyn"),
+    ]);
+
+    //
+    // Replace the first, keep the second.
+    list = [
+      WithId(id: "x", name: "Marc"),
+      WithId(id: "x", name: "John"),
+    ];
+    newItems = [WithId(id: "x", name: "Lyn")];
+    updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+    expect(updatedList, [
+      WithId(id: "x", name: "Lyn"),
+      WithId(id: "x", name: "John"),
+    ]);
+
+    //
+    // Nulls are kept.
+    List<WithId?> listNullable = [];
+    List<WithId?> updatedListNullable = [];
+    listNullable = [WithId(id: "x", name: "Marc"), null, WithId(id: "x", name: "Marc")];
+    newItems = [];
+    updatedListNullable = listNullable.updateById(newItems, (WithId? obj) => obj?.id);
+    expect(updatedListNullable, [
+      WithId(id: "x", name: "Marc"),
+      null,
+      WithId(id: "x", name: "Marc"),
+    ]);
+
+    //
+    list = [WithId(id: "x", name: "Marc")];
+    newItems = [
+      WithId(id: "a", name: "Lyn"),
+      WithId(id: "a", name: "Beth"),
+    ];
+    updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+    expect(updatedList, [
+      WithId(id: "x", name: "Marc"),
+      WithId(id: "a", name: "Beth"),
+    ]);
+
+    //
+    list = [WithId(id: "a", name: "Marc")];
+    newItems = [
+      WithId(id: "a", name: "Lyn"),
+      WithId(id: "a", name: "Lyn"),
+    ];
+    updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+    expect(updatedList, [
+      WithId(id: "a", name: "Lyn"),
+    ]);
+
+    //
+    listNullable = [null, WithId(id: "x", name: "Marc")];
+    List<WithId?> newItemsNullable = [null, WithId(id: "a", name: "Lyn"), null];
+    updatedListNullable = listNullable.updateById(newItemsNullable, (WithId? obj) => obj?.id);
+    expect(updatedListNullable, [
+      null,
+      WithId(id: "x", name: "Marc"),
+      WithId(id: "a", name: "Lyn"),
+    ]);
+
+    //
+    listNullable = [WithId(id: "x", name: "Marc")];
+    newItemsNullable = [null, WithId(id: "a", name: "Lyn"), null];
+    updatedListNullable = listNullable.updateById(newItemsNullable, (WithId? obj) => obj?.id);
+    expect(updatedListNullable, [
+      WithId(id: "x", name: "Marc"),
+      null,
+      WithId(id: "a", name: "Lyn"),
+    ]);
+
+    //
+    list = [
+      WithId(id: "x", name: "Marc"),
+      WithId(id: "y", name: "Bill"),
+      WithId(id: "z", name: "Luke"),
+      WithId(id: "k", name: "July"),
+      WithId(id: "l", name: "Samy"),
+      WithId(id: "m", name: "Jane"),
+      WithId(id: "n", name: "Zack"),
+    ];
+
+    newItems = [
+      WithId(id: "x", name: "Lyn"),
+      WithId(id: "a", name: "Richard"),
+      WithId(id: "l", name: "Lea"),
+      WithId(id: "n", name: "Amy"),
+    ];
+
+    updatedList = list.updateById(newItems, (WithId obj) => obj.id);
+
+    expect(updatedList, [
+      WithId(id: "x", name: "Lyn"),
+      WithId(id: "y", name: "Bill"),
+      WithId(id: "z", name: "Luke"),
+      WithId(id: "k", name: "July"),
+      WithId(id: "l", name: "Lea"),
+      WithId(id: "m", name: "Jane"),
+      WithId(id: "n", name: "Amy"),
+      WithId(id: "a", name: "Richard"),
+    ]);
+  });
   // /////////////////////////////////////////////////////////////////////////////
 
   test("findDuplicates", () {
@@ -220,6 +350,26 @@ class _ClassEqualsByValue {
 
   @override
   int get hashCode => 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+class WithId {
+  String id;
+  String name;
+
+  WithId({required this.id, required this.name});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WithId && runtimeType == other.runtimeType && id == other.id && name == other.name;
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
+
+  @override
+  String toString() => "WithId{$id, $name}";
 }
 
 // /////////////////////////////////////////////////////////////////////////////

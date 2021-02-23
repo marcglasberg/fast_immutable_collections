@@ -1,6 +1,3 @@
-import 'dart:collection';
-
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import "package:fast_immutable_collections/src/base/hash.dart";
 
 /// An *immutable* list of only 2 items.

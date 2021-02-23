@@ -447,8 +447,6 @@ class IList<T> // ignore: must_be_immutable
   /// 1) Items with the same [id] will be replaced, in place.
   /// 2) Items with new [id]s will be added go to the end of the list.
   ///
-  ///
-  ///
   /// Note: If the original list contains more than one item with the same
   /// [id] as some item in [newItems], the first will be replaced, and the
   /// others will be left untouched. If [newItems] contains more than one
@@ -458,9 +456,8 @@ class IList<T> // ignore: must_be_immutable
   IList<T> updateById(
     Iterable<T> newItems,
     dynamic Function(T item) id,
-  ) {
-    return IList._unsafeFromList(_l.updateById(newItems, id), config: config);
-  }
+  ) =>
+      IList._unsafeFromList(_l.updateById(newItems, id), config: config);
 
   /// Removes the **first** occurrence of [item] from this [IList].
   ///
