@@ -145,16 +145,23 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 /// `identical`, but will give **less false negatives**. So it is almost always
 /// recommended to use `same` instead of `identical`.
 ///
-bool areSameImmutableCollection<C extends ImmutableCollection?>(C c1, C c2) {
+bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>?>(C c1, C c2) {
   if (identical(c1, c2)) return true;
   if (c1 == null || c2 == null) return false;
 
   if ((c1 is IList && c2 is IList) ||
       (c1 is ISet && c2 is ISet) ||
       (c1 is IMap && c2 is IMap) ||
-      (c1 is IMapOfSets && c2 is IMapOfSets))
+      (c1 is IMapOfSets && c2 is IMapOfSets)) {
+    print("This shouldn't be executed if Dart is implicitly checking "
+        "for the type of the items inside the [ImmutableCollection]");
+    // Dart is working as expected. The line below is reached. However, the method [IList.same]
+    // does check for the type of the items inside the [IList], so we get a type error.
+    // Is there a way to fix this? Neither `ImmutableCollection<dynamic>?` nor 
+    // `ImmutableCollection?` seem to fix this. Maybe more typing for the `ImmutableCollection` 
+    // generics?
     return c1.same(c2);
-  else
+  } else
     return false;
 }
 

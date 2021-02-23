@@ -43,7 +43,7 @@ void main() {
     expect(areSameImmutableCollection(imap1, imap2), isFalse);
     expect(areSameImmutableCollection(imap1, imap3), isTrue);
 
-    // 3.3) IMapOfSets
+    // 3.4) IMapOfSets
     IMapOfSets<String, int> imapOfSets1 = IMapOfSets({
           "a": {1},
           "b": {1, 2}
@@ -56,6 +56,16 @@ void main() {
 
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets2), isFalse);
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
+  });
+
+  test(
+      "Trying to verify if Dart implicitly checks for the type of the items inside the "
+      "[ImmutableCollection]. If it does, then the print inside the 3rd `if` shouldn't be executed.",
+      () {
+    IList<int> iListA = IList([1, 2]);
+    IList<String> iListB = IList(["a", "b"]);
+
+    expect(areSameImmutableCollection(iListA, iListB), isFalse); // throws an error
   });
 
   /////////////////////////////////////////////////////////////////////////////
