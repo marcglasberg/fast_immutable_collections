@@ -1060,7 +1060,7 @@ void main() {
     expect(students.isNotNullOrEmpty, isTrue);
 
     expect(aNull.isEmptyButNotNull, isFalse);
-    expect(Students([]).isEmptyButNotNull, isFalse);
+    expect(Students([]).isEmptyButNotNull, isTrue);
     expect(students.isEmptyButNotNull, isFalse);
   });
 }
