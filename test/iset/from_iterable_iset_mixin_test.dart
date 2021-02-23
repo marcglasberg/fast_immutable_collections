@@ -435,7 +435,7 @@ void main() {
         "   Student: Lucy\n"
         "}");
   });
- 
+
   /////////////////////////////////////////////////////////////////////////////
 
   test("FromIterableISetMixinExtension", () {

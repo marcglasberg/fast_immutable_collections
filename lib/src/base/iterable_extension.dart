@@ -75,7 +75,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
-  /// 
+  ///
   /// ```dart
   /// Iterable? iterable1 = null;
   /// Iterable? iterable2 = null;
@@ -104,7 +104,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
-  /// 
+  ///
   /// ```dart
   /// Iterable iterable1 = null;
   /// Iterable iterable2 = null;

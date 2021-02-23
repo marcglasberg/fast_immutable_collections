@@ -25,5 +25,3 @@ class IListOf4<T> {
   @override
   int get hashCode => hashObj4(first, second, third, fourth);
 }
-
-

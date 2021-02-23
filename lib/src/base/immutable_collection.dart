@@ -157,8 +157,8 @@ bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>?>(C c1, C
         "for the type of the items inside the [ImmutableCollection]");
     // Dart is working as expected. The line below is reached. However, the method [IList.same]
     // does check for the type of the items inside the [IList], so we get a type error.
-    // Is there a way to fix this? Neither `ImmutableCollection<dynamic>?` nor 
-    // `ImmutableCollection?` seem to fix this. Maybe more typing for the `ImmutableCollection` 
+    // Is there a way to fix this? Neither `ImmutableCollection<dynamic>?` nor
+    // `ImmutableCollection?` seem to fix this. Maybe more typing for the `ImmutableCollection`
     // generics?
     return c1.same(c2);
   } else

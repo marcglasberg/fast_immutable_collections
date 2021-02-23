@@ -1043,7 +1043,7 @@ void main() {
   });
 
   /////////////////////////////////////////////////////////////////////////////
-  
+
   test("FromIListMixinExtension", () {
     FromIListMixin? aNull;
     const Student james = Student("James");
