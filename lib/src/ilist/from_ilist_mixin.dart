@@ -112,6 +112,8 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
+  // TODO: Marcelo, the implementation on [FicIterableExtension] features an [orElse] parameter.
+  //       Should we add it here?
   T? firstWhereOrNull(bool Function(T) test) => iter.firstWhereOrNull(test);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
