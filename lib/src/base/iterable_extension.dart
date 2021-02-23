@@ -75,20 +75,22 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
+  /// 
   /// ```dart
-  /// Iterable iterable1 = null;
-  /// Iterable iterable2 = null;
+  /// Iterable? iterable1 = null;
+  /// Iterable? iterable2 = null;
   /// iterable1.deepEquals(iterable2) == true;
   /// ```
-  ///
+  // TODO: Marcelo, I don' t think the example above works with NNBD, it would have to be
+  //       `iterable1?.deepEquals(...)` and then it returns `null`.
   bool deepEquals(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
 
-    /// Assumes EfficientLengthIterable for these:
+    // Assumes `EfficientLengthIterable` for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) ||
+        (this is Map) || // TODO: Marcelo, but `Map` isn't an `Iterable`, is it?
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
@@ -102,6 +104,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
+  /// 
   /// ```dart
   /// Iterable iterable1 = null;
   /// Iterable iterable2 = null;

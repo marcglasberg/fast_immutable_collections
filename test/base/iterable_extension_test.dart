@@ -107,6 +107,55 @@ void main() {
     expect(list.firstWhereOrNull((String value) => value == "D"), null);
     expect(list.firstWhereOrNull((String value) => value == "D", orElse: () => "Z"), "Z");
   });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("deepEquals", () {
+    // *) If both are null, then true
+    Iterable? iterable1;
+    Iterable? iterable2;
+    expect(iterable1?.deepEquals(iterable2), isNull);
+
+    // 1) Identical
+    List<int> listA = [1, 2, 3];
+    List<int> listB = listA;
+
+    expect(listA.deepEquals(listB), isTrue);
+
+    // 2) If one of them is not null, then false
+    expect([].deepEquals(null), isFalse);
+
+    // 3) Different lengths
+    List<int> list1 = [1, 2], list2 = [1, 2, 3];
+    Set<int> set1 = {1, 2}, set2 = {1, 2, 3};
+    IList<int> ilist1 = [1, 2].lock, ilist2 = [1, 2, 3].lock;
+
+    expect(list1.deepEquals(list2), isFalse);
+    expect(set1.deepEquals(set2), isFalse);
+    expect(ilist1.deepEquals(ilist2), isFalse);
+
+    // 4) Checking for equality
+
+    // 4.1) Ordered Equality
+    expect([1, 2].deepEquals([1, 2]), isTrue);
+    expect([1, 2].deepEquals([2, 1]), isFalse);
+
+    expect({1, 2}.deepEquals({1, 2}), isTrue);
+    expect({1, 2}.deepEquals({2, 1}), isFalse);
+
+    expect([1, 2].lock.deepEquals([1, 2].lock), isTrue);
+    expect([1, 2].lock.deepEquals([2, 1].lock), isFalse);
+
+    // 4.2) Unordered Equality
+    expect([1, 2].deepEquals([1, 2], ignoreOrder: true), isTrue);
+    expect([1, 2].deepEquals([2, 1], ignoreOrder: true), isTrue);
+
+    expect({1, 2}.deepEquals({1, 2}, ignoreOrder: true), isTrue);
+    expect({1, 2}.deepEquals({2, 1}, ignoreOrder: true), isTrue);
+
+    expect([1, 2].lock.deepEquals([1, 2].lock, ignoreOrder: true), isTrue);
+    expect([1, 2].lock.deepEquals([2, 1].lock, ignoreOrder: true), isTrue);
+  });
 }
 
 class _ClassEqualsByValue {
