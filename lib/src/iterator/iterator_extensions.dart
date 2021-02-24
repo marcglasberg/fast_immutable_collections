@@ -3,7 +3,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// See also: [FicIterableExtension]
 extension FicIteratorExtension<T> on Iterator<T> {
   //
-  /// Convert this iterator into an [Iterable].
+  /// Convert this iterator into an [Iterable], with a synchronous generator.
   Iterable<T> toIterable() sync* {
     while (moveNext()) yield current;
   }
