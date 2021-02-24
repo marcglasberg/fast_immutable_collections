@@ -317,6 +317,41 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("entry", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+
+    expect(listMap.entry("a").key, "a");
+    expect(listMap.entry("a").value, 1);
+
+    expect(() => listMap.entry("z").key, throwsStateError);
+    expect(() => listMap.entry("z").value, throwsStateError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("entryOrNull", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+
+    expect(listMap.entryOrNull("a")?.key, "a");
+    expect(listMap.entryOrNull("a")?.value, 1);
+
+    expect(listMap.entryOrNull("z"), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("entryOrNullValue", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+
+    expect(listMap.entryOrNullValue("a").key, "a");
+    expect(listMap.entryOrNullValue("a").value, 1);
+
+    expect(listMap.entryOrNullValue("z").key, "z");
+    expect(listMap.entryOrNullValue("z").value, isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("putIfAbsent", () {
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).putIfAbsent("d", () => 10),
         throwsUnsupportedError);
@@ -457,6 +492,22 @@ void main() {
     expect(
         () => ListMap.of({"b": 1, "a": 2, "c": 10}).updateAll((String key, int value) => 2 * value),
         throwsUnsupportedError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("get", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+    expect(listMap.get("a"), 1);
+    expect(listMap.get("z"), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("getOrThrow", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+    expect(listMap.getOrThrow("a"), 1);
+    expect(() => listMap.getOrThrow("z"), throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////
