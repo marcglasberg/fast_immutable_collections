@@ -23,7 +23,7 @@ void main() {
     expect(iterator.toList(), allOf(isA<List<int>>(), [1, 2, 3]));
     iterator.toList(growable: true).add(4);
 
-    // 1) growable = false
+    // 2) growable = false
     final List<int> list2 = [1, 2, 3];
     final Iterator<int> iterator2 = list2.iterator;
 
