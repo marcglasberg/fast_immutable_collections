@@ -2,6 +2,10 @@ import "dart:math";
 
 import "list_map.dart";
 
+/// A [ListMapView] lets you view a regular map as if it was a [ListMap].
+/// At the moment this class is for FIC's internal use only, since a lot of
+/// its methods will throw [UnsupportedError].
+///
 class ListMapView<K, V> implements ListMap<K, V> {
   final Map<K, V> _map;
 

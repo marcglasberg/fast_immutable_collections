@@ -89,6 +89,9 @@ class ListMap<K, V> implements Map<K, V> {
   /// or with [compareObject] if not provided. If [sort] is false,
   /// [compare] will be ignored.
   ///
+  /// The iterables [keys] and [values] must have the same number of items,
+  /// otherwise it throws a [StateError].
+  ///
   factory ListMap.fromIterables(
     Iterable<K> keys,
     Iterable<V> values, {

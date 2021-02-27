@@ -1,9 +1,7 @@
 import "dart:math";
 
-import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-
-import "../utils.dart";
+import "package:test/test.dart";
 
 void main() {
   /////////////////////////////////////////////////////////////////////////////
@@ -145,12 +143,17 @@ void main() {
 
   test("fromIterables", () {
     // 0) Assertion Error
-    expect(() => ListMap.fromIterables(<String>[], <int>[], compare: null, sort: true),
-        throwsAssertionError);
-    expect(() => ListMap.fromIterables(<String>[], <int>[], compare: null), throwsAssertionError);
-    expect(() => ListMap.fromIterables(<String>[], <int>[], sort: true), throwsAssertionError);
+    expect(() => ListMap.fromIterables(<String>["a", "b"], <int>[4], compare: null, sort: true),
+        throwsStateError);
+
+    expect(() => ListMap.fromIterables(<String>["a"], <int>[4, 7], compare: null, sort: true),
+        throwsStateError);
 
     // 1) Regular usage
+
+    expect(ListMap.fromIterables(<String>[], <int>[], compare: null), {});
+    expect(ListMap.fromIterables(<String>[], <int>[], sort: true), {});
+
     Iterable<String> keys = ["a", "c", "b"];
     Iterable<int> values = [1, 5, 2];
 

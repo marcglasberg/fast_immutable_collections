@@ -6,7 +6,9 @@ extension FicIteratorExtension<T> on Iterator<T> {
   //
   /// Convert this iterator into an [Iterable].
   Iterable<T> toIterable() sync* {
-    while (moveNext()) yield current;
+    while (moveNext()) {
+      yield current;
+    }
   }
 
   /// Convert this iterator into a [List].
@@ -16,7 +18,9 @@ extension FicIteratorExtension<T> on Iterator<T> {
   Set<T> toSet() => Set.of(toIterable());
 
   /// Convert this iterator into an [IList].
-  IList<T> toIList() => IList(toIterable());
+  IList<T> toIList() {
+    return IList(toIterable());
+  }
 
   /// Convert this iterator into an [ISet].
   ISet<T> toISet() => ISet(toIterable());

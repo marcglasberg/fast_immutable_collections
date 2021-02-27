@@ -33,31 +33,19 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("toSet", () {
-    final List<int> list = [1, 2, 3, 3];
-    final Iterator<int> iterator = list.iterator;
-
-    expect(iterator.toSet(), allOf(isA<Set<int>>(), {1, 2, 3}));
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
   test("toIList", () {
-    final List<int> list = [1, 2, 3];
-    final Iterator<int> iterator = list.iterator;
-
-    expect(iterator.toIList(), isA<IList<int>>());
-    expect(iterator.toIList(), [1, 2, 3]);
+    expect([1, 2, 3].iterator.toIList(), isA<IList<int>>());
+    expect([1, 2, 3].iterator.toIList(), [1, 2, 3]);
   }, skip: false);
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("toISet", () {
-    final Set<int> set = {1, 2, 3};
-    final Iterator<int> iterator = set.iterator;
+  test("toSet/toISet", () {
+    expect([1, 2, 3, 3].iterator.toSet(), isA<Set<int>>());
+    expect([1, 2, 3, 3].iterator.toSet(), {1, 2, 3});
 
-    expect(iterator.toISet(), isA<ISet<int>>());
-    expect(iterator.toISet(), {1, 2, 3});
+    expect({1, 2, 3}.iterator.toISet(), isA<ISet<int>>());
+    expect({1, 2, 3}.iterator.toISet(), {1, 2, 3});
   }, skip: false);
 
   //////////////////////////////////////////////////////////////////////////////
