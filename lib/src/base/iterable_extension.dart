@@ -42,9 +42,9 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
   //
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
-  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
+  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
-  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
+  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -74,15 +74,6 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// using [operator ==]. Return true if they are all the same,
   /// in the same order.
   ///
-  /// Note: Since this is an extension, it works with nulls:
-  ///
-  /// ```dart
-  /// Iterable? iterable1 = null;
-  /// Iterable? iterable2 = null;
-  /// iterable1.deepEquals(iterable2) == true;
-  /// ```
-  // TODO: Marcelo, I don' t think the example above works with NNBD, it would have to be
-  //       `iterable1?.deepEquals(...)` and then it returns `null`.
   bool deepEquals(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
@@ -90,7 +81,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     // Assumes `EfficientLengthIterable` for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) || // TODO: Marcelo, but `Map` isn't an `Iterable`, is it?
+        (this is Queue) ||
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
@@ -102,15 +93,6 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Compare all items, in order or not, according to [ignoreOrder],
   /// using [identical]. Return true if they are all the same,
   /// in the same order.
-  ///
-  /// Note: Since this is an extension, it works with nulls:
-  ///
-  /// ```dart
-  /// Iterable iterable1 = null;
-  /// Iterable iterable2 = null;
-  /// iterable1.deepEqualsByIdentity(iterable2) == true;
-  /// ```
-  /// TODO: Marcelo, same comment as the method above.
   bool deepEqualsByIdentity(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
@@ -118,7 +100,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     /// Assumes EfficientLengthIterable for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) || // TODO: Marcelo, can this be a `Map` if `Map` isn't an `Iterable`?
+        (this is Queue) ||
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder

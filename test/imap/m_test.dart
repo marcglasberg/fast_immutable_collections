@@ -85,22 +85,6 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
-
-  test("map", () {
-    MExample<String, int> imap = MExample({"x": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6});
-
-    // ---
-
-    var imap1 = imap.map<String, int>((String k, int? v) => MapEntry(k, v! + 1));
-    expect(imap1.keys, ["x", "b", "c", "d", "e", "f"]);
-    expect(imap1.values, [2, 3, 4, 5, 6, 7]);
-
-    // ---
-
-    var imap3 = imap.map<int, String>((String k, int? v) => MapEntry(-v!, k));
-    expect(imap3.keys, [-1, -2, -3, -4, -5, -6]);
-    expect(imap3.values, ["x", "b", "c", "d", "e", "f"]);
-  });
 }
 
 //////////////////////////////////////////////////////////////////////////////

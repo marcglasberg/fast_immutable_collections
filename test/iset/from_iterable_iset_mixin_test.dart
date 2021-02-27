@@ -449,13 +449,13 @@ void main() {
     expect(Students({}).isNullOrEmpty, isTrue);
     expect(students.isNullOrEmpty, isFalse);
 
-    expect(aNull.isNotNullOrEmpty, isFalse);
-    expect(Students({}).isNotNullOrEmpty, isFalse);
-    expect(students.isNotNullOrEmpty, isTrue);
+    expect(aNull.isNotNullNotEmpty, isFalse);
+    expect(Students({}).isNotNullNotEmpty, isFalse);
+    expect(students.isNotNullNotEmpty, isTrue);
 
-    expect(aNull.isEmptyButNotNull, isFalse);
-    expect(Students({}).isEmptyButNotNull, isTrue);
-    expect(students.isEmptyButNotNull, isFalse);
+    expect(aNull.isEmptyNotNull, isFalse);
+    expect(Students({}).isEmptyNotNull, isTrue);
+    expect(students.isEmptyNotNull, isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////

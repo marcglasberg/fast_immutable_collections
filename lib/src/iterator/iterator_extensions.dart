@@ -4,7 +4,7 @@ import "../iset/iset.dart";
 /// See also: [FicIterableExtension]
 extension FicIteratorExtension<T> on Iterator<T> {
   //
-  /// Convert this iterator into an [Iterable], with a synchronous generator.
+  /// Convert this iterator into an [Iterable].
   Iterable<T> toIterable() sync* {
     while (moveNext()) yield current;
   }

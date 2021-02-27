@@ -112,9 +112,8 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
-  // TODO: Marcelo, the implementation on [FicIterableExtension] features an [orElse] parameter.
-  //       Should we add it here?
-  T? firstWhereOrNull(bool Function(T) test) => iter.firstWhereOrNull(test);
+  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) =>
+      iter.firstWhereOrNull(test, orElse: orElse);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);
@@ -262,12 +261,8 @@ extension FromIListMixinExtension on FromIListMixin? {
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
   /// Checks if [this] is **not** `null` and **not** empty.
-  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
-  // TODO: Marcelo, the naming of this method is extremely confusing.
-  // The docs mention *and*, the name has an *or* and the implmentation is using an `&&` and `isNotEmpty`.
-  // If you agree with the improvement, please check other extensions, because this is a pattern throughout the project.
+  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
   /// Checks if [this] is empty but **not** `null`.
-  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
-  // TODO: Marcelo, wouldn't it be more in line with what this method does if it were renamed to `isEmptyAndNotNull`?
+  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
 }

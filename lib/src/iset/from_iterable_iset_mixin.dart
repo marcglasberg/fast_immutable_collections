@@ -114,8 +114,8 @@ extension FromIterableISetMixinExtension on FromIterableISetMixin? {
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
   /// Checks if [this] is **not** `null` and **not** empty.
-  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
+  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
   /// Checks if [this] is empty but **not** `null`.
-  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
+  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
 }
