@@ -1,4 +1,5 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "../ilist/ilist_of_4.dart";
+import "iset.dart";
 
 /// See also: [FicListExtension]
 extension FicSetExtension<T> on Set<T> {
@@ -33,6 +34,7 @@ extension FicSetExtension<T> on Set<T> {
   }
 
   /// Given this set and [other], returns:
+  ///
   /// 1) Items of this set which are NOT in [other] (difference this - other), in this set's order.
   /// 2) Items of [other] which are NOT in this set (difference other - this), in [other]'s order.
   /// 3) Items of this set which are also in [other], in this set's order.

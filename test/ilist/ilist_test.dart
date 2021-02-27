@@ -574,6 +574,18 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("updateById", () {
+    // This is way more thoroughly tested under the original implementation,
+    // which is under [IterableExtension].
+    IList<int> ilist = [1, 2, 1, 3].lock;
+
+    IList<int> updatedIList = ilist.updateById([3, 10], (int item) => item * 10);
+
+    expect(updatedIList, [1, 2, 1, 3, 10]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("remove", () {
     // 1) Regular Usage
     final IList<int> ilist1 = [1, 2, 3].lock;

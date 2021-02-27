@@ -3,6 +3,8 @@ import "dart:math";
 import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+import "../utils.dart";
+
 void main() {
   /////////////////////////////////////////////////////////////////////////////
 
@@ -141,6 +143,48 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("fromIterables", () {
+    // 0) Assertion Error
+    expect(() => ListMap.fromIterables(<String>[], <int>[], compare: null, sort: true),
+        throwsAssertionError);
+    expect(() => ListMap.fromIterables(<String>[], <int>[], compare: null), throwsAssertionError);
+    expect(() => ListMap.fromIterables(<String>[], <int>[], sort: true), throwsAssertionError);
+
+    // 1) Regular usage
+    Iterable<String> keys = ["a", "c", "b"];
+    Iterable<int> values = [1, 5, 2];
+
+    ListMap<String, int> listMap = ListMap.fromIterables(keys, values, sort: false);
+    expect(listMap["a"], 1);
+    expect(listMap["c"], 5);
+    expect(listMap["b"], 2);
+    expect(listMap.keys, ["a", "c", "b"]);
+
+    listMap = ListMap.fromIterables(keys, values, sort: true);
+    expect(listMap["a"], 1);
+    expect(listMap["c"], 5);
+    expect(listMap["b"], 2);
+    expect(listMap.keys, ["a", "b", "c"]);
+
+    // 2) Sorting
+    var listMap1 = ListMap.fromIterables(
+      ["c", "b", "a"],
+      [3, 1, 2],
+      sort: false,
+    );
+
+    var listMap2 = ListMap.fromIterables(
+      ["c", "b", "a"],
+      [3, 1, 2],
+      sort: true,
+    );
+
+    expect(listMap1.keys, ["c", "b", "a"]);
+    expect(listMap2.keys, ["a", "b", "c"]);
+  }, skip: true);
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("unsafe", () {
     // 1) Simple
     Map<String, int> initialMap = {"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6};
@@ -269,6 +313,41 @@ void main() {
     int result = 100;
     listMap.forEach((String k, int? v) => result *= 1 + v!);
     expect(result, 504000);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("entry", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+
+    expect(listMap.entry("a").key, "a");
+    expect(listMap.entry("a").value, 1);
+
+    expect(() => listMap.entry("z").key, throwsStateError);
+    expect(() => listMap.entry("z").value, throwsStateError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("entryOrNull", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+
+    expect(listMap.entryOrNull("a")?.key, "a");
+    expect(listMap.entryOrNull("a")?.value, 1);
+
+    expect(listMap.entryOrNull("z"), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("entryOrNullValue", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+
+    expect(listMap.entryOrNullValue("a").key, "a");
+    expect(listMap.entryOrNullValue("a").value, 1);
+
+    expect(listMap.entryOrNullValue("z").key, "z");
+    expect(listMap.entryOrNullValue("z").value, isNull);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -413,6 +492,22 @@ void main() {
     expect(
         () => ListMap.of({"b": 1, "a": 2, "c": 10}).updateAll((String key, int value) => 2 * value),
         throwsUnsupportedError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("get", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+    expect(listMap.get("a"), 1);
+    expect(listMap.get("z"), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("getOrThrow", () {
+    final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
+    expect(listMap.getOrThrow("a"), 1);
+    expect(() => listMap.getOrThrow("z"), throwsStateError);
   });
 
   /////////////////////////////////////////////////////////////////////////////

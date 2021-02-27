@@ -1120,6 +1120,18 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("entryOrNull", () {
+    final IMap<String, int> imap =
+        {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
+
+    expect(imap.entryOrNull("a")?.key, "a");
+    expect(imap.entryOrNull("a")?.value, 1);
+
+    expect(imap.entryOrNull("z"), isNull);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("comparableEntries", () {
     final IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
@@ -1346,6 +1358,12 @@ void main() {
     imap
         .toEntrySet()
         .forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
+
+    // 2) When compare = null
+    expect(imap.toEntrySet(compare: null), isA<Set<MapEntry<String, int>>>());
+    imap
+        .toEntrySet(compare: null)
+        .forEach((MapEntry<String, int?> entry) => expect(imap[entry.key], entry.value));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1354,6 +1372,7 @@ void main() {
     final IMap<String, int> imap =
         {"a": 1, "c": 3, "b": 2}.lock.add("d", 4).addAll(IMap({"f": 6, "e": 5}));
     expect(imap.toKeySet(), allOf(isA<Set<String>>(), {"a", "c", "b", "d", "f", "e"}));
+    expect(imap.toKeySet(compare: null), allOf(isA<Set<String>>(), {"a", "c", "b", "d", "f", "e"}));
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1362,6 +1381,7 @@ void main() {
     final IMap<String, int> imap =
         {"a": 1, "c": 3, "b": 2}.lock.add("d", 4).addAll(IMap({"f": 6, "e": 5}));
     expect(imap.toValueSet(), allOf(isA<Set<int>>(), {1, 3, 2, 4, 6, 5}));
+    expect(imap.toValueSet(compare: null), allOf(isA<Set<int>>(), {1, 3, 2, 4, 6, 5}));
   });
 
   //////////////////////////////////////////////////////////////////////////////

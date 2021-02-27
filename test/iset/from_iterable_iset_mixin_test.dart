@@ -436,7 +436,29 @@ void main() {
         "}");
   });
 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("FromIterableISetMixinExtension", () {
+    FromIterableISetMixin? aNull;
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students({james, sara, lucy});
+
+    expect(aNull.isNullOrEmpty, isTrue);
+    expect(Students({}).isNullOrEmpty, isTrue);
+    expect(students.isNullOrEmpty, isFalse);
+
+    expect(aNull.isNotNullOrEmpty, isFalse);
+    expect(Students({}).isNotNullOrEmpty, isFalse);
+    expect(students.isNotNullOrEmpty, isTrue);
+
+    expect(aNull.isEmptyButNotNull, isFalse);
+    expect(Students({}).isEmptyButNotNull, isTrue);
+    expect(students.isEmptyButNotNull, isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
 }
 
 ///////////////////////////////////////////////////////////////////////////////

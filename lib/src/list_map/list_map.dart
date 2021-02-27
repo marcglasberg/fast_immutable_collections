@@ -143,13 +143,10 @@ class ListMap<K, V> implements Map<K, V> {
   /// is important.
   V? get(covariant K key) => _map[key];
 
-  /// The value for the given [key], or `null` if [key] is not in the map.
-  ///
-  /// Some maps allow `null` as a value.
-  /// For those maps, a lookup using this operator cannot distinguish between a
-  /// key not being in the map, and the key being there with a `null` value.
-  /// Methods like [containsKey] or [putIfAbsent] can be used if the distinction
-  /// is important.
+  /// Returns the value if it exists, otherwise throws a `StateError`.
+  /// 
+  /// Note that the usual behavior for maps is actually to throw back `null` 
+  /// when the value doesn't exist.
   V getOrThrow(K key) {
     if (containsKey(key)) {
       return (_map[key] as V);

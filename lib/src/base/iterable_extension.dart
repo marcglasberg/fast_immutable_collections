@@ -63,7 +63,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   ///
   /// If no element satisfies [test], the result of invoking the [orElse]
   /// function is returned.
-  /// If [orElse] is omitted, return true.
+  /// If [orElse] is omitted, return `true`.
   T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
     for (T element in this) if (test(element)) return element;
     if (orElse != null) return orElse();
@@ -75,20 +75,22 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
+  ///
   /// ```dart
-  /// Iterable iterable1 = null;
-  /// Iterable iterable2 = null;
+  /// Iterable? iterable1 = null;
+  /// Iterable? iterable2 = null;
   /// iterable1.deepEquals(iterable2) == true;
   /// ```
-  ///
+  // TODO: Marcelo, I don' t think the example above works with NNBD, it would have to be
+  //       `iterable1?.deepEquals(...)` and then it returns `null`.
   bool deepEquals(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
 
-    /// Assumes EfficientLengthIterable for these:
+    // Assumes `EfficientLengthIterable` for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) ||
+        (this is Map) || // TODO: Marcelo, but `Map` isn't an `Iterable`, is it?
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
@@ -102,12 +104,13 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// in the same order.
   ///
   /// Note: Since this is an extension, it works with nulls:
+  ///
   /// ```dart
   /// Iterable iterable1 = null;
   /// Iterable iterable2 = null;
   /// iterable1.deepEqualsByIdentity(iterable2) == true;
   /// ```
-  ///
+  /// TODO: Marcelo, same comment as the method above.
   bool deepEqualsByIdentity(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
@@ -115,7 +118,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     /// Assumes EfficientLengthIterable for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) ||
+        (this is Map) || // TODO: Marcelo, can this be a `Map` if `Map` isn't an `Iterable`?
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
@@ -134,10 +137,10 @@ extension FicIterableExtension<T> on Iterable<T> {
     return duplicates;
   }
 
-  /// Returns true if all items are equal to [value].
+  /// Returns `true` if all items are equal to [value].
   bool everyIs(T value) => every((item) => item == value);
 
-  /// Returns true if any item is equal to [value].
+  /// Returns `true` if any item is equal to [value].
   bool anyIs(T value) => any((item) => item == value);
 
   /// Removes `null`s from the [Iterable].

@@ -21,12 +21,66 @@ void main() {
     expect(areSameImmutableCollection(null, IList()), isFalse);
 
     // 3) If none of them is null, then use .same()
+
+    // 3.1) IList
     IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]);
     IList<int> iList3 = iList1.remove(3);
 
     expect(areSameImmutableCollection(iList1, iList2), isFalse);
     expect(areSameImmutableCollection(iList1, iList3), isTrue);
-  });
+
+    // 3.2) ISet
+    ISet<int> iset1 = ISet([1, 2]), iSet2 = ISet([1, 2]);
+    ISet<int> iset3 = iset1.remove(3);
+
+    expect(areSameImmutableCollection(iset1, iSet2), isFalse);
+    expect(areSameImmutableCollection(iset1, iset3), isTrue);
+
+    // 3.3) IMap
+    IMap<String, int> imap1 = IMap({"a": 1, "b": 2}), imap2 = IMap({"a": 1, "b": 2});
+    IMap<String, int> imap3 = imap1.remove("c");
+
+    expect(areSameImmutableCollection(imap1, imap2), isFalse);
+    expect(areSameImmutableCollection(imap1, imap3), isTrue);
+
+    // 3.4) IMapOfSets
+    IMapOfSets<String, int> imapOfSets1 = IMapOfSets({
+          "a": {1},
+          "b": {1, 2}
+        }),
+        imapOfSets2 = IMapOfSets({
+          "a": {1},
+          "b": {1, 2}
+        });
+    IMapOfSets<String, int> imapOfSets3 = imapOfSets1.removeSet("c");
+
+    expect(areSameImmutableCollection(imapOfSets1, imapOfSets2), isFalse);
+    expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
+  }, skip: true);
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("areSameImmutableCollection | Different Collections", () {
+    // IList<int> ilistA = IList([1, 2]);
+    // ISet<int> isetA = ISet([1, 2]);
+
+    // This won't even compile, because there is only one generic for both arguments.
+    // Maybe there should be 2 generics, `C` and `K`, both extending [ImmutableCollection].
+    // expect(areSameImmutableCollection(ilistA, isetA), isFalse);
+  }, skip: true);
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test(
+      "areSameImmutableCollection | "
+      "Trying to verify if Dart implicitly checks for the type of the items inside the "
+      "[ImmutableCollection]. If it does, then the print inside the 3rd `if` shouldn't be executed.",
+      () {
+    IList<int> iListA = IList([1, 2]);
+    IList<String> iListB = IList(["a", "b"]);
+
+    expect(areSameImmutableCollection(iListA, iListB), isFalse); // throws an error
+  }, skip: true);
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -426,4 +480,3 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 }
-

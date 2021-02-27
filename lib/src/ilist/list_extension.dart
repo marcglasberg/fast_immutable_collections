@@ -302,7 +302,7 @@ extension FicListExtension<T> on List<T> {
 
   /// Return an efficient concatenation of up to 5 lists:
   ///
-  /// ```
+  /// ```dart
   /// list = list1.concat(list2, list3, list4, list5);
   /// ```
   ///
@@ -311,7 +311,7 @@ extension FicListExtension<T> on List<T> {
   /// You should only use this if you need to concatenate lists as efficient as possible,
   /// or if your lists may be null. Otherwise, just add the lists like this:
   ///
-  /// ```
+  /// ```dart
   /// list = list1 + list2 + list3 + list4 + list5;
   /// ```
   List<T> concat(List<T>? list2, [List<T>? list3, List<T>? list4, List<T>? list5]) {
