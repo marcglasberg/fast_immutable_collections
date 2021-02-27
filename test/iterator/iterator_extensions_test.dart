@@ -36,7 +36,7 @@ void main() {
   test("toIList", () {
     expect([1, 2, 3].iterator.toIList(), isA<IList<int>>());
     expect([1, 2, 3].iterator.toIList(), [1, 2, 3]);
-  }, skip: false);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +46,7 @@ void main() {
 
     expect({1, 2, 3}.iterator.toISet(), isA<ISet<int>>());
     expect({1, 2, 3}.iterator.toISet(), {1, 2, 3});
-  }, skip: false);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 }

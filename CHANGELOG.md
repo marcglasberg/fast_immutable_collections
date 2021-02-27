@@ -1,3 +1,9 @@
+## [2.0.0-nullsafety.3] - 2021/02/27
+
+* Nullsafety improvements.
+* isNotNullOrEmpty getter renamed to isNotNullNotEmpty.
+* isEmptyButNotNull getter to isEmptyNotNull.
+
 ## [2.0.0-nullsafety.2] - 2021/02/16
 
 * Nullsafety.

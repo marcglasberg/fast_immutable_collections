@@ -56,7 +56,7 @@ void main() {
 
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets2), isFalse);
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
-  }, skip: false);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ void main() {
     IList<int> ilistA = IList([1, 2]);
     ISet<int> isetA = ISet([1, 2]);
     expect(areSameImmutableCollection(ilistA, isetA), isFalse);
-  }, skip: false);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -77,7 +77,7 @@ void main() {
     IList<String> iListB = IList(["a", "b"]);
 
     expect(areSameImmutableCollection(iListA, iListB), isFalse); // throws an error
-  }, skip: false);
+  });
 
   /////////////////////////////////////////////////////////////////////////////
 
