@@ -270,7 +270,7 @@ void main() {
   test("cast", () {
     final ListMapView<String, int> view = ListMapView({"a": 1, "b": 2, "c": 3});
     expect(view.cast<String, num>(), isA<ListMapView<String, num>>());
-  }, skip: true);
+  }, skip: false);
 
   /////////////////////////////////////////////////////////////////////////////
 }

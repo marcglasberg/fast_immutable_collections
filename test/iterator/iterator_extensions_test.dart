@@ -1,5 +1,5 @@
-import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -46,8 +46,9 @@ void main() {
     final List<int> list = [1, 2, 3];
     final Iterator<int> iterator = list.iterator;
 
-    expect(iterator.toIList(), allOf(isA<IList<int>>(), [1, 2, 3]));
-  }, skip: true);
+    expect(iterator.toIList(), isA<IList<int>>());
+    expect(iterator.toIList(), [1, 2, 3]);
+  }, skip: false);
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -55,8 +56,9 @@ void main() {
     final Set<int> set = {1, 2, 3};
     final Iterator<int> iterator = set.iterator;
 
-    expect(iterator.toISet(), allOf(isA<ISet<int>>(), {1, 2, 3}));
-  }, skip: true);
+    expect(iterator.toISet(), isA<ISet<int>>());
+    expect(iterator.toISet(), {1, 2, 3});
+  }, skip: false);
 
   //////////////////////////////////////////////////////////////////////////////
 }

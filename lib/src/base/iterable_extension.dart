@@ -180,7 +180,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     Set<T> thisSet = Set.of(this);
     Set<dynamic> otherSet = Set<dynamic>.of(ordering);
 
-    IListOf4<List?> result = thisSet.diffAndIntersect<dynamic>(
+    DiffAndIntersectResult<T, dynamic> result = thisSet.diffAndIntersect<dynamic>(
       otherSet,
       diffThisMinusOther: true,
       diffOtherMinusThis: false,
@@ -188,8 +188,8 @@ extension FicIterableExtension<T> on Iterable<T> {
       intersectOtherWithThis: true,
     );
 
-    List<T?> intersectOtherWithThis = result.fourth as List<T?>;
-    List<T?> diffThisMinusOther = result.first as List<T?>;
+    List<T>? intersectOtherWithThis = result.intersectOtherWithThis ?? [];
+    List<T>? diffThisMinusOther = result.diffThisMinusOther ?? [];
     return intersectOtherWithThis.followedBy(diffThisMinusOther).toList();
   }
 

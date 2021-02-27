@@ -56,18 +56,15 @@ void main() {
 
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets2), isFalse);
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
-  }, skip: true);
+  }, skip: false);
 
   /////////////////////////////////////////////////////////////////////////////
 
   test("areSameImmutableCollection | Different Collections", () {
-    // IList<int> ilistA = IList([1, 2]);
-    // ISet<int> isetA = ISet([1, 2]);
-
-    // This won't even compile, because there is only one generic for both arguments.
-    // Maybe there should be 2 generics, `C` and `K`, both extending [ImmutableCollection].
-    // expect(areSameImmutableCollection(ilistA, isetA), isFalse);
-  }, skip: true);
+    IList<int> ilistA = IList([1, 2]);
+    ISet<int> isetA = ISet([1, 2]);
+    expect(areSameImmutableCollection(ilistA, isetA), isFalse);
+  }, skip: false);
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +77,7 @@ void main() {
     IList<String> iListB = IList(["a", "b"]);
 
     expect(areSameImmutableCollection(iListA, iListB), isFalse); // throws an error
-  }, skip: true);
+  }, skip: false);
 
   /////////////////////////////////////////////////////////////////////////////
 

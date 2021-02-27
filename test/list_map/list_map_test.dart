@@ -181,7 +181,7 @@ void main() {
 
     expect(listMap1.keys, ["c", "b", "a"]);
     expect(listMap2.keys, ["a", "b", "c"]);
-  }, skip: true);
+  }, skip: false);
 
   /////////////////////////////////////////////////////////////////////////////
 
