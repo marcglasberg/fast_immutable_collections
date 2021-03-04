@@ -23,14 +23,6 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("StopwatchRecord | Can't pass null", () {
-    expect(() => StopwatchRecord(collectionName: null, record: null), throwsAssertionError);
-    expect(() => StopwatchRecord(collectionName: null, record: 10), throwsAssertionError);
-    expect(() => StopwatchRecord(collectionName: "asdf", record: null), throwsAssertionError);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-
   test("StopwatchRecord | The collection name has to have length bigger than 0", () {
     expect(() => StopwatchRecord(collectionName: "", record: 10), throwsAssertionError);
   });
@@ -78,7 +70,6 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("RecordsColumn | Title cannot be null nor have length equal to zero", () {
-    expect(() => RecordsColumn.empty(title: null), throwsAssertionError);
     expect(() => RecordsColumn.empty(title: ""), throwsAssertionError);
   });
 

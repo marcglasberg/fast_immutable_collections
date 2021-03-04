@@ -1,7 +1,6 @@
 import "dart:io";
 
 import "package:benchmark_harness/benchmark_harness.dart";
-import "package:meta/meta.dart";
 import "package:path/path.dart" as p;
 
 import "records.dart";
@@ -13,7 +12,7 @@ class TableScoreEmitter implements ScoreEmitter {
   final Config config;
   RecordsColumn _recordsColumn;
 
-  TableScoreEmitter({@required this.prefixName, @required this.config})
+  TableScoreEmitter({required this.prefixName, required this.config})
       : _recordsColumn = RecordsColumn.empty(title: prefixName);
 
   @override

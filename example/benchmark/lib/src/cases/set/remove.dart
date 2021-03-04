@@ -3,7 +3,6 @@ import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/collection.dart";
-import "package:meta/meta.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12,7 +11,7 @@ class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
 
-  SetRemoveBenchmark({@required TableScoreEmitter emitter})
+  SetRemoveBenchmark({required TableScoreEmitter emitter})
       : benchmarks = <SetBenchmarkBase>[
           MutableSetRemoveBenchmark(emitter: emitter),
           ISetRemoveBenchmark(emitter: emitter),
@@ -25,12 +24,12 @@ class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableSetRemoveBenchmark extends SetBenchmarkBase {
-  MutableSetRemoveBenchmark({@required TableScoreEmitter emitter})
+  MutableSetRemoveBenchmark({required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
-  Set<int> set;
-  int count;
-  List<Set<int>> initialSets;
+  late Set<int> set;
+  late int count;
+  late List<Set<int>> initialSets;
 
   @override
   Set<int> toMutable() => set;
@@ -61,11 +60,11 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ISetRemoveBenchmark extends SetBenchmarkBase {
-  ISetRemoveBenchmark({@required TableScoreEmitter emitter})
+  ISetRemoveBenchmark({required TableScoreEmitter emitter})
       : super(name: "ISet", emitter: emitter);
 
-  ISet<int> fixedSet;
-  ISet<int> iSet;
+  late ISet<int> fixedSet;
+  late ISet<int> iSet;
 
   @override
   Set<int> toMutable() => iSet.unlock;
@@ -83,11 +82,11 @@ class ISetRemoveBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtSetRemoveBenchmark extends SetBenchmarkBase {
-  KtSetRemoveBenchmark({@required TableScoreEmitter emitter})
+  KtSetRemoveBenchmark({required TableScoreEmitter emitter})
       : super(name: "KtSet", emitter: emitter);
 
-  KtSet<int> fixedSet;
-  KtSet<int> ktSet;
+  late KtSet<int> fixedSet;
+  late KtSet<int> ktSet;
 
   @override
   Set<int> toMutable() => ktSet.asSet();
@@ -105,11 +104,11 @@ class KtSetRemoveBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
-  BuiltSetRemoveBenchmark({@required TableScoreEmitter emitter})
+  BuiltSetRemoveBenchmark({required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
 
-  BuiltSet<int> fixedSet;
-  BuiltSet<int> builtSet;
+  late BuiltSet<int> fixedSet;
+  late BuiltSet<int> builtSet;
 
   @override
   Set<int> toMutable() => builtSet.asSet();

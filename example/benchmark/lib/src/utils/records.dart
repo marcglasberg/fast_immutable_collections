@@ -2,13 +2,14 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class Config {
   final int size;
 
-  const Config({@required this.size}) : assert(size != null && size >= 0);
+  const Config({required this.size}) : assert(size >= 0);
 
   @override
   String toString() => "Config: (size: $size)";
@@ -24,9 +25,8 @@ class StopwatchRecord {
   /// (µs).
   final double record;
 
-  const StopwatchRecord({@required this.collectionName, @required this.record})
-      : assert(collectionName != null && collectionName.length > 0),
-        assert(record != null);
+  const StopwatchRecord({required this.collectionName, required this.record})
+      : assert(collectionName.length > 0);
 
   @override
   bool operator ==(Object other) =>
@@ -49,7 +49,7 @@ class RecordsColumn {
 
   RecordsColumn.empty({String title = "Column"}) : this._(const <StopwatchRecord>[], title);
 
-  const RecordsColumn._(this.records, this.title) : assert(title != null && title.length > 0);
+  const RecordsColumn._(this.records, this.title) : assert(title.length > 0);
 
   RecordsColumn operator +(StopwatchRecord stopwatchRecord) =>
       RecordsColumn._(List.of([...records, stopwatchRecord]), title);
@@ -83,7 +83,7 @@ class RecordsColumn {
     return rowNames;
   }
 
-  RecordsColumn filter(String collectionName) {
+  RecordsColumn filter(String? collectionName) {
     if (collectionName != null) {
       final List<StopwatchRecord> recordsCopy = List.of(records);
       recordsCopy.removeWhere((StopwatchRecord record) => record.collectionName == collectionName);
@@ -113,7 +113,7 @@ class RecordsColumn {
 class LeftLegend {
   final RecordsColumn _results;
 
-  const LeftLegend({@required RecordsColumn results}) : _results = results;
+  const LeftLegend({required RecordsColumn results}) : _results = results;
 
   IList<String> get rows {
     IList<String> collections = const <String>["Collection"].lock;
@@ -130,7 +130,7 @@ class RecordsTable {
   final RecordsColumn resultsColumn;
   final Config config;
 
-  RecordsTable({@required this.resultsColumn, @required this.config});
+  RecordsTable({required this.resultsColumn, required this.config});
 
   LeftLegend get leftLegend => LeftLegend(results: resultsColumn);
 

@@ -7,7 +7,7 @@ import "package:flutter/material.dart";
 class MultiBenchmarkScreen extends StatelessWidget {
   final Type collectionType;
 
-  const MultiBenchmarkScreen({@required this.collectionType});
+  const MultiBenchmarkScreen({required this.collectionType});
 
   @override
   Widget build(_) {

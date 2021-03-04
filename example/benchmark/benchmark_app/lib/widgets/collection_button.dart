@@ -4,11 +4,11 @@ import "package:flutter/material.dart";
 
 class CollectionButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const CollectionButton({
-    @required this.label,
-    @required this.onPressed,
+    required this.label,
+    required this.onPressed,
   });
 
   @override

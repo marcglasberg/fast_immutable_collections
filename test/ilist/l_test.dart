@@ -2,6 +2,7 @@ import "dart:collection";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
+
 import "package:test/test.dart";
 
 /// These tests are mainly for coverage purposes, it tests methods inside the [L] class which were

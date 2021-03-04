@@ -9,7 +9,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 class BarChart extends StatelessWidget {
   final RecordsTable recordsTable;
 
-  const BarChart({@required this.recordsTable});
+  const BarChart({required this.recordsTable});
 
   List<charts.Series<StopwatchRecord, String>> _seriesList() => [
         charts.Series<StopwatchRecord, String>(

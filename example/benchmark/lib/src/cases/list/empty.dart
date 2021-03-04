@@ -1,6 +1,6 @@
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
-import "package:meta/meta.dart";
+
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -13,7 +13,7 @@ class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListEmptyBenchmark({@required TableScoreEmitter emitter})
+  ListEmptyBenchmark({required TableScoreEmitter emitter})
       : benchmarks = <ListBenchmarkBase>[
           MutableListEmptyBenchmark(emitter: emitter),
           IListEmptyBenchmark(emitter: emitter),
@@ -26,10 +26,10 @@ class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableListEmptyBenchmark extends ListBenchmarkBase {
-  MutableListEmptyBenchmark({@required TableScoreEmitter emitter})
+  MutableListEmptyBenchmark({required TableScoreEmitter emitter})
       : super(name: "List (Mutable)", emitter: emitter);
 
-  List<int> list;
+  late List<int> list;
 
   @override
   List<int> toMutable() => list;
@@ -41,10 +41,10 @@ class MutableListEmptyBenchmark extends ListBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IListEmptyBenchmark extends ListBenchmarkBase {
-  IListEmptyBenchmark({@required TableScoreEmitter emitter})
+  IListEmptyBenchmark({required TableScoreEmitter emitter})
       : super(name: "IList", emitter: emitter);
 
-  IList<int> iList;
+  late IList<int> iList;
 
   @override
   List<int> toMutable() => iList.unlock;
@@ -56,10 +56,10 @@ class IListEmptyBenchmark extends ListBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtListEmptyBenchmark extends ListBenchmarkBase {
-  KtListEmptyBenchmark({@required TableScoreEmitter emitter})
+  KtListEmptyBenchmark({required TableScoreEmitter emitter})
       : super(name: "KtList", emitter: emitter);
 
-  KtList<int> ktList;
+  late KtList<int> ktList;
 
   @override
   List<int> toMutable() => ktList.asList();
@@ -71,10 +71,10 @@ class KtListEmptyBenchmark extends ListBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltListEmptyBenchmark extends ListBenchmarkBase {
-  BuiltListEmptyBenchmark({@required TableScoreEmitter emitter})
+  BuiltListEmptyBenchmark({required TableScoreEmitter emitter})
       : super(name: "BuiltList", emitter: emitter);
 
-  BuiltList<int> builtList;
+  late BuiltList<int> builtList;
 
   @override
   List<int> toMutable() => builtList.asList();

@@ -15,9 +15,9 @@ class BenchWidget extends StatefulWidget {
   final List<MultiBenchmarkReporter> Function() benchmarks;
 
   const BenchWidget({
-    this.title,
-    this.code,
-    @required this.benchmarks,
+    required this.title,
+    required this.code,
+    required this.benchmarks,
   });
 
   @override
@@ -27,8 +27,8 @@ class BenchWidget extends StatefulWidget {
 // ////////////////////////////////////////////////////////////////////////////
 
 class _BenchWidgetState extends State<BenchWidget> {
-  bool _isRunning = false;
-  List<RecordsTable> _results;
+  late bool _isRunning = false;
+  late List<RecordsTable>? _results;
 
   Future<void> _goToResults() => Navigator.of(context).push(
         MaterialPageRoute(
@@ -40,15 +40,15 @@ class _BenchWidgetState extends State<BenchWidget> {
       );
 
   void _run() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       setState(() => _isRunning = true);
-      WidgetsBinding.instance.addPostFrameCallback(
+      WidgetsBinding.instance!.addPostFrameCallback(
         (_) => setState(() {
           _results = <RecordsTable>[];
           widget.benchmarks().forEach((MultiBenchmarkReporter benchmark) {
             benchmark.report();
             // print(benchmark.emitter.table);
-            _results.add(benchmark.emitter.table);
+            _results!.add(benchmark.emitter.table);
           });
           _isRunning = false;
           _goToResults();
@@ -129,7 +129,7 @@ class _BenchWidgetState extends State<BenchWidget> {
 // ////////////////////////////////////////////////////////////////////////////
 
 class _PleaseWait extends StatelessWidget {
-  const _PleaseWait({Key key}) : super(key: key);
+  const _PleaseWait({Key? key}) : super(key: key);
 
   @override
   Widget build(_) {

@@ -2,7 +2,7 @@ import "dart:math";
 
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/kt.dart";
-import "package:meta/meta.dart";
+
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -15,7 +15,7 @@ class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
 
-  MapAddAllBenchmark({@required TableScoreEmitter emitter})
+  MapAddAllBenchmark({required TableScoreEmitter emitter})
       : benchmarks = <MapBenchmarkBase>[
           MutableMapAddAllBenchmark(emitter: emitter),
           IMapAddAllBenchmark(emitter: emitter),
@@ -28,16 +28,16 @@ class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapAddAllBenchmark extends MapBenchmarkBase {
-  MutableMapAddAllBenchmark({@required TableScoreEmitter emitter})
+  MutableMapAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "Map (Mutable)", emitter: emitter);
 
-  Map<String, int> map;
-  Map<String, int> toBeAdded;
+  late Map<String, int> map;
+  late Map<String, int> toBeAdded;
 
-  int count;
+  late int count;
 
   // Saves many copies of the initial list (created during setup).
-  List<Map<String, int>> initialMaps;
+  late List<Map<String, int>> initialMaps;
 
   @override
   Map<String, int> toMutable() => map;
@@ -69,12 +69,12 @@ class MutableMapAddAllBenchmark extends MapBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapAddAllBenchmark extends MapBenchmarkBase {
-  IMapAddAllBenchmark({@required TableScoreEmitter emitter})
+  IMapAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "IMap", emitter: emitter);
 
-  IMap<String, int> iMap;
-  IMap<String, int> result;
-  IMap<String, int> toBeAdded;
+  late IMap<String, int> iMap;
+  late IMap<String, int> result;
+  late IMap<String, int> toBeAdded;
 
   @override
   Map<String, int> toMutable() => result.unlock;
@@ -92,12 +92,12 @@ class IMapAddAllBenchmark extends MapBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapAddAllBenchmark extends MapBenchmarkBase {
-  KtMapAddAllBenchmark({@required TableScoreEmitter emitter})
+  KtMapAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "KtMap", emitter: emitter);
 
-  KtMap<String, int> ktMap;
-  KtMap<String, int> result;
-  KtMap<String, int> toBeAdded;
+  late KtMap<String, int> ktMap;
+  late KtMap<String, int> result;
+  late KtMap<String, int> toBeAdded;
 
   @override
   Map<String, int> toMutable() => result.asMap();
@@ -116,12 +116,12 @@ class KtMapAddAllBenchmark extends MapBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
-  BuiltMapAddAllBenchmark({@required TableScoreEmitter emitter})
+  BuiltMapAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "BuiltMap", emitter: emitter);
 
-  BuiltMap<String, int> builtMap;
-  BuiltMap<String, int> result;
-  BuiltMap<String, int> toBeAdded;
+  late BuiltMap<String, int> builtMap;
+  late BuiltMap<String, int> result;
+  late BuiltMap<String, int> toBeAdded;
 
   @override
   Map<String, int> toMutable() => result.asMap();

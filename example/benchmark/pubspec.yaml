@@ -4,15 +4,15 @@ publish_to: "none"
 version: 0.0.1
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  benchmark_harness: ^1.0.5
+  benchmark_harness: ^2.0.0
   meta: ^1.2.3
   path: ^1.7.0
 
-  built_collection: ^4.3.2
-  kt_dart: ^0.7.0+1
+  built_collection: ^5.0.0
+  kt_dart: ^0.9.0-nullsafety.0
   # Depends on much older versions of Dart: `>=0.8.10+6 <2.0.0`,
   # So its use will be either postponed or rejected entirely.
   # vacuum_persistent:

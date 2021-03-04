@@ -4,6 +4,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 
+
 /// An **immutable**, **unordered**, map of sets.
 @immutable
 class IMapOfSets<K, V> // ignore: must_be_immutable,

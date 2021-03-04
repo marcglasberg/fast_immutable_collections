@@ -62,8 +62,8 @@ class _CodeBlock extends StatelessWidget {
   final String code;
 
   const _CodeBlock({
-    @required this.title,
-    @required this.code,
+    required this.title,
+    required this.code,
   });
 
   @override

@@ -7,9 +7,12 @@ import "package:intl/intl.dart";
 
 class GraphScreen extends StatefulWidget {
   final String title;
-  final List<RecordsTable> tables;
+  final List<RecordsTable>? tables;
 
-  const GraphScreen({@required this.title, @required this.tables});
+  const GraphScreen({
+    required this.title,
+    required this.tables,
+  });
 
   @override
   _GraphScreenState createState() => _GraphScreenState();
@@ -31,13 +34,13 @@ class _GraphScreenState extends State<GraphScreen> {
   );
   static final NumberFormat formatter = NumberFormat("#,##0", "en_US");
 
-  int currentTableIndex;
+  late int currentTableIndex;
 
-  Map<String, bool> filters;
+  late Map<String, bool> filters;
 
-  RecordsTable get currentTable => currentTableIndex >= widget.tables.length
-      ? widget.tables.last
-      : widget.tables[currentTableIndex];
+  RecordsTable get currentTable => currentTableIndex >= widget.tables!.length
+      ? widget.tables!.last
+      : widget.tables![currentTableIndex];
 
   @override
   void initState() {
@@ -94,19 +97,19 @@ class _GraphScreenState extends State<GraphScreen> {
 
   void updateFilters(String newFilter) {
     setState(() {
-      filters[newFilter] = !filters[newFilter];
+      filters[newFilter] = !filters[newFilter]!;
     });
   }
 
   List<InkWell> bottomItems(activeIndex) {
     return <InkWell>[
-      for (int i = 0; i < widget.tables.length; i++)
+      for (int i = 0; i < widget.tables!.length; i++)
         InkWell(
           onTap: () => onTap(i),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Text(
-              "Size\n${formatter.format(widget.tables[i].config.size)}",
+              "Size\n${formatter.format(widget.tables![i].config.size)}",
               style: bottomItemTextStyle(activeIndex, i),
               textAlign: TextAlign.center,
             ),
@@ -246,7 +249,7 @@ class _FilterDialogState extends State<_FilterDialog> {
   Checkbox _checkbox(String filter) {
     return Checkbox(
       value: filters[filter],
-      onChanged: (bool value) {
+      onChanged: (bool? value) {
         setState(() {
           widget.updateFilters(filter);
         });

@@ -2,7 +2,7 @@ import "dart:math";
 
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
-import "package:meta/meta.dart";
+
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -15,7 +15,7 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
 
-  SetAddAllBenchmark({@required TableScoreEmitter emitter})
+  SetAddAllBenchmark({required TableScoreEmitter emitter})
       : benchmarks = <SetBenchmarkBase>[
           MutableSetAddAllBenchmark(emitter: emitter),
           ISetAddAllBenchmark(emitter: emitter),
@@ -28,14 +28,13 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableSetAddAllBenchmark extends SetBenchmarkBase {
-  MutableSetAddAllBenchmark({@required TableScoreEmitter emitter})
+  MutableSetAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "Set (Mutable)", emitter: emitter);
 
-  Set<int> set;
-  Set<int> toBeAdded;
-  List<Set<int>> initialSet;
-
-  int count;
+  late Set<int> set;
+  late Set<int> toBeAdded;
+  late List<Set<int>> initialSet;
+  late int count;
 
   @override
   Set<int> toMutable() => set;
@@ -67,12 +66,12 @@ class MutableSetAddAllBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ISetAddAllBenchmark extends SetBenchmarkBase {
-  ISetAddAllBenchmark({@required TableScoreEmitter emitter})
+  ISetAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "ISet", emitter: emitter);
 
-  ISet<int> iSet;
-  ISet<int> toBeAdded;
-  ISet<int> fixedISet;
+  late ISet<int> iSet;
+  late ISet<int> toBeAdded;
+  late ISet<int> fixedISet;
 
   @override
   Set<int> toMutable() => iSet.unlock;
@@ -93,12 +92,12 @@ class ISetAddAllBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtSetAddAllBenchmark extends SetBenchmarkBase {
-  KtSetAddAllBenchmark({@required TableScoreEmitter emitter})
+  KtSetAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "KtSet", emitter: emitter);
 
-  KtSet<int> ktSet;
-  KtSet<int> toBeAdded;
-  KtSet<int> fixedISet;
+  late KtSet<int> ktSet;
+  late KtSet<int> toBeAdded;
+  late KtSet<int> fixedISet;
 
   @override
   Set<int> toMutable() => ktSet.asSet();
@@ -120,12 +119,12 @@ class KtSetAddAllBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
-  BuiltSetAddAllBenchmark({@required TableScoreEmitter emitter})
+  BuiltSetAddAllBenchmark({required TableScoreEmitter emitter})
       : super(name: "BuiltSet", emitter: emitter);
 
-  BuiltSet<int> builtSet;
-  BuiltSet<int> toBeAdded;
-  BuiltSet<int> fixedISet;
+  late BuiltSet<int> builtSet;
+  late BuiltSet<int> toBeAdded;
+  late BuiltSet<int> fixedISet;
 
   @override
   Set<int> toMutable() => builtSet.asSet();

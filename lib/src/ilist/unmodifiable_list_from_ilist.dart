@@ -1,6 +1,7 @@
 import "dart:collection";
-import "package:meta/meta.dart";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:meta/meta.dart";
 import "ilist.dart";
 import "list_extension.dart";
 

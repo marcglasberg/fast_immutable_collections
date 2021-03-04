@@ -1,6 +1,6 @@
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/kt.dart";
-import "package:meta/meta.dart";
+
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
@@ -13,7 +13,7 @@ class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase>
   @override
   final List<MapBenchmarkBase> benchmarks;
 
-  MapContainsValueBenchmark({@required TableScoreEmitter emitter})
+  MapContainsValueBenchmark({required TableScoreEmitter emitter})
       : benchmarks = <MapBenchmarkBase>[
           MutableMapContainsValueBenchmark(emitter: emitter),
           IMapContainsValueBenchmark(emitter: emitter),
@@ -26,11 +26,11 @@ class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase>
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
-  MutableMapContainsValueBenchmark({@required TableScoreEmitter emitter})
+  MutableMapContainsValueBenchmark({required TableScoreEmitter emitter})
       : super(name: "Map (Mutable)", emitter: emitter);
 
-  Map<String, int> map;
-  bool contains;
+  late Map<String, int> map;
+  late bool contains;
 
   @override
   Map<String, int> toMutable() => map;
@@ -47,11 +47,11 @@ class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapContainsValueBenchmark extends MapBenchmarkBase {
-  IMapContainsValueBenchmark({@required TableScoreEmitter emitter})
+  IMapContainsValueBenchmark({required TableScoreEmitter emitter})
       : super(name: "IMap", emitter: emitter);
 
-  IMap<String, int> iMap;
-  bool contains;
+  late IMap<String, int> iMap;
+  late bool contains;
 
   @override
   Map<String, int> toMutable() => iMap.unlock;
@@ -69,11 +69,11 @@ class IMapContainsValueBenchmark extends MapBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class KtMapContainsValueBenchmark extends MapBenchmarkBase {
-  KtMapContainsValueBenchmark({@required TableScoreEmitter emitter})
+  KtMapContainsValueBenchmark({required TableScoreEmitter emitter})
       : super(name: "KtMap", emitter: emitter);
 
-  KtMap<String, int> ktMap;
-  bool contains;
+  late KtMap<String, int> ktMap;
+  late bool contains;
 
   @override
   Map<String, int> toMutable() => ktMap.asMap();
@@ -90,11 +90,11 @@ class KtMapContainsValueBenchmark extends MapBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
-  BuiltMapContainsValueBenchmark({@required TableScoreEmitter emitter})
+  BuiltMapContainsValueBenchmark({required TableScoreEmitter emitter})
       : super(name: "BuiltMap", emitter: emitter);
 
-  BuiltMap<String, int> builtMap;
-  bool contains;
+  late BuiltMap<String, int> builtMap;
+  late bool contains;
 
   @override
   Map<String, int> toMutable() => builtMap.asMap();

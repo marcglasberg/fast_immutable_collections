@@ -33,7 +33,7 @@ linter:
     # http://dart-lang.github.io/linter/lints/always_declare_return_types.html
     # - always_put_required_named_parameters_first
 
-    # All non nullable named parameters should be and annotated with @required.
+    # All non nullable named parameters should be and annotated with required.
     # This allows API consumers to get warnings via lint rather than a crash a runtime.
     # Might become obsolete with Non-Nullable types
     # http://dart-lang.github.io/linter/lints/always_require_non_null_named_parameters.html
