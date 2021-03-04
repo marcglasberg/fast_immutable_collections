@@ -74,16 +74,40 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("entry/entryOrNull", () {
-    final ListMapView<String, int> imap = ListMapView({"a": 1, "b": 2, "c": 3});
+  test("entry", () {
+    final ListMapView<String, int> listMapView = ListMapView({"a": 1, "b": 2, "c": 3});
 
-    expect(imap.entry("a").key, "a");
-    expect(imap.entry("a").value, 1);
+    expect(listMapView.entry("a").key, "a");
+    expect(listMapView.entry("a").value, 1);
 
-    expect(imap.entryOrNull("z"), isNull);
+    expect(() => listMapView.entry("z").key, throwsStateError);
+    expect(() => listMapView.entry("z").value, throwsStateError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("entryOrNull", () {
+    final ListMapView<String, int> listMapView = ListMapView({"a": 1, "b": 2, "c": 3});
+
+    expect(listMapView.entryOrNull("a")?.key, "a");
+    expect(listMapView.entryOrNull("a")?.value, 1);
+
+    expect(listMapView.entryOrNull("z"), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("entryOrNullValue", () {
+    final ListMapView<String, int> listMapView = ListMapView({"a": 1, "b": 2, "c": 3});
+
+    expect(listMapView.entryOrNullValue("a").key, "a");
+    expect(listMapView.entryOrNullValue("a").value, 1);
+
+    expect(listMapView.entryOrNullValue("z").key, "z");
+    expect(listMapView.entryOrNullValue("z").value, isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
 
   test("forEach", () {
     final ListMapView<String, int> listMapView =
@@ -223,6 +247,29 @@ void main() {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     // TODO: This is not yet supported, but will be in the future.
     expect(() => view.sort(), throwsUnsupportedError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("get", () {
+    final ListMapView<String, int> view = ListMapView({"a": 1, "b": 2, "c": 3});
+    expect(view.get("a"), 1);
+    expect(view.get("z"), isNull);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("getOrThrow", () {
+    final ListMapView<String, int> view = ListMapView({"a": 1, "b": 2, "c": 3});
+    expect(view.getOrThrow("a"), 1);
+    expect(() => view.getOrThrow("z"), throwsStateError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("cast", () {
+    final ListMapView<String, int> view = ListMapView({"a": 1, "b": 2, "c": 3});
+    expect(view.cast<String, num>(), isA<ListMap<String, num>>());
   });
 
   /////////////////////////////////////////////////////////////////////////////

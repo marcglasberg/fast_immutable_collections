@@ -343,8 +343,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(
-        students.where((Student student) => student.name.length == 5), {const Student("James")});
+    expect(students.where((Student student) => student.name.length == 5), {const Student("James")});
     expect(students.where((Student student) => student.name.length == 100), <Student>{});
   });
 
@@ -545,8 +544,7 @@ void main() {
     const Student lucy = Student("Lucy");
     final Students students = Students([james, sara, lucy, Student("James")]);
 
-    expect(
-        students.retainWhere((Student student) => student.name.length == 4).iter, {sara, lucy});
+    expect(students.retainWhere((Student student) => student.name.length == 4).iter, {sara, lucy});
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -680,6 +678,28 @@ void main() {
         "   Student: Sara,\n"
         "   Student: Lucy\n"
         "}");
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("FromISetMixinExtension", () {
+    FromISetMixin? aNull;
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students({james, sara, lucy});
+
+    expect(aNull.isNullOrEmpty, isTrue);
+    expect(Students({}).isNullOrEmpty, isTrue);
+    expect(students.isNullOrEmpty, isFalse);
+
+    expect(aNull.isNotNullNotEmpty, isFalse);
+    expect(Students({}).isNotNullNotEmpty, isFalse);
+    expect(students.isNotNullNotEmpty, isTrue);
+
+    expect(aNull.isEmptyNotNull, isFalse);
+    expect(Students({}).isEmptyNotNull, isTrue);
+    expect(students.isEmptyNotNull, isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////

@@ -89,6 +89,9 @@ class ListMap<K, V> implements Map<K, V> {
   /// or with [compareObject] if not provided. If [sort] is false,
   /// [compare] will be ignored.
   ///
+  /// The iterables [keys] and [values] must have the same number of items,
+  /// otherwise it throws a [StateError].
+  ///
   factory ListMap.fromIterables(
     Iterable<K> keys,
     Iterable<V> values, {
@@ -141,15 +144,15 @@ class ListMap<K, V> implements Map<K, V> {
   /// key not being in the map, and the key being there with a `null` value.
   /// Methods like [containsKey] or [putIfAbsent] can be used if the distinction
   /// is important.
+  ///
+  /// See also: [getOrThrow] to throw an error when the value doesn't exist.
+  ///
   V? get(covariant K key) => _map[key];
 
-  /// The value for the given [key], or `null` if [key] is not in the map.
+  /// Returns the value if it exists, otherwise throws a `StateError`.
   ///
-  /// Some maps allow `null` as a value.
-  /// For those maps, a lookup using this operator cannot distinguish between a
-  /// key not being in the map, and the key being there with a `null` value.
-  /// Methods like [containsKey] or [putIfAbsent] can be used if the distinction
-  /// is important.
+  /// See also: [get] to return `null` when the value doesn't exist.
+  ///
   V getOrThrow(K key) {
     if (containsKey(key)) {
       return (_map[key] as V);

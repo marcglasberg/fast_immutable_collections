@@ -110,12 +110,12 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 }
 
 extension FromIterableISetMixinExtension on FromIterableISetMixin? {
-  /// Checks if `this` is `null` or empty.
+  /// Checks if [this] is `null` or empty.
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
-  /// Checks if `this` is **not** `null` and **not** empty.
-  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
+  /// Checks if [this] is **not** `null` and **not** empty.
+  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
-  /// Checks if `this` is empty but **not** `null`.
-  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
+  /// Checks if [this] is empty but **not** `null`.
+  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
 }

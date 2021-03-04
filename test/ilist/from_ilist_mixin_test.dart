@@ -193,6 +193,19 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("firstWhereOrNull", () {
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(students.firstWhereOrNull((Student student) => student == Student("Lucy")),
+        Student("Lucy"));
+    expect(students.firstWhereOrNull((Student student) => student == Student("Marcus")), null);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("fold", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -1031,6 +1044,26 @@ void main() {
   });
 
   /////////////////////////////////////////////////////////////////////////////
+
+  test("FromIListMixinExtension", () {
+    FromIListMixin? aNull;
+    const Student james = Student("James");
+    const Student sara = Student("Sara");
+    const Student lucy = Student("Lucy");
+    final Students students = Students([james, sara, lucy]);
+
+    expect(aNull.isNullOrEmpty, isTrue);
+    expect(Students([]).isNullOrEmpty, isTrue);
+    expect(students.isNullOrEmpty, isFalse);
+
+    expect(aNull.isNotNullNotEmpty, isFalse);
+    expect(Students([]).isNotNullNotEmpty, isFalse);
+    expect(students.isNotNullNotEmpty, isTrue);
+
+    expect(aNull.isEmptyNotNull, isFalse);
+    expect(Students([]).isEmptyNotNull, isTrue);
+    expect(students.isEmptyNotNull, isFalse);
+  });
 }
 
 /////////////////////////////////////////////////////////////////////////////

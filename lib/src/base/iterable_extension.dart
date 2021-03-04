@@ -42,9 +42,9 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
   //
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
-  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
+  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
-  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
+  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   ///
   /// If no element satisfies [test], the result of invoking the [orElse]
   /// function is returned.
-  /// If [orElse] is omitted, return true.
+  /// If [orElse] is omitted, return `true`.
   T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
     for (T element in this) if (test(element)) return element;
     if (orElse != null) return orElse();
@@ -74,21 +74,14 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// using [operator ==]. Return true if they are all the same,
   /// in the same order.
   ///
-  /// Note: Since this is an extension, it works with nulls:
-  /// ```dart
-  /// Iterable iterable1 = null;
-  /// Iterable iterable2 = null;
-  /// iterable1.deepEquals(iterable2) == true;
-  /// ```
-  ///
   bool deepEquals(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
 
-    /// Assumes EfficientLengthIterable for these:
+    // Assumes `EfficientLengthIterable` for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) ||
+        (this is Queue) ||
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
@@ -100,14 +93,6 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Compare all items, in order or not, according to [ignoreOrder],
   /// using [identical]. Return true if they are all the same,
   /// in the same order.
-  ///
-  /// Note: Since this is an extension, it works with nulls:
-  /// ```dart
-  /// Iterable iterable1 = null;
-  /// Iterable iterable2 = null;
-  /// iterable1.deepEqualsByIdentity(iterable2) == true;
-  /// ```
-  ///
   bool deepEqualsByIdentity(Iterable? other, {bool ignoreOrder = false}) {
     if (identical(this, other)) return true;
     if (other == null) return false;
@@ -115,7 +100,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     /// Assumes EfficientLengthIterable for these:
     if ((this is List) ||
         (this is Set) ||
-        (this is Map) ||
+        (this is Queue) ||
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
@@ -134,10 +119,10 @@ extension FicIterableExtension<T> on Iterable<T> {
     return duplicates;
   }
 
-  /// Returns true if all items are equal to [value].
+  /// Returns `true` if all items are equal to [value].
   bool everyIs(T value) => every((item) => item == value);
 
-  /// Returns true if any item is equal to [value].
+  /// Returns `true` if any item is equal to [value].
   bool anyIs(T value) => any((item) => item == value);
 
   /// Removes `null`s from the [Iterable].
@@ -195,7 +180,7 @@ extension FicIterableExtension<T> on Iterable<T> {
     Set<T> thisSet = Set.of(this);
     Set<dynamic> otherSet = Set<dynamic>.of(ordering);
 
-    IListOf4<List?> result = thisSet.diffAndIntersect<dynamic>(
+    DiffAndIntersectResult<T, dynamic> result = thisSet.diffAndIntersect<dynamic>(
       otherSet,
       diffThisMinusOther: true,
       diffOtherMinusThis: false,
@@ -203,8 +188,8 @@ extension FicIterableExtension<T> on Iterable<T> {
       intersectOtherWithThis: true,
     );
 
-    List<T?> intersectOtherWithThis = result.fourth as List<T?>;
-    List<T?> diffThisMinusOther = result.first as List<T?>;
+    List<T>? intersectOtherWithThis = result.intersectOtherWithThis ?? [];
+    List<T>? diffThisMinusOther = result.diffThisMinusOther ?? [];
     return intersectOtherWithThis.followedBy(diffThisMinusOther).toList();
   }
 

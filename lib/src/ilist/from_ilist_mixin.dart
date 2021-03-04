@@ -112,7 +112,8 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
-  T? firstWhereOrNull(bool Function(T) test) => iter.firstWhereOrNull(test);
+  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) =>
+      iter.firstWhereOrNull(test, orElse: orElse);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);
@@ -256,12 +257,12 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 }
 
 extension FromIListMixinExtension on FromIListMixin? {
-  /// Checks if `this` is `null` or empty.
+  /// Checks if [this] is `null` or empty.
   bool get isNullOrEmpty => (this == null) || this!.isEmpty;
 
-  /// Checks if `this` is **not** `null` and **not** empty.
-  bool get isNotNullOrEmpty => (this != null) && this!.isNotEmpty;
+  /// Checks if [this] is **not** `null` and **not** empty.
+  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
-  /// Checks if `this` is empty but **not** `null`.
-  bool get isEmptyButNotNull => (this != null) && this!.isEmpty;
+  /// Checks if [this] is empty but **not** `null`.
+  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
 }

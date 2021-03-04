@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Changing channels so we have access to NNBD
+        run: bash tool/flutter_beta.sh
+
       - name: Removing CI/CD unnecessary folders
         run: bash tool/delete_noncicd_dirs.sh
 

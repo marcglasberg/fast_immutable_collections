@@ -16,7 +16,8 @@ void main() {
 
   test("MapEntryExtension.compareKeyAndValue", () {
     expect(
-        MapEntry<String?, int?>(null, null).compareKeyAndValue(MapEntry<String?, int?>(null, null)), 0);
+        MapEntry<String?, int?>(null, null).compareKeyAndValue(MapEntry<String?, int?>(null, null)),
+        0);
     expect(MapEntry<String?, int?>(null, null).compareKeyAndValue(null), -1);
     expect(MapEntry<String, int>("a", 1).compareKeyAndValue(MapEntry<String, int>("a", 1)), 0);
     expect(MapEntry<String, int>("a", 1).compareKeyAndValue(MapEntry<String, int>("b", 1)), -1);

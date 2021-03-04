@@ -1256,9 +1256,6 @@ abstract class M<K, V> {
     });
     return matches;
   }
-
-  Map<RK, RV> map<RK, RV>(MapEntry<RK, RV> Function(K key, V value) mapper) =>
-      LinkedHashMap.fromEntries(entries.map((entry) => mapper(entry.key, entry.value)));
 }
 
 // /////////////////////////////////////////////////////////////////////////////

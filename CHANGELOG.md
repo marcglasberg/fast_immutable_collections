@@ -1,6 +1,8 @@
 ## [2.0.0] - 2021/03/03
 
-* Nullsafety.
+* Nullsafety improvements.
+* isNotNullOrEmpty getter renamed to isNotNullNotEmpty.
+* isEmptyButNotNull getter to isEmptyNotNull.
 
 ## [1.0.28] - 2021/02/09
 

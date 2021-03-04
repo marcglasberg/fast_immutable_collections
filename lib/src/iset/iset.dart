@@ -45,7 +45,7 @@ class ISet<T> // ignore: must_be_immutable
             : iterable.isEmpty
                 ? ISet.empty<T>(config)
                 : ISet<T>._(iterable, config: config)
-        : ((iterable == null) || iterable.isEmpty)
+        : (iterable == null)
             ? ISet.empty<T>(config)
             : ISet<T>._unsafe(SFlat<T>(iterable, config: config), config: config);
   }

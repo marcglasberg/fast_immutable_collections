@@ -21,11 +21,62 @@ void main() {
     expect(areSameImmutableCollection(null, IList()), isFalse);
 
     // 3) If none of them is null, then use .same()
+
+    // 3.1) IList
     IList<int> iList1 = IList([1, 2]), iList2 = IList([1, 2]);
     IList<int> iList3 = iList1.remove(3);
 
     expect(areSameImmutableCollection(iList1, iList2), isFalse);
     expect(areSameImmutableCollection(iList1, iList3), isTrue);
+
+    // 3.2) ISet
+    ISet<int> iset1 = ISet([1, 2]), iSet2 = ISet([1, 2]);
+    ISet<int> iset3 = iset1.remove(3);
+
+    expect(areSameImmutableCollection(iset1, iSet2), isFalse);
+    expect(areSameImmutableCollection(iset1, iset3), isTrue);
+
+    // 3.3) IMap
+    IMap<String, int> imap1 = IMap({"a": 1, "b": 2}), imap2 = IMap({"a": 1, "b": 2});
+    IMap<String, int> imap3 = imap1.remove("c");
+
+    expect(areSameImmutableCollection(imap1, imap2), isFalse);
+    expect(areSameImmutableCollection(imap1, imap3), isTrue);
+
+    // 3.4) IMapOfSets
+    IMapOfSets<String, int> imapOfSets1 = IMapOfSets({
+          "a": {1},
+          "b": {1, 2}
+        }),
+        imapOfSets2 = IMapOfSets({
+          "a": {1},
+          "b": {1, 2}
+        });
+    IMapOfSets<String, int> imapOfSets3 = imapOfSets1.removeSet("c");
+
+    expect(areSameImmutableCollection(imapOfSets1, imapOfSets2), isFalse);
+    expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("areSameImmutableCollection | Different Collections", () {
+    IList<int> ilistA = IList([1, 2]);
+    ISet<int> isetA = ISet([1, 2]);
+    expect(areSameImmutableCollection(ilistA, isetA), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test(
+      "areSameImmutableCollection | "
+      "Trying to verify if Dart implicitly checks for the type of the items inside the "
+      "[ImmutableCollection]. If it does, then the print inside the 3rd `if` shouldn't be executed.",
+      () {
+    IList<int> iListA = IList([1, 2]);
+    IList<String> iListB = IList(["a", "b"]);
+
+    expect(areSameImmutableCollection(iListA, iListB), isFalse); // throws an error
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -262,102 +313,102 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("isNotNullOrEmpty", () {
+  test("isNotNullNotEmpty", () {
     // List:
-    expect([].isNotNullOrEmpty, isFalse);
-    expect([1].isNotNullOrEmpty, isTrue);
+    expect([].isNotNullNotEmpty, isFalse);
+    expect([1].isNotNullNotEmpty, isTrue);
     List<int>? list;
-    expect(list.isNotNullOrEmpty, isFalse);
+    expect(list.isNotNullNotEmpty, isFalse);
 
     // Set:
-    expect(<Set>{}.isNotNullOrEmpty, isFalse);
-    expect({1}.isNotNullOrEmpty, isTrue);
+    expect(<Set>{}.isNotNullNotEmpty, isFalse);
+    expect({1}.isNotNullNotEmpty, isTrue);
     Set<int>? set;
-    expect(set.isNotNullOrEmpty, isFalse);
+    expect(set.isNotNullNotEmpty, isFalse);
 
     // IMap:
-    expect(<Map>{}.isNotNullOrEmpty, isFalse);
-    expect({1: 2}.isNotNullOrEmpty, isTrue);
+    expect(<Map>{}.isNotNullNotEmpty, isFalse);
+    expect({1: 2}.isNotNullNotEmpty, isTrue);
     Map<int, int>? map;
-    expect(map.isNotNullOrEmpty, isFalse);
+    expect(map.isNotNullNotEmpty, isFalse);
 
     // IList:
-    expect(IList().isNotNullOrEmpty, isFalse);
-    expect(IList([1]).isNotNullOrEmpty, isTrue);
+    expect(IList().isNotNullNotEmpty, isFalse);
+    expect(IList([1]).isNotNullNotEmpty, isTrue);
     IList<int>? ilist;
-    expect(ilist.isNotNullOrEmpty, isFalse);
+    expect(ilist.isNotNullNotEmpty, isFalse);
 
     // ISet:
-    expect(ISet().isNotNullOrEmpty, isFalse);
-    expect(ISet([1]).isNotNullOrEmpty, isTrue);
+    expect(ISet().isNotNullNotEmpty, isFalse);
+    expect(ISet([1]).isNotNullNotEmpty, isTrue);
     ISet<int>? iset;
-    expect(iset.isNotNullOrEmpty, isFalse);
+    expect(iset.isNotNullNotEmpty, isFalse);
 
     // IMap:
-    expect(IMap().isNotNullOrEmpty, isFalse);
-    expect(IMap({1: 2}).isNotNullOrEmpty, isTrue);
+    expect(IMap().isNotNullNotEmpty, isFalse);
+    expect(IMap({1: 2}).isNotNullNotEmpty, isTrue);
     IMap<int, int>? imap;
-    expect(imap.isNotNullOrEmpty, isFalse);
+    expect(imap.isNotNullNotEmpty, isFalse);
 
     // IMapOfSets:
-    expect(IMapOfSets().isNotNullOrEmpty, isFalse);
+    expect(IMapOfSets().isNotNullNotEmpty, isFalse);
     expect(
         IMapOfSets({
           1: {2}
-        }).isNotNullOrEmpty,
+        }).isNotNullNotEmpty,
         isTrue);
     IMapOfSets<int, int>? imapOfSets;
-    expect(imapOfSets.isNotNullOrEmpty, isFalse);
+    expect(imapOfSets.isNotNullNotEmpty, isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("isEmptyButNotNull", () {
+  test("isEmptyNotNull", () {
     // List:
-    expect([].isEmptyButNotNull, isTrue);
-    expect([1].isEmptyButNotNull, isFalse);
+    expect([].isEmptyNotNull, isTrue);
+    expect([1].isEmptyNotNull, isFalse);
     List<int>? list;
-    expect(list.isEmptyButNotNull, isFalse);
+    expect(list.isEmptyNotNull, isFalse);
 
     // Set:
-    expect(<Set>{}.isEmptyButNotNull, isTrue);
-    expect({1}.isEmptyButNotNull, isFalse);
+    expect(<Set>{}.isEmptyNotNull, isTrue);
+    expect({1}.isEmptyNotNull, isFalse);
     Set<int>? set;
-    expect(set.isEmptyButNotNull, isFalse);
+    expect(set.isEmptyNotNull, isFalse);
 
     // IMap:
-    expect(<Map>{}.isEmptyButNotNull, isTrue);
-    expect({1: 2}.isEmptyButNotNull, isFalse);
+    expect(<Map>{}.isEmptyNotNull, isTrue);
+    expect({1: 2}.isEmptyNotNull, isFalse);
     Map<int, int>? map;
-    expect(map.isEmptyButNotNull, isFalse);
+    expect(map.isEmptyNotNull, isFalse);
 
     // IList:
-    expect(IList().isEmptyButNotNull, isTrue);
-    expect(IList([1]).isEmptyButNotNull, isFalse);
+    expect(IList().isEmptyNotNull, isTrue);
+    expect(IList([1]).isEmptyNotNull, isFalse);
     IList<int>? ilist;
-    expect(ilist.isEmptyButNotNull, isFalse);
+    expect(ilist.isEmptyNotNull, isFalse);
 
     // ISet:
-    expect(ISet().isEmptyButNotNull, isTrue);
-    expect(ISet([1]).isEmptyButNotNull, isFalse);
+    expect(ISet().isEmptyNotNull, isTrue);
+    expect(ISet([1]).isEmptyNotNull, isFalse);
     ISet<int>? iset;
-    expect(iset.isEmptyButNotNull, isFalse);
+    expect(iset.isEmptyNotNull, isFalse);
 
     // IMap:
-    expect(IMap().isEmptyButNotNull, isTrue);
-    expect(IMap({1: 2}).isEmptyButNotNull, isFalse);
+    expect(IMap().isEmptyNotNull, isTrue);
+    expect(IMap({1: 2}).isEmptyNotNull, isFalse);
     IMap<int, int>? imap;
-    expect(imap.isEmptyButNotNull, isFalse);
+    expect(imap.isEmptyNotNull, isFalse);
 
     // IMapOfSets:
-    expect(IMapOfSets().isEmptyButNotNull, isTrue);
+    expect(IMapOfSets().isEmptyNotNull, isTrue);
     expect(
         IMapOfSets({
           1: {2}
-        }).isEmptyButNotNull,
+        }).isEmptyNotNull,
         isFalse);
     IMapOfSets<int, int>? imapOfSets;
-    expect(imapOfSets.isEmptyButNotNull, isFalse);
+    expect(imapOfSets.isEmptyNotNull, isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
@@ -413,17 +464,16 @@ void main() {
   test("FicIteratorExtension.toIterable()", () {
     final Iterable<int> iter1 = [1, 2, 3].iterator.toIterable();
     expect(iter1.isNullOrEmpty, isFalse);
-    expect(iter1.isNotNullOrEmpty, isTrue);
+    expect(iter1.isNotNullNotEmpty, isTrue);
 
     final Iterable<int> iter2 = <int>[].iterator.toIterable();
     expect(iter2.isNullOrEmpty, isTrue);
-    expect(iter2.isNotNullOrEmpty, isFalse);
+    expect(iter2.isNotNullNotEmpty, isFalse);
 
     Iterable<int>? iter3;
     expect(iter3.isNullOrEmpty, isTrue);
-    expect(iter3.isNotNullOrEmpty, isFalse);
+    expect(iter3.isNotNullNotEmpty, isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
 }
-

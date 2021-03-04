@@ -52,4 +52,19 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("toIMap", () {
+    final Map<String, int> map = {"a": 1, "b": 2};
+
+    // 1) No config
+    expect(map.toIMap(), isA<IMap<String, int>>());
+    expect(map.toIMap().unlock, {"a": 1, "b": 2});
+
+    // 2) With config
+    expect(map.toIMap(ConfigMap(sort: true)), isA<IMap<String, int>>());
+    expect(map.toIMap(ConfigMap(sort: true)).unlock, {"a": 1, "b": 2});
+    expect(map.toIMap(ConfigMap(sort: true)).config, ConfigMap(sort: true));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

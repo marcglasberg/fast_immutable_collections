@@ -1187,7 +1187,7 @@ These are some of the provided helpers and extensions:
 * `combineIterables` is a top-level function that combines two iterables into one, by applying
   a `combine` function.
 
-* `Iterable.isNullOrEmpty`, `Iterable.isNotNullOrEmpty` and `Iterable.isEmptyButNotNull`.
+* `Iterable.isNullOrEmpty`, `Iterable.isNotNullNotEmpty` and `Iterable.isEmptyNotNull`.
 
 * `Iterable.deepEquals` compare all items, in order, using `operator ==`.
 
@@ -2218,10 +2218,9 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
           not a characteristic of an interface. I know, that's not very clear; let me explain.
     - [Ben Rayfield on recursiveness][ben_rayfield_recursiveness]
 
-1. [MarcG's question on the behavior of `List.unmodifiable`][marcelo_list_unmodifiable]
+1. [Question on the behavior of `List.unmodifiable`][marcelo_list_unmodifiable]
 
     - `List.unmodifiable` does create a new list. And it's `O(N)`.
-    - MarcG is the main author of this package.
 
 1. [Immutable Collections In Java &ndash; Not Now, Not Ever][immutable_collections_java_not_now_not_ever]
 

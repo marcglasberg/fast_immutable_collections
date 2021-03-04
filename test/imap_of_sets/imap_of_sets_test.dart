@@ -1159,6 +1159,18 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("entryOrNull", () {
+    final IMapOfSets<String, int> iMapOfSets =
+        IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
+
+    expect(iMapOfSets.entryOrNull("a")?.key, "a");
+    expect(iMapOfSets.entryOrNull("a")?.value, {1, 2});
+
+    expect(iMapOfSets.entryOrNull("z"), isNull);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("keys", () {
     final IMapOfSets<String, int> iMapOfSets =
         IMapOfSets.empty<String, int>().add("b", 3).add("a", 1).add("a", 2);
@@ -2188,7 +2200,35 @@ void main() {
       "b": {11, 12},
     }.lock;
 
-    expect(mapOfSets.firstValueWhere((int? value) => value! > 100, orElse: () => 650), 650);
+    expect(() => mapOfSets.firstValueWhere((int? value) => value! > 100), throwsStateError);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("firstValueWhereOrNull", () {
+    // 1) Regular usage
+    IMapOfSets<String, int> mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12},
+    }.lock;
+
+    expect(mapOfSets.firstValueWhereOrNull((int? value) => value! > 10, orElse: () => 1000), 11);
+
+    // 2) orElse
+    mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12},
+    }.lock;
+
+    expect(mapOfSets.firstValueWhereOrNull((int? value) => value! > 100, orElse: () => 1000), 1000);
+
+    // 3) if orElse is not specified
+    mapOfSets = {
+      "a": {1, 2},
+      "b": {11, 12},
+    }.lock;
+
+    expect(mapOfSets.firstValueWhereOrNull((int? value) => value! > 100), isNull);
   });
 
   //////////////////////////////////////////////////////////////////////////////

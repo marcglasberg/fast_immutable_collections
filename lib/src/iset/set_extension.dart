@@ -1,4 +1,6 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import 'package:collection/equality.dart';
+
+import "iset.dart";
 
 /// See also: [FicListExtension]
 extension FicSetExtension<T> on Set<T> {
@@ -33,44 +35,88 @@ extension FicSetExtension<T> on Set<T> {
   }
 
   /// Given this set and [other], returns:
+  ///
   /// 1) Items of this set which are NOT in [other] (difference this - other), in this set's order.
   /// 2) Items of [other] which are NOT in this set (difference other - this), in [other]'s order.
   /// 3) Items of this set which are also in [other], in this set's order.
   /// 4) Items of this set which are also in [other], in [other]'s order.
   ///
-  IListOf4<List?> diffAndIntersect<G>(
+  DiffAndIntersectResult<T, G> diffAndIntersect<G>(
     Set<G> other, {
     bool diffThisMinusOther = true,
     bool diffOtherMinusThis = true,
     bool intersectThisWithOther = true,
     bool intersectOtherWithThis = true,
   }) {
-    List<T>? _differenceThisMinusOther = diffThisMinusOther ? [] : null;
-    List<G>? _differenceOtherMinusThis = diffOtherMinusThis ? [] : null;
-    List<T>? _intersectionOfThisWithOther = intersectThisWithOther ? [] : null;
-    List<T>? _intersectionOfOtherWithThis = intersectOtherWithThis ? [] : null;
+    List<T>? _diffThisMinusOther = diffThisMinusOther ? [] : null;
+    List<G>? _diffOtherMinusThis = diffOtherMinusThis ? [] : null;
+    List<T>? _intersectThisWithOther = intersectThisWithOther ? [] : null;
+    List<T>? _intersectOtherWithThis = intersectOtherWithThis ? [] : null;
 
     if (diffThisMinusOther || intersectThisWithOther)
       for (var element in this) {
         if (other.contains(element)) {
-          _intersectionOfThisWithOther?.add(element);
+          _intersectThisWithOther?.add(element);
         } else
-          _differenceThisMinusOther?.add(element);
+          _diffThisMinusOther?.add(element);
       }
 
     if (diffOtherMinusThis || intersectOtherWithThis)
       for (var element in other) {
         if (contains(element))
-          _intersectionOfOtherWithThis?.add(element as T);
+          _intersectOtherWithThis?.add(element as T);
         else
-          _differenceOtherMinusThis?.add(element);
+          _diffOtherMinusThis?.add(element);
       }
 
-    return IListOf4(
-      _differenceThisMinusOther,
-      _differenceOtherMinusThis,
-      _intersectionOfThisWithOther,
-      _intersectionOfOtherWithThis,
+    return DiffAndIntersectResult(
+      diffThisMinusOther: _diffThisMinusOther,
+      diffOtherMinusThis: _diffOtherMinusThis,
+      intersectThisWithOther: _intersectThisWithOther,
+      intersectOtherWithThis: _intersectOtherWithThis,
     );
   }
 }
+
+// ////////////////////////////////////////////////////////////////////////////
+
+class DiffAndIntersectResult<T, G> {
+  final List<T>? diffThisMinusOther;
+  final List<G>? diffOtherMinusThis;
+  final List<T>? intersectThisWithOther;
+  final List<T>? intersectOtherWithThis;
+
+  DiffAndIntersectResult({
+    this.diffThisMinusOther,
+    this.diffOtherMinusThis,
+    this.intersectThisWithOther,
+    this.intersectOtherWithThis,
+  });
+
+  @override
+  String toString() => 'DiffAndIntersectResult{\n'
+      'diffThisMinusOther: $diffThisMinusOther,\n'
+      'diffOtherMinusThis: $diffOtherMinusThis,\n'
+      'intersectThisWithOther: $intersectThisWithOther,\n'
+      'intersectOtherWithThis: $intersectOtherWithThis\n'
+      '}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DiffAndIntersectResult &&
+          runtimeType == other.runtimeType &&
+          const ListEquality().equals(diffThisMinusOther, other.diffThisMinusOther) &&
+          const ListEquality().equals(diffOtherMinusThis, other.diffOtherMinusThis) &&
+          const ListEquality().equals(intersectThisWithOther, other.intersectThisWithOther) &&
+          const ListEquality().equals(intersectOtherWithThis, other.intersectOtherWithThis);
+
+  @override
+  int get hashCode =>
+      diffThisMinusOther.hashCode ^
+      diffOtherMinusThis.hashCode ^
+      intersectThisWithOther.hashCode ^
+      intersectOtherWithThis.hashCode;
+}
+
+// ////////////////////////////////////////////////////////////////////////////

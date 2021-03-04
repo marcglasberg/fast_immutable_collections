@@ -114,7 +114,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// Will return `true` only if the collection items are equal to the iterable
   /// items. If the collection is ordered, it will also check if the items are
   /// in the same order. This may be slow for very large collection, since it
-  /// compares each item, one by one. If you can/try to compare ordered and unordered
+  /// compares each item, one by one. If you try to compare ordered and unordered
   /// collections, it will throw a [StateError].
   bool equalItems(Iterable other);
 
@@ -130,8 +130,8 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   ///
   /// Note: This is not the same as `identical(col1, col2)` since it doesn't
   /// compare the collection instances themselves, but their internal state.
-  /// Comparing the internal state is better, because it will return `true` more
-  /// often.
+  /// Comparing the internal state is better, because it's also fast but will
+  /// return `true` more often.
   bool same(C other);
 
   @override
@@ -140,33 +140,29 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-/// While `identical(collection1, collection2)` will compare the identity of the
-/// collection itself, `same(collection1, collection2)` will compare its
-/// internal state by identity. Note `same` is practically as fast as
-/// `identical`, but will give **less false negatives**. So it is almost always
-/// recommended to use `same` instead of `identical`.
+/// While `identical(collection1, collection2)` will compare the collections by
+/// identity, `areSameImmutableCollection(collection1, collection2)` will
+/// compare them by type, and then by their internal state. Note this is
+/// practically as fast as `identical`, but will give **less false negatives**.
+/// So it is almost always recommended to use `areSameImmutableCollection`
+/// instead of `identical`.
 ///
-bool areSameImmutableCollection<C extends ImmutableCollection<dynamic>?>(C c1, C c2) {
+bool areSameImmutableCollection(ImmutableCollection? c1, ImmutableCollection? c2) {
   if (identical(c1, c2)) return true;
   if (c1 == null || c2 == null) return false;
 
-  if ((c1 is IList && c2 is IList) ||
-      (c1 is ISet && c2 is ISet) ||
-      (c1 is IMap && c2 is IMap) ||
-      (c1 is IMapOfSets && c2 is IMapOfSets))
+  if (c1.runtimeType == c2.runtimeType) {
     return c1.same(c2);
-  else
+  } else
     return false;
 }
 
-/// Will return `true` only if the collection items are equal, and the collections
-/// are of the same type. If the collection is ordered, it will also check if the items are
-/// in the same order. This may be slow for very large collection, since it
-/// compares each item, one by one. If you can/try to compare ordered and unordered
-/// collections, it will throw a [StateError]. Note this will **not** compare the
-/// configurations.
+/// Will return `true` only if the collections are of the same type, and their
+/// items are equal by calling the collection's [equalItems] method. This may be
+/// slow for very large collection, since it compares each item, one by one.
+/// Note this will **not** compare the collection configuration.
 ///
-bool areImmutableCollectionsWithEqualItems<C extends ImmutableCollection<dynamic>?>(C c1, C c2) {
+bool areImmutableCollectionsWithEqualItems(ImmutableCollection? c1, ImmutableCollection? c2) {
   if (identical(c1, c2)) return true;
   if (c1 is IList && c2 is IList) return (c1).equalItems(c2);
   if (c1 is ISet && c2 is ISet) return (c1).equalItems(c2);
@@ -189,7 +185,7 @@ abstract class CanBeEmpty {
 /// Meant to be used when you wish to save a value that's going to be tossed
 /// out of an immutable collection.
 ///
-/// For an example, see `IList.removeAt()`.
+/// For an example, see [IList.removeAt()].
 ///
 class Output<T> {
   T? _value;
