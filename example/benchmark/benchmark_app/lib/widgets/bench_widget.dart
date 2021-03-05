@@ -27,8 +27,8 @@ class BenchWidget extends StatefulWidget {
 // ////////////////////////////////////////////////////////////////////////////
 
 class _BenchWidgetState extends State<BenchWidget> {
-  late bool _isRunning = false;
-  late List<RecordsTable>? _results;
+  bool _isRunning = false;
+  List<RecordsTable>? _results;
 
   Future<void> _goToResults() => Navigator.of(context).push(
         MaterialPageRoute(
