@@ -1,4 +1,4 @@
-## [2.0.0] - 2021/03/03
+## [2.0.1] - 2021/03/03
 
 * Nullsafety improvements.
 * isNotNullOrEmpty getter renamed to isNotNullNotEmpty.
