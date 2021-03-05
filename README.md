@@ -75,7 +75,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
 </p>
 
 <p align="center">
-  <sub>The <a href="https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark/benchmark_app"><code>benchmark_app</code></a> compares the performance of FIC to other packages</sub>
+  <sub>The <a href="https://github.com/marcglasberg/fast_immutable_collections/tree/master/example/benchmark/benchmark_app"><code>benchmark_app</code></a> compares FIC's performance to other packages &mdash; you might need to run it with <code>flutter run --no-sound-null-safety</code> since some of its dependencies haven't yet transitioned into NNBD.</sub>
 </p>
 
 [built_collection]: https://pub.dev/packages/built_collection
