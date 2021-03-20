@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/reversed_list_view.dart";
@@ -314,14 +316,19 @@ extension FicListExtension<T> on List<T> {
   /// ```dart
   /// list = list1 + list2 + list3 + list4 + list5;
   /// ```
-  List<T> concat(List<T>? list2, [List<T>? list3, List<T>? list4, List<T>? list5]) {
+  List<T> concat(List<T>? list2,
+      [List<T>? list3, List<T>? list4, List<T>? list5]) {
     List<T> list1 = this;
     list2 ??= const [];
     list3 ??= const [];
     list4 ??= const [];
     list5 ??= const [];
 
-    var totalLength = list1.length + list2.length + list3.length + list4.length + list5.length;
+    var totalLength = list1.length +
+        list2.length +
+        list3.length +
+        list4.length +
+        list5.length;
 
     if (totalLength == 0) return const [];
 
@@ -341,7 +348,8 @@ extension FicListExtension<T> on List<T> {
       ..setAll(list1.length, list2)
       ..setAll(list1.length + list2.length, list3)
       ..setAll(list1.length + list2.length + list3.length, list4)
-      ..setAll(list1.length + list2.length + list3.length + list4.length, list5);
+      ..setAll(
+          list1.length + list2.length + list3.length + list4.length, list5);
   }
 
   /// Cut the original list into one or more lists with at most [length] items.
@@ -355,16 +363,59 @@ extension FicListExtension<T> on List<T> {
     return chunks;
   }
 
-  /// Removes all duplicates, leaving only the distinct items.
+  /// Returns a new list, which is equal to the original one, but without
+  /// duplicates. In other words, the new list has only distinct items.
   /// Optionally, you can provide an [id] function to compare the items.
   ///
-  /// See also `Iterable.removeDuplicates()` in [FicIterableExtension] for a lazy version.
+  /// See also: [whereNoDuplicates] in [FicIterableExtension] for a lazy version.
+  ///
+  /// See also: [removeDuplicates] to mutate the current list.
   ///
   List<T> distinct({dynamic Function(T item)? by}) => by != null
-      ? removeDuplicates(by: by).toList()
+      ? whereNoDuplicates(by: by).toList()
       : [
           ...{...this}
         ];
+
+  /// Removes all duplicates from the list, leaving only the distinct items.
+  /// Optionally, you can provide an [id] function to compare the items.
+  ///
+  /// If you pass [removeNulls] as true, it will also remove the nulls
+  /// (it will check the item is null, before applying the [by] function).
+  ///
+  /// See also: [distinct] to return a new list and keep the original unchanged.
+  ///
+  /// See also: [whereNoDuplicates] in [FicIterableExtension] for a lazy version.
+  ///
+  void removeDuplicates({
+    dynamic Function(T item)? by,
+    bool removeNulls = false,
+  }) {
+    if (by != null) {
+      Set<dynamic> ids = <dynamic>{};
+      removeWhere((item) {
+        if (removeNulls && item == null) return true;
+        dynamic id = by(item);
+        return !ids.add(id);
+      });
+    } else {
+      Set<T> items = {};
+      removeWhere((item) {
+        if (removeNulls && item == null) return true;
+        return !items.add(item);
+      });
+    }
+  }
+
+  /// Removes all `null`s from the [List].
+  ///
+  /// See also: [whereNotNull] in [FicIterableExtension] for a lazy version.
+  ///
+  /// See also: [removeDuplicates] which can also remove nulls.
+  ///
+  void removeNulls() {
+    removeWhere((element) => element == null);
+  }
 
   /// Returns a [List] of the objects in this list in reverse order.
   /// Very efficient since it returns a view (which means, if you change the original list

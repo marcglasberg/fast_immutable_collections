@@ -121,28 +121,28 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   test("removeDuplicates", () {
-    expect(([].removeDuplicates()), []);
-    expect(([5, 5, 5].removeDuplicates()), [5]);
-    expect(([1, 2, 3, 4].removeDuplicates()), [1, 2, 3, 4]);
-    expect(([1, 2, 3, 4, 3, 5, 3].removeDuplicates()), [1, 2, 3, 4, 5]);
-    expect(([1, 2, 3, 4, 3, 5, 1].removeDuplicates()), [1, 2, 3, 4, 5]);
-    expect((["abc", "abc", "def"].removeDuplicates()), ["abc", "def"]);
-    expect((["abc", "abc", "def"].removeDuplicates()).take(1), ["abc"]);
+    expect(([].whereNoDuplicates()), []);
+    expect(([5, 5, 5].whereNoDuplicates()), [5]);
+    expect(([1, 2, 3, 4].whereNoDuplicates()), [1, 2, 3, 4]);
+    expect(([1, 2, 3, 4, 3, 5, 3].whereNoDuplicates()), [1, 2, 3, 4, 5]);
+    expect(([1, 2, 3, 4, 3, 5, 1].whereNoDuplicates()), [1, 2, 3, 4, 5]);
+    expect((["abc", "abc", "def"].whereNoDuplicates()), ["abc", "def"]);
+    expect((["abc", "abc", "def"].whereNoDuplicates()).take(1), ["abc"]);
 
-    expect((["a", "b", "abc", "ab", "def"].removeDuplicates(by: (item) => item.length)),
+    expect((["a", "b", "abc", "ab", "def"].whereNoDuplicates(by: (item) => item.length)),
         ["a", "abc", "ab"]);
 
     expect(
         (["a", "b", "abc", "ab", "def"]
-            .removeDuplicates(by: (item) => item.length, removeNulls: true)),
+            .whereNoDuplicates(by: (item) => item.length, removeNulls: true)),
         ["a", "abc", "ab"]);
 
-    expect(([null, 1, 2, 3, null, 4, 3, 5, 1, null].removeDuplicates(removeNulls: true)),
+    expect(([null, 1, 2, 3, null, 4, 3, 5, 1, null].whereNoDuplicates(removeNulls: true)),
         [1, 2, 3, 4, 5]);
 
     expect(
         ([null, "a", "b", null, "abc", "ab", "def", null]
-            .removeDuplicates(by: ((item) => item?.length), removeNulls: true)),
+            .whereNoDuplicates(by: ((item) => item?.length), removeNulls: true)),
         ["a", "abc", "ab"]);
   });
 

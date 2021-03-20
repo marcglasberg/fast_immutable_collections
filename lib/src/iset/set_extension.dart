@@ -34,6 +34,14 @@ extension FicSetExtension<T> on Set<T> {
     return result;
   }
 
+  /// Removes all `null`s from the [Set].
+  ///
+  /// See also: [whereNotNull] in [FicIterableExtension] for a lazy version.
+  ///
+  void removeNulls() {
+    removeWhere((element) => element == null);
+  }
+
   /// Given this set and [other], returns:
   ///
   /// 1) Items of this set which are NOT in [other] (difference this - other), in this set's order.

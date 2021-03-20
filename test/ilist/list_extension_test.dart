@@ -13,8 +13,65 @@ void main() {
     expect((["abc", "abc", "def"].distinct()), ["abc", "def"]);
     expect((["abc", "abc", "def"].distinct()).take(1), ["abc"]);
 
+    expect((["a", "b", "abc", "ab", "def"].distinct(by: (item) => item.length)),
+        ["a", "abc", "ab"]);
+
+    // Make sure it creates a new list, not mutate the original one.
+    List<int> list1 = [1, 2, 2, 4];
+    List<int> list2 = list1.distinct();
+    expect(list1, [1, 2, 2, 4]);
+    expect(list2, [1, 2, 4]);
+    expect(identical(list1, list2), isFalse);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("removeDuplicates", () {
+    expect(([]..removeDuplicates()), []);
+    expect(([5, 5, 5]..removeDuplicates()), [5]);
+    expect(([1, 2, 3, 4]..removeDuplicates()), [1, 2, 3, 4]);
+    expect(([1, 2, 3, 4, 3, 5, 3]..removeDuplicates()), [1, 2, 3, 4, 5]);
+    expect(([1, 2, 3, 4, 3, 5, 1]..removeDuplicates()), [1, 2, 3, 4, 5]);
+    expect((["abc", "abc", "def"]..removeDuplicates()), ["abc", "def"]);
+    expect((["abc", "abc", "def"]..removeDuplicates()).take(1), ["abc"]);
+
     expect(
-        (["a", "b", "abc", "ab", "def"].distinct(by: (item) => item.length)), ["a", "abc", "ab"]);
+        (["a", "b", "abc", "ab", "def"]
+          ..removeDuplicates(by: (item) => item.length)),
+        ["a", "abc", "ab"]);
+
+    // Make sure it mutates the original list.
+    List<int> list1 = [1, 2, 2, 4];
+    list1.removeDuplicates();
+    expect(list1, [1, 2, 4]);
+
+    // ---
+
+    // Not removing nulls.
+    expect(([1, 2, null, 3, null, 4]..removeDuplicates()), [1, 2, null, 3, 4]);
+    expect(([1, 2, null, 3, 2, 4]..removeDuplicates()), [1, 2, null, 3, 4]);
+    expect(([null]..removeDuplicates()), [null]);
+    expect(([null, null]..removeDuplicates()), [null]);
+    expect(([null, 1, null, 1]..removeDuplicates()), [null, 1]);
+
+    // Removing nulls.
+    expect(([1, 2, null, 3, null, 4]..removeDuplicates(removeNulls: true)),
+        [1, 2, 3, 4]);
+    expect(([1, 2, null, 3, 2, 4]..removeDuplicates(removeNulls: true)),
+        [1, 2, 3, 4]);
+    expect(([null]..removeDuplicates(removeNulls: true)), []);
+    expect(([null, null]..removeDuplicates(removeNulls: true)), []);
+    expect(([null, 1, null, 1]..removeDuplicates(removeNulls: true)), [1]);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("removeNulls", () {
+    expect(([1, 2, null, 3, null, 4]..removeNulls()), [1, 2, 3, 4]);
+    expect(([1, 2, null, 3, 2, 4]..removeNulls()), [1, 2, 3, 2, 4]);
+    expect(([null]..removeNulls()), []);
+    expect(([null, null]..removeNulls()), []);
+    expect(([null, 1, null, 1]..removeNulls()), [1, 1]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -155,7 +212,9 @@ void main() {
 
   test("mapIndexed", () {
     expect(
-        [1, 2, 3].mapIndexed((int index, int item) => (index + item).toString()), ["1", "3", "5"]);
+        [1, 2, 3]
+            .mapIndexed((int index, int item) => (index + item).toString()),
+        ["1", "3", "5"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,18 +253,21 @@ void main() {
       [4, 5]
     ]);
 
-    expect([0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1].divideList(((v) => v == 1)), [
-      [0, 1, 0],
-      [1, 0],
-      [1],
-      [1, 0, 0],
-      [1],
-      [1],
-      [1],
-      [1],
-      [1, 0],
-      [1]
-    ]);
+    expect(
+        [0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1]
+            .divideList(((v) => v == 1)),
+        [
+          [0, 1, 0],
+          [1, 0],
+          [1],
+          [1, 0, 0],
+          [1],
+          [1],
+          [1],
+          [1],
+          [1, 0],
+          [1]
+        ]);
 
     expect([1].divideList(((v) => v == 1)), [
       [1]
@@ -283,7 +345,8 @@ void main() {
 
   test("divideListAsMap", () {
     //
-    expect([].divideListAsMap((dynamic v) => v == 3, key: (dynamic v) => -v), {});
+    expect(
+        [].divideListAsMap((dynamic v) => v == 3, key: (dynamic v) => -v), {});
 
     expect([1].divideListAsMap(((v) => v == 1)), {
       1: [1],
@@ -305,54 +368,83 @@ void main() {
       -2: [1, 2, 3]
     });
 
-    expect([1, 2, 3].divideListAsMap(((v) => v == 2 || v == 3), key: ((v) => -v)), {
-      -2: [1, 2],
-      -3: [3]
-    });
+    expect(
+        [1, 2, 3].divideListAsMap(((v) => v == 2 || v == 3), key: ((v) => -v)),
+        {
+          -2: [1, 2],
+          -3: [3]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3), key: ((v) => -v)), {
-      -3: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3), key: ((v) => -v)),
+        {
+          -3: [1, 2, 3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 1), key: ((v) => -v)), {
-      -1: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 1), key: ((v) => -v)),
+        {
+          -1: [1, 2, 3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 7), key: ((v) => -v)), {
-      -7: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 7), key: ((v) => -v)),
+        {
+          -7: [1, 2, 3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 8), key: ((v) => -v)), {
-      null: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 8), key: ((v) => -v)),
+        {
+          null: [1, 2, 3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3 || v == 4), key: ((v) => -v)), {
-      -3: [1, 2, 3],
-      -4: [4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3 || v == 4), key: ((v) => -v)),
+        {
+          -3: [1, 2, 3],
+          -4: [4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3 || v == 5), key: ((v) => -v)), {
-      -3: [1, 2, 3, 4],
-      -5: [5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3 || v == 5), key: ((v) => -v)),
+        {
+          -3: [1, 2, 3, 4],
+          -5: [5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3 || v == 6), key: ((v) => -v)), {
-      -3: [1, 2, 3, 4, 5],
-      -6: [6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3 || v == 6), key: ((v) => -v)),
+        {
+          -3: [1, 2, 3, 4, 5],
+          -6: [6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v % 2 == 0), key: ((v) => -v)), {
-      -2: [1, 2, 3],
-      -4: [4, 5],
-      -6: [6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v % 2 == 0), key: ((v) => -v)),
+        {
+          -2: [1, 2, 3],
+          -4: [4, 5],
+          -6: [6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v % 2 == 1), key: ((v) => -v)), {
-      -1: [1, 2],
-      -3: [3, 4],
-      -5: [5, 6],
-      -7: [7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v % 2 == 1), key: ((v) => -v)),
+        {
+          -1: [1, 2],
+          -3: [3, 4],
+          -5: [5, 6],
+          -7: [7]
+        });
 
     /// Repeating keys will be joined together.
     expect([1, 2, 3, 8, 12, 1, 4, 6].divideListAsMap(((v) => v % 2 == 1)), {
@@ -372,7 +464,9 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("concat | Efficiently concatenates lists. The resulting list has fixed size.", () {
+  test(
+      "concat | Efficiently concatenates lists. The resulting list has fixed size.",
+      () {
     expect([].concat([], []), []);
     expect([5].concat([1]), [5, 1]);
     expect([5].concat([], []), [5]);
@@ -390,7 +484,8 @@ void main() {
     expect([1, 2].concat([2, 3], null, [3, 4]), [1, 2, 2, 3, 3, 4]);
     expect([10, 2].concat([20, 3], [30]), [10, 2, 20, 3, 30]);
     expect(["10", 2].concat([20, "3"], [30]), ["10", 2, 20, "3", 30]);
-    expect(["10", 2].concat([20, "3"], [30], ["a", "b"]), ["10", 2, 20, "3", 30, "a", "b"]);
+    expect(["10", 2].concat([20, "3"], [30], ["a", "b"]),
+        ["10", 2, 20, "3", 30, "a", "b"]);
     expect([1].concat([2], [3], [4], [5]), [1, 2, 3, 4, 5]);
 
     // The resulting list is not unmodifiable/immutable.

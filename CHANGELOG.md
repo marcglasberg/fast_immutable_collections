@@ -1,3 +1,12 @@
+## [2.0.2] - 2021/20/03
+
+* Breaking changes:
+    - `Iterable.removeDuplicates` was renamed to `Iterable.whereNoDuplicates` to indicate it returns an Iterable.
+    - `Iterable.removeNulls` was renamed to `Iterable.whereNotNull` to indicate it returns an Iterable.
+    - `List.removeNulls` now is a List extension only. It mutates the `List`, removing nulls.
+    - `List.removeDuplicates` now is a List extension only. It mutates the `List`, removing all duplicates.
+    - `Set.removeNulls` now is a Set extension only. It mutates the `Set`, removing all nulls.
+
 ## [2.0.1] - 2021/03/03
 
 * Nullsafety improvements.

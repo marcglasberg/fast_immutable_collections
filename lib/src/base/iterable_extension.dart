@@ -126,7 +126,10 @@ extension FicIterableExtension<T> on Iterable<T> {
   bool anyIs(T value) => any((item) => item == value);
 
   /// Removes `null`s from the [Iterable].
-  Iterable<T> removeNulls() sync* {
+  ///
+  /// See also: `removeNulls` in [FicListExtension].
+  ///
+  Iterable<T> whereNotNull() sync* {
     for (T item in this) {
       if (item != null) yield item;
     }
@@ -150,7 +153,9 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// // This will process a million items:
   /// var newList = list.distinct().sublist(0, 5);
   ///
-  Iterable<T> removeDuplicates({
+  /// See also: `distinct` and `removeDuplicates` in [FicListExtension].
+  ///
+  Iterable<T> whereNoDuplicates({
     dynamic Function(T item)? by,
     bool removeNulls = false,
   }) sync* {
