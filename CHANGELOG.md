@@ -1,3 +1,8 @@
+## [2.0.3] - 2021/04/07
+
+* Factories `IList<T>.orNull()`, `ISet<T>.orNull()`, `IMap<K, V>.orNull()`, 
+  and `IMapofSets<K, V>.orNull()`, that help implement `copyWith` methods.
+
 ## [2.0.2] - 2021/20/03
 
 * Breaking changes:

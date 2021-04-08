@@ -7,7 +7,6 @@ import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:fast_immutable_collections/src/list_map/list_map.dart";
 import "package:meta/meta.dart";
 
-
 import "entry.dart";
 import "m_add.dart";
 import "m_add_all.dart";
@@ -79,7 +78,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// If multiple [entries] have the same [key],
   /// later occurrences overwrite the earlier ones.
   ///
-  factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries, {ConfigMap? config}) {
+  factory IMap.fromEntries(Iterable<MapEntry<K, V>> entries,
+      {ConfigMap? config}) {
     config ??= defaultConfig;
     Map<K, V> map = ListMap.fromEntries(
       entries,
@@ -206,8 +206,10 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   /// See also: [fromIterable]
   ///
-  factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values, {ConfigMap? config}) {
-    Map<K, V> map = ListMap.fromIterables(keys, values, sort: (config ?? defaultConfig).sort);
+  factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values,
+      {ConfigMap? config}) {
+    Map<K, V> map = ListMap.fromIterables(keys, values,
+        sort: (config ?? defaultConfig).sort);
     return IMap._(map, config: config ?? defaultConfig);
   }
 
@@ -229,6 +231,35 @@ class IMap<K, V> // ignore: must_be_immutable
       throw UnsupportedError("IMap.unsafe is disallowed.");
   }
 
+  /// If [map] is null, return null.
+  ///
+  /// Otherwise, Create an [IMap] from the [map].
+  ///
+  /// This static factory is useful for implementing a `copyWith` method
+  /// that accept maps. For example:
+  ///
+  /// ```
+  ///  IMap<Id, String> studentsPerId;
+  ///
+  ///  Students copyWith({ Map<Id, String>? studentsPerId }) =>
+  ///    Students(studentsPerId: IMap.orNull(studentsPerId) ?? this.studentsPerId);
+  /// ```
+  ///
+  /// Of course, if your `copyWith` accepts an [IMap], this is not necessary:
+  ///
+  /// ```
+  ///  IMap<Id, String> studentsPerId;
+  ///
+  ///  Students copyWith({ IMap<Id, String>? studentsPerId }) =>
+  ///    Students(studentsPerId: studentsPerId ?? this.studentsPerId);
+  /// ```
+  ///
+  static IMap<K, V>? orNull<K, V>(
+    Map<K, V>? map, [
+    ConfigMap? config,
+  ]) =>
+      (map == null) ? null : IMap.withConfig(map, config ?? defaultConfig);
+
   /// Returns an empty [IMap], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
   ///
@@ -242,7 +273,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     IMap.flushFactor = _defaultFlushFactor;
     IMap.defaultConfig = _defaultConfig;
   }
@@ -268,7 +300,8 @@ class IMap<K, V> // ignore: must_be_immutable
   static set defaultConfig(ConfigMap config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _defaultConfig = config;
   }
 
@@ -276,7 +309,8 @@ class IMap<K, V> // ignore: must_be_immutable
   static set flushFactor(int value) {
     if (_flushFactor == value) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     if (value > 0)
       _flushFactor = value;
     else
@@ -287,7 +321,8 @@ class IMap<K, V> // ignore: must_be_immutable
   static set asyncAutoflush(bool value) {
     if (_asyncAutoflush == value) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _asyncAutoflush = value;
   }
 
@@ -358,15 +393,18 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap._unsafe(this._m, {required this.config});
 
   /// **Unsafe**.
-  IMap._unsafeFromMap(Map<K, V> map, {required this.config}) : _m = MFlat<K, V>.unsafe(map);
+  IMap._unsafeFromMap(Map<K, V> map, {required this.config})
+      : _m = MFlat<K, V>.unsafe(map);
 
   /// Creates a map with `identityEquals` (compares the internals by `identity`).
-  IMap<K, V> get withIdentityEquals =>
-      config.isDeepEquals ? IMap._unsafe(_m, config: config.copyWith(isDeepEquals: false)) : this;
+  IMap<K, V> get withIdentityEquals => config.isDeepEquals
+      ? IMap._unsafe(_m, config: config.copyWith(isDeepEquals: false))
+      : this;
 
   /// Creates a map with `deepEquals` (compares all map entries by equality).
-  IMap<K, V> get withDeepEquals =>
-      config.isDeepEquals ? this : IMap._unsafe(_m, config: config.copyWith(isDeepEquals: true));
+  IMap<K, V> get withDeepEquals => config.isDeepEquals
+      ? this
+      : IMap._unsafe(_m, config: config.copyWith(isDeepEquals: true));
 
   /// See also: [ConfigList]
   bool get isDeepEquals => config.isDeepEquals;
@@ -383,12 +421,14 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Return the [MapEntry] for the given [key].
   /// For key/value pairs that don't exist, it will return null.
-  MapEntry<K, V>? entryOrNull(K key) => _m.containsKey(key) ? MapEntry(key, _m[key]!) : null;
+  MapEntry<K, V>? entryOrNull(K key) =>
+      _m.containsKey(key) ? MapEntry(key, _m[key]!) : null;
 
   /// Returns an [Iterable] of the map entries of type [Entry]. Contrary to
   /// [MapEntry], [Entry] is comparable and implements equals (`==`) and [hashcode] by
   /// using its key and value.
-  Iterable<Entry<K, V>> get comparableEntries => _m.entries.map((e) => e.asComparableEntry);
+  Iterable<Entry<K, V>> get comparableEntries =>
+      _m.entries.map((e) => e.asComparableEntry);
 
   /// Returns an [Iterable] of the map keys.
   Iterable<K> get keys {
@@ -415,7 +455,8 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigList? config,
   }) {
     _count();
-    var result = IList<MapEntry<K, V>>.withConfig(entries, config ?? IList.defaultConfig);
+    var result = IList<MapEntry<K, V>>.withConfig(
+        entries, config ?? IList.defaultConfig);
     if (compare != null || this.config.sort) result = result.sort(compare);
     return result;
   }
@@ -488,7 +529,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The list will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   ///
-  List<MapEntry<K, V>> toEntryList({int Function(MapEntry<K, V> a, MapEntry<K, V> b)? compare}) {
+  List<MapEntry<K, V>> toEntryList(
+      {int Function(MapEntry<K, V> a, MapEntry<K, V> b)? compare}) {
     _count();
     var result = List<MapEntry<K, V>>.of(entries);
     if (compare != null || config.sort) result.sort(compare ?? compareObject);
@@ -528,7 +570,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Returns a [Set] of the map entries.
   /// The set will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
-  Set<MapEntry<K, V>> toEntrySet({int Function(MapEntry<K, V> a, MapEntry<K, V> b)? compare}) {
+  Set<MapEntry<K, V>> toEntrySet(
+      {int Function(MapEntry<K, V> a, MapEntry<K, V> b)? compare}) {
     _count();
 
     if (compare == null) {
@@ -666,7 +709,8 @@ class IMap<K, V> // ignore: must_be_immutable
     if (_isUnequalByHashCode(other)) return false;
 
     return config == other.config &&
-        (identical(_m, other._m) || (flush._m as MFlat).deepMapEquals(other.flush._m as MFlat));
+        (identical(_m, other._m) ||
+            (flush._m as MFlat).deepMapEquals(other.flush._m as MFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCode]s proves the
@@ -679,7 +723,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(IMap? other) {
     return (other == null) ||
-        (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
+        (_hashCode != null &&
+            other._hashCode != null &&
+            _hashCode != other._hashCode);
   }
 
   /// Will return `true` only if the maps internals are the same instances
@@ -690,7 +736,8 @@ class IMap<K, V> // ignore: must_be_immutable
   /// compare the maps themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
   @override
-  bool same(IMap<K, V> other) => identical(_m, other._m) && (config == other.config);
+  bool same(IMap<K, V> other) =>
+      identical(_m, other._m) && (config == other.config);
 
   // HashCode cache. Must be null if hashCode is not cached.
   int? _hashCode;
@@ -731,7 +778,8 @@ class IMap<K, V> // ignore: must_be_immutable
     IMap<K, V> result;
     result = config.sort
         ? IMap._unsafe(
-            MFlat.fromEntries(_m.entries.followedBy([MapEntry(key, value)]), config: config),
+            MFlat.fromEntries(_m.entries.followedBy([MapEntry(key, value)]),
+                config: config),
             config: config)
         : IMap<K, V>._unsafe(_m.add(key: key, value: value), config: config);
 
@@ -765,16 +813,20 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> addAll(IMap<K, V> imap, {bool keepOrder = false}) {
     IMap<K, V> result;
     result = config.sort
-        ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(imap.entries), config: config),
+        ? IMap._unsafe(
+            MFlat.fromEntries(_m.entries.followedBy(imap.entries),
+                config: config),
             config: config)
-        : IMap<K, V>._unsafe(_m.addAll(imap, keepOrder: keepOrder), config: config);
+        : IMap<K, V>._unsafe(_m.addAll(imap, keepOrder: keepOrder),
+            config: config);
 
     // A map created with `addAll` has a larger counter than both its source
     // maps. This improves the order in which maps are flushed.
     // If the outer map is used, it will be flushed before the source maps.
     // If the source maps are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((imap is IMap<K, V>) ? imap._counter : 0)) + 1;
+    result._counter =
+        max(_counter, ((imap is IMap<K, V>) ? imap._counter : 0)) + 1;
 
     return result;
   }
@@ -785,7 +837,9 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> addMap(Map<K, V> map) {
     IMap<K, V> result;
     result = config.sort
-        ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(map.entries), config: config),
+        ? IMap._unsafe(
+            MFlat.fromEntries(_m.entries.followedBy(map.entries),
+                config: config),
             config: config)
         : IMap<K, V>._unsafe(_m.addMap(map), config: config);
 
@@ -799,7 +853,8 @@ class IMap<K, V> // ignore: must_be_immutable
   IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) {
     IMap<K, V> result;
     result = config.sort
-        ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(entries), config: config),
+        ? IMap._unsafe(
+            MFlat.fromEntries(_m.entries.followedBy(entries), config: config),
             config: config)
         : IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
 
@@ -812,7 +867,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// return the current map (same instance).
   IMap<K, V> remove(K key) {
     M<K, V> result = _m.remove(key);
-    return identical(result, _m) ? this : IMap<K, V>._unsafe(result, config: config);
+    return identical(result, _m)
+        ? this
+        : IMap<K, V>._unsafe(result, config: config);
   }
 
   /// Returns a new map containing the current map minus the entries that
@@ -820,7 +877,9 @@ class IMap<K, V> // ignore: must_be_immutable
   /// return the current map (same instance).
   IMap<K, V> removeWhere(bool Function(K key, V value) predicate) {
     M<K, V> result = _m.removeWhere(predicate);
-    return identical(result, _m) ? this : IMap<K, V>._unsafe(result, config: config);
+    return identical(result, _m)
+        ? this
+        : IMap<K, V>._unsafe(result, config: config);
   }
 
   /// Returns the value for the given [key] or null if [key] is not in the map.
@@ -934,9 +993,8 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     config ??= defaultConfig;
     Map<RK, RV> map = ListMap.fromEntries(
-      entries
-          .map((entry) => mapper(entry.key, entry.value))
-          .where((entry) => ifRemove == null || !ifRemove(entry.key, entry.value)),
+      entries.map((entry) => mapper(entry.key, entry.value)).where(
+          (entry) => ifRemove == null || !ifRemove(entry.key, entry.value)),
       sort: config.sort,
     );
 
@@ -960,7 +1018,8 @@ class IMap<K, V> // ignore: must_be_immutable
         return "{${entry.key}: ${entry.value}}";
       } else {
         Iterable<MapEntry<K, V>> sortedEntries = config.sort
-            ? (entries.toList()..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
+            ? (entries.toList()
+              ..sort((e1, e2) => e1.key.compareObjectTo(e2.key)))
             : entries;
         return "{\n   ${sortedEntries.map((entry) => entry.print(prettyPrint)).join(",\n   ")}\n}";
       }
@@ -1108,7 +1167,8 @@ abstract class M<K, V> {
   /// Returns the flushed map (flushes it only once).
   /// **It is an error to use the flushed map outside of the [M] class.**
   Map<K, V> getFlushed(ConfigMap? config) {
-    _flushed ??= ListMap.fromEntries(entries, sort: (config ?? IMap.defaultConfig).sort);
+    _flushed ??=
+        ListMap.fromEntries(entries, sort: (config ?? IMap.defaultConfig).sort);
     return _flushed!;
   }
 
@@ -1162,8 +1222,8 @@ abstract class M<K, V> {
     else {
       // We want the entries being added to overwrite those of the original add.
       // So we have to remove the entries that are already present in the second map.
-      Map<K, V> firstMap =
-          ListMap.fromEntries(entries.where((entry) => !imap.containsKey(entry.key)));
+      Map<K, V> firstMap = ListMap.fromEntries(
+          entries.where((entry) => !imap.containsKey(entry.key)));
 
       M<K, V> firstM = MFlat<K, V>.unsafe(firstMap);
 
@@ -1208,8 +1268,9 @@ abstract class M<K, V> {
 
   /// Provides a view of this map as having [RK] keys and [RV] instances.
   /// May return `M<RK, RV>` or `Map<RK, RV>`.
-  Map<RK, RV> cast<RK, RV>(ConfigMap config) =>
-      (RK == K && RV == V) ? (this as Map<RK, RV>) : getFlushed(config).cast<RK, RV>();
+  Map<RK, RV> cast<RK, RV>(ConfigMap config) => (RK == K && RV == V)
+      ? (this as Map<RK, RV>)
+      : getFlushed(config).cast<RK, RV>();
 
   /// Returns `true` if there is no key/value pair in the map.
   bool get isEmpty => length == 0;

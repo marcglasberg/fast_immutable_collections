@@ -6,7 +6,6 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 
-
 import "modifiable_set_from_iset.dart";
 import "s_add.dart";
 import "s_add_all.dart";
@@ -35,6 +34,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Create an [ISet] from any [Iterable] and a [ConfigSet].
   /// Fast, if the Iterable is another [ISet].
+  /// If [iterable] is null, return an empty [ISet].
   factory ISet.withConfig(
     Iterable<T>? iterable,
     ConfigSet config,
@@ -47,7 +47,8 @@ class ISet<T> // ignore: must_be_immutable
                 : ISet<T>._(iterable, config: config)
         : (iterable == null)
             ? ISet.empty<T>(config)
-            : ISet<T>._unsafe(SFlat<T>(iterable, config: config), config: config);
+            : ISet<T>._unsafe(SFlat<T>(iterable, config: config),
+                config: config);
   }
 
   /// Creates a set in which the items are computed from the [iterable].
@@ -62,7 +63,8 @@ class ISet<T> // ignore: must_be_immutable
     ConfigSet? config,
   }) {
     config ??= defaultConfig;
-    var result = ListSet.of(iterable.expand(mapper as Iterable<T> Function(I)), sort: config.sort);
+    var result = ListSet.of(iterable.expand(mapper as Iterable<T> Function(I)),
+        sort: config.sort);
     return ISet<T>._unsafeFromSet(result, config: config);
   }
 
@@ -118,6 +120,38 @@ class ISet<T> // ignore: must_be_immutable
       throw UnsupportedError("ISet.unsafe is disallowed.");
   }
 
+  /// If [iterable] is null, return null.
+  ///
+  /// Otherwise, Create an [ISet] from the [Iterable].
+  /// Fast, if the Iterable is another [ISet].
+  ///
+  /// This static factory is useful for implementing a `copyWith` method
+  /// that accept an [Iterable]. For example:
+  ///
+  /// ```
+  ///  ISet<String> names;
+  ///
+  ///  Students copyWith({ Iterable<String>? names }) =>
+  ///    Students(names: ISet.orNull(names) ?? this.names);
+  /// ```
+  ///
+  /// Of course, if your `copyWith` accepts an [ISet], this is not necessary:
+  ///
+  /// ```
+  ///  ISet<String> names;
+  ///
+  ///  Students copyWith({ ISet<String>? names }) =>
+  ///    Students(names: names ?? this.names);
+  /// ```
+  ///
+  static ISet<T>? orNull<T>(
+    Iterable<T>? iterable, [
+    ConfigSet? config,
+  ]) =>
+      (iterable == null)
+          ? null
+          : ISet.withConfig(iterable, config ?? defaultConfig);
+
   /// Returns an empty [ISet], with the given configuration. If a configuration
   /// is not provided, it will use the default configuration.
   ///
@@ -132,7 +166,8 @@ class ISet<T> // ignore: must_be_immutable
   /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     ISet.flushFactor = _defaultFlushFactor;
     ISet.defaultConfig = _defaultConfig;
   }
@@ -159,14 +194,16 @@ class ISet<T> // ignore: must_be_immutable
   static set defaultConfig(ConfigSet config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _defaultConfig = config;
   }
 
   /// See also: [ImmutableCollection]
   static set flushFactor(int value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     if (value > 0)
       _flushFactor = value;
     else
@@ -176,7 +213,8 @@ class ISet<T> // ignore: must_be_immutable
   /// See also: [ImmutableCollection]
   static set asyncAutoflush(bool value) {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
+      throw StateError(
+          "Can't change the configuration of immutable collections.");
     _asyncAutoflush = value;
   }
 
@@ -254,15 +292,18 @@ class ISet<T> // ignore: must_be_immutable
   ISet._unsafe(this._s, {required this.config});
 
   /// **Unsafe**. Note: Does not sort.
-  ISet._unsafeFromSet(Set<T> set, {required this.config}) : _s = SFlat<T>.unsafe(set);
+  ISet._unsafeFromSet(Set<T> set, {required this.config})
+      : _s = SFlat<T>.unsafe(set);
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
-  ISet<T> get withIdentityEquals =>
-      config.isDeepEquals ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false)) : this;
+  ISet<T> get withIdentityEquals => config.isDeepEquals
+      ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false))
+      : this;
 
   /// Creates a set with `deepEquals` (compares all set items by equality).
-  ISet<T> get withDeepEquals =>
-      config.isDeepEquals ? this : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
+  ISet<T> get withDeepEquals => config.isDeepEquals
+      ? this
+      : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
 
   /// See also: [ConfigList]
   bool get isDeepEquals => config.isDeepEquals;
@@ -361,7 +402,8 @@ class ISet<T> // ignore: must_be_immutable
   /// one by one.
   bool unorderedEqualItems(covariant Iterable? other) {
     if (other == null) return false;
-    if (identical(this, other) || (other is ISet<T> && same(other))) return true;
+    if (identical(this, other) || (other is ISet<T> && same(other)))
+      return true;
     return const UnorderedIterableEquality<dynamic>().equals(_s, other);
   }
 
@@ -375,7 +417,8 @@ class ISet<T> // ignore: must_be_immutable
     if (_isUnequalByHashCode(other)) return false;
 
     return config == other!.config &&
-        (identical(_s, other._s) || (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat));
+        (identical(_s, other._s) ||
+            (flush._s as SFlat).deepSetEquals(other.flush._s as SFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCode]s proves the
@@ -388,7 +431,9 @@ class ISet<T> // ignore: must_be_immutable
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(ISet? other) {
     return (other == null) ||
-        (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
+        (_hashCode != null &&
+            other._hashCode != null &&
+            _hashCode != other._hashCode);
   }
 
   /// Will return `true` only if the sets internals are the same instances
@@ -439,7 +484,8 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> add(T item) {
     ISet<T> result;
     result = config.sort
-        ? ISet._unsafe(SFlat(_s.followedBy([item]), config: config), config: config)
+        ? ISet._unsafe(SFlat(_s.followedBy([item]), config: config),
+            config: config)
         : ISet<T>._unsafe(_s.add(item), config: config);
 
     // A set created with `add` has a larger counter than its source set.
@@ -456,7 +502,8 @@ class ISet<T> // ignore: must_be_immutable
   ISet<T> addAll(Iterable<T>? items) {
     ISet<T> result;
     result = config.sort
-        ? ISet._unsafe(SFlat(_s.followedBy(items!), config: config), config: config)
+        ? ISet._unsafe(SFlat(_s.followedBy(items!), config: config),
+            config: config)
         : ISet<T>._unsafe(_s.addAll(items!), config: config);
 
     // A set created with `addAll` has a larger counter than both its source
@@ -464,7 +511,8 @@ class ISet<T> // ignore: must_be_immutable
     // If the outer set is used, it will be flushed before the source sets.
     // If the source sets are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((items is ISet<T>) ? items._counter : 0)) + 1;
+    result._counter =
+        max(_counter, ((items is ISet<T>) ? items._counter : 0)) + 1;
 
     return result;
   }
@@ -525,7 +573,8 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Expands each element of this [ISet] into zero or more elements.
   @override
-  Iterable<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet? config}) => _s.expand(f);
+  Iterable<E> expand<E>(Iterable<E> Function(T) f, {ConfigSet? config}) =>
+      _s.expand(f);
 
   /// The number of objects in this set.
   @override
@@ -903,12 +952,14 @@ abstract class S<T> implements Iterable<T> {
   /// it will return the current set (same instance).
   /// Note: The items of [items] which are already in the original set will be ignored.
   S<T> addAll(Iterable<T> items) {
-    final Set<T> setToBeAdded = ListSet.of(items.where((item) => !contains(item)));
+    final Set<T> setToBeAdded =
+        ListSet.of(items.where((item) => !contains(item)));
     return setToBeAdded.isEmpty ? this : SAddAll.unsafe(this, setToBeAdded);
   }
 
   // TODO: Still need to implement efficiently.
-  S<T> remove(T element) => !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
+  S<T> remove(T element) =>
+      !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 
   @override
   bool any(bool Function(T) test) => iter.any(test);

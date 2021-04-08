@@ -14,8 +14,8 @@
 
 > _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and myself,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
-> The below documentation is very detailed. For an overview, go to my 
-> <a href="https://medium.com/flutter-community/announcing-fic-fast-immutable-collections-5eb091d1e31f">Medium story</a>. 
+> The below documentation is very detailed. For an overview, go to my
+> <a href="https://medium.com/flutter-community/announcing-fic-fast-immutable-collections-5eb091d1e31f">Medium story</a>.
 > You may also check <a href="https://fanaro.io/articles/fic/fic.html">Philippe's article</a>.
 
 ## 1.1. Introduction
@@ -746,6 +746,83 @@ These are your options to obtain a regular `List` back from an `IList`:
   all `IList` items). This is transparent to you, and will happen at most only once. In other words,
   it will unlock the `IList` lazily, only if necessary. If you never mutate the list, it will be
   very fast to lock this list back into an `IList`.
+
+## 2.6. Iterables to create IList fields
+
+If you have a class that has an `IList` field, you may be tempted to accept an `IList` in its
+constructor:
+
+```
+class Students {
+   final IList<String> names;   
+   Students(this.names);
+}
+```
+
+However, it's more flexible if you allow for any `Iterable` in the constructor:
+
+```
+class Students {
+   final IList<String> names;   
+   Students(Iterable<String> names) : names = IList(names);
+}
+```
+
+Note, this constructor is very fast, because `IList(names)` will return the same `names` instance
+if `names` is already an `IList`.
+
+### Forcing non-default configurations
+
+This can also be used to enforce custom **configurations**. For example:
+
+```
+class Students {
+   static const config = ConfigList(isDeepEquals: false);  
+   final IList<String> names;
+      
+   Students(Iterable<String> names) : 
+      names = IList.withConfig(names, config);
+}
+```
+
+The above code guarantees the `names` field will have the desired `ConfigList` configuration. Note,
+this constructor is still very fast, because `IList(names)` will return the same `names` instance
+if `names` is already an `IList` with the correct configuration. It will only create a new `IList`
+if `names` is not an `IList`
+or if it is but the configuration is different.
+
+### copyWith
+
+The `IList.orNull()` factory is useful if you want your `copyWith()` method to accept `Iterable`s.
+For example :
+
+```
+class Students {
+   static const config = ConfigList(isDeepEquals: false);  
+   final IList<String> names;
+      
+   Students(Iterable<String>? names) : 
+      names = IList.withConfig(names, config);
+   
+   Students copyWith({Iterable<String>? names}) => 
+      Students(names: IList.orNull(names) ?? this.names);
+}
+```
+
+### Nullable fields
+
+In case your `names` field is a nullable `IList`, you can use the `IList.orNull()` factory in your
+class constructor:
+
+```
+class Students {
+   static const config = ConfigList(isDeepEquals: false);  
+   final IList<String>? names;
+      
+   Students(Iterable<String>? names) : 
+      names = IList.orNull(names, config);
+}
+```
 
 # 3. ISet
 
