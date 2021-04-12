@@ -142,7 +142,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
       keyMapper: keyMapper,
       valueMapper: valueMapper,
     );
-    return IMapOfSets.withConfig(map, config!);
+    return IMapOfSets.withConfig(map, config ?? defaultConfig);
   }
 
   /// **Unsafe**. Note: Does not sort.

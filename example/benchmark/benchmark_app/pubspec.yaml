@@ -21,4 +21,4 @@ dependencies:
     path: ../
 
 dev_dependencies:
-  pedantic: ^1.9.2
+  pedantic: ^1.11.0
