@@ -5,7 +5,7 @@ void main() {
   //
   //////////////////////////////////////////////////////////////////////////////
 
-  test("inRange/isNotInRange", () {
+  test("isNullOrZero", () {
     //
     expect((-10).isNullOrZero, false);
     expect((-1).isNullOrZero, false);
@@ -19,7 +19,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("inRange/isNotInRange", () {
+  test("isInRange/isNotInRange", () {
     //
     expect((-10).isInRange(5, 10), false);
     expect(0.isInRange(5, 10), false);
