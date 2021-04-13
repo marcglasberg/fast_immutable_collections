@@ -85,27 +85,27 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
           );
   }
 
-  /// If [mapOfSets] is null, return null.
+  /// If [mapOfSets] is `null`, return `null`.
   ///
-  /// Otherwise, Create an [IMapOfSets] from the [mapOfSets].
+  /// Otherwise, create an [IMapOfSets] from the [mapOfSets].
   ///
   /// This static factory is useful for implementing a `copyWith` method
   /// that accept regular map of sets. For example:
   ///
-  /// ```
-  ///  IMapOfSets<Course, String> studentsPerCourse;
+  /// ```dart
+  /// IMapOfSets<Course, String> studentsPerCourse;
   ///
-  ///  Students copyWith({ Map<Id, Iterable<String>>? studentsPerCourse }) =>
-  ///    Students(studentsPerCourse: IMapOfSets.orNull(studentsPerCourse) ?? this.studentsPerCourse);
+  /// Students copyWith({ Map<Id, Iterable<String>>? studentsPerCourse }) =>
+  ///   Students(studentsPerCourse: IMapOfSets.orNull(studentsPerCourse) ?? this.studentsPerCourse);
   /// ```
   ///
   /// Of course, if your `copyWith` accepts an [IMapOfSets], this is not necessary:
   ///
-  /// ```
-  ///  IMapOfSets<Id, String> studentsPerCourse;
+  /// ```dart
+  /// IMapOfSets<Id, String> studentsPerCourse;
   ///
-  ///  Students copyWith({ IMapOfSets<Id, String>? studentsPerCourse }) =>
-  ///    Students(studentsPerCourse: studentsPerCourse ?? this.studentsPerCourse);
+  /// Students copyWith({ IMapOfSets<Id, String>? studentsPerCourse }) =>
+  ///   Students(studentsPerCourse: studentsPerCourse ?? this.studentsPerCourse);
   /// ```
   ///
   static IMapOfSets<K, V>? orNull<K, V>(
