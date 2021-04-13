@@ -53,6 +53,7 @@ void main() {
 
   test("removeNulls", () {
     expect(({1, 2, null, 3, 4}..removeNulls()), {1, 2, 3, 4});
+    // ignore: equal_elements_in_set
     expect(({1, 2, null, 3, 2, 4}..removeNulls()), {1, 2, 3, 2, 4});
     expect(({null}..removeNulls()), isEmpty);
     expect(({null, 1}..removeNulls()), {1});
@@ -141,6 +142,48 @@ void main() {
           intersectThisWithOther: [3, 4],
           intersectOtherWithThis: [4, 3],
         ));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("DiffAndIntersectResult.toString", () {
+    Set<int> set = {1, 2, 3, 4};
+
+    expect(
+        set.diffAndIntersect({5, 4, 3}).toString(),
+        "DiffAndIntersectResult{\n"
+        "diffThisMinusOther: [1, 2],\n"
+        "diffOtherMinusThis: [5],\n"
+        "intersectThisWithOther: [3, 4],\n"
+        "intersectOtherWithThis: [4, 3]\n"
+        "}");
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("DiffAndIntersectResult.==", () {
+    Set<int> set = {1, 2, 3, 4};
+    DiffAndIntersectResult setDiffAndIntersect = set.diffAndIntersect({5, 4, 3});
+
+    expect(setDiffAndIntersect == setDiffAndIntersect, isTrue);
+    expect(setDiffAndIntersect == <int>{1, 2, 3, 4}.diffAndIntersect({5, 4, 3}), isTrue);
+    // TODO: Marcelo, dado que estamos lidando com sets, == não deveria ser implementado
+    // com SetEquality? Apesar de que, realmente, ordenamento pode deixar isso mais previsível.
+    expect(setDiffAndIntersect == <int>{1, 2, 4, 3}.diffAndIntersect({5, 3, 4}), isTrue);
+    expect(setDiffAndIntersect == <int>{1, 2, 3, 4}.diffAndIntersect({10, 100}), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("DiffAndIntersectResult.hashCode", () {
+    Set<int> set = {1, 2, 3, 4};
+    DiffAndIntersectResult setDiffAndIntersect = set.diffAndIntersect({5, 4, 3});
+
+    expect(setDiffAndIntersect.hashCode, setDiffAndIntersect.hashCode);
+    // TODO: Marcelo, internamente, as listas internas resultantes de cada chamada da
+    // interseção abaixo são objetos distintos, não? O hashcode será muito
+    // provavelmente distinto, acho.
+    expect(setDiffAndIntersect.hashCode, <int>{1, 2, 3, 4}.diffAndIntersect({5, 4, 3}).hashCode);
   });
 
   //////////////////////////////////////////////////////////////////////////////
