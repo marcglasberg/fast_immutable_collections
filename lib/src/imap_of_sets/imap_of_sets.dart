@@ -21,8 +21,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   static set defaultConfig(ConfigMapOfSets config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration of immutable collections.");
     _defaultConfig = config;
   }
 
@@ -50,9 +49,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// Note: This will flush the map and all its internal sets.
   @override
-  bool get isFlushed =>
-      _mapOfSets.isFlushed &&
-      _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
+  bool get isFlushed => _mapOfSets.isFlushed && _mapOfSets.values.every((ISet<V> s) => s.isFlushed);
 
   /// Returns an empty [IMapOfSets], with the given configuration. If a
   /// configuration is not provided, it will use the default configuration.
@@ -81,8 +78,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
         : IMapOfSets._unsafe(
             IMap.fromIterables(
               mapOfSets.keys,
-              mapOfSets.values
-                  .map((value) => ISet.withConfig(value, configSet)),
+              mapOfSets.values.map((value) => ISet.withConfig(value, configSet)),
               config: configMap,
             ),
             config,
@@ -116,9 +112,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     Map<K, Iterable<V>>? map, [
     ConfigMapOfSets? config,
   ]) =>
-      (map == null)
-          ? null
-          : IMapOfSets.withConfig(map, config ?? defaultConfig);
+      (map == null) ? null : IMapOfSets.withConfig(map, config ?? defaultConfig);
 
   /// Creates a map of sets instance in which the keys and values are
   /// computed from the [iterable].
@@ -164,8 +158,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     var configSet = config.asConfigSet;
 
     if ((mapOfSets.config == configMap) &&
-        (mapOfSets.values.every((set) => set.config == configSet)))
-      return mapOfSets;
+        (mapOfSets.values.every((set) => set.config == configSet))) return mapOfSets;
 
     return mapOfSets.map(
       (key, value) => MapEntry(key, value.withConfig(configSet)),
@@ -256,8 +249,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Returns an [IList] of the map keys.
   /// Optionally, you may provide a [config] for the list.
-  IList<K> keyList({ConfigList? config}) =>
-      IList.withConfig(keys, config ?? IList.defaultConfig);
+  IList<K> keyList({ConfigList? config}) => IList.withConfig(keys, config ?? IList.defaultConfig);
 
   /// Returns an [Iterable] of the map values.
   Iterable<ISet<V>> get sets => _mapOfSets.values;
@@ -303,8 +295,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ISet<ISet<V>> get setsAsSet => ISet(sets).withDeepEquals;
 
   /// Return all [values] of all [sets], removing duplicates.
-  ISet<V> get valuesAsSet => ISet.fromIterable(_mapOfSets.entries,
-      mapper: ((MapEntry<K, ISet<V>> e) => e.value));
+  ISet<V> get valuesAsSet =>
+      ISet.fromIterable(_mapOfSets.entries, mapper: ((MapEntry<K, ISet<V>> e) => e.value));
 
   /// Return all [keys].
   IList<K> get keysAsList => IList(keys).withDeepEquals;
@@ -415,9 +407,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
-    return (countRemoved == 0)
-        ? this
-        : IMapOfSets<K, V>._unsafe(map.lock, config);
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config);
   }
 
   /// Remove, from the given [key] set, all values that satisfy the given [test].
@@ -474,9 +464,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
-    return (countRemoved == 0)
-        ? this
-        : IMapOfSets<K, V>._unsafe(map.lock, config);
+    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config);
   }
 
   /// Removes the [value] from the set of the corresponding [key],
@@ -519,9 +507,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   IMapOfSets<K, V> removeSet(K key) {
     IMap<K, ISet<V>> newMapOfSets = _mapOfSets.remove(key);
-    return _mapOfSets.same(newMapOfSets)
-        ? this
-        : IMapOfSets<K, V>._unsafe(newMapOfSets, config);
+    return _mapOfSets.same(newMapOfSets) ? this : IMapOfSets<K, V>._unsafe(newMapOfSets, config);
   }
 
   /// Return the [set] for the given [key].
@@ -613,8 +599,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// order. This may be slow for very large sets, since it compares each item,
   /// one by one.
   @override
-  bool equalItems(covariant Iterable<MapEntry> other) =>
-      _mapOfSets.equalItems(other);
+  bool equalItems(covariant Iterable<MapEntry> other) => _mapOfSets.equalItems(other);
 
   /// Will return `true` only if the list items are equal, and the map of sets configurations
   /// ([ConfigMapOfSets]) are equal. This may be slow for very large maps, since it compares each
@@ -624,19 +609,16 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     if (identical(this, other)) return true;
 
     return config == other.config &&
-        (identical(_mapOfSets, other._mapOfSets) ||
-            _mapOfSets.equalItemsToIMap(other._mapOfSets));
+        (identical(_mapOfSets, other._mapOfSets) || _mapOfSets.equalItemsToIMap(other._mapOfSets));
   }
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMap<RK, RV>(IMap<RK, ISet<RV>> other) =>
-      _mapOfSets.equalItemsToIMap(other);
+  bool equalItemsToIMap<RK, RV>(IMap<RK, ISet<RV>> other) => _mapOfSets.equalItemsToIMap(other);
 
   /// Will return `true` only if the two maps have the same number of entries, and
   /// if the entries of the two maps are pairwise equal on both key and value.
-  bool equalItemsToIMapOfSets(IMapOfSets other) =>
-      _mapOfSets.equalItemsToIMap(other._mapOfSets);
+  bool equalItemsToIMapOfSets(IMapOfSets other) => _mapOfSets.equalItemsToIMap(other._mapOfSets);
 
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
@@ -746,8 +728,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     ConfigMapOfSets? config,
   }) {
     bool Function(RK key, ISet<RV> set)? ifRemove;
-    if ((config ?? this.config).removeEmptySets)
-      ifRemove = (RK key, ISet<RV> set) => set.isEmpty;
+    if ((config ?? this.config).removeEmptySets) ifRemove = (RK key, ISet<RV> set) => set.isEmpty;
 
     return IMapOfSets<RK, RV>.from(
       _mapOfSets.map(mapper, ifRemove: ifRemove),
@@ -802,8 +783,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     bool Function(K key, ISet<V> set)? ifRemove;
     if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
 
-    return IMapOfSets<K, V>._unsafe(
-        _mapOfSets.updateAll(update, ifRemove: ifRemove), config);
+    return IMapOfSets<K, V>._unsafe(_mapOfSets.updateAll(update, ifRemove: ifRemove), config);
   }
 
   /// Return a map where the keys are the values, and the values are the keys.
@@ -830,8 +810,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return a map where the keys are the values, and the values are the keys.
   /// Empty sets will become the key `null`.
   /// You can pass a new [config] for the map.
-  IMapOfSets<V?, K> invertKeysAndValuesKeepingNullKeys(
-      [ConfigMapOfSets? config]) {
+  IMapOfSets<V?, K> invertKeysAndValuesKeepingNullKeys([ConfigMapOfSets? config]) {
     Map<V?, Set<K>> result = {};
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       K key = entry.key;

@@ -1,7 +1,6 @@
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/kt.dart";
 
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "../../utils/table_score_emitter.dart";

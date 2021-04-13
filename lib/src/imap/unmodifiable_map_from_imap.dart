@@ -3,7 +3,6 @@ import "dart:collection";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
-
 import "imap.dart";
 import "map_extension.dart";
 

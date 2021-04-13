@@ -316,19 +316,14 @@ extension FicListExtension<T> on List<T> {
   /// ```dart
   /// list = list1 + list2 + list3 + list4 + list5;
   /// ```
-  List<T> concat(List<T>? list2,
-      [List<T>? list3, List<T>? list4, List<T>? list5]) {
+  List<T> concat(List<T>? list2, [List<T>? list3, List<T>? list4, List<T>? list5]) {
     List<T> list1 = this;
     list2 ??= const [];
     list3 ??= const [];
     list4 ??= const [];
     list5 ??= const [];
 
-    var totalLength = list1.length +
-        list2.length +
-        list3.length +
-        list4.length +
-        list5.length;
+    var totalLength = list1.length + list2.length + list3.length + list4.length + list5.length;
 
     if (totalLength == 0) return const [];
 
@@ -348,8 +343,7 @@ extension FicListExtension<T> on List<T> {
       ..setAll(list1.length, list2)
       ..setAll(list1.length + list2.length, list3)
       ..setAll(list1.length + list2.length + list3.length, list4)
-      ..setAll(
-          list1.length + list2.length + list3.length + list4.length, list5);
+      ..setAll(list1.length + list2.length + list3.length + list4.length, list5);
   }
 
   /// Cut the original list into one or more lists with at most [length] items.

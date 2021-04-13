@@ -3,7 +3,6 @@ import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
 
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "../../utils/table_score_emitter.dart";
@@ -66,8 +65,7 @@ class MutableSetAddAllBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ISetAddAllBenchmark extends SetBenchmarkBase {
-  ISetAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "ISet", emitter: emitter);
+  ISetAddAllBenchmark({required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
   late ISet<int> iSet;
   late ISet<int> toBeAdded;

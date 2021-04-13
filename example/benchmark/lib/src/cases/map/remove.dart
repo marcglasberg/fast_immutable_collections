@@ -3,7 +3,6 @@ import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:kt_dart/collection.dart";
 
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "../../utils/table_score_emitter.dart";
@@ -67,8 +66,7 @@ class MutableMapRemoveBenchmark extends MapBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class IMapRemoveBenchmark extends MapBenchmarkBase {
-  IMapRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "IMap", emitter: emitter);
+  IMapRemoveBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
 
   late IMap<String, int> iMap;
 
