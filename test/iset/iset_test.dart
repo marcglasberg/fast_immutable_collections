@@ -43,6 +43,23 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("orNull", () {
+    // 1) Null -> Null
+    Set<int>? set;
+    expect(ISet.orNull(set), isNull);
+
+    // 2) Set -> ISet
+    set = <int>{1, 2, 3};
+    expect(ISet.orNull(set), {1, 2, 3});
+
+    // 3) Set with Config -> ISet with Config
+    ISet<int>? iset = ISet.orNull(set, ConfigSet(isDeepEquals: false));
+    expect(iset, {1, 2, 3});
+    expect(iset?.config, ConfigSet(isDeepEquals: false));
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("isEmpty | isNotEmpty", () {
     expect(ISet().isEmpty, isTrue);
     expect(ISet({}).isEmpty, isTrue);
