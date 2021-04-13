@@ -103,7 +103,7 @@ class IList<T> // ignore: must_be_immutable
       throw UnsupportedError("IList.unsafe is disallowed.");
   }
 
-  /// If [iterable] is null, return null.
+  /// If [Iterable] is `null`, return `null`.
   ///
   /// Otherwise, Create an [IList] from the [Iterable].
   /// Fast, if the Iterable is another [IList].
@@ -111,20 +111,20 @@ class IList<T> // ignore: must_be_immutable
   /// This static factory is useful for implementing a `copyWith` method
   /// that accept an [Iterable]. For example:
   ///
-  /// ```
-  ///  IList<String> names;
+  /// ```dart
+  /// IList<String> names;
   ///
-  ///  Students copyWith({ Iterable<String>? names }) =>
-  ///    Students(names: IList.orNull(names) ?? this.names);
+  /// Students copyWith({Iterable<String>? names}) =>
+  ///   Students(names: IList.orNull(names) ?? this.names);
   /// ```
   ///
   /// Of course, if your `copyWith` accepts an [IList], this is not necessary:
   ///
-  /// ```
-  ///  IList<String> names;
+  /// ```dart
+  /// IList<String> names;
   ///
-  ///  Students copyWith({ IList<String>? names }) =>
-  ///    Students(names: names ?? this.names);
+  /// Students copyWith({IList<String>? names}) =>
+  ///   Students(names: names ?? this.names);
   /// ```
   ///
   static IList<T>? orNull<T>(
@@ -1689,4 +1689,3 @@ class InternalsForTestingPurposesIList {
 }
 
 // /////////////////////////////////////////////////////////////////////////////
-
