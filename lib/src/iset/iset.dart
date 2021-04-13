@@ -118,28 +118,28 @@ class ISet<T> // ignore: must_be_immutable
       throw UnsupportedError("ISet.unsafe is disallowed.");
   }
 
-  /// If [iterable] is null, return null.
+  /// If [Iterable] is `null`, return `null`.
   ///
-  /// Otherwise, Create an [ISet] from the [Iterable].
-  /// Fast, if the Iterable is another [ISet].
+  /// Otherwise, create an [ISet] from the [Iterable].
+  /// Fast, if the [Iterable] is another [ISet].
   ///
   /// This static factory is useful for implementing a `copyWith` method
   /// that accept an [Iterable]. For example:
   ///
-  /// ```
-  ///  ISet<String> names;
+  /// ```dart
+  /// ISet<String> names;
   ///
-  ///  Students copyWith({ Iterable<String>? names }) =>
-  ///    Students(names: ISet.orNull(names) ?? this.names);
+  /// Students copyWith({Iterable<String>? names}) =>
+  ///   Students(names: ISet.orNull(names) ?? this.names);
   /// ```
   ///
   /// Of course, if your `copyWith` accepts an [ISet], this is not necessary:
   ///
-  /// ```
-  ///  ISet<String> names;
+  /// ```dart
+  /// ISet<String> names;
   ///
-  ///  Students copyWith({ ISet<String>? names }) =>
-  ///    Students(names: names ?? this.names);
+  /// Students copyWith({ISet<String>? names}) =>
+  ///   Students(names: names ?? this.names);
   /// ```
   ///
   static ISet<T>? orNull<T>(

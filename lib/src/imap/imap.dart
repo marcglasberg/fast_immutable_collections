@@ -228,27 +228,27 @@ class IMap<K, V> // ignore: must_be_immutable
       throw UnsupportedError("IMap.unsafe is disallowed.");
   }
 
-  /// If [map] is null, return null.
+  /// If [Map] is `null`, return `null`.
   ///
-  /// Otherwise, Create an [IMap] from the [map].
+  /// Otherwise, create an [IMap] from the [Map].
   ///
   /// This static factory is useful for implementing a `copyWith` method
-  /// that accept maps. For example:
+  /// that accepts maps. For example:
   ///
-  /// ```
-  ///  IMap<Id, String> studentsPerId;
+  /// ```dart
+  /// IMap<Id, String> studentsPerId;
   ///
-  ///  Students copyWith({ Map<Id, String>? studentsPerId }) =>
-  ///    Students(studentsPerId: IMap.orNull(studentsPerId) ?? this.studentsPerId);
+  /// Students copyWith({Map<Id, String>? studentsPerId}) =>
+  ///   Students(studentsPerId: IMap.orNull(studentsPerId) ?? this.studentsPerId);
   /// ```
   ///
   /// Of course, if your `copyWith` accepts an [IMap], this is not necessary:
   ///
-  /// ```
-  ///  IMap<Id, String> studentsPerId;
+  /// ```dart
+  /// IMap<Id, String> studentsPerId;
   ///
-  ///  Students copyWith({ IMap<Id, String>? studentsPerId }) =>
-  ///    Students(studentsPerId: studentsPerId ?? this.studentsPerId);
+  /// Students copyWith({IMap<Id, String>? studentsPerId}) =>
+  ///   Students(studentsPerId: studentsPerId ?? this.studentsPerId);
   /// ```
   ///
   static IMap<K, V>? orNull<K, V>(
