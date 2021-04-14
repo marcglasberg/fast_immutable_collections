@@ -87,7 +87,46 @@ implementation details. Later in this document, we provide benchmarks so that yo
 
 ---
 
+**Outline**
+
+<ul>
+  <li>
+    <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
+  </li>
+  <li><a href="#2-ilist">2. IList</a></li>
+  <li><a href="#3-iset">3. ISet</a></li>
+  <li><a href="#4-imap">4. IMap</a></li>
+  <li><a href="#5-imapofsets">5. IMapOfSets</a></li>
+  <li><a href="#6-listset">6. ListSet</a></li>
+  <li><a href="#7-listmap">7. ListMap</a></li>
+  <li><a href="#8-extensions-and-helpers">8. Extensions and Helpers</a></li>
+  <li><a href="#9-comparators">9. Comparators</a></li>
+  <li><a href="#10-flushing">10. Flushing</a></li>
+  <li><a href="#11-json-support">11. JSON Support</a></li>
+  <li><a href="#12-benchmarks">12. Benchmarks</a></li>
+  <li><a href="#13-immutable-objects">13. Immutable Objects</a></li>
+  <li>
+    <a href="#14-performance-and-memory-savings"
+      >14. Performance and Memory Savings</a
+    >
+  </li>
+  <li>
+    <a
+      href="#15-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
+      >15. The above text has about 10% of original content. The rest is
+      shamelessly copied from the following pages. Please, visit them:</a
+    >
+  </li>
+  <li>
+    <a href="#16-should-i-use-this-package">16. Should I use this package?</a>
+  </li>
+  <li><a href="#17-implementation-details">17. Implementation details</a></li>
+  <li><a href="#18-bibliography">18. Bibliography</a></li>
+  <li><a href="#19-final-note">19. Final Note</a></li>
+</ul>
+
 **Table of Contents**
+
 <div id="user-content-toc">
   <ul>
     <li>
@@ -113,6 +152,20 @@ implementation details. Later in this document, we provide benchmarks so that yo
           >
         </li>
         <li><a href="#25-advanced-usage">2.5. Advanced usage</a></li>
+        <li>
+          <a href="#26-iterables-to-create-ilist-fields"
+            >2.6. Iterables to create IList fields</a
+          >
+          <ul>
+            <li>
+              <a href="#261-forcing-non-default-configurations"
+                >2.6.1. Forcing non-default configurations</a
+              >
+            </li>
+            <li><a href="#262-copywith">2.6.2. copyWith</a></li>
+            <li><a href="#263-nullable-fields">2.6.3. Nullable fields</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li>
@@ -149,17 +202,17 @@ implementation details. Later in this document, we provide benchmarks so that yo
     <li><a href="#6-listset">6. ListSet</a></li>
     <li><a href="#7-listmap">7. ListMap</a></li>
     <li>
-      <a href="#8-extensions-and-helpers">8. Extensions and helpers</a>
+      <a href="#8-extensions-and-helpers">8. Extensions and Helpers</a>
       <ul>
         <li>
           <a href="#81-iterable-helpers-and-extensions"
-            >8.1 Iterable helpers and extensions</a
+            >8.1 Iterable Helpers and Extensions</a
           >
         </li>
-        <li><a href="#82-list-extensions">8.2 List extensions</a></li>
-        <li><a href="#82-list-extensions-1">8.2 List extensions</a></li>
-        <li><a href="#83-iterator-extensions">8.3 Iterator extensions</a></li>
-        <li><a href="#84-boolean-extensions">8.4 Boolean extensions</a></li>
+        <li><a href="#82-list-extensions">8.2 List Extensions</a></li>
+        <li><a href="#82-list-extensions-1">8.2 List Extensions</a></li>
+        <li><a href="#83-iterator-extensions">8.3 Iterator Extensions</a></li>
+        <li><a href="#84-boolean-extensions">8.4 Boolean Extensions</a></li>
       </ul>
     </li>
     <li>
@@ -181,95 +234,96 @@ implementation details. Later in this document, we provide benchmarks so that yo
     <li>
       <a href="#10-flushing">10. Flushing</a>
       <ul>
-        <li><a href="#101-auto-flush">10.1. Auto-flush</a></li>
-        <li><a href="#102-sync-auto-flush">10.2. Sync Auto-flush</a></li>
-        <li><a href="#103-async-auto-flush">10.3. Async Auto-flush</a></li>
+        <li><a href="#101-auto-flush">10.1. Auto-Flush</a></li>
+        <li><a href="#102-sync-auto-flush">10.2. Sync Auto-Flush</a></li>
+        <li><a href="#103-async-auto-flush">10.3. Async Auto-Flush</a></li>
       </ul>
     </li>
+    <li><a href="#11-json-support">11. JSON Support</a></li>
     <li>
-      <a href="#11-benchmarks">11. Benchmarks</a>
+      <a href="#12-benchmarks">12. Benchmarks</a>
       <ul>
         <li>
-          <a href="#111-list-benchmarks">11.1. List Benchmarks</a>
+          <a href="#121-list-benchmarks">12.1. List Benchmarks</a>
           <ul>
-            <li><a href="#1111-list-add">11.1.1. List Add</a></li>
-            <li><a href="#1112-list-addall">11.1.2. List AddAll</a></li>
-            <li><a href="#1113-list-contains">11.1.3. List Contains</a></li>
-            <li><a href="#1114-list-empty">11.1.4. List Empty</a></li>
-            <li><a href="#1115-list-insert">11.1.5. List Insert</a></li>
-            <li><a href="#1116-list-read">11.1.6. List Read</a></li>
-            <li><a href="#1117-list-remove">11.1.7. List Remove</a></li>
+            <li><a href="#1211-list-add">12.1.1. List Add</a></li>
+            <li><a href="#1212-list-addall">12.1.2. List AddAll</a></li>
+            <li><a href="#1213-list-contains">12.1.3. List Contains</a></li>
+            <li><a href="#1214-list-empty">12.1.4. List Empty</a></li>
+            <li><a href="#1215-list-insert">12.1.5. List Insert</a></li>
+            <li><a href="#1216-list-read">12.1.6. List Read</a></li>
+            <li><a href="#1217-list-remove">12.1.7. List Remove</a></li>
           </ul>
         </li>
         <li>
-          <a href="#112-map-benchmarks">11.2. Map Benchmarks</a>
+          <a href="#122-map-benchmarks">12.2. Map Benchmarks</a>
           <ul>
-            <li><a href="#1121-map-add">11.2.1. Map Add</a></li>
-            <li><a href="#1122-map-addall">11.2.2. Map AddAll</a></li>
+            <li><a href="#1221-map-add">12.2.1. Map Add</a></li>
+            <li><a href="#1222-map-addall">12.2.2. Map AddAll</a></li>
             <li>
-              <a href="#1123-map-containsvalue">11.2.3. Map ContainsValue</a>
+              <a href="#1223-map-containsvalue">12.2.3. Map ContainsValue</a>
             </li>
-            <li><a href="#1124-map-empty">11.2.4. Map Empty</a></li>
-            <li><a href="#1125-map-read">11.2.5. Map Read</a></li>
-            <li><a href="#1125-map-remove">11.2.5. Map Remove</a></li>
+            <li><a href="#1224-map-empty">12.2.4. Map Empty</a></li>
+            <li><a href="#1225-map-read">12.2.5. Map Read</a></li>
+            <li><a href="#1225-map-remove">12.2.5. Map Remove</a></li>
           </ul>
         </li>
         <li>
-          <a href="#113-set-benchmarks">11.3. Set Benchmarks</a>
+          <a href="#123-set-benchmarks">12.3. Set Benchmarks</a>
           <ul>
-            <li><a href="#1125-set-add">11.2.5. Set Add</a></li>
-            <li><a href="#1126-set-addall">11.2.6. Set AddAll</a></li>
-            <li><a href="#1126-set-contains">11.2.6. Set Contains</a></li>
-            <li><a href="#1126-set-empty">11.2.6. Set Empty</a></li>
-            <li><a href="#1126-set-remove">11.2.6. Set Remove</a></li>
+            <li><a href="#1225-set-add">12.2.5. Set Add</a></li>
+            <li><a href="#1226-set-addall">12.2.6. Set AddAll</a></li>
+            <li><a href="#1226-set-contains">12.2.6. Set Contains</a></li>
+            <li><a href="#1226-set-empty">12.2.6. Set Empty</a></li>
+            <li><a href="#1226-set-remove">12.2.6. Set Remove</a></li>
           </ul>
         </li>
       </ul>
     </li>
     <li>
-      <a href="#12-immutable-objects">12. Immutable Objects</a>
+      <a href="#13-immutable-objects">13. Immutable Objects</a>
       <ul>
         <li>
-          <a href="#121-whats-the-difference-between-unmodifiable-and-immutable"
-            >12.1. What&#39;s the difference between Unmodifiable and
+          <a href="#131-whats-the-difference-between-unmodifiable-and-immutable"
+            >13.1. What&#39;s the difference between Unmodifiable and
             Immutable?</a
           >
         </li>
-        <li><a href="#122-clean-code">12.2. Clean-code</a></li>
+        <li><a href="#132-clean-code">13.2. Clean-code</a></li>
       </ul>
     </li>
     <li>
-      <a href="#13-performance-and-memory-savings"
-        >13. Performance and Memory Savings</a
+      <a href="#14-performance-and-memory-savings"
+        >14. Performance and Memory Savings</a
       >
     </li>
     <li>
       <a
-        href="#14-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
-        >14. The above text has about 10% of original content. The rest is
+        href="#15-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
+        >15. The above text has about 10% of original content. The rest is
         shamelessly copied from the following pages. Please, visit them:</a
       >
     </li>
     <li>
-      <a href="#15-should-i-use-this-package">15. Should I use this package?</a>
+      <a href="#16-should-i-use-this-package">16. Should I use this package?</a>
     </li>
-    <li><a href="#16-implementation-details">16. Implementation details</a></li>
+    <li><a href="#17-implementation-details">17. Implementation details</a></li>
     <li>
-      <a href="#17-bibliography">17. Bibliography</a>
+      <a href="#18-bibliography">18. Bibliography</a>
       <ul>
         <li>
-          <a href="#171-projects">17.1. Projects</a>
+          <a href="#181-projects">18.1. Projects</a>
           <ul>
-            <li><a href="#1711-dart">17.1.1. Dart</a></li>
-            <li><a href="#1712-java">17.1.2. Java</a></li>
-            <li><a href="#1713-js">17.1.3. JS</a></li>
+            <li><a href="#1811-dart">18.1.1. Dart</a></li>
+            <li><a href="#1812-java">18.1.2. Java</a></li>
+            <li><a href="#1813-js">18.1.3. JS</a></li>
           </ul>
         </li>
-        <li><a href="#172-articles">17.2. Articles</a></li>
-        <li><a href="#173-other-resources">17.3. Other Resources</a></li>
+        <li><a href="#182-articles">18.2. Articles</a></li>
+        <li><a href="#183-other-resources">18.3. Other Resources</a></li>
       </ul>
     </li>
-    <li><a href="#18-final-note">18. Final Note</a></li>
+    <li><a href="#19-final-note">19. Final Note</a></li>
   </ul>
 </div>
 
@@ -771,7 +825,7 @@ class Students {
 Note, this constructor is very fast, because `IList(names)` will return the same `names` instance
 if `names` is already an `IList`.
 
-### Forcing non-default configurations
+### 2.6.1. Forcing non-default configurations
 
 This can also be used to enforce custom **configurations**. For example:
 
@@ -791,7 +845,7 @@ if `names` is already an `IList` with the correct configuration. It will only cr
 if `names` is not an `IList`
 or if it is but the configuration is different.
 
-### copyWith
+### 2.6.2. copyWith
 
 The `IList.orNull()` factory is useful if you want your `copyWith()` method to accept `Iterable`s.
 For example :
@@ -809,7 +863,7 @@ class Students {
 }
 ```
 
-### Nullable fields
+### 2.6.3. Nullable fields
 
 In case your `names` field is a nullable `IList`, you can use the `IList.orNull()` factory in your
 class constructor:
@@ -893,8 +947,8 @@ than for `IList`. Please read the `IList` explanation first, before trying to un
   classes based on the `ISet`. This helps you create more strongly typed collections, and add your
   own methods to them.
 
-- You can flush an `ISet` by using the getter `.flush`. Note flush just optimizes the set **
-  internally**, and no external difference will be visible. Depending on the global configuration,
+- You can flush an `ISet` by using the getter `.flush`. Note flush just optimizes the set **internally**,
+  and no external difference will be visible. Depending on the global configuration,
   the `ISet`s will flush automatically for you.
 
 - There are a few ways to lock and unlock a set, which will have different results in speed and
@@ -1059,8 +1113,8 @@ than for IList. Please read the IList explanation first, before trying to unders
   by using the following `IMap` methods:
   `equalItems`, `equalItemsAndConfig`, `unorderedEqualItems`, `equalItemsToIMap` and `same`.
 
-- You can flush an `IMap` by using the getter `.flush`. Note flush just optimizes the map **
-  internally**, and no external difference will be visible. Depending on the global configuration,
+- You can flush an `IMap` by using the getter `.flush`. Note flush just optimizes the map **internally**,
+  and no external difference will be visible. Depending on the global configuration,
   the `IMap`s will flush automatically for you.
 
 - There are a few ways to lock and unlock a map, which will have different results in speed and
@@ -1255,11 +1309,11 @@ Also, you can efficiently read its information by index, by using the `entryAt`,
 and `valueAt` methods. The disadvantage, of course, is that `ListMap` has a fixed size, while
 a `LinkedHashMap` does not.
 
-# 8. Extensions and helpers
+# 8. Extensions and Helpers
 
 These are some of the provided helpers and extensions:
 
-## 8.1 Iterable helpers and extensions
+## 8.1 Iterable Helpers and Extensions
 
 * `combineIterables` is a top-level function that combines two iterables into one, by applying
   a `combine` function.
@@ -1284,7 +1338,7 @@ These are some of the provided helpers and extensions:
 * `Iterable.sortedLike` returns a list, sorted according to the order specified by the ordering
   iterable. Items which don't appear in the ordering iterable will be included in the end.
 
-## 8.2 List extensions
+## 8.2 List Extensions
 
 * `List.sortOrdered` is similar to `sort`, but uses
   a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort). Contrary to `sort`,
@@ -1335,17 +1389,17 @@ These are some of the provided helpers and extensions:
 
 * `List.reversedView` returns a list of the objects in this list, in reverse order.
 
-## 8.2 List extensions
+## 8.2 List Extensions
 
 * `Set.toggle` If the item doesn't exist in the set, add it and return `true`. Otherwise, if the
   item already exists in the set, remove it and return `false`.
 
-## 8.3 Iterator extensions
+## 8.3 Iterator Extensions
 
 * `toIterable`, `toList`, `toSet`, `toIList`, and `toISet` convert the iterator into an
   `Iterable`, `List`, `Set`, `IList`, and `ISet`, respectively.
 
-## 8.4 Boolean extensions
+## 8.4 Boolean Extensions
 
 * `compareTo` makes `true` > `false`.
 
@@ -1529,7 +1583,7 @@ flush the list again. So you don't need to worry about flushing the list more th
 Also, note that flushing just optimizes the list **internally**, and no external difference will be
 visible. So, for all intents and purposes, you may consider that `flush` doesn't mutate the list.
 
-## 10.1. Auto-flush
+## 10.1. Auto-Flush
 
 Usually you don't need to flush your collections manually. Depending on the global configuration,
 the collections will flush automatically for you. The global configuration default is to have
@@ -1552,7 +1606,7 @@ Auto-flush is an advanced topic, and you don't need to read the following detail
 all to use the immutable collections. However, in case you want to tweak the auto-flush
 configuration, here it goes...
 
-## 10.2. Sync Auto-flush
+## 10.2. Sync Auto-Flush
 
 If your auto-flush is set to occur synchronously:
 
@@ -1560,7 +1614,7 @@ Each collection keeps a `counter` variable which starts at `0`
 and is incremented each time some collection methods are called. As soon as this counter reaches a
 certain value called the `flushFactor`, the collection is flushed.
 
-## 10.3. Async Auto-flush
+## 10.3. Async Auto-Flush
 
 If your auto-flush is set to occur asynchronously:
 
@@ -1636,7 +1690,7 @@ IMap.flushFactor = 15;
 ImmutableCollection.lockConfig();
 ```
 
-# 11. Json support
+# 11. JSON Support
 
 Most FIC collections convert to and from Json, through their `.fromJson()` and `.toJson()`.
 
@@ -1656,7 +1710,7 @@ class MyClass {
 }
 ```
 
-# 11. Benchmarks
+# 12. Benchmarks
 
 Having benchmarks for this project is necessary for justifying its existence.
 The [`benchmark` package][benchmark] — and its companion app [benchmark_app][benchmark_app] —
@@ -1692,9 +1746,9 @@ appear:
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/Example%20Run.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/FIC%20Opening.png" height="500px"/>
 
-### 11.1. List Benchmarks
+### 12.1. List Benchmarks
 
-#### 11.1.1. List Add
+#### 12.1.1. List Add
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_add_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_add_10k.png" height="500px"/>
@@ -1709,84 +1763,84 @@ project.
 <br />
 <br />
 
-#### 11.1.2. List AddAll
+#### 12.1.2. List AddAll
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_addAll_10k.png" height="500px"/>
 
-#### 11.1.3. List Contains
+#### 12.1.3. List Contains
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_contains_10k.png" height="500px"/>
 
-#### 11.1.4. List Empty
+#### 12.1.4. List Empty
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_empty.png" height="500px"/>
 
-#### 11.1.5. List Insert
+#### 12.1.5. List Insert
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_insert_1k.png" height="500px"/>
 
 *Note: We haven't implemented the fast code for list inserts yet. When we do, it will become faster
 than the mutable List insert.*
 
-#### 11.1.6. List Read
+#### 12.1.6. List Read
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_read_100k.png" height="500px"/>
 
-#### 11.1.7. List Remove
+#### 12.1.7. List Remove
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/list_remove_10k.png" height="500px"/>
 
-### 11.2. Map Benchmarks
+### 12.2. Map Benchmarks
 
-#### 11.2.1. Map Add
+#### 12.2.1. Map Add
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_add_10.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_add_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_add_10k.png" height="500px"/>
 
-#### 11.2.2. Map AddAll
+#### 12.2.2. Map AddAll
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_addAll_100k.png" height="500px"/>
 
-#### 11.2.3. Map ContainsValue
+#### 12.2.3. Map ContainsValue
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_containsValue_10k.png" height="500px"/>
 
-#### 11.2.4. Map Empty
+#### 12.2.4. Map Empty
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_empty.png" height="500px"/>
 
-#### 11.2.5. Map Read
+#### 12.2.5. Map Read
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_read_100k.png" height="500px"/>
 
-#### 11.2.5. Map Remove
+#### 12.2.5. Map Remove
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/map_remove_100k.png" height="500px"/>
 
-### 11.3. Set Benchmarks
+### 12.3. Set Benchmarks
 
-#### 11.2.5. Set Add
+#### 12.2.5. Set Add
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_add_10.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_add_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_add_10k.png" height="500px"/>
 
-#### 11.2.6. Set AddAll
+#### 12.2.6. Set AddAll
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_addAll_10k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_addAll_100k.png" height="500px"/>
 
-#### 11.2.6. Set Contains
+#### 12.2.6. Set Contains
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_contains_1k.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_contains_10k.png" height="500px"/>
 
-#### 11.2.6. Set Empty
+#### 12.2.6. Set Empty
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_empty.png" height="500px"/>
 
-#### 11.2.6. Set Remove
+#### 12.2.6. Set Remove
 
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_remove_100.png" height="500px"/>
 <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/benchmark_screenshots/set_remove_1k.png" height="500px"/>
@@ -1795,7 +1849,7 @@ than the mutable List insert.*
 
 ---
 
-# 12. Immutable Objects
+# 13. Immutable Objects
 
 Immutable objects are those that cannot be changed once created. A Dart `String` is a typical
 example of a commonly used immutable object.
@@ -1861,7 +1915,7 @@ permanent and should not be changed.
 
 <br>
 
-## 12.1. What's the difference between Unmodifiable and Immutable?
+## 13.1. What's the difference between Unmodifiable and Immutable?
 
 Doesn't <a href="https://api.dart.dev/stable/2.10.4/dart-core/List/List.unmodifiable.html">
 `List.unmodifiable()`</a>
@@ -1889,7 +1943,7 @@ unmodifiable list will throw an error. So it makes it harder to reason about the
 For clean-code reasons what is needed is a **different type**, one that guarantees the object can't
 be mutated. That's why `IList` does not extend `List`.
 
-## 12.2. Clean-code
+## 13.2. Clean-code
 
 Late in the evening, exhausted and frustrated you find out that the people who implemented
 
@@ -1924,7 +1978,7 @@ again.
 
 <br>
 
-# 13. Performance and Memory Savings
+# 14. Performance and Memory Savings
 
 Let's start off by stating the obvious. Most mutable collection operations are generally faster than
 their immutable counterparts. That's a basic fact of life. Consider a hash table for example. A
@@ -2024,7 +2078,7 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   If the function parameters are all immutable and equal by identity (which is a very cheap
   comparison) you can return the cached value.
 
-# 14. The above text has about 10% of original content. The rest is shamelessly copied from the following pages. Please, visit them:
+# 15. The above text has about 10% of original content. The rest is shamelessly copied from the following pages. Please, visit them:
 
 * <a href="https://medium.com/dartlang/darts-built-collection-for-immutable-collections-db662f705eff">
   built_collection</a>
@@ -2054,7 +2108,7 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
 * <a href="https://github.com/dart-lang/language/issues/117">Dart-lang issue: Make it easy to create
   immutable collections via literals</a>
 
-# 15. Should I use this package?
+# 16. Should I use this package?
 
 The performance differences discussed above are nearly always dwarfed by bigger concerns like I/O,
 memory leaks, algorithms of the wrong Big-O complexity, sheer coding errors, failure to properly
@@ -2107,7 +2161,7 @@ efficient ones. In any case, if and when better immutable collections arise, we'
 benchmarks again, and if necessary switch the implementation so that the collections in this package
 keep performing as well as possible.
 
-# 16. Implementation details
+# 17. Implementation details
 
 I haven't been able to check the source code of the native Dart collections, but I am assuming here
 they work similarly to their corresponding Java collections of the same name. A `HashMap` has no
@@ -2140,11 +2194,11 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 ***************************
 
-# 17. Bibliography
+# 18. Bibliography
 
-## 17.1. Projects
+## 18.1. Projects
 
-### 17.1.1. Dart
+### 18.1.1. Dart
 
 1. [persistent][persistent_dart]
 
@@ -2209,7 +2263,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [remi_performance_testing_dart]: https://gist.github.com/rrousselGit/5a047bd4ec36515a4cfcc6bd275f05f5
 
-### 17.1.2. Java
+### 18.1.2. Java
 
 1. [Dexx][dexx]
 
@@ -2250,7 +2304,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [performance_java_immutable]: https://github.com/brianburton/java-immutable-collections/wiki/Comparative-Performance
 
-### 17.1.3. JS
+### 18.1.3. JS
 
 1. [immutable-js][immutable_js]
 
@@ -2280,7 +2334,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [immutable_js]: https://github.com/immutable-js/immutable-js
 
-## 17.2. Articles
+## 18.2. Articles
 
 1. [Discussion on the Performance of Immutable Collections][performance_discussion]
 
@@ -2377,7 +2431,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [why_no_immutable_on_java_8]: https://softwareengineering.stackexchange.com/q/221762/344810
 
-## 17.3. Other Resources
+## 18.3. Other Resources
 
 1. [Is Dart Compiled or Interpreted?][dart_compiled_or_interpreted]
 
@@ -2402,7 +2456,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 <br>
 
-# 18. Final Note
+# 19. Final Note
 
 This package is very complex and still fairly new. I am using it myself in important projects of
 mine, so you can say I trust it, but bugs are still possible.
@@ -2448,6 +2502,5 @@ you find any bugs it's his fault! 😂 — I am only half kidding 😐.
 
 <a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a><br>
 <a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a><br>
-<a href="https://stackoverflow.com/users/3411681/marcg">_
-stackoverflow.com/users/3411681/marcg_</a><br>
+<a href="https://stackoverflow.com/users/3411681/marcg">_stackoverflow.com/users/3411681/marcg_</a><br>
 <a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a><br>
