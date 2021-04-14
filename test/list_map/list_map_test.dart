@@ -151,13 +151,7 @@ void main() {
     expect(() => ListMap.fromIterables(<String>["a"], <int>[4, 7], compare: null, sort: true),
         throwsStateError);
 
-    // 2) Assertion Error
-
-    expect(
-        () => ListMap.fromIterables(<String>["a"], <int>[1], compare: null), throwsAssertionError);
-    expect(() => ListMap.fromIterables(<String>["a"], <int>[1], sort: true), throwsAssertionError);
-
-    // 3) Regular usage
+    // 2) Regular usage
 
     Iterable<String> keys = ["a", "c", "b"];
     Iterable<int> values = [1, 5, 2];
@@ -174,7 +168,7 @@ void main() {
     expect(listMap["b"], 2);
     expect(listMap.keys, ["a", "b", "c"]);
 
-    // 4) Sorting
+    // 3) Sorting
     var listMap1 = ListMap.fromIterables(
       ["c", "b", "a"],
       [3, 1, 2],

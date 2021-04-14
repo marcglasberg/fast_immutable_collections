@@ -165,11 +165,15 @@ void main() {
     Set<int> set = {1, 2, 3, 4};
     DiffAndIntersectResult setDiffAndIntersect = set.diffAndIntersect({5, 4, 3});
 
+    var otherIntersect = <int>{1, 2, 3, 4}.diffAndIntersect({5, 4, 3});
+
     expect(setDiffAndIntersect == setDiffAndIntersect, isTrue);
-    expect(setDiffAndIntersect == <int>{1, 2, 3, 4}.diffAndIntersect({5, 4, 3}), isTrue);
-    // TODO: Marcelo, dado que estamos lidando com sets, == não deveria ser implementado
-    // com SetEquality? Apesar de que, realmente, ordenamento pode deixar isso mais previsível.
-    expect(setDiffAndIntersect == <int>{1, 2, 4, 3}.diffAndIntersect({5, 3, 4}), isTrue);
+    expect(setDiffAndIntersect.diffThisMinusOther, otherIntersect.diffThisMinusOther);
+    expect(setDiffAndIntersect.diffOtherMinusThis, otherIntersect.diffOtherMinusThis);
+    expect(setDiffAndIntersect.intersectThisWithOther, otherIntersect.intersectThisWithOther);
+    expect(setDiffAndIntersect.intersectOtherWithThis, otherIntersect.intersectOtherWithThis);
+    expect(setDiffAndIntersect == otherIntersect, isTrue);
+
     expect(setDiffAndIntersect == <int>{1, 2, 3, 4}.diffAndIntersect({10, 100}), isFalse);
   });
 
@@ -179,10 +183,10 @@ void main() {
     Set<int> set = {1, 2, 3, 4};
     DiffAndIntersectResult setDiffAndIntersect = set.diffAndIntersect({5, 4, 3});
 
+    var otherIntersect = <int>{1, 2, 3, 4}.diffAndIntersect({10, 100});
+    expect(setDiffAndIntersect.hashCode, isNot(otherIntersect.hashCode));
+
     expect(setDiffAndIntersect.hashCode, setDiffAndIntersect.hashCode);
-    // TODO: Marcelo, internamente, as listas internas resultantes de cada chamada da
-    // interseção abaixo são objetos distintos, não? O hashcode será muito
-    // provavelmente distinto, acho.
     expect(setDiffAndIntersect.hashCode, <int>{1, 2, 3, 4}.diffAndIntersect({5, 4, 3}).hashCode);
   });
 

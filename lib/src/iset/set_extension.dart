@@ -113,7 +113,6 @@ class DiffAndIntersectResult<T, G> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DiffAndIntersectResult &&
-          runtimeType == other.runtimeType &&
           const ListEquality().equals(diffThisMinusOther, other.diffThisMinusOther) &&
           const ListEquality().equals(diffOtherMinusThis, other.diffOtherMinusThis) &&
           const ListEquality().equals(intersectThisWithOther, other.intersectThisWithOther) &&
@@ -121,10 +120,10 @@ class DiffAndIntersectResult<T, G> {
 
   @override
   int get hashCode =>
-      diffThisMinusOther.hashCode ^
-      diffOtherMinusThis.hashCode ^
-      intersectThisWithOther.hashCode ^
-      intersectOtherWithThis.hashCode;
+      const ListEquality().hash(diffThisMinusOther) ^
+      const ListEquality().hash(diffOtherMinusThis) ^
+      const ListEquality().hash(intersectThisWithOther) ^
+      const ListEquality().hash(intersectOtherWithThis);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
