@@ -140,6 +140,13 @@ class IList<T> // ignore: must_be_immutable
   static IList<T> empty<T>([ConfigList? config]) =>
       IList._unsafe(LFlat.empty<T>(), config: config ?? defaultConfig);
 
+  /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
+  factory IList.fromJson(dynamic json, T Function(Object?) fromJsonT) =>
+      IList<T>((json as Iterable).map(fromJsonT));
+
+  /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
+  Object toJson(Object Function(T) toJsonT) => map(toJsonT).toList();
+
   /// See also: [ImmutableCollection], [ImmutableCollection.lockConfig],
   /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {

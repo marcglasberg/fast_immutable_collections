@@ -1,3 +1,10 @@
+## [3.0.0] - 2021/04/13
+                       
+* Renamed extension `isNotNullOrZero` to `isNotNullNotZero`. 
+
+* Json serialization support for json_serializable with @JsonSerializable 
+  (for IList, ISet, ListSet, ListSetView). 
+
 ## [2.0.4] - 2021/04/12
 
 * Factories `IList<T>.orNull()`, `ISet<T>.orNull()`, `IMap<K, V>.orNull()`, 

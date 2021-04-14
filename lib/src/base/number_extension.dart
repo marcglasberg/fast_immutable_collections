@@ -34,11 +34,7 @@ extension FicNumberExtension<T extends num> on T {
 extension FicNumberExtensionNullable<T extends num> on T? {
   bool get isNullOrZero => this == null || this == 0;
 
-  // TODO: Marcelo, uma sugestão seria não utilizar *not* à frente de `or` ou `and`.
-  // (A implementação é basicamente a lei de DeMorgan do método anterior, mas isso é sutil demais, na minha opinião.)
-  // Fica difícil de saber se o *not* se refere ao primeiro termo ou ao resto do texto totalmente (ambiguidade).
-  // Além disso, o nome menciona `or`, mas a implementação é com `and`, o que me deixa ainda mais confuso.
-  bool get isNotNullOrZero => this != null && this != 0;
+  bool get isNotNullNotZero => this != null && this != 0;
 
   /// Returns the number constrainedTo between min and max.
   /// If the number is `null`, return [orElse].

@@ -44,6 +44,13 @@ class ListSet<T> implements Set<T>, List<T> {
 
   ListSet._(this._set, this._list) : assert(_set.length == _list.length);
 
+  /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
+  factory ListSet.fromJson(dynamic json, T Function(Object?) fromJsonT) =>
+      ListSet<T>.of((json as Iterable).map(fromJsonT));
+
+  /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
+  Object toJson(Object Function(T) toJsonT) => map(toJsonT).toList();
+
   @override
   bool add(T value) {
     throw UnsupportedError("Can't add to a ListSet.");

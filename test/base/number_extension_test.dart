@@ -90,16 +90,16 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("isNotNullOrZero", () {
+  test("isNotNullNotZero", () {
     //
-    expect((-10).isNotNullOrZero, isTrue);
-    expect((-1).isNotNullOrZero, isTrue);
-    expect(0.isNotNullOrZero, isFalse);
-    expect(1.isNotNullOrZero, isTrue);
-    expect(10.isNotNullOrZero, isTrue);
+    expect((-10).isNotNullNotZero, isTrue);
+    expect((-1).isNotNullNotZero, isTrue);
+    expect(0.isNotNullNotZero, isFalse);
+    expect(1.isNotNullNotZero, isTrue);
+    expect(10.isNotNullNotZero, isTrue);
 
     int? value;
-    expect(value.isNotNullOrZero, isFalse);
+    expect(value.isNotNullNotZero, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
