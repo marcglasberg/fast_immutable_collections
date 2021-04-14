@@ -89,41 +89,43 @@ implementation details. Later in this document, we provide benchmarks so that yo
 
 **Outline**
 
-<ul>
-  <li>
-    <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
-  </li>
-  <li><a href="#2-ilist">2. IList</a></li>
-  <li><a href="#3-iset">3. ISet</a></li>
-  <li><a href="#4-imap">4. IMap</a></li>
-  <li><a href="#5-imapofsets">5. IMapOfSets</a></li>
-  <li><a href="#6-listset">6. ListSet</a></li>
-  <li><a href="#7-listmap">7. ListMap</a></li>
-  <li><a href="#8-extensions-and-helpers">8. Extensions and Helpers</a></li>
-  <li><a href="#9-comparators">9. Comparators</a></li>
-  <li><a href="#10-flushing">10. Flushing</a></li>
-  <li><a href="#11-json-support">11. JSON Support</a></li>
-  <li><a href="#12-benchmarks">12. Benchmarks</a></li>
-  <li><a href="#13-immutable-objects">13. Immutable Objects</a></li>
-  <li>
-    <a href="#14-performance-and-memory-savings"
-      >14. Performance and Memory Savings</a
-    >
-  </li>
-  <li>
-    <a
-      href="#15-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
-      >15. The above text has about 10% of original content. The rest is
-      shamelessly copied from the following pages. Please, visit them:</a
-    >
-  </li>
-  <li>
-    <a href="#16-should-i-use-this-package">16. Should I use this package?</a>
-  </li>
-  <li><a href="#17-implementation-details">17. Implementation details</a></li>
-  <li><a href="#18-bibliography">18. Bibliography</a></li>
-  <li><a href="#19-final-note">19. Final Note</a></li>
-</ul>
+<div id="user-content-toc">
+  <ul>
+    <li>
+      <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
+    </li>
+    <li><a href="#2-ilist">2. IList</a></li>
+    <li><a href="#3-iset">3. ISet</a></li>
+    <li><a href="#4-imap">4. IMap</a></li>
+    <li><a href="#5-imapofsets">5. IMapOfSets</a></li>
+    <li><a href="#6-listset">6. ListSet</a></li>
+    <li><a href="#7-listmap">7. ListMap</a></li>
+    <li><a href="#8-extensions-and-helpers">8. Extensions and Helpers</a></li>
+    <li><a href="#9-comparators">9. Comparators</a></li>
+    <li><a href="#10-flushing">10. Flushing</a></li>
+    <li><a href="#11-json-support">11. JSON Support</a></li>
+    <li><a href="#12-benchmarks">12. Benchmarks</a></li>
+    <li><a href="#13-immutable-objects">13. Immutable Objects</a></li>
+    <li>
+      <a href="#14-performance-and-memory-savings"
+        >14. Performance and Memory Savings</a
+      >
+    </li>
+    <li>
+      <a
+        href="#15-the-above-text-has-about-10-of-original-content-the-rest-is-shamelessly-copied-from-the-following-pages-please-visit-them"
+        >15. The above text has about 10% of original content. The rest is
+        shamelessly copied from the following pages. Please, visit them:</a
+      >
+    </li>
+    <li>
+      <a href="#16-should-i-use-this-package">16. Should I use this package?</a>
+    </li>
+    <li><a href="#17-implementation-details">17. Implementation details</a></li>
+    <li><a href="#18-bibliography">18. Bibliography</a></li>
+    <li><a href="#19-final-note">19. Final Note</a></li>
+  </ul>
+</div>
 
 **Table of Contents**
 
