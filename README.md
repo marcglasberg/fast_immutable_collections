@@ -1636,6 +1636,26 @@ IMap.flushFactor = 15;
 ImmutableCollection.lockConfig();
 ```
 
+# 11. Json support
+
+Most FIC collections convert to and from Json, through their `.fromJson()` and `.toJson()`.
+
+They can be used with
+<a href="https://pub.dev/packages/json_serializable">json_serializable</a> in classes annotated 
+with `@JsonSerializable`.
+
+For example:
+
+```
+@JsonSerializable()
+class MyClass {
+  final IList<String> myList;
+  MyClass(this.myList);
+  factory MyClass.fromJson(Map<String, dynamic> json) => _$MyClassFromJson(json);
+  Map<String, dynamic> toJson() => _$MyClassToJson(this);
+}
+```
+
 # 11. Benchmarks
 
 Having benchmarks for this project is necessary for justifying its existence.

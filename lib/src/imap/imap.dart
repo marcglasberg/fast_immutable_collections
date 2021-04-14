@@ -266,6 +266,18 @@ class IMap<K, V> // ignore: must_be_immutable
   static IMap<K, V> empty<K, V>([ConfigMap? config]) =>
       IMap._unsafe(MFlat.empty<K, V>(), config: config ?? defaultConfig);
 
+  /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
+  factory IMap.fromJson(
+    Map<String, Object?> json,
+    K Function(Object?) fromJsonK,
+    V Function(Object?) fromJsonV,
+  ) =>
+      json.map<K, V>((key, value) => MapEntry(fromJsonK(key), fromJsonV(value))).lock;
+
+  /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
+  Object toJson(Object Function(K) toJsonK, Object Function(V) toJsonV) =>
+      unlock.map((key, value) => MapEntry(toJsonK(key), toJsonV(value)));
+
   /// See also: [ImmutableCollection], [ImmutableCollection.lockConfig],
   /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {

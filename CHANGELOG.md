@@ -1,9 +1,9 @@
-## [3.0.1] - 2021/04/13
+## [3.0.2] - 2021/04/14
                        
-* Renamed extension `isNotNullOrZero` to `isNotNullNotZero`. 
-
 * Json serialization support for json_serializable with @JsonSerializable 
-  (for IList, ISet, ListSet, ListSetView). 
+  (for IList, ISet, IMap, ListSet, ListSetView).
+
+* Renamed extension `isNotNullOrZero` to `isNotNullNotZero`.
 
 ## [2.0.4] - 2021/04/12
 
