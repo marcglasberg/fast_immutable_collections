@@ -120,7 +120,7 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  test("removeDuplicates", () {
+  test("whereNoDuplicates", () {
     expect(([].whereNoDuplicates()), []);
     expect(([5, 5, 5].whereNoDuplicates()), [5]);
     expect(([1, 2, 3, 4].whereNoDuplicates()), [1, 2, 3, 4]);

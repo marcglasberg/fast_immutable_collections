@@ -280,6 +280,23 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("orNull", () {
+    // 1) Null -> Null
+    Map<String, int>? map;
+    expect(IMap.orNull(map), isNull);
+
+    // 2) Map -> IMap
+    map = {"a": 1, "b": 2, "c": 3};
+    expect(IMap.orNull(map)?.unlock, {"a": 1, "b": 2, "c": 3});
+
+    // 3) Map with Config -> IMap with Config
+    IMap<String, int>? imap = IMap.orNull(map, ConfigMap(isDeepEquals: false));
+    expect(imap?.unlock, {"a": 1, "b": 2, "c": 3});
+    expect(imap?.config, ConfigMap(isDeepEquals: false));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("empty", () {
     // 1) Regular usage
     var imap = IMap.empty();

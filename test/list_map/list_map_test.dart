@@ -3,6 +3,8 @@ import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
+import "../utils.dart";
+
 void main() {
   /////////////////////////////////////////////////////////////////////////////
 
@@ -142,17 +144,20 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("fromIterables", () {
-    // 0) Assertion Error
+    // 1) State Error (keys and values must have the same size)
     expect(() => ListMap.fromIterables(<String>["a", "b"], <int>[4], compare: null, sort: true),
         throwsStateError);
 
     expect(() => ListMap.fromIterables(<String>["a"], <int>[4, 7], compare: null, sort: true),
         throwsStateError);
 
-    // 1) Regular usage
+    // 2) Assertion Error
 
-    expect(ListMap.fromIterables(<String>[], <int>[], compare: null), {});
-    expect(ListMap.fromIterables(<String>[], <int>[], sort: true), {});
+    expect(
+        () => ListMap.fromIterables(<String>["a"], <int>[1], compare: null), throwsAssertionError);
+    expect(() => ListMap.fromIterables(<String>["a"], <int>[1], sort: true), throwsAssertionError);
+
+    // 3) Regular usage
 
     Iterable<String> keys = ["a", "c", "b"];
     Iterable<int> values = [1, 5, 2];
@@ -169,7 +174,7 @@ void main() {
     expect(listMap["b"], 2);
     expect(listMap.keys, ["a", "b", "c"]);
 
-    // 2) Sorting
+    // 4) Sorting
     var listMap1 = ListMap.fromIterables(
       ["c", "b", "a"],
       [3, 1, 2],

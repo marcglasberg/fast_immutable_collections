@@ -858,6 +858,38 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("orNull", () {
+    // 1) Null -> Null
+    Map<String, Iterable<int>>? mapOfSets;
+    expect(IMapOfSets.orNull(mapOfSets), isNull);
+
+    // 2) Map -> IMapOfSets
+    mapOfSets = {
+      "a": {1, 2, 3},
+      "b": {1},
+      "c": {1, 2},
+    };
+    expect(
+        IMapOfSets.orNull(mapOfSets),
+        {
+          "a": {1, 2, 3},
+          "b": {1},
+          "c": {1, 2},
+        }.lock);
+
+    // 3) Map with Config -> IMapOfSets with Config
+    IMapOfSets<String, int>? imapOfSets =
+        IMapOfSets.orNull(mapOfSets, ConfigMapOfSets(isDeepEquals: false));
+    expect(imapOfSets?.unlock, {
+      "a": {1, 2, 3},
+      "b": {1},
+      "c": {1, 2},
+    });
+    expect(imapOfSets?.config, ConfigMapOfSets(isDeepEquals: false));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("isIdentityEquals", () {
     final Map<String, Set<int>> mapOfSets = {
       "a": {1, 2},

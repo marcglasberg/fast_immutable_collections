@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+import "package:collection/collection.dart";
 
 import "iset.dart";
 
@@ -12,7 +12,7 @@ extension FicSetExtension<T> on Set<T> {
   /// **This is unsafe: Use it at your own peril**.
   ///
   /// This constructor is fast, since it makes no defensive copies of the set.
-  /// However, you should only use this with a new set you've created yourself,
+  /// However, you should only use this with a new set you"ve created yourself,
   /// when you are sure no external copies exist. If the original set is modified,
   /// it will break the [ISet] and any other derived sets in unpredictable ways.
   ///
@@ -23,7 +23,7 @@ extension FicSetExtension<T> on Set<T> {
   /// See also: [ImmutableCollection]
   ISet<T> get lockUnsafe => ISet<T>.unsafe(this, config: ISet.defaultConfig);
 
-  /// If the item doesn't exist in the set, add it and return `true`.
+  /// If the item doesn"t exist in the set, add it and return `true`.
   /// Otherwise, if the item already exists in the set, remove it and return `false`.
   bool toggle(T item) {
     var result = contains(item);
@@ -44,10 +44,10 @@ extension FicSetExtension<T> on Set<T> {
 
   /// Given this set and [other], returns:
   ///
-  /// 1) Items of this set which are NOT in [other] (difference this - other), in this set's order.
-  /// 2) Items of [other] which are NOT in this set (difference other - this), in [other]'s order.
-  /// 3) Items of this set which are also in [other], in this set's order.
-  /// 4) Items of this set which are also in [other], in [other]'s order.
+  /// 1) Items of this set which are NOT in [other] (difference this - other), in this set"s order.
+  /// 2) Items of [other] which are NOT in this set (difference other - this), in [other]"s order.
+  /// 3) Items of this set which are also in [other], in this set"s order.
+  /// 4) Items of this set which are also in [other], in [other]"s order.
   ///
   DiffAndIntersectResult<T, G> diffAndIntersect<G>(
     Set<G> other, {
@@ -102,12 +102,12 @@ class DiffAndIntersectResult<T, G> {
   });
 
   @override
-  String toString() => 'DiffAndIntersectResult{\n'
-      'diffThisMinusOther: $diffThisMinusOther,\n'
-      'diffOtherMinusThis: $diffOtherMinusThis,\n'
-      'intersectThisWithOther: $intersectThisWithOther,\n'
-      'intersectOtherWithThis: $intersectOtherWithThis\n'
-      '}';
+  String toString() => "DiffAndIntersectResult{\n"
+      "diffThisMinusOther: $diffThisMinusOther,\n"
+      "diffOtherMinusThis: $diffOtherMinusThis,\n"
+      "intersectThisWithOther: $intersectThisWithOther,\n"
+      "intersectOtherWithThis: $intersectOtherWithThis\n"
+      "}";
 
   @override
   bool operator ==(Object other) =>

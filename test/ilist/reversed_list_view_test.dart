@@ -51,11 +51,11 @@ void main() {
 
     // 4) length, first and  last setters
 
-    list.first = 100;
-    expect(list.first, 100);
+    reversed.first = 100;
+    expect(reversed.first, 100);
 
-    list.last = 500;
-    expect(list.last, 500);
+    reversed.last = 500;
+    expect(reversed.last, 500);
   });
 
   //////////////////////////////////////////////////////////////////////////////

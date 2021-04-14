@@ -10,11 +10,13 @@ extension FicNumberExtension<T extends num> on T {
   ///
   /// Example:
   ///
-  ///    2.constrainedTo(0, 10) = 2;
-  ///    2.constrainedTo(5, 10) = 5;
-  ///    12.constrainedTo(5, 10) = 10;
-  ///    null.constrainedTo(5, 10) = null;
-  ///    null.constrainedTo(5, 10, orElse: 7) = 7;
+  /// ```dart
+  /// 2.constrainedTo(0, 10) = 2;
+  /// 2.constrainedTo(5, 10) = 5;
+  /// 12.constrainedTo(5, 10) = 10;
+  /// null.constrainedTo(5, 10) = null;
+  /// null.constrainedTo(5, 10, orElse: 7) = 7;
+  /// ```
   ///
   /// Beware: `-10.inRange(5, 8)` is the same as `-(10.inRange(5, 10)`.
   /// To enforce the negative input value you must write:
@@ -32,6 +34,10 @@ extension FicNumberExtension<T extends num> on T {
 extension FicNumberExtensionNullable<T extends num> on T? {
   bool get isNullOrZero => this == null || this == 0;
 
+  // TODO: Marcelo, uma sugestão seria não utilizar *not* à frente de `or` ou `and`.
+  // (A implementação é basicamente a lei de DeMorgan do método anterior, mas isso é sutil demais, na minha opinião.)
+  // Fica difícil de saber se o *not* se refere ao primeiro termo ou ao resto do texto totalmente (ambiguidade).
+  // Além disso, o nome menciona `or`, mas a implementação é com `and`, o que me deixa ainda mais confuso.
   bool get isNotNullOrZero => this != null && this != 0;
 
   /// Returns the number constrainedTo between min and max.
@@ -39,11 +45,13 @@ extension FicNumberExtensionNullable<T extends num> on T? {
   ///
   /// Example:
   ///
-  ///    2.constrainedTo(0, 10) = 2;
-  ///    2.constrainedTo(5, 10) = 5;
-  ///    12.constrainedTo(5, 10) = 10;
-  ///    null.constrainedTo(5, 10) = null;
-  ///    null.constrainedTo(5, 10, orElse: 7) = 7;
+  /// ```dart
+  /// 2.constrainedTo(0, 10) = 2;
+  /// 2.constrainedTo(5, 10) = 5;
+  /// 12.constrainedTo(5, 10) = 10;
+  /// null.constrainedTo(5, 10) = null;
+  /// null.constrainedTo(5, 10, orElse: 7) = 7;
+  /// ```
   ///
   T? inRange(T min, T max, {T? orElse}) {
     if (this == null) return orElse;

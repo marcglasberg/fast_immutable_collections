@@ -60,8 +60,7 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ISetRemoveBenchmark extends SetBenchmarkBase {
-  ISetRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "ISet", emitter: emitter);
+  ISetRemoveBenchmark({required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
   late ISet<int> fixedSet;
   late ISet<int> iSet;

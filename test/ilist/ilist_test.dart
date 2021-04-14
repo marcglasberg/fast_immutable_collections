@@ -458,6 +458,23 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("orNull", () {
+    // 1) Null -> Null
+    Iterable<int>? iter;
+    expect(IList.orNull(iter), isNull);
+
+    // 2) Iterable -> IList
+    iter = [1, 2, 3];
+    expect(IList.orNull(iter), allOf(isA<IList<int>>(), [1, 2, 3]));
+
+    // 3) Iterable with Config -> IList with Config
+    IList<int>? ilist = IList.orNull(iter, ConfigList(isDeepEquals: false));
+    expect(ilist, [1, 2, 3]);
+    expect(ilist?.config, ConfigList(isDeepEquals: false));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("unsafe", () {
     // 1) Regular usage
     final List<int> list = [1, 2, 3];

@@ -85,8 +85,8 @@ class ListMap<K, V> implements Map<K, V> {
   /// Creates a [ListMap] from the provided [keys] and [values].
   /// If a key is repeated, the last occurrence overwrites the previous value.
   ///
-  /// If [sort] is true, it will be sorted with [compare], if provided,
-  /// or with [compareObject] if not provided. If [sort] is false,
+  /// If [sort] is `true`, it will be sorted with [compare], if provided,
+  /// or with [compareObject] if not provided. If [sort] is `false`,
   /// [compare] will be ignored.
   ///
   /// The iterables [keys] and [values] must have the same number of items,

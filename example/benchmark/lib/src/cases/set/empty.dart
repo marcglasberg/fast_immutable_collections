@@ -40,8 +40,7 @@ class MutableSetEmptyBenchmark extends SetBenchmarkBase {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ISetEmptyBenchmark extends SetBenchmarkBase {
-  ISetEmptyBenchmark({required TableScoreEmitter emitter})
-      : super(name: "ISet", emitter: emitter);
+  ISetEmptyBenchmark({required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
 
   late ISet<int> iSet;
 
