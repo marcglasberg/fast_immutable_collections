@@ -60,6 +60,19 @@ extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
       if (item != null) yield item;
     }
   }
+
+  /// Similar to [map], but returns a non-nullable type.
+  ///
+  /// ```
+  /// int? f(String? e) => (e == null) ? 0 : e.length;
+  ///
+  /// List<int?> list1 = ["xxx", "xx", null, "x"].map(f).toList();
+  /// expect(list1, isA<List<int?>>());
+  ///
+  /// List<int?> list2 = ["xxx", "xx", null, "x"].mapNotNull(f).toList();
+  /// expect(list2, isA<List<int>>());
+  /// ```
+  Iterable<E> mapNotNull<E>(E? Function(T? e) f) => map(f).cast();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

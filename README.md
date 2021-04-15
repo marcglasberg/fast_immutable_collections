@@ -1261,6 +1261,11 @@ These are some of the provided helpers and extensions:
 
 ## 8.1 Iterable helpers and extensions
 
+* `whereNotNull` is similar to `.where((x) => x != null)`, but the returned iterable has a
+  non-nullable type.
+
+* `mapNotNull` is similar to map, but the returned iterable has a non-nullable type.
+
 * `combineIterables` is a top-level function that combines two iterables into one, by applying
   a `combine` function.
 
@@ -1639,11 +1644,11 @@ ImmutableCollection.lockConfig();
 # 11. Json support
 
 With some help from <a href="https://github.com/knaeckeKami">Martin Kamleithner</a> and
-<a href="https://github.com/rrousselGit">Remi Rousselet</a>, now most FIC collections convert to 
-and from Json, through `.fromJson()` and `.toJson()`.
+<a href="https://github.com/rrousselGit">Remi Rousselet</a>, now most FIC collections convert to and
+from Json, through `.fromJson()` and `.toJson()`.
 
 This means those FIC collections can be used with
-<a href="https://pub.dev/packages/json_serializable">json_serializable</a> in classes annotated 
+<a href="https://pub.dev/packages/json_serializable">json_serializable</a> in classes annotated
 with `@JsonSerializable`.
 
 For example:

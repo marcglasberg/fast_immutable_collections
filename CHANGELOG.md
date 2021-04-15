@@ -1,5 +1,6 @@
-## [3.0.4] - 2021/04/15
-                       
+## [3.0.5] - 2021/04/15
+
+* `Iterable.mapNotNull` extension is similar to map, but returns `Iterable<T>`, where `T` is a non-nullable type.                       
 * `Iterable.whereNotNull` extension now returns `Iterable<T>`, where `T` is a non-nullable type.
 
 ## [3.0.2] - 2021/04/14
