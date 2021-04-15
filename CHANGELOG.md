@@ -1,4 +1,4 @@
-## [3.0.3] - 2021/04/15
+## [3.0.4] - 2021/04/15
                        
 * `Iterable.whereNotNull` extension now returns `Iterable<T>`, where `T` is a non-nullable type.
 

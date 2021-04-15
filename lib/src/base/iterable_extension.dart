@@ -45,13 +45,18 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
   bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
   bool get isEmptyNotNull => (this != null) && this!.isEmpty;
+}
 
+// ////////////////////////////////////////////////////////////////////////////
+
+/// See also: [FicListExtension], [FicSetExtension]
+extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
   /// Removes `null`s from the [Iterable].
   ///
   /// See also: `removeNulls` in [FicListExtension].
   ///
   Iterable<T> whereNotNull() sync* {
-    for (T? item in this!) {
+    for (T? item in this) {
       if (item != null) yield item;
     }
   }
