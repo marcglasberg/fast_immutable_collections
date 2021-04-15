@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/reversed_list_view.dart";
