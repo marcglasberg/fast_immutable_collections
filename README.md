@@ -1638,9 +1638,11 @@ ImmutableCollection.lockConfig();
 
 # 11. Json support
 
-Most FIC collections convert to and from Json, through their `.fromJson()` and `.toJson()`.
+With some help from <a href="https://github.com/knaeckeKami">Martin Kamleithner</a> and
+<a href="https://github.com/rrousselGit">Remi Rousselet</a>, now most FIC collections convert to 
+and from Json, through `.fromJson()` and `.toJson()`.
 
-They can be used with
+This means those FIC collections can be used with
 <a href="https://pub.dev/packages/json_serializable">json_serializable</a> in classes annotated 
 with `@JsonSerializable`.
 

@@ -45,6 +45,16 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
   bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
 
   bool get isEmptyNotNull => (this != null) && this!.isEmpty;
+
+  /// Removes `null`s from the [Iterable].
+  ///
+  /// See also: `removeNulls` in [FicListExtension].
+  ///
+  Iterable<T> whereNotNull() sync* {
+    for (T? item in this!) {
+      if (item != null) yield item;
+    }
+  }
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -124,16 +134,6 @@ extension FicIterableExtension<T> on Iterable<T> {
 
   /// Returns `true` if any item is equal to [value].
   bool anyIs(T value) => any((item) => item == value);
-
-  /// Removes `null`s from the [Iterable].
-  ///
-  /// See also: `removeNulls` in [FicListExtension].
-  ///
-  Iterable<T> whereNotNull() sync* {
-    for (T item in this) {
-      if (item != null) yield item;
-    }
-  }
 
   /// Removes all duplicates, leaving only the distinct items.
   /// Optionally, you can provide an [by] function to compare the items.

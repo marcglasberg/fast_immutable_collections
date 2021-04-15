@@ -1,3 +1,7 @@
+## [3.0.3] - 2021/04/15
+                       
+* `Iterable.whereNotNull` extension now returns `Iterable<T>`, where `T` is a non-nullable type.
+
 ## [3.0.2] - 2021/04/14
                        
 * Json serialization support for json_serializable with @JsonSerializable 
