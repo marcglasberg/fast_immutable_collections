@@ -61,7 +61,7 @@ extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
     }
   }
 
-  /// Similar to [map], but returns a non-nullable type.
+  /// Similar to [map], but MAY return a non-nullable type.
   ///
   /// ```
   /// int? f(String? e) => (e == null) ? 0 : e.length;
@@ -87,16 +87,17 @@ extension FicIterableExtension<T> on Iterable<T> {
   IList<T> toIList([ConfigList? config]) =>
       IList<T>.withConfig(this, config ?? IList.defaultConfig);
 
-  /// Returns the first element that satisfies the given predicate [test].
-  ///
-  /// If no element satisfies [test], the result of invoking the [orElse]
-  /// function is returned.
-  /// If [orElse] is omitted, return `true`.
-  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
-    for (T element in this) if (test(element)) return element;
-    if (orElse != null) return orElse();
-    return null;
-  }
+  /// Removed, since now you can: import "package:collection/collection.dart";
+  // /// Returns the first element that satisfies the given predicate [test].
+  // ///
+  // /// If no element satisfies [test], the result of invoking the [orElse]
+  // /// function is returned.
+  // /// If [orElse] is omitted, return `true`.
+  // T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
+  //   for (T element in this) if (test(element)) return element;
+  //   if (orElse != null) return orElse();
+  //   return null;
+  // }
 
   /// Compare all items, in order or not, according to [ignoreOrder],
   /// using [operator ==]. Return true if they are all the same,

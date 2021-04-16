@@ -1,7 +1,11 @@
-## [3.0.5] - 2021/04/15
+## [4.0.0] - 2021/04/16
+
+* `Iterable.firstwhereOrNull` removed because you can now just `import "package:collection/collection.dart";`
+
+## [3.0.6] - 2021/04/15
 
 * `Iterable.mapNotNull` extension is similar to map, but returns `Iterable<T>`, where `T` is a non-nullable type.                       
-* `Iterable.whereNotNull` extension now returns `Iterable<T>`, where `T` is a non-nullable type.
+* `Iterable.whereNotNull` extension now returns `Iterable<T>`, where `T` may be a non-nullable type.
 
 ## [3.0.2] - 2021/04/14
                        

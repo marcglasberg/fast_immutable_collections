@@ -1,5 +1,6 @@
 import "dart:math";
 
+import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "ilist.dart";
@@ -112,8 +113,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
-  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) =>
-      iter.firstWhereOrNull(test, orElse: orElse);
+  T? firstWhereOrNull(bool Function(T) test) => iter.firstWhereOrNull(test);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);

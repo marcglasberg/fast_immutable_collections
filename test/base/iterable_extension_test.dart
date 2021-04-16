@@ -338,15 +338,6 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("firstWhereOrNull", () {
-    List<String> list = ["A", "B", "C"];
-    expect(list.firstWhereOrNull((String value) => value == "C"), "C");
-    expect(list.firstWhereOrNull((String value) => value == "D"), null);
-    expect(list.firstWhereOrNull((String value) => value == "D", orElse: () => "Z"), "Z");
-  });
-
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("everyIs", () {
     List<int> list1 = [1, 1, 1];
     List<int> list2 = [1, 1, 2];
