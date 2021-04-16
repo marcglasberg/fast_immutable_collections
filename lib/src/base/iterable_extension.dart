@@ -51,16 +51,7 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
 
 /// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
-  /// Removes `null`s from the [Iterable].
-  ///
-  /// See also: `removeNulls` in [FicListExtension].
-  ///
-  Iterable<T> whereNotNull() sync* {
-    for (T? item in this) {
-      if (item != null) yield item;
-    }
-  }
-
+  //
   /// Similar to [map], but MAY return a non-nullable type.
   ///
   /// ```

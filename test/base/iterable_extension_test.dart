@@ -1,4 +1,5 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:collection/collection.dart";
 import "package:test/test.dart";
 
 void main() {
@@ -8,23 +9,6 @@ void main() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = true;
     ImmutableCollection.prettyPrint = true;
-  });
-
-  //////////////////////////////////////////////////////////////////////////////////////////////
-
-  test('whereNotNull', () {
-    //
-    List<String?> list1 = ["xxx", "xx", null, "x"];
-    expect(list1, isA<List<String?>>());
-
-    List<String?> list2 = list1.where((x) => x != null).toList();
-    expect(list2, isA<List<String?>>());
-    expect(list2, isNot(isA<List<String>>()));
-    expect(list2, ["xxx", "xx", "x"]);
-
-    List<String> list3 = list1.whereNotNull().toList();
-    expect(list3, isA<List<String>>());
-    expect(list3, ["xxx", "xx", "x"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +24,23 @@ void main() {
     Iterable<int?> list2 = ["xxx", "xx", null, "x"].mapNotNull(f).toList();
     expect(list2, isA<Iterable<int>>());
     expect(list1, isA<Iterable<int?>>());
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('whereNotNull (removed this, now using it from collection package)', () {
+    //
+    List<String?> list1 = ["xxx", "xx", null, "x"];
+    expect(list1, isA<List<String?>>());
+
+    List<String?> list2 = list1.where((x) => x != null).toList();
+    expect(list2, isA<List<String?>>());
+    expect(list2, isNot(isA<List<String>>()));
+    expect(list2, ["xxx", "xx", "x"]);
+
+    List<String> list3 = list1.whereNotNull().toList();
+    expect(list3, isA<List<String>>());
+    expect(list3, ["xxx", "xx", "x"]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
