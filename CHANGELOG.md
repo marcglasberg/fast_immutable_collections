@@ -1,4 +1,4 @@
-## [4.0.1] - 2021/04/16
+## [4.0.2] - 2021/04/16
 
 * Breaking change. Please, add `import "package:collection/collection.dart";` to your project.
 I have removed the following methods because they are now present in the `collection` package:

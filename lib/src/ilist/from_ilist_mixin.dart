@@ -90,7 +90,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   T? operator [](int index) => iter[index];
 
-  T? elementAt(int index) => iter[index];
+  T elementAt(int index) => iter[index];
 
   bool every(bool Function(T) test) => iter.every(test);
 
