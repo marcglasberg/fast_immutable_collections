@@ -49,11 +49,11 @@ extension FicNumberExtensionNullable<T extends num> on T? {
   /// null.inRange(5, 10, orElse: 7) = 7;
   /// ```
   ///
-  T? inRange(T min, T max, {T? orElse}) {
+  T inRange(T min, T max, {required T orElse}) {
     if (this == null) return orElse;
     if (this! <= min) return min;
     if (this! >= max) return max;
-    return this;
+    return this!;
   }
 }
 
