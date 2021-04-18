@@ -1,3 +1,7 @@
+## [4.0.4] - 2021/04/18
+
+* `Iterable.isFirst`, `isNotFirst`, `isLast` and `isNotLast`.
+
 ## [4.0.3] - 2021/04/16
 
 * Breaking change. Please, add `import "package:collection/collection.dart";` to your project. I

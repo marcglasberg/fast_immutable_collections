@@ -243,4 +243,60 @@ extension FicIterableExtension<T> on Iterable<T> {
     newList.addAll(idsPerNewItem.values);
     return newList;
   }
+
+  /// Return true if the given [item] is the same (by identity) as the first iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you have the first item.
+  /// For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (!children.isFirst(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isFirst(T item) => length > 0 && identical(first, item);
+
+  /// Return true if the given [item] is NOT the same (by identity) as the first iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you don't have the first
+  /// item. For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (children.isNotFirst(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isNotFirst(T item) => !isFirst(item);
+
+  /// Return true if the given [item] is the same (by identity) as the last iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you have the last item.
+  /// For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (!children.isLast(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isLast(T item) => length > 0 && identical(last, item);
+
+  /// Return true if the given [item] is NOT the same (by identity) as the last iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you don't have the last
+  /// item. For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (children.isNotLast(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isNotLast(T item) => !isLast(item);
 }
