@@ -55,6 +55,7 @@ void main() {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     expect(mExample.containsKey("a"), isTrue);
     expect(mExample.containsKey("z"), isFalse);
+    expect(mExample.containsKey(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -63,6 +64,7 @@ void main() {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     expect(mExample.containsValue(1), isTrue);
     expect(mExample.containsValue(100), isFalse);
+    expect(mExample.containsValue(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -115,10 +117,10 @@ class MExample<K, V> extends M<K, V> {
   Iterator<MapEntry<K, V>> get iterator => _imap.iterator;
 
   @override
-  bool containsKey(K key) => _imap.containsKey(key);
+  bool containsKey(K? key) => _imap.containsKey(key);
 
   @override
-  bool containsValue(V value) => _imap.containsValue(value);
+  bool containsValue(V? value) => _imap.containsValue(value);
 }
 
 //////////////////////////////////////////////////////////////////////////////

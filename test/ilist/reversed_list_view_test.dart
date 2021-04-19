@@ -258,6 +258,7 @@ void main() {
     expect(reversed.contains(3), isTrue);
     expect(reversed.contains(4), isTrue);
     expect(reversed.contains(5), isFalse);
+    expect(reversed.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

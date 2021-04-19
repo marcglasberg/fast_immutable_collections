@@ -100,7 +100,7 @@ extension FicListExtension<T> on List<T> {
       remove(item);
     else
       add(item);
-    return result;
+    return !result;
   }
 
   /// Return `true` if the lists contain the same items (in any order).

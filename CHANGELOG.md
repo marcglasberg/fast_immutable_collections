@@ -1,3 +1,8 @@
+## [4.0.5] - 2021/04/16
+
+* The `contains()` methods now accept `null`.
+* Method `toggle()` now returns the correct bool.
+
 ## [4.0.3] - 2021/04/16
 
 * Breaking change. Please, add `import "package:collection/collection.dart";` to your project. I

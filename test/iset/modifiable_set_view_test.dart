@@ -37,6 +37,7 @@ void main() {
     expect(modifiableSetView.contains(2), isTrue);
     expect(modifiableSetView.contains(3), isTrue);
     expect(modifiableSetView.contains(4), isFalse);
+    expect(modifiableSetView.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -84,6 +85,7 @@ void main() {
     expect(modifiableSetView.add(4), isTrue);
     expect(modifiableSetView.length, 4);
     expect(modifiableSetView.contains(4), isTrue);
+    expect(modifiableSetView.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -94,6 +96,7 @@ void main() {
     expect(modifiableSetView.remove(3), isTrue);
     expect(modifiableSetView.length, 2);
     expect(modifiableSetView.contains(3), isFalse);
+    expect(modifiableSetView.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

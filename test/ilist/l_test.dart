@@ -72,6 +72,7 @@ void main() {
     final LExample<String> lExample = LExample(["a", "b", "c", "e", "d", "f"]);
     expect(lExample.contains("a"), isTrue);
     expect(lExample.contains("z"), isFalse);
+    expect(lExample.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

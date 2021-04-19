@@ -29,10 +29,10 @@ class MAdd<K, V> extends M<K, V> {
   bool contains(K key, V value) => (key == _key && value == _value) || _m.contains(key, value);
 
   @override
-  bool containsKey(K key) => (key == _key) || _m.containsKey(key);
+  bool containsKey(K? key) => (key == _key) || _m.containsKey(key);
 
   @override
-  bool containsValue(V value) => (value == _value) || _m.containsValue(value);
+  bool containsValue(V? value) => (value == _value) || _m.containsValue(value);
 
   @override
   int get length => _m.length + 1;

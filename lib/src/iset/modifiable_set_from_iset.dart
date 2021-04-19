@@ -47,7 +47,7 @@ class ModifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty {
   }
 
   @override
-  bool contains(covariant T element) => _iSet?.contains(element) ?? _set!.contains(element);
+  bool contains(covariant T? element) => _iSet?.contains(element) ?? _set!.contains(element);
 
   @override
   T? lookup(covariant T element) => contains(element) ? element : null;

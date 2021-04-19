@@ -86,6 +86,7 @@ void main() {
       expect(view.contains(2), isTrue);
       expect(view.contains(3), isTrue);
       expect(view.contains(4), isFalse);
+      expect(view.contains(null), isFalse);
     });
   });
 

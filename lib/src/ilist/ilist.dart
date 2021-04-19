@@ -584,7 +584,7 @@ class IList<T> // ignore: must_be_immutable
 
   /// Returns `true` if the collection contains an element equal to [element], `false` otherwise.
   @override
-  bool contains(covariant T element) {
+  bool contains(covariant T? element) {
     _count();
     return _l.contains(element);
   }
@@ -1541,7 +1541,7 @@ abstract class L<T> implements Iterable<T> {
   Iterable<R> cast<R>() => iter.cast<R>();
 
   @override
-  bool contains(covariant T element) => iter.contains(element);
+  bool contains(covariant T? element) => iter.contains(element);
 
   T operator [](int index);
 

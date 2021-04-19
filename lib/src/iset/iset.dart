@@ -541,7 +541,7 @@ class ISet<T> // ignore: must_be_immutable
 
   /// Returns `true` if the collection contains an element equal to [element], `false` otherwise.
   @override
-  bool contains(covariant T element) {
+  bool contains(covariant T? element) {
     _count();
     return _s.contains(element);
   }
@@ -954,7 +954,7 @@ abstract class S<T> implements Iterable<T> {
   Iterable<R> cast<R>() => iter.cast<R>();
 
   @override
-  bool contains(covariant T element);
+  bool contains(covariant T? element);
 
   bool containsAll(Iterable<T> other);
 

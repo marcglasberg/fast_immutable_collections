@@ -923,13 +923,13 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns `true` if the map contains the [key], `false` otherwise.
-  bool containsKey(K key) {
+  bool containsKey(K? key) {
     _count();
     return _m.containsKey(key);
   }
 
   /// Returns `true` if the map contains the [value], `false` otherwise.
-  bool containsValue(V value) {
+  bool containsValue(V? value) {
     _count();
     return _m.containsValue(value);
   }
@@ -1269,13 +1269,13 @@ abstract class M<K, V> {
   ///
   /// Returns `true` if any of the keys in the map are equal to `key`
   /// according to the equality used by the map.
-  bool containsKey(K key);
+  bool containsKey(K? key);
 
   /// Returns `true` if this map contains the given [value].
   ///
   /// Returns `true` if any of the values in the map are equal to `value`
   /// according to the `==` operator.
-  bool containsValue(V value);
+  bool containsValue(V? value);
 
   bool containsEntry(MapEntry<K, V> entry) => contains(entry.key, entry.value);
 

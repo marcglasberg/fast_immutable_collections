@@ -41,7 +41,7 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  bool contains(covariant T value) => _set.contains(value);
+  bool contains(covariant T? value) => _set.contains(value);
 
   @override
   bool containsAll(covariant Iterable<T?> other) => _set.containsAll(other);

@@ -1562,6 +1562,7 @@ void main() {
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(imap.containsKey("a"), isTrue);
     expect(imap.containsKey("z"), isFalse);
+    expect(imap.containsKey(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1571,6 +1572,7 @@ void main() {
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(imap.containsValue(1), isTrue);
     expect(imap.containsValue(100), isFalse);
+    expect(imap.containsValue(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

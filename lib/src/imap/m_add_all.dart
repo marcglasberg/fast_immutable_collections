@@ -30,13 +30,13 @@ class MAddAll<K, V> extends M<K, V> {
   }
 
   @override
-  bool containsKey(K key) {
+  bool containsKey(K? key) {
     // Check the real map first (it's faster).
     return _items.containsKey(key) || _m.containsKey(key);
   }
 
   @override
-  bool containsValue(V value) {
+  bool containsValue(V? value) {
     // Check the real map first (it's faster).
     return _items.containsValue(value) || _m.containsValue(value);
   }

@@ -59,6 +59,7 @@ void main() {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd.contains(1), isTrue);
     expect(lAdd.contains(5), isFalse);
+    expect(lAdd.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

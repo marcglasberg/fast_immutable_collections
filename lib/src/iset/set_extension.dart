@@ -23,7 +23,7 @@ extension FicSetExtension<T> on Set<T> {
   /// See also: [ImmutableCollection]
   ISet<T> get lockUnsafe => ISet<T>.unsafe(this, config: ISet.defaultConfig);
 
-  /// If the item doesn"t exist in the set, add it and return `true`.
+  /// If the item doesn't exist in the set, add it and return `true`.
   /// Otherwise, if the item already exists in the set, remove it and return `false`.
   bool toggle(T item) {
     var result = contains(item);
@@ -31,7 +31,7 @@ extension FicSetExtension<T> on Set<T> {
       remove(item);
     else
       add(item);
-    return result;
+    return !result;
   }
 
   /// Removes all `null`s from the [Set].

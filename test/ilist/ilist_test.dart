@@ -749,6 +749,7 @@ void main() {
     expect(ilist.contains(100), isFalse);
     expect(ilist.contains(-1), isFalse);
     expect(ilist.contains(-100), isFalse);
+    expect(ilist.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

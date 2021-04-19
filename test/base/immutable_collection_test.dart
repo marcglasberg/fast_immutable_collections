@@ -155,6 +155,7 @@ void main() {
     expect(iterable.contains(const MapEntry("b", 2)), isTrue);
     expect(iterable.contains(const MapEntry("c", 3)), isTrue);
     expect(iterable.contains(const MapEntry("d", 4)), isFalse);
+    expect(iterable.contains(null), isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
