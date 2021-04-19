@@ -326,6 +326,34 @@ void main() {
       WithId(id: "a", name: "Richard"),
     ]);
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("isFirst", () {
+    //
+    var a = Object();
+    var b = Object();
+    var c = Object();
+
+    List<Object> list = [a, b, c];
+
+    expect(list.isFirst(a), isTrue);
+    expect(list.isFirst(b), isFalse);
+    expect(list.isFirst(c), isFalse);
+
+    expect(list.isNotFirst(a), isFalse);
+    expect(list.isNotFirst(b), isTrue);
+    expect(list.isNotFirst(c), isTrue);
+
+    expect(list.isLast(a), isFalse);
+    expect(list.isLast(b), isFalse);
+    expect(list.isLast(c), isTrue);
+
+    expect(list.isNotLast(a), isTrue);
+    expect(list.isNotLast(b), isTrue);
+    expect(list.isNotLast(c), isFalse);
+  });
+
   // /////////////////////////////////////////////////////////////////////////////
 
   test("findDuplicates", () {

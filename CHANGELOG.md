@@ -1,7 +1,11 @@
-## [4.0.5] - 2021/04/16
+## [4.0.5] - 2021/04/19
 
 * The `contains()` methods now accept `null`.
 * Method `toggle()` now returns the correct bool.
+
+## [4.0.4] - 2021/04/18
+
+* `Iterable.isFirst`, `isNotFirst`, `isLast` and `isNotLast`.
 
 ## [4.0.3] - 2021/04/16
 

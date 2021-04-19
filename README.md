@@ -1289,6 +1289,12 @@ These are some of the provided helpers and extensions:
 * `Iterable.sortedLike` returns a list, sorted according to the order specified by the ordering
   iterable. Items which don't appear in the ordering iterable will be included in the end.
 
+* `updateById` returns a new list where new items are added or updated, by their id.
+
+* `isFirst`, `isNotFirst`, `isLast` and `isNotLast` return true if the given item is the same (by
+  identity) as the first/last/not-first/not-last of the items. This is useful for non-indexed loops
+  where you need to know when you have the given item.
+
 ## 8.2 List extensions
 
 * `List.sortOrdered` is similar to `sort`, but uses
