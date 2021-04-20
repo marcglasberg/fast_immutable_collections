@@ -72,6 +72,23 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("withNullsRemoved", () {
+    List<String?> list = ["a", "b", null];
+    expect(list.runtimeType.toString(), "List<String?>");
+    expect(list.withNullsRemoved(), ["a", "b"]);
+    expect(list.withNullsRemoved().runtimeType.toString(), "List<String>");
+
+    list = [null, null];
+    expect(list.withNullsRemoved(), []);
+    expect(list.withNullsRemoved().runtimeType.toString(), "List<String>");
+
+    List<String> other = ["a", "b"];
+    expect(other.withNullsRemoved(), ["a", "b"]);
+    expect(other.withNullsRemoved().runtimeType.toString(), "List<String>");
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("sortOrdered", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
     list.sortOrdered((int a, int b) => a.compareTo(b));

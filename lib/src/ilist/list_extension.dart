@@ -2,6 +2,8 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/reversed_list_view.dart";
 
+// ////////////////////////////////////////////////////////////////////////////
+
 extension FicListExtension<T> on List<T> {
   //
   /// Locks the list, returning an *immutable* list ([IList]).
@@ -427,3 +429,34 @@ extension FicListExtension<T> on List<T> {
   ///
   List<T> get reversedView => ReversedListView<T>(this);
 }
+
+// ////////////////////////////////////////////////////////////////////////////
+
+extension FicListExtensionNullable<T> on List<T?> {
+  //
+  /// Returns a new [List] with all `null`s removed.
+  /// This may return a list with a non-nullable type.
+  ///
+  /// See also: [removeNulls], which mutates the list (and does not change its type).
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// List<String?> myList = ["a", "b", null];
+  ///
+  /// // Is ["a", "b"]
+  /// List<String> myNewList = myList.withNullsRemoved();
+  /// ```
+  ///
+  List<T> withNullsRemoved() {
+    Iterable<T> _whereNotNull() sync* {
+      for (var element in this) {
+        if (element != null) yield element;
+      }
+    }
+
+    return _whereNotNull().toList();
+  }
+}
+
+// ////////////////////////////////////////////////////////////////////////////

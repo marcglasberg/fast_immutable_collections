@@ -1,3 +1,7 @@
+## [4.0.6] - 2021/04/20
+
+* Extension `List.withNullsRemoved()`.
+
 ## [4.0.5] - 2021/04/19
 
 * The `contains()` methods now accept `null`.
