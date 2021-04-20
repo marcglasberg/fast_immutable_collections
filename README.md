@@ -1257,12 +1257,13 @@ a `LinkedHashMap` does not.
 
 # 8. Extensions and helpers
 
-These are some of the provided helpers and extensions:
+These are some provided helpers and extensions:
 
 ## 8.1 Iterable helpers and extensions
 
 * `whereNotNull` is similar to `.where((x) => x != null)`, but the returned iterable has a
-  non-nullable type.
+  non-nullable type. (Note: This has been removed from FIC, because it's now present in package
+  `collection` provided by the Dart team).
 
 * `mapNotNull` is similar to map, but the returned iterable has a non-nullable type.
 
@@ -1283,7 +1284,7 @@ These are some of the provided helpers and extensions:
 
 * `Iterable.removeNulls` removes `null`s from the iterable.
 
-* `Iterable.removeDuplicates` removes all duplicates. Optionally, you can provide an `by` function
+* `Iterable.whereNoDuplicates` removes all duplicates. Optionally, you can provide an `by` function
   to compare the items. If you pass `removeNulls` true, it will also remove the nulls.
 
 * `Iterable.sortedLike` returns a list, sorted according to the order specified by the ordering
@@ -1345,6 +1346,15 @@ These are some of the provided helpers and extensions:
 * `List.distinct` removes all duplicates, leaving only the distinct items.
 
 * `List.reversedView` returns a list of the objects in this list, in reverse order.
+
+* `List.removeDuplicates` removes all duplicates (mutates the list). Optionally, you can provide
+  an `by` function to compare the items. If you pass `removeNulls` true, it will also remove the
+  nulls.
+
+* `List.removeNulls` removes all nulls from the list (mutates the list).
+
+* `List.withNullsRemoved` returns a new list with all nulls removed (does not mutate the original
+  list). This may return a list with a non-nullable type.
 
 ## 8.2 List extensions
 
