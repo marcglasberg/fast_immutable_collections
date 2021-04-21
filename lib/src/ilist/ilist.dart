@@ -1,11 +1,9 @@
 import "dart:collection";
 import "dart:math";
-
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-
 import "ilist_of_2.dart";
 import "l_add.dart";
 import "l_add_all.dart";
@@ -14,22 +12,153 @@ import "list_extension.dart";
 import "modifiable_list_from_ilist.dart";
 import "unmodifiable_list_from_ilist.dart";
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// This is an [IList] which can be made constant.
+/// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
+///
+@immutable
+class IListConst<T> // ignore: must_be_immutable
+    extends IList<T> {
+  //
+  final List<T> _list;
+
+  @override
+  final int? _hashCode;
+
+  @override
+  final ConfigList config;
+
+  const IListConst(this._list)
+      : _hashCode = null,
+        config = const ConfigList(),
+        super._gen();
+
+  /// Example: `const IList<String> myList = IListConst.empty();`
+  const IListConst.empty()
+      : _list = const [],
+        _hashCode = null,
+        config = const ConfigList(),
+        super._gen();
+
+  const IListConst.withConfig(this._list, this._hashCode, this.config) : super._gen();
+
+  @override
+  int get _counter => 0;
+
+  @override
+  L<T> get _l => LFlat<T>.unsafe(_list);
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(IList<T>? other) =>
+      (other != null) &&
+      (other is IListConst) &&
+      identical(_list, (other as IListConst)._list) &&
+      (config == other.config);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@immutable
+class IListImpl<T> // ignore: must_be_immutable
+    extends IList<T> {
+  //
+  /// The list configuration ([ConfigList]).
+  @override
+  final ConfigList config;
+
+  @override
+  late L<T> _l;
+
+  @override
+  int _counter = 0;
+
+  @override
+  int? _hashCode;
+
+  /// Flushes the list, if necessary. Chainable method/getter.
+  /// If the list is already flushed, it doesn't do anything.
+  @override
+  IList<T> get flush {
+    if (!isFlushed) {
+      // Flushes the original _l because maybe it's used elsewhere.
+      // Or maybe it was flushed already, and we can use it as is.
+      _l = LFlat<T>.unsafe(_l.getFlushed!);
+      _counter = 0;
+    }
+    return this;
+  }
+
+  IListImpl.unsafe(List<T> list, {required this.config})
+      : _l = LFlat<T>.unsafe(list),
+        super._gen() {
+    if (ImmutableCollection.disallowUnsafeConstructors)
+      throw UnsupportedError("IList.unsafe is disallowed.");
+  }
+
+  /// **Unsafe**.
+  IListImpl._unsafe(this._l, {required this.config}) : super._gen();
+
+  /// **Unsafe**.
+  IListImpl._unsafeFromList(List<T> list, {required this.config})
+      : _l = LFlat<T>.unsafe(list),
+        super._gen();
+
+  /// Returns an empty [IList], with the given configuration. If a
+  /// configuration is not provided, it will use the default configuration.
+  ///
+  /// Note: If you want to create an empty immutable collection of the same
+  /// type and same configuration as a source collection, simply call [clear]
+  /// on the source collection.
+  static IListImpl<T> empty<T>([ConfigList? config]) =>
+      IListImpl._unsafe(LFlat.empty<T>(), config: config ?? IList.defaultConfig);
+
+  /// **Safe**. Fast if the [Iterable] is an [IList].
+  IListImpl._(
+    Iterable<T>? iterable, {
+    required this.config,
+  })   : _l = iterable is IList<T> //
+            ? iterable._l
+            : iterable == null
+                ? LFlat.empty<T>()
+                : LFlat<T>(iterable),
+        super._gen();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// An **immutable** list.
 /// Note The [replace] method is the equivalent of `operator []=` for the [IList].
 ///
 @immutable
-class IList<T> // ignore: must_be_immutable
+abstract class IList<T> // ignore: must_be_immutable
     extends ImmutableCollection<IList<T>?> implements Iterable<T> {
   //
-  L<T> _l;
+  ConfigList get config;
 
-  /// The list configuration ([ConfigList]).
-  final ConfigList config;
+  set config(ConfigList value) {}
+
+  L<T> get _l;
+
+  set _l(L<T> value) {}
+
+  int get _counter;
+
+  set _counter(int value) {}
+
+  int? get _hashCode;
+
+  set _hashCode(int? value);
 
   /// Create an [IList] from any [Iterable].
   /// Fast, if the Iterable is another [IList].
   factory IList([Iterable<T>? iterable]) => //
       IList.withConfig(iterable ?? const [], defaultConfig);
+
+  const IList._gen();
 
   /// Create an [IList] from any [Iterable] and a [ConfigList].
   /// Fast, if the Iterable is another [IList].
@@ -42,11 +171,11 @@ class IList<T> // ignore: must_be_immutable
         ? (config == iterable.config)
             ? iterable
             : iterable.isEmpty
-                ? IList.empty<T>(config)
-                : IList<T>._(iterable, config: config)
+                ? IListImpl.empty<T>(config)
+                : IListImpl<T>._(iterable, config: config)
         : (iterable == null)
-            ? IList.empty<T>(config)
-            : IList<T>._unsafe(LFlat<T>(iterable), config: config);
+            ? IListImpl.empty<T>(config)
+            : IListImpl<T>._unsafe(LFlat<T>(iterable), config: config);
   }
 
   /// Creates a new list with the given [config].
@@ -66,7 +195,7 @@ class IList<T> // ignore: must_be_immutable
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
   IList<T> withConfig(ConfigList config) {
-    return (config == this.config) ? this : IList._unsafe(_l, config: config);
+    return (config == this.config) ? this : IListImpl._unsafe(_l, config: config);
   }
 
   /// Returns a new list with the contents of the present [IList],
@@ -83,7 +212,7 @@ class IList<T> // ignore: must_be_immutable
     required ConfigList? config,
   }) {
     List<T> list = iset.toList(growable: false, compare: compare);
-    return IList._unsafe(LFlat<T>.unsafe(list), config: config ?? defaultConfig);
+    return IListImpl._unsafe(LFlat<T>.unsafe(list), config: config ?? defaultConfig);
   }
 
   /// **Unsafe constructor. Use this at your own peril.**
@@ -96,10 +225,8 @@ class IList<T> // ignore: must_be_immutable
   /// Note you can optionally disallow unsafe constructors ([ImmutableCollection]) in the global
   /// configuration by doing: `ImmutableCollection.disallowUnsafeConstructors = true` (and then
   /// optionally preventing further configuration changes by calling `lockConfig()`).
-  IList.unsafe(List<T> list, {required this.config}) : _l = LFlat<T>.unsafe(list) {
-    if (ImmutableCollection.disallowUnsafeConstructors)
-      throw UnsupportedError("IList.unsafe is disallowed.");
-  }
+  factory IList.unsafe(List<T> list, {required ConfigList config}) =>
+      IListImpl.unsafe(list, config: config);
 
   /// If [Iterable] is `null`, return `null`.
   ///
@@ -137,8 +264,12 @@ class IList<T> // ignore: must_be_immutable
   /// Note: If you want to create an empty immutable collection of the same
   /// type and same configuration as a source collection, simply call [clear]
   /// on the source collection.
+  ///
+  /// Also, to create an empty const list, use [IListConst.empty], for example:
+  /// `static const IList<String> myList = IListConst.empty();`
+  ///
   static IList<T> empty<T>([ConfigList? config]) =>
-      IList._unsafe(LFlat.empty<T>(), config: config ?? defaultConfig);
+      IListImpl._unsafe(LFlat.empty<T>(), config: config ?? defaultConfig);
 
   /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
   factory IList.fromJson(dynamic json, T Function(Object?) fromJsonT) =>
@@ -207,8 +338,6 @@ class IList<T> // ignore: must_be_immutable
 
   static bool _asyncAutoflush = true;
 
-  int _counter = 0;
-
   /// ## Sync Auto-flush
   ///
   /// Keeps a counter variable which starts at `0` and is incremented each
@@ -259,21 +388,13 @@ class IList<T> // ignore: must_be_immutable
     }
   }
 
-  /// **Safe**. Fast if the [Iterable] is an [IList].
-  IList._(
-    Iterable<T>? iterable, {
-    required this.config,
-  }) : _l = iterable is IList<T> //
-            ? iterable._l
-            : iterable == null
-                ? LFlat.empty<T>()
-                : LFlat<T>(iterable);
+  /// **Unsafe**.
+  factory IList._unsafe(L<T> _l, {required ConfigList config}) =>
+      IListImpl._unsafe(_l, config: config);
 
   /// **Unsafe**.
-  IList._unsafe(this._l, {required this.config});
-
-  /// **Unsafe**.
-  IList._unsafeFromList(List<T> list, {required this.config}) : _l = LFlat<T>.unsafe(list);
+  factory IList._unsafeFromList(List<T> list, {required ConfigList config}) =>
+      IListImpl._unsafeFromList(list, config: config);
 
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
   IList<T> get withIdentityEquals =>
@@ -415,9 +536,6 @@ class IList<T> // ignore: must_be_immutable
   @override
   bool same(IList<T>? other) =>
       (other != null) && identical(_l, other._l) && (config == other.config);
-
-  // HashCode cache. Must be null if hashCode is not cached.
-  int? _hashCode;
 
   @override
   int get hashCode {

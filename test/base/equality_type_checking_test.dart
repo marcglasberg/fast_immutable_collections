@@ -19,8 +19,8 @@ void main() {
     IList<Supertype> ilist1 = IList(<Subtype>[obj1, obj2, obj3]);
     IList<Supertype> ilist2 = [obj1, obj2, obj3].lock;
 
-    expect(ilist1.runtimeType.toString(), "IList<Supertype>");
-    expect(ilist2.runtimeType.toString(), "IList<Subtype>");
+    expect(ilist1.runtimeType.toString(), "IListImpl<Supertype>");
+    expect(ilist2.runtimeType.toString(), "IListImpl<Subtype>");
 
     expect(ilist1 == ilist1, isTrue);
     expect(ilist1 == ilist2, isTrue);

@@ -14,7 +14,7 @@ export "src/base/sort.dart";
 // IList:
 export "src/ilist/from_ilist_mixin.dart";
 export "src/ilist/from_iterable_ilist_mixin.dart";
-export "src/ilist/ilist.dart";
+export "src/ilist/ilist.dart" hide IListImpl;
 export "src/ilist/ilist_of_2.dart";
 export "src/ilist/ilist_of_3.dart";
 export "src/ilist/ilist_of_4.dart";

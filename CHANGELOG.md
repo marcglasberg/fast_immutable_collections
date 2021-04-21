@@ -1,3 +1,9 @@
+## [5.0.0-dev.1] - 2021/04/21
+
+* Const `IList`. 
+  Example: `const IList<String> myList = IListConst.empty();`
+  Example: `const IList<int> myList = IListConst([1, 2, 3]);`
+
 ## [4.0.6] - 2021/04/20
 
 * Extension `List.withNullsRemoved()`.
