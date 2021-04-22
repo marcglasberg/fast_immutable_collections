@@ -1,4 +1,4 @@
-## [5.0.0-dev.1] - 2021/04/21
+## [5.0.0-dev.2] - 2021/04/21
 
 * Const `IList`. 
   Example: `const IList<String> myList = IListConst.empty();`
