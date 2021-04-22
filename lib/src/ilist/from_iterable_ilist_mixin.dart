@@ -51,7 +51,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   bool contains(covariant T? element) => iter.contains(element);
 
-  T? operator [](int index) => iter[index];
+  T operator [](int index) => iter[index];
 
   T elementAt(int index) => iter[index];
 

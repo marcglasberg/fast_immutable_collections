@@ -9,8 +9,7 @@ class IListWrapper {
 
   IListWrapper(this.iList);
 
-  factory IListWrapper.fromJson(Map<String, dynamic> json) =>
-      _$IListWrapperFromJson(json);
+  factory IListWrapper.fromJson(Map<String, dynamic> json) => _$IListWrapperFromJson(json);
 
   Map<String, dynamic> toJson() => _$IListWrapperToJson(this);
 }
@@ -21,8 +20,7 @@ class IMapWrapper {
 
   IMapWrapper(this.iMap);
 
-  factory IMapWrapper.fromJson(Map<String, dynamic> json) =>
-      _$IMapWrapperFromJson(json);
+  factory IMapWrapper.fromJson(Map<String, dynamic> json) => _$IMapWrapperFromJson(json);
 
   Map<String, dynamic> toJson() => _$IMapWrapperToJson(this);
 }
@@ -33,8 +31,7 @@ class ISetWrapper {
 
   ISetWrapper(this.iSet);
 
-  factory ISetWrapper.fromJson(Map<String, dynamic> json) =>
-      _$ISetWrapperFromJson(json);
+  factory ISetWrapper.fromJson(Map<String, dynamic> json) => _$ISetWrapperFromJson(json);
 
   Map<String, dynamic> toJson() => _$ISetWrapperToJson(this);
 }
