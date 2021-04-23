@@ -34,6 +34,7 @@ void main() {
     expect(mAdd.containsKey("a"), isTrue);
     expect(mAdd.containsKey("b"), isFalse);
     expect(mAdd.containsKey("d"), isTrue);
+    expect(mAdd.containsKey(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -45,6 +46,7 @@ void main() {
     expect(mAdd.containsValue(1), isTrue);
     expect(mAdd.containsValue(2), isFalse);
     expect(mAdd.containsValue(4), isTrue);
+    expect(mAdd.containsValue(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -67,6 +69,7 @@ void main() {
     expect(mAdd.keys.contains("a"), isTrue);
     expect(mAdd.keys.contains("b"), isFalse);
     expect(mAdd.keys.contains("d"), isTrue);
+    expect(mAdd.keys.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -78,6 +81,7 @@ void main() {
     expect(mAdd.values.contains(1), isTrue);
     expect(mAdd.values.contains(2), isFalse);
     expect(mAdd.values.contains(4), isTrue);
+    expect(mAdd.values.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

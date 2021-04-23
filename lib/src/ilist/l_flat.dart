@@ -25,7 +25,7 @@ class LFlat<T> extends L<T> {
   Iterable<T> get iter => _list;
 
   @override
-  bool contains(covariant T element) => _list.contains(element);
+  bool contains(covariant T? element) => _list.contains(element);
 
   @override
   T operator [](int index) => _list[index];

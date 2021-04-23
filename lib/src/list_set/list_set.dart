@@ -73,7 +73,7 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  bool contains(covariant T value) => _set.contains(value);
+  bool contains(covariant T? value) => _set.contains(value);
 
   @override
   bool containsAll(covariant Iterable<T?> other) => _set.containsAll(other);

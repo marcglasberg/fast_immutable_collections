@@ -1,7 +1,7 @@
 import "../widgets/bar_chart.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
-import "package:intl/intl.dart";
+
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,6 @@ class _GraphScreenState extends State<GraphScreen> {
       ),
     ],
   );
-  static final NumberFormat formatter = NumberFormat("#,##0", "en_US");
 
   late int currentTableIndex;
 
@@ -109,7 +108,7 @@ class _GraphScreenState extends State<GraphScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             child: Text(
-              "Size\n${formatter.format(widget.tables![i].config.size)}",
+              "Size\n${widget.tables![i].config.size}",
               style: bottomItemTextStyle(activeIndex, i),
               textAlign: TextAlign.center,
             ),

@@ -50,6 +50,25 @@ extension FicIterableExtensionNullable<T> on Iterable<T>? {
 // ////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicListExtension], [FicSetExtension]
+extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
+  //
+  /// Similar to [map], but MAY return a non-nullable type.
+  ///
+  /// ```
+  /// int? f(String? e) => (e == null) ? 0 : e.length;
+  ///
+  /// List<int?> list1 = ["xxx", "xx", null, "x"].map(f).toList();
+  /// expect(list1, isA<List<int?>>());
+  ///
+  /// List<int?> list2 = ["xxx", "xx", null, "x"].mapNotNull(f).toList();
+  /// expect(list2, isA<List<int>>());
+  /// ```
+  Iterable<E> mapNotNull<E>(E? Function(T? e) f) => map(f).cast();
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+
+/// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtension<T> on Iterable<T> {
   //
   /// Creates an *immutable* set ([ISet]) from the iterable.
@@ -59,16 +78,17 @@ extension FicIterableExtension<T> on Iterable<T> {
   IList<T> toIList([ConfigList? config]) =>
       IList<T>.withConfig(this, config ?? IList.defaultConfig);
 
-  /// Returns the first element that satisfies the given predicate [test].
-  ///
-  /// If no element satisfies [test], the result of invoking the [orElse]
-  /// function is returned.
-  /// If [orElse] is omitted, return `true`.
-  T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
-    for (T element in this) if (test(element)) return element;
-    if (orElse != null) return orElse();
-    return null;
-  }
+  /// Removed, since now you can: import "package:collection/collection.dart";
+  // /// Returns the first element that satisfies the given predicate [test].
+  // ///
+  // /// If no element satisfies [test], the result of invoking the [orElse]
+  // /// function is returned.
+  // /// If [orElse] is omitted, return null.
+  // T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
+  //   for (T element in this) if (test(element)) return element;
+  //   if (orElse != null) return orElse();
+  //   return null;
+  // }
 
   /// Compare all items, in order or not, according to [ignoreOrder],
   /// using [operator ==]. Return true if they are all the same,
@@ -124,16 +144,6 @@ extension FicIterableExtension<T> on Iterable<T> {
 
   /// Returns `true` if any item is equal to [value].
   bool anyIs(T value) => any((item) => item == value);
-
-  /// Removes `null`s from the [Iterable].
-  ///
-  /// See also: `removeNulls` in [FicListExtension].
-  ///
-  Iterable<T> whereNotNull() sync* {
-    for (T item in this) {
-      if (item != null) yield item;
-    }
-  }
 
   /// Removes all duplicates, leaving only the distinct items.
   /// Optionally, you can provide an [by] function to compare the items.
@@ -233,4 +243,60 @@ extension FicIterableExtension<T> on Iterable<T> {
     newList.addAll(idsPerNewItem.values);
     return newList;
   }
+
+  /// Return true if the given [item] is the same (by identity) as the first iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you have the first item.
+  /// For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (!children.isFirst(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isFirst(T item) => length > 0 && identical(first, item);
+
+  /// Return true if the given [item] is NOT the same (by identity) as the first iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you don't have the first
+  /// item. For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (children.isNotFirst(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isNotFirst(T item) => !isFirst(item);
+
+  /// Return true if the given [item] is the same (by identity) as the last iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you have the last item.
+  /// For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (!children.isLast(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isLast(T item) => length > 0 && identical(last, item);
+
+  /// Return true if the given [item] is NOT the same (by identity) as the last iterable item.
+  /// If this iterable is empty, always return null.
+  /// This is useful for non-indexed loops where you need to know when you don't have the last
+  /// item. For example:
+  ///
+  /// ```dart
+  /// for (student in students) {
+  ///    if (children.isNotLast(student) result.add(Divider());
+  ///    result.add(Text(student.name));
+  /// }
+  /// ```
+  ///
+  bool isNotLast(T item) => !isLast(item);
 }

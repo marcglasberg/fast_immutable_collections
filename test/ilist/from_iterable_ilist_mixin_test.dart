@@ -66,6 +66,7 @@ void main() {
 
     expect(students.contains(const Student("James")), isTrue);
     expect(students.contains(const Student("John")), isFalse);
+    expect(students.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

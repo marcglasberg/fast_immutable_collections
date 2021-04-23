@@ -1,4 +1,5 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:collection/collection.dart";
 import "package:test/test.dart";
 
 void main() {
@@ -8,6 +9,38 @@ void main() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = true;
     ImmutableCollection.prettyPrint = true;
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('mapNotNull', () {
+    //
+    int? f(String? e) => (e == null) ? 0 : e.length;
+
+    Iterable<int?> list1 = ["xxx", "xx", null, "x"].map(f).toList();
+    expect(list1, isA<Iterable<int?>>());
+    expect(list1, isNot(isA<Iterable<int>>()));
+
+    Iterable<int?> list2 = ["xxx", "xx", null, "x"].mapNotNull(f).toList();
+    expect(list2, isA<Iterable<int>>());
+    expect(list1, isA<Iterable<int?>>());
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
+  test('whereNotNull (removed this, now using it from collection package)', () {
+    //
+    List<String?> list1 = ["xxx", "xx", null, "x"];
+    expect(list1, isA<List<String?>>());
+
+    List<String?> list2 = list1.where((x) => x != null).toList();
+    expect(list2, isA<List<String?>>());
+    expect(list2, isNot(isA<List<String>>()));
+    expect(list2, ["xxx", "xx", "x"]);
+
+    List<String> list3 = list1.whereNotNull().toList();
+    expect(list3, isA<List<String>>());
+    expect(list3, ["xxx", "xx", "x"]);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -293,6 +326,34 @@ void main() {
       WithId(id: "a", name: "Richard"),
     ]);
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("isFirst", () {
+    //
+    var a = Object();
+    var b = Object();
+    var c = Object();
+
+    List<Object> list = [a, b, c];
+
+    expect(list.isFirst(a), isTrue);
+    expect(list.isFirst(b), isFalse);
+    expect(list.isFirst(c), isFalse);
+
+    expect(list.isNotFirst(a), isFalse);
+    expect(list.isNotFirst(b), isTrue);
+    expect(list.isNotFirst(c), isTrue);
+
+    expect(list.isLast(a), isFalse);
+    expect(list.isLast(b), isFalse);
+    expect(list.isLast(c), isTrue);
+
+    expect(list.isNotLast(a), isTrue);
+    expect(list.isNotLast(b), isTrue);
+    expect(list.isNotLast(c), isFalse);
+  });
+
   // /////////////////////////////////////////////////////////////////////////////
 
   test("findDuplicates", () {
@@ -302,15 +363,6 @@ void main() {
     expect(["A", "B", "C", "E"].findDuplicates(), <String>[]);
     expect(["A", "B", "B", "B"].findDuplicates(), {"B"});
     expect(["A", "B", "B", "B"].findDuplicates(), ["B"]);
-  });
-
-  // /////////////////////////////////////////////////////////////////////////////
-
-  test("firstWhereOrNull", () {
-    List<String> list = ["A", "B", "C"];
-    expect(list.firstWhereOrNull((String value) => value == "C"), "C");
-    expect(list.firstWhereOrNull((String value) => value == "D"), null);
-    expect(list.firstWhereOrNull((String value) => value == "D", orElse: () => "Z"), "Z");
   });
 
   // /////////////////////////////////////////////////////////////////////////////

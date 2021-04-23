@@ -61,6 +61,7 @@ void main() {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     expect(lAddAll.contains(1), isTrue);
     expect(lAddAll.contains(6), isFalse);
+    expect(lAddAll.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -163,6 +164,7 @@ void main() {
           LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
       expect(lAddAll.contains(1), isTrue);
       expect(lAddAll.contains(8), isTrue);
+      expect(lAddAll.contains(null), isFalse);
     });
 
     //////////////////////////////////////////////////////////////////////////////

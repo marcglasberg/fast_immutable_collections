@@ -760,6 +760,7 @@ void main() {
     expect(iset.contains(4), isTrue);
     expect(iset.contains(5), isTrue);
     expect(iset.contains(100), isFalse);
+    expect(iset.contains(null), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////

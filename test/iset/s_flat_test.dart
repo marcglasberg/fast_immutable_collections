@@ -247,6 +247,7 @@ void main() {
     expect(sFlat.contains(4), isTrue);
     expect(sFlat.contains(5), isTrue);
     expect(sFlat.contains(100), isFalse);
+    expect(sFlat.contains(null), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////

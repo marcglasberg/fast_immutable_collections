@@ -43,6 +43,7 @@ void main() {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.contains(1), isTrue);
     expect(sAddAll.contains(6), isFalse);
+    expect(sAddAll.contains(null), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////
@@ -193,6 +194,7 @@ void main() {
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     expect(sAddAll.contains(1), isTrue);
     expect(sAddAll.contains(9), isFalse);
+    expect(sAddAll.contains(null), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////

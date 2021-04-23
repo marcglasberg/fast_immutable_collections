@@ -45,11 +45,10 @@ void main() {
 
     // 2) FicNumberExtensionNullable
 
-    int? value;
-    expect(value.inRange(5, 10), isNull);
-    expect(value.inRange(5, 10, orElse: 100), 100);
+    int? valueNullable;
+    expect(valueNullable.inRange(5, 10, orElse: 100), 100);
 
-    value = 0;
+    int value = 0;
     expect(value.inRange(5, 10), 5);
 
     value = 4;

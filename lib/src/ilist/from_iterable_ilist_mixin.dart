@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 import "ilist.dart";
@@ -48,11 +49,11 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
-  bool contains(covariant T element) => iter.contains(element);
+  bool contains(covariant T? element) => iter.contains(element);
 
-  T? operator [](int index) => iter[index];
+  T operator [](int index) => iter[index];
 
-  T? elementAt(int index) => iter[index];
+  T elementAt(int index) => iter[index];
 
   bool every(bool Function(T) test) => iter.every(test);
 

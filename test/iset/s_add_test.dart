@@ -40,6 +40,7 @@ void main() {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.contains(1), isTrue);
     expect(sAdd.contains(5), isFalse);
+    expect(sAdd.contains(null), isFalse);
   });
 
   /////////////////////////////////////////////////////////////////////////////

@@ -5,6 +5,8 @@ import "package:meta/meta.dart";
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   //
+  const ImmutableCollection();
+
   /// In your app initialization, call [lockConfig] if you want to lock the
   /// configuration, so that no one can change it anymore.
   ///

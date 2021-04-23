@@ -1313,9 +1313,15 @@ a `LinkedHashMap` does not.
 
 # 8. Extensions and Helpers
 
-These are some of the provided helpers and extensions:
+These are some provided helpers and extensions:
 
 ## 8.1 Iterable Helpers and Extensions
+
+* `whereNotNull` is similar to `.where((x) => x != null)`, but the returned iterable has a
+  non-nullable type. (Note: This has been removed from FIC, because it's now present in package
+  `collection` provided by the Dart team).
+
+* `mapNotNull` is similar to map, but the returned iterable has a non-nullable type.
 
 * `combineIterables` is a top-level function that combines two iterables into one, by applying
   a `combine` function.
@@ -1334,13 +1340,19 @@ These are some of the provided helpers and extensions:
 
 * `Iterable.removeNulls` removes `null`s from the iterable.
 
-* `Iterable.removeDuplicates` removes all duplicates. Optionally, you can provide an `by` function
+* `Iterable.whereNoDuplicates` removes all duplicates. Optionally, you can provide an `by` function
   to compare the items. If you pass `removeNulls` true, it will also remove the nulls.
 
 * `Iterable.sortedLike` returns a list, sorted according to the order specified by the ordering
   iterable. Items which don't appear in the ordering iterable will be included in the end.
 
-## 8.2 List Extensions
+* `updateById` returns a new list where new items are added or updated, by their id.
+
+* `isFirst`, `isNotFirst`, `isLast` and `isNotLast` return true if the given item is the same (by
+  identity) as the first/last/not-first/not-last of the items. This is useful for non-indexed loops
+  where you need to know when you have the given item.
+
+## 8.2 List extensions
 
 * `List.sortOrdered` is similar to `sort`, but uses
   a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort). Contrary to `sort`,
@@ -1391,17 +1403,26 @@ These are some of the provided helpers and extensions:
 
 * `List.reversedView` returns a list of the objects in this list, in reverse order.
 
-## 8.2 List Extensions
+* `List.removeDuplicates` removes all duplicates (mutates the list). Optionally, you can provide
+  an `by` function to compare the items. If you pass `removeNulls` true, it will also remove the
+  nulls.
+
+* `List.removeNulls` removes all nulls from the list (mutates the list).
+
+* `List.withNullsRemoved` returns a new list with all nulls removed (does not mutate the original
+  list). This may return a list with a non-nullable type.
+
+## 8.3 List extensions
 
 * `Set.toggle` If the item doesn't exist in the set, add it and return `true`. Otherwise, if the
   item already exists in the set, remove it and return `false`.
 
-## 8.3 Iterator Extensions
+## 8.4 Iterator Extensions
 
 * `toIterable`, `toList`, `toSet`, `toIList`, and `toISet` convert the iterator into an
   `Iterable`, `List`, `Set`, `IList`, and `ISet`, respectively.
 
-## 8.4 Boolean Extensions
+## 8.5 Boolean Extensions
 
 * `compareTo` makes `true` > `false`.
 
@@ -1694,10 +1715,12 @@ ImmutableCollection.lockConfig();
 
 # 11. JSON Support
 
-Most FIC collections convert to and from Json, through their `.fromJson()` and `.toJson()`.
+With some help from <a href="https://github.com/knaeckeKami">Martin Kamleithner</a> and
+<a href="https://github.com/rrousselGit">Remi Rousselet</a>, now most FIC collections convert to and
+from Json, through `.fromJson()` and `.toJson()`.
 
-They can be used with
-<a href="https://pub.dev/packages/json_serializable">json_serializable</a> in classes annotated 
+This means those FIC collections can be used with
+<a href="https://pub.dev/packages/json_serializable">json_serializable</a> in classes annotated
 with `@JsonSerializable`.
 
 For example:

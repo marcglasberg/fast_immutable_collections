@@ -38,5 +38,8 @@ jobs:
       - name: Run tests
         run: flutter test --coverage --coverage-path=lcov.info
 
+      - name: Run json_serializable e2e tests
+        run: bash tool/test_json_serializable_codegen.sh
+
       - name: Upload Results to Codecov.io
         run: bash tool/codecov.sh

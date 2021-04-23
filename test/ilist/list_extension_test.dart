@@ -72,6 +72,23 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("withNullsRemoved", () {
+    List<String?> list = ["a", "b", null];
+    expect(list.runtimeType.toString(), "List<String?>");
+    expect(list.withNullsRemoved(), ["a", "b"]);
+    expect(list.withNullsRemoved().runtimeType.toString(), "List<String>");
+
+    list = [null, null];
+    expect(list.withNullsRemoved(), []);
+    expect(list.withNullsRemoved().runtimeType.toString(), "List<String>");
+
+    List<String> other = ["a", "b"];
+    expect(other.withNullsRemoved(), ["a", "b"]);
+    expect(other.withNullsRemoved().runtimeType.toString(), "List<String>");
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("sortOrdered", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
     list.sortOrdered((int a, int b) => a.compareTo(b));
@@ -129,57 +146,60 @@ void main() {
 
     // 1) Toggle existing item
     expect(list.contains(4), isTrue);
-    expect(list.toggle(4), isTrue);
-    expect(list.contains(4), isFalse);
     expect(list.toggle(4), isFalse);
+    expect(list.contains(4), isFalse);
+    expect(list.toggle(4), isTrue);
     expect(list.contains(4), isTrue);
 
     // 2) Toggle NON-existing item
     expect(list.contains(6), isFalse);
-    expect(list.toggle(6), isFalse);
-    expect(list.contains(6), isTrue);
     expect(list.toggle(6), isTrue);
+    expect(list.contains(6), isTrue);
+    expect(list.toggle(6), isFalse);
     expect(list.contains(6), isFalse);
 
     // 3) Nulls and other checks
     list = <int>[];
-    expect(list.toggle(1), isFalse);
+    expect(list.toggle(1), isTrue);
     expect(list.contains(1), isTrue);
 
     list = <int?>[];
-    expect(list.toggle(null), isFalse);
+    expect(list.toggle(null), isTrue);
     expect(list.contains(null), isTrue);
+    expect(list.toggle(null), isFalse);
+    expect(list.contains(null), isFalse);
 
     list = <int?>[null];
-    expect(list.toggle(1), isFalse);
+    expect(list.toggle(1), isTrue);
     expect(list.contains(1), isTrue);
 
     list = <int?>[null];
-    expect(list.toggle(null), isTrue);
+    expect(list.toggle(null), isFalse);
     expect(list.contains(null), isFalse);
 
     list = <int>[1];
-    expect(list.toggle(1), isTrue);
+    expect(list.toggle(1), isFalse);
     expect(list.contains(1), isFalse);
 
     list = <int?>[1];
-    expect(list.toggle(null), isFalse);
+    expect(list.toggle(null), isTrue);
     expect(list.contains(null), isTrue);
 
     list = <int?>[null, null, null];
-    expect(list.toggle(1), isFalse);
+    expect(list.toggle(1), isTrue);
     expect(list.contains(1), isTrue);
+    expect(list.contains(null), isTrue);
 
     list = <int?>[null, null, null];
-    expect(list.toggle(null), isTrue);
+    expect(list.toggle(null), isFalse);
     expect(list, <int?>[null, null]);
 
     list = <int?>[null, 1, null, 1];
-    expect(list.toggle(1), isTrue);
+    expect(list.toggle(1), isFalse);
     expect(list, <int?>[null, null, 1]);
 
     list = <int?>[null, 1, null, 1];
-    expect(list.toggle(null), isTrue);
+    expect(list.toggle(null), isFalse);
     expect(list, <int?>[1, null, 1]);
   });
 

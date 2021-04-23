@@ -1,8 +1,7 @@
 import "package:charts_flutter/flutter.dart" as charts;
-import "package:flutter/material.dart";
-import "package:intl/intl.dart";
-
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:flutter/material.dart";
+
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -38,8 +37,7 @@ class BarChart extends StatelessWidget {
     int i,
     RecordsColumn normalizedAgainstMaxColumn,
   ) {
-    final NumberFormat formatter = NumberFormat("#,##0", "en_US");
-    final String millis = formatter.format(resultsColumn.records[i].record.round());
+    final String millis = resultsColumn.records[i].record.round().toString();
     final String collectionName = normalizedAgainstMaxColumn.records[i].collectionName;
 
     return StopwatchRecord(

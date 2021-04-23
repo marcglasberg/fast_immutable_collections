@@ -47,10 +47,10 @@ class MFlat<K, V> extends M<K, V> {
       : (_map.containsKey(key) && (_map[key] == null));
 
   @override
-  bool containsKey(K key) => _map.containsKey(key);
+  bool containsKey(K? key) => _map.containsKey(key);
 
   @override
-  bool containsValue(V value) => _map.containsValue(value);
+  bool containsValue(V? value) => _map.containsValue(value);
 
   @override
   V? operator [](K key) => _map[key];
