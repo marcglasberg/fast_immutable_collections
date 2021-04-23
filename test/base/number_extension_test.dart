@@ -48,29 +48,29 @@ void main() {
     int? valueNullable;
     expect(valueNullable.inRange(5, 10, orElse: 100), 100);
 
-    int value = 0;
-    expect(value.inRange(5, 10), 5);
+    valueNullable = 0;
+    expect(valueNullable.inRange(5, 10), 5);
 
-    value = 4;
-    expect(value.inRange(5, 10), 5);
+    valueNullable = 4;
+    expect(valueNullable.inRange(5, 10), 5);
 
-    value = 5;
-    expect(value.inRange(5, 10), 5);
+    valueNullable = 5;
+    expect(valueNullable.inRange(5, 10), 5);
 
-    value = 6;
-    expect(value.inRange(5, 10), 6);
+    valueNullable = 6;
+    expect(valueNullable.inRange(5, 10), 6);
 
-    value = 9;
-    expect(value.inRange(5, 10), 9);
+    valueNullable = 9;
+    expect(valueNullable.inRange(5, 10), 9);
 
-    value = 10;
-    expect(value.inRange(5, 10), 10);
+    valueNullable = 10;
+    expect(valueNullable.inRange(5, 10), 10);
 
-    value = 11;
-    expect(value.inRange(5, 10), 10);
+    valueNullable = 11;
+    expect(valueNullable.inRange(5, 10), 10);
 
-    value = 100;
-    expect(value.inRange(5, 10), 10);
+    valueNullable = 100;
+    expect(valueNullable.inRange(5, 10), 10);
   });
 
   //////////////////////////////////////////////////////////////////////////////
