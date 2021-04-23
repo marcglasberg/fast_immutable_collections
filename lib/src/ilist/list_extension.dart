@@ -199,8 +199,13 @@ extension FicListExtension<T> on List<T> {
   /// Search a list for items that satisfy a [test] predicate (matching items),
   /// and then divide that list into a [Map] of parts, such as each part contains
   /// one matching item, and the keys are given by the [key] function.
-  /// Except maybe for the first matching item, it will keep the matching items as
-  /// the first item in each part.
+  ///
+  /// If no items satisfy the [test], it will return an empty map.
+  ///
+  /// if [includeFirstItems] is false (the default), each matching item will be the
+  /// first item of its respective part. If [includeFirstItems] is true, the items
+  /// before the first matched item will be included in the first part (otherwise, they
+  /// will be discarded).
   ///
   ///
   /// Example: Suppose you have a list with Chapters, Texts and Images.
@@ -214,24 +219,23 @@ extension FicListExtension<T> on List<T> {
   ///
   /// In another example, the matching items are `2` and `4`. We'll divide
   /// the following list into 2, one containing `2`, and another containing `4`.
-  /// The `4` will be the first item in its part:
+  /// Note `2` and `4` will be the first items in their part:
   ///
   /// ```
-  /// [1,2,3,4,5].divideListAsMap((v)=>v==2 || v==4, (v)=>v) ➜ {2:[1,2,3], 4:[4,5]}
+  /// [1,2,3,4,5].divideListAsMap((v)=>v==2 || v==4, (v)=>v) ➜ {2:[2,3], 4:[4,5]}
   /// ```
   ///
-  /// In the example below the single matching item is `2`.
-  /// This means the list is unchanged:
+  /// However, if we do `includeFirstItems: true`, the number `1` will be included:
   ///
   /// ```
-  /// [1,2,3].divideListAsMap((v)=>v==2, (v)=>v) ➜ {2: [1,2,3]}
+  /// [1,2,3,4,5].divideListAsMap((v)=>v==2 || v==4, (v)=>v, includeFirstItems: true)
+  ///   ➜ {2:[1,2,3], 4:[4,5]}
   /// ```
   ///
-  /// In the example below there is no matching item.
-  /// This means the list is unchanged:
+  /// If there is no matching item, the result list will be empty:
   ///
   /// ```
-  /// [1,2,3].divideListAsMap((v)=>v==10, (v)=>v) ➜ {null: [1,2,3]}
+  /// [1,2,3].divideListAsMap((v)=>v==10, (v)=>v) ➜ {}
   /// ```
   ///
   /// Note: Repeating keys will be joined together, but it probably doesn't
@@ -239,30 +243,37 @@ extension FicListExtension<T> on List<T> {
   ///
   /// See also: [groupBy] from `package:collection`
   ///
-  Map<G?, List<T>> divideListAsMap<G>(
+  Map<G, List<T>> divideListAsMap<G>(
     bool Function(T item) test, {
     G Function(T item)? key,
+    bool includeFirstItems = false,
   }) {
     if (isEmpty) return {};
 
-    Map<G?, List<T>> result = {};
+    Map<G, List<T>> result = {};
     List<int> indexes = [];
-    List<G?> keys = [];
+    List<G> keys = [];
 
+    int? firstMatch;
     for (int i = 0; i < length; i++) {
       T item = this[i];
+
       if (test(item)) {
         indexes.add(i);
-        var _key = (key == null) ? (item as G?) : key(item);
+        var _key = (key == null) ? (item as G) : key(item);
         keys.add(_key);
+
+        if (!includeFirstItems) firstMatch ??= i;
       }
     }
 
+    firstMatch ??= 0;
+
     if (indexes.isEmpty)
-      return {null: this};
+      return {};
     else {
       for (int i = 0; i < indexes.length; i++) {
-        var ini = i == 0 ? 0 : indexes[i];
+        var ini = i == 0 ? firstMatch : indexes[i];
         var fim = i == indexes.length - 1 ? length - 1 : indexes[i + 1] - 1;
         var repeating = result[keys[i]];
         result[keys[i]] = (repeating != null)

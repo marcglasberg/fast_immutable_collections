@@ -1,8 +1,9 @@
-## [5.0.0-dev.2] - 2021/04/21
+## [5.0.0-dev.3] - 2021/04/23
 
 * Const `IList`. 
   Example: `const IList<String> myList = IListConst.empty();`
   Example: `const IList<int> myList = IListConst([1, 2, 3]);`
+* Better NNBD for `divideListAsMap()`.  
 
 ## [4.0.6] - 2021/04/20
 

@@ -356,79 +356,143 @@ void main() {
 
   test("divideListAsMap", () {
     //
-    expect([].divideListAsMap((dynamic v) => v == 3, key: (dynamic v) => -v), {});
+    expect(
+      [1, 2, 3, 4, 5, 6, 7, 8, 9].divideListAsMap((v) => v == 3 || v == 6),
+      {
+        3: [3, 4, 5],
+        6: [6, 7, 8, 9],
+      },
+    );
+
+    expect(
+      [1, 2, 3, 4, 5, 6, 7, 8, 9].divideListAsMap((v) => v == 3 || v == 6, includeFirstItems: true),
+      {
+        3: [1, 2, 3, 4, 5],
+        6: [6, 7, 8, 9],
+      },
+    );
+
+    expect(
+      [1, 2, 3, 4, 5, 6, 7, 8, 9].divideListAsMap((v) => v == 52),
+      {},
+    );
+  });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test("divideListAsMap", () {
+    //
+    expect(
+        [].divideListAsMap((dynamic v) => v == 3, key: (dynamic v) => -v, includeFirstItems: true),
+        {});
 
     expect([1].divideListAsMap(((v) => v == 1)), {
       1: [1],
     });
 
-    expect([1].divideListAsMap(((v) => v == 1), key: ((v) => -v)), {
+    expect([1].divideListAsMap(((v) => v == 1), key: ((v) => -v), includeFirstItems: true), {
       -1: [1],
     });
 
-    expect([1, 2].divideListAsMap(((v) => v == 1), key: ((v) => -v)), {
+    expect([1, 2].divideListAsMap(((v) => v == 1), key: ((v) => -v), includeFirstItems: true), {
       -1: [1, 2]
     });
 
-    expect([1, 2].divideListAsMap(((v) => v == 2), key: ((v) => -v)), {
+    expect([1, 2].divideListAsMap(((v) => v == 2), key: ((v) => -v), includeFirstItems: true), {
       -2: [1, 2],
     });
 
-    expect([1, 2, 3].divideListAsMap(((v) => v == 2), key: ((v) => -v)), {
+    expect([1, 2, 3].divideListAsMap(((v) => v == 2), key: ((v) => -v), includeFirstItems: true), {
       -2: [1, 2, 3]
     });
 
-    expect([1, 2, 3].divideListAsMap(((v) => v == 2 || v == 3), key: ((v) => -v)), {
-      -2: [1, 2],
-      -3: [3]
-    });
+    expect(
+        [1, 2, 3]
+            .divideListAsMap(((v) => v == 2 || v == 3), key: ((v) => -v), includeFirstItems: true),
+        {
+          -2: [1, 2],
+          -3: [3]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3), key: ((v) => -v)), {
-      -3: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3), key: ((v) => -v), includeFirstItems: true),
+        {
+          -3: [1, 2, 3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 1), key: ((v) => -v)), {
-      -1: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3), key: ((v) => -v), includeFirstItems: false),
+        {
+          -3: [3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 7), key: ((v) => -v)), {
-      -7: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 1), key: ((v) => -v), includeFirstItems: true),
+        {
+          -1: [1, 2, 3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 8), key: ((v) => -v)), {
-      null: [1, 2, 3, 4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 7), key: ((v) => -v), includeFirstItems: true),
+        {
+          -7: [1, 2, 3, 4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3 || v == 4), key: ((v) => -v)), {
-      -3: [1, 2, 3],
-      -4: [4, 5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 8), key: ((v) => -v), includeFirstItems: true),
+        {});
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3 || v == 5), key: ((v) => -v)), {
-      -3: [1, 2, 3, 4],
-      -5: [5, 6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3 || v == 4), key: ((v) => -v), includeFirstItems: true),
+        {
+          -3: [1, 2, 3],
+          -4: [4, 5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v == 3 || v == 6), key: ((v) => -v)), {
-      -3: [1, 2, 3, 4, 5],
-      -6: [6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3 || v == 5), key: ((v) => -v), includeFirstItems: true),
+        {
+          -3: [1, 2, 3, 4],
+          -5: [5, 6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v % 2 == 0), key: ((v) => -v)), {
-      -2: [1, 2, 3],
-      -4: [4, 5],
-      -6: [6, 7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v == 3 || v == 6), key: ((v) => -v), includeFirstItems: true),
+        {
+          -3: [1, 2, 3, 4, 5],
+          -6: [6, 7]
+        });
 
-    expect([1, 2, 3, 4, 5, 6, 7].divideListAsMap(((v) => v % 2 == 1), key: ((v) => -v)), {
-      -1: [1, 2],
-      -3: [3, 4],
-      -5: [5, 6],
-      -7: [7]
-    });
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v % 2 == 0), key: ((v) => -v), includeFirstItems: true),
+        {
+          -2: [1, 2, 3],
+          -4: [4, 5],
+          -6: [6, 7]
+        });
+
+    expect(
+        [1, 2, 3, 4, 5, 6, 7]
+            .divideListAsMap(((v) => v % 2 == 1), key: ((v) => -v), includeFirstItems: true),
+        {
+          -1: [1, 2],
+          -3: [3, 4],
+          -5: [5, 6],
+          -7: [7]
+        });
 
     /// Repeating keys will be joined together.
-    expect([1, 2, 3, 8, 12, 1, 4, 6].divideListAsMap(((v) => v % 2 == 1)), {
+    expect(
+        [1, 2, 3, 8, 12, 1, 4, 6].divideListAsMap(((v) => v % 2 == 1), includeFirstItems: true), {
       1: [1, 2, 1, 4, 6],
       3: [3, 8, 12],
     });

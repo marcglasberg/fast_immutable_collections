@@ -1,9 +1,11 @@
 import "dart:collection";
 import "dart:math";
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
+
 import "ilist_of_2.dart";
 import "l_add.dart";
 import "l_add_all.dart";
@@ -24,30 +26,28 @@ class IListConst<T> // ignore: must_be_immutable
   final List<T> _list;
 
   @override
-  final int? _hashCode;
-
-  @override
   final ConfigList config;
 
   const IListConst(this._list)
-      : _hashCode = null,
-        config = const ConfigList(),
+      : config = const ConfigList(),
         super._gen();
 
   /// Example: `const IList<String> myList = IListConst.empty();`
   const IListConst.empty()
       : _list = const [],
-        _hashCode = null,
         config = const ConfigList(),
         super._gen();
 
-  const IListConst.withConfig(this._list, this._hashCode, this.config) : super._gen();
+  const IListConst.withConfig(this._list, this.config) : super._gen();
 
   @override
   int get _counter => 0;
 
   @override
   L<T> get _l => LFlat<T>.unsafe(_list);
+
+  @override
+  int? get _hashCode => _list.hashCode;
 
   @override
   set _hashCode(int? value) {}
@@ -77,6 +77,7 @@ class IListImpl<T> // ignore: must_be_immutable
   int _counter = 0;
 
   @override
+  // ignore: use_late_for_private_fields_and_variables
   int? _hashCode;
 
   /// Flushes the list, if necessary. Chainable method/getter.
