@@ -120,7 +120,7 @@ class IListImpl<T> // ignore: must_be_immutable
   IListImpl._(
     Iterable<T>? iterable, {
     required this.config,
-  })   : _l = iterable is IList<T> //
+  })  : _l = iterable is IList<T> //
             ? iterable._l
             : iterable == null
                 ? LFlat.empty<T>()

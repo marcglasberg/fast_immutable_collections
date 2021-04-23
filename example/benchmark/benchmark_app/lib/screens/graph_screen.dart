@@ -2,7 +2,6 @@ import "../widgets/bar_chart.dart";
 import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 
-
 // ////////////////////////////////////////////////////////////////////////////
 
 class GraphScreen extends StatefulWidget {

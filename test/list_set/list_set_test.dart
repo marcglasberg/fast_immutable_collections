@@ -43,6 +43,23 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("fromJson", () {
+    dynamic obj = [1, 2, 3];
+    var listset = ListSet.fromJson(obj, (Object? item) => item);
+
+    expect(listset, [1, 2, 3]);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("toJson", () {
+    var set = ListSet.of([1, 2, 3]);
+
+    expect(set.toJson((int item) => item), allOf(isA<List<int>>(), [1, 2, 3]));
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("add", () {
     expect(() => ListSet.of([1, 10, 50, -2, 8, 10, -2, 20]).add(100), throwsUnsupportedError);
   });

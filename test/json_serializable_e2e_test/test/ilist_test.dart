@@ -12,8 +12,7 @@ void main() {
     });
 
     test('can deserialize IList', () {
-      expect(IListWrapper.fromJson({'iList': <String>[]}).iList,
-          IList(<String>[]));
+      expect(IListWrapper.fromJson({'iList': <String>[]}).iList, IList(<String>[]));
       expect(
           IListWrapper.fromJson({
             'iList': <String>['a', 'b', 'c']

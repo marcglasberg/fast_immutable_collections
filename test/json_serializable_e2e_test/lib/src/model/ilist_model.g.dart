@@ -12,8 +12,7 @@ IListWrapper _$IListWrapperFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$IListWrapperToJson(IListWrapper instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$IListWrapperToJson(IListWrapper instance) => <String, dynamic>{
       'iList': instance.iList.toJson(
         (value) => value,
       ),
@@ -21,13 +20,12 @@ Map<String, dynamic> _$IListWrapperToJson(IListWrapper instance) =>
 
 IMapWrapper _$IMapWrapperFromJson(Map<String, dynamic> json) {
   return IMapWrapper(
-    IMap.fromJson(json['iMap'] as Map<String, dynamic>,
-        (value) => value as String, (value) => value as String),
+    IMap.fromJson(json['iMap'] as Map<String, dynamic>, (value) => value as String,
+        (value) => value as String),
   );
 }
 
-Map<String, dynamic> _$IMapWrapperToJson(IMapWrapper instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$IMapWrapperToJson(IMapWrapper instance) => <String, dynamic>{
       'iMap': instance.iMap.toJson(
         (value) => value,
         (value) => value,
@@ -40,8 +38,7 @@ ISetWrapper _$ISetWrapperFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ISetWrapperToJson(ISetWrapper instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ISetWrapperToJson(ISetWrapper instance) => <String, dynamic>{
       'iSet': instance.iSet.toJson(
         (value) => value,
       ),
