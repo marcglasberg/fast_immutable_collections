@@ -191,7 +191,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Items which don't appear in [ordering] will be included in the end, in their original order.
   /// Items of [ordering] which are not found in the original list are ignored.
   ///
-  List<T?> sortedLike(Iterable ordering) {
+  List<T> sortedLike(Iterable ordering) {
     Set<T> thisSet = Set.of(this);
     Set<dynamic> otherSet = Set<dynamic>.of(ordering);
 
@@ -203,8 +203,8 @@ extension FicIterableExtension<T> on Iterable<T> {
       intersectOtherWithThis: true,
     );
 
-    List<T>? intersectOtherWithThis = result.intersectOtherWithThis ?? [];
-    List<T>? diffThisMinusOther = result.diffThisMinusOther ?? [];
+    List<T> intersectOtherWithThis = result.intersectOtherWithThis ?? [];
+    List<T> diffThisMinusOther = result.diffThisMinusOther ?? [];
     return intersectOtherWithThis.followedBy(diffThisMinusOther).toList();
   }
 
