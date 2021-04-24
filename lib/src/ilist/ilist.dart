@@ -28,15 +28,16 @@ class IListConst<T> // ignore: must_be_immutable
   @override
   final ConfigList config;
 
-  const IListConst(this._list)
+  const IListConst([this._list = const []])
       : config = const ConfigList(),
         super._gen();
 
-  /// Example: `const IList<String> myList = IListConst.empty();`
-  const IListConst.empty()
-      : _list = const [],
-        config = const ConfigList(),
-        super._gen();
+  // TODO: REMOVER
+  // /// Example: `const IList<String> myList = IListConst.empty();`
+  // const IListConst.empty()
+  //     : _list = const [],
+  //       config = const ConfigList(),
+  //       super._gen();
 
   const IListConst.withConfig(this._list, this.config) : super._gen();
 
@@ -46,8 +47,14 @@ class IListConst<T> // ignore: must_be_immutable
   @override
   L<T> get _l => LFlat<T>.unsafe(_list);
 
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
   @override
-  int? get _hashCode => _list.hashCode;
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const ListEquality<dynamic>().hash(_list), config.hashCode)
+        : hash2(identityHashCode(_l), config.hashCode);
+  }
 
   @override
   set _hashCode(int? value) {}
