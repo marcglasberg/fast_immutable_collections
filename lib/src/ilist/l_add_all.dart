@@ -1,4 +1,5 @@
 import "package:fast_immutable_collections/src/iterator/iterator_add_all.dart";
+
 import "ilist.dart";
 
 /// First we have the items in [_l] and then the items in [_listOrL].
@@ -13,7 +14,7 @@ class LAddAll<T> extends L<T> {
   /// Note: If you need to pass an [IList], pass its [L] instead.
   LAddAll(this._l, Iterable<T> items)
       : assert(items is! IList),
-        _listOrL = (items is L) ? items : List.of(items, growable: false);
+        _listOrL = (items is L<T>) ? items : List<T>.of(items, growable: false);
 
   @override
   bool get isEmpty => _l.isEmpty && _listOrL.isEmpty;

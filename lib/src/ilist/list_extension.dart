@@ -41,7 +41,7 @@ extension FicListExtension<T> on List<T> {
   /// Items of [ordering] which are not found in the original list are ignored.
   ///
   void sortLike(Iterable ordering) {
-    List<T> result = sortedLike(ordering) as List<T>;
+    List<T> result = sortedLike(ordering);
     clear();
     addAll(result);
   }

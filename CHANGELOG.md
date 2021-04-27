@@ -1,8 +1,8 @@
-## [5.0.0-dev.5] - 2021/04/24
+## [5.0.0-dev.6] - 2021/04/27
 
 * Const `IList`. 
-  Example: `const IList<String> myList = IListConst.empty();`
   Example: `const IList<int> myList = IListConst([1, 2, 3]);`
+  Example of empty list: `const IList<String> myList = IListConst([]);`
 * Better NNBD for `divideListAsMap()` and `sortedLike()`.  
 
 ## [4.0.6] - 2021/04/20

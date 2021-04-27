@@ -2,7 +2,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
@@ -16,7 +16,7 @@ void main() {
     expect(const IListConst([]), isA<IListConst>());
     expect(const IListConst<String>([]), isA<IListConst<String>>());
     expect(const IListConst([1]), isA<IListConst<int>>());
-    expect(const IListConst<int>(), isA<IListConst<int>>());
+    expect(const IListConst<int>([]), isA<IListConst<int>>());
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -31,19 +31,19 @@ void main() {
     expect(IListConst([1]).isEmpty, isFalse);
     expect(IListConst([1]).isNotEmpty, isTrue);
 
-    expect(IListConst<int>().isEmpty, isTrue);
-    expect(IListConst<int>().isNotEmpty, isFalse);
+    expect(IListConst<int>([]).isEmpty, isTrue);
+    expect(IListConst<int>([]).isNotEmpty, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("hashCode", () {
-    expect(const IListConst() == const IListConst(), isTrue);
+    expect(const IListConst([]) == const IListConst([]), isTrue);
     expect(IList() == IList(), isTrue);
-    expect(const IListConst() == IList(), isTrue);
-    expect(const IListConst() == IList([]), isTrue);
-    expect(IList() == const IListConst(), isTrue);
-    expect(IList([]) == const IListConst(), isTrue);
+    expect(const IListConst([]) == IList(), isTrue);
+    expect(const IListConst([]) == IList([]), isTrue);
+    expect(IList() == const IListConst([]), isTrue);
+    expect(IList([]) == const IListConst([]), isTrue);
 
     expect(const IListConst([1, 2]) == const IListConst([1, 2]), isTrue);
     expect(IList([1, 2]) == IList([1, 2]), isTrue);
@@ -783,7 +783,7 @@ void main() {
   //   expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
   //
   //   // 2) State Exception
-  //   expect(() => IListConst().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
+  //   expect(() => IListConst([]).reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
   // });
   //
   // //////////////////////////////////////////////////////////////////////////////
@@ -1476,10 +1476,10 @@ void main() {
   test("IListConst", () {
     //
     // The default constructor will always use the same const [] internals.
-    expect(const IListConst().same(const IListConst()), isTrue);
-    expect(const IListConst().same(IListConst()), isTrue);
-    expect(const IListConst().same(const IListConst()), isTrue);
-    expect(IListConst().same(IListConst()), isTrue);
+    expect(const IListConst([]).same(const IListConst([])), isTrue);
+    expect(const IListConst([]).same(IListConst([])), isFalse);
+    expect(const IListConst([]).same(const IListConst([])), isTrue);
+    expect(IListConst([]).same(IListConst([])), isFalse);
 
     // ---
 
@@ -1511,17 +1511,17 @@ void main() {
   test("Interaction between IList and IListConst", () {
     //
     // Empty.
-    expect(IListConst().same(IList()), isFalse);
-    expect(IListConst().same(IList()), isFalse);
+    expect(IListConst([]).same(IList()), isFalse);
+    expect(IListConst([]).same(IList()), isFalse);
     expect(IList().same(IListConst([])), isFalse);
-    expect(IList().same(IListConst()), isFalse);
-    expect(IList().same(IListConst()), isFalse);
     expect(IList().same(IListConst([])), isFalse);
-    expect(const IListConst().same(IList()), isFalse);
-    expect(const IListConst().same(IList()), isFalse);
+    expect(IList().same(IListConst([])), isFalse);
+    expect(IList().same(IListConst([])), isFalse);
+    expect(const IListConst([]).same(IList()), isFalse);
+    expect(const IListConst([]).same(IList()), isFalse);
     expect(IList().same(const IListConst([])), isFalse);
-    expect(IList().same(const IListConst()), isFalse);
-    expect(IList().same(const IListConst()), isFalse);
+    expect(IList().same(const IListConst([])), isFalse);
+    expect(IList().same(const IListConst([])), isFalse);
     expect(IList().same(const IListConst([])), isFalse);
 
     // Not Empty.
@@ -1533,8 +1533,8 @@ void main() {
     // equalItems
     expect(IList([]).equalItems(IListConst([])), isTrue);
     expect(IList([]).equalItems(const IListConst([])), isTrue);
-    expect(IList().equalItems(const IListConst()), isTrue);
-    expect(IList().equalItems(IListConst()), isTrue);
+    expect(IList().equalItems(const IListConst([])), isTrue);
+    expect(IList().equalItems(IListConst([])), isTrue);
     expect(IList([1, 2]).equalItems(IListConst([1, 2])), isTrue);
     expect(IListConst([1, 2]).equalItems(IList([1, 2])), isTrue);
     expect(IList([1, 2]).equalItems(const IListConst([1, 2])), isTrue);
@@ -1543,8 +1543,8 @@ void main() {
     // equalItemsAndConfig
     expect(IList([]).equalItemsAndConfig(IListConst([])), isTrue);
     expect(IList([]).equalItemsAndConfig(const IListConst([])), isTrue);
-    expect(IList().equalItemsAndConfig(const IListConst()), isTrue);
-    expect(IList().equalItemsAndConfig(IListConst()), isTrue);
+    expect(IList().equalItemsAndConfig(const IListConst([])), isTrue);
+    expect(IList().equalItemsAndConfig(IListConst([])), isTrue);
     expect(IList([1, 2]).equalItemsAndConfig(IListConst([1, 2])), isTrue);
     expect(IListConst([1, 2]).equalItemsAndConfig(IList([1, 2])), isTrue);
     expect(IList([1, 2]).equalItemsAndConfig(const IListConst([1, 2])), isTrue);
@@ -1553,8 +1553,8 @@ void main() {
     // unorderedEqualItems
     expect(IList([]).unorderedEqualItems(IListConst([])), isTrue);
     expect(IList([]).unorderedEqualItems(const IListConst([])), isTrue);
-    expect(IList().unorderedEqualItems(const IListConst()), isTrue);
-    expect(IList().unorderedEqualItems(IListConst()), isTrue);
+    expect(IList().unorderedEqualItems(const IListConst([])), isTrue);
+    expect(IList().unorderedEqualItems(IListConst([])), isTrue);
     expect(IList([1, 2]).unorderedEqualItems(IListConst([1, 2])), isTrue);
     expect(IList([1, 2]).unorderedEqualItems(IListConst([2, 1])), isTrue);
     expect(IListConst([1, 2]).unorderedEqualItems(IList([1, 2])), isTrue);
@@ -1562,6 +1562,23 @@ void main() {
     expect(IList([1, 2]).unorderedEqualItems(const IListConst([2, 1])), isTrue);
     expect(const IListConst([1, 2]).unorderedEqualItems(IList([1, 2])), isTrue);
     expect(const IListConst([1, 2]).unorderedEqualItems(IList([2, 1])), isTrue);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  test("Make sure the internal list is List<int>, and not List<Never>", () {
+    var l1 = const IListConst<int>([]);
+    expect(l1.runtimeType.toString(), 'IListConst<int>');
+
+    var l2 = IList<int>([1, 2, 3]);
+    expect(l2.runtimeType.toString(), 'IListImpl<int>');
+
+    var l3 = l1.addAll(l2);
+    expect(l3.runtimeType.toString(), 'IListImpl<int>');
+
+    var result = l3.where((int i) => i == 2).toList();
+    expect(result, [2]);
+    expect(result.runtimeType.toString(), "List<int>");
   });
 
   //////////////////////////////////////////////////////////////////////////////

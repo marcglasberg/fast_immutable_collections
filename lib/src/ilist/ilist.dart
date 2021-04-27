@@ -28,16 +28,18 @@ class IListConst<T> // ignore: must_be_immutable
   @override
   final ConfigList config;
 
-  const IListConst([this._list = const []])
+  /// To create an empty, do: `const IListConst([])`.
+  /// To create a list with items, do: `const IListConst([1, 2, 3])`.
+  ///
+  /// IMPORTANT: You must always use this with the `const` keyword.
+  /// It's always wrong to use an `IListConst` which is not constant.
+  ///
+  const IListConst(this._list
+      // Note: The _list can't be optional. This doesn't work: [this._list = const []]
+      // because when you do this _list will be List<Never> which will create problems.
+      )
       : config = const ConfigList(),
         super._gen();
-
-  // TODO: REMOVER
-  // /// Example: `const IList<String> myList = IListConst.empty();`
-  // const IListConst.empty()
-  //     : _list = const [],
-  //       config = const ConfigList(),
-  //       super._gen();
 
   const IListConst.withConfig(this._list, this.config) : super._gen();
 
