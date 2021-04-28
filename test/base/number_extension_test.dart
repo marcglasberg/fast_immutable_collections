@@ -74,32 +74,4 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
-
-  test("isNullOrZero", () {
-    //
-    expect((-10).isNullOrZero, isFalse);
-    expect((-1).isNullOrZero, isFalse);
-    expect(0.isNullOrZero, isTrue);
-    expect(1.isNullOrZero, isFalse);
-    expect(10.isNullOrZero, isFalse);
-
-    int? value;
-    expect(value.isNullOrZero, isTrue);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("isNotNullNotZero", () {
-    //
-    expect((-10).isNotNullNotZero, isTrue);
-    expect((-1).isNotNullNotZero, isTrue);
-    expect(0.isNotNullNotZero, isFalse);
-    expect(1.isNotNullNotZero, isTrue);
-    expect(10.isNotNullNotZero, isTrue);
-
-    int? value;
-    expect(value.isNotNullNotZero, isFalse);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

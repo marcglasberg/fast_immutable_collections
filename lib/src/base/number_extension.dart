@@ -32,9 +32,7 @@ extension FicNumberExtension<T extends num> on T {
 // /////////////////////////////////////////////////////////////////////////////
 
 extension FicNumberExtensionNullable<T extends num> on T? {
-  bool get isNullOrZero => this == null || this == 0;
-
-  bool get isNotNullNotZero => this != null && this != 0;
+  //
 
   /// Returns the number inRange between min and max.
   /// If the number is `null`, return [orElse].
