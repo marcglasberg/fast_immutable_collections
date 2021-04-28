@@ -3,18 +3,6 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 // /////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicMapOfSetsExtension]
-extension FicMapExtensionNullable<K, V> on Map<K, V>? {
-  /// Checks if `this` is `null` or empty.
-  bool get isNullOrEmpty => (this == null) || this!.isEmpty;
-
-  /// Checks if `this` is **not** `null` and **not** empty.
-  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
-
-  /// Checks if `this` is empty but **not** `null`.
-  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
-}
-
-/// See also: [FicMapOfSetsExtension]
 extension FicMapExtension<K, V> on Map<K, V> {
   /// Locks the map, returning an *immutable* map ([IMap]).
   IMap<K, V> get lock => IMap<K, V>(this);

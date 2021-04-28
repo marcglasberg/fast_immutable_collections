@@ -38,18 +38,6 @@ Iterable<R> combineIterables<A, B, R>(
 // ////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicListExtension], [FicSetExtension]
-extension FicIterableExtensionNullable<T> on Iterable<T>? {
-  //
-  bool get isNullOrEmpty => (this == null) || this!.isEmpty;
-
-  bool get isNotNullNotEmpty => (this != null) && this!.isNotEmpty;
-
-  bool get isEmptyNotNull => (this != null) && this!.isEmpty;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-
-/// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
   //
   /// Similar to [map], but MAY return a non-nullable type.

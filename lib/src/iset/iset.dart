@@ -12,6 +12,146 @@ import "s_add_all.dart";
 import "s_flat.dart";
 import "unmodifiable_set_from_iset.dart";
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// This is an [ISet] which can be made constant.
+/// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
+///
+/// The const ISet will always keep insertion order. In other words, you can't make
+/// the sort configuration `true`.
+///
+@immutable
+class ISetConst<T> // ignore: must_be_immutable
+    extends ISet<T> {
+  //
+  /// To create an empty ISet: `const ISetConst({})`.
+  /// To create a set with items: `const ISetConst({1, 2, 3})`.
+  ///
+  /// IMPORTANT: You must always use this with the `const` keyword.
+  /// It's always wrong to use an `ISetConst` which is not constant.
+  ///
+  const ISetConst(
+    this._set,
+    // Note: The _set can't be optional. This doesn't work: [this._set = const []]
+    // because when you do this _set will be Set<Never> which will create problems.
+    {
+    this.isDeepEquals = true,
+  }) : super._gen();
+
+  final Set<T> _set;
+
+  @override
+  final bool isDeepEquals;
+
+  @override
+  ConfigSet get config =>
+      isDeepEquals ? const ConfigSet(isDeepEquals: true) : const ConfigSet(isDeepEquals: false);
+
+  /// A constant set is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a constant set, by definition.
+  @override
+  ISetConst<T> get flush => this;
+
+  @override
+  int get _counter => 0;
+
+  @override
+  S<T> get _s => SFlat<T>.unsafe(_set);
+
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
+  @override
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const SetEquality<dynamic>().hash(_set), config.hashCode)
+        : hash2(identityHashCode(_s), config.hashCode);
+  }
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(ISet<T>? other) =>
+      (other != null) &&
+      (other is ISetConst) &&
+      identical(_set, (other as ISetConst)._set) &&
+      (config == other.config);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@immutable
+class ISetImpl<T> // ignore: must_be_immutable
+    extends ISet<T> {
+  //
+  /// The set configuration ([ConfigSet]).
+  @override
+  final ConfigSet config;
+
+  @override
+  late S<T> _s;
+
+  @override
+  int _counter = 0;
+
+  @override
+  // ignore: use_late_for_private_fields_and_variables
+  int? _hashCode;
+
+  /// Flushes the set, if necessary. Chainable method.
+  /// If the set is already flushed, don't do anything.
+  @override
+  ISet<T> get flush {
+    if (!isFlushed) {
+      // Flushes the original _s because maybe it's used elsewhere.
+      // Or maybe it was flushed already, and we can use it as is.
+      _s = SFlat<T>.unsafe(_s.getFlushed(config));
+      _counter = 0;
+    }
+    return this;
+  }
+
+  ISetImpl.unsafe(Set<T> set, {required this.config})
+      : _s = SFlat<T>.unsafe(set),
+        super._gen() {
+    if (ImmutableCollection.disallowUnsafeConstructors)
+      throw UnsupportedError("ISet.unsafe is disallowed.");
+  }
+
+  /// **Unsafe**.
+  ISetImpl._unsafe(this._s, {required this.config}) : super._gen();
+
+  /// **Unsafe**.
+  ISetImpl._unsafeFromSet(Set<T> set, {required this.config})
+      : _s = SFlat<T>.unsafe(set),
+        super._gen();
+
+  /// Returns an empty [ISet], with the given configuration. If a
+  /// configuration is not provided, it will use the default configuration.
+  ///
+  /// Note: If you want to create an empty immutable collection of the same
+  /// type and same configuration as a source collection, simply call [clear]
+  /// on the source collection.
+  static ISetImpl<T> empty<T>([ConfigSet? config]) =>
+      ISetImpl._unsafe(SFlat.empty<T>(), config: config ?? ISet.defaultConfig);
+
+  /// **Safe**. Fast if the [Iterable] is an [ISet].
+  ISetImpl._(
+    Iterable<T>? iterable, {
+    required this.config,
+  })   : _s = iterable is ISet<T> //
+            ? iterable._s
+            : iterable == null
+                ? SFlat.empty<T>()
+                : SFlat<T>(iterable),
+        super._gen();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// An **immutable**, **ordered** set.
 /// It can be configured to order by insertion order, or sort.
 ///
@@ -19,18 +159,32 @@ import "unmodifiable_set_from_iset.dart";
 /// by calling `ISet.elementAt(index)` or by using the `[]` operator.
 ///
 @immutable
-class ISet<T> // ignore: must_be_immutable
+abstract class ISet<T> // ignore: must_be_immutable
     extends ImmutableCollection<ISet<T>> implements Iterable<T> {
   //
-  S<T> _s;
-
   /// The set configuration.
-  final ConfigSet config;
+  ConfigSet get config;
+
+  set config(ConfigSet value) {}
+
+  S<T> get _s;
+
+  set _s(S<T> value) {}
+
+  int get _counter;
+
+  set _counter(int value) {}
+
+  int? get _hashCode;
+
+  set _hashCode(int? value);
 
   /// Create an [ISet] from any [Iterable].
   /// Fast, if the [Iterable] is another [ISet].
   factory ISet([Iterable<T>? iterable]) => //
       ISet.withConfig(iterable, defaultConfig);
+
+  const ISet._gen();
 
   /// Create an [ISet] from any [Iterable] and a [ConfigSet].
   /// Fast, if the Iterable is another [ISet].
@@ -43,27 +197,11 @@ class ISet<T> // ignore: must_be_immutable
         ? (config == iterable.config)
             ? iterable
             : iterable.isEmpty
-                ? ISet.empty<T>(config)
-                : ISet<T>._(iterable, config: config)
+                ? ISetImpl.empty<T>(config)
+                : ISetImpl<T>._(iterable, config: config)
         : (iterable == null)
-            ? ISet.empty<T>(config)
-            : ISet<T>._unsafe(SFlat<T>(iterable, config: config), config: config);
-  }
-
-  /// Creates a set in which the items are computed from the [iterable].
-  ///
-  /// For each element of the [iterable] it computes another iterable of items
-  /// by applying [mapper]. The items of this resulting iterable will be added
-  /// to the set.
-  ///
-  static ISet<T> fromIterable<T, I>(
-    Iterable<I> iterable, {
-    required Iterable<T>? Function(I) mapper,
-    ConfigSet? config,
-  }) {
-    config ??= defaultConfig;
-    var result = ListSet.of(iterable.expand(mapper as Iterable<T> Function(I)), sort: config.sort);
-    return ISet<T>._unsafeFromSet(result, config: config);
+            ? ISetImpl.empty<T>(config)
+            : ISetImpl<T>._unsafe(SFlat<T>(iterable, config: config), config: config);
   }
 
   /// Creates a new set with the given [config].
@@ -89,17 +227,33 @@ class ISet<T> // ignore: must_be_immutable
       // If the new config is not sorted it can use sorted or not sorted.
       // If the new config is sorted it can only use sorted.
       if (!config.sort || this.config.sort)
-        return ISet._unsafe(_s, config: config);
+        return ISetImpl._unsafe(_s, config: config);
       //
       // If the new config is sorted and the previous is not, it must sort.
       else
-        return ISet._unsafe(SFlat(_s, config: config), config: config);
+        return ISetImpl._unsafe(SFlat(_s, config: config), config: config);
     }
   }
 
   /// Returns a new set with the contents of the present [ISet],
   /// but the config of [other].
   ISet<T> withConfigFrom(ISet<T> other) => withConfig(other.config);
+
+  /// Creates a set in which the items are computed from the [iterable].
+  ///
+  /// For each element of the [iterable] it computes another iterable of items
+  /// by applying [mapper]. The items of this resulting iterable will be added
+  /// to the set.
+  ///
+  static ISet<T> fromIterable<T, I>(
+    Iterable<I> iterable, {
+    required Iterable<T>? Function(I) mapper,
+    ConfigSet? config,
+  }) {
+    config ??= defaultConfig;
+    var result = ListSet.of(iterable.expand(mapper as Iterable<T> Function(I)), sort: config.sort);
+    return ISetImpl<T>._unsafeFromSet(result, config: config);
+  }
 
   /// **Unsafe constructor**. Use this at your own peril.
   ///
@@ -113,10 +267,8 @@ class ISet<T> // ignore: must_be_immutable
   /// not sorted, it will break the [ISet] and any other derived sets in unpredictable
   /// ways.
   ///
-  ISet.unsafe(Set<T> set, {required this.config}) : _s = SFlat<T>.unsafe(set) {
-    if (ImmutableCollection.disallowUnsafeConstructors)
-      throw UnsupportedError("ISet.unsafe is disallowed.");
-  }
+  factory ISet.unsafe(Set<T> set, {required ConfigSet config}) =>
+      ISetImpl.unsafe(set, config: config);
 
   /// If [Iterable] is `null`, return `null`.
   ///
@@ -153,7 +305,7 @@ class ISet<T> // ignore: must_be_immutable
   ///
   /// Note: If you want to create an empty immutable collection of the same type
   /// and same configuration as a source collection, simply call [clear] in the source collection.
-  static ISet<T> empty<T>([ConfigSet? config]) => ISet._unsafe(
+  static ISet<T> empty<T>([ConfigSet? config]) => ISetImpl._unsafe(
         SFlat.empty<T>(),
         config: config ?? defaultConfig,
       );
@@ -225,8 +377,6 @@ class ISet<T> // ignore: must_be_immutable
 
   static bool _asyncAutoflush = true;
 
-  int _counter = 0;
-
   /// ## Sync Auto-flush
   ///
   /// Keeps a counter variable which starts at `0` and is incremented each
@@ -277,21 +427,13 @@ class ISet<T> // ignore: must_be_immutable
     }
   }
 
-  /// **Safe**. Fast if the iterable is an [ISet].
-  ISet._(
-    Iterable<T>? iterable, {
-    required this.config,
-  }) : _s = iterable is ISet<T>
-            ? iterable._s
-            : iterable == null
-                ? SFlat.empty<T>()
-                : SFlat<T>(iterable, config: config);
+  /// **Unsafe**. Note: Does not sort.
+  factory ISet._unsafe(S<T> _s, {required ConfigSet config}) =>
+      ISetImpl._unsafe(_s, config: config);
 
   /// **Unsafe**. Note: Does not sort.
-  ISet._unsafe(this._s, {required this.config});
-
-  /// **Unsafe**. Note: Does not sort.
-  ISet._unsafeFromSet(Set<T> set, {required this.config}) : _s = SFlat<T>.unsafe(set);
+  factory ISet._unsafeFromSet(Set<T> set, {required ConfigSet config}) =>
+      ISetImpl._unsafeFromSet(set, config: config);
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
   ISet<T> get withIdentityEquals =>
@@ -402,7 +544,7 @@ class ISet<T> // ignore: must_be_immutable
     return const UnorderedIterableEquality<dynamic>().equals(_s, other);
   }
 
-  /// Will return `true` only if the list items are equal and the list configurations are equal.
+  /// Will return `true` only if the set items are equal and the set configurations are equal.
   /// This may be slow for very large sets, since it compares each item, one by one.
   @override
   bool equalItemsAndConfig(ISet? other) {
@@ -439,9 +581,6 @@ class ISet<T> // ignore: must_be_immutable
   bool same(ISet<T>? other) =>
       (other != null) && identical(_s, other._s) && (config == other.config);
 
-  // HashCode cache. Must be null if hashCode is not cached.
-  int? _hashCode;
-
   @override
   int get hashCode {
     if (_hashCode != null) return _hashCode!;
@@ -458,15 +597,7 @@ class ISet<T> // ignore: must_be_immutable
   /// Flushes the set, if necessary. Chainable method.
   /// If the set is already flushed, don't do anything.
   @override
-  ISet<T> get flush {
-    if (!isFlushed) {
-      // Flushes the original _s because maybe it's used elsewhere.
-      // Or maybe it was flushed already, and we can use it as is.
-      _s = SFlat<T>.unsafe(_s.getFlushed(config));
-      _counter = 0;
-    }
-    return this;
-  }
+  ISet<T> get flush;
 
   /// Whether this set is already flushed or not.
   @override

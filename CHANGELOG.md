@@ -1,9 +1,14 @@
-## [5.0.0-dev.6] - 2021/04/27
+## [5.0.0-dev.7] - 2021/04/28
 
 * Const `IList`. 
   Example: `const IList<int> myList = IListConst([1, 2, 3]);`
   Example of empty list: `const IList<String> myList = IListConst([]);`
-* Better NNBD for `divideListAsMap()` and `sortedLike()`.  
+* Const `ISet`. 
+  Example: `const ISet<int> mySet = ISetConst({1, 2, 3});`
+  Example of empty set: `const ISet<String> mySet = ISetConst({});`
+* Better NNBD for `divideListAsMap()` and `sortedLike()`.
+* Breaking change: Removed all extensions like `isNullOrEmpty` and similar. This was a good idea 
+  before NNBD, but now if you use this Dart can't infer nullability anymore.
 
 ## [4.0.6] - 2021/04/20
 

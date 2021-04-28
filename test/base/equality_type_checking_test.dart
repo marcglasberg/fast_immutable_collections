@@ -46,8 +46,8 @@ void main() {
     ISet<Supertype> iset1 = ISet(<Subtype>[obj1, obj2, obj3]);
     ISet<Supertype> iset2 = {obj1, obj2, obj3}.lock;
 
-    expect(iset1.runtimeType.toString(), "ISet<Supertype>");
-    expect(iset2.runtimeType.toString(), "ISet<Subtype>");
+    expect(iset1.runtimeType.toString(), "ISetImpl<Supertype>");
+    expect(iset2.runtimeType.toString(), "ISetImpl<Subtype>");
 
     expect(iset1 == iset2, isTrue);
     expect(iset2 == iset1, isTrue);

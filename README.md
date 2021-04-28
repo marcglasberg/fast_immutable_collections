@@ -1286,8 +1286,6 @@ These are some provided helpers and extensions:
 * `combineIterables` is a top-level function that combines two iterables into one, by applying
   a `combine` function.
 
-* `Iterable.isNullOrEmpty`, `Iterable.isNotNullNotEmpty` and `Iterable.isEmptyNotNull`.
-
 * `Iterable.deepEquals` compare all items, in order, using `operator ==`.
 
 * `Iterable.deepEqualsByIdentity` compare all items, in order, using `identical`.

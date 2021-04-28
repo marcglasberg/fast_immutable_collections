@@ -23,13 +23,8 @@ import "unmodifiable_list_from_ilist.dart";
 class IListConst<T> // ignore: must_be_immutable
     extends IList<T> {
   //
-  final List<T> _list;
-
-  @override
-  final ConfigList config;
-
-  /// To create an empty, do: `const IListConst([])`.
-  /// To create a list with items, do: `const IListConst([1, 2, 3])`.
+  /// To create an empty IList: `const IListConst([])`.
+  /// To create a list with items: `const IListConst([1, 2, 3])`.
   ///
   /// IMPORTANT: You must always use this with the `const` keyword.
   /// It's always wrong to use an `IListConst` which is not constant.
@@ -41,7 +36,20 @@ class IListConst<T> // ignore: must_be_immutable
       : config = const ConfigList(),
         super._gen();
 
+  final List<T> _list;
+
+  @override
+  final ConfigList config;
+
   const IListConst.withConfig(this._list, this.config) : super._gen();
+
+  /// A constant list is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a constant list, by definition.
+  @override
+  IListConst<T> get flush => this;
 
   @override
   int get _counter => 0;
@@ -89,14 +97,14 @@ class IListImpl<T> // ignore: must_be_immutable
   // ignore: use_late_for_private_fields_and_variables
   int? _hashCode;
 
-  /// Flushes the list, if necessary. Chainable method/getter.
-  /// If the list is already flushed, it doesn't do anything.
+  /// Flushes the list, if necessary. Chainable getter.
+  /// If the list is already flushed, don't do anything.
   @override
   IList<T> get flush {
     if (!isFlushed) {
       // Flushes the original _l because maybe it's used elsewhere.
       // Or maybe it was flushed already, and we can use it as is.
-      _l = LFlat<T>.unsafe(_l.getFlushed!);
+      _l = LFlat<T>.unsafe(_l.getFlushed);
       _counter = 0;
     }
     return this;
@@ -560,18 +568,10 @@ abstract class IList<T> // ignore: must_be_immutable
     return hashCode;
   }
 
-  /// Flushes the list, if necessary. Chainable method/getter.
-  /// If the list is already flushed, it doesn't do anything.
+  /// Flushes the list, if necessary. Chainable getter.
+  /// If the list is already flushed, don't do anything.
   @override
-  IList<T> get flush {
-    if (!isFlushed) {
-      // Flushes the original _l because maybe it's used elsewhere.
-      // Or maybe it was flushed already, and we can use it as is.
-      _l = LFlat<T>.unsafe(_l.getFlushed!);
-      _counter = 0;
-    }
-    return this;
-  }
+  IList<T> get flush;
 
   /// Whether this list is already [flush]ed or not.
   @override
@@ -1572,9 +1572,9 @@ abstract class L<T> implements Iterable<T> {
 
   /// Returns the flushed list (flushes it only once).
   /// **It is an error to use the flushed list outside of the [L] class**.
-  List<T>? get getFlushed {
+  List<T> get getFlushed {
     _flushed ??= unlock;
-    return _flushed;
+    return _flushed!;
   }
 
   /// Returns a regular Dart (*mutable*, `growable`) List.

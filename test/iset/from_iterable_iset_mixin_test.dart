@@ -438,28 +438,6 @@ void main() {
   });
 
   /////////////////////////////////////////////////////////////////////////////
-
-  test("FromIterableISetMixinExtension", () {
-    FromIterableISetMixin? aNull;
-    const Student james = Student("James");
-    const Student sara = Student("Sara");
-    const Student lucy = Student("Lucy");
-    final Students students = Students({james, sara, lucy});
-
-    expect(aNull.isNullOrEmpty, isTrue);
-    expect(Students({}).isNullOrEmpty, isTrue);
-    expect(students.isNullOrEmpty, isFalse);
-
-    expect(aNull.isNotNullNotEmpty, isFalse);
-    expect(Students({}).isNotNullNotEmpty, isFalse);
-    expect(students.isNotNullNotEmpty, isTrue);
-
-    expect(aNull.isEmptyNotNull, isFalse);
-    expect(Students({}).isEmptyNotNull, isTrue);
-    expect(students.isEmptyNotNull, isFalse);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
 }
 
 ///////////////////////////////////////////////////////////////////////////////

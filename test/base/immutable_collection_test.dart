@@ -264,156 +264,6 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
-  test("isNullOrEmpty", () {
-    // List:
-    expect([].isNullOrEmpty, isTrue);
-    expect([1].isNullOrEmpty, isFalse);
-    List<int>? list;
-    expect(list.isNullOrEmpty, isTrue);
-
-    // Set:
-    expect(<Set>{}.isNullOrEmpty, isTrue);
-    expect({1}.isNullOrEmpty, isFalse);
-    Set<int>? set;
-    expect(set.isNullOrEmpty, isTrue);
-
-    // IMap:
-    expect(<Map>{}.isNullOrEmpty, isTrue);
-    expect({1: 2}.isNullOrEmpty, isFalse);
-    Map<int, int>? map;
-    expect(map.isNullOrEmpty, isTrue);
-
-    // IList:
-    expect(IList().isNullOrEmpty, isTrue);
-    expect(IList([1]).isNullOrEmpty, isFalse);
-    IList<int>? ilist;
-    expect(ilist.isNullOrEmpty, isTrue);
-
-    // ISet:
-    expect(ISet().isNullOrEmpty, isTrue);
-    expect(ISet([1]).isNullOrEmpty, isFalse);
-    ISet<int>? iset;
-    expect(iset.isNullOrEmpty, isTrue);
-
-    // IMap:
-    expect(IMap().isNullOrEmpty, isTrue);
-    expect(IMap({1: 2}).isNullOrEmpty, isFalse);
-    IMap<int, int>? imap;
-    expect(imap.isNullOrEmpty, isTrue);
-
-    // IMapOfSets:
-    expect(IMapOfSets().isNullOrEmpty, isTrue);
-    expect(
-        IMapOfSets({
-          1: {2}
-        }).isNullOrEmpty,
-        isFalse);
-    IMapOfSets<int, int>? imapOfSets;
-    expect(imapOfSets.isNullOrEmpty, isTrue);
-  });
-
-  // /////////////////////////////////////////////////////////////////////////////
-
-  test("isNotNullNotEmpty", () {
-    // List:
-    expect([].isNotNullNotEmpty, isFalse);
-    expect([1].isNotNullNotEmpty, isTrue);
-    List<int>? list;
-    expect(list.isNotNullNotEmpty, isFalse);
-
-    // Set:
-    expect(<Set>{}.isNotNullNotEmpty, isFalse);
-    expect({1}.isNotNullNotEmpty, isTrue);
-    Set<int>? set;
-    expect(set.isNotNullNotEmpty, isFalse);
-
-    // IMap:
-    expect(<Map>{}.isNotNullNotEmpty, isFalse);
-    expect({1: 2}.isNotNullNotEmpty, isTrue);
-    Map<int, int>? map;
-    expect(map.isNotNullNotEmpty, isFalse);
-
-    // IList:
-    expect(IList().isNotNullNotEmpty, isFalse);
-    expect(IList([1]).isNotNullNotEmpty, isTrue);
-    IList<int>? ilist;
-    expect(ilist.isNotNullNotEmpty, isFalse);
-
-    // ISet:
-    expect(ISet().isNotNullNotEmpty, isFalse);
-    expect(ISet([1]).isNotNullNotEmpty, isTrue);
-    ISet<int>? iset;
-    expect(iset.isNotNullNotEmpty, isFalse);
-
-    // IMap:
-    expect(IMap().isNotNullNotEmpty, isFalse);
-    expect(IMap({1: 2}).isNotNullNotEmpty, isTrue);
-    IMap<int, int>? imap;
-    expect(imap.isNotNullNotEmpty, isFalse);
-
-    // IMapOfSets:
-    expect(IMapOfSets().isNotNullNotEmpty, isFalse);
-    expect(
-        IMapOfSets({
-          1: {2}
-        }).isNotNullNotEmpty,
-        isTrue);
-    IMapOfSets<int, int>? imapOfSets;
-    expect(imapOfSets.isNotNullNotEmpty, isFalse);
-  });
-
-  // /////////////////////////////////////////////////////////////////////////////
-
-  test("isEmptyNotNull", () {
-    // List:
-    expect([].isEmptyNotNull, isTrue);
-    expect([1].isEmptyNotNull, isFalse);
-    List<int>? list;
-    expect(list.isEmptyNotNull, isFalse);
-
-    // Set:
-    expect(<Set>{}.isEmptyNotNull, isTrue);
-    expect({1}.isEmptyNotNull, isFalse);
-    Set<int>? set;
-    expect(set.isEmptyNotNull, isFalse);
-
-    // IMap:
-    expect(<Map>{}.isEmptyNotNull, isTrue);
-    expect({1: 2}.isEmptyNotNull, isFalse);
-    Map<int, int>? map;
-    expect(map.isEmptyNotNull, isFalse);
-
-    // IList:
-    expect(IList().isEmptyNotNull, isTrue);
-    expect(IList([1]).isEmptyNotNull, isFalse);
-    IList<int>? ilist;
-    expect(ilist.isEmptyNotNull, isFalse);
-
-    // ISet:
-    expect(ISet().isEmptyNotNull, isTrue);
-    expect(ISet([1]).isEmptyNotNull, isFalse);
-    ISet<int>? iset;
-    expect(iset.isEmptyNotNull, isFalse);
-
-    // IMap:
-    expect(IMap().isEmptyNotNull, isTrue);
-    expect(IMap({1: 2}).isEmptyNotNull, isFalse);
-    IMap<int, int>? imap;
-    expect(imap.isEmptyNotNull, isFalse);
-
-    // IMapOfSets:
-    expect(IMapOfSets().isEmptyNotNull, isTrue);
-    expect(
-        IMapOfSets({
-          1: {2}
-        }).isEmptyNotNull,
-        isFalse);
-    IMapOfSets<int, int>? imapOfSets;
-    expect(imapOfSets.isEmptyNotNull, isFalse);
-  });
-
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("ImmutableCollection.disallowUnsafeConstructors", () {
     // 1) Is initially false
     expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);
@@ -464,16 +314,10 @@ void main() {
 
   test("FicIteratorExtension.toIterable()", () {
     final Iterable<int> iter1 = [1, 2, 3].iterator.toIterable();
-    expect(iter1.isNullOrEmpty, isFalse);
-    expect(iter1.isNotNullNotEmpty, isTrue);
+    expect(iter1, [1, 2, 3]);
 
     final Iterable<int> iter2 = <int>[].iterator.toIterable();
-    expect(iter2.isNullOrEmpty, isTrue);
-    expect(iter2.isNotNullNotEmpty, isFalse);
-
-    Iterable<int>? iter3;
-    expect(iter3.isNullOrEmpty, isTrue);
-    expect(iter3.isNotNullNotEmpty, isFalse);
+    expect(iter2, isEmpty);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
