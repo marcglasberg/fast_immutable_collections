@@ -77,13 +77,13 @@ void main() {
     expect(iListNewConfig.isDeepEquals, isTrue);
     expect(iListNewConfigIdentity.isDeepEquals, isFalse);
 
-    // 2) With empty list and different configs
+    // 2) With empty list and different configs.
     const List<int> emptyList = <int>[];
     expect(const IListConst.withConfig(emptyList, ConfigList(cacheHashCode: false)), []);
 
-    // 3) With non-empty list and different configs
-    const List<int> nonemptyIList = <int>[1, 2, 3];
-    expect(const IListConst.withConfig(nonemptyIList, ConfigList(cacheHashCode: false)), [1, 2, 3]);
+    // 3) With non-empty list and different configs.
+    const List<int> nonemptyList = <int>[1, 2, 3];
+    expect(const IListConst.withConfig(nonemptyList, ConfigList(cacheHashCode: false)), [1, 2, 3]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

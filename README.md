@@ -37,6 +37,8 @@ This package, called **FIC** for short, provides:
 
 Other valuable features are:
 
+- It's possible to create const `IList` and `ISet`.
+
 - `ListSet`, a very efficient fixed-size mutable collection which is at the same time an
   ordered `Set` and a `List`.
 
@@ -399,6 +401,42 @@ IList<int> ilist = ['Bob', 'Alice', 'Dominic'].lock;
 // Results in ['Bob', 'John', 'Dominic'] 
 ilist = ilist.replace(1, 'John');     
 ```
+
+## 2.1. Const IList
+
+It's actually possible to create a const `IList`, but you must follow these rules:
+
+1. Instantiate an `IListConst`.
+2. Explicitly assign it to an `IList`.
+3. Use the const keyword.
+
+Examples:
+
+```
+const IList<int> ilist1 = IListConst([1, 2, 3]);
+const IList<int> ilist2 = IListConst([]);
+const IList<int> ilist3 = IListConst.withConfig([1, 2], ConfigList(isDeepEquals: false));
+```
+
+If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
+example, those are wrong:
+
+```
+// Wrong: Not using the const keyword.
+IList<int> ilist = IListConst([]);
+
+// Wrong: Not explicitly assigning it to an `IList`.
+const ilist = IListConst([]);
+```
+
+One other thing to keep in mind is that the `IListConst()` constructor always uses
+`ConfigList(isDeepEquals: true, cacheHashCode: true)`, completely ignoring the global
+`defaultConfig` (which will be explained below). This means if you want a specific a config you must
+use the `IListConst.withConfig()` constructor.
+
+_Note: While the FIC collections are generally intuitive to use, the **const** `IList` is a bit
+cumbersome to use, because of these rules you have to remember. Unfortunately it can't be avoided
+because of the limitations of the Dart language._
 
 ## 2.1. IList Equality
 
@@ -875,6 +913,51 @@ Set<String> set = Set.of(iset);
 Set<String> set = iset.unlock; 
 ```
 
+## 3.1. Const ISet
+
+It's actually possible to create a const `ISet`, but you must follow these rules:
+
+1. Instantiate an `ISetConst`.
+2. Explicitly assign it to an `ISet`.
+3. Use the const keyword.
+4. You can only create a sorted set (`ConfigSet(sort: true)`) if the set is empty.
+
+Examples:
+
+```
+const ISet<int> iset1 = ISetConst({1, 2, 3});
+const ISet<int> iset2 = ISetConst({});
+const ISet<int> iset3 = ISetConst.withConfig({1, 2}, ConfigSet(isDeepEquals: false));
+const ISet<int> iset4 = ISetConst.withConfig({}, ConfigSet(sort: true));
+```
+
+If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
+example, those are wrong:
+
+```
+// Wrong: Not using the const keyword.
+ISet<int> iset = ISetConst({});
+
+// Wrong: Not explicitly assigning it to an `ISet`.
+const iset = ISetConst({});
+
+// Wrong: Const sorted set is not empty.
+const ISet<int> iset = ISetConst.withConfig({1, 2}, ConfigSet(sort: true));
+```
+
+The reason you can't have a non-empty const set is that we can't sort it in the constructor (
+since it's constant). If you try to create a non-empty const set it will seem to work, but will
+throw an error when you try to use it.
+
+One other thing to keep in mind is that the `ISetConst()` constructor always uses
+`ConfigSet(isDeepEquals: true, sort: false, cacheHashCode: true)`, completely ignoring the global
+`defaultConfig` (which will be explained below). This means if you want a specific a config you must
+use the `ISetConst.withConfig()` constructor.
+
+_Note: While the FIC collections are generally intuitive to use, the **const** `ISet` is a bit
+cumbersome to use, because of these rules you have to remember. Unfortunately it can't be avoided
+because of the limitations of the Dart language._
+
 ## 3.1. Similarities and Differences to the IList
 
 Since I don't want to repeat myself, all the topics below are explained in much less detail here
@@ -909,8 +992,8 @@ than for `IList`. Please read the `IList` explanation first, before trying to un
   classes based on the `ISet`. This helps you create more strongly typed collections, and add your
   own methods to them.
 
-- You can flush an `ISet` by using the getter `.flush`. Note flush just optimizes the set **internally**,
-  and no external difference will be visible. Depending on the global configuration,
+- You can flush an `ISet` by using the getter `.flush`. Note flush just optimizes the set **
+  internally**, and no external difference will be visible. Depending on the global configuration,
   the `ISet`s will flush automatically for you.
 
 - There are a few ways to lock and unlock a set, which will have different results in speed and
@@ -1075,8 +1158,8 @@ than for IList. Please read the IList explanation first, before trying to unders
   by using the following `IMap` methods:
   `equalItems`, `equalItemsAndConfig`, `unorderedEqualItems`, `equalItemsToIMap` and `same`.
 
-- You can flush an `IMap` by using the getter `.flush`. Note flush just optimizes the map **internally**,
-  and no external difference will be visible. Depending on the global configuration,
+- You can flush an `IMap` by using the getter `.flush`. Note flush just optimizes the map **
+  internally**, and no external difference will be visible. Depending on the global configuration,
   the `IMap`s will flush automatically for you.
 
 - There are a few ways to lock and unlock a map, which will have different results in speed and
@@ -2185,48 +2268,48 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 1. [persistent][persistent_dart]
 
-  - They've implemented *operators* for all the objects, something which converges to the
-    assumption that immutable objects should be treated just like values.
-  - It depends on Dart `>=0.8.10+6 <2.0.0`. It's old enough so that *typing* is very weak
-    throughout the package. So a major refactor would be necessary in order to use it with more
-    recent versions of Dart, which would be very costly, given the complexity of the package.
+- They've implemented *operators* for all the objects, something which converges to the assumption
+  that immutable objects should be treated just like values.
+- It depends on Dart `>=0.8.10+6 <2.0.0`. It's old enough so that *typing* is very weak throughout
+  the package. So a major refactor would be necessary in order to use it with more recent versions
+  of Dart, which would be very costly, given the complexity of the package.
 
 1. [kt.dart][kt_dart]
 
-  - Follows Kotlin conventions.
-  - Doesn't use a persistent data structure.
-  - Not that many worries about speed.
-  - Features interesting annotations, though some will become unnecessary after NNBD.
+- Follows Kotlin conventions.
+- Doesn't use a persistent data structure.
+- Not that many worries about speed.
+- Features interesting annotations, though some will become unnecessary after NNBD.
 
 1. [built_collection][built_collection]
 
-  - Each of the core SDK collections is split into two: a mutable builder class and an immutable "
-    built"
-    class. Builders are for computation, "built" classes are for safely sharing with no need of a
-    defensive copy.
-  - Uses the [Builder Pattern][builder_pattern], which simplifies the creation of objects, and
-    even allows for lazy optimizations.
-  - Uses (deep) hash codes.
-  - (...) do not make a copy, but return a copy-on-write wrapper.
+- Each of the core SDK collections is split into two: a mutable builder class and an immutable "
+  built"
+  class. Builders are for computation, "built" classes are for safely sharing with no need of a
+  defensive copy.
+- Uses the [Builder Pattern][builder_pattern], which simplifies the creation of objects, and even
+  allows for lazy optimizations.
+- Uses (deep) hash codes.
+- (...) do not make a copy, but return a copy-on-write wrapper.
 
 1. [Rémi Rousselet's Example Gist of Performance Testing in Dart][remi_performance_testing_dart]
 
-  - Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
+- Uses the official package for benchmarking, [`benchmark_harness`][benchmark_harness].
 
 1. [Make it easy/efficient to create immutable collections via literals][dart_lang_117]
 
-  - Nice overview of the different types of "immutable" definitions.
-  - Good idea to simplify the use of unmodifiable data types.
+- Nice overview of the different types of "immutable" definitions.
+- Good idea to simplify the use of unmodifiable data types.
 
 1. [Dart should provide a — standard — way of combining hashes][dart_lang_11617]
 
-  - Nice discussion on the — very surprising — absence of basic good hashing methods inside Dart's
-    basic packages.
+- Nice discussion on the — very surprising — absence of basic good hashing methods inside Dart's
+  basic packages.
 
 1. [Dart's Immutable Collections' Feature Specification][dart_immutable_feature_spec]
 
-  - Dart apparently already has plans of incorporating immutable objects. The question is how long
-    will they take to make it happen?
+- Dart apparently already has plans of incorporating immutable objects. The question is how long
+  will they take to make it happen?
 
 [benchmark_harness]: https://pub.dev/packages/benchmark_harness
 
@@ -2250,28 +2333,27 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 1. [Dexx][dexx]
 
-  - Port of Scala's immutable, persistent collections to Java and Kotlin.
-  - [Class Hierarchy][dexx_class_hierarchy]
-  - Interesting feature: Explore annotating methods that return a new collection
-    with `@CheckReturnValue` to allow static verification of collection usage.
+- Port of Scala's immutable, persistent collections to Java and Kotlin.
+- [Class Hierarchy][dexx_class_hierarchy]
+- Interesting feature: Explore annotating methods that return a new collection
+  with `@CheckReturnValue` to allow static verification of collection usage.
 
 1. [Paguro][paguro]
 
-  - Immutable Collections and Functional Transformations for the JVM.
-  - Inspired by Clojure — which is built on top of the Java platform.
-  - Is based on the question-discussion — mentioned in the next section
-    —: [Why doesn't Java 8 include immutable collections?][why_no_immutable_on_java_8]
+- Immutable Collections and Functional Transformations for the JVM.
+- Inspired by Clojure — which is built on top of the Java platform.
+- Is based on the question-discussion — mentioned in the next section
+  —: [Why doesn't Java 8 include immutable collections?][why_no_immutable_on_java_8]
 
 1. Brian Burton's [Java Immutable Collections][java_immutable_collections]
 
-  - [Comparative Performance of Java Immutable Collections][performance_java_immutable]
-    - The real questions are: how much faster are mutable collections and will you really notice
-      the difference? Based on benchmark runs a `JImmutableHashMap` is about 2-3 times slower
-      than a
-      `HashMap` but is about 1.5x faster than a `TreeMap`. Unless your application spends most
-      of its time CPU bound updating collections you generally won't notice much of a difference
-      using an immutable collection.
-  - [List Tutorial][java_immutable_collections_list_tutorial]
+- [Comparative Performance of Java Immutable Collections][performance_java_immutable]
+    - The real questions are: how much faster are mutable collections and will you really notice the
+      difference? Based on benchmark runs a `JImmutableHashMap` is about 2-3 times slower than a
+      `HashMap` but is about 1.5x faster than a `TreeMap`. Unless your application spends most of
+      its time CPU bound updating collections you generally won't notice much of a difference using
+      an immutable collection.
+- [List Tutorial][java_immutable_collections_list_tutorial]
     - The current implementation uses a balanced binary tree with leaf nodes containing up to 64
       values each which provides `O(log2(n))` performance for all operations.
 
@@ -2291,27 +2373,27 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 1. [immutable-js][immutable_js]
 
-  - Immutable data cannot be changed once created, leading to much simpler application
-    development, no defensive copying, and enabling advanced memoization and change detection
-    techniques with simple logic. Persistent data presents a mutative API which does not update
-    the data in-place, but instead always yields new updated data.
-  - Alan Kay: The last thing you wanted any programmer to do is mess with internal state even if
-    presented figuratively. It is unfortunate that much of what is called "object-oriented
-    programming" today is simply old style programming with fancier constructs.
+- Immutable data cannot be changed once created, leading to much simpler application development, no
+  defensive copying, and enabling advanced memoization and change detection techniques with simple
+  logic. Persistent data presents a mutative API which does not update the data in-place, but
+  instead always yields new updated data.
+- Alan Kay: The last thing you wanted any programmer to do is mess with internal state even if
+  presented figuratively. It is unfortunate that much of what is called "object-oriented
+  programming" today is simply old style programming with fancier constructs.
     - [React.js Conf 2015 &ndash; Immutable Data and React][immutable_data_react_lecture]
-  - These data structures are highly efficient on modern JavaScript VMs by using structural
-    sharing via hash maps tries and vector tries as popularized by Clojure and Scala, minimizing
-    the need to copy or cache data.
-  - Immutable collections should be treated as *values* rather than *objects*. While objects
-    represent something which could change over time, a value represents the state of that thing
-    at a particular instance of time. This principle is most important to understanding the
-    appropriate use of immutable data. In order to treat Immutable.js collections as values, it's
-    important to use the `Immutable.is()` function or `.equals()` method to determine value
-    equality instead of the `===` operator which determines object *reference identity*.
-  - If an object is immutable, it can be "copied" simply by making another reference to it instead
-    of copying the entire object. Because a reference is much smaller than the object itself, this
-    results in memory savings and a potential boost in execution speed for programs which rely on
-    copies (such as an undo-stack).
+- These data structures are highly efficient on modern JavaScript VMs by using structural sharing
+  via hash maps tries and vector tries as popularized by Clojure and Scala, minimizing the need to
+  copy or cache data.
+- Immutable collections should be treated as *values* rather than *objects*. While objects represent
+  something which could change over time, a value represents the state of that thing at a particular
+  instance of time. This principle is most important to understanding the appropriate use of
+  immutable data. In order to treat Immutable.js collections as values, it's important to use
+  the `Immutable.is()` function or `.equals()` method to determine value equality instead of
+  the `===` operator which determines object *reference identity*.
+- If an object is immutable, it can be "copied" simply by making another reference to it instead of
+  copying the entire object. Because a reference is much smaller than the object itself, this
+  results in memory savings and a potential boost in execution speed for programs which rely on
+  copies (such as an undo-stack).
 
 [immutable_data_react_lecture]: https://youtu.be/I7IdS-PbEgI
 
@@ -2321,70 +2403,69 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 1. [Discussion on the Performance of Immutable Collections][performance_discussion]
 
-  - Kevin Bourrillion: "Raw CPU speed? To a first order of approximation, the performance is the
-    same. Heck, to a second order of approximation, it's the same, too. These kinds of performance
-    differences are nearly always absolutely dwarfed by bigger concerns — I/O, lock contention,
-    memory leaks, algorithms of the wrong big-O complexity, sheer coding errors, failure to
-    properly reuse data once obtained (which may be solved by "caching" or simply by structuring
-    the code better), etc. etc. etc."
-  - If you measure your isolated component and it performs better than competitors, then it is
-    better in isolation. If it doesn't perform as expected in the system, it's because its design
-    doesn't fit, the specifications are probably wrong.
+- Kevin Bourrillion: "Raw CPU speed? To a first order of approximation, the performance is the same.
+  Heck, to a second order of approximation, it's the same, too. These kinds of performance
+  differences are nearly always absolutely dwarfed by bigger concerns — I/O, lock contention, memory
+  leaks, algorithms of the wrong big-O complexity, sheer coding errors, failure to properly reuse
+  data once obtained (which may be solved by "caching" or simply by structuring the code better),
+  etc. etc. etc."
+- If you measure your isolated component and it performs better than competitors, then it is better
+  in isolation. If it doesn't perform as expected in the system, it's because its design doesn't
+  fit, the specifications are probably wrong.
     - Systems are bigger than the sum of its components, but they are finite and can have their
       external interactions abstracted away, so I kind of disagree with Bourrillion's answer.
 
 1. [Why doesn't Java 8 include immutable collections?][why_no_immutable_on_java_8]
 
-  - [The difference between *readable*, *read-only* and *
-    immutable* collections][3_types_of_collections].
-  - Basically, the `UnmodifiableListMixin` also exists in Java. For more,
-    check [Arkanon's answer][arkanon_answer].
-  - I enjoy entertaining the idea that of all the code written in Java and running on millions of
-    computers all over the world, every day, around the clock, about half the total clock cycles
-    must be wasted doing nothing but making safety copies of collections that are being returned
-    by functions. (And garbage-collecting these collections milliseconds after their creation.)
+- [The difference between *readable*, *read-only* and *
+  immutable* collections][3_types_of_collections].
+- Basically, the `UnmodifiableListMixin` also exists in Java. For more,
+  check [Arkanon's answer][arkanon_answer].
+- I enjoy entertaining the idea that of all the code written in Java and running on millions of
+  computers all over the world, every day, around the clock, about half the total clock cycles must
+  be wasted doing nothing but making safety copies of collections that are being returned by
+  functions. (And garbage-collecting these collections milliseconds after their creation.)
     - From [Mike Nakis' answer][mike_nakis_answer].
     - Now, an interface like Collection which would be missing the `add()`, `remove()`
       and `clear()`
       methods would not be an `ImmutableCollection` interface; it would be
       an `UnmodifiableCollection` interface. As a matter of fact, there could never be
-      an `ImmutableCollection` interface, because immutability is a nature of an implementation,
-      not a characteristic of an interface. I know, that's not very clear; let me explain.
-  - [Ben Rayfield on recursiveness][ben_rayfield_recursiveness]
+      an `ImmutableCollection` interface, because immutability is a nature of an implementation, not
+      a characteristic of an interface. I know, that's not very clear; let me explain.
+- [Ben Rayfield on recursiveness][ben_rayfield_recursiveness]
 
 1. [Question on the behavior of `List.unmodifiable`][marcelo_list_unmodifiable]
 
-  - `List.unmodifiable` does create a new list. And it's `O(N)`.
+- `List.unmodifiable` does create a new list. And it's `O(N)`.
 
 1. [Immutable Collections In Java &ndash; Not Now, Not Ever][immutable_collections_java_not_now_not_ever]
 
-  - Originally, unmodifiable marked an instance that offered no mutability (by throwing
-    `UnsupportedOperationException` on mutating methods) but may be changed in other ways (maybe
-    because it was just a wrapper around a mutable collection).
-  - An immutable collection of secret agents might sound an awful lot like an immutable collection
-    of immutable secret agents, but the two are not the same. The immutable collection may not be
-    editable by adding/removing/clearing/etc, but, if secret agents are mutable (although the lack
-    of character development in spy movies seems to suggest otherwise), that doesn’t mean the
-    collection of agents as a whole is immutable.
-  - *Immutability is not an absence of mutation, it’s a guarantee there won’t be mutation*.
-  - Converting old code to a new immutability hierarchy may be source-incompatible.
+- Originally, unmodifiable marked an instance that offered no mutability (by throwing
+  `UnsupportedOperationException` on mutating methods) but may be changed in other ways (maybe
+  because it was just a wrapper around a mutable collection).
+- An immutable collection of secret agents might sound an awful lot like an immutable collection of
+  immutable secret agents, but the two are not the same. The immutable collection may not be
+  editable by adding/removing/clearing/etc, but, if secret agents are mutable (although the lack of
+  character development in spy movies seems to suggest otherwise), that doesn’t mean the collection
+  of agents as a whole is immutable.
+- *Immutability is not an absence of mutation, it’s a guarantee there won’t be mutation*.
+- Converting old code to a new immutability hierarchy may be source-incompatible.
 
 1. [Faster Purely Functional Data Structures for Java][faster_java_functional_data_structures]
 
-  - Use unifying interfaces for more flexibility with respect to implementations.
-  - Laziness in copying is key to performance.
-  - *Persistent collections are immutable collections with efficient copy-on-write operations.*
-  - [Chris Osaki's thesis on *Purely Functional Data Structures*][osaki_thesis]
-  - [Extreme Cleverness: Functional Data Structures in Scala - Daniel Spiewak][spiewak_lecture]
-  - [Clojure Data Structures Part 1 - Rich Hickey (the creator of Clojure)][hickey_lecture]
+- Use unifying interfaces for more flexibility with respect to implementations.
+- Laziness in copying is key to performance.
+- *Persistent collections are immutable collections with efficient copy-on-write operations.*
+- [Chris Osaki's thesis on *Purely Functional Data Structures*][osaki_thesis]
+- [Extreme Cleverness: Functional Data Structures in Scala - Daniel Spiewak][spiewak_lecture]
+- [Clojure Data Structures Part 1 - Rich Hickey (the creator of Clojure)][hickey_lecture]
 
 1. [How can List be faster than native arrays?][how_can_lists_be_faster_than_arrays]
 
-  - Structural sharing makes an immutable list be faster than a native array in JS.
-  - `List` is an implementation of an immutable data-structure called *relaxed radix balanced
-    trees*.
-  - Not all operations are faster...
-  - [`List` on Github][list_github]
+- Structural sharing makes an immutable list be faster than a native array in JS.
+- `List` is an implementation of an immutable data-structure called *relaxed radix balanced trees*.
+- Not all operations are faster...
+- [`List` on Github][list_github]
 
 [3_types_of_collections]: https://softwareengineering.stackexchange.com/a/222052/344810
 
@@ -2418,14 +2499,14 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 1. [Is Dart Compiled or Interpreted?][dart_compiled_or_interpreted]
 
-  - Both. It ultimately depends onto which platform you're deploying.
+- Both. It ultimately depends onto which platform you're deploying.
 
 1. [Introduction to the Dart VM][intro_dart_vm]
 
 1. [What does `external` mean in Dart?][external_in_dart]
 
-  - Basically that the method is implemented elsewhere, probably by a subclass. It's kind of like
-    an abstract method but not in an abstract class.
+- Basically that the method is implemented elsewhere, probably by a subclass. It's kind of like an
+  abstract method but not in an abstract class.
 
 1. [An example of how to graph benchmarks][funkia].
 
@@ -2485,5 +2566,6 @@ you find any bugs it's his fault! 😂 — I am only half kidding 😐.
 
 <a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a><br>
 <a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a><br>
-<a href="https://stackoverflow.com/users/3411681/marcg">_stackoverflow.com/users/3411681/marcg_</a><br>
+<a href="https://stackoverflow.com/users/3411681/marcg">_
+stackoverflow.com/users/3411681/marcg_</a><br>
 <a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a><br>

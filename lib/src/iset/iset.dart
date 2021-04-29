@@ -32,20 +32,17 @@ class ISetConst<T> // ignore: must_be_immutable
   ///
   const ISetConst(
     this._set,
-    // Note: The _set can't be optional. This doesn't work: [this._set = const []]
+    // Note: The _set can't be optional. This doesn't work: [this._set = const {}]
     // because when you do this _set will be Set<Never> which will create problems.
-    {
-    this.isDeepEquals = true,
-  }) : super._gen();
+  )   : config = const ConfigSet(),
+        super._gen();
 
   final Set<T> _set;
 
   @override
-  final bool isDeepEquals;
+  final ConfigSet config;
 
-  @override
-  ConfigSet get config =>
-      isDeepEquals ? const ConfigSet(isDeepEquals: true) : const ConfigSet(isDeepEquals: false);
+  const ISetConst.withConfig(this._set, this.config) : super._gen();
 
   /// A constant set is always flushed, by definition.
   @override
@@ -59,7 +56,11 @@ class ISetConst<T> // ignore: must_be_immutable
   int get _counter => 0;
 
   @override
-  S<T> get _s => SFlat<T>.unsafe(_set);
+  S<T> get _s {
+    if (config.sort && _set.isNotEmpty)
+      throw UnsupportedError("Can't use a const ISet unless it's empty.");
+    return SFlat<T>.unsafe(_set);
+  }
 
   /// Hash codes must be the same for objects that are equal to each other
   /// according to operator ==.
