@@ -171,8 +171,18 @@ abstract class IList<T> // ignore: must_be_immutable
 
   set _hashCode(int? value);
 
-  /// Create an [IList] from any [Iterable].
-  /// Fast, if the Iterable is another [IList].
+  /// Create an [IList] from an [iterable], with the default configuration.
+  /// Fast, if the iterable is another [IList].
+  ///
+  /// To create an empty [IList] with the default configuration, just omit
+  /// the iterable: `IList()`.
+  ///
+  /// Note: To create an [IList] with a specific configuration, use the `IList.withConfig()`
+  /// constructor.
+  ///
+  /// Note: If you want to create an empty [IList] of the same configuration as a
+  /// source [IList], simply call [clear] on the source [IList].
+  ///
   factory IList([Iterable<T>? iterable]) => //
       IList.withConfig(iterable ?? const [], defaultConfig);
 
@@ -275,19 +285,6 @@ abstract class IList<T> // ignore: must_be_immutable
     ConfigList? config,
   ]) =>
       (iterable == null) ? null : IList.withConfig(iterable, config ?? defaultConfig);
-
-  /// Returns an empty [IList], with the given configuration. If a
-  /// configuration is not provided, it will use the default configuration.
-  ///
-  /// Note: If you want to create an empty immutable collection of the same
-  /// type and same configuration as a source collection, simply call [clear]
-  /// on the source collection.
-  ///
-  /// Also, to create an empty const list, use [IListConst.empty], for example:
-  /// `static const IList<String> myList = IListConst.empty();`
-  ///
-  static IList<T> empty<T>([ConfigList? config]) =>
-      IListImpl._unsafe(LFlat.empty<T>(), config: config ?? defaultConfig);
 
   /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
   factory IList.fromJson(dynamic json, T Function(Object?) fromJsonT) =>
@@ -1063,7 +1060,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Returns an empty list with the same configuration.
-  IList<T> clear() => empty<T>(config);
+  IList<T> clear() => IListImpl.empty<T>(config);
 
   /// Returns the index of the first [element] in the list.
   ///

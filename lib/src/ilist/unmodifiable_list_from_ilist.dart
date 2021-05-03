@@ -38,7 +38,7 @@ class UnmodifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEm
 
   /// Create an unmodifiable [List] view of type [UnmodifiableListFromIList], from an [ilist].
   UnmodifiableListFromIList(IList<T>? ilist)
-      : _iList = (ilist != null) ? ilist : IList.empty<T>(),
+      : _iList = (ilist != null) ? ilist : IList<T>(),
         _list = null;
 
   /// Create an unmodifiable [List] view of type [UnmodifiableListFromIList], from another [List].

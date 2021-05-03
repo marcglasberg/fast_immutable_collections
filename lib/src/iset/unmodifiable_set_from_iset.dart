@@ -35,7 +35,7 @@ class UnmodifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty 
 
   /// Create an unmodifiable [Set] view of type [UnmodifiableSetFromISet], from an [iset].
   UnmodifiableSetFromISet(ISet<T>? iset)
-      : _iSet = iset ?? ISet.empty<T>(),
+      : _iSet = iset ?? ISetImpl.empty<T>(),
         _set = null;
 
   /// Create an unmodifiable [Set] view of type [UnmodifiableSetFromISet], from another [Set].

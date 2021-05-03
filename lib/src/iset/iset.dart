@@ -180,8 +180,18 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   set _hashCode(int? value);
 
-  /// Create an [ISet] from any [Iterable].
-  /// Fast, if the [Iterable] is another [ISet].
+  /// Create an [ISet] from an [iterable], with the default configuration.
+  /// Fast, if the iterable is another [ISet].
+  ///
+  /// To create an empty [ISet] with the default configuration, just omit
+  /// the iterable: `ISet()`.
+  ///
+  /// Note: To create an [ISet] with a specific configuration, use the `ISet.withConfig()`
+  /// constructor.
+  ///
+  /// Note: If you want to create an empty [ISet] of the same configuration as a
+  /// source [ISet], simply call [clear] on the source [ISet].
+  ///
   factory ISet([Iterable<T>? iterable]) => //
       ISet.withConfig(iterable, defaultConfig);
 
@@ -300,16 +310,6 @@ abstract class ISet<T> // ignore: must_be_immutable
     ConfigSet? config,
   ]) =>
       (iterable == null) ? null : ISet.withConfig(iterable, config ?? defaultConfig);
-
-  /// Returns an empty [ISet], with the given configuration. If a configuration
-  /// is not provided, it will use the default configuration.
-  ///
-  /// Note: If you want to create an empty immutable collection of the same type
-  /// and same configuration as a source collection, simply call [clear] in the source collection.
-  static ISet<T> empty<T>([ConfigSet? config]) => ISetImpl._unsafe(
-        SFlat.empty<T>(),
-        config: config ?? defaultConfig,
-      );
 
   /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
   factory ISet.fromJson(dynamic json, T Function(Object?) fromJsonT) =>
@@ -935,7 +935,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Returns an empty set with the same configuration.
-  ISet<T> clear() => empty<T>(config);
+  ISet<T> clear() => ISetImpl.empty<T>(config);
 
   /// Returns whether this [ISet] contains all the elements of [other].
   bool containsAll(Iterable<T> other) {

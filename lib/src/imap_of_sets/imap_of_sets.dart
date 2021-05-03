@@ -319,7 +319,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// [set], nothing happens.
   ///
   IMapOfSets<K, V> add(K key, V value) {
-    ISet<V> set = _mapOfSets[key] ?? ISet.empty<V>(config.asConfigSet);
+    ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
     ISet<V> newSet = set.add(value);
     return set.same(newSet) ? this : replaceSet(key, newSet);
   }
@@ -329,7 +329,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// and then add the [values] to it.
   ///
   IMapOfSets<K, V> addValues(K key, Iterable<V> values) {
-    ISet<V> set = _mapOfSets[key] ?? ISet.empty<V>(config.asConfigSet);
+    ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
     ISet<V> newSet = set.addAll(values);
     return set.same(newSet) ? this : replaceSet(key, newSet);
   }
@@ -501,7 +501,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// When [removeEmptySets] is `false`, the [set] for the corresponding [key]
   /// will become empty.
   ///
-  IMapOfSets<K, V> clearSet(K key) => replaceSet(key, ISet.empty<V>());
+  IMapOfSets<K, V> clearSet(K key) => replaceSet(key, ISetImpl.empty<V>());
 
   /// Remove the given [key], if it exists, and its corresponding [set].
   /// If the [key] doesn't exist, don't do anything.
@@ -513,7 +513,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Return the [set] for the given [key].
   /// If the [key] doesn't exist, return an empty set (never return `null`).
-  ISet<V> get(K key) => _mapOfSets[key] ?? ISet.empty<V>(config.asConfigSet);
+  ISet<V> get(K key) => _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
 
   /// Return the [set] for the given [key].
   /// If the [key] doesn't exist, return `null`.
@@ -714,7 +714,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     if (config.removeEmptySets)
       return empty<K, V>(config);
     else {
-      var emptySet = ISet.empty<V>(config.asConfigSet);
+      var emptySet = ISetImpl.empty<V>(config.asConfigSet);
       return updateAll((K key, ISet<V> set) => emptySet);
     }
   }

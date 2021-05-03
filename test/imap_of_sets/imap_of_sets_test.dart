@@ -2000,7 +2000,7 @@ void main() {
       "3": {10, 11},
     });
     expect(
-        iMapOfSets.update("2", (ISet<int?>? set) => ISet.empty()),
+        iMapOfSets.update("2", (ISet<int?>? set) => ISetImpl.empty()),
         {
           "1": {1, 2, 3},
           "3": {10, 11},
@@ -2009,7 +2009,7 @@ void main() {
     expect(
         iMapOfSets
             .withConfig(ConfigMapOfSets(removeEmptySets: false))
-            .update("2", (ISet<int?>? set) => ISet.empty()),
+            .update("2", (ISet<int?>? set) => ISetImpl.empty()),
         {
           "1": {1, 2, 3},
           "2": <int>{},

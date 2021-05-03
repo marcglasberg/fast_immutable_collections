@@ -19,7 +19,7 @@ void main() {
     expect(IList([]), isA<IList>());
     expect(IList<String>([]), isA<IList<String>>());
     expect(IList([1]), isA<IList<int>>());
-    expect(IList.empty<int>(), isA<IList<int>>());
+    expect(IList<int>(), isA<IList<int>>());
     expect([].lock, isA<IList>());
   });
 
@@ -38,8 +38,8 @@ void main() {
     expect(IList([1]).isEmpty, isFalse);
     expect(IList([1]).isNotEmpty, isTrue);
 
-    expect(IList.empty<int>().isEmpty, isTrue);
-    expect(IList.empty<int>().isNotEmpty, isFalse);
+    expect(IList<int>().isEmpty, isTrue);
+    expect(IList<int>().isNotEmpty, isFalse);
 
     expect([].lock.isEmpty, isTrue);
     expect([].lock.isNotEmpty, isFalse);
@@ -1189,7 +1189,7 @@ void main() {
     expect(ilist.indexWhere((String? element) => element == "fa"), -1);
 
     // 3) Empty list or list with a single item
-    var emptyIlist = IList.empty<String>();
+    var emptyIlist = IList<String>();
     expect(emptyIlist.indexWhere((String? element) => element == "x"), -1);
 
     emptyIlist = ["do"].lock;

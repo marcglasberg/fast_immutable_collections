@@ -198,7 +198,7 @@ void main() {
     expect(listSet.indexWhere((String element) => element == "fa"), -1);
 
     // 3) Empty list or list with a single item
-    var emptyIlist = IList.empty<String>();
+    var emptyIlist = IList<String>();
     expect(emptyIlist.indexWhere((String? element) => element == "x"), -1);
 
     emptyIlist = ["do"].lock;

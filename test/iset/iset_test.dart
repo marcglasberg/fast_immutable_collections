@@ -18,7 +18,7 @@ void main() {
     expect(ISet({}), isA<ISet>());
     expect(ISet<String>({}), isA<ISet<String>>());
     expect(ISet([1]), isA<ISet<int>>());
-    expect(ISet.empty<int>(), isA<ISet<int>>());
+    expect(ISet<int>(), isA<ISet<int>>());
     expect(<int>{}.lock, isA<ISet>());
   });
 
@@ -65,14 +65,14 @@ void main() {
     expect(ISet({}).isEmpty, isTrue);
     expect(ISet<String>({}).isEmpty, isTrue);
     expect(ISet([1]).isEmpty, isFalse);
-    expect(ISet.empty<int>().isEmpty, isTrue);
+    expect(ISet<int>().isEmpty, isTrue);
     expect(<int>{}.lock.isEmpty, isTrue);
 
     expect(ISet().isNotEmpty, isFalse);
     expect(ISet({}).isNotEmpty, isFalse);
     expect(ISet<String>({}).isNotEmpty, isFalse);
     expect(ISet([1]).isNotEmpty, isTrue);
-    expect(ISet.empty<int>().isNotEmpty, isFalse);
+    expect(ISet<int>().isNotEmpty, isFalse);
     expect(<int>{}.lock.isNotEmpty, isFalse);
   });
 
@@ -504,7 +504,7 @@ void main() {
 
   test("empty", () {
     // 1) Regular usage
-    ISet<int> iset = ISet.empty<int>();
+    ISet<int> iset = ISet<int>();
     iset = iset.addAll({2, 3}).add(1);
 
     expect(iset, [2, 3, 1]);
@@ -513,7 +513,7 @@ void main() {
     expect(iset.elementAt(2), 1);
 
     // 2) With sorting
-    iset = ISet.empty<int>(const ConfigSet(sort: true));
+    iset = ISet<int>.withConfig([], const ConfigSet(sort: true));
     iset = iset.addAll({2, 3}).add(1);
 
     expect(iset, [1, 2, 3]);
@@ -790,7 +790,7 @@ void main() {
     expect(iset.length, 6);
 
     // 2) When the set is empty
-    iset = ISet.empty();
+    iset = ISet();
 
     expect(iset.length, 0);
     expect(iset.isEmpty, isTrue);
