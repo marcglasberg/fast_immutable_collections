@@ -15,7 +15,7 @@ class ListSetView<T> implements ListSet<T> {
 
   /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
   @override
-  Object toJson(Object Function(T) toJsonT) => map(toJsonT).toList();
+  Object toJson(Object? Function(T) toJsonT) => map(toJsonT).toList();
 
   @override
   bool add(T value) {

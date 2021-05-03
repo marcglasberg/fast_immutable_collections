@@ -1,4 +1,4 @@
-## [5.0.0-dev.8] - 2021/04/29
+## [5.0.0-dev.9] - 2021/05/02
 
 * Const `IList`. 
   Example: `const IList<int> myList = IListConst([1, 2, 3]);`
@@ -7,6 +7,7 @@
   Example: `const ISet<int> mySet = ISetConst({1, 2, 3});`
   Example of empty set: `const ISet<String> mySet = ISetConst({});`
 * Better NNBD for `divideListAsMap()` and `sortedLike()`.
+* Better Json serialization for NNBD.
 * Breaking change: Removed all extensions like `isNullOrEmpty` and similar. This was a good idea 
   before NNBD, but now if you use this Dart can't infer nullability anymore.
 
