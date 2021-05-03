@@ -316,7 +316,7 @@ abstract class ISet<T> // ignore: must_be_immutable
       ISet<T>((json as Iterable).map(fromJsonT));
 
   /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
-  Object toJson(Object Function(T) toJsonT) => map(toJsonT).toList();
+  Object toJson(Object? Function(T) toJsonT) => map(toJsonT).toList();
 
   /// See also: [ImmutableCollection], [ImmutableCollection.lockConfig],
   /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]

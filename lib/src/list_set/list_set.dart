@@ -49,7 +49,7 @@ class ListSet<T> implements Set<T>, List<T> {
       ListSet<T>.of((json as Iterable).map(fromJsonT));
 
   /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
-  Object toJson(Object Function(T) toJsonT) => map(toJsonT).toList();
+  Object toJson(Object? Function(T) toJsonT) => map(toJsonT).toList();
 
   @override
   bool add(T value) {
