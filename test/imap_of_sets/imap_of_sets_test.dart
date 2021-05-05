@@ -743,6 +743,21 @@ void main() {
 
     expect(imapOfSets1.keys, ["c", "a", "b"]);
     expect(imapOfSets2.keys, ["a", "b", "c"]);
+
+    // 4) Ignoring values
+    final IMapOfSets<String, int> fromIterableIgnoring = IMapOfSets.fromIterable(
+      [1, 2, 2, 3],
+      keyMapper: (int n) => n.toString(),
+      valueMapper: (int n) => 2 * n,
+      config: ConfigMapOfSets(cacheHashCode: false),
+      ignore: (int n) => n == 1, // Removes n == 1.
+    );
+
+    expect(fromIterableIgnoring.unlock, {
+      "2": {4},
+      "3": {6}
+    });
+    expect(fromIterableIgnoring.config, const ConfigMapOfSets(cacheHashCode: false));
   });
 
   //////////////////////////////////////////////////////////////////////////////

@@ -1,18 +1,17 @@
-## [5.0.0-dev.10] - 2021/05/03
+## [5.0.0-dev.11] - 2021/05/05
 
-* Const `IList`. 
-  Example: `const IList<int> myList = IListConst([1, 2, 3]);`
+* Const `IList`. Example: `const IList<int> myList = IListConst([1, 2, 3]);`
   Example of empty list: `const IList<String> myList = IListConst([]);`
-* Const `ISet`. 
-  Example: `const ISet<int> mySet = ISetConst({1, 2, 3});`
+* Const `ISet`. Example: `const ISet<int> mySet = ISetConst({1, 2, 3});`
   Example of empty set: `const ISet<String> mySet = ISetConst({});`
 * Better NNBD for `divideListAsMap()` and `sortedLike()`.
 * Better Json serialization for NNBD.
-* Breaking change: Removed `empty()` constructors from `IList` and `ISet`. You can create 
-  empty collections using `IList()` and `ISet()`, or `myIList.clear()` and `myISet.clear()`, or
+* Small IMapOfSets.fromIterable() improvement: added `ignore` parameter.
+* Breaking change: Removed `empty()` constructors from `IList` and `ISet`. You can create empty
+  collections using `IList()` and `ISet()`, or `myIList.clear()` and `myISet.clear()`, or
   `IList.withCongif(const [], myConfig)` and `ISet.withConfig(const [], myConfig)`, or
   `const IListConst([])` and `const ISetConst({})`.
-* Breaking change: Removed all extensions like `isNullOrEmpty` and similar. This was a good idea 
+* Breaking change: Removed all extensions like `isNullOrEmpty` and similar. This was a good idea
   before NNBD, but now if you use this Dart can't infer nullability anymore.
 
 ## [4.0.6] - 2021/04/20

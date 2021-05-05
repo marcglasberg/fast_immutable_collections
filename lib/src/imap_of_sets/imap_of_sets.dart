@@ -126,16 +126,20 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If [keyMapper] and [valueMapper] are not specified, the default is the
   /// identity function.
   ///
+  /// If [ignore] is provided and return true, the entry will not be included.
+  ///
   static IMapOfSets<K, V> fromIterable<K, V, I>(
     Iterable<I> iterable, {
     K Function(I)? keyMapper,
     V Function(I)? valueMapper,
+    bool Function(I)? ignore,
     ConfigMapOfSets? config,
   }) {
     Map<K, Set<V>> map = _mutableMapOfSets<K, V, I>(
       iterable,
       keyMapper: keyMapper,
       valueMapper: valueMapper,
+      ignore: ignore,
     );
     return IMapOfSets.withConfig(map, config ?? defaultConfig);
   }
@@ -873,21 +877,26 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Creates a mutable map of sets from an [Iterable]
   /// and a [keyMapper] and [valueMapper].
+  /// If [ignore] is provided and return true, the entry will not be included.
   static Map<K, Set<V>> _mutableMapOfSets<K, V, I>(
     Iterable<I> iterable, {
-    K Function(I)? keyMapper,
-    V Function(I)? valueMapper,
+    required K Function(I)? keyMapper,
+    required V Function(I)? valueMapper,
+    required bool Function(I)? ignore,
   }) {
     Map<K, Set<V>> map = {};
     for (I item in iterable) {
-      K key = keyMapper == null ? (item as K) : keyMapper(item);
-      V value = valueMapper == null ? (item as V) : valueMapper(item);
-      Set<V>? set = map[key];
-      if (set == null) {
-        set = <V>{};
-        map[key] = set;
+      bool _ignore = ignore?.call(item) ?? false;
+      if (!_ignore) {
+        K key = (keyMapper == null) ? (item as K) : keyMapper(item);
+        V value = (valueMapper == null) ? (item as V) : valueMapper(item);
+        Set<V>? set = map[key];
+        if (set == null) {
+          set = <V>{};
+          map[key] = set;
+        }
+        set.add(value);
       }
-      set.add(value);
     }
     return map;
   }
