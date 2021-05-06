@@ -17,7 +17,7 @@ class BarChart extends StatelessWidget {
           domainFn: (StopwatchRecord record, _) => record.collectionName,
           measureFn: (StopwatchRecord record, _) => record.record,
           data: _normalizedAgainstMaxPrefixedByAbs(recordsTable),
-          displayName: "Xaxaxaxa",
+          displayName: "displayName",
         ),
       ];
 

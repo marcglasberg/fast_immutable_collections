@@ -25,6 +25,37 @@ extension FicListExtension<T> on List<T> {
   /// See also: [ImmutableCollection]
   IList<T> get lockUnsafe => IList<T>.unsafe(this, config: IList.defaultConfig);
 
+  /// Returns the [index]th element.
+  /// If that index doesn't exist (negative, or out of range), will return
+  /// the result of calling [orElse]. In this case, if [orElse] is not provided,
+  /// will throw an error.
+  T get(int index, {T Function(int index)? orElse}) {
+    if (orElse == null) return this[index];
+    return (index < 0 || index >= length) //
+        ? orElse(index)
+        : this[index];
+  }
+
+  /// Returns the [index]th element.
+  /// If that index doesn't exist (negative or out of range), will return null.
+  /// This method will never throw an error.
+  T? getOrNull(int index) => (index < 0 || index >= length) //
+      ? null
+      : this[index];
+
+  /// Gets the [index]th element, and then apply the [map] function to it, returning the result.
+  /// If that index doesn't exist (negative, or out of range), will the [map] method
+  /// will be called with `inRange` false and `value` null.
+  T getAndMap(
+    int index,
+    T Function(int index, bool inRange, T? value) map,
+  ) {
+    bool inRange = (index >= 0 && index < length);
+
+    T? value = inRange ? this[index] : null;
+    return map(index, inRange, value);
+  }
+
   /// Sorts this list according to the order specified by the [compare] function.
   ///
   /// This is similar to [sort], but uses a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort).

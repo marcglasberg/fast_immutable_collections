@@ -591,4 +591,34 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("get, getOrNull, getAndMap", () {
+    var list = ["a", "b", "c", "d", "e", "f"];
+
+    // getOrNull
+    expect(list.getOrNull(0), "a");
+    expect(list.getOrNull(5), "f");
+    expect(list.getOrNull(6), null);
+    expect(list.getOrNull(-1), null);
+
+    // get
+    expect(list.get(0), "a");
+    expect(list.get(5), "f");
+    expect(() => list.get(6), throwsRangeError);
+    expect(() => list.get(-1), throwsRangeError);
+
+    // get with orElse
+    expect(list.get(0, orElse: (index) => index.toString()), "a");
+    expect(list.get(5, orElse: (index) => index.toString()), "f");
+    expect(list.get(6, orElse: (index) => index.toString()), "6");
+    expect(list.get(-1, orElse: (index) => index.toString()), "-1");
+
+    // getAndMap
+    expect(list.getAndMap(0, (idx, inRange, value) => "$idx|$inRange|$value"), "0|true|a");
+    expect(list.getAndMap(5, (idx, inRange, value) => "$idx|$inRange|$value"), "5|true|f");
+    expect(list.getAndMap(6, (idx, inRange, value) => "$idx|$inRange|$value"), "6|false|null");
+    expect(list.getAndMap(-1, (idx, inRange, value) => "$idx|$inRange|$value"), "-1|false|null");
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

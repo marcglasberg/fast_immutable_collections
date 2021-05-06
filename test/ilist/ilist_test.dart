@@ -754,17 +754,42 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("elementAt", () {
+  test("elementAt, get, getOrNull, getAndMap", () {
     var ilist = ["a", "b", "c", "d", "e", "f"].lock;
+
+    // elementAt
     expect(ilist.elementAt(0), "a");
     expect(ilist.elementAt(1), "b");
     expect(ilist.elementAt(2), "c");
     expect(ilist.elementAt(3), "d");
     expect(ilist.elementAt(4), "e");
     expect(ilist.elementAt(5), "f");
-
     expect(() => ilist.elementAt(6), throwsRangeError);
     expect(() => ilist.elementAt(-1), throwsRangeError);
+
+    // getOrNull
+    expect(ilist.getOrNull(0), "a");
+    expect(ilist.getOrNull(5), "f");
+    expect(ilist.getOrNull(6), null);
+    expect(ilist.getOrNull(-1), null);
+
+    // get
+    expect(ilist.get(0), "a");
+    expect(ilist.get(5), "f");
+    expect(() => ilist.get(6), throwsRangeError);
+    expect(() => ilist.get(-1), throwsRangeError);
+
+    // get with orElse
+    expect(ilist.get(0, orElse: (index) => index.toString()), "a");
+    expect(ilist.get(5, orElse: (index) => index.toString()), "f");
+    expect(ilist.get(6, orElse: (index) => index.toString()), "6");
+    expect(ilist.get(-1, orElse: (index) => index.toString()), "-1");
+
+    // getAndMap
+    expect(ilist.getAndMap(0, (idx, inRange, value) => "$idx|$inRange|$value"), "0|true|a");
+    expect(ilist.getAndMap(5, (idx, inRange, value) => "$idx|$inRange|$value"), "5|true|f");
+    expect(ilist.getAndMap(6, (idx, inRange, value) => "$idx|$inRange|$value"), "6|false|null");
+    expect(ilist.getAndMap(-1, (idx, inRange, value) => "$idx|$inRange|$value"),"-1|false|null");
   });
 
   //////////////////////////////////////////////////////////////////////////////

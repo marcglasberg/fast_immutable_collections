@@ -1395,6 +1395,14 @@ These are some provided helpers and extensions:
 
 ## 8.2 List extensions
 
+* `get` returns the index-th element. If index is out of range, will call `orElse` (not throw an
+  error).
+
+* `getOrNull` returns the index-th element. If index is out of range, will return `null` (not throw
+  an error).
+
+* `getAndMap` gets the index-th element, and then apply the `map` function to it.
+
 * `List.sortOrdered` is similar to `sort`, but uses
   a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort). Contrary to `sort`,
   `orderedSort` is stable, meaning distinct objects that compare as equal end up in the same order

@@ -691,6 +691,46 @@ abstract class IList<T> // ignore: must_be_immutable
     return _l[index];
   }
 
+  /// Returns the [index]th element.
+  /// This is the same as using the [] operator.
+  /// See also: [get] and [getOrNull].
+  @override
+  T elementAt(int index) {
+    _count();
+    return _l[index];
+  }
+
+  /// Returns the [index]th element.
+  /// If that index doesn't exist (negative, or out of range), will return
+  /// the result of calling [orElse]. In this case, if [orElse] is not provided,
+  /// will throw an error.
+  T get(int index, {T Function(int index)? orElse}) {
+    if (orElse == null) return _l[index];
+    return (index < 0 || index >= _l.length) //
+        ? orElse(index)
+        : _l[index];
+  }
+
+  /// Returns the [index]th element.
+  /// If that index doesn't exist (negative or out of range), will return null.
+  /// This method will never throw an error.
+  T? getOrNull(int index) => (index < 0 || index >= _l.length) //
+      ? null
+      : _l[index];
+
+  /// Gets the [index]th element, and then apply the [map] function to it, returning the result.
+  /// If that index doesn't exist (negative, or out of range), will the [map] method
+  /// will be called with `inRange` false and `value` null.
+  T getAndMap(
+    int index,
+    T Function(int index, bool inRange, T? value) map,
+  ) {
+    bool inRange = (index >= 0 && index < _l.length);
+
+    T? value = inRange ? _l[index] : null;
+    return map(index, inRange, value);
+  }
+
   /// Checks whether any element of this iterable satisfies [test].
   ///
   /// Checks every element in iteration order, and returns `true` if
@@ -712,13 +752,6 @@ abstract class IList<T> // ignore: must_be_immutable
   bool contains(covariant T? element) {
     _count();
     return _l.contains(element);
-  }
-
-  /// Returns the [index]th element.
-  @override
-  T elementAt(int index) {
-    _count();
-    return _l[index];
   }
 
   /// Checks whether every element of this iterable satisfies [test].

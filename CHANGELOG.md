@@ -1,9 +1,11 @@
-## [5.0.0-dev.11] - 2021/05/05
+## [5.0.0-dev.12] - 2021/05/06
 
 * Const `IList`. Example: `const IList<int> myList = IListConst([1, 2, 3]);`
   Example of empty list: `const IList<String> myList = IListConst([]);`
 * Const `ISet`. Example: `const ISet<int> mySet = ISetConst({1, 2, 3});`
   Example of empty set: `const ISet<String> mySet = ISetConst({});`
+* Methods `IList.get()`, `IList.getOrNull()` and `IList.getAndMap()`.
+* Extensions `List.get()`, `List.getOrNull()` and `List.getAndMap()`.
 * Better NNBD for `divideListAsMap()` and `sortedLike()`.
 * Better Json serialization for NNBD.
 * Small IMapOfSets.fromIterable() improvement: added `ignore` parameter.
