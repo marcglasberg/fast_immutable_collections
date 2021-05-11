@@ -1426,9 +1426,6 @@ These are some provided helpers and extensions:
 * `List.compareAsSets` returns `true` if the lists contain the same items (in any order). Ignores
   repeated items.
 
-* `List.mapIndexed` maps each element of the list. The map function gets both the original item and
-  its index.
-
 * `List.splitList` splits a list, according to a predicate, removing the list item that satisfies
   the predicate.
 

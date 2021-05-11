@@ -146,16 +146,6 @@ extension FicListExtension<T> on List<T> {
     );
   }
 
-  /// Maps each element of the list.
-  /// The [map] function gets both the original [item] and its [index].
-  ///
-  /// Note: This is done through a [*synchronous generator*](https://dart.dev/guides/language/language-tour#generators).
-  Iterable<E> mapIndexed<E>(E Function(int index, T item) map) sync* {
-    for (var index = 0; index < length; index++) {
-      yield map(index, this[index]);
-    }
-  }
-
   /// Split a list, according to a predicate,
   /// removing the list item that satisfies the predicate.
   ///

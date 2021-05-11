@@ -1,4 +1,4 @@
-## [5.0.0-dev.12] - 2021/05/06
+## [5.0.0-dev.13] - 2021/05/10
 
 * Const `IList`. Example: `const IList<int> myList = IListConst([1, 2, 3]);`
   Example of empty list: `const IList<String> myList = IListConst([]);`
@@ -15,6 +15,9 @@
   `const IListConst([])` and `const ISetConst({})`.
 * Breaking change: Removed all extensions like `isNullOrEmpty` and similar. This was a good idea
   before NNBD, but now if you use this Dart can't infer nullability anymore.
+* Breaking change. Please, add `import "package:collection/collection.dart";` to your project. I
+  have removed the following methods because they are now present in the `collection` package:
+  * `Iterable.mapIndexed`  
 
 ## [4.0.6] - 2021/04/20
 
