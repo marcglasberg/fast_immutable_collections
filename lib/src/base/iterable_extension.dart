@@ -127,7 +127,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// primes.restrict(7, orElse: -1); // Returns 7.
   /// ```
   ///
-  T restrict(T item, {required T orElse}) => contains(item) ? item : orElse;
+  T restrict(T? item, {required T orElse}) => contains(item) ? item as T : orElse;
 
   /// Finds duplicates and then returns a [Set] with the duplicated elements.
   /// If there are no duplicates, an empty [Set] is returned.
