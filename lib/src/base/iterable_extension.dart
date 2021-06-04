@@ -116,6 +116,19 @@ extension FicIterableExtension<T> on Iterable<T> {
         : const IterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other);
   }
 
+  /// Restricts some item to one of those present in this iterable.
+  ///
+  /// Returns the [item] itself, if it's present in this iterable. Otherwise,
+  /// return [orElse]. For example:
+  ///
+  /// ```
+  /// var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+  /// primes.restrict(14, orElse: -1); // Returns -1.
+  /// primes.restrict(7, orElse: -1); // Returns 7.
+  /// ```
+  ///
+  T restrict(T item, {required T orElse}) => contains(item) ? item : orElse;
+
   /// Finds duplicates and then returns a [Set] with the duplicated elements.
   /// If there are no duplicates, an empty [Set] is returned.
   Set<T> findDuplicates() {

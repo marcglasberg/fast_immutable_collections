@@ -1,3 +1,7 @@
+## [5.0.1] - 2021/05/24
+
+* `Iterable.restrict()` restricts some item to one of those present in this iterable.
+
 ## [5.0.0] - 2021/05/24
 
 * Const `IList`. Example: `const IList<int> myList = IListConst([1, 2, 3]);`

@@ -1373,6 +1373,8 @@ These are some provided helpers and extensions:
 
 * `Iterable.deepEqualsByIdentity` compare all items, in order, using `identical`.
 
+* `Iterable.restrict()` restricts some item to one of those present in this iterable.
+
 * `Iterable.findDuplicates` finds duplicates and then returns a set with the duplicated elements.
 
 * `Iterable.everyIs` returns true if all items are equal to some value.
