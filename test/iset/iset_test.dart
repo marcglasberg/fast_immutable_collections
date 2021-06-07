@@ -1448,4 +1448,32 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("Reuse ISets only if they have the exact same generic type.", () {
+    //
+    // Reuse? No!
+    final ISet<int> iset1 = {1, 2}.lock;
+    final ISet<num> iset2 = ISet<num>(iset1);
+    expect(iset1.runtimeType.toString().endsWith("<int>"), isTrue);
+    expect(iset2.runtimeType.toString().endsWith("<num>"), isTrue);
+    expect(identical(iset1, iset2), isFalse);
+
+    // Reuse? Yes!
+    ISet<num> iset3 = <num>{1, 2}.lock;
+    ISet<num> iset4 = ISet<num>(iset3);
+    expect(identical(iset3, iset4), isTrue);
+
+    // Reuse? Yes!
+    ISet<int> iset5 = {1, 2}.lock;
+    ISet<int> iset6 = ISet<int>(iset5);
+    expect(identical(iset5, iset6), isTrue);
+
+    // Reuse? Yes!
+    ISet<int> iset7 = {1, 2}.lock;
+    ISet<int> iset8 = ISet(iset7);
+    expect(identical(iset7, iset8), isTrue);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
 }

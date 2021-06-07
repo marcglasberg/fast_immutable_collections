@@ -1,3 +1,7 @@
+## [5.0.1] - 2021/06/07
+
+* Reuse `IList`s and `ISet`s only if they have the exact same generic type.
+
 ## [5.0.0] - 2021/05/24
 
 * Const `IList`. Example: `const IList<int> myList = IListConst([1, 2, 3]);`

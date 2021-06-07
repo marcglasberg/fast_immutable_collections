@@ -789,7 +789,7 @@ void main() {
     expect(ilist.getAndMap(0, (idx, inRange, value) => "$idx|$inRange|$value"), "0|true|a");
     expect(ilist.getAndMap(5, (idx, inRange, value) => "$idx|$inRange|$value"), "5|true|f");
     expect(ilist.getAndMap(6, (idx, inRange, value) => "$idx|$inRange|$value"), "6|false|null");
-    expect(ilist.getAndMap(-1, (idx, inRange, value) => "$idx|$inRange|$value"),"-1|false|null");
+    expect(ilist.getAndMap(-1, (idx, inRange, value) => "$idx|$inRange|$value"), "-1|false|null");
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1594,6 +1594,33 @@ void main() {
     expect(count2, 6);
 
     // -------------
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Reuse ILists only if they have the exact same generic type.", () {
+    //
+    // Reuse? No!
+    final IList<int> ilist1 = [1, 2].lock;
+    final IList<num> ilist2 = IList<num>(ilist1);
+    expect(ilist1.runtimeType.toString().endsWith("<int>"), isTrue);
+    expect(ilist2.runtimeType.toString().endsWith("<num>"), isTrue);
+    expect(identical(ilist1, ilist2), isFalse);
+
+    // Reuse? Yes!
+    IList<num> ilist3 = <num>[1, 2].lock;
+    IList<num> ilist4 = IList<num>(ilist3);
+    expect(identical(ilist3, ilist4), isTrue);
+
+    // Reuse? Yes!
+    IList<int> ilist5 = [1, 2].lock;
+    IList<int> ilist6 = IList<int>(ilist5);
+    expect(identical(ilist5, ilist6), isTrue);
+
+    // Reuse? Yes!
+    IList<int> ilist7 = [1, 2].lock;
+    IList<int> ilist8 = IList(ilist7);
+    expect(identical(ilist7, ilist8), isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////

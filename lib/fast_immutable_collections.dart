@@ -8,6 +8,7 @@ export "src/base/immutable_collection.dart";
 export "src/base/iterable_extension.dart";
 export "src/base/map_entry_equality.dart";
 export "src/base/number_extension.dart";
+export "src/base/object_extensions.dart";
 export "src/base/other_extensions.dart";
 export "src/base/sort.dart";
 

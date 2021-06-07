@@ -204,7 +204,7 @@ abstract class ISet<T> // ignore: must_be_immutable
     Iterable<T>? iterable,
     ConfigSet config,
   ) {
-    return iterable is ISet<T>
+    return ((iterable is ISet<T>) && (iterable.isOfExactGenericType(T)))
         ? (config == iterable.config)
             ? iterable
             : iterable.isEmpty

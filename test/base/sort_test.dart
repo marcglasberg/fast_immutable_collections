@@ -98,7 +98,7 @@ void main() {
             then: sortBy((x) => x % 2 == 1,
                 then: sortBy((x) => x % 3 == 0,
                     then: sortBy(
-                      (x) => x % 5 == 0,
+                          (x) => x % 5 == 0,
                       then: (int a, int b) => a.compareTo(b),
                     )))));
 
@@ -131,7 +131,7 @@ void main() {
     /// 3) Otherwise, numbers come in their natural order.
     int Function(int?, int?) compareTo = sortLike(const [7, 3, 4, 21, 2],
         then: sortBy(
-          (x) => x! % 2 == 1,
+              (x) => x! % 2 == 1,
           then: (int? a, int? b) => a!.compareTo(b!),
         ));
 
@@ -169,7 +169,7 @@ void main() {
     int Function(String?, String?) compareToList = sortLike(const [7, 3, 4, 21, 2],
         mapper: (String? text) => text!.length,
         then: sortBy(
-          (String? x) => x!.length % 2 == 1,
+              (String? x) => x!.length % 2 == 1,
           then: (String? a, String? b) => a!.length.compareTo(b!.length),
         ));
 
@@ -182,7 +182,7 @@ void main() {
     int Function(String?, String?) compareToIList = sortLike([7, 3, 4, 21, 2].lock,
         mapper: (String? text) => text!.length,
         then: sortBy(
-          (String? x) => x!.length % 2 == 1,
+              (String? x) => x!.length % 2 == 1,
           then: (String? a, String? b) => a!.length.compareTo(b!.length),
         ));
 
@@ -195,7 +195,7 @@ void main() {
     int Function(String?, String?) compareToIterable = sortLike({7, 3, 4, 21, 2},
         mapper: (String? text) => text!.length,
         then: sortBy(
-          (String? x) => x!.length % 2 == 1,
+              (String? x) => x!.length % 2 == 1,
           then: (String? a, String? b) => a!.length.compareTo(b!.length),
         ));
 
@@ -222,7 +222,7 @@ void main() {
     ///
     int Function(int?, int?) compareTo = sortLike(const [4, 3],
         then: sortBy(
-          (x) => x! % 2 == 1,
+              (x) => x! % 2 == 1,
           then: (int? a, int? b) => a!.compareTo(b!),
         ));
 

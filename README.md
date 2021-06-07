@@ -1472,6 +1472,13 @@ These are some provided helpers and extensions:
 
 * `compareTo` makes `true` > `false`.
 
+## 8.6 Object extensions
+
+* `isOfExactGenericType` checks if some object in the format "Obj<T>" has a generic type T.
+
+* `isOfExactGenericTypeAs` checks if some object in the format "Obj1<T>" has a generic type equal
+  to "Obj2<T>".
+
 # 9. Comparators
 
 To help you sort collections (from FIC or any other), we provide the global comparator

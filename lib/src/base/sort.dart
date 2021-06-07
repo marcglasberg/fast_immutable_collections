@@ -199,6 +199,7 @@ int Function(T, T) sortLike<T, E>(
 // /////////////////////////////////////////////////////////////////////////////
 
 extension FicComparableExtension on Object? {
+  //
   /// 1. If this object and [other] are both `null`, they don't have order. If
   /// one of them is `null`, it will come later, unless the [nullsBefore] is `true`,
   /// in which case the `null` will come before.

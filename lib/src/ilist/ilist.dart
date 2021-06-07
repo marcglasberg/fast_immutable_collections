@@ -138,7 +138,7 @@ class IListImpl<T> // ignore: must_be_immutable
   IListImpl._(
     Iterable<T>? iterable, {
     required this.config,
-  })   : _l = iterable is IList<T> //
+  })  : _l = iterable is IList<T> //
             ? iterable._l
             : iterable == null
                 ? LFlat.empty<T>()
@@ -195,7 +195,7 @@ abstract class IList<T> // ignore: must_be_immutable
     Iterable<T>? iterable,
     ConfigList config,
   ) {
-    return iterable is IList<T>
+    return ((iterable is IList<T>) && (iterable.isOfExactGenericType(T)))
         ? (config == iterable.config)
             ? iterable
             : iterable.isEmpty
