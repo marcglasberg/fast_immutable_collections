@@ -356,6 +356,22 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
+  test("restrict", () {
+    var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+    expect(primes.restrict(14, orElse: -1), -1);
+    expect(primes.restrict(7, orElse: -1), 7);
+    expect(primes.restrict(2, orElse: -1), 2);
+    expect(primes.restrict(31, orElse: -1), 31);
+    expect(primes.restrict(null, orElse: -1), -1);
+
+    var primesWithNull = [2, 3, null, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+    expect(primesWithNull.restrict(null, orElse: -1), null);
+    expect(primesWithNull.restrict(2, orElse: -1), 2);
+    expect(primesWithNull.restrict(100, orElse: -1), -1);
+  });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
   test("findDuplicates", () {
     expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), {"C", "A"});
     expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), ["C", "A"]);

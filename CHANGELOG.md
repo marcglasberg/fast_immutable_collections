@@ -1,4 +1,6 @@
-## [5.0.1] - 2021/06/07
+## [5.0.1] - 2021/05/24
+
+* `Iterable.restrict()` restricts some item to one of those present in this iterable.
 
 * Reuse `IList`s and `ISet`s only if they have the exact same generic type.
 
