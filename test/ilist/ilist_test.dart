@@ -1625,12 +1625,47 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Reuse ILists only if they have the exact same generic type.", () {
+  test("Zip with Index", () {
     //
     final IList<String> ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
     final Iterable<Tuple2> indexZipped = ilist1.zipWithIndex();
     expect(indexZipped,
         IList([Tuple2(0, 'red'), Tuple2(1, 'green'), Tuple2(2, 'blue'), Tuple2(3, 'alpha')]));
   });
+
+  test("Zip with another source of same length ignoring the longer Iterable", () {
+    //
+    final IList<String> countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
+    final IList<String> capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
+
+    final Iterable<Tuple2> zipped = countries.zip(capitals);
+    expect(
+        zipped,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Brazil', 'Brasilia'),
+          Tuple2('Japan', 'Tokyo')
+        ]));
+
+    // Ignore Brazil Japan
+    final Iterable<Tuple2> subIn = countries.take(2).toIList().zip(capitals);
+    expect(
+        subIn,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+        ]));
+
+    // Ignore Brazil Japan
+    final Iterable<Tuple2> subOut = countries.zip(capitals.take(2));
+    expect(
+        subOut,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+        ]));
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 }

@@ -1589,6 +1589,13 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Aggregate each element with corresponding index
   Iterable<Tuple2<int, T>> zipWithIndex() =>
       List.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
+
+  /// Aggregate two sources considering only the shortest list
+  Iterable<Tuple2<T, T>> zip(Iterable<T> other) {
+    final minLength = min(length, other.length);
+    final list = other.toList();
+    return List.generate(minLength, (index) => Tuple2(_l[index], list[index])).toIList(config);
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////
