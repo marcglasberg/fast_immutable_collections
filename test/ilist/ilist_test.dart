@@ -1692,15 +1692,26 @@ void main() {
           Tuple2('Japan', null)
         ]));
 
-    final Iterable<Tuple2> completeAsFill =
+    final Iterable<Tuple2> completeOutAsFill =
         countries.zipAll(capitals.take(2), fill: (idx) => 'Capital $idx');
     expect(
-        completeAsFill,
+        completeOutAsFill,
         IList([
           Tuple2('France', 'Paris'),
           Tuple2('Germany', 'Berlin'),
           Tuple2('Brazil', 'Capital 2'),
           Tuple2('Japan', 'Capital 3')
+        ]));
+
+    final Iterable<Tuple2> completeInAsFill =
+        countries.take(2).toIList().zipAll(capitals, fill: (idx) => 'Country $idx');
+    expect(
+        completeInAsFill,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Country 2', 'Brasilia'),
+          Tuple2('Country 3', 'Tokyo')
         ]));
   });
 

@@ -1591,25 +1591,24 @@ abstract class IList<T> // ignore: must_be_immutable
       List.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
 
   /// Aggregate two sources considering only the shortest list
-  Iterable<Tuple2<T, T>> zip(Iterable<T> other) {
-    final list = other.toList();
-    final minLength = min(length, list.length);
-    return List.generate(minLength, (index) => Tuple2(_l[index], list[index])).toIList(config);
+  Iterable<Tuple2<T, T>> zip(Iterable<T> otherIterable) {
+    final other = otherIterable.toList();
+    final minLength = min(length, other.length);
+    return List.generate(minLength, (index) => Tuple2(_l[index], other[index])).toIList(config);
   }
 
   /// Aggregate two sources considering only the shortest list
-  Iterable<Tuple2<T, T?>> zipAll(Iterable<T> other, {T Function(int index)? fill}) {
-    final bases = [toList(growable: false), other.toList()];
-    bases.sort((a, b) => b.length.compareTo(a.length));
+  Iterable<Tuple2<T?, T?>> zipAll(Iterable<T> otherIterable, {T Function(int index)? fill}) {
+    final other = otherIterable.toList();
+    final current = toList(growable: false);
+    final maxLength = max(current.length, other.length);
 
     T? fillOrNull(int index) => fill != null ? fill(index) : null;
+    T? getOrFill(List<T> l, int index) => index < l.length ? l[index] : fillOrNull(index);
 
-    return List.generate(
-        bases.first.length,
-        (index) => Tuple2<T, T?>(
-              bases.first[index],
-              index < bases.last.length ? bases.last[index] : fillOrNull(index),
-            )).toIList(config);
+    return List.generate(maxLength,
+            (index) => Tuple2<T?, T?>(getOrFill(current, index), getOrFill(other, index)))
+        .toIList(config);
   }
 }
 
