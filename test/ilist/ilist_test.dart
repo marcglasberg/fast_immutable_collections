@@ -1627,16 +1627,16 @@ void main() {
 
   test("Zip with Index", () {
     //
-    final IList<String> ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
-    final Iterable<Tuple2> indexZipped = ilist1.zipWithIndex();
+    final ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
+    final indexZipped = ilist1.zipWithIndex();
     expect(indexZipped,
         IList([Tuple2(0, 'red'), Tuple2(1, 'green'), Tuple2(2, 'blue'), Tuple2(3, 'alpha')]));
   });
 
   test("Zip with another source of same or different length ignoring the longer Iterable", () {
     //
-    final IList<String> countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
-    final IList<String> capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
+    final countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
+    final capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
 
     final Iterable<Tuple2> zipped = countries.zip(capitals);
     expect(
@@ -1669,12 +1669,11 @@ void main() {
 
   test("ZipAll with another source replacing with fill method value if available or else null", () {
     //
-    final IList<String> countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
-    final IList<String> capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
+    final countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
+    final capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
 
-    final Iterable<Tuple2> zipped = countries.zipAll(capitals);
     expect(
-        zipped,
+        countries.zipAll(capitals),
         IList([
           Tuple2('France', 'Paris'),
           Tuple2('Germany', 'Berlin'),
@@ -1682,9 +1681,8 @@ void main() {
           Tuple2('Japan', 'Tokyo')
         ]));
 
-    final Iterable<Tuple2> completeAsNull = countries.zipAll(capitals.take(2));
     expect(
-        completeAsNull,
+        countries.zipAll(capitals.take(2)),
         IList([
           Tuple2('France', 'Paris'),
           Tuple2('Germany', 'Berlin'),
@@ -1692,26 +1690,28 @@ void main() {
           Tuple2('Japan', null)
         ]));
 
-    final Iterable<Tuple2> completeOutAsFill =
-        countries.zipAll(capitals.take(2), otherFill: (idx) => 'Capital $idx');
     expect(
-        completeOutAsFill,
-        IList([
-          Tuple2('France', 'Paris'),
-          Tuple2('Germany', 'Berlin'),
-          Tuple2('Brazil', 'Capital 2'),
-          Tuple2('Japan', 'Capital 3')
-        ]));
-
-    final Iterable<Tuple2> completeInAsFill =
-        countries.take(2).toIList().zipAll(capitals, currentFill: (idx) => 'Country $idx');
-    expect(
-        completeInAsFill,
+        countries.take(2).toIList().zipAll(
+              capitals,
+              currentFill: (idx) => 'Country $idx',
+            ),
         IList([
           Tuple2('France', 'Paris'),
           Tuple2('Germany', 'Berlin'),
           Tuple2('Country 2', 'Brasilia'),
           Tuple2('Country 3', 'Tokyo')
+        ]));
+
+    expect(
+        countries.zipAll(
+          [100, 200],
+          otherFill: (idx) => (idx + 1) * 100,
+        ),
+        IList([
+          Tuple2('France', 100),
+          Tuple2('Germany', 200),
+          Tuple2('Brazil', 300),
+          Tuple2('Japan', 400)
         ]));
   });
 
