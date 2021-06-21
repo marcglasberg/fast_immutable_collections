@@ -1608,23 +1608,17 @@ abstract class IList<T> // ignore: must_be_immutable
     final current = toList(growable: false);
     final maxLength = max(current.length, other.length);
 
-    T? getCurrentOrFill(int index) => index < current.length
-        ? current[index]
-        : currentFill != null
-            ? currentFill(index)
-            : null;
-
-    U? getOtherOrFill(int index) => index < other.length
-        ? other[index]
-        : otherFill != null
-            ? otherFill(index)
+    Object? getOrFill(List l, int index, Function? fill) => index < l.length
+        ? l[index]
+        : fill != null
+            ? fill(index)
             : null;
 
     return List.generate(
         maxLength,
         (index) => Tuple2<T?, U?>(
-              getCurrentOrFill(index),
-              getOtherOrFill(index),
+              getOrFill(current, index, currentFill) as T?,
+              getOrFill(other, index, otherFill) as U?,
             )).toIList(config);
   }
 }
