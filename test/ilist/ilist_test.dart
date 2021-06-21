@@ -1693,7 +1693,7 @@ void main() {
         ]));
 
     final Iterable<Tuple2> completeOutAsFill =
-        countries.zipAll(capitals.take(2), fill: (idx) => 'Capital $idx');
+        countries.zipAll(capitals.take(2), otherFill: (idx) => 'Capital $idx');
     expect(
         completeOutAsFill,
         IList([
@@ -1704,7 +1704,7 @@ void main() {
         ]));
 
     final Iterable<Tuple2> completeInAsFill =
-        countries.take(2).toIList().zipAll(capitals, fill: (idx) => 'Country $idx');
+        countries.take(2).toIList().zipAll(capitals, currentFill: (idx) => 'Country $idx');
     expect(
         completeInAsFill,
         IList([

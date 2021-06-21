@@ -1598,18 +1598,34 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Aggregate two sources based on the longest source.
-  /// Missing elements can be completed by passing a [fill] method or will be at null by default
-  Iterable<Tuple2<T?, T?>> zipAll(Iterable<T> otherIterable, {T Function(int index)? fill}) {
+  /// Missing elements can be completed by passing a [currentFill] method or will be at null by default
+  Iterable<Tuple2<T?, U?>> zipAll<U>(
+    Iterable<U> otherIterable, {
+    T Function(int index)? currentFill,
+    U Function(int index)? otherFill,
+  }) {
     final other = otherIterable.toList();
     final current = toList(growable: false);
     final maxLength = max(current.length, other.length);
 
-    T? fillOrNull(int index) => fill != null ? fill(index) : null;
-    T? getOrFill(List<T> l, int index) => index < l.length ? l[index] : fillOrNull(index);
+    T? getCurrentOrFill(int index) => index < current.length
+        ? current[index]
+        : currentFill != null
+            ? currentFill(index)
+            : null;
 
-    return List.generate(maxLength,
-            (index) => Tuple2<T?, T?>(getOrFill(current, index), getOrFill(other, index)))
-        .toIList(config);
+    U? getOtherOrFill(int index) => index < other.length
+        ? other[index]
+        : otherFill != null
+            ? otherFill(index)
+            : null;
+
+    return List.generate(
+        maxLength,
+        (index) => Tuple2<T?, U?>(
+              getCurrentOrFill(index),
+              getOtherOrFill(index),
+            )).toIList(config);
   }
 }
 
