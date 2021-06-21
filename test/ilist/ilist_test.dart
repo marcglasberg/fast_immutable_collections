@@ -1633,7 +1633,7 @@ void main() {
         IList([Tuple2(0, 'red'), Tuple2(1, 'green'), Tuple2(2, 'blue'), Tuple2(3, 'alpha')]));
   });
 
-  test("Zip with another source of same length ignoring the longer Iterable", () {
+  test("Zip with another source of same or different length ignoring the longer Iterable", () {
     //
     final IList<String> countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
     final IList<String> capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
@@ -1664,6 +1664,43 @@ void main() {
         IList([
           Tuple2('France', 'Paris'),
           Tuple2('Germany', 'Berlin'),
+        ]));
+  });
+
+  test("ZipAll with another source replacing with fill method value if available or else null", () {
+    //
+    final IList<String> countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
+    final IList<String> capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
+
+    final Iterable<Tuple2> zipped = countries.zipAll(capitals);
+    expect(
+        zipped,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Brazil', 'Brasilia'),
+          Tuple2('Japan', 'Tokyo')
+        ]));
+
+    final Iterable<Tuple2> completeAsNull = countries.zipAll(capitals.take(2));
+    expect(
+        completeAsNull,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Brazil', null),
+          Tuple2('Japan', null)
+        ]));
+
+    final Iterable<Tuple2> completeAsFill =
+        countries.zipAll(capitals.take(2), fill: (idx) => 'Capital $idx');
+    expect(
+        completeAsFill,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Brazil', 'Capital 2'),
+          Tuple2('Japan', 'Capital 3')
         ]));
   });
 
