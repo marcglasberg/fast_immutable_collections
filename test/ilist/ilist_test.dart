@@ -1624,4 +1624,13 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("Reuse ILists only if they have the exact same generic type.", () {
+    //
+    final IList<String> ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
+    final Iterable<Tuple2> indexZipped = ilist1.zipWithIndex();
+    expect(indexZipped,
+        IList([Tuple2(0, 'red'), Tuple2(1, 'green'), Tuple2(2, 'blue'), Tuple2(3, 'alpha')]));
+  });
+  //////////////////////////////////////////////////////////////////////////////
 }

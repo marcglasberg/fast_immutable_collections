@@ -1585,6 +1585,10 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Shuffles the elements of this list randomly.
   IList<T> shuffle([Random? random]) =>
       IList._unsafeFromList(toList()..shuffle(random), config: config);
+
+  /// Aggregate each element with corresponding index
+  Iterable<Tuple2<int, T>> zipWithIndex() =>
+      List.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
 }
 
 // /////////////////////////////////////////////////////////////////////////////
