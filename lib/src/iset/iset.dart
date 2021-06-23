@@ -12,8 +12,6 @@ import "s_add_all.dart";
 import "s_flat.dart";
 import "unmodifiable_set_from_iset.dart";
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /// This is an [ISet] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -82,8 +80,6 @@ class ISetConst<T> // ignore: must_be_immutable
       (config == other.config);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 @immutable
 class ISetImpl<T> // ignore: must_be_immutable
     extends ISet<T> {
@@ -143,15 +139,13 @@ class ISetImpl<T> // ignore: must_be_immutable
   ISetImpl._(
     Iterable<T>? iterable, {
     required this.config,
-  })   : _s = iterable is ISet<T> //
+  })  : _s = iterable is ISet<T> //
             ? iterable._s
             : iterable == null
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable),
         super._gen();
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable**, **ordered** set.
 /// It can be configured to order by insertion order, or sort.
