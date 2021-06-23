@@ -110,6 +110,10 @@ void main() {
   /////////////////////////////////////////////////////////////////////////////
 
   test("sortReversed", () {
+    List<int> list = [1, 2, 4, 10, 3, 5];
+    list = (list..sort()).reversed.toList();
+    expect(list, [10, 5, 4, 3, 2, 1]);
+
     List<int> listInt = [1, 2, 4, 10, 3, 5];
     listInt.sortReversed();
     expect(listInt, [10, 5, 4, 3, 2, 1]);
