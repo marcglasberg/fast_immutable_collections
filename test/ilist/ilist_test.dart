@@ -1630,6 +1630,98 @@ void main() {
 
     expect(ilist.head(), "a");
     expect(ilist.tail(), ["b", "c", "d", "e", "f"].lock);
+    });
+  
+//////////////////////////////////////////////////////////////////////////////
+  
+  test("Zip with Index", () {
+    //
+    final ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
+    final indexZipped = ilist1.zipWithIndex();
+    expect(indexZipped,
+        IList([Tuple2(0, 'red'), Tuple2(1, 'green'), Tuple2(2, 'blue'), Tuple2(3, 'alpha')]));
+  });
+
+  test("Zip with another source of same or different length ignoring the longer Iterable", () {
+    //
+    final countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
+    final capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
+
+    final Iterable<Tuple2> zipped = countries.zip(capitals);
+    expect(
+        zipped,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Brazil', 'Brasilia'),
+          Tuple2('Japan', 'Tokyo')
+        ]));
+
+    // Ignore Brazil Japan
+    final Iterable<Tuple2> subIn = countries.take(2).toIList().zip(capitals);
+    expect(
+        subIn,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+        ]));
+
+    // Ignore Brazil Japan
+    final Iterable<Tuple2> subOut = countries.zip(capitals.take(2));
+    expect(
+        subOut,
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+        ]));
+  });
+
+  test("ZipAll with another source replacing with fill method value if available or else null", () {
+    //
+    final countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
+    final capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
+
+    expect(
+        countries.zipAll(capitals),
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Brazil', 'Brasilia'),
+          Tuple2('Japan', 'Tokyo')
+        ]));
+
+    expect(
+        countries.zipAll(capitals.take(2)),
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Brazil', null),
+          Tuple2('Japan', null)
+        ]));
+
+    expect(
+        countries.take(2).toIList().zipAll(
+              capitals,
+              currentFill: (idx) => 'Country $idx',
+            ),
+        IList([
+          Tuple2('France', 'Paris'),
+          Tuple2('Germany', 'Berlin'),
+          Tuple2('Country 2', 'Brasilia'),
+          Tuple2('Country 3', 'Tokyo')
+        ]));
+
+    expect(
+        countries.zipAll(
+          [100, 200],
+          otherFill: (idx) => (idx + 1) * 100,
+        ),
+        IList([
+          Tuple2('France', 100),
+          Tuple2('Germany', 200),
+          Tuple2('Brazil', 300),
+          Tuple2('Japan', 400)
+        ]));
   });
 
   //////////////////////////////////////////////////////////////////////////////

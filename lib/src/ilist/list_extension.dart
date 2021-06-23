@@ -77,6 +77,15 @@ extension FicListExtension<T> on List<T> {
     addAll(result);
   }
 
+  /// Sorts this list in reverse order in relation to the default [sort] method.
+  ///
+  void sortReversed([int Function(T a, T b)? compare]) {
+    if (compare != null)
+      sort((T a, T b) => compare(b, a));
+    else
+      sort((T a, T b) => compareObject(b, a));
+  }
+
   /// Moves the first occurrence of the [item] to the start of the list.
   void moveToTheFront(T item) {
     int pos = indexOf(item);
