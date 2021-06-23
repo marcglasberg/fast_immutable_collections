@@ -1604,7 +1604,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Aggregate two sources based on the longest source.
-  /// Missing elements can be completed by passing a [currentFill] method or will be at null by default
+  /// Missing elements can be completed by passing a [currentFill] and [otherFill] methods or will be at null by default
   Iterable<Tuple2<T?, U?>> zipAll<U>(
     Iterable<U> otherIterable, {
     T Function(int index)? currentFill,
