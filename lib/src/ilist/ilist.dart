@@ -1594,6 +1594,13 @@ abstract class IList<T> // ignore: must_be_immutable
   IList<T> shuffle([Random? random]) =>
       IList._unsafeFromList(toList()..shuffle(random), config: config);
 
+  /// Split list based on predicate p. (takeWhile p, dropWhile p)
+  Tuple2<Iterable<T>, Iterable<T>> span(Predicate<T> p) {
+    final i = indexWhere((e) => !p(e));
+    final idx = i < 0 ? _l.length : i;
+    return Tuple2(getRange(0, idx), getRange(idx, _l.length));
+  }
+
   /// Aggregate each element with corresponding index
   Iterable<Tuple2<int, T>> zipWithIndex() =>
       List.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
