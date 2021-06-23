@@ -1597,8 +1597,8 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Split list based on predicate p. (takeWhile p, dropWhile p)
   Tuple2<Iterable<T>, Iterable<T>> span(Predicate<T> p) {
     final i = indexWhere((e) => !p(e));
-    final idx = i < 0 ? _l.length : i;
-    return Tuple2(getRange(0, idx), getRange(idx, _l.length));
+    final idx = i < 0 ? length : i;
+    return Tuple2(getRange(0, idx), getRange(idx, length));
   }
 
   /// Aggregate each element with corresponding index

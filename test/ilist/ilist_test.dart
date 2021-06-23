@@ -1630,10 +1630,20 @@ void main() {
 
     expect(ilist.head(), "a");
     expect(ilist.tail(), ["b", "c", "d", "e", "f"].lock);
-    });
-  
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("span", () {
+    final ilist = [0, 2, 4, 6, 7, 8, 9, 2].lock;
+
+    final evenSpan = ilist.span((e) => e % 2 == 0);
+    expect(evenSpan.first.toIList(), [0, 2, 4, 6]);
+    expect(evenSpan.second.toIList(), [7, 8, 9, 2]);
+  });
+
 //////////////////////////////////////////////////////////////////////////////
-  
+
   test("Zip with Index", () {
     //
     final ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
