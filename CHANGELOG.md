@@ -1,6 +1,6 @@
-## [5.0.3] - 2021/06/24
+## [5.0.4] - 2021/06/24
 
-* Introduce the Predicate typedef
+* Introduce the Predicate typedef.
 
 ## [5.0.2] - 2021/06/23
 
