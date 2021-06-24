@@ -799,7 +799,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Returns the last element that satisfies the given predicate [test].
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) {
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _s.lastWhere(test, orElse: orElse);
   }
@@ -822,7 +822,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Returns the single element that satisfies [test].
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) {
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _s.singleWhere(test, orElse: orElse);
   }
@@ -845,7 +845,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Returns an [ISet] with all elements that satisfy the predicate [test].
   @override
-  Iterable<T> where(bool Function(T element) test) => _s.where(test);
+  Iterable<T> where(Predicate<T> test) => _s.where(test);
 
   /// Returns an [ISet] with all elements that have type [E].
   @override
@@ -998,7 +998,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Removes all elements of this set that satisfy [test].
-  ISet<T> removeWhere(bool Function(T element) test) {
+  ISet<T> removeWhere(Predicate<T> test) {
     return ISet._unsafeFromSet(unlock..removeWhere(test), config: config);
   }
 
@@ -1013,7 +1013,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Removes all elements of this set that fail to satisfy [test].
-  ISet<T> retainWhere(bool Function(T element) test) {
+  ISet<T> retainWhere(Predicate<T> test) {
     return ISet._unsafeFromSet(unlock..retainWhere(test), config: config);
   }
 }
@@ -1128,7 +1128,7 @@ abstract class S<T> implements Iterable<T> {
   String join([String separator = ""]) => iter.join(separator);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
   @override
@@ -1138,7 +1138,7 @@ abstract class S<T> implements Iterable<T> {
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
   @override
@@ -1154,7 +1154,7 @@ abstract class S<T> implements Iterable<T> {
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(Predicate<T> test) => iter.where(test);
 
   @override
   Iterable<E> whereType<E>() => iter.whereType<E>();

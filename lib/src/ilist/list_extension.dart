@@ -203,7 +203,7 @@ extension FicListExtension<T> on List<T> {
   /// ```
   ///
   List<List<T>> divideList(
-    bool Function(T element) test,
+    Predicate<T> test,
   ) {
     if (isEmpty) return [];
 

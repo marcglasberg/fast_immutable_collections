@@ -62,7 +62,7 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  bool any(bool Function(T element) test) => _list.any(test);
+  bool any(Predicate<T> test) => _list.any(test);
 
   @override
   ListSet<E> cast<E>() => ListSet<E>._(_set.cast<E>(), _list.cast<E>());
@@ -91,7 +91,7 @@ class ListSet<T> implements Set<T>, List<T> {
   T elementAt(int index) => _list[index];
 
   @override
-  bool every(bool Function(T element) test) => _list.every(test);
+  bool every(Predicate<T> test) => _list.every(test);
 
   @override
   Iterable<E> expand<E>(Iterable<E> Function(T element) f) => _list.expand(f);
@@ -103,11 +103,11 @@ class ListSet<T> implements Set<T>, List<T> {
   T get last => _list.last;
 
   @override
-  T firstWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       _list.firstWhere(test, orElse: orElse);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       _list.lastWhere(test, orElse: orElse);
 
   @override
@@ -155,7 +155,7 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  void removeWhere(bool Function(T element) test) {
+  void removeWhere(Predicate<T> test) {
     throw UnsupportedError("Can't removeWhere from a ListSet.");
   }
 
@@ -165,7 +165,7 @@ class ListSet<T> implements Set<T>, List<T> {
   }
 
   @override
-  void retainWhere(bool Function(T element) test) {
+  void retainWhere(Predicate<T> test) {
     throw UnsupportedError("Can't retainWhere from a ListSet.");
   }
 
@@ -173,7 +173,7 @@ class ListSet<T> implements Set<T>, List<T> {
   T get single => _list.single;
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       _list.singleWhere(test, orElse: orElse);
 
   @override
@@ -195,7 +195,7 @@ class ListSet<T> implements Set<T>, List<T> {
   Set<T> toSet() => _list.toSet();
 
   @override
-  Iterable<T> where(bool Function(T element) test) => _list.where(test);
+  Iterable<T> where(Predicate<T> test) => _list.where(test);
 
   @override
   Iterable<E> whereType<E>() => _list.whereType();
@@ -233,7 +233,7 @@ class ListSet<T> implements Set<T>, List<T> {
   int indexOf(T element, [int start = 0]) => _list.indexOf(element, start);
 
   @override
-  int indexWhere(bool Function(T element) test, [int start = 0]) => _list.indexWhere(test, start);
+  int indexWhere(Predicate<T> test, [int start = 0]) => _list.indexWhere(test, start);
 
   @override
   void insert(int index, T element) {
@@ -255,7 +255,7 @@ class ListSet<T> implements Set<T>, List<T> {
   int lastIndexOf(T element, [int? start]) => _list.lastIndexOf(element, start);
 
   @override
-  int lastIndexWhere(bool Function(T element) test, [int? start]) =>
+  int lastIndexWhere(Predicate<T> test, [int? start]) =>
       _list.lastIndexWhere(test, start);
 
   @override

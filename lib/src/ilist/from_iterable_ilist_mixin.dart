@@ -87,14 +87,14 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   String join([String separator = ""]) => iter.join(separator);
 
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
   Iterable<T> skip(int count) => iter.skip(count);
@@ -105,7 +105,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  Iterable<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(Predicate<T> test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 
