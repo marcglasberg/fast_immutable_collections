@@ -1685,11 +1685,12 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Iterable Tuple2 as Iterable
-  Tuple2<Iterable<T>, Iterable<U>> unzip<U>(Iterable<Tuple2<T, U>> source) =>
+  Tuple2<Iterable<U>, Iterable<V>> unzip<U, V>(
+          Iterable<Tuple2<U, V>> source) =>
       Tuple2(
-          Iterable<T>.generate(
-              source.length, (idx) => source.elementAt(idx).first),
           Iterable<U>.generate(
+              source.length, (idx) => source.elementAt(idx).first),
+          Iterable<V>.generate(
               source.length, (idx) => source.elementAt(idx).second));
 
   static IList<U> iterate<U>(U base, int count, Op<U> op) {
