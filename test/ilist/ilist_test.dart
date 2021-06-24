@@ -1625,6 +1625,15 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("head, tail", () {
+    var ilist = ["a", "b", "c", "d", "e", "f"].lock;
+
+    expect(ilist.head(), "a");
+    expect(ilist.tail(), ["b", "c", "d", "e", "f"].lock);
+    });
+  
+//////////////////////////////////////////////////////////////////////////////
+  
   test("Zip with Index", () {
     //
     final ilist1 = ['red', 'green', 'blue', 'alpha'].lock;

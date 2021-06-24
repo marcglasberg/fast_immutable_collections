@@ -853,6 +853,9 @@ abstract class IList<T> // ignore: must_be_immutable
     _l.forEach(f);
   }
 
+  /// Returns the first element of this Iterable
+  T head() => _l.first;
+
   /// Converts each element to a [String] and concatenates the strings with the [separator]
   /// in-between each concatenation.
   @override
@@ -895,6 +898,9 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Returns an [Iterable] that skips leading elements while [test] is satisfied.
   @override
   Iterable<T> skipWhile(bool Function(T value) test) => _l.skipWhile(test);
+
+  /// Returns an [Iterable] that is the original iterable without head, aka first element
+  Iterable<T> tail() => _l.skip(1);
 
   /// Returns an [Iterable] of the [count] first elements of this iterable.
   @override
