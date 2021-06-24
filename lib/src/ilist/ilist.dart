@@ -1684,15 +1684,6 @@ abstract class IList<T> // ignore: must_be_immutable
             )).toIList(config);
   }
 
-  /// Iterable Tuple2 as Iterable
-  Tuple2<Iterable<U>, Iterable<V>> unzip<U, V>(
-          Iterable<Tuple2<U, V>> source) =>
-      Tuple2(
-          Iterable<U>.generate(
-              source.length, (idx) => source.elementAt(idx).first),
-          Iterable<V>.generate(
-              source.length, (idx) => source.elementAt(idx).second));
-
   static IList<U> iterate<U>(U base, int count, Op<U> op) {
     IList<U> iterations() {
       final l = List.filled(count, base, growable: false);
@@ -1711,6 +1702,13 @@ abstract class IList<T> // ignore: must_be_immutable
 
     return count > 0 ? iterations() : <U>[].lock;
   }
+}
+
+extension ZipExtension<U, V> on Iterable<Tuple2<U, V>> {
+  /// Iterable Tuple2 as Iterable
+  Tuple2<Iterable<U>, Iterable<V>> unzip() => Tuple2(
+      Iterable<U>.generate(length, (idx) => elementAt(idx).first),
+      Iterable<V>.generate(length, (idx) => elementAt(idx).second));
 }
 
 // /////////////////////////////////////////////////////////////////////////////
