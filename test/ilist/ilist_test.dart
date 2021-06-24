@@ -1634,11 +1634,12 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("head, tail", () {
-    var ilist = ["a", "b", "c", "d", "e", "f"].lock;
+  test("head, tail, init", () {
+    final ilist = ["a", "b", "c", "d", "e", "f"].lock;
 
-    expect(ilist.head(), "a");
-    expect(ilist.tail(), ["b", "c", "d", "e", "f"].lock);
+    expect(ilist.head, "a");
+    expect(ilist.tail, ["b", "c", "d", "e", "f"].lock);
+    expect(ilist.init, ["a", "b", "c", "d", "e"].lock);
   });
 
   //////////////////////////////////////////////////////////////////////////////
