@@ -1704,13 +1704,6 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 }
 
-extension ZipExtension<U, V> on Iterable<Tuple2<U, V>> {
-  /// Iterable Tuple2 as Iterable
-  Tuple2<Iterable<U>, Iterable<V>> unzip() => Tuple2(
-      Iterable<U>.generate(length, (idx) => elementAt(idx).first),
-      Iterable<V>.generate(length, (idx) => elementAt(idx).second));
-}
-
 // /////////////////////////////////////////////////////////////////////////////
 
 @visibleForOverriding
