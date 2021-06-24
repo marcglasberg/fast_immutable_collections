@@ -28,7 +28,7 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  bool any(bool Function(T element) test) => _set.any(test);
+  bool any(Predicate<T> test) => _set.any(test);
 
   @override
   ListSet<E> cast<E>() {
@@ -53,7 +53,7 @@ class ListSetView<T> implements ListSet<T> {
   T elementAt(int index) => _set.elementAt(index);
 
   @override
-  bool every(bool Function(T element) test) => _set.every(test);
+  bool every(Predicate<T> test) => _set.every(test);
 
   @override
   Iterable<E> expand<E>(Iterable<E> Function(T element) f) => _set.expand(f);
@@ -65,11 +65,11 @@ class ListSetView<T> implements ListSet<T> {
   T get last => _set.last;
 
   @override
-  T firstWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       _set.firstWhere(test, orElse: orElse);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       _set.lastWhere(test, orElse: orElse);
 
   @override
@@ -120,7 +120,7 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  void removeWhere(bool Function(T element) test) {
+  void removeWhere(Predicate<T> test) {
     throw UnsupportedError("Can't removeWhere from a ListSetView.");
   }
 
@@ -130,7 +130,7 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  void retainWhere(bool Function(T element) test) {
+  void retainWhere(Predicate<T> test) {
     throw UnsupportedError("Can't retainWhere from a ListSetView.");
   }
 
@@ -138,7 +138,7 @@ class ListSetView<T> implements ListSet<T> {
   T get single => _set.single;
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       _set.singleWhere(test, orElse: orElse);
 
   @override
@@ -163,7 +163,7 @@ class ListSetView<T> implements ListSet<T> {
   Set<T> union(Set<T> other) => _set.union(other);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => _set.where(test);
+  Iterable<T> where(Predicate<T> test) => _set.where(test);
 
   @override
   Iterable<E> whereType<E>() => _set.whereType();
@@ -199,7 +199,7 @@ class ListSetView<T> implements ListSet<T> {
   int indexOf(T element, [int start = 0]) => _set.toList(growable: false).indexOf(element, start);
 
   @override
-  int indexWhere(bool Function(T element) test, [int start = 0]) {
+  int indexWhere(Predicate<T> test, [int start = 0]) {
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
@@ -226,7 +226,7 @@ class ListSetView<T> implements ListSet<T> {
   }
 
   @override
-  int lastIndexWhere(bool Function(T element) test, [int? start]) {
+  int lastIndexWhere(Predicate<T> test, [int? start]) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }

@@ -12,8 +12,6 @@ import "s_add_all.dart";
 import "s_flat.dart";
 import "unmodifiable_set_from_iset.dart";
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /// This is an [ISet] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -82,8 +80,6 @@ class ISetConst<T> // ignore: must_be_immutable
       (config == other.config);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 @immutable
 class ISetImpl<T> // ignore: must_be_immutable
     extends ISet<T> {
@@ -143,15 +139,13 @@ class ISetImpl<T> // ignore: must_be_immutable
   ISetImpl._(
     Iterable<T>? iterable, {
     required this.config,
-  })   : _s = iterable is ISet<T> //
+  })  : _s = iterable is ISet<T> //
             ? iterable._s
             : iterable == null
                 ? SFlat.empty<T>()
                 : SFlat<T>(iterable),
         super._gen();
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable**, **ordered** set.
 /// It can be configured to order by insertion order, or sort.
@@ -660,7 +654,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Checks every element in iteration order, and returns `true` if
   /// any of them make [test] return `true`, otherwise returns `false`.
   @override
-  bool any(bool Function(T) test) {
+  bool any(Predicate<T> test) {
     _count();
     return _s.any(test);
   }
@@ -687,7 +681,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Checks whether every element of this iterable satisfies [test].
   @override
-  bool every(bool Function(T) test) {
+  bool every(Predicate<T> test) {
     _count();
     return _s.every(test);
   }
@@ -773,7 +767,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// function is returned.
   /// - If [orElse] is omitted, it defaults to throwing a [StateError].
   @override
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) {
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _s.firstWhere(test, orElse: orElse);
   }
@@ -805,7 +799,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Returns the last element that satisfies the given predicate [test].
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) {
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _s.lastWhere(test, orElse: orElse);
   }
@@ -828,7 +822,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Returns the single element that satisfies [test].
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) {
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _s.singleWhere(test, orElse: orElse);
   }
@@ -851,7 +845,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Returns an [ISet] with all elements that satisfy the predicate [test].
   @override
-  Iterable<T> where(bool Function(T element) test) => _s.where(test);
+  Iterable<T> where(Predicate<T> test) => _s.where(test);
 
   /// Returns an [ISet] with all elements that have type [E].
   @override
@@ -1004,7 +998,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Removes all elements of this set that satisfy [test].
-  ISet<T> removeWhere(bool Function(T element) test) {
+  ISet<T> removeWhere(Predicate<T> test) {
     return ISet._unsafeFromSet(unlock..removeWhere(test), config: config);
   }
 
@@ -1019,7 +1013,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Removes all elements of this set that fail to satisfy [test].
-  ISet<T> retainWhere(bool Function(T element) test) {
+  ISet<T> retainWhere(Predicate<T> test) {
     return ISet._unsafeFromSet(unlock..retainWhere(test), config: config);
   }
 }
@@ -1080,7 +1074,7 @@ abstract class S<T> implements Iterable<T> {
   S<T> remove(T element) => !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 
   @override
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   @override
   Iterable<R> cast<R>() => iter.cast<R>();
@@ -1099,7 +1093,7 @@ abstract class S<T> implements Iterable<T> {
   Set<T> union(Set<T> other);
 
   @override
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   @override
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
@@ -1117,7 +1111,7 @@ abstract class S<T> implements Iterable<T> {
   T get single => iter.single;
 
   @override
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
   @override
@@ -1134,7 +1128,7 @@ abstract class S<T> implements Iterable<T> {
   String join([String separator = ""]) => iter.join(separator);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
   @override
@@ -1144,7 +1138,7 @@ abstract class S<T> implements Iterable<T> {
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
   @override
@@ -1160,7 +1154,7 @@ abstract class S<T> implements Iterable<T> {
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(Predicate<T> test) => iter.where(test);
 
   @override
   Iterable<E> whereType<E>() => iter.whereType<E>();

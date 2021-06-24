@@ -82,7 +82,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   Iterator<T> get iterator => iter.iterator;
 
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   Iterable<R> cast<R>() => iter.cast<R>();
 
@@ -92,7 +92,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   T elementAt(int index) => iter[index];
 
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
@@ -110,10 +110,10 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   T? get singleOrNull => iter.singleOrNull;
 
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
-  T? firstWhereOrNull(bool Function(T) test) => iter.firstWhereOrNull(test);
+  T? firstWhereOrNull(Predicate<T> test) => iter.firstWhereOrNull(test);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);
@@ -124,14 +124,14 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   String join([String separator = ""]) => iter.join(separator);
 
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
   Iterable<T> skip(int count) => iter.skip(count);
@@ -142,7 +142,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  Iterable<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(Predicate<T> test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 
@@ -181,7 +181,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   int indexOf(T element, [int start = 0]) => iter.indexOf(element, start);
 
-  int indexWhere(bool Function(T element) test, [int start = 0]) => iter.indexWhere(test, start);
+  int indexWhere(Predicate<T> test, [int start = 0]) => iter.indexWhere(test, start);
 
   I insert(int index, T element) => newInstance(iter.insert(index, element));
 
@@ -189,7 +189,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   int lastIndexOf(T element, [int? start]) => iter.lastIndexOf(element, start);
 
-  int lastIndexWhere(bool Function(T element) test, [int? start]) =>
+  int lastIndexWhere(Predicate<T> test, [int? start]) =>
       iter.lastIndexWhere(test, start);
 
   T lastOr(T orElse) => iter.lastOr(orElse);
@@ -212,12 +212,12 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   I removeRange(int start, int end) => newInstance(iter.removeRange(start, end));
 
-  I removeWhere(bool Function(T element) test) => newInstance(iter.removeWhere(test));
+  I removeWhere(Predicate<T> test) => newInstance(iter.removeWhere(test));
 
   I replaceAll({required T from, required T to}) =>
       newInstance(iter.replaceAll(from: from, to: to));
 
-  I replaceAllWhere(bool Function(T element) test, T to) =>
+  I replaceAllWhere(Predicate<T> test, T to) =>
       newInstance(iter.replaceAllWhere(test, to));
 
   I replaceFirst({required T from, required T to}) =>
@@ -229,7 +229,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   I replaceRange(int start, int end, Iterable<T> replacement) =>
       newInstance(iter.replaceRange(start, end, replacement));
 
-  I retainWhere(bool Function(T element) test) => newInstance(iter.retainWhere(test));
+  I retainWhere(Predicate<T> test) => newInstance(iter.retainWhere(test));
 
   I get reversed => newInstance(iter.reversed);
 

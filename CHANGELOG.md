@@ -1,3 +1,7 @@
+## [5.0.3] - 2021/06/24
+
+* Introduce the Predicate typedef
+
 ## [5.0.2] - 2021/06/23
 
 * `List.sortReversed()` extension.
