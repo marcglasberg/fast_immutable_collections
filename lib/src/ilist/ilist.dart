@@ -140,6 +140,26 @@ class IListImpl<T> // ignore: must_be_immutable
       IListImpl._unsafe(LFlat.empty<T>(),
           config: config ?? IList.defaultConfig);
 
+  /// Apply Op on previous state of base and return all results
+  static IList<U> iterate<U>(U base, int count, Op<U> op) {
+    IList<U> iterations() {
+      final l = List.filled(count, base, growable: false);
+      U acc = base;
+      int i = 1;
+      l[0] = acc;
+
+      while (i < count) {
+        acc = op(acc);
+        l[i] = acc;
+        i += 1;
+      }
+
+      return l.lock;
+    }
+
+    return count > 0 ? iterations() : <U>[].lock;
+  }
+
   /// **Safe**. Fast if the [Iterable] is an [IList].
   IListImpl._(
     Iterable<T>? iterable, {
@@ -1684,24 +1704,7 @@ abstract class IList<T> // ignore: must_be_immutable
             )).toIList(config);
   }
 
-  static IList<U> iterate<U>(U base, int count, Op<U> op) {
-    IList<U> iterations() {
-      final l = List.filled(count, base, growable: false);
-      U acc = base;
-      int i = 1;
-      l[0] = acc;
 
-      while (i < count) {
-        acc = op(acc);
-        l[i] = acc;
-        i += 1;
-      }
-
-      return l.lock;
-    }
-
-    return count > 0 ? iterations() : <U>[].lock;
-  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////
