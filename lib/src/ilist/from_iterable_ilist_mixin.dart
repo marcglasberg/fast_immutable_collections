@@ -45,7 +45,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   Iterator<T> get iterator => iter.iterator;
 
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
@@ -55,7 +55,7 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   T elementAt(int index) => iter[index];
 
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
@@ -73,10 +73,10 @@ mixin FromIterableIListMixin<T> implements CanBeEmpty {
 
   T? get singleOrNull => iter.singleOrNull;
 
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
-  T? firstWhereOrNull(bool Function(T) test) => iter.firstWhereOrNull(test);
+  T? firstWhereOrNull(Predicate<T> test) => iter.firstWhereOrNull(test);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);

@@ -39,7 +39,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
   /// Classes `with` [FromIterableISetMixin] must override this.
   ISet<T> get iter;
 
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   Iterable<R> cast<R>() => throw UnsupportedError("cast");
 
@@ -47,7 +47,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   T elementAt(int index) => throw UnsupportedError("elementAt in ISet is not allowed");
 
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
@@ -59,7 +59,7 @@ mixin FromIterableISetMixin<T> implements CanBeEmpty {
 
   T get single => iter.single;
 
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>

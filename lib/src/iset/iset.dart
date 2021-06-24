@@ -654,7 +654,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Checks every element in iteration order, and returns `true` if
   /// any of them make [test] return `true`, otherwise returns `false`.
   @override
-  bool any(bool Function(T) test) {
+  bool any(Predicate<T> test) {
     _count();
     return _s.any(test);
   }
@@ -681,7 +681,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Checks whether every element of this iterable satisfies [test].
   @override
-  bool every(bool Function(T) test) {
+  bool every(Predicate<T> test) {
     _count();
     return _s.every(test);
   }
@@ -767,7 +767,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// function is returned.
   /// - If [orElse] is omitted, it defaults to throwing a [StateError].
   @override
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) {
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _s.firstWhere(test, orElse: orElse);
   }
@@ -1074,7 +1074,7 @@ abstract class S<T> implements Iterable<T> {
   S<T> remove(T element) => !contains(element) ? this : SFlat<T>.unsafe(unlock..remove(element));
 
   @override
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   @override
   Iterable<R> cast<R>() => iter.cast<R>();
@@ -1093,7 +1093,7 @@ abstract class S<T> implements Iterable<T> {
   Set<T> union(Set<T> other);
 
   @override
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   @override
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
@@ -1111,7 +1111,7 @@ abstract class S<T> implements Iterable<T> {
   T get single => iter.single;
 
   @override
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
   @override

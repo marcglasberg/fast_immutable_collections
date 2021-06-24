@@ -97,7 +97,7 @@ int compareObject<T extends Object>(
 /// Note [sortBy] can be combined with [sortLike].
 ///
 int Function(T, T) sortBy<T>(
-  bool Function(T) test, {
+  Predicate<T> test, {
   int Function(T, T)? then,
 }) =>
     (T a, T b) {

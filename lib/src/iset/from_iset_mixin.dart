@@ -53,7 +53,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   /// Classes `with` [FromISetMixin] must override this.
   I newInstance(ISet<T> iset);
 
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   Iterable<R> cast<R>() => iter.cast<R>();
 
@@ -61,7 +61,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   T elementAt(int index) => throw UnsupportedError("elementAt in $runtimeType is not allowed");
 
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
@@ -73,7 +73,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   T get single => iter.single;
 
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
