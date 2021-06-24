@@ -1,5 +1,5 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
@@ -194,6 +194,14 @@ void main() {
     expect([3, 2].sortedLike([1, 5, 2]), [2, 3]);
     expect([3, 2].sortedLike([10, 50, 20]), [3, 2]);
     expect([3, 2].sortedLike([1, 2, 3, 2, 1]), [2, 3]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  test("sortedReversed", () {
+    expect([1, 2, 3].sortedReversed(), [3, 2, 1]);
+    expect([3, 2, 1].sortedReversed(), [3, 2, 1]);
+    expect([1, 3, 2].sortedReversed(), [3, 2, 1]);
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////

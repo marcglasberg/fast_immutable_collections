@@ -80,6 +80,8 @@ class ISetConst<T> // ignore: must_be_immutable
       (config == other.config);
 }
 
+// /////////////////////////////////////////////////////////////////////////////
+
 @immutable
 class ISetImpl<T> // ignore: must_be_immutable
     extends ISet<T> {
@@ -146,6 +148,8 @@ class ISetImpl<T> // ignore: must_be_immutable
                 : SFlat<T>(iterable),
         super._gen();
 }
+
+// /////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable**, **ordered** set.
 /// It can be configured to order by insertion order, or sort.

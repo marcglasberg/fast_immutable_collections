@@ -1390,6 +1390,9 @@ These are some provided helpers and extensions:
 * `Iterable.sortedLike` returns a list, sorted according to the order specified by the ordering
   iterable. Items which don't appear in the ordering iterable will be included in the end.
 
+* `Iterable.sortedReversed` returns a reversed sorted list of the elements of the iterable. Note
+  that `Iterable.sorted` can be found in `package:collection/collection.dart`.
+
 * `updateById` returns a new list where new items are added or updated, by their id.
 
 * `isFirst`, `isNotFirst`, `isLast` and `isNotLast` return true if the given item is the same (by
