@@ -1,3 +1,18 @@
+## [5.0.5] - 2021/06/25
+
+* Introduce the OP typedef.
+
+* `Iterable<Tuple2<U, V>>.unzip()` extension.
+
+* `IList.count(Predicate)` count positive predicates.
+
+* `IList.iterate` generate IList applying OP multiple times.
+
+* `IList.span` Tuple2 will contains longest positive predicate then the rest of the list.
+
+* Arity property on Abstract Tuple
+
+
 ## [5.0.4] - 2021/06/24
 
 * Introduce the Predicate typedef.
