@@ -137,8 +137,7 @@ class IListImpl<T> // ignore: must_be_immutable
   /// type and same configuration as a source collection, simply call [clear]
   /// on the source collection.
   static IListImpl<T> empty<T>([ConfigList? config]) =>
-      IListImpl._unsafe(LFlat.empty<T>(),
-          config: config ?? IList.defaultConfig);
+      IListImpl._unsafe(LFlat.empty<T>(), config: config ?? IList.defaultConfig);
 
   /// **Safe**. Fast if the [Iterable] is an [IList].
   IListImpl._(
@@ -229,9 +228,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
   IList<T> withConfig(ConfigList config) {
-    return (config == this.config)
-        ? this
-        : IListImpl._unsafe(_l, config: config);
+    return (config == this.config) ? this : IListImpl._unsafe(_l, config: config);
   }
 
   /// Returns a new list with the contents of the present [IList],
@@ -248,8 +245,7 @@ abstract class IList<T> // ignore: must_be_immutable
     required ConfigList? config,
   }) {
     List<T> list = iset.toList(growable: false, compare: compare);
-    return IListImpl._unsafe(LFlat<T>.unsafe(list),
-        config: config ?? defaultConfig);
+    return IListImpl._unsafe(LFlat<T>.unsafe(list), config: config ?? defaultConfig);
   }
 
   /// **Unsafe constructor. Use this at your own peril.**
@@ -293,9 +289,7 @@ abstract class IList<T> // ignore: must_be_immutable
     Iterable<T>? iterable, [
     ConfigList? config,
   ]) =>
-      (iterable == null)
-          ? null
-          : IList.withConfig(iterable, config ?? defaultConfig);
+      (iterable == null) ? null : IList.withConfig(iterable, config ?? defaultConfig);
 
   /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
   factory IList.fromJson(dynamic json, T Function(Object?) fromJsonT) =>
@@ -308,8 +302,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration  of immutable collections.");
+      throw StateError("Can't change the configuration  of immutable collections.");
     IList.flushFactor = _defaultFlushFactor;
     IList.defaultConfig = _defaultConfig;
   }
@@ -354,8 +347,7 @@ abstract class IList<T> // ignore: must_be_immutable
   static set defaultConfig(ConfigList config) {
     if (_defaultConfig == config) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration of immutable collections.");
     _defaultConfig = config;
   }
 
@@ -363,8 +355,7 @@ abstract class IList<T> // ignore: must_be_immutable
   static set flushFactor(int value) {
     if (_flushFactor == value) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration of immutable collections.");
     if (value > 0)
       _flushFactor = value;
     else
@@ -375,8 +366,7 @@ abstract class IList<T> // ignore: must_be_immutable
   static set asyncAutoflush(bool value) {
     if (_asyncAutoflush == value) return;
     if (ImmutableCollection.isConfigLocked)
-      throw StateError(
-          "Can't change the configuration of immutable collections.");
+      throw StateError("Can't change the configuration of immutable collections.");
     _asyncAutoflush = value;
   }
 
@@ -447,14 +437,12 @@ abstract class IList<T> // ignore: must_be_immutable
       IListImpl._unsafeFromList(list, config: config);
 
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
-  IList<T> get withIdentityEquals => config.isDeepEquals
-      ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false))
-      : this;
+  IList<T> get withIdentityEquals =>
+      config.isDeepEquals ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false)) : this;
 
   /// Creates a list with `deepEquals` (compares all list items by equality).
-  IList<T> get withDeepEquals => config.isDeepEquals
-      ? this
-      : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
+  IList<T> get withDeepEquals =>
+      config.isDeepEquals ? this : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
 
   /// See also: [ConfigList]
   bool get isDeepEquals => config.isDeepEquals;
@@ -535,11 +523,9 @@ abstract class IList<T> // ignore: must_be_immutable
     }
 
     if (other is List<T>)
-      return const ListEquality<dynamic>()
-          .equals(UnmodifiableListFromIList<T>(this), other);
+      return const ListEquality<dynamic>().equals(UnmodifiableListFromIList<T>(this), other);
 
-    if (other is HashSet)
-      throw StateError("Can't compare to HashSet (which is unordered).");
+    if (other is HashSet) throw StateError("Can't compare to HashSet (which is unordered).");
 
     return const IterableEquality<dynamic>().equals(_l, other);
   }
@@ -550,8 +536,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// one by one.
   bool unorderedEqualItems(covariant Iterable? other) {
     if (other == null) return false;
-    if (identical(this, other) || (other is IList<T> && same(other)))
-      return true;
+    if (identical(this, other) || (other is IList<T> && same(other))) return true;
     return const UnorderedIterableEquality<dynamic>().equals(_l, other);
   }
 
@@ -566,8 +551,7 @@ abstract class IList<T> // ignore: must_be_immutable
     if (_isUnequalByHashCode(other)) return false;
 
     return config == other!.config &&
-        (identical(_l, other._l) ||
-            (flush._l as LFlat).deepListEquals(other.flush._l as LFlat));
+        (identical(_l, other._l) || (flush._l as LFlat).deepListEquals(other.flush._l as LFlat));
   }
 
   /// Return `true` if other is `null` or the cached [hashCodes] proves the
@@ -579,9 +563,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(IList? other) {
     return (other == null) ||
-        (_hashCode != null &&
-            other._hashCode != null &&
-            _hashCode != other._hashCode);
+        (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
 
   /// Will return `true` only if the lists internals are the same instances
@@ -642,8 +624,7 @@ abstract class IList<T> // ignore: must_be_immutable
     // If the outer list is used, it will be flushed before the source lists.
     // If the source lists are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter =
-        max(_counter, ((items is IList<T>) ? (items)._counter : 0)) + 1;
+    result._counter = max(_counter, ((items is IList<T>) ? (items)._counter : 0)) + 1;
 
     return result;
   }
@@ -678,9 +659,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   IList<T> remove(T item) {
     final L<T> result = _l.remove(item);
-    return identical(result, _l)
-        ? this
-        : IList<T>._unsafe(result, config: config);
+    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of all [items] from this list.
@@ -690,9 +669,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   IList<T> removeAll(Iterable<T?> items) {
     final L<T> result = _l.removeAll(items);
-    return identical(result, _l)
-        ? this
-        : IList<T>._unsafe(result, config: config);
+    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of [item] from this list.
@@ -707,9 +684,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   IList<T> removeMany(T item) {
     final L<T> result = _l.removeMany(item);
-    return identical(result, _l)
-        ? this
-        : IList<T>._unsafe(result, config: config);
+    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all nulls from this list.
@@ -732,8 +707,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Removes the first instance of the element, if it exists in the list.
   /// Otherwise, adds it to the list.
-  IList<T> toggle(T element) =>
-      contains(element) ? remove(element) : add(element);
+  IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
 
   /// Returns the object at the given [index] in the list or throws a [RangeError] if [index] is out
   /// of bounds.
@@ -1055,8 +1029,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Note: Not very efficient at the moment (will be improved in the future).
   /// Please use for a small number of items.
   ///
-  IList<T> sortLike(Iterable<T> ordering) =>
-      IList._unsafe(_l.sortLike(ordering), config: config);
+  IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
   /// The first one contains all items which satisfy the provided [test].
@@ -1210,8 +1183,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// return the unchanged list if no item satisfies the [test].
   /// - If [addIfNotFound] is `true`, add the item to the end of the list
   /// if no item satisfies the [test].
-  IList<T> replaceFirstWhere(bool Function(T item) test, T to,
-      {bool addIfNotFound = false}) {
+  IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false}) {
     var index = indexWhere(test);
     return (index != -1)
         ? put(index, to)
@@ -1335,10 +1307,8 @@ abstract class IList<T> // ignore: must_be_immutable
     _count();
     var _length = length;
     start ??= _length;
-    if (start < 0)
-      throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = min(start, _length - 1); i >= 0; i--)
-      if (this[i] == element) return i;
+    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--) if (this[i] == element) return i;
     return -1;
   }
 
@@ -1364,10 +1334,8 @@ abstract class IList<T> // ignore: must_be_immutable
     _count();
     var _length = length;
     start ??= _length;
-    if (start < 0)
-      throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = min(start, _length - 1); i >= 0; i--)
-      if (test(this[i])) return i;
+    if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
+    for (int i = min(start, _length - 1); i >= 0; i--) if (test(this[i])) return i;
     return -1;
   }
 
@@ -1390,8 +1358,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   IList<T> replaceRange(int start, int end, Iterable<T> replacement) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(
-        toList(growable: true)..replaceRange(start, end, replacement),
+    return IList._unsafeFromList(toList(growable: true)..replaceRange(start, end, replacement),
         config: config);
   }
 
@@ -1424,8 +1391,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   IList<T> fillRange(int start, int end, [T? fillValue]) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(
-        toList(growable: false)..fillRange(start, end, fillValue),
+    return IList._unsafeFromList(toList(growable: false)..fillRange(start, end, fillValue),
         config: config);
   }
 
@@ -1476,8 +1442,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// If `end` is equal to `start`, then the returned list is empty.
   IList<T> sublist(int start, [int? end]) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: false).sublist(start, end),
-        config: config);
+    return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
   }
 
   /// The [replace] method is the equivalent of `operator []=` for the [IList].
@@ -1497,8 +1462,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// The [index] value must be non-negative and no greater than [length].
   IList<T> insert(int index, T element) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(toList(growable: true)..insert(index, element),
-        config: config);
+    return IList._unsafeFromList(toList(growable: true)..insert(index, element), config: config);
   }
 
   /// Inserts all objects of [iterable] at position [index] in this list.
@@ -1510,8 +1474,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// The [index] value must be non-negative and no greater than [length].
   IList<T> insertAll(int index, Iterable<T> iterable) {
     // TODO: Still need to implement efficiently.
-    return IList._unsafeFromList(
-        toList(growable: true)..insertAll(index, iterable),
+    return IList._unsafeFromList(toList(growable: true)..insertAll(index, iterable),
         config: config);
   }
 
@@ -1539,8 +1502,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
   ///
-  IList<T> removeLast([Output<T>? removedItem]) =>
-      removeAt(length - 1, removedItem);
+  IList<T> removeLast([Output<T>? removedItem]) => removeAt(length - 1, removedItem);
 
   /// Removes the objects in the range [start] inclusive to [end] exclusive.
   ///
@@ -1644,8 +1606,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// If [iterable] depends on this list in some other way, no guarantees are
   /// made.
   ///
-  IList<T> setRange(int start, int end, Iterable<T> iterable,
-      [int skipCount = 0]) {
+  IList<T> setRange(int start, int end, Iterable<T> iterable, [int skipCount = 0]) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
     list.setRange(start, end, iterable, skipCount);
@@ -1668,15 +1629,13 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Aggregate each element with corresponding index
   Iterable<Tuple2<int, T>> zipWithIndex() =>
-      Iterable.generate(length, (index) => Tuple2(index, _l[index]))
-          .toIList(config);
+      Iterable.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
 
   /// Aggregate two sources trimming by the shortest source
   Iterable<Tuple2<T, T>> zip(Iterable<T> otherIterable) {
     final other = otherIterable.toList();
     final minLength = min(length, other.length);
-    return Iterable.generate(
-        minLength, (index) => Tuple2(_l[index], other[index])).toIList(config);
+    return Iterable.generate(minLength, (index) => Tuple2(_l[index], other[index])).toIList(config);
   }
 
   /// Aggregate two sources based on the longest source.
@@ -1751,8 +1710,7 @@ abstract class L<T> implements Iterable<T> {
 
   // TODO: Still need to implement efficiently.
   /// Removes the first occurrence of [element] from this list.
-  L<T> remove(T element) =>
-      !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
+  L<T> remove(T element) => !contains(element) ? this : LFlat<T>.unsafe(unlock..remove(element));
 
   L<T> removeAll(Iterable<T?> elements) {
     var list = unlock;
@@ -1764,9 +1722,8 @@ abstract class L<T> implements Iterable<T> {
   }
 
   // TODO: Still need to implement efficiently.
-  L<T> removeMany(T element) => !contains(element)
-      ? this
-      : LFlat<T>.unsafe(unlock..removeWhere((e) => e == element));
+  L<T> removeMany(T element) =>
+      !contains(element) ? this : LFlat<T>.unsafe(unlock..removeWhere((e) => e == element));
 
   // TODO: Still need to implement efficiently.
   /// If the list has more than `maxLength` elements, removes the last elements so it remains
@@ -1807,8 +1764,7 @@ abstract class L<T> implements Iterable<T> {
     Set<T> newSet = Set.of(this);
     Set<T> intersection = orderingSet.intersection(newSet);
     Set<T> difference = newSet.difference(orderingSet);
-    List<T> result =
-        ordering.where((element) => intersection.contains(element)).toList();
+    List<T> result = ordering.where((element) => intersection.contains(element)).toList();
     result.addAll(difference);
     return LFlat<T>.unsafe(result);
   }
@@ -1846,8 +1802,7 @@ abstract class L<T> implements Iterable<T> {
   T get single;
 
   @override
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.firstWhere(test, orElse: orElse);
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => iter.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -1863,8 +1818,7 @@ abstract class L<T> implements Iterable<T> {
   String join([String separator = ""]) => iter.join(separator);
 
   @override
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.lastWhere(test, orElse: orElse);
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => iter.lastWhere(test, orElse: orElse);
 
   @override
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
