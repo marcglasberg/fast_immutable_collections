@@ -1052,6 +1052,9 @@ abstract class IList<T> // ignore: must_be_immutable
     );
   }
 
+  /// Split the List at specified index
+  Tuple2<Iterable<T>, Iterable<T>> splitAt(int index) => Tuple2(take(index), skip(index));
+
   /// Moves all items that satisfy the provided [test] to the end of the list.
   /// Keeps the relative order of the moved items.
   IList<T> whereMoveToTheEnd(bool Function(T item) test) {

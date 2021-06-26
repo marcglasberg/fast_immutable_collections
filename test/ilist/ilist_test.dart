@@ -1740,8 +1740,18 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Iterate apply ops n times",
+  test("Iterate apply ops n times to create a list",
       () => expect(IList.iterate<int>(1, 5, (e) => e + 2), [1, 3, 5, 7, 9]));
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Split at specified index", () {
+    final base = [1, 2, 3, 4, 5, 6, 7, 8, 9].lock;
+    final split = base.splitAt(4);
+
+    expect(split.first.toIList(), base.sublist(0, 4));
+    expect(split.second.toIList(), base.sublist(4));
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 

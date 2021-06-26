@@ -2,6 +2,8 @@
 
 * Introduce the OP typedef.
 
+* `IList.splitAt` Tuples from original list at specified index.
+
 * `Iterable<Tuple2<U, V>>.unzip()` extension.
 
 * `IList.count(Predicate)` count positive predicates.
