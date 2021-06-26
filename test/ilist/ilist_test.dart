@@ -1750,8 +1750,13 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Iterate apply ops n times to create a list",
-      () => expect(IList.iterate<int>(1, 5, (e) => e + 2), [1, 3, 5, 7, 9]));
+  test("Iterate apply ops n times to create a list", () {
+    expect(IList.iterate<int>(1, 5, (e) => e + 2), [1, 3, 5, 7, 9]);
+  });
+
+  test("Iterate apply ops while Predicate succeed", () {
+    expect(IList.iterateWhile<int>(1, (e) => e < 9, (e) => e + 2), [1, 3, 5, 7, 9]);
+  });
 
   //////////////////////////////////////////////////////////////////////////////
 

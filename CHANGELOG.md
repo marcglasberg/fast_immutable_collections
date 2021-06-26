@@ -15,6 +15,8 @@
 * `IList.count(Predicate)` count positive predicates.
 
 * `IList.iterate` generate IList applying OP multiple times.
+  
+* `IList.iterateWhile` generate IList applying OP while Predicate stand.
 
 * `IList.span` Tuple2 will contains longest positive predicate then the rest of the list.
 
