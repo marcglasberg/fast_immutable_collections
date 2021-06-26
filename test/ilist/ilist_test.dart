@@ -1642,6 +1642,34 @@ void main() {
     expect(ilist.init, ["a", "b", "c", "d", "e"].lock);
   });
 
+  test("heads, tails, inits", () {
+    final ilist = ["a", "b", "c", "d", "e", "f"].lock;
+
+    expect(
+        ilist.tails(),
+        [
+          ["a", "b", "c", "d", "e", "f"].lock,
+          ["b", "c", "d", "e", "f"].lock,
+          ["c", "d", "e", "f"].lock,
+          ["d", "e", "f"].lock,
+          ["e", "f"].lock,
+          ["f"].lock,
+          [].lock,
+        ].lock);
+
+    expect(
+        ilist.inits(),
+        [
+          ["a", "b", "c", "d", "e", "f"].lock,
+          ["a", "b", "c", "d", "e"].lock,
+          ["a", "b", "c", "d"].lock,
+          ["a", "b", "c"].lock,
+          ["a", "b"].lock,
+          ["a"].lock,
+          [].lock,
+        ].lock);
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("span", () {

@@ -941,6 +941,12 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Returns an [Iterable] that is the original iterable without head, aka first element
   Iterable<T> get tail => _l.skip(1);
 
+  Iterable<Iterable<T>> tails() =>
+      IList.iterateWhile(this, (l) => l.isNotEmpty, (l) => l.toIList().tail);
+
+  Iterable<Iterable<T>> inits() =>
+      IList.iterateWhile(this, (l) => l.isNotEmpty, (l) => l.toIList().init);
+
   /// Returns an [Iterable] that is the original iterable without the last element
   Iterable<T> get init => _l.take(_l.length - 1);
 

@@ -2,9 +2,11 @@
 
 * Breaking: Align head and tail to dart convention as getter like first and last
 
-* `IList.init` Access init part of the list 
-
 * Introduce the OP typedef.
+  
+* `IList.init` Access init part of the list 
+  
+* `IList.inits`, `IList.tails` methods
 
 * `IList.splitAt` Tuples from original list at specified index.
   
