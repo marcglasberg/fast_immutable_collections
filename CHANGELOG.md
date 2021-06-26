@@ -1,5 +1,9 @@
 ## [5.0.5] - 2021/06/25
 
+* Breaking: Align head and tail to dart convention as getter like first and last
+
+* `IList.init` Access init part of the list 
+
 * Introduce the OP typedef.
 
 * `IList.splitAt` Tuples from original list at specified index.
