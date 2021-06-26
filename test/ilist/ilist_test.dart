@@ -1006,6 +1006,15 @@ void main() {
     expect(ilist.where((int? v) => v! < 100), [1, 2, 3, 4, 5, 6]);
   });
 
+  test("where NOT", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+
+    expect(ilist.whereNot((int? v) => v! < 0), [1, 2, 3, 4, 5, 6]);
+    expect(ilist.whereNot((int? v) => v! < 3), [3, 4, 5, 6]);
+    expect(ilist.whereNot((int? v) => v! < 5), [5, 6]);
+    expect(ilist.whereNot((int? v) => v! < 100), []);
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("whereType", () {

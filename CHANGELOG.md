@@ -3,6 +3,8 @@
 * Introduce the OP typedef.
 
 * `IList.splitAt` Tuples from original list at specified index.
+  
+* `IList.whereNot` Reverse predicate for Where.
 
 * `Iterable<Tuple2<U, V>>.unzip()` extension.
 

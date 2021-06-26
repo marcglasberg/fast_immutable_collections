@@ -939,6 +939,9 @@ abstract class IList<T> // ignore: must_be_immutable
   @override
   Iterable<T> where(Predicate<T> test) => _l.where(test);
 
+  /// Returns an [Iterable] with all elements that doest NOT satisfy the predicate [test].
+  Iterable<T> whereNot(Predicate<T> test) => _l.where((e) => !test(e));
+
   /// Returns an [Iterable] with all elements that have type [E].
   @override
   Iterable<E> whereType<E>() => _l.whereType<E>();
