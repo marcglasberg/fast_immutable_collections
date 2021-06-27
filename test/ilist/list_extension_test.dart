@@ -109,6 +109,30 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("sortReversed", () {
+    List<int> list = [1, 2, 4, 10, 3, 5];
+    list = (list..sort()).reversed.toList();
+    expect(list, [10, 5, 4, 3, 2, 1]);
+
+    List<int> listInt = [1, 2, 4, 10, 3, 5];
+    listInt.sortReversed();
+    expect(listInt, [10, 5, 4, 3, 2, 1]);
+    listInt.sort();
+    expect(listInt, [1, 2, 3, 4, 5, 10]);
+    listInt.sortReversed();
+    expect(listInt, [10, 5, 4, 3, 2, 1]);
+
+    List<String> listStr = ["a", "cc", "aaaaa", "bbb"];
+    listStr.sortReversed((String a, String b) => a.length.compareTo(b.length));
+    expect(listStr, ["aaaaa", "bbb", "cc", "a"]);
+    listStr.sort((String a, String b) => a.length.compareTo(b.length));
+    expect(listStr, ["a", "cc", "bbb", "aaaaa"]);
+    listStr.sortReversed((String a, String b) => a.length.compareTo(b.length));
+    expect(listStr, ["aaaaa", "bbb", "cc", "a"]);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("moveToTheEnd", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
     list.moveToTheEnd(4);

@@ -16,6 +16,8 @@ import "unmodifiable_list_from_ilist.dart";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+typedef Predicate<T> = bool Function(T element);
+
 /// This is an [IList] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -736,7 +738,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Checks every element in iteration order, and returns `true` if
   /// any of them make [test] return `true`, otherwise returns `false`.
   @override
-  bool any(bool Function(T) test) {
+  bool any(Predicate<T> test) {
     _count();
     return _l.any(test);
   }
@@ -756,7 +758,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Checks whether every element of this iterable satisfies [test].
   @override
-  bool every(bool Function(T) test) {
+  bool every(Predicate<T> test) {
     _count();
     return _l.every(test);
   }
@@ -829,7 +831,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// function is returned.
   /// - If [orElse] is omitted, it defaults to throwing a [StateError].
   @override
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) {
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _l.firstWhere(test, orElse: orElse);
   }
@@ -853,6 +855,9 @@ abstract class IList<T> // ignore: must_be_immutable
     _l.forEach(f);
   }
 
+  /// Returns the first element of this Iterable
+  T head() => _l.first;
+
   /// Converts each element to a [String] and concatenates the strings with the [separator]
   /// in-between each concatenation.
   @override
@@ -860,7 +865,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Returns the last element that satisfies the given predicate [test].
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) {
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _l.lastWhere(test, orElse: orElse);
   }
@@ -883,7 +888,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Returns the single element that satisfies [test].
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) {
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) {
     _count();
     return _l.singleWhere(test, orElse: orElse);
   }
@@ -896,6 +901,9 @@ abstract class IList<T> // ignore: must_be_immutable
   @override
   Iterable<T> skipWhile(bool Function(T value) test) => _l.skipWhile(test);
 
+  /// Returns an [Iterable] that is the original iterable without head, aka first element
+  Iterable<T> tail() => _l.skip(1);
+
   /// Returns an [Iterable] of the [count] first elements of this iterable.
   @override
   Iterable<T> take(int count) => _l.take(count);
@@ -906,7 +914,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Returns an [Iterable] with all elements that satisfy the predicate [test].
   @override
-  Iterable<T> where(bool Function(T element) test) => _l.where(test);
+  Iterable<T> where(Predicate<T> test) => _l.where(test);
 
   /// Returns an [Iterable] with all elements that have type [E].
   @override
@@ -1163,7 +1171,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Finds all items that satisfy the provided [test],
   /// and replace it with [to].
-  IList<T> replaceAllWhere(bool Function(T element) test, T to) =>
+  IList<T> replaceAllWhere(Predicate<T> test, T to) =>
       map((element) => test(element) ? to : element).toIList(config);
 
   /// Allows for complex processing of a list.
@@ -1239,7 +1247,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// ```dart
   /// notes.indexWhere((note) => note.startsWith('k'));       // -1
   /// ```
-  int indexWhere(bool Function(T element) test, [int start = 0]) {
+  int indexWhere(Predicate<T> test, [int start = 0]) {
     _count();
     var _length = length;
     if (_length == 0) return -1;
@@ -1299,7 +1307,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// ```dart
   /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
   /// ```
-  int lastIndexWhere(bool Function(T element) test, [int? start]) {
+  int lastIndexWhere(Predicate<T> test, [int? start]) {
     _count();
     var _length = length;
     start ??= _length;
@@ -1496,7 +1504,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// final IList<String> newNumbers = numbers.removeWhere((item) => item.length == 3);
   /// newNumbers.join(', '); // 'three, four'
   /// ```
-  IList<T> removeWhere(bool Function(T element) test) {
+  IList<T> removeWhere(Predicate<T> test) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
     list.removeWhere(test);
@@ -1512,7 +1520,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// final IList<String> newNumbers = numbers.retainWhere((item) => item.length == 3);
   /// newNumbers.join(', '); // 'one, two'
   /// ```
-  IList<T> retainWhere(bool Function(T element) test) {
+  IList<T> retainWhere(Predicate<T> test) {
     // TODO: Still need to implement efficiently.
     var list = toList(growable: true);
     list.retainWhere(test);
@@ -1585,6 +1593,42 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Shuffles the elements of this list randomly.
   IList<T> shuffle([Random? random]) =>
       IList._unsafeFromList(toList()..shuffle(random), config: config);
+
+  /// Aggregate each element with corresponding index
+  Iterable<Tuple2<int, T>> zipWithIndex() =>
+      List.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
+
+  /// Aggregate two sources trimming by the shortest source
+  Iterable<Tuple2<T, T>> zip(Iterable<T> otherIterable) {
+    final other = otherIterable.toList();
+    final minLength = min(length, other.length);
+    return List.generate(minLength, (index) => Tuple2(_l[index], other[index])).toIList(config);
+  }
+
+  /// Aggregate two sources based on the longest source.
+  /// Missing elements can be completed by passing a [currentFill] and [otherFill] methods or will be at null by default
+  Iterable<Tuple2<T?, U?>> zipAll<U>(
+    Iterable<U> otherIterable, {
+    T Function(int index)? currentFill,
+    U Function(int index)? otherFill,
+  }) {
+    final other = otherIterable.toList();
+    final current = toList(growable: false);
+    final maxLength = max(current.length, other.length);
+
+    Object? getOrFill(List l, int index, Function? fill) => index < l.length
+        ? l[index]
+        : fill != null
+            ? fill(index)
+            : null;
+
+    return List.generate(
+        maxLength,
+        (index) => Tuple2<T?, U?>(
+              getOrFill(current, index, currentFill) as T?,
+              getOrFill(other, index, otherFill) as U?,
+            )).toIList(config);
+  }
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -1693,7 +1737,7 @@ abstract class L<T> implements Iterable<T> {
   }
 
   @override
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   @override
   Iterable<R> cast<R>() => iter.cast<R>();
@@ -1707,7 +1751,7 @@ abstract class L<T> implements Iterable<T> {
   T elementAt(int index) => this[index];
 
   @override
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   @override
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
@@ -1725,7 +1769,7 @@ abstract class L<T> implements Iterable<T> {
   T get single;
 
   @override
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
   @override
@@ -1742,7 +1786,7 @@ abstract class L<T> implements Iterable<T> {
   String join([String separator = ""]) => iter.join(separator);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
   @override
@@ -1752,7 +1796,7 @@ abstract class L<T> implements Iterable<T> {
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
   @override
@@ -1768,7 +1812,7 @@ abstract class L<T> implements Iterable<T> {
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
   @override
-  Iterable<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(Predicate<T> test) => iter.where(test);
 
   @override
   Iterable<E> whereType<E>() => iter.whereType<E>();

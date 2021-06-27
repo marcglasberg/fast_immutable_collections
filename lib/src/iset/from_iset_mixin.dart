@@ -53,7 +53,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
   /// Classes `with` [FromISetMixin] must override this.
   I newInstance(ISet<T> iset);
 
-  bool any(bool Function(T) test) => iter.any(test);
+  bool any(Predicate<T> test) => iter.any(test);
 
   Iterable<R> cast<R>() => iter.cast<R>();
 
@@ -61,7 +61,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   T elementAt(int index) => throw UnsupportedError("elementAt in $runtimeType is not allowed");
 
-  bool every(bool Function(T) test) => iter.every(test);
+  bool every(Predicate<T> test) => iter.every(test);
 
   Iterable<E> expand<E>(Iterable<E> Function(T) f) => iter.expand(f);
 
@@ -73,7 +73,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   T get single => iter.single;
 
-  T firstWhere(bool Function(T) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.firstWhere(test, orElse: orElse);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -85,14 +85,14 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   String join([String separator = ""]) => iter.join(separator);
 
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.lastWhere(test, orElse: orElse);
 
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
   T reduce(T Function(T value, T element) combine) => iter.reduce(combine);
 
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       iter.singleWhere(test, orElse: orElse);
 
   Iterable<T> skip(int count) => iter.skip(count);
@@ -103,7 +103,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   Iterable<T> takeWhile(bool Function(T value) test) => iter.takeWhile(test);
 
-  Iterable<T> where(bool Function(T element) test) => iter.where(test);
+  Iterable<T> where(Predicate<T> test) => iter.where(test);
 
   Iterable<E> whereType<E>() => iter.whereType<E>();
 
@@ -133,9 +133,9 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   I remove(T item) => newInstance(iter.remove(item));
 
-  I removeWhere(bool Function(T element) test) => newInstance(iter.removeWhere(test));
+  I removeWhere(Predicate<T> test) => newInstance(iter.removeWhere(test));
 
-  I retainWhere(bool Function(T element) test) => newInstance(iter.retainWhere(test));
+  I retainWhere(Predicate<T> test) => newInstance(iter.retainWhere(test));
 
   I toggle(T element) => newInstance(iter.toggle(element));
 

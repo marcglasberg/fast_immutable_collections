@@ -1,3 +1,11 @@
+## [5.0.4] - 2021/06/24
+
+* Introduce the Predicate typedef.
+
+## [5.0.2] - 2021/06/23
+
+* `List.sortReversed()` extension.
+
 ## [5.0.1] - 2021/05/24
 
 * `Iterable.restrict()` restricts some item to one of those present in this iterable.
@@ -8,30 +16,30 @@
 
 * Const `IList`. Example: `const IList<int> myList = IListConst([1, 2, 3]);`
   Example of empty list: `const IList<String> myList = IListConst([]);`
-  
+
 * Const `ISet`. Example: `const ISet<int> mySet = ISetConst({1, 2, 3});`
   Example of empty set: `const ISet<String> mySet = ISetConst({});`
-  
+
 * Methods `IList.get()`, `IList.getOrNull()` and `IList.getAndMap()`.
-  
+
 * Extensions `List.get()`, `List.getOrNull()` and `List.getAndMap()`.
-  
+
 * Better NNBD for `divideListAsMap()` and `sortedLike()`.
-  
+
 * Better Json serialization for NNBD.
-  
+
 * Small IMapOfSets.fromIterable() improvement: added `ignore` parameter.
-  
+
 * Breaking change: Removed `empty()` constructors from `IList` and `ISet`. You can create empty
   collections using `IList()` and `ISet()`, or `myIList.clear()` and `myISet.clear()`, or
   `IList.withConfig(const [], myConfig)` and `ISet.withConfig(const [], myConfig)`, or
   `const IListConst([])` and `const ISetConst({})`.
-  
+
 * Breaking change: Removed all extensions like `isNullOrEmpty` and similar. This was a good idea
   before NNBD, but now if you use this Dart can't infer nullability anymore.
-  
+
 * Breaking change. Please, add `import "package:collection/collection.dart";` to your project. I
-  have removed a few methods, like `Iterable.mapIndexed`, because they are now present in the 
+  have removed a few methods, like `Iterable.mapIndexed`, because they are now present in the
   `collection` package.
 
 ## [4.0.6] - 2021/04/20

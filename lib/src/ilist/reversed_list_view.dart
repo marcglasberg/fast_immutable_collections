@@ -1,5 +1,7 @@
 import "dart:math";
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 /// Returns a [List] of the objects in this list in reverse order.
 /// Very efficient since it returns a view, which means if you change the
 /// original list this one will also change, and vice-versa.
@@ -36,13 +38,13 @@ class ReversedListView<T> implements List<T> {
   set last(T value) => list[0] = value;
 
   @override
-  int indexWhere(bool Function(T element) test, [int start = 0]) {
+  int indexWhere(Predicate<T> test, [int start = 0]) {
     var index = list.lastIndexWhere(test, start == 0 ? null : start);
     return (index == -1) ? -1 : list.length - index - 1;
   }
 
   @override
-  int lastIndexWhere(bool Function(T element) test, [int? start]) {
+  int lastIndexWhere(Predicate<T> test, [int? start]) {
     var index = list.indexWhere(test, start ?? 0);
     return (index == -1) ? -1 : list.length - index - 1;
   }
@@ -63,7 +65,7 @@ class ReversedListView<T> implements List<T> {
   void addAll(Iterable<T> iterable) => list.insertAll(0, iterable.toList().reversed);
 
   @override
-  bool any(bool Function(T element) test) => list.reversed.any(test);
+  bool any(Predicate<T> test) => list.reversed.any(test);
 
   @override
   Map<int, T> asMap() => list.reversed.toList().asMap();
@@ -81,7 +83,7 @@ class ReversedListView<T> implements List<T> {
   T elementAt(int index) => this[index];
 
   @override
-  bool every(bool Function(T element) test) => list.reversed.every(test);
+  bool every(Predicate<T> test) => list.reversed.every(test);
 
   @override
   Iterable<E> expand<E>(Iterable<E> Function(T element) f) => list.reversed.expand(f);
@@ -91,7 +93,7 @@ class ReversedListView<T> implements List<T> {
       list.fillRange(length - end, length - start, fillValue);
 
   @override
-  T firstWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
       list.reversed.firstWhere(test, orElse: orElse);
 
   @override
@@ -143,7 +145,7 @@ class ReversedListView<T> implements List<T> {
   String join([String separator = ""]) => list.reversed.join(separator);
 
   @override
-  T lastWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
       list.reversed.lastWhere(test, orElse: orElse);
 
   @override
@@ -165,14 +167,14 @@ class ReversedListView<T> implements List<T> {
   void removeRange(int start, int end) => list.removeRange(length - end, length - start);
 
   @override
-  void removeWhere(bool Function(T element) test) => list.removeWhere(test);
+  void removeWhere(Predicate<T> test) => list.removeWhere(test);
 
   @override
   void replaceRange(int start, int end, Iterable<T> replacement) =>
       list.replaceRange(length - end, length - start, replacement.toList().reversed);
 
   @override
-  void retainWhere(bool Function(T element) test) => list.retainWhere(test);
+  void retainWhere(Predicate<T> test) => list.retainWhere(test);
 
   @override
   Iterable<T> get reversed => list;
@@ -192,7 +194,7 @@ class ReversedListView<T> implements List<T> {
   T get single => list.single;
 
   @override
-  T singleWhere(bool Function(T element) test, {T Function()? orElse}) =>
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) =>
       list.singleWhere(test, orElse: orElse);
 
   @override
@@ -230,7 +232,7 @@ class ReversedListView<T> implements List<T> {
   Set<T> toSet() => list.reversed.toSet();
 
   @override
-  Iterable<T> where(bool Function(T element) test) => list.reversed.where(test);
+  Iterable<T> where(Predicate<T> test) => list.reversed.where(test);
 
   @override
   Iterable<E> whereType<E>() => list.reversed.whereType<E>();

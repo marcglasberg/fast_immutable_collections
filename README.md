@@ -192,7 +192,8 @@ implementation details. Later in this document, we provide benchmarks so that yo
         </li>
         <li><a href="#93-sortby-function">9.3. SortBy function</a></li>
         <li><a href="#94-sortlike-function">9.4. SortLike function</a></li>
-        <li><a href="#95-if0-extension">9.5. if0 extension</a></li>
+        <li><a href="#95-sortreversed-function">9.5. SortReversed function</a></li>
+        <li><a href="#96-if0-extension">9.5. if0 extension</a></li>
       </ul>
     </li>
     <li>
@@ -1389,6 +1390,9 @@ These are some provided helpers and extensions:
 * `Iterable.sortedLike` returns a list, sorted according to the order specified by the ordering
   iterable. Items which don't appear in the ordering iterable will be included in the end.
 
+* `Iterable.sortedReversed` returns a reversed sorted list of the elements of the iterable. Note
+  that `Iterable.sorted` can be found in `package:collection/collection.dart`.
+
 * `updateById` returns a new list where new items are added or updated, by their id.
 
 * `isFirst`, `isNotFirst`, `isLast` and `isNotLast` return true if the given item is the same (by
@@ -1484,8 +1488,9 @@ These are some provided helpers and extensions:
 # 9. Comparators
 
 To help you sort collections (from FIC or any other), we provide the global comparator
-functions `compareObject`, `sortBy` and `sortLike`, as well as the `compareObjectTo` and `if0`
-extensions. These make it easy for you to create other complex comparators, as described below.
+functions `compareObject`, `sortBy`, `sortLike` and `sortReversed`, as well as the `compareObjectTo`
+and `if0` extensions. These make it easy for you to create other complex comparators, as described
+below.
 
 ## 9.1. CompareObject function
 
@@ -1591,7 +1596,12 @@ file for more information and runnable examples.
 
 [sort_test]: https://github.com/marcglasberg/fast_immutable_collections/tree/master/test/base/sort_test.dart
 
-## 9.5. if0 extension
+## 9.5. SortReversed function
+
+The `sortReversed` function sorts this list in reverse order in relation to the default `sort`
+method.
+
+## 9.6. if0 extension
 
 The `if0` function lets you nest comparators.
 

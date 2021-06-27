@@ -72,7 +72,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   // /// If no element satisfies [test], the result of invoking the [orElse]
   // /// function is returned.
   // /// If [orElse] is omitted, return null.
-  // T? firstWhereOrNull(bool Function(T) test, {T? Function()? orElse}) {
+  // T? firstWhereOrNull(Predicate<T> test, {T? Function()? orElse}) {
   //   for (T element in this) if (test(element)) return element;
   //   if (orElse != null) return orElse();
   //   return null;
@@ -187,6 +187,15 @@ extension FicIterableExtension<T> on Iterable<T> {
       }
     }
   }
+
+  /// Creates a reversed sorted list of the elements of the iterable.
+  ///
+  /// If the [compare] function is not supplied, the sorting uses the
+  /// [compareObject] function.
+  ///
+  /// See also: [sorted] (from 'package:collection/collection.dart').
+  ///
+  List<T> sortedReversed([Comparator<T>? compare]) => [...this]..sortReversed(compare);
 
   /// Returns a list, sorted according to the order specified by the [ordering] iterable.
   /// Items which don't appear in [ordering] will be included in the end, in their original order.
