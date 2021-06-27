@@ -317,6 +317,17 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   @override
   bool get isNotEmpty => _mapOfSets.isNotEmpty;
 
+  /// Return `true` if the value set is empty or `null`, for the given [key].
+  /// Return `false` if there are 1 or more values, for the given [key].
+  bool isEmptyForKey(K key) {
+    ISet<V>? values = this[key];
+    return values != null && values.isNotEmpty;
+  }
+
+  /// Return `true` if there are 1 or more values, for the given [key].
+  /// Return `false` if the value set is empty or `null`, for the given [key].
+  bool isNotEmptyForKey(K key) => !isEmptyForKey(key);
+
   /// Find the [key]/[set] entry, and add the [value] to the [set].
   /// If the [key] doesn't exist, will first create it with an empty [set],
   /// and then add the [value] to it. If the [value] already exists in the
