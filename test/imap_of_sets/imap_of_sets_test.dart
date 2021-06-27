@@ -28,6 +28,26 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("isEmptyForKey and isNotEmptyForKey", () {
+    final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
+      "a": {1},
+      "b": {1, 2, 3},
+      "c": {},
+    });
+
+    expect(iMapOfSets1.isEmptyForKey('a'), isFalse);
+    expect(iMapOfSets1.isEmptyForKey('b'), isFalse);
+    expect(iMapOfSets1.isEmptyForKey('c'), isTrue);
+    expect(iMapOfSets1.isEmptyForKey('d'), isTrue);
+
+    expect(iMapOfSets1.isNotEmptyForKey('a'), isTrue);
+    expect(iMapOfSets1.isNotEmptyForKey('b'), isTrue);
+    expect(iMapOfSets1.isNotEmptyForKey('c'), isFalse);
+    expect(iMapOfSets1.isNotEmptyForKey('d'), isFalse);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("equalItems", () {
     final IMapOfSets<String, int> iMapOfSets1 = IMapOfSets({
       "a": {1, 2},
