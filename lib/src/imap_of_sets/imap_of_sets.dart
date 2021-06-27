@@ -321,7 +321,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return `false` if there are 1 or more values, for the given [key].
   bool isEmptyForKey(K key) {
     ISet<V>? values = this[key];
-    return values != null && values.isNotEmpty;
+    return values == null || values.isEmpty;
   }
 
   /// Return `true` if there are 1 or more values, for the given [key].
