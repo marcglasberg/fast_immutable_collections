@@ -20,7 +20,7 @@
   
 * `IList.iterateWhile` generate IList applying OP while Predicate stand.
 
-* `IList.span` Tuple2 will contains longest positive predicate then the rest of the list.
+* `IList.span` Tuple2 will contains the longest consecutive positive predicate then the rest of the list.
 
 * Arity property on Abstract Tuple
 
