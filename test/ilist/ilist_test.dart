@@ -1806,6 +1806,15 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("Corresponds", () {
+    expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 6, 8, 10].lock, (a, b) => a * 2 == b), true);
+    expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 60, 8, 10].lock, (a, b) => a * 2 == b), false);
+    expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 6, 8].lock, (a, b) => a * 2 == b), false);
+    expect([1, 2, 3, 4].lock.corresponds([2, 4, 6, 8, 10].lock, (a, b) => a * 2 == b), false);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Tabulate", () {
     expect(IList.tabulate(5, (at) => 'i$at'), ['i0', 'i1', 'i2', 'i3', 'i4']);
 

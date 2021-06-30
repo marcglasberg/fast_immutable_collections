@@ -21,6 +21,8 @@ typedef Predicate<T> = bool Function(T element);
 /// Operation of type that conserve the original type
 typedef Op<T> = T Function(T element);
 
+typedef EQ<T, U> = bool Function(T item, U other);
+
 /// This is an [IList] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -1121,6 +1123,19 @@ abstract class IList<T> // ignore: must_be_immutable
       IList._unsafeFromList(first, config: config),
       IList._unsafeFromList(last, config: config),
     );
+  }
+
+  /// Return true if length match and all Eq are true
+  bool corresponds<U>(IList<U> others, EQ eq) {
+    if (length != others.length) return false;
+    final iterator = others.iterator;
+    for (T item in this) {
+      final next = iterator.moveNext();
+      if (!next) return false;
+      U other = iterator.current;
+      if (!eq(item, other)) return false;
+    }
+    return true;
   }
 
   /// Split the List at specified index
