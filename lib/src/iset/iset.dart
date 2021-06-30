@@ -708,6 +708,9 @@ abstract class ISet<T> // ignore: must_be_immutable
     return length;
   }
 
+  /// Compare with [others] length
+  bool lengthCompare(Iterable others) => length == others.length;
+
   /// Returns any item from the set. This is useful if you need to read
   /// some property that you know all items in the set have.
   ///
@@ -1115,8 +1118,7 @@ abstract class S<T> implements Iterable<T> {
   T get single => iter.single;
 
   @override
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.firstWhere(test, orElse: orElse);
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => iter.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -1132,8 +1134,7 @@ abstract class S<T> implements Iterable<T> {
   String join([String separator = ""]) => iter.join(separator);
 
   @override
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.lastWhere(test, orElse: orElse);
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => iter.lastWhere(test, orElse: orElse);
 
   @override
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);

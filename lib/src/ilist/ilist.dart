@@ -865,6 +865,9 @@ abstract class IList<T> // ignore: must_be_immutable
     return length;
   }
 
+  /// Compare with [others] length
+  bool lengthCompare(Iterable others) => length == others.length;
+
   /// Returns `true` if the given [index] is valid (between `0` and `length - 1`).
   bool inRange(int index) => index >= 0 && index < length;
 
