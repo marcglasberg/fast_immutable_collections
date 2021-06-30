@@ -1805,4 +1805,52 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("Tabulate", () {
+    expect(IList.tabulate(5, (at) => 'i$at'), ['i0', 'i1', 'i2', 'i3', 'i4']);
+
+    expect(IList.tabulate2(3, 2, (at0, at1) => 'i$at0|j$at1'), [
+      ['i0|j0', 'i0|j1'],
+      ['i1|j0', 'i1|j1'],
+      ['i2|j0', 'i2|j1']
+    ]);
+
+    expect(IList.tabulate3(3, 3, 3, (at0, at1, at2) => at0 == at1 && at0 == at2 ? 'X' : 'O'), [
+      [
+        ['X', 'O', 'O'],
+        ['O', 'O', 'O'],
+        ['O', 'O', 'O']
+      ],
+      [
+        ['O', 'O', 'O'],
+        ['O', 'X', 'O'],
+        ['O', 'O', 'O']
+      ],
+      [
+        ['O', 'O', 'O'],
+        ['O', 'O', 'O'],
+        ['O', 'O', 'X']
+      ]
+    ]);
+
+    final by4 = IList.tabulate4(
+        4, 4, 4, 4, (at0, at1, at2, at3) => at0 == at1 && at0 == at2 && at0 == at3 ? 'X' : 'O');
+
+    expect(by4.first.first.first.first, 'X');
+    expect(by4.last.last.last.last, 'X');
+
+    final by5 = IList.tabulate5(
+        5,
+        5,
+        5,
+        5,
+        5,
+        (at0, at1, at2, at3, at4) =>
+            at0 == at1 && at0 == at2 && at0 == at3 && at0 == at4 ? 'X' : 'O');
+
+    expect(by5.first.first.first.first.first, 'X');
+    expect(by5.last.last.last.last.last, 'X');
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 }

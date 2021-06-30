@@ -341,6 +341,51 @@ abstract class IList<T> // ignore: must_be_immutable
     return l.lock;
   }
 
+  static Iterable<U> tabulate<U>(int count, U Function(int at) on) =>
+      Iterable.generate(count, (idx) => on(idx));
+
+  static Iterable<Iterable<U>> tabulate2<U>(
+          int count0, int count1, U Function(int at0, int at1) on) =>
+      Iterable.generate(count0, (idx0) => Iterable.generate(count1, (idx1) => on(idx0, idx1)));
+
+  static Iterable<Iterable<Iterable<U>>> tabulate3<U>(
+          int count0, int count1, int count2, U Function(int at0, int at1, int at2) on) =>
+      Iterable.generate(
+          count0,
+          (idx0) => Iterable.generate(
+                count1,
+                (idx1) => Iterable.generate(count2, (idx2) => on(idx0, idx1, idx2)),
+              ));
+
+  static Iterable<Iterable<Iterable<Iterable<U>>>> tabulate4<U>(int count0, int count1, int count2,
+          int count3, U Function(int at0, int at1, int at2, int at3) on) =>
+      Iterable.generate(
+          count0,
+          (idx0) => Iterable.generate(
+                count1,
+                (idx1) => Iterable.generate(count2,
+                    (idx2) => Iterable.generate(count3, (idx3) => on(idx0, idx1, idx2, idx3))),
+              ));
+
+  static Iterable<Iterable<Iterable<Iterable<Iterable<U>>>>> tabulate5<U>(
+          int count0,
+          int count1,
+          int count2,
+          int count3,
+          int count4,
+          U Function(int at0, int at1, int at2, int at3, int at4) on) =>
+      Iterable.generate(
+          count0,
+          (idx0) => Iterable.generate(
+                count1,
+                (idx1) => Iterable.generate(
+                    count2,
+                    (idx2) => Iterable.generate(
+                        count3,
+                        (idx3) =>
+                            Iterable.generate(count4, (idx4) => on(idx0, idx1, idx2, idx3, idx4)))),
+              ));
+
   /// Global configuration that specifies if, by default, the [IList]s
   /// use equality or identity for their [operator ==].
   /// By default `isDeepEquals: true` (lists are compared by equality) and `cacheHashCode = true`.
