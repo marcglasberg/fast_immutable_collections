@@ -1806,6 +1806,14 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("LengthCompare", () {
+    expect([1, 3, 5, 7, 9].lock.lengthCompare([9, 8, 7, 6, 5]), true);
+    expect([1, 3, 5].lock.lengthCompare([9, 8, 7, 6, 5]), false);
+    expect([1, 3, 5, 7, 9].lock.lengthCompare([9, 6, 5]), false);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("Corresponds", () {
     expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 6, 8, 10], (a, b) => a * 2 == b), true);
     expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 60, 8, 10], (a, b) => a * 2 == b), false);
