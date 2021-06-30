@@ -1126,7 +1126,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Return true if length match and all Eq are true
-  bool corresponds<U>(IList<U> others, EQ eq) {
+  bool corresponds<U>(Iterable<U> others, EQ eq) {
     if (length != others.length) return false;
     final iterator = others.iterator;
     for (T item in this) {
