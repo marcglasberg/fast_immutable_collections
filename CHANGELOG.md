@@ -22,6 +22,13 @@
 
 * `IList.span` Tuple2 will contains the longest consecutive positive predicate then the rest of the list.
 
+* `IList.tabulate` Apply function start at 0 on multiples dimensions
+  
+* `IList.corresponds` Check for correspondance between list and applied function on list
+  
+* `IList.lengthCompare` `ISet.lengthCompare` Direct size comparaison as convenience for composition
+
+
 * Arity property on Abstract Tuple
 
 
