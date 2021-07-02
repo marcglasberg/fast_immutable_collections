@@ -31,6 +31,9 @@
 
 * Arity property on Abstract Tuple
 
+## [5.0.5] - 2021/06/27
+
+* MapOfSets.isEmptyForKey() and MapOfSets.isNotEmptyForKey().
 
 ## [5.0.4] - 2021/06/24
 
