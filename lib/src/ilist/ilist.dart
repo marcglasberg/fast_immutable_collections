@@ -18,6 +18,11 @@ import "unmodifiable_list_from_ilist.dart";
 
 typedef Predicate<T> = bool Function(T element);
 
+/// Operation of type that conserve the original type
+typedef Op<T> = T Function(T element);
+
+typedef EQ<T, U> = bool Function(T item, U other);
+
 /// This is an [IList] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -303,6 +308,85 @@ abstract class IList<T> // ignore: must_be_immutable
     IList.flushFactor = _defaultFlushFactor;
     IList.defaultConfig = _defaultConfig;
   }
+
+  /// Apply Op on previous state of base and return all results
+  static IList<U> iterate<U>(U base, int count, Op<U> op) {
+    IList<U> iterations() {
+      final l = List.filled(count, base, growable: false);
+      U acc = base;
+      int i = 1;
+      l[0] = acc;
+
+      while (i < count) {
+        acc = op(acc);
+        l[i] = acc;
+        i += 1;
+      }
+
+      return l.lock;
+    }
+
+    return count > 0 ? iterations() : <U>[].lock;
+  }
+
+  /// Apply Op on previous state of base while predicate pass then return all results
+  static IList<U> iterateWhile<U>(U base, Predicate<U> test, Op<U> op) {
+    final l = <U>[];
+    U acc = base;
+    l.add(acc);
+
+    while (test(acc)) {
+      acc = op(l.last);
+      l.add(acc);
+    }
+
+    return l.lock;
+  }
+
+  static Iterable<U> tabulate<U>(int count, U Function(int at) on) =>
+      Iterable.generate(count, (idx) => on(idx));
+
+  static Iterable<Iterable<U>> tabulate2<U>(
+          int count0, int count1, U Function(int at0, int at1) on) =>
+      Iterable.generate(count0, (idx0) => Iterable.generate(count1, (idx1) => on(idx0, idx1)));
+
+  static Iterable<Iterable<Iterable<U>>> tabulate3<U>(
+          int count0, int count1, int count2, U Function(int at0, int at1, int at2) on) =>
+      Iterable.generate(
+          count0,
+          (idx0) => Iterable.generate(
+                count1,
+                (idx1) => Iterable.generate(count2, (idx2) => on(idx0, idx1, idx2)),
+              ));
+
+  static Iterable<Iterable<Iterable<Iterable<U>>>> tabulate4<U>(int count0, int count1, int count2,
+          int count3, U Function(int at0, int at1, int at2, int at3) on) =>
+      Iterable.generate(
+          count0,
+          (idx0) => Iterable.generate(
+                count1,
+                (idx1) => Iterable.generate(count2,
+                    (idx2) => Iterable.generate(count3, (idx3) => on(idx0, idx1, idx2, idx3))),
+              ));
+
+  static Iterable<Iterable<Iterable<Iterable<Iterable<U>>>>> tabulate5<U>(
+          int count0,
+          int count1,
+          int count2,
+          int count3,
+          int count4,
+          U Function(int at0, int at1, int at2, int at3, int at4) on) =>
+      Iterable.generate(
+          count0,
+          (idx0) => Iterable.generate(
+                count1,
+                (idx1) => Iterable.generate(
+                    count2,
+                    (idx2) => Iterable.generate(
+                        count3,
+                        (idx3) =>
+                            Iterable.generate(count4, (idx4) => on(idx0, idx1, idx2, idx3, idx4)))),
+              ));
 
   /// Global configuration that specifies if, by default, the [IList]s
   /// use equality or identity for their [operator ==].
@@ -781,6 +865,9 @@ abstract class IList<T> // ignore: must_be_immutable
     return length;
   }
 
+  /// Compare with [others] length
+  bool lengthCompare(Iterable others) => length == others.length;
+
   /// Returns `true` if the given [index] is valid (between `0` and `length - 1`).
   bool inRange(int index) => index >= 0 && index < length;
 
@@ -856,7 +943,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Returns the first element of this Iterable
-  T head() => _l.first;
+  T get head => _l.first;
 
   /// Converts each element to a [String] and concatenates the strings with the [separator]
   /// in-between each concatenation.
@@ -902,7 +989,16 @@ abstract class IList<T> // ignore: must_be_immutable
   Iterable<T> skipWhile(bool Function(T value) test) => _l.skipWhile(test);
 
   /// Returns an [Iterable] that is the original iterable without head, aka first element
-  Iterable<T> tail() => _l.skip(1);
+  Iterable<T> get tail => _l.skip(1);
+
+  Iterable<Iterable<T>> tails() =>
+      IList.iterateWhile(this, (l) => l.isNotEmpty, (l) => l.toIList().tail);
+
+  Iterable<Iterable<T>> inits() =>
+      IList.iterateWhile(this, (l) => l.isNotEmpty, (l) => l.toIList().init);
+
+  /// Returns an [Iterable] that is the original iterable without the last element
+  Iterable<T> get init => _l.take(_l.length - 1);
 
   /// Returns an [Iterable] of the [count] first elements of this iterable.
   @override
@@ -915,6 +1011,9 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Returns an [Iterable] with all elements that satisfy the predicate [test].
   @override
   Iterable<T> where(Predicate<T> test) => _l.where(test);
+
+  /// Returns an [Iterable] with all elements that doest NOT satisfy the predicate [test].
+  Iterable<T> whereNot(Predicate<T> test) => _l.where((e) => !test(e));
 
   /// Returns an [Iterable] with all elements that have type [E].
   @override
@@ -1028,6 +1127,22 @@ abstract class IList<T> // ignore: must_be_immutable
       IList._unsafeFromList(last, config: config),
     );
   }
+
+  /// Return true if length match and all Eq are true
+  bool corresponds<U>(Iterable<U> others, EQ eq) {
+    if (length != others.length) return false;
+    final iterator = others.iterator;
+    for (T item in this) {
+      final next = iterator.moveNext();
+      if (!next) return false;
+      U other = iterator.current;
+      if (!eq(item, other)) return false;
+    }
+    return true;
+  }
+
+  /// Split the List at specified index
+  Tuple2<Iterable<T>, Iterable<T>> splitAt(int index) => Tuple2(take(index), skip(index));
 
   /// Moves all items that satisfy the provided [test] to the end of the list.
   /// Keeps the relative order of the moved items.
@@ -1594,15 +1709,25 @@ abstract class IList<T> // ignore: must_be_immutable
   IList<T> shuffle([Random? random]) =>
       IList._unsafeFromList(toList()..shuffle(random), config: config);
 
+  /// Positives predicate results count
+  int count(Predicate<T> p) => where(p).length;
+
+  /// Split list based on predicate p. (takeWhile p, dropWhile p)
+  Tuple2<Iterable<T>, Iterable<T>> span(Predicate<T> p) {
+    final i = indexWhere((e) => !p(e));
+    final idx = i < 0 ? length : i;
+    return Tuple2(getRange(0, idx), getRange(idx, length));
+  }
+
   /// Aggregate each element with corresponding index
   Iterable<Tuple2<int, T>> zipWithIndex() =>
-      List.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
+      Iterable.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
 
   /// Aggregate two sources trimming by the shortest source
   Iterable<Tuple2<T, T>> zip(Iterable<T> otherIterable) {
     final other = otherIterable.toList();
     final minLength = min(length, other.length);
-    return List.generate(minLength, (index) => Tuple2(_l[index], other[index])).toIList(config);
+    return Iterable.generate(minLength, (index) => Tuple2(_l[index], other[index])).toIList(config);
   }
 
   /// Aggregate two sources based on the longest source.
@@ -1622,7 +1747,7 @@ abstract class IList<T> // ignore: must_be_immutable
             ? fill(index)
             : null;
 
-    return List.generate(
+    return Iterable.generate(
         maxLength,
         (index) => Tuple2<T?, U?>(
               getOrFill(current, index, currentFill) as T?,
@@ -1769,8 +1894,7 @@ abstract class L<T> implements Iterable<T> {
   T get single;
 
   @override
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.firstWhere(test, orElse: orElse);
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => iter.firstWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -1786,8 +1910,7 @@ abstract class L<T> implements Iterable<T> {
   String join([String separator = ""]) => iter.join(separator);
 
   @override
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.lastWhere(test, orElse: orElse);
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => iter.lastWhere(test, orElse: orElse);
 
   @override
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);

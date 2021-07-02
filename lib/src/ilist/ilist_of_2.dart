@@ -28,9 +28,14 @@ class IListOf2<T> {
 // TODO required non-function type alias since dart 2.13
 // typedef IndexedZip<T> = Zip<int, T>;
 
+abstract class Tuple {
+  final int arity;
+  const Tuple(this.arity);
+}
+
 /// Resulting composition of multiple sources like indexes or other Iterables.
 /// Adapted from Tuple package
-class Tuple2<T1, T2> {
+class Tuple2<T1, T2> extends Tuple {
   /// Returns the first item of the tuple
   final T1 first;
 
@@ -38,7 +43,15 @@ class Tuple2<T1, T2> {
   final T2 second;
 
   /// Creates a new tuple value with the specified items.
-  const Tuple2(this.first, this.second);
+  const Tuple2(this.first, this.second) : super(2);
+
+  /// Operator access
+  Object? operator [](int i) {
+    if (i == 0)
+      return first;
+    else if (i == 1) return second;
+    throw IndexError(i, this);
+  }
 
   /// Create a new tuple value with the specified list [items].
   factory Tuple2.fromList(List items) {
@@ -59,7 +72,8 @@ class Tuple2<T1, T2> {
   ///
   /// The elements are in item order. The list is variable-length
   /// if [growable] is true.
-  List toList({bool growable = false}) => List.from([first, second], growable: growable);
+  List toList({bool growable = false}) =>
+      List.from([first, second], growable: growable);
 
   @override
   String toString() => '($first, $second)';

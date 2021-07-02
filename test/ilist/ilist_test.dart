@@ -1006,6 +1006,15 @@ void main() {
     expect(ilist.where((int? v) => v! < 100), [1, 2, 3, 4, 5, 6]);
   });
 
+  test("where NOT", () {
+    final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
+
+    expect(ilist.whereNot((int? v) => v! < 0), [1, 2, 3, 4, 5, 6]);
+    expect(ilist.whereNot((int? v) => v! < 3), [3, 4, 5, 6]);
+    expect(ilist.whereNot((int? v) => v! < 5), [5, 6]);
+    expect(ilist.whereNot((int? v) => v! < 100), []);
+  });
+
   //////////////////////////////////////////////////////////////////////////////
 
   test("whereType", () {
@@ -1625,15 +1634,54 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("head, tail", () {
-    var ilist = ["a", "b", "c", "d", "e", "f"].lock;
+  test("head, tail, init", () {
+    final ilist = ["a", "b", "c", "d", "e", "f"].lock;
 
-    expect(ilist.head(), "a");
-    expect(ilist.tail(), ["b", "c", "d", "e", "f"].lock);
-    });
-  
+    expect(ilist.head, "a");
+    expect(ilist.tail, ["b", "c", "d", "e", "f"].lock);
+    expect(ilist.init, ["a", "b", "c", "d", "e"].lock);
+  });
+
+  test("heads, tails, inits", () {
+    final ilist = ["a", "b", "c", "d", "e", "f"].lock;
+
+    expect(
+        ilist.tails(),
+        [
+          ["a", "b", "c", "d", "e", "f"].lock,
+          ["b", "c", "d", "e", "f"].lock,
+          ["c", "d", "e", "f"].lock,
+          ["d", "e", "f"].lock,
+          ["e", "f"].lock,
+          ["f"].lock,
+          [].lock,
+        ].lock);
+
+    expect(
+        ilist.inits(),
+        [
+          ["a", "b", "c", "d", "e", "f"].lock,
+          ["a", "b", "c", "d", "e"].lock,
+          ["a", "b", "c", "d"].lock,
+          ["a", "b", "c"].lock,
+          ["a", "b"].lock,
+          ["a"].lock,
+          [].lock,
+        ].lock);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("span", () {
+    final ilist = [0, 2, 4, 6, 7, 8, 9, 2].lock;
+
+    final evenSpan = ilist.span((e) => e % 2 == 0);
+    expect(evenSpan.first.toIList(), [0, 2, 4, 6]);
+    expect(evenSpan.second.toIList(), [7, 8, 9, 2]);
+  });
+
 //////////////////////////////////////////////////////////////////////////////
-  
+
   test("Zip with Index", () {
     //
     final ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
@@ -1678,8 +1726,8 @@ void main() {
 
   test("ZipAll with another source replacing with fill method value if available or else null", () {
     //
-    final countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
-    final capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
+    final countries = <String?>['France', 'Germany', 'Brazil', 'Japan'].lock;
+    final capitals = <String?>['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
 
     expect(
         countries.zipAll(capitals),
@@ -1722,6 +1770,103 @@ void main() {
           Tuple2('Brazil', 300),
           Tuple2('Japan', 400)
         ]));
+
+    final unzipped = countries.zipAll(capitals).unzip();
+    expect(unzipped.first.toIList(), countries);
+    expect(unzipped.second.toIList(), capitals);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Iterate apply ops n times to create a list", () {
+    expect(IList.iterate<int>(1, 5, (e) => e + 2), [1, 3, 5, 7, 9]);
+  });
+
+  test("Iterate apply ops while Predicate succeed", () {
+    expect(IList.iterateWhile<int>(1, (e) => e < 9, (e) => e + 2), [1, 3, 5, 7, 9]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Split at specified index", () {
+    final base = [1, 2, 3, 4, 5, 6, 7, 8, 9].lock;
+    final split = base.splitAt(4);
+
+    expect(split.first.toIList(), base.sublist(0, 4));
+    expect(split.second.toIList(), base.sublist(4));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Count on predicates", () {
+    expect([1, 3, 5, 7, 9].lock.count((e) => e % 2 == 0), 0);
+    expect([2, 4, 6, 8, 10, 11].lock.count((e) => e % 2 == 0), 5);
+    expect([1, 3, 5, 7, 9].lock.count((e) => e == 5), 1);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("LengthCompare", () {
+    expect([1, 3, 5, 7, 9].lock.lengthCompare([9, 8, 7, 6, 5]), true);
+    expect([1, 3, 5].lock.lengthCompare([9, 8, 7, 6, 5]), false);
+    expect([1, 3, 5, 7, 9].lock.lengthCompare([9, 6, 5]), false);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Corresponds", () {
+    expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 6, 8, 10], (a, b) => a * 2 == b), true);
+    expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 60, 8, 10], (a, b) => a * 2 == b), false);
+    expect([1, 2, 3, 4, 5].lock.corresponds([2, 4, 6, 8], (a, b) => a * 2 == b), false);
+    expect([1, 2, 3, 4].lock.corresponds([2, 4, 6, 8, 10], (a, b) => a * 2 == b), false);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("Tabulate", () {
+    expect(IList.tabulate(5, (at) => 'i$at'), ['i0', 'i1', 'i2', 'i3', 'i4']);
+
+    expect(IList.tabulate2(3, 2, (at0, at1) => 'i$at0|j$at1'), [
+      ['i0|j0', 'i0|j1'],
+      ['i1|j0', 'i1|j1'],
+      ['i2|j0', 'i2|j1']
+    ]);
+
+    expect(IList.tabulate3(3, 3, 3, (at0, at1, at2) => at0 == at1 && at0 == at2 ? 'X' : 'O'), [
+      [
+        ['X', 'O', 'O'],
+        ['O', 'O', 'O'],
+        ['O', 'O', 'O']
+      ],
+      [
+        ['O', 'O', 'O'],
+        ['O', 'X', 'O'],
+        ['O', 'O', 'O']
+      ],
+      [
+        ['O', 'O', 'O'],
+        ['O', 'O', 'O'],
+        ['O', 'O', 'X']
+      ]
+    ]);
+
+    final by4 = IList.tabulate4(
+        4, 4, 4, 4, (at0, at1, at2, at3) => at0 == at1 && at0 == at2 && at0 == at3 ? 'X' : 'O');
+
+    expect(by4.first.first.first.first, 'X');
+    expect(by4.last.last.last.last, 'X');
+
+    final by5 = IList.tabulate5(
+        5,
+        5,
+        5,
+        5,
+        5,
+        (at0, at1, at2, at3, at4) =>
+            at0 == at1 && at0 == at2 && at0 == at3 && at0 == at4 ? 'X' : 'O');
+
+    expect(by5.first.first.first.first.first, 'X');
+    expect(by5.last.last.last.last.last, 'X');
   });
 
   //////////////////////////////////////////////////////////////////////////////

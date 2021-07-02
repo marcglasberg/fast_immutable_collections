@@ -1,3 +1,36 @@
+## [5.1.0] - 2021/06/25
+
+* Breaking: Align head and tail to dart convention as getter like first and last
+
+* Introduce the OP typedef.
+  
+* `IList.init` Access init part of the list 
+  
+* `IList.inits`, `IList.tails` methods
+
+* `IList.splitAt` Tuples from original list at specified index.
+  
+* `IList.whereNot` Reverse predicate for Where.
+
+* `Iterable<Tuple2<U, V>>.unzip()` extension.
+
+* `IList.count(Predicate)` count positive predicates.
+
+* `IList.iterate` generate IList applying OP multiple times.
+  
+* `IList.iterateWhile` generate IList applying OP while Predicate stand.
+
+* `IList.span` Tuple2 will contains the longest consecutive positive predicate then the rest of the list.
+
+* `IList.tabulate` Apply function start at 0 on multiples dimensions
+  
+* `IList.corresponds` Check for correspondance between list and applied function on list
+  
+* `IList.lengthCompare` `ISet.lengthCompare` Direct size comparaison as convenience for composition
+
+
+* Arity property on Abstract Tuple
+
 ## [5.0.5] - 2021/06/27
 
 * MapOfSets.isEmptyForKey() and MapOfSets.isNotEmptyForKey().
