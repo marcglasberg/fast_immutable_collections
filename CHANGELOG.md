@@ -1,4 +1,4 @@
-## [5.0.5] - 2021/06/25
+## [5.1.0] - 2021/06/25
 
 * Breaking: Align head and tail to dart convention as getter like first and last
 
