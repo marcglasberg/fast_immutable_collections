@@ -105,9 +105,9 @@ class ListMap<K, V> implements Map<K, V> {
   }
 
   /// Creates a [ListMap] backed by the provided map. No defensive copy will be
-  /// made, so you have to make sure that the number of entries of the original
-  /// map won't change after the [ListMap] is created, since this will render
-  /// the [ListMap] in an invalid state.
+  /// made, so you have to make sure that the original map won't change after
+  /// the [ListMap] is created, since this will render the [ListMap] in an
+  /// invalid state.
   ///
   /// If [sort] is true, it will be sorted with [compare], if provided,
   /// or with [compareObject] if not provided. If [sort] is false,
@@ -123,6 +123,26 @@ class ListMap<K, V> implements Map<K, V> {
   })  : assert(compare == null || sort == true),
         _list = List.of(_map.keys, growable: false) {
     if (sort) _list.sort(compare ?? compareObject);
+  }
+
+  /// Creates a [ListMap] backed by the provided [map] and [list]. No defensive
+  /// copies will be made, so you have to make sure that:
+  ///
+  /// 1) The number of entries of the [map] and [list] won't change after
+  /// the [ListMap] is created.
+  ///
+  /// 2) The [map] and [list] won't change after the [ListMap] is created.
+  ///
+  /// 3) The [list] items are the [map] keys (but the order of the map items is
+  /// irrelevant).
+  ///
+  ListMap.unsafeFrom({
+    required Map<K, V> map,
+    required List<K> list,
+  })   : _map = map,
+        _list = list {
+    if (map.length != list.length)
+      throw AssertionError('Map has ${map.length} but list has ${list.length} items.');
   }
 
   /// The value for the given [key], or `null` if [key] is not in the map.

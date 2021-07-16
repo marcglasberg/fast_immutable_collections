@@ -262,6 +262,29 @@ void main() {
 
   /////////////////////////////////////////////////////////////////////////////
 
+  test("unsafeFrom", () {
+    Map<String, int> map = {"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6};
+    List<String> list = ["b", "e", "a", "d", "f", "c"];
+    ListMap<String, int> listMap = ListMap.unsafeFrom(map: map, list: list);
+
+    expect(listMap.entryAt(0).key, "b");
+    expect(listMap.entryAt(0).value, 2);
+    expect(listMap.entryAt(1).key, "e");
+    expect(listMap.entryAt(1).value, 5);
+    expect(listMap.entryAt(2).key, "a");
+    expect(listMap.entryAt(2).value, 1);
+    expect(listMap.entryAt(3).key, "d");
+    expect(listMap.entryAt(3).value, 4);
+    expect(listMap.entryAt(4).key, "f");
+    expect(listMap.entryAt(4).value, 6);
+    expect(listMap.entryAt(5).key, "c");
+    expect(listMap.entryAt(5).value, 3);
+
+    expect(() => listMap.entryAt(6).key, throwsRangeError);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+
   test("[]=", () {
     var listMap = ListMap.of({"b": 1, "a": 2, "c": 10});
     listMap["a"] = 100;
