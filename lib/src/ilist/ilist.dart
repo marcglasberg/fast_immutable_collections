@@ -1084,6 +1084,13 @@ abstract class IList<T> // ignore: must_be_immutable
   IList<T> sort([int Function(T a, T b)? compare]) =>
       IList._unsafe(_l.sort(compare), config: config);
 
+  /// Sorts this list in reverse order in relation to the default [sort] method.
+  IList<T> sortReversed([int Function(T a, T b)? compare]) {
+    return (compare != null)
+        ? sort((T a, T b) => compare(b, a))
+        : sort((T a, T b) => compareObject(b, a));
+  }
+
   /// Sorts this list according to the order specified by the [compare] function.
   ///
   /// This is similar to [sort], but uses a [merge sort algorithm](https://en.wikipedia.org/wiki/Merge_sort).

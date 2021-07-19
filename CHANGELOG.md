@@ -1,3 +1,7 @@
+## [5.1.2] - 2021/07/19
+
+* `IList.sortReversed()`.
+
 ## [5.1.1] - 2021/07/16
 
 * `ListMap.unsafeFrom()` constructor.
@@ -24,13 +28,13 @@
   
 * `IList.iterateWhile` generate IList applying OP while Predicate stand.
 
-* `IList.span` Tuple2 will contains the longest consecutive positive predicate then the rest of the list.
+* `IList.span` Tuple2 will contain the longest consecutive positive predicate then the rest of the list.
 
 * `IList.tabulate` Apply function start at 0 on multiples dimensions.
   
-* `IList.corresponds` Check for correspondance between list and applied function on list.
+* `IList.corresponds` Check for correspondence between list and applied function on list.
   
-* `IList.lengthCompare` `ISet.lengthCompare` Direct size comparaison as convenience for composition.
+* `IList.lengthCompare` `ISet.lengthCompare` Direct size comparison as convenience for composition.
 
 * Arity property on Abstract Tuple.
 
