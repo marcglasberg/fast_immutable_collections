@@ -28,6 +28,7 @@ class ISetConst<T> // ignore: must_be_immutable
   /// IMPORTANT: You must always use this with the `const` keyword.
   /// It's always wrong to use an `ISetConst` which is not constant.
   ///
+  @literal
   const ISetConst(
     this._set,
     // Note: The _set can't be optional. This doesn't work: [this._set = const {}]

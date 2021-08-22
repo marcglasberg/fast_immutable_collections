@@ -36,6 +36,7 @@ class IListConst<T> // ignore: must_be_immutable
   /// IMPORTANT: You must always use this with the `const` keyword.
   /// It's always wrong to use an `IListConst` which is not constant.
   ///
+  @literal
   const IListConst(this._list
       // Note: The _list can't be optional. This doesn't work: [this._list = const []]
       // because when you do this _list will be List<Never> which will create problems.
