@@ -679,6 +679,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Returns a new list with all [items] added to the end of the current list,
   /// (thus extending the [length] by the [length] of items).
   IList<T> addAll(Iterable<T> items) {
+    if (_l is L<Never>) return IListImpl.unsafe(_l.cast<T>().toList(), config: config);
     var result = IList<T>._unsafe(_l.addAll(items), config: config);
 
     // A list created with `addAll` has a larger counter than both its source

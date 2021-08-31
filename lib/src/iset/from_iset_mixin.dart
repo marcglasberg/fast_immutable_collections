@@ -121,9 +121,12 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   I operator +(Iterable<T> other) => newInstance(iter + other);
 
-  I add(T item) => newInstance(iter.add(item));
+  /// If we have ISet<Never>, we cast it to ISet<T>.
+  ISet<T> get _castIter => (iter is ISet<Never>) ? iter.cast<T>().toISet() : iter;
 
-  I addAll(Iterable<T> items) => newInstance(iter.addAll(items));
+  I add(T item) => newInstance(_castIter.add(item));
+
+  I addAll(Iterable<T> items) => newInstance(_castIter.addAll(items));
 
   I clear() => newInstance(iter.clear());
 

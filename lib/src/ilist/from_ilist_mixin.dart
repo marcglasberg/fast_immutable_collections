@@ -110,8 +110,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   T? get singleOrNull => iter.singleOrNull;
 
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.firstWhere(test, orElse: orElse);
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => iter.firstWhere(test, orElse: orElse);
 
   T? firstWhereOrNull(Predicate<T> test) => iter.firstWhereOrNull(test);
 
@@ -124,8 +123,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   String join([String separator = ""]) => iter.join(separator);
 
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.lastWhere(test, orElse: orElse);
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => iter.lastWhere(test, orElse: orElse);
 
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 
@@ -158,9 +156,14 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   I operator +(Iterable<T> other) => newInstance(iter + other);
 
-  I add(T item) => newInstance(iter.add(item));
+  /// If we have IList<Never>, we cast it to IList<T>.
+  IList<T> get _castIter => (iter is IList<Never>) ? iter.cast<T>().toIList() : iter;
 
-  I addAll(Iterable<T> items) => newInstance(iter.addAll(items));
+  I add(T item) {
+    return newInstance(_castIter.add(item));
+  }
+
+  I addAll(Iterable<T> items) => newInstance(_castIter.addAll(items));
 
   IMap<int, T> asMap() => iter.asMap();
 
@@ -189,8 +192,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
 
   int lastIndexOf(T element, [int? start]) => iter.lastIndexOf(element, start);
 
-  int lastIndexWhere(Predicate<T> test, [int? start]) =>
-      iter.lastIndexWhere(test, start);
+  int lastIndexWhere(Predicate<T> test, [int? start]) => iter.lastIndexWhere(test, start);
 
   T lastOr(T orElse) => iter.lastOr(orElse);
 
@@ -217,8 +219,7 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   I replaceAll({required T from, required T to}) =>
       newInstance(iter.replaceAll(from: from, to: to));
 
-  I replaceAllWhere(Predicate<T> test, T to) =>
-      newInstance(iter.replaceAllWhere(test, to));
+  I replaceAllWhere(Predicate<T> test, T to) => newInstance(iter.replaceAllWhere(test, to));
 
   I replaceFirst({required T from, required T to}) =>
       newInstance(iter.replaceFirst(from: from, to: to));

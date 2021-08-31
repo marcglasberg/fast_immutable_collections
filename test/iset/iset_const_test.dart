@@ -236,4 +236,34 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("Test we can cast from ISetConst<Never>, when using FromISetMixin.", () {
+    MySet<int> mySet1 = MySet.empty();
+    mySet1 = mySet1.add(1);
+    expect(mySet1, [1]);
+
+    MySet<int> mySet2 = MySet.empty();
+    mySet2 = mySet2.addAll([1, 2, 3]);
+    expect(mySet2, [1, 2, 3]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class MySet<A extends num> with FromISetMixin<A, MySet<A>> implements Iterable<A> {
+  final ISet<A> numbs;
+
+  MySet([Iterable<A>? activities]) : numbs = ISet(activities);
+
+  const MySet.empty() : numbs = const ISetConst({});
+
+  @override
+  MySet<A> newInstance(ISet<A> iSet) => MySet<A>(iSet);
+
+  @override
+  ISet<A> get iter => numbs;
 }

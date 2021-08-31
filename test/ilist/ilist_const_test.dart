@@ -22,17 +22,17 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
-    expect(IListConst([]).isEmpty, isTrue);
-    expect(IListConst([]).isNotEmpty, isFalse);
+    expect(const IListConst([]).isEmpty, isTrue);
+    expect(const IListConst([]).isNotEmpty, isFalse);
 
-    expect(IListConst<String>([]).isEmpty, isTrue);
-    expect(IListConst<String>([]).isNotEmpty, isFalse);
+    expect(const IListConst<String>([]).isEmpty, isTrue);
+    expect(const IListConst<String>([]).isNotEmpty, isFalse);
 
-    expect(IListConst([1]).isEmpty, isFalse);
-    expect(IListConst([1]).isNotEmpty, isTrue);
+    expect(const IListConst([1]).isEmpty, isFalse);
+    expect(const IListConst([1]).isNotEmpty, isTrue);
 
-    expect(IListConst<int>([]).isEmpty, isTrue);
-    expect(IListConst<int>([]).isNotEmpty, isFalse);
+    expect(const IListConst<int>([]).isEmpty, isTrue);
+    expect(const IListConst<int>([]).isNotEmpty, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -65,7 +65,7 @@ void main() {
 
   test("withConfig", () {
     // 1) Regular usage
-    final IList<int> ilist = IListConst([1, 2]);
+    const IList<int> ilist = IListConst([1, 2]);
 
     expect(ilist.isDeepEquals, isTrue);
 
@@ -230,4 +230,32 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+
+  test("Test we can cast from IListConst<Never>, when using FromIListMixin.", () {
+    MyList<int> myList1 = MyList.empty();
+    myList1 = myList1.add(1);
+    expect(myList1, [1]);
+
+    MyList<int> myList2 = MyList.empty();
+    myList2 = myList2.addAll([1, 2, 3]);
+    expect(myList2, [1, 2, 3]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class MyList<A extends num> with FromIListMixin<A, MyList<A>> implements Iterable<A> {
+  final IList<A> numbs;
+
+  MyList([Iterable<A>? activities]) : numbs = IList(activities);
+
+  const MyList.empty() : numbs = const IListConst([]);
+
+  @override
+  MyList<A> newInstance(IList<A> ilist) => MyList<A>(ilist);
+
+  @override
+  IList<A> get iter => numbs;
 }

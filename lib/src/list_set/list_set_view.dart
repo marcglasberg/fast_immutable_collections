@@ -1,4 +1,5 @@
 import "dart:math";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -30,10 +31,11 @@ class ListSetView<T> implements ListSet<T> {
   @override
   bool any(Predicate<T> test) => _set.any(test);
 
+  /// Returns a list-set of [R] instances.
+  /// If this list-set contains instances which cannot be cast to [R],
+  /// it will throw an error.
   @override
-  ListSet<E> cast<E>() {
-    throw UnsupportedError("Can't cast a ListSetView.");
-  }
+  ListSetView<R> cast<R>() => ListSetView<R>(_set.cast<R>());
 
   @override
   void clear() {
@@ -65,12 +67,10 @@ class ListSetView<T> implements ListSet<T> {
   T get last => _set.last;
 
   @override
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
-      _set.firstWhere(test, orElse: orElse);
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => _set.firstWhere(test, orElse: orElse);
 
   @override
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
-      _set.lastWhere(test, orElse: orElse);
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => _set.lastWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>

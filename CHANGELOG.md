@@ -1,3 +1,7 @@
+## [5.1.3] - 2021/08/31
+
+* `FromIListMixin` and `FromISetMixin` improvement to deal with `IListConst<Never>`.
+
 ## [5.1.2] - 2021/07/19
 
 * `IList.sortReversed()`.
