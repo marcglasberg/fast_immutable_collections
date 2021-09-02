@@ -66,7 +66,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   IList<T> toIList([ConfigList? config]) =>
       IList<T>.withConfig(this, config ?? IList.defaultConfig);
 
-  /// Removed, since now you can: import "package:collection/collection.dart";
+  // Removed, since now you can: import "package:collection/collection.dart";
   // /// Returns the first element that satisfies the given predicate [test].
   // ///
   // /// If no element satisfies [test], the result of invoking the [orElse]
