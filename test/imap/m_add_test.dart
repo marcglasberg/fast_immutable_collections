@@ -30,7 +30,7 @@ void main() {
   test("containsKey", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
-    final MAdd<String, int> mAdd = MAdd(mFlat, "d", 4);
+    final MAdd<String?, int> mAdd = MAdd(mFlat, "d", 4);
     expect(mAdd.containsKey("a"), isTrue);
     expect(mAdd.containsKey("b"), isFalse);
     expect(mAdd.containsKey("d"), isTrue);

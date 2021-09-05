@@ -9,7 +9,6 @@ void main() {
     ImmutableCollection.lockConfig();
 
     expect(() => ISet.flushFactor = 1000, throwsStateError);
-    expect(() => ISet.asyncAutoflush = false, throwsStateError);
     expect(() => ISet.resetAllConfigurations(), throwsStateError);
     expect(() => ISet.defaultConfig = ConfigSet(cacheHashCode: false), throwsStateError);
   });

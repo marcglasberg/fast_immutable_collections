@@ -297,13 +297,6 @@ class IMap<K, V> // ignore: must_be_immutable
   /// before it is eligible for auto-flush. Must be larger than `0`.
   static int get flushFactor => _flushFactor;
 
-  /// Global configuration that specifies if auto-flush of [IMap]s should be
-  /// async. The default is `true`. When the autoflush is async, it will only
-  /// happen after the async gap, no matter how many operations a collection
-  /// undergoes. When the autoflush is sync, it may flush one or more times
-  /// during the same task.
-  static bool get asyncAutoflush => _asyncAutoflush;
-
   /// See also: [ConfigList], [ImmutableCollection], [resetAllConfigurations]
   static set defaultConfig(ConfigMap config) {
     if (_defaultConfig == config) return;
@@ -323,70 +316,32 @@ class IMap<K, V> // ignore: must_be_immutable
       throw StateError("flushFactor can't be $value.");
   }
 
-  /// See also: [ImmutableCollection]
-  static set asyncAutoflush(bool value) {
-    if (_asyncAutoflush == value) return;
-    if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _asyncAutoflush = value;
-  }
-
   static ConfigMap _defaultConfig = const ConfigMap();
 
-  static const _defaultFlushFactor = 30;
+  static const _defaultFlushFactor = 50;
 
   static int _flushFactor = _defaultFlushFactor;
 
-  static bool _asyncAutoflush = true;
-
   int _counter = 0;
 
-  /// ## Sync Auto-flush
+  /// ## Auto-flush
   ///
   /// Keeps a counter variable which starts at `0` and is incremented each
-  /// time some collection methods are used.
+  /// time collection methods are used. As soon as counter reaches the
+  /// refresh-factor, the collection is flushed and `counter` returns to `0`.
   ///
-  /// As soon as counter reaches the refresh-factor, the collection is flushed
-  /// and `counter` returns to `0`.
-  ///
-  /// ## Async Auto-flush
-  ///
-  /// Keeps a counter variable which starts at `0` and is incremented each
-  /// time some collection methods are used, as long as `counter >= 0`.
-  ///
-  /// As soon as counter reaches the refresh-factor, the collection is marked
-  /// for flushing. There is also a global counter called an `asyncCounter`
-  /// which starts at `1`. When a collection is marked for flushing, it first
-  /// creates a future to increment the `asyncCounter`. Then, the collection's
-  /// own `counter` is set to be `-asyncCounter`. Having a negative value means
-  /// the collection's `counter` will not be incremented anymore. However, when
-  /// `counter` is negative and different from `-asyncCounter` it means we are
-  /// one async gap after the collection was marked for flushing.
-  /// At this point, the collection will flush and `counter` returns to zero.
-  ///
-  /// Note: [_count] is called in methods which read values. It's not called
-  /// in methods which create new IMaps or flush the map.
+  /// Note: [_count] is called in all methods that change, and some that read.
+  /// It's not called in methods which create new [ILists] or flush the list.
   void _count() {
     if (!ImmutableCollection.autoFlush) return;
+
     if (isFlushed) {
       _counter = 0;
     } else {
-      if (_counter >= 0) {
-        _counter++;
-        if (_counter == _flushFactor) {
-          if (asyncAutoflush) {
-            ImmutableCollection.markAsyncCounterToIncrement();
-            _counter = -ImmutableCollection.asyncCounter;
-          } else {
-            flush;
-            _counter = 0;
-          }
-        }
-      } else {
-        if (_counter != -ImmutableCollection.asyncCounter) {
-          flush;
-          _counter = 0;
-        }
+      _counter++;
+      if (_counter >= _flushFactor) {
+        flush;
+        _counter = 0;
       }
     }
   }
@@ -432,14 +387,12 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns an [Iterable] of the map keys.
   Iterable<K> get keys {
-    _count();
     return _m.keys;
   }
 
   /// Returns an [Iterable] of the map values, in the same order as the keys.
   /// If you need to sort the values, please use [toValueIList].
   Iterable<V> get values {
-    _count();
     return _m.values;
   }
 
@@ -454,7 +407,6 @@ class IMap<K, V> // ignore: must_be_immutable
     int Function(MapEntry<K, V>? a, MapEntry<K, V>? b)? compare,
     ConfigList? config,
   }) {
-    _count();
     var result = IList<MapEntry<K, V>>.withConfig(entries, config ?? IList.defaultConfig);
     if (compare != null || this.config.sort) result = result.sort(compare);
     return result;
@@ -471,7 +423,6 @@ class IMap<K, V> // ignore: must_be_immutable
     int Function(K? a, K? b)? compare,
     ConfigList? config,
   }) {
-    _count();
     var result = IList.withConfig(keys, config ?? IList.defaultConfig);
     if (compare != null || this.config.sort) result = result.sort(compare);
     return result;
@@ -492,7 +443,6 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     assert(compare == null || sort == true);
 
-    _count();
     var result = IList.withConfig(values, config ?? IList.defaultConfig);
     if (sort) result = result.sort(compare ?? compareObject);
     return result;
@@ -510,7 +460,6 @@ class IMap<K, V> // ignore: must_be_immutable
   ISet<K> toKeyISet({
     ConfigSet? config,
   }) {
-    _count();
     return ISet.withConfig(keys, config ?? ISet.defaultConfig);
   }
 
@@ -519,7 +468,6 @@ class IMap<K, V> // ignore: must_be_immutable
   ISet<V> toValueISet({
     ConfigSet? config,
   }) {
-    _count();
     return ISet.withConfig(values, config ?? ISet.defaultConfig);
   }
 
@@ -529,7 +477,6 @@ class IMap<K, V> // ignore: must_be_immutable
   /// or if you explicitly provide a [compare] method.
   ///
   List<MapEntry<K, V>> toEntryList({int Function(MapEntry<K, V> a, MapEntry<K, V> b)? compare}) {
-    _count();
     var result = List<MapEntry<K, V>>.of(entries);
     if (compare != null || config.sort) result.sort(compare ?? compareObject);
     return result;
@@ -541,7 +488,6 @@ class IMap<K, V> // ignore: must_be_immutable
   /// or if you explicitly provide a [compare] method.
   ///
   List<K> toKeyList({int Function(K a, K b)? compare}) {
-    _count();
     var result = List.of(keys);
     if (compare != null || config.sort) result.sort(compare);
     return result;
@@ -559,7 +505,6 @@ class IMap<K, V> // ignore: must_be_immutable
   }) {
     assert(compare == null || sort == true);
 
-    _count();
     var result = List.of(values);
     if (sort) result.sort(compare ?? compareObject);
     return result;
@@ -569,8 +514,6 @@ class IMap<K, V> // ignore: must_be_immutable
   /// The set will be sorted if the map's [sort] configuration is `true`,
   /// or if you explicitly provide a [compare] method.
   Set<MapEntry<K, V>> toEntrySet({int Function(MapEntry<K, V> a, MapEntry<K, V> b)? compare}) {
-    _count();
-
     if (compare == null) {
       return Set<MapEntry<K, V>>.of(entries);
     } else {
@@ -583,8 +526,6 @@ class IMap<K, V> // ignore: must_be_immutable
   /// or if you explicitly provide a [compare] method.
   ///
   Set<K> toKeySet({int Function(K a, K b)? compare}) {
-    _count();
-
     if (compare == null) {
       return Set<K>.of(keys);
     } else {
@@ -597,7 +538,6 @@ class IMap<K, V> // ignore: must_be_immutable
   /// or if you explicitly provide a [compare] method.
   ///
   Set<V> toValueSet({int Function(V a, V b)? compare}) {
-    _count();
     return toValueList(compare: compare).toSet();
   }
 
@@ -780,7 +720,8 @@ class IMap<K, V> // ignore: must_be_immutable
     // If the outer map is used, it will be flushed before the source map.
     // If the source map is not used directly, it will not flush unnecessarily,
     // and also may be garbage collected.
-    result._counter = _counter + 1;
+    result._counter = _counter;
+    result._count();
 
     return result;
   }
@@ -814,7 +755,8 @@ class IMap<K, V> // ignore: must_be_immutable
     // If the outer map is used, it will be flushed before the source maps.
     // If the source maps are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((imap is IMap<K, V>) ? imap._counter : 0)) + 1;
+    result._counter = max(_counter, ((imap is IMap<K, V>) ? imap._counter : 0));
+    result._count();
 
     return result;
   }
@@ -823,13 +765,14 @@ class IMap<K, V> // ignore: must_be_immutable
   /// Note: [map] entries that already exist in the original map will overwrite
   /// those of the original map, in place (keeping order).
   IMap<K, V> addMap(Map<K, V> map) {
-    IMap<K, V> result;
-    result = config.sort
+    IMap<K, V> result = config.sort
         ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(map.entries), config: config),
             config: config)
         : IMap<K, V>._unsafe(_m.addMap(map), config: config);
 
-    result._counter = _counter + 1;
+    result._counter = _counter;
+    result._count();
+
     return result;
   }
 
@@ -843,7 +786,9 @@ class IMap<K, V> // ignore: must_be_immutable
             config: config)
         : IMap<K, V>._unsafe(_m.addEntries(entries), config: config);
 
-    result._counter = _counter + 1;
+    result._counter = _counter;
+    result._count();
+
     return result;
   }
 
@@ -876,10 +821,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Checks whether any key-value pair of this map satisfies [test].
-  bool any(bool Function(K key, V value) test) {
-    _count();
-    return _m.any(test);
-  }
+  bool any(bool Function(K key, V value) test) => _m.any(test);
 
   /// Provides a **view** of this map as having [RK] keys and [RV] instances,
   /// if necessary.
@@ -904,16 +846,10 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Checks whether any entry of this iterable satisfies [test].
-  bool anyEntry(bool Function(MapEntry<K, V>) test) {
-    _count();
-    return _m.anyEntry(test);
-  }
+  bool anyEntry(bool Function(MapEntry<K, V>) test) => _m.anyEntry(test);
 
   /// Checks whether every entry of this iterable satisfies [test].
-  bool everyEntry(bool Function(MapEntry<K, V>) test) {
-    _count();
-    return _m.everyEntry(test);
-  }
+  bool everyEntry(bool Function(MapEntry<K, V>) test) => _m.everyEntry(test);
 
   /// Returns `true` if the map contains an element equal to the [key]-[value] pair, `false`
   /// otherwise.
@@ -935,10 +871,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns `true` if the map contains the [entry], `false` otherwise.
-  bool containsEntry(MapEntry<K, V> entry) {
-    _count();
-    return _m.contains(entry.key, entry.value);
-  }
+  bool containsEntry(MapEntry<K, V> entry) => _m.contains(entry.key, entry.value);
 
   /// The number of objects in this list.
   int get length {
@@ -947,15 +880,12 @@ class IMap<K, V> // ignore: must_be_immutable
     /// Optimization: Flushes the map, if free.
     if (length == 0 && _m is! MFlat)
       _m = MFlat.empty<K, V>();
-    else
-      _count();
 
     return length;
   }
 
   /// Applies the function [f] to each element.
   void forEach(void Function(K key, V value) f) {
-    _count();
     _m.forEach(f);
   }
 
@@ -1164,6 +1094,16 @@ abstract class M<K, V> {
   Iterator<MapEntry<K, V>> get iterator;
 
   int get length;
+
+  /// Used by tail-call-optimisation.
+  /// Returns type [V] or [M].
+  @protected
+  dynamic getVOrM(K key);
+
+  /// Used by tail-call-optimisation.
+  /// Returns type [bool] or [M].
+  @protected
+  dynamic containsKeyOrM(K? key);
 
   /// Returns a new map containing the current map plus the given key:value.
   /// However, if the given key already exists in the set,

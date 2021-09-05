@@ -1558,7 +1558,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("containsKey", () {
-    final IMap<String, int> imap =
+    final IMap<String?, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));
     expect(imap.containsKey("a"), isTrue);
     expect(imap.containsKey("z"), isFalse);
@@ -1962,7 +1962,7 @@ void main() {
 
   test("flushFactor", () {
     // 1) Default value
-    expect(IMap.flushFactor, 30);
+    expect(IMap.flushFactor, 50);
 
     // 2) Setter
     IMap.flushFactor = 200;
@@ -1971,12 +1971,6 @@ void main() {
     // 3) Can't be smaller or equal to 0
     expect(() => IMap.flushFactor = 0, throwsStateError);
     expect(() => IMap.flushFactor = -100, throwsStateError);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("asyncAutoFlush", () {
-    expect(IMap.asyncAutoflush, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////

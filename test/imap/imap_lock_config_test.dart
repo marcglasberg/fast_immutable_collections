@@ -9,7 +9,6 @@ void main() {
     ImmutableCollection.lockConfig();
 
     expect(() => IMap.flushFactor = 1000, throwsStateError);
-    expect(() => IMap.asyncAutoflush = false, throwsStateError);
     expect(() => IMap.resetAllConfigurations(), throwsStateError);
     expect(() => IMap.defaultConfig = ConfigMap(cacheHashCode: false), throwsStateError);
   });

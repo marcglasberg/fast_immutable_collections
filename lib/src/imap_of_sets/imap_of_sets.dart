@@ -539,7 +539,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ISet<V>? operator [](K key) => _mapOfSets[key];
 
   /// Return `true` if the given [key] exists.
-  bool containsKey(K key) => _mapOfSets.containsKey(key);
+  bool containsKey(K? key) => _mapOfSets.containsKey(key);
 
   /// Return any `key:set` entry where the value exists in the set.
   /// If that entry doesn't exist, return `null`.

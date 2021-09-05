@@ -212,8 +212,8 @@ class _FilterDialogState extends State<_FilterDialog> {
       ),
       actions: [
         TextButton(
-          child: Text("OK", style: TextStyle(fontSize: 21)),
           onPressed: () => Navigator.of(context).pop(),
+          child: Text("OK", style: TextStyle(fontSize: 21)),
         ),
       ],
     );

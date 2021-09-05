@@ -146,7 +146,7 @@ class IListImpl<T> // ignore: must_be_immutable
   IListImpl._(
     Iterable<T>? iterable, {
     required this.config,
-  })  : _l = iterable is IList<T> //
+  })   : _l = iterable is IList<T> //
             ? iterable._l
             : iterable == null
                 ? LFlat.empty<T>()
@@ -398,13 +398,6 @@ abstract class IList<T> // ignore: must_be_immutable
   /// before it is eligible for auto-flush. Must be larger than `0`.
   static int get flushFactor => _flushFactor;
 
-  /// Global configuration that specifies if auto-flush of [IList]s should be
-  /// async. The default is `true`. When the autoflush is *async*, it will only
-  /// happen after the async gap, no matter how many operations a collection
-  /// undergoes. When the autoflush is *sync*, it may flush one or more times
-  /// during the same task.
-  static bool get asyncAutoflush => _asyncAutoflush;
-
   /// See also: [ConfigList], [ImmutableCollection], [resetAllConfigurations]
   static set defaultConfig(ConfigList config) {
     if (_defaultConfig == config) return;
@@ -424,68 +417,29 @@ abstract class IList<T> // ignore: must_be_immutable
       throw StateError("flushFactor can't be $value.");
   }
 
-  /// See also: [ImmutableCollection]
-  static set asyncAutoflush(bool value) {
-    if (_asyncAutoflush == value) return;
-    if (ImmutableCollection.isConfigLocked)
-      throw StateError("Can't change the configuration of immutable collections.");
-    _asyncAutoflush = value;
-  }
-
   static ConfigList _defaultConfig = const ConfigList();
 
-  static const _defaultFlushFactor = 300;
+  static const _defaultFlushFactor = 500;
 
   static int _flushFactor = _defaultFlushFactor;
 
-  static bool _asyncAutoflush = true;
-
-  /// ## Sync Auto-flush
+  /// ## Auto-flush
   ///
   /// Keeps a counter variable which starts at `0` and is incremented each
-  /// time collection methods are used.
+  /// time collection methods are used. As soon as counter reaches the
+  /// refresh-factor, the collection is flushed and `counter` returns to `0`.
   ///
-  /// As soon as counter reaches the refresh-factor, the collection is flushed
-  /// and `counter` returns to `0`.
-  ///
-  /// ## Async Auto-flush
-  ///
-  /// Keeps a counter variable which starts at `0` and is incremented each
-  /// time collection methods are used, as long as `counter >= 0`.
-  ///
-  /// As soon as counter reaches the refresh-factor, the collection is marked
-  /// for flushing. There is also a global counter called an `asyncCounter`
-  /// which starts at `1`. When a collection is marked for flushing, it first
-  /// creates a future to increment the `asyncCounter`. Then, the collection's
-  /// own `counter` is set to be `-asyncCounter`. Having a negative value means
-  /// the collection's `counter` will not be incremented anymore. However, when
-  /// `counter` is negative and different from `-asyncCounter` it means we are
-  /// one async gap after the collection was marked for flushing.
-  /// At this point, the collection will flush and `counter` returns to zero.
-  ///
-  /// Note: [_count] is called in methods which read values. It's not called
-  /// in methods which create new [ILists] or flush the list.
+  /// Note: [_count] is called in all methods that change, and some that read.
+  /// It's not called in methods which create new [ILists] or flush the list.
   void _count() {
     if (!ImmutableCollection.autoFlush) return;
     if (isFlushed) {
       _counter = 0;
     } else {
-      if (_counter >= 0) {
-        _counter++;
-        if (_counter == _flushFactor) {
-          if (asyncAutoflush) {
-            ImmutableCollection.markAsyncCounterToIncrement();
-            _counter = -ImmutableCollection.asyncCounter;
-          } else {
-            flush;
-            _counter = 0;
-          }
-        }
-      } else {
-        if (_counter != -ImmutableCollection.asyncCounter) {
-          flush;
-          _counter = 0;
-        }
+      _counter++;
+      if (_counter >= _flushFactor) {
+        flush;
+        _counter = 0;
       }
     }
   }
@@ -671,7 +625,8 @@ abstract class IList<T> // ignore: must_be_immutable
     // If the outer list is used, it will be flushed before the source list.
     // If the source list is not used directly, it will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = _counter + 1;
+    result._counter = _counter;
+    result._count();
 
     return result;
   }
@@ -687,7 +642,8 @@ abstract class IList<T> // ignore: must_be_immutable
     // If the outer list is used, it will be flushed before the source lists.
     // If the source lists are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((items is IList<T>) ? (items)._counter : 0)) + 1;
+    result._counter = max(_counter, ((items is IList<T>) ? (items)._counter : 0));
+    result._count();
 
     return result;
   }
@@ -824,10 +780,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Checks every element in iteration order, and returns `true` if
   /// any of them make [test] return `true`, otherwise returns `false`.
   @override
-  bool any(Predicate<T> test) {
-    _count();
-    return _l.any(test);
-  }
+  bool any(Predicate<T> test) => _l.any(test);
 
   /// Returns a list of [R] instances.
   /// If this list contains instances which cannot be cast to [R],
@@ -844,10 +797,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Checks whether every element of this iterable satisfies [test].
   @override
-  bool every(Predicate<T> test) {
-    _count();
-    return _l.every(test);
-  }
+  bool every(Predicate<T> test) => _l.every(test);
 
   /// Expands each element of this [Iterable] into zero or more elements.
   @override
@@ -859,10 +809,7 @@ abstract class IList<T> // ignore: must_be_immutable
     final int length = _l.length;
 
     // Optimization: Flushes the list, if free.
-    if (length == 0 && _l is! LFlat)
-      _l = LFlat.empty<T>();
-    else
-      _count();
+    if (length == 0 && _l is! LFlat) _l = LFlat.empty<T>();
 
     return length;
   }
@@ -876,18 +823,12 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Returns the first element.
   /// Throws a [StateError] if the list is empty.
   @override
-  T get first {
-    _count();
-    return _l.first;
-  }
+  T get first => _l.first;
 
   /// Returns the last element.
   /// Throws a [StateError] if the list is empty.
   @override
-  T get last {
-    _count();
-    return _l.last;
-  }
+  T get last => _l.last;
 
   /// Checks that this iterable has only one element, and returns that element.
   /// Throws a [StateError] if the list is empty or has more than one element.
@@ -920,18 +861,13 @@ abstract class IList<T> // ignore: must_be_immutable
   /// function is returned.
   /// - If [orElse] is omitted, it defaults to throwing a [StateError].
   @override
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) {
-    _count();
-    return _l.firstWhere(test, orElse: orElse);
-  }
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => _l.firstWhere(test, orElse: orElse);
 
   /// Reduces a collection to a single value by iteratively combining eac element of the collection
   /// with an existing value.
   @override
-  E fold<E>(E initialValue, E Function(E previousValue, T element) combine) {
-    _count();
-    return _l.fold(initialValue, combine);
-  }
+  E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
+      _l.fold(initialValue, combine);
 
   /// Returns the lazy concatenation of this iterable and [other].
   @override
@@ -940,7 +876,6 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Applies the function [f] to each element of this collection in iteration order.
   @override
   void forEach(void Function(T element) f) {
-    _count();
     _l.forEach(f);
   }
 
@@ -954,33 +889,21 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Returns the last element that satisfies the given predicate [test].
   @override
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) {
-    _count();
-    return _l.lastWhere(test, orElse: orElse);
-  }
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => _l.lastWhere(test, orElse: orElse);
 
   /// Returns a new lazy [Iterable] with elements that are created by calling [f] on each element of
   /// this [Iterable] in iteration order.
   @override
-  Iterable<E> map<E>(E Function(T element) f, {ConfigList? config}) {
-    _count();
-    return _l.map(f);
-  }
+  Iterable<E> map<E>(E Function(T element) f, {ConfigList? config}) => _l.map(f);
 
   /// Reduces a collection to a single value by iteratively combining elements of the collection
   /// using the provided function.
   @override
-  T reduce(T Function(T value, T element) combine) {
-    _count();
-    return _l.reduce(combine);
-  }
+  T reduce(T Function(T value, T element) combine) => _l.reduce(combine);
 
   /// Returns the single element that satisfies [test].
   @override
-  T singleWhere(Predicate<T> test, {T Function()? orElse}) {
-    _count();
-    return _l.singleWhere(test, orElse: orElse);
-  }
+  T singleWhere(Predicate<T> test, {T Function()? orElse}) => _l.singleWhere(test, orElse: orElse);
 
   /// Returns an [Iterable] that provides all but the first [count] elements.
   @override
@@ -1169,17 +1092,11 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Creates a [List] containing the elements of this [IList].
   @override
-  List<T> toList({bool growable = true}) {
-    _count();
-    return _l.toList(growable: growable);
-  }
+  List<T> toList({bool growable = true}) => _l.toList(growable: growable);
 
   /// Creates a [Set] containing the same elements as this [IList].
   @override
-  Set<T> toSet() {
-    _count();
-    return _l.toSet();
-  }
+  Set<T> toSet() => _l.toSet();
 
   /// Returns a string representation of (some of) the elements of `this`.
   ///
@@ -1219,10 +1136,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// print(imap[0] + imap[1]); // Prints 'hello';
   /// imap.keys.toList(); // [0, 1, 2, 3]
   /// ```
-  IMap<int, T> asMap() {
-    _count();
-    return IMap<int, T>(UnmodifiableListFromIList(this).asMap());
-  }
+  IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListFromIList(this).asMap());
 
   /// Returns an empty list with the same configuration.
   IList<T> clear() => IListImpl.empty<T>(config);
@@ -1372,7 +1286,6 @@ abstract class IList<T> // ignore: must_be_immutable
   /// notes.indexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int indexWhere(Predicate<T> test, [int start = 0]) {
-    _count();
     var _length = length;
     if (_length == 0) return -1;
     if (start < 0 || start >= _length)
@@ -1405,7 +1318,6 @@ abstract class IList<T> // ignore: must_be_immutable
   /// notes.lastIndexOf('fa');    // -1
   /// ```
   int lastIndexOf(T element, [int? start]) {
-    _count();
     var _length = length;
     start ??= _length;
     if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");
@@ -1432,7 +1344,6 @@ abstract class IList<T> // ignore: must_be_immutable
   /// notes.lastIndexWhere((note) => note.startsWith('k'));       // -1
   /// ```
   int lastIndexWhere(Predicate<T> test, [int? start]) {
-    _count();
     var _length = length;
     start ??= _length;
     if (start < 0) throw ArgumentError.value(start, "index", "Index out of range");

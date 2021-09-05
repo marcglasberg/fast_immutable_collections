@@ -1,4 +1,5 @@
 import "package:fast_immutable_collections/src/iterator/iterator_add_all.dart";
+import 'package:meta/meta.dart';
 
 import "imap.dart";
 
@@ -20,8 +21,18 @@ class MAddAll<K, V> extends M<K, V> {
   Iterable<V> get values => _m.values.followedBy(_items.values);
 
   @override
-  // Check the real map first (it's faster).
   V? operator [](K key) => _items[key] ?? _m[key];
+
+  /// This may be used to help avoid stack-overflow.
+  @protected
+  @override
+  dynamic getVOrM(K key) => _items[key] ?? _m;
+
+  /// Used by tail-call-optimisation.
+  /// Returns type [bool] or [M].
+  @protected
+  @override
+  dynamic containsKeyOrM(K? key) => _items.containsKey(key) || _m.containsKey(key);
 
   @override
   bool contains(K key, V value) {
@@ -30,16 +41,10 @@ class MAddAll<K, V> extends M<K, V> {
   }
 
   @override
-  bool containsKey(K? key) {
-    // Check the real map first (it's faster).
-    return _items.containsKey(key) || _m.containsKey(key);
-  }
+  bool containsKey(K? key) => _items.containsKey(key) || _m.containsKey(key);
 
   @override
-  bool containsValue(V? value) {
-    // Check the real map first (it's faster).
-    return _items.containsValue(value) || _m.containsValue(value);
-  }
+  bool containsValue(V? value) => _items.containsValue(value) || _m.containsValue(value);
 
   @override
   int get length => _m.length + _items.length;

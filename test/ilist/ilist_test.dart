@@ -1540,7 +1540,7 @@ void main() {
 
   test("flushFactor", () {
     // 1) Default value
-    expect(IList.flushFactor, 300);
+    expect(IList.flushFactor, 500);
 
     // 2) Setter
     IList.flushFactor = 100;
@@ -1549,12 +1549,6 @@ void main() {
     // 3) Can't be smaller than or equal to 0
     expect(() => IList.flushFactor = 0, throwsStateError);
     expect(() => IList.flushFactor = -100, throwsStateError);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("asyncAutoFlush", () {
-    expect(IList.asyncAutoflush, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////

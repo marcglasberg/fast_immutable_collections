@@ -34,11 +34,15 @@ void main() {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
-    final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
+    final MAddAll<String?, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.containsKey("a"), isTrue);
     expect(mAddAll.containsKey("b"), isTrue);
     expect(mAddAll.containsKey("c"), isTrue);
     expect(mAddAll.containsKey("d"), isFalse);
+    expect(mAddAll.keys.contains("a"), isTrue);
+    expect(mAddAll.keys.contains("b"), isTrue);
+    expect(mAddAll.keys.contains("c"), isTrue);
+    expect(mAddAll.keys.contains("d"), isFalse);
     expect(mAddAll.containsKey(null), isFalse);
   });
 
@@ -76,10 +80,6 @@ void main() {
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MFlat<String, int> mFlatToAdd = MFlat({"b": 2, "c": 3});
     final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
-    expect(mAddAll.keys.contains("a"), isTrue);
-    expect(mAddAll.keys.contains("b"), isTrue);
-    expect(mAddAll.keys.contains("c"), isTrue);
-    expect(mAddAll.keys.contains("d"), isFalse);
     expect(mAddAll.keys.contains(null), isFalse);
   });
 
@@ -94,6 +94,10 @@ void main() {
     expect(mAddAll.values.contains(2), isTrue);
     expect(mAddAll.values.contains(3), isTrue);
     expect(mAddAll.values.contains(4), isFalse);
+    expect(mAddAll.keys.contains("a"), isTrue);
+    expect(mAddAll.keys.contains("b"), isTrue);
+    expect(mAddAll.keys.contains("c"), isTrue);
+    expect(mAddAll.keys.contains("d"), isFalse);
     expect(mAddAll.values.contains(null), isFalse);
   });
 

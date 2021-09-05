@@ -52,7 +52,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("containsKey", () {
-    final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
+    final MExample<String?, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     expect(mExample.containsKey("a"), isTrue);
     expect(mExample.containsKey("z"), isFalse);
     expect(mExample.containsKey(null), isFalse);
@@ -101,6 +101,11 @@ class MExample<K, V> extends M<K, V> {
   @override
   V? operator [](K key) => _imap[key];
 
+  /// This may be used to help avoid stack-overflow.
+  @protected
+  @override
+  dynamic getVOrM(K key) => _imap[key];
+
   @override
   Iterable<MapEntry<K, V>> get entries => _imap.entries;
 
@@ -121,6 +126,12 @@ class MExample<K, V> extends M<K, V> {
 
   @override
   bool containsValue(V? value) => _imap.containsValue(value);
+
+  /// Used by tail-call-optimisation.
+  /// Returns type [bool] or [M].
+  @protected
+  @override
+  bool containsKeyOrM(K? key) => _imap.containsKey(key);
 }
 
 //////////////////////////////////////////////////////////////////////////////

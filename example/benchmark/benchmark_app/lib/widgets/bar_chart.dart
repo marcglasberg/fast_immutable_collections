@@ -2,7 +2,6 @@ import "package:charts_flutter/flutter.dart" as charts;
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:flutter/material.dart";
 
-
 // ////////////////////////////////////////////////////////////////////////////
 
 class BarChart extends StatelessWidget {

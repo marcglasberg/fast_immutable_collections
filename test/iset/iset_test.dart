@@ -1382,7 +1382,7 @@ void main() {
 
   test("flushFactor", () {
     // 1) Default value
-    expect(ISet.flushFactor, 30);
+    expect(ISet.flushFactor, 50);
 
     // 2) Setter
     ISet.flushFactor = 200;
@@ -1391,12 +1391,6 @@ void main() {
     // 3) Can't be smaller than or equal to 0
     expect(() => ISet.flushFactor = 0, throwsStateError);
     expect(() => ISet.flushFactor = -100, throwsStateError);
-  });
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  test("asyncAutoFlush", () {
-    expect(ISet.asyncAutoflush, isTrue);
   });
 
   //////////////////////////////////////////////////////////////////////////////

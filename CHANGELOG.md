@@ -1,3 +1,19 @@
+## [6.0.0] - 2021/09/05
+
+* Breaking change: Note, unless you know what an "async flush mode" is were using it explicitly,
+  this breaking change is not important to you, and you don't need to do anything to upgrade. If you
+  want to know the details, however, keep reading. I have removed the async flush mode. The
+  **async** flush mode only flushed after the async gap, but since Dart does not allow
+  **tail-call-optimization** (https://github.com/dart-lang/language/issues/1159) it was not possible
+  to guarantee that very large collections created within the current microtask would not throw a
+  stack-overflow error when reading values from it. The solution to make it work async was to
+  tail-call-optimize by hand, which I played with a little bit. For example, check out the
+  new `IMap` implementations for `operator []` and `containsKey()`. However, I'd actually would have
+  to do that for each and every method that traverses the data tree, for each collection in FIC. The
+  amount of work was just too much, so I've decided to remove the async flush mode. The **sync
+  mode** was recommended anyway (which now is the only mode, meaning I have removed any references
+  to it in the docs), so I guess that won't make much of a difference to anyone.
+
 ## [5.1.3] - 2021/08/31
 
 * `FromIListMixin` and `FromISetMixin` improvement to deal with `IListConst<Never>`.
@@ -12,16 +28,16 @@
 
 ## [5.1.0] - 2021/06/25
 
-* Breaking: Align head and tail to dart convention as getter like first and last
+* Breaking change: Align head and tail to dart convention as getter like first and last
 
 * Introduce the OP typedef.
-  
-* `IList.init` Access init part of the list. 
-  
+
+* `IList.init` Access init part of the list.
+
 * `IList.inits`, `IList.tails` methods.
 
 * `IList.splitAt` Tuples from original list at specified index.
-  
+
 * `IList.whereNot` Reverse predicate for Where.
 
 * `Iterable<Tuple2<U, V>>.unzip()` extension.
@@ -29,15 +45,16 @@
 * `IList.count(Predicate)` count positive predicates.
 
 * `IList.iterate` generate IList applying OP multiple times.
-  
+
 * `IList.iterateWhile` generate IList applying OP while Predicate stand.
 
-* `IList.span` Tuple2 will contain the longest consecutive positive predicate then the rest of the list.
+* `IList.span` Tuple2 will contain the longest consecutive positive predicate then the rest of the
+  list.
 
 * `IList.tabulate` Apply function start at 0 on multiples dimensions.
-  
+
 * `IList.corresponds` Check for correspondence between list and applied function on list.
-  
+
 * `IList.lengthCompare` `ISet.lengthCompare` Direct size comparison as convenience for composition.
 
 * Arity property on Abstract Tuple.

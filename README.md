@@ -199,9 +199,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
     <li>
       <a href="#10-flushing">10. Flushing</a>
       <ul>
-        <li><a href="#101-auto-flush">10.1. Auto-Flush</a></li>
-        <li><a href="#102-sync-auto-flush">10.2. Sync Auto-Flush</a></li>
-        <li><a href="#103-async-auto-flush">10.3. Async Auto-Flush</a></li>
+        <li><a href="#101-auto-flush">10.1. Auto-Flush</a></li>                
       </ul>
     </li>
     <li><a href="#11-json-support">11. JSON Support</a></li>
@@ -1675,104 +1673,36 @@ visible. So, for all intents and purposes, you may consider that `flush` doesn't
 
 Usually you don't need to flush your collections manually. Depending on the global configuration,
 the collections will flush automatically for you. The global configuration default is to have
-auto-flush on. It's easy to disable it though:
+auto-flush on. It's easy to disable it (not recommended):
 
 ```
-
 ImmutableCollection.autoFlush = false;
 
-// You can also lock further changes to the global configuration, if
-desired:                                              
+// You can also lock further changes to the global configuration, if desired:                                              
 ImmutableCollection.lockConfig();
-
 ```
-
-If you leave it on, you can configure auto-flush to happen after you use a collection a few times.
-And you can also configure it to flush at most once per asynchronous gap.
-
-Auto-flush is an advanced topic, and you don't need to read the following detailed explanation at
-all to use the immutable collections. However, in case you want to tweak the auto-flush
-configuration, here it goes...
-
-## 10.2. Sync Auto-Flush
-
-If your auto-flush is set to occur synchronously:
-
-Each collection keeps a `counter` variable which starts at `0`
-and is incremented each time some collection methods are called. As soon as this counter reaches a
-certain value called the `flushFactor`, the collection is flushed.
-
-## 10.3. Async Auto-Flush
-
-If your auto-flush is set to occur asynchronously:
-
-If you take a collection and add or remove a lot of items synchronously, no flushing will take
-place.
-
-Each collection still keeps a `counter` variable which starts at `0`, but it will be incremented
-during method calls only while `counter >= 0`. As soon as this counter reaches a certain value
-called the `flushFactor`, the collection is marked for flushing.
-
-But after the asynchronous gap, as soon as you try to get, add or remove an item from it, it will
-flush automatically.
-
-There is also a global counter called an `asyncCounter`, which starts at `1`. When a collection is
-marked for flushing, it first creates a future to increment the `asyncCounter`. Then, the
-collection's own `counter` is set to be `-asyncCounter`. Having a negative value means the
-collection's `counter` will not be incremented anymore. However, when `counter` is negative and
-different from `-asyncCounter`
-it means we are one async gap after the collection was marked for flushing.
-
-At this point, the collection will be flushed and its `counter` will return to zero.
-
-An example:
-
-```text
-1. The flushFactor is 3. The asyncCounter is 1.
- 
-2. IList is created. Its counter is 0, smaller than the flushFactor.
-
-3. IList is used. Its counter is now 1, smaller than the flushFactor.
- 
-4. IList is used. Its counter is now 2, smaller than the flushFactor.
-
-5. IList is used. Its counter is now 3, equal to the flushFactor.
-   For this reason, the list counter is set at negative asyncCounter (-1), 
-   and the asyncCounter is set to increment in the future.    
-
-6. IList is used. Since its counter is negative, it's not incremented.
-   Since the counter is negative and equal to negative asyncCounter, it is not flushed.  
-  
-7. Here comes the async gap. The asyncCounter was set to increment, so it now becomes 2.
-
-8. IList is used. Since its counter is negative, it is not incremented.
-   Since the counter is negative and different than negative asyncCounter, the list is flushed.
-   Also, its counter reverts to 0.                                   
-```
-
-The auto-flush process is a heuristic only. However, note the process is very fast, using only
-simple integer operations and a few bytes of memory. It guarantees that, if a collection is being
-used a lot, it will flush more often than one which is not being used that often. It also guarantees
-a collection will not auto-flush in the middle of sync operations. Finally, it saves no references
-to the collections, so it doesn't prevent them from being garbage-collected.
 
 If you think about the update/publish cycle of the `built_collections` package, it has an
 intermediate state (the builder) which is not a valid collection, and then you publish it manually.
-In contrast, **FIC** *does* have a valid intermediate state (unflushed)
-which you can use as a valid collection, and then it publishes automatically (flushes) after the
-async gap (when so configured).
+In contrast, **FIC** *does* have a valid intermediate state (unflushed) which you can use as a valid
+collection, and then it publishes automatically (flushes) after some use.
 
-As discussed, the default is to have auto-flush turned on, but you can turn it off. If you leave it
-on, you can tweak the `flushFactor` for lists, sets and maps, separately. Usually, lists should have
-a higher `flushFactor` because they are generally still very efficient when unflushed.
+You can configure auto-flush to happen after you use a collection a few times.
 
-The minimum `flushFactor` you can choose is `1`, which means the collections will always flush in
-the next async gap after they are touched.
+You don't need to read the following detailed explanation at all to use the immutable collections.
+However, in case you want to tweak the auto-flush configuration, here it goes:
+
+Each collection keeps a `counter` variable which starts at `0` and is incremented each time some
+collection methods are called. As soon as this counter reaches a certain value called the
+`flushFactor`, the collection is flushed. You can tweak the `flushFactor` for lists, sets and maps,
+separately. Usually, lists should have a higher `flushFactor` because they are generally still very
+efficient when unflushed. The minimum `flushFactor` you can choose is `1`, which means the
+collections will flush almost always when they are changed.
 
 ```
-IList.flushFactor = 150;
-ISet.flushFactor = 15;
-IMap.flushFactor = 15;
+IList.flushFactor = 500;
+ISet.flushFactor = 50;
+IMap.flushFactor = 50;
 
 // Lock further changes, if desired:                                              
 ImmutableCollection.lockConfig();

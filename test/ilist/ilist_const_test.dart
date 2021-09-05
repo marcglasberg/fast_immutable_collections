@@ -1,6 +1,8 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
+// ignore_for_file: non_const_call_to_literal_constructor
+
 void main() {
   //////////////////////////////////////////////////////////////////////////////
 

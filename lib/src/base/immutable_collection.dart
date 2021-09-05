@@ -1,5 +1,4 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:meta/meta.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -16,14 +15,11 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// 2. `ImmutableCollection.disallowUnsafeConstructors`
   /// 3. `IList.defaultConfig`
   /// 4. `IList.flushFactor`
-  /// 5. `IList.asyncAutoflush`
-  /// 6. `ISet.defaultConfig`
-  /// 7. `ISet.flushFactor`
-  /// 8. `ISet.asyncAutoflush`
-  /// 9. `IMap.defaultConfig`
-  /// 10. `IMap.flushFactor`
-  /// 11. `IMap.asyncAutoflush`
-  /// 12. `IMapOfSets.defaultConfig`
+  /// 5. `ISet.defaultConfig`
+  /// 6. `ISet.flushFactor`
+  /// 7. `IMap.defaultConfig`
+  /// 8. `IMap.flushFactor`
+  /// 9. `IMapOfSets.defaultConfig`
   static void lockConfig() => _isConfigLocked = true;
 
   static bool get isConfigLocked => _isConfigLocked;
@@ -38,10 +34,6 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
 
   static bool _disallowUnsafeConstructors = false;
 
-  static int _asyncCounter = 1;
-
-  static bool _asyncCounterMarkedForIncrement = false;
-
   static bool _prettyPrint = true;
 
   static void resetAllConfigurations() {
@@ -49,8 +41,6 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
       throw StateError("Can't change the configuration of immutable collections.");
     _autoFlush = true;
     _disallowUnsafeConstructors = false;
-    _asyncCounter = 1;
-    _asyncCounterMarkedForIncrement = false;
     _prettyPrint = true;
     IList.resetAllConfigurations();
     ISet.resetAllConfigurations();
@@ -73,26 +63,6 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     _disallowUnsafeConstructors = value;
-  }
-
-  /// Internal use only.
-  @visibleForTesting
-  static bool get asyncCounterMarkedForIncrement => _asyncCounterMarkedForIncrement;
-
-  /// Internal use only.
-  static int get asyncCounter => _asyncCounter;
-
-  /// Internal use only.
-  static void markAsyncCounterToIncrement() {
-    if (_asyncCounterMarkedForIncrement) return;
-    _asyncCounterMarkedForIncrement = true;
-
-    Future(() {
-      // Increments, but resets at some point.
-      _asyncCounter++;
-      if (_asyncCounter == 10000) _asyncCounter = 1;
-      _asyncCounterMarkedForIncrement = false;
-    });
   }
 
   static bool get prettyPrint => _prettyPrint;

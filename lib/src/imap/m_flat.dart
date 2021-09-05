@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/list_map/list_map.dart";
+import 'package:meta/meta.dart';
 
 import "imap.dart";
 
@@ -42,6 +43,9 @@ class MFlat<K, V> extends M<K, V> {
   bool any(bool Function(K, V) test) => _map.entries.any((entry) => test(entry.key, entry.value));
 
   @override
+  V? operator [](K key) => _map[key];
+
+  @override
   bool contains(K key, V value) => (value != null) //
       ? (_map[key] == value)
       : (_map.containsKey(key) && (_map[key] == null));
@@ -52,8 +56,16 @@ class MFlat<K, V> extends M<K, V> {
   @override
   bool containsValue(V? value) => _map.containsValue(value);
 
+  /// This may be used to help avoid stack-overflow.
+  @protected
   @override
-  V? operator [](K key) => _map[key];
+  dynamic getVOrM(K key) => _map[key];
+
+  /// Used by tail-call-optimisation.
+  /// Returns type [bool] or [M].
+  @protected
+  @override
+  dynamic containsKeyOrM(K? key) => _map.containsKey(key);
 
   @override
   int get length => _map.length;
