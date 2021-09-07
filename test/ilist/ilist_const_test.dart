@@ -24,15 +24,18 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
+    expect(const IListConst([]), isEmpty);
     expect(const IListConst([]).isEmpty, isTrue);
     expect(const IListConst([]).isNotEmpty, isFalse);
 
     expect(const IListConst<String>([]).isEmpty, isTrue);
     expect(const IListConst<String>([]).isNotEmpty, isFalse);
 
+    expect(const IListConst([1]), isNotEmpty);
     expect(const IListConst([1]).isEmpty, isFalse);
     expect(const IListConst([1]).isNotEmpty, isTrue);
 
+    expect(const IListConst<int>([]), isEmpty);
     expect(const IListConst<int>([]).isEmpty, isTrue);
     expect(const IListConst<int>([]).isNotEmpty, isFalse);
   });
