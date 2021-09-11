@@ -60,7 +60,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// in the source collection.
   static IMapOfSets<K, V> empty<K, V>([ConfigMapOfSets? config]) {
     config ??= defaultConfig;
-    return IMapOfSets<K, V>._unsafe(IMap.empty(config.asConfigMap), config);
+    return IMapOfSets<K, V>._unsafe(IMapImpl.empty(config.asConfigMap), config);
   }
 
   factory IMapOfSets([Map<K, Iterable<V>>? mapOfSets]) => //

@@ -64,7 +64,7 @@ void main() {
     IMap<int, int> iMap;
 
     bool isFlushed = true;
-    iMap = IMap.empty();
+    iMap = IMapImpl.empty();
     for (int i = 0; i < keyIterations; i++) {
       for (int j = 0; j < valueIterations; j++) {
         iMap = iMap.add(i, j);

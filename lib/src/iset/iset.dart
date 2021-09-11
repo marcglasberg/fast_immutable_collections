@@ -27,12 +27,11 @@ class ISetConst<T> // ignore: must_be_immutable
   /// It's always wrong to use an `ISetConst` which is not constant.
   ///
   @literal
-  const ISetConst(
-    this._set,
-    // Note: The _set can't be optional. This doesn't work: [this._set = const {}]
-    // because when you do this _set will be Set<Never> which will create problems.
-  )   : config = const ConfigSet(),
-        super._gen();
+  const ISetConst(this._set,
+      // Note: The _set can't be optional. This doesn't work: [this._set = const {}]
+      // because when you do this _set will be Set<Never> which will create problems.
+      [this.config = const ConfigSet()])
+      : super._gen();
 
   final Set<T> _set;
 

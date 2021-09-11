@@ -15,19 +15,172 @@ import "m_replace.dart";
 import "modifiable_map_from_imap.dart";
 import "unmodifiable_map_from_imap.dart";
 
+/// This is an [IMap] which can be made constant.
+/// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
+///
+@immutable
+class IMapConst<K, V> // ignore: must_be_immutable
+    extends IMap<K, V> {
+  //
+  /// To create an empty IMap: `const IMapConst({})`.
+  /// To create a map with entries: `const IMapConst({1:'a', 2:'b', 3:'c'})`.
+  ///
+  /// IMPORTANT: You must always use this with the `const` keyword.
+  /// It's always wrong to use an `IMapConst` which is not constant.
+  ///
+  @literal
+  const IMapConst(this._map,
+      // Note: The _map can't be optional. This doesn't work: [this._map = const {}]
+      // because when you do this _map will be Map<Never, Never> which will create problems.
+      [this.config = const ConfigMap()])
+      : super._gen();
+
+  final Map<K, V> _map;
+
+  @override
+  final ConfigMap config;
+
+  const IMapConst.withConfig(this._map, this.config) : super._gen();
+
+  /// A constant map is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a constant map, by definition.
+  @override
+  IMapConst<K, V> get flush => this;
+
+  @override
+  int get _counter => 0;
+
+  @override
+  M<K, V> get _m => MFlat<K, V>.unsafe(_map);
+
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
+  @override
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const MapEquality<dynamic, dynamic>().hash(_map), config.hashCode)
+        : hash2(identityHashCode(_m), config.hashCode);
+  }
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(IMap<K, V>? other) =>
+      (other != null) &&
+      (other is IMapConst) &&
+      identical(_map, (other as IMapConst)._map) &&
+      (config == other.config);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@immutable
+class IMapImpl<K, V> // ignore: must_be_immutable
+    extends IMap<K, V> {
+  //
+  /// The map configuration ([ConfigMap]).
+  @override
+  final ConfigMap config;
+
+  @override
+  late M<K, V> _m;
+
+  @override
+  int _counter = 0;
+
+  @override
+  // HashCode cache. Must be null if hashCode is not cached.
+  // ignore: use_late_for_private_fields_and_variables
+  int? _hashCode;
+
+  /// Flushes the map, if necessary. Chainable method.
+  /// If the map is already flushed, doesn't do anything.
+  @override
+  IMap<K, V> get flush {
+    if (!isFlushed) {
+      // Flushes the original _m because maybe it's used elsewhere.
+      // Or maybe it was flushed already, and we can use it as is.
+      _m = MFlat<K, V>.unsafe(_m.getFlushed(config));
+      _counter = 0;
+    }
+    return this;
+  }
+
+  IMapImpl.unsafe(Map<K, V>? map, {required this.config})
+      : _m = (map == null) ? MFlat.empty<K, V>() : MFlat<K, V>.unsafe(map),
+        super._gen() {
+    if (ImmutableCollection.disallowUnsafeConstructors)
+      throw UnsupportedError("IMap.unsafe is disallowed.");
+  }
+
+  /// **Unsafe**. Note: Does not sort.
+  IMapImpl._unsafe(this._m, {required this.config}) : super._gen();
+
+  /// **Unsafe**.
+  IMapImpl._unsafeFromMap(Map<K, V> map, {required this.config})
+      : _m = MFlat<K, V>.unsafe(map),
+        super._gen();
+
+  /// Returns an empty [IMap], with the given configuration. If a
+  /// configuration is not provided, it will use the default configuration.
+  ///
+  /// Note: If you want to create an empty immutable collection of the same
+  /// type and same configuration as a source collection, simply call [clear]
+  /// in the source collection.
+  static IMapImpl<K, V> empty<K, V>([ConfigMap? config]) =>
+      IMapImpl._unsafe(MFlat.empty<K, V>(), config: config ?? IMap.defaultConfig);
+
+  /// **Unsafe**. Note: Does not sort, so the map should already respect config.
+  IMapImpl._(Map<K, V> map, {required this.config})
+      : _m = MFlat<K, V>.unsafe(map),
+        super._gen();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// An **immutable**, **unordered** map.
 @immutable
-class IMap<K, V> // ignore: must_be_immutable
+abstract class IMap<K, V> // ignore: must_be_immutable
     extends ImmutableCollection<IMap<K, V>> {
   //
-  M<K, V> _m;
+  ConfigMap get config;
 
-  /// The map configuration.
-  final ConfigMap config;
+  set config(ConfigMap value) {}
+
+  M<K, V> get _m;
+
+  set _m(M<K, V> value) {}
+
+  int get _counter;
+
+  set _counter(int value) {}
+
+  int? get _hashCode;
+
+  set _hashCode(int? value);
+
+  @override
+  int get hashCode {
+    if (_hashCode != null) return _hashCode!;
+
+    var hashCode = isDeepEquals //
+        ? hash2((flush._m as MFlat<K, V>).deepMapHashcode(), config.hashCode)
+        : hash2(identityHashCode(_m), config.hashCode);
+
+    if (config.cacheHashCode) _hashCode = hashCode;
+
+    return hashCode;
+  }
 
   /// Create an [IMap] from a [Map].
   factory IMap([Map<K, V>? map]) => //
       IMap.withConfig(map, defaultConfig);
+
+  const IMap._gen();
 
   /// Create an [IMap] from a [Map] and a [ConfigMap].
   factory IMap.withConfig(
@@ -35,8 +188,8 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigMap config,
   ) {
     return (map == null || map.isEmpty)
-        ? IMap.empty<K, V>(config)
-        : IMap<K, V>._unsafe(MFlat<K, V>(map, config: config), config: config);
+        ? IMapImpl.empty<K, V>(config)
+        : IMapImpl<K, V>._unsafe(MFlat<K, V>(map, config: config), config: config);
   }
 
   /// Creates a new map with the given [config].
@@ -84,7 +237,7 @@ class IMap<K, V> // ignore: must_be_immutable
       entries,
       sort: config.sort,
     );
-    return IMap._(map, config: config);
+    return IMapImpl._(map, config: config);
   }
 
   /// Create an [IMap] from the given [keys].
@@ -108,7 +261,7 @@ class IMap<K, V> // ignore: must_be_immutable
       sort: config.sort,
     );
 
-    return IMap._(map, config: config);
+    return IMapImpl._(map, config: config);
   }
 
   /// Create an [IMap] from the given [values].
@@ -132,7 +285,7 @@ class IMap<K, V> // ignore: must_be_immutable
       sort: config.sort,
     );
 
-    return IMap._(map, config: config);
+    return IMapImpl._(map, config: config);
   }
 
   /// Creates an IMap instance in which the [keys] and [values] are computed
@@ -185,7 +338,7 @@ class IMap<K, V> // ignore: must_be_immutable
       sort: config.sort,
     );
 
-    return IMap._(map, config: config);
+    return IMapImpl._(map, config: config);
   }
 
   /// Creates an IMap instance associating the given [keys] to [values].
@@ -207,7 +360,7 @@ class IMap<K, V> // ignore: must_be_immutable
   ///
   factory IMap.fromIterables(Iterable<K> keys, Iterable<V> values, {ConfigMap? config}) {
     Map<K, V> map = ListMap.fromIterables(keys, values, sort: (config ?? defaultConfig).sort);
-    return IMap._(map, config: config ?? defaultConfig);
+    return IMapImpl._(map, config: config ?? defaultConfig);
   }
 
   /// **Unsafe constructor**. Use this at your own peril.
@@ -218,15 +371,12 @@ class IMap<K, V> // ignore: must_be_immutable
   /// it will break the [IMap] and any other derived maps in unpredictable ways.
   ///
   /// Also, if [config] is [ConfigMap.sort] `true`, it assumes you will pass it a
-  /// sorted mao. It will not sort the map for you. In this case, if [map] is
-  /// not sorted, it will break the [IMap] and any other derived sets in unpredictable
+  /// sorted mao. It will not sort the map for you. In this case, if [map] is not
+  /// sorted, it will break the [IMap] and any other derived sets in unpredictable
   /// ways.
   ///
-  IMap.unsafe(Map<K, V>? map, {required this.config})
-      : _m = (map == null) ? MFlat.empty<K, V>() : MFlat<K, V>.unsafe(map) {
-    if (ImmutableCollection.disallowUnsafeConstructors)
-      throw UnsupportedError("IMap.unsafe is disallowed.");
-  }
+  factory IMap.unsafe(Map<K, V>? map, {required ConfigMap config}) =>
+      IMapImpl.unsafe(map, config: config);
 
   /// If [Map] is `null`, return `null`.
   ///
@@ -256,15 +406,6 @@ class IMap<K, V> // ignore: must_be_immutable
     ConfigMap? config,
   ]) =>
       (map == null) ? null : IMap.withConfig(map, config ?? defaultConfig);
-
-  /// Returns an empty [IMap], with the given configuration. If a
-  /// configuration is not provided, it will use the default configuration.
-  ///
-  /// Note: If you want to create an empty immutable collection of the same
-  /// type and same configuration as a source collection, simply call [clear]
-  /// in the source collection.
-  static IMap<K, V> empty<K, V>([ConfigMap? config]) =>
-      IMap._unsafe(MFlat.empty<K, V>(), config: config ?? defaultConfig);
 
   /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
   factory IMap.fromJson(
@@ -322,8 +463,6 @@ class IMap<K, V> // ignore: must_be_immutable
 
   static int _flushFactor = _defaultFlushFactor;
 
-  int _counter = 0;
-
   /// ## Auto-flush
   ///
   /// Keeps a counter variable which starts at `0` and is incremented each
@@ -346,14 +485,13 @@ class IMap<K, V> // ignore: must_be_immutable
     }
   }
 
-  /// **Unsafe**. Note: Does not sort, so the map should already respect config.
-  IMap._(Map<K, V> map, {required this.config}) : _m = MFlat<K, V>.unsafe(map);
-
   /// **Unsafe**. Note: Does not sort.
-  IMap._unsafe(this._m, {required this.config});
+  factory IMap._unsafe(M<K, V> _m, {required ConfigMap config}) =>
+      IMapImpl._unsafe(_m, config: config);
 
   /// **Unsafe**.
-  IMap._unsafeFromMap(Map<K, V> map, {required this.config}) : _m = MFlat<K, V>.unsafe(map);
+  factory IMap._unsafeFromMap(Map<K, V> map, {required ConfigMap config}) =>
+      IMapImpl._unsafeFromMap(map, config: config);
 
   /// Creates a map with `identityEquals` (compares the internals by `identity`).
   IMap<K, V> get withIdentityEquals =>
@@ -672,35 +810,6 @@ class IMap<K, V> // ignore: must_be_immutable
   @override
   bool same(IMap<K, V> other) => identical(_m, other._m) && (config == other.config);
 
-  // HashCode cache. Must be null if hashCode is not cached.
-  int? _hashCode;
-
-  @override
-  int get hashCode {
-    if (_hashCode != null) return _hashCode!;
-
-    var hashCode = isDeepEquals //
-        ? hash2((flush._m as MFlat<K, V>).deepMapHashcode(), config.hashCode)
-        : hash2(identityHashCode(_m), config.hashCode);
-
-    if (config.cacheHashCode) _hashCode = hashCode;
-
-    return hashCode;
-  }
-
-  /// Flushes the map, if necessary. Chainable method.
-  /// If the map is already flushed, doesn't do anything.
-  @override
-  IMap<K, V> get flush {
-    if (!isFlushed) {
-      // Flushes the original _m because maybe it's used elsewhere.
-      // Or maybe it was flushed already, and we can use it as is.
-      _m = MFlat<K, V>.unsafe(_m.getFlushed(config));
-      _counter = 0;
-    }
-    return this;
-  }
-
   /// Whether this map is already flushed or not.
   @override
   bool get isFlushed => _m is MFlat;
@@ -840,7 +949,7 @@ class IMap<K, V> // ignore: must_be_immutable
     if (result is M<RK, RV>)
       return IMap._unsafe(result, config: config);
     else if (result is Map<RK, RV>)
-      return IMap._(result, config: config);
+      return IMapImpl._(result, config: config);
     else
       throw AssertionError(result.runtimeType);
   }
@@ -878,8 +987,7 @@ class IMap<K, V> // ignore: must_be_immutable
     final int length = _m.length;
 
     /// Optimization: Flushes the map, if free.
-    if (length == 0 && _m is! MFlat)
-      _m = MFlat.empty<K, V>();
+    if (length == 0 && _m is! MFlat) _m = MFlat.empty<K, V>();
 
     return length;
   }
@@ -891,7 +999,7 @@ class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns an [IMap] with all elements that satisfy the predicate [test].
   IMap<K, V> where(bool Function(K key, V value) test) =>
-      IMap<K, V>._(_m.where(test), config: config);
+      IMapImpl<K, V>._(_m.where(test), config: config);
 
   /// Returns a new map where all entries of this map are transformed by
   /// the given [mapper] function. However, if [ifRemove] is provided,
@@ -943,7 +1051,7 @@ class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns an empty map with the same configuration.
-  IMap<K, V> clear() => empty<K, V>(config);
+  IMap<K, V> clear() => IMapImpl.empty<K, V>(config);
 
   /// Look up the value of [key], or add a new value if it isn't there.
   ///

@@ -4,6 +4,7 @@ library fast_immutable_collections;
 
 // Base:
 export "src/base/configs.dart";
+export "src/base/fp.dart";
 export "src/base/immutable_collection.dart";
 export "src/base/iterable_extension.dart";
 export "src/base/map_entry_equality.dart";

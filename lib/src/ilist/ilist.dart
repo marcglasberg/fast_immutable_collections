@@ -14,15 +14,6 @@ import "list_extension.dart";
 import "modifiable_list_from_ilist.dart";
 import "unmodifiable_list_from_ilist.dart";
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-typedef Predicate<T> = bool Function(T element);
-
-/// Operation of type that conserve the original type
-typedef Op<T> = T Function(T element);
-
-typedef EQ<T, U> = bool Function(T item, U other);
-
 /// This is an [IList] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -37,12 +28,11 @@ class IListConst<T> // ignore: must_be_immutable
   /// It's always wrong to use an `IListConst` which is not constant.
   ///
   @literal
-  const IListConst(this._list
+  const IListConst(this._list,
       // Note: The _list can't be optional. This doesn't work: [this._list = const []]
       // because when you do this _list will be List<Never> which will create problems.
-      )
-      : config = const ConfigList(),
-        super._gen();
+      [this.config = const ConfigList()])
+      : super._gen();
 
   final List<T> _list;
 
@@ -102,6 +92,7 @@ class IListImpl<T> // ignore: must_be_immutable
   int _counter = 0;
 
   @override
+  // HashCode cache. Must be null if hashCode is not cached.
   // ignore: use_late_for_private_fields_and_variables
   int? _hashCode;
 
@@ -157,11 +148,11 @@ class IListImpl<T> // ignore: must_be_immutable
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable** list.
-/// Note The [replace] method is the equivalent of `operator []=` for the [IList].
+/// Note: The [replace] method is the equivalent of `operator []=` for the [IList].
 ///
 @immutable
 abstract class IList<T> // ignore: must_be_immutable
-    extends ImmutableCollection<IList<T>?> implements Iterable<T> {
+    extends ImmutableCollection<IList<T>> implements Iterable<T> {
   //
   ConfigList get config;
 
@@ -178,6 +169,19 @@ abstract class IList<T> // ignore: must_be_immutable
   int? get _hashCode;
 
   set _hashCode(int? value);
+
+  @override
+  int get hashCode {
+    if (_hashCode != null) return _hashCode!;
+
+    var hashCode = isDeepEquals
+        ? hash2((flush._l as LFlat<T>).deepListHashcode(), config.hashCode)
+        : hash2(identityHashCode(_l), config.hashCode);
+
+    if (config.cacheHashCode) _hashCode = hashCode;
+
+    return hashCode;
+  }
 
   /// Create an [IList] from an [iterable], with the default configuration.
   /// Fast, if the iterable is another [IList].
@@ -231,7 +235,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
   IList<T> withConfig(ConfigList config) {
-    return (config == this.config) ? this : IListImpl._unsafe(_l, config: config);
+    return (config == this.config) ? this : IList._unsafe(_l, config: config);
   }
 
   /// Returns a new list with the contents of the present [IList],
@@ -248,7 +252,7 @@ abstract class IList<T> // ignore: must_be_immutable
     required ConfigList? config,
   }) {
     List<T> list = iset.toList(growable: false, compare: compare);
-    return IListImpl._unsafe(LFlat<T>.unsafe(list), config: config ?? defaultConfig);
+    return IList._unsafe(LFlat<T>.unsafe(list), config: config ?? defaultConfig);
   }
 
   /// **Unsafe constructor. Use this at your own peril.**
@@ -592,19 +596,6 @@ abstract class IList<T> // ignore: must_be_immutable
   @override
   bool same(IList<T>? other) =>
       (other != null) && identical(_l, other._l) && (config == other.config);
-
-  @override
-  int get hashCode {
-    if (_hashCode != null) return _hashCode!;
-
-    var hashCode = isDeepEquals
-        ? hash2((flush._l as LFlat<T>).deepListHashcode(), config.hashCode)
-        : hash2(identityHashCode(_l), config.hashCode);
-
-    if (config.cacheHashCode) _hashCode = hashCode;
-
-    return hashCode;
-  }
 
   /// Flushes the list, if necessary. Chainable getter.
   /// If the list is already flushed, don't do anything.

@@ -72,8 +72,8 @@ void main() {
     IMap<Supertype, String> imap1 = IMap(<Subtype, String>{obj1: "a", obj2: "a", obj3: "a"});
     IMap<Supertype, String> imap2 = {obj1: "a", obj2: "a", obj3: "a"}.lock;
 
-    expect(imap1.runtimeType.toString(), "IMap<Supertype, String>");
-    expect(imap2.runtimeType.toString(), "IMap<Subtype, String>");
+    expect(imap1.runtimeType.toString(), "IMapImpl<Supertype, String>");
+    expect(imap2.runtimeType.toString(), "IMapImpl<Subtype, String>");
 
     expect(imap1 == imap2, isTrue);
     expect(imap2 == imap1, isTrue);
@@ -98,8 +98,8 @@ void main() {
     IMap<String, Supertype> imap1 = IMap(<String, Subtype>{"a": obj1, "b": obj2, "c": obj3});
     IMap<String, Supertype> imap2 = {"a": obj1, "b": obj2, "c": obj3}.lock;
 
-    expect(imap1.runtimeType.toString(), "IMap<String, Supertype>");
-    expect(imap2.runtimeType.toString(), "IMap<String, Subtype>");
+    expect(imap1.runtimeType.toString(), "IMapImpl<String, Supertype>");
+    expect(imap2.runtimeType.toString(), "IMapImpl<String, Subtype>");
 
     expect(imap1 == imap2, isTrue);
     expect(imap2 == imap1, isTrue);

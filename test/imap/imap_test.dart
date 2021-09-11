@@ -20,7 +20,7 @@ void main() {
     expect(IMap({}), isA<IMap>());
     expect(IMap<String, int>({}), isA<IMap<String, int>>());
     expect(IMap({"a": 1}), isA<IMap<String, int>>());
-    expect(IMap.empty<String, int>(), isA<IMap<String, int>>());
+    expect(IMapImpl.empty<String, int>(), isA<IMap<String, int>>());
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -30,13 +30,13 @@ void main() {
     expect(IMap({}).isEmpty, isTrue);
     expect(IMap<String, int>({}).isEmpty, isTrue);
     expect(IMap({"a": 1}).isEmpty, isFalse);
-    expect(IMap.empty<String, int>().isEmpty, isTrue);
+    expect(IMapImpl.empty<String, int>().isEmpty, isTrue);
 
     expect(IMap().isNotEmpty, isFalse);
     expect(IMap({}).isNotEmpty, isFalse);
     expect(IMap<String, int>({}).isNotEmpty, isFalse);
     expect(IMap({"a": 1}).isNotEmpty, isTrue);
-    expect(IMap.empty<String, int>().isNotEmpty, isFalse);
+    expect(IMapImpl.empty<String, int>().isNotEmpty, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -299,14 +299,14 @@ void main() {
 
   test("empty", () {
     // 1) Regular usage
-    var imap = IMap.empty();
+    var imap = IMapImpl.empty();
 
     expect(imap, isEmpty);
     expect(imap.unlock, {});
     expect(imap.config, ConfigMap());
 
     // 2) With another config
-    imap = IMap.empty(ConfigMap(sort: true));
+    imap = IMapImpl.empty(ConfigMap(sort: true));
 
     expect(imap.config, ConfigMap(sort: true));
   });
@@ -640,7 +640,7 @@ void main() {
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3});
 
     // 2) Adding the same item overwrites it
-    imap = IMap.empty<String, int>().withDeepEquals;
+    imap = IMapImpl.empty<String, int>().withDeepEquals;
     IMap<String, int> newMap = imap.add("a", 1);
     newMap = newMap.add("b", 2);
     newMap = newMap.add("a", 3);
@@ -678,7 +678,7 @@ void main() {
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3});
 
     // 2) addEntry to the same entry overwrites it
-    imap = IMap.empty<String, int>().withDeepEquals;
+    imap = IMapImpl.empty<String, int>().withDeepEquals;
     IMap<String, int> newMap = imap.addEntry(MapEntry<String, int>("a", 1));
     newMap = newMap.addEntry(MapEntry<String, int>("b", 2));
     newMap = newMap.addEntry(MapEntry<String, int>("a", 3));
@@ -703,7 +703,7 @@ void main() {
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
 
     // 2) addAll to the same keys overwrites them.
-    imap = IMap.empty<String, int>().withDeepEquals;
+    imap = IMapImpl.empty<String, int>().withDeepEquals;
     IMap<String, int> newMap = imap.addAll({"a": 1}.lock);
     newMap = newMap.addAll({"b": 2}.lock);
     newMap = newMap.addAll({"a": 3}.lock);
@@ -799,7 +799,7 @@ void main() {
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
 
     // 2) addMap to the keys overwrites them
-    imap = IMap.empty<String, int>().withDeepEquals;
+    imap = IMapImpl.empty<String, int>().withDeepEquals;
     IMap<String, int> newMap = imap.addMap({"a": 1});
     newMap = newMap.addMap({"b": 2});
     newMap = newMap.addMap({"a": 3});
@@ -825,7 +825,7 @@ void main() {
     expect(newIMap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
 
     // 2) addEntries to the keys overwrites them
-    imap = IMap.empty<String, int>().withDeepEquals;
+    imap = IMapImpl.empty<String, int>().withDeepEquals;
     IMap<String, int> newMap = imap.addEntries([MapEntry<String, int>("a", 1)]);
     newMap = newMap.addEntries([MapEntry<String, int>("b", 2)]);
     newMap = newMap.addEntries([MapEntry<String, int>("a", 3)]);
@@ -1711,7 +1711,7 @@ void main() {
     expect(imap.length, 6);
 
     // 2) When with an empty IMap
-    imap = IMap.empty();
+    imap = IMapImpl.empty();
 
     expect(imap.length, 0);
     expect(imap.isEmpty, isTrue);

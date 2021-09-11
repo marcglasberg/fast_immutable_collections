@@ -56,7 +56,7 @@ class ModifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, CanB
   /// After this, the map is empty.
   @override
   void clear() {
-    _iMap = IMap.empty<K, V>();
+    _iMap = IMapImpl.empty<K, V>(_iMap?.config);
     _map = null;
   }
 
