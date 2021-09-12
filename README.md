@@ -414,7 +414,7 @@ Examples:
 ```
 const IList<int> ilist1 = IListConst([1, 2, 3]);
 const IList<int> ilist2 = IListConst([]);
-const IList<int> ilist3 = IListConst.withConfig([1, 2], ConfigList(isDeepEquals: false));
+const IList<int> ilist3 = IListConst([1, 2], ConfigList(isDeepEquals: false));
 ```
 
 If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
@@ -431,7 +431,7 @@ const ilist = IListConst([]);
 One other thing to keep in mind is that the `IListConst()` constructor always uses
 `ConfigList(isDeepEquals: true, cacheHashCode: true)`, completely ignoring the global
 `defaultConfig` (which will be explained below). This means if you want a specific a config you must
-use the `IListConst.withConfig()` constructor.
+provide it in the constructor.
 
 _Note: While the FIC collections are generally intuitive to use, the **const** `IList` is a bit
 cumbersome to use, because of these rules you have to remember. Unfortunately it can't be avoided
@@ -926,8 +926,8 @@ Examples:
 ```
 const ISet<int> iset1 = ISetConst({1, 2, 3});
 const ISet<int> iset2 = ISetConst({});
-const ISet<int> iset3 = ISetConst.withConfig({1, 2}, ConfigSet(isDeepEquals: false));
-const ISet<int> iset4 = ISetConst.withConfig({}, ConfigSet(sort: true));
+const ISet<int> iset3 = ISetConst({1, 2}, ConfigSet(isDeepEquals: false));
+const ISet<int> iset4 = ISetConst({}, ConfigSet(sort: true));
 ```
 
 If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
@@ -941,7 +941,7 @@ ISet<int> iset = ISetConst({});
 const iset = ISetConst({});
 
 // Wrong: Const sorted set is not empty.
-const ISet<int> iset = ISetConst.withConfig({1, 2}, ConfigSet(sort: true));
+const ISet<int> iset = ISetConst({1, 2}, ConfigSet(sort: true));
 ```
 
 The reason you can't have a non-empty const set is that we can't sort it in the constructor (
@@ -951,7 +951,7 @@ throw an error when you try to use it.
 One other thing to keep in mind is that the `ISetConst()` constructor always uses
 `ConfigSet(isDeepEquals: true, sort: false, cacheHashCode: true)`, completely ignoring the global
 `defaultConfig` (which will be explained below). This means if you want a specific a config you must
-use the `ISetConst.withConfig()` constructor.
+provide it in the constructor.
 
 _Note: While the FIC collections are generally intuitive to use, the **const** `ISet` is a bit
 cumbersome to use, because of these rules you have to remember. Unfortunately it can't be avoided
@@ -1180,6 +1180,51 @@ than for IList. Please read the IList explanation first, before trying to unders
     Map<String, int> set = imap.unlockLazy;                // Safe, fast and mutable
     ```
 
+## 4.1.2. Const IMap
+
+It's actually possible to create a const `IMap`, but you must follow these rules:
+
+1. Instantiate an `IMapConst`.
+2. Explicitly assign it to an `IMap`.
+3. Use the const keyword.
+4. You can only create a sorted map (`ConfigMap(sort: true)`) if the map is empty.
+
+Examples:
+
+```
+const IMap<String, int> imap1 = IMapConst({'a': 1, 'b':2});
+const IMap<String, int> imap2 = IMapConst({});
+const IMap<String, int> imap3 = IMapConst({'a': 1, 'b':2}, ConfigMap(isDeepEquals: false));
+const IMap<String, int> imap4 = IMapConst({}, ConfigMap(sort: true));
+```
+
+If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
+example, those are wrong:
+
+```
+// Wrong: Not using the const keyword.
+IMap<int> imap = IMapConst({});
+
+// Wrong: Not explicitly assigning it to an `IMap`.
+const imap = IMapConst({});
+
+// Wrong: Const sorted map is not empty.
+const IMap<int> imap = IMapConst({1, 2}, ConfigMap(sort: true));
+```
+
+The reason you can't have a non-empty const map is that we can't sort it in the constructor (
+since it's constant). If you try to create a non-empty const map it will seem to work, but will
+throw an error when you try to use it.
+
+One other thing to keep in mind is that the `IMapConst()` constructor always uses
+`ConfigMap(isDeepEquals: true, sort: false, cacheHashCode: true)`, completely ignoring the global
+`defaultConfig` (which will be explained below). This means if you want a specific a config you must
+provide it in the constructor.
+
+_Note: While the FIC collections are generally intuitive to use, the **const** `IMap` is a bit
+cumbersome to use, because of these rules you have to remember. Unfortunately it can't be avoided
+because of the limitations of the Dart language._
+
 ## 4.2. Global IMap Configuration
 
 The **default** configuration of the `IMap` is
@@ -1247,8 +1292,7 @@ comes handy:
 
 ```
 class StudentsPerCourse {
-  final IMapOfSets<Course
-  , Student> imap;
+  final IMapOfSets<Course, Student> imap;
 
   StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
       : imap = (studentsPerCourse ?? {}).lock;
@@ -1312,6 +1356,47 @@ StudentsPerCourse([Map<Course, Set<Student>> studentsPerCourse])
 
 Note: The `IMapOfSets` is an immutable multimap. If you need a mutable one, check the
 <a href="https://pub.dev/packages/quiver">Quiver</a> package.
+
+## 5.1. Const IMapOfSets
+
+It's actually possible to create a const `IMapOfSets`, but you must follow these rules:
+
+1. Instantiate an `IMapOfSetsConst`.
+2. Explicitly assign it to an `IMapOfSets`.
+3. Use the const keyword.
+4. You can only create a map with sorted keys or values (`ConfigMapOfSets(sortKeys: true)`
+   or `ConfigMapOfSets(sortValues: true)`) if the map is empty.
+5. Your map values can't be empty sets, unless your config
+   is `ConfigMapOfSets(removeEmptySets: false)`.
+
+Examples:
+
+```
+const IMap<String, int> imap1 = IMapOfSetsConst(IMapConst({'a': ISetConst({1, 2})}));
+const IMap<String, int> imap2 = IMapOfSetsConst(IMapConst({}));
+const IMap<String, int> imap3 = IMapOfSetsConst(IMapConst({'a': ISetConst({})}, ConfigMapIfSets(removeEmptySets: false));
+const IMap<String, int> imap4 = IMapOfSetsConst(IMapConst({}), ConfigMapIfSets(sortKeys: true));
+```
+
+If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
+example, those are wrong:
+
+```
+// Wrong: Not using the const keyword.
+IMapOfSets<int> imapOfSets = IMapOfSetsConst({});
+
+// Wrong: Not explicitly assigning it to an `IMapOfSets`.
+const imapOfSets = IMapOfSetsConst({});
+```
+
+One other thing to keep in mind is that the `IMapOfSetsConst()` constructor always uses
+`ConfigMapOfSets(isDeepEquals = true, sortKeys = false, sortValues = false, removeEmptySets = true, cacheHashCode = true,)`
+, completely ignoring the global `defaultConfig`. This means if you want a specific a config you
+must provide it in the constructor.
+
+_Note: While the FIC collections are generally intuitive to use, the **const** `IMapOfSets` is a bit
+cumbersome to use, because of these rules you have to remember. Unfortunately it can't be avoided
+because of the limitations of the Dart language._
 
 # 6. ListSet
 

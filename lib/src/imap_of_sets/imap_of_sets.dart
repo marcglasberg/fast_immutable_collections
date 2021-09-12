@@ -5,6 +5,29 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class IMapOfSetsConst<K, V> extends IMapOfSets<K, V> {
+  //
+  /// To create an empty constant IMapOfSets: `const IMapOfSetsConst(IMapConst({}))`.
+  ///
+  /// To create an empty constant IMapOfSets with a specific configuration:
+  /// `const IMapOfSetsConst(IMapConst({}), ConfigMapOfSets())`.
+  ///
+  /// To create a constant map with entries:
+  /// `const IMapOfSetsConst(IMapConst({'a': ISetConst({1, 2})}))`.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's ALWAYS wrong to use an `IMapConst` which is not constant.
+  ///
+  @literal
+  const IMapOfSetsConst(IMap<K, ISet<V>> _mapOfSets,
+      [ConfigMapOfSets config = const ConfigMapOfSets()])
+      : super._(_mapOfSets, config);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// An **immutable**, **unordered**, map of sets.
 @immutable
 class IMapOfSets<K, V> // ignore: must_be_immutable,
@@ -65,6 +88,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   factory IMapOfSets([Map<K, Iterable<V>>? mapOfSets]) => //
       IMapOfSets.withConfig(mapOfSets, defaultConfig);
+
+  @literal
+  const IMapOfSets._(this._mapOfSets,
+      // Note: The _mapOfSets can't be optional. This doesn't work: [this._mapOfSets = const {}]
+      // because when you do this _mapOfSets will be MapOfSets<Never, Never> which is bad.
+      [this.config = const ConfigMapOfSets()]);
 
   /// Create an [IMapOfSets] from a map of sets and a [ConfigMapOfSets].
   factory IMapOfSets.withConfig(

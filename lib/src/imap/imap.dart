@@ -22,16 +22,16 @@ import "unmodifiable_map_from_imap.dart";
 class IMapConst<K, V> // ignore: must_be_immutable
     extends IMap<K, V> {
   //
-  /// To create an empty IMap: `const IMapConst({})`.
-  /// To create a map with entries: `const IMapConst({1:'a', 2:'b', 3:'c'})`.
+  /// To create an empty constant IMap: `const IMapConst({})`.
+  /// To create a constant map with entries: `const IMapConst({1:'a', 2:'b', 3:'c'})`.
   ///
-  /// IMPORTANT: You must always use this with the `const` keyword.
-  /// It's always wrong to use an `IMapConst` which is not constant.
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's ALWAYS wrong to use an `IMapConst` which is not constant.
   ///
   @literal
   const IMapConst(this._map,
       // Note: The _map can't be optional. This doesn't work: [this._map = const {}]
-      // because when you do this _map will be Map<Never, Never> which will create problems.
+      // because when you do this _map will be Map<Never, Never> which is bad.
       [this.config = const ConfigMap()])
       : super._gen();
 
@@ -39,8 +39,6 @@ class IMapConst<K, V> // ignore: must_be_immutable
 
   @override
   final ConfigMap config;
-
-  const IMapConst.withConfig(this._map, this.config) : super._gen();
 
   /// A constant map is always flushed, by definition.
   @override

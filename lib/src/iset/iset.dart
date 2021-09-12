@@ -20,16 +20,16 @@ import "unmodifiable_set_from_iset.dart";
 class ISetConst<T> // ignore: must_be_immutable
     extends ISet<T> {
   //
-  /// To create an empty ISet: `const ISetConst({})`.
-  /// To create a set with items: `const ISetConst({1, 2, 3})`.
+  /// To create an empty constant ISet: `const ISetConst({})`.
+  /// To create a constant set with items: `const ISetConst({1, 2, 3})`.
   ///
-  /// IMPORTANT: You must always use this with the `const` keyword.
+  /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `ISetConst` which is not constant.
   ///
   @literal
   const ISetConst(this._set,
       // Note: The _set can't be optional. This doesn't work: [this._set = const {}]
-      // because when you do this _set will be Set<Never> which will create problems.
+      // because when you do this _set will be Set<Never> which is bad.
       [this.config = const ConfigSet()])
       : super._gen();
 
@@ -37,8 +37,6 @@ class ISetConst<T> // ignore: must_be_immutable
 
   @override
   final ConfigSet config;
-
-  const ISetConst.withConfig(this._set, this.config) : super._gen();
 
   /// A constant set is always flushed, by definition.
   @override

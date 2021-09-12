@@ -80,17 +80,17 @@ void main() {
 
     // 2) With non-empty set, non-sorted configs.
     const Set<int> nonemptySet = <int>{1, 2, 3};
-    expect(const ISetConst.withConfig(nonemptySet, ConfigSet(isDeepEquals: false)), [1, 2, 3]);
+    expect(const ISetConst(nonemptySet, ConfigSet(isDeepEquals: false)), [1, 2, 3]);
 
     // 3) With empty set and different configs.
     const Set<int> emptySet = <int>{};
-    const sortedEmptyConstISet = ISetConst.withConfig(emptySet, ConfigSet(sort: true));
+    const sortedEmptyConstISet = ISetConst(emptySet, ConfigSet(sort: true));
     expect(sortedEmptyConstISet, isEmpty);
 
     // 4) With non-empty set, sorted configs. We can actually create a sorted const ISet,
     // but it will throw an error if we try to use it. Only EMPTY sorted const ISets
     // are allowed.
-    const sortedConstISet = ISetConst.withConfig(nonemptySet, ConfigSet(sort: true));
+    const sortedConstISet = ISetConst(nonemptySet, ConfigSet(sort: true));
     expect(() => sortedConstISet, throwsUnsupportedError);
   });
 

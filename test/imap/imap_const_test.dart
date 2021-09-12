@@ -14,54 +14,54 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
-    expect(const IListConst([]), isA<IListConst>());
-    expect(const IListConst([]), isA<IListConst>());
-    expect(const IListConst<String>([]), isA<IListConst<String>>());
-    expect(const IListConst([1]), isA<IListConst<int>>());
-    expect(const IListConst<int>([]), isA<IListConst<int>>());
+    expect(const IMapConst({}), isA<IMapConst>());
+    expect(const IMapConst({}), isA<IMapConst>());
+    expect(const IMapConst<String, int>({}), isA<IMapConst<String, int>>());
+    expect(const IMapConst({'a': 1}), isA<IMapConst<String, int>>());
+    expect(const IMapConst<String, int>({}), isA<IMapConst<String, int>>());
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
-    expect(const IListConst([]), isEmpty);
-    expect(const IListConst([]).isEmpty, isTrue);
-    expect(const IListConst([]).isNotEmpty, isFalse);
+    expect(const IMapConst({}), isEmpty);
+    expect(const IMapConst({}).isEmpty, isTrue);
+    expect(const IMapConst({}).isNotEmpty, isFalse);
 
-    expect(const IListConst<String>([]).isEmpty, isTrue);
-    expect(const IListConst<String>([]).isNotEmpty, isFalse);
+    expect(const IMapConst<String, int>({}).isEmpty, isTrue);
+    expect(const IMapConst<String, int>({}).isNotEmpty, isFalse);
 
-    expect(const IListConst([1]), isNotEmpty);
-    expect(const IListConst([1]).isEmpty, isFalse);
-    expect(const IListConst([1]).isNotEmpty, isTrue);
+    expect(const IMapConst({'a': 1}), isNotEmpty);
+    expect(const IMapConst({'a': 1}).isEmpty, isFalse);
+    expect(const IMapConst({'a': 1}).isNotEmpty, isTrue);
 
-    expect(const IListConst<int>([]), isEmpty);
-    expect(const IListConst<int>([]).isEmpty, isTrue);
-    expect(const IListConst<int>([]).isNotEmpty, isFalse);
+    expect(const IMapConst<String, int>({}), isEmpty);
+    expect(const IMapConst<String, int>({}).isEmpty, isTrue);
+    expect(const IMapConst<String, int>({}).isNotEmpty, isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("hashCode", () {
-    expect(const IListConst([]) == const IListConst([]), isTrue);
-    expect(IList() == IList(), isTrue);
-    expect(const IListConst([]) == IList(), isTrue);
-    expect(const IListConst([]) == IList([]), isTrue);
-    expect(IList() == const IListConst([]), isTrue);
-    expect(IList([]) == const IListConst([]), isTrue);
+    expect(const IMapConst({}) == const IMapConst({}), isTrue);
+    expect(IMap() == IMap(), isTrue);
+    expect(const IMapConst({}) == IMap(), isTrue);
+    expect(const IMapConst({}) == IMap({}), isTrue);
+    expect(IMap() == const IMapConst({}), isTrue);
+    expect(IMap({}) == const IMapConst({}), isTrue);
 
-    expect(const IListConst([1, 2]) == const IListConst([1, 2]), isTrue);
-    expect(IList([1, 2]) == IList([1, 2]), isTrue);
-    expect(const IListConst([1, 2]) == IList([1, 2]), isTrue);
-    expect(IList([1, 2]) == const IListConst([1, 2]), isTrue);
+    expect(const IMapConst({'a': 1, 'b': 2}) == const IMapConst({'a': 1, 'b': 2}), isTrue);
+    expect(IMap({'a': 1, 'b': 2}) == IMap({'a': 1, 'b': 2}), isTrue);
+    expect(const IMapConst({'a': 1, 'b': 2}) == IMap({'a': 1, 'b': 2}), isTrue);
+    expect(IMap({'a': 1, 'b': 2}) == const IMapConst({'a': 1, 'b': 2}), isTrue);
 
-    var a = IList<int>(<int>[]);
-    var b = const IListConst<String>(<String>[]);
+    var a = IMap<String, int>(<String, int>{});
+    var b = const IMapConst<String, int>(<String, int>{});
     expect(a, b);
     expect(a.hashCode, b.hashCode);
 
-    var x = IList([1, 2, 3]);
-    var y = IList([1, 2]).add(3);
+    var x = IMap({'a': 1, 'b': 2, 'c': 3});
+    var y = IMap({'a': 1, 'b': 2}).add('c', 3);
     expect(x, y);
     expect(x.hashCode, y.hashCode);
   });
@@ -70,197 +70,178 @@ void main() {
 
   test("withConfig", () {
     // 1) Regular usage
-    const IList<int> ilist = IListConst([1, 2]);
+    const IMap<String, int> imap = IMapConst({'a': 1, 'b': 2});
 
-    expect(ilist.isDeepEquals, isTrue);
+    expect(imap.isDeepEquals, isTrue);
 
-    IList<int> iListNewConfig = ilist.withConfig(ilist.config.copyWith());
+    IMap<String, int> iMapNewConfig = imap.withConfig(imap.config.copyWith());
 
-    IList<int> iListNewConfigIdentity =
-        ilist.withConfig(ilist.config.copyWith(isDeepEquals: false));
+    IMap<String, int> iMapNewConfigIdentity =
+        imap.withConfig(imap.config.copyWith(isDeepEquals: false));
 
-    expect(iListNewConfig.isDeepEquals, isTrue);
-    expect(iListNewConfigIdentity.isDeepEquals, isFalse);
+    expect(iMapNewConfig.isDeepEquals, isTrue);
+    expect(iMapNewConfigIdentity.isDeepEquals, isFalse);
 
-    // 2) With empty list and different configs.
-    const List<int> emptyList = <int>[];
-    expect(const IListConst.withConfig(emptyList, ConfigList(cacheHashCode: false)), []);
+    // 2) With empty map and different configs.
+    const Map<String, int> emptyMap = <String, int>{};
+    expect(const IMapConst(emptyMap, ConfigMap()), <String, int>{}.lock);
+    expect(const IMapConst(emptyMap, ConfigMap(cacheHashCode: false)),
+        <String, int>{}.lock.withConfig(ConfigMap(cacheHashCode: false)));
+    expect(const IMapConst(emptyMap, ConfigMap(cacheHashCode: false)),
+        isNot(<String, int>{}.lock));
 
-    // 3) With non-empty list and different configs.
-    const List<int> nonemptyList = <int>[1, 2, 3];
-    expect(const IListConst.withConfig(nonemptyList, ConfigList(cacheHashCode: false)), [1, 2, 3]);
+    // 3) With non-empty map and different configs.
+    const Map<String, int> nonemptyMap = <String, int>{'a': 1, 'b': 2, 'c': 3};
+    expect(const IMapConst(nonemptyMap, ConfigMap()),
+        <String, int>{'a': 1, 'b': 2, 'c': 3}.lock);
+    expect(const IMapConst(nonemptyMap, ConfigMap(cacheHashCode: false)),
+        <String, int>{'a': 1, 'b': 2, 'c': 3}.lock.withConfig(ConfigMap(cacheHashCode: false)));
+    expect(const IMapConst(nonemptyMap, ConfigMap(cacheHashCode: false)),
+        isNot(<String, int>{'a': 1, 'b': 2, 'c': 3}.lock));
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
-    const ilistConst = IListConst([1, 2, 3]);
-    expect(ilistConst.unlock, [1, 2, 3]);
-    expect(ilistConst.unlock..add(4), [1, 2, 3, 4]);
+    const imapConst = IMapConst({'a': 1, 'b': 2, 'c': 3});
+    expect(imapConst.unlock, {'a': 1, 'b': 2, 'c': 3});
 
-    expect(ilistConst.unlockLazy, [1, 2, 3]);
-    expect(ilistConst.unlockLazy..add(4), [1, 2, 3, 4]);
+    Map map = imapConst.unlock;
+    expect(map, isA<Map>());
+    map['d'] = 4;
+    expect(map, {'a': 1, 'b': 2, 'c': 3, 'd': 4});
 
-    expect(ilistConst.unlockView, [1, 2, 3]);
-    expect(() => ilistConst.unlockView..add(4), throwsUnsupportedError);
+    expect(imapConst.unlockLazy, {'a': 1, 'b': 2, 'c': 3});
+    map = imapConst.unlockLazy;
+    expect(map, isA<Map>());
+    map['d'] = 4;
+    expect(map, {'a': 1, 'b': 2, 'c': 3, 'd': 4});
+
+    expect(imapConst.unlockView, {'a': 1, 'b': 2, 'c': 3});
+    expect(() => imapConst.unlockView['d'] = 4, throwsUnsupportedError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("flush", () {
-    const ilistConst = IListConst([1, 2, 3]);
-    expect(ilistConst.isFlushed, isTrue);
-    ilistConst.flush;
-    expect(ilistConst.isFlushed, isTrue);
-    expect(ilistConst.unlock, [1, 2, 3]);
+    const imapConst = IMapConst({'a': 1, 'b': 2, 'c': 3});
+    expect(imapConst.isFlushed, isTrue);
+    imapConst.flush;
+    expect(imapConst.isFlushed, isTrue);
+    expect(imapConst.unlock, {'a': 1, 'b': 2, 'c': 3});
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
   test("add/addAll, remove/removeAll", () {
-    const ilistConst = IListConst([1, 2, 3]);
-    expect(ilistConst.add(4), [1, 2, 3, 4]);
-    expect(ilistConst.addAll([4, 5, 6]), [1, 2, 3, 4, 5, 6]);
-    expect(ilistConst.remove(2), [1, 3]);
-    expect(ilistConst.removeAll([1, 2]), [3]);
+    const imapConst = IMapConst({'a': 1, 'b': 2, 'c': 3});
+    expect(imapConst.add('d', 4), {'a': 1, 'b': 2, 'c': 3, 'd': 4}.lock);
+    expect(imapConst.addAll({'d': 4, 'e': 5, 'f': 6}.lock),
+        {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6}.lock);
+    expect(imapConst.remove('b'), {'a': 1, 'c': 3}.lock);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("IListConst", () {
+  test("IMapConst", () {
     //
-    // The default constructor will always use the same const [] internals.
-    expect(const IListConst([]).same(const IListConst([])), isTrue);
-    expect(const IListConst([]).same(IListConst([])), isFalse);
-    expect(const IListConst([]).same(const IListConst([])), isTrue);
-    expect(IListConst([]).same(IListConst([])), isFalse);
+    // The default constructor will always use the same const {} internals.
+    expect(const IMapConst({}).same(const IMapConst({})), isTrue);
+    expect(const IMapConst({}).same(IMapConst({})), isFalse);
+    expect(const IMapConst({}).same(const IMapConst({})), isTrue);
+    expect(IMapConst({}).same(IMapConst({})), isFalse);
 
     // ---
 
-    // Both IListConst are const. So they are the same.
-    expect(const IListConst([]).same(const IListConst([])), isTrue);
+    // Both IMapConst are const. So they are the same.
+    expect(const IMapConst({}).same(const IMapConst({})), isTrue);
 
-    // One of the IListConst is const, the other is not. So they are NOT the same.
-    expect(const IListConst([]).same(IListConst([])), isFalse);
-    expect(IListConst([]).same(const IListConst([])), isFalse);
+    // One of the IMapConst is const, the other is not. So they are NOT the same.
+    expect(const IMapConst({}).same(IMapConst({})), isFalse);
+    expect(IMapConst({}).same(const IMapConst({})), isFalse);
 
-    // None of the IListConst are const. So they are NOT the same.
-    expect(IListConst([]).same(IListConst([])), isFalse);
+    // None of the IMapConst are const. So they are NOT the same.
+    expect(IMapConst({}).same(IMapConst({})), isFalse);
 
     // ---
 
-    // Both IListConst are const. So they are the same.
-    expect(const IListConst([1, 2, 3]).same(const IListConst([1, 2, 3])), isTrue);
+    // Both IMapConst are const. So they are the same.
+    expect(
+        const IMapConst({'a': 1, 'b': 2, 'c': 3}).same(const IMapConst({'a': 1, 'b': 2, 'c': 3})),
+        isTrue);
 
-    // One of the IListConst is const, the other is not. So they are NOT the same.
-    expect(const IListConst([1, 2, 3]).same(IListConst([1, 2, 3])), isFalse);
-    expect(IListConst([1, 2, 3]).same(const IListConst([1, 2, 3])), isFalse);
+    // One of the IMapConst is const, the other is not. So they are NOT the same.
+    expect(const IMapConst({'a': 1, 'b': 2, 'c': 3}).same(IMapConst({'a': 1, 'b': 2, 'c': 3})),
+        isFalse);
+    expect(IMapConst({'a': 1, 'b': 2, 'c': 3}).same(const IMapConst({'a': 1, 'b': 2, 'c': 3})),
+        isFalse);
 
-    // None of the IListConst are const. So they are NOT the same.
-    expect(IListConst([1, 2, 3]).same(IListConst([1, 2, 3])), isFalse);
+    // None of the IMapConst are const. So they are NOT the same.
+    expect(IMapConst({'a': 1, 'b': 2, 'c': 3}).same(IMapConst({'a': 1, 'b': 2, 'c': 3})), isFalse);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 
-  test("Interaction between IList and IListConst", () {
+  test("Interaction between IMap and IMapConst", () {
     //
     // Empty.
-    expect(IListConst([]).same(IList()), isFalse);
-    expect(IListConst([]).same(IList()), isFalse);
-    expect(IList().same(IListConst([])), isFalse);
-    expect(IList().same(IListConst([])), isFalse);
-    expect(IList().same(IListConst([])), isFalse);
-    expect(IList().same(IListConst([])), isFalse);
-    expect(const IListConst([]).same(IList()), isFalse);
-    expect(const IListConst([]).same(IList()), isFalse);
-    expect(IList().same(const IListConst([])), isFalse);
-    expect(IList().same(const IListConst([])), isFalse);
-    expect(IList().same(const IListConst([])), isFalse);
-    expect(IList().same(const IListConst([])), isFalse);
+    expect(IMapConst({}).same(IMap()), isFalse);
+    expect(IMapConst({}).same(IMap()), isFalse);
+    expect(IMap().same(IMapConst({})), isFalse);
+    expect(IMap().same(IMapConst({})), isFalse);
+    expect(IMap().same(IMapConst({})), isFalse);
+    expect(IMap().same(IMapConst({})), isFalse);
+    expect(const IMapConst({}).same(IMap()), isFalse);
+    expect(const IMapConst({}).same(IMap()), isFalse);
+    expect(IMap().same(const IMapConst({})), isFalse);
+    expect(IMap().same(const IMapConst({})), isFalse);
+    expect(IMap().same(const IMapConst({})), isFalse);
+    expect(IMap().same(const IMapConst({})), isFalse);
 
     // Not Empty.
-    expect(IList([1, 2]).same(IListConst([1, 2])), isFalse);
-    expect(IListConst([1, 2]).same(IList([1, 2])), isFalse);
-    expect(IList([1, 2]).same(const IListConst([1, 2])), isFalse);
-    expect(const IListConst([1, 2]).same(IList([1, 2])), isFalse);
+    expect(IMap({'a': 1, 'b': 2}).same(IMapConst({'a': 1, 'b': 2})), isFalse);
+    expect(IMapConst({'a': 1, 'b': 2}).same(IMap({'a': 1, 'b': 2})), isFalse);
+    expect(IMap({'a': 1, 'b': 2}).same(const IMapConst({'a': 1, 'b': 2})), isFalse);
+    expect(const IMapConst({'a': 1, 'b': 2}).same(IMap({'a': 1, 'b': 2})), isFalse);
 
     // equalItems
-    expect(IList([]).equalItems(IListConst([])), isTrue);
-    expect(IList([]).equalItems(const IListConst([])), isTrue);
-    expect(IList().equalItems(const IListConst([])), isTrue);
-    expect(IList().equalItems(IListConst([])), isTrue);
-    expect(IList([1, 2]).equalItems(IListConst([1, 2])), isTrue);
-    expect(IListConst([1, 2]).equalItems(IList([1, 2])), isTrue);
-    expect(IList([1, 2]).equalItems(const IListConst([1, 2])), isTrue);
-    expect(const IListConst([1, 2]).equalItems(IList([1, 2])), isTrue);
+    expect(IMap({}).equalItems(IMapConst({}).entries), isTrue);
+    expect(IMap({}).equalItems(const IMapConst({}).entries), isTrue);
+    expect(IMap().equalItems(const IMapConst({}).entries), isTrue);
+    expect(IMap().equalItems(IMapConst({}).entries), isTrue);
+    expect(IMap({'a': 1, 'b': 2}).equalItems(IMapConst({'a': 1, 'b': 2}).entries), isTrue);
+    expect(IMapConst({'a': 1, 'b': 2}).equalItems(IMap({'a': 1, 'b': 2}).entries), isTrue);
+    expect(IMap({'a': 1, 'b': 2}).equalItems(const IMapConst({'a': 1, 'b': 2}).entries), isTrue);
+    expect(const IMapConst({'a': 1, 'b': 2}).equalItems(IMap({'a': 1, 'b': 2}).entries), isTrue);
 
     // equalItemsAndConfig
-    expect(IList([]).equalItemsAndConfig(IListConst([])), isTrue);
-    expect(IList([]).equalItemsAndConfig(const IListConst([])), isTrue);
-    expect(IList().equalItemsAndConfig(const IListConst([])), isTrue);
-    expect(IList().equalItemsAndConfig(IListConst([])), isTrue);
-    expect(IList([1, 2]).equalItemsAndConfig(IListConst([1, 2])), isTrue);
-    expect(IListConst([1, 2]).equalItemsAndConfig(IList([1, 2])), isTrue);
-    expect(IList([1, 2]).equalItemsAndConfig(const IListConst([1, 2])), isTrue);
-    expect(const IListConst([1, 2]).equalItemsAndConfig(IList([1, 2])), isTrue);
-
-    // unorderedEqualItems
-    expect(IList([]).unorderedEqualItems(IListConst([])), isTrue);
-    expect(IList([]).unorderedEqualItems(const IListConst([])), isTrue);
-    expect(IList().unorderedEqualItems(const IListConst([])), isTrue);
-    expect(IList().unorderedEqualItems(IListConst([])), isTrue);
-    expect(IList([1, 2]).unorderedEqualItems(IListConst([1, 2])), isTrue);
-    expect(IList([1, 2]).unorderedEqualItems(IListConst([2, 1])), isTrue);
-    expect(IListConst([1, 2]).unorderedEqualItems(IList([1, 2])), isTrue);
-    expect(IList([1, 2]).unorderedEqualItems(const IListConst([1, 2])), isTrue);
-    expect(IList([1, 2]).unorderedEqualItems(const IListConst([2, 1])), isTrue);
-    expect(const IListConst([1, 2]).unorderedEqualItems(IList([1, 2])), isTrue);
-    expect(const IListConst([1, 2]).unorderedEqualItems(IList([2, 1])), isTrue);
+    expect(IMap({}).equalItemsAndConfig(IMapConst({})), isTrue);
+    expect(IMap({}).equalItemsAndConfig(const IMapConst({})), isTrue);
+    expect(IMap().equalItemsAndConfig(const IMapConst({})), isTrue);
+    expect(IMap().equalItemsAndConfig(IMapConst({})), isTrue);
+    expect(IMap({'a': 1, 'b': 2}).equalItemsAndConfig(IMapConst({'a': 1, 'b': 2})), isTrue);
+    expect(IMapConst({'a': 1, 'b': 2}).equalItemsAndConfig(IMap({'a': 1, 'b': 2})), isTrue);
+    expect(IMap({'a': 1, 'b': 2}).equalItemsAndConfig(const IMapConst({'a': 1, 'b': 2})), isTrue);
+    expect(const IMapConst({'a': 1, 'b': 2}).equalItemsAndConfig(IMap({'a': 1, 'b': 2})), isTrue);
   });
 
   /////////////////////////////////////////////////////////////////////////////
 
-  test("Make sure the internal list is List<int>, and not List<Never>", () {
-    var l1 = const IListConst<int>([]);
-    expect(l1.runtimeType.toString(), 'IListConst<int>');
+  test("Make sure the internal map is Map<String, int>, and not Map<Never>", () {
+    var l1 = const IMapConst<String, int>({});
+    expect(l1.runtimeType.toString(), 'IMapConst<String, int>');
 
-    var l2 = IList<int>([1, 2, 3]);
-    expect(l2.runtimeType.toString(), 'IListImpl<int>');
+    var l2 = IMap<String, int>({'a': 1, 'b': 2, 'c': 3});
+    expect(l2.runtimeType.toString(), 'IMapImpl<String, int>');
 
     var l3 = l1.addAll(l2);
-    expect(l3.runtimeType.toString(), 'IListImpl<int>');
+    expect(l3.runtimeType.toString(), 'IMapImpl<String, int>');
 
-    var result = l3.where((int i) => i == 2).toList();
-    expect(result, [2]);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  test("Test we can cast from IListConst<Never>, when using FromIListMixin.", () {
-    MyList<int> myList1 = MyList.empty();
-    myList1 = myList1.add(1);
-    expect(myList1, [1]);
-
-    MyList<int> myList2 = MyList.empty();
-    myList2 = myList2.addAll([1, 2, 3]);
-    expect(myList2, [1, 2, 3]);
+    var result = l3.where((String key, int value) => value == 2);
+    expect(result, {'b': 2}.lock);
   });
 
   //////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class MyList<A extends num> with FromIListMixin<A, MyList<A>> implements Iterable<A> {
-  final IList<A> numbs;
-
-  MyList([Iterable<A>? activities]) : numbs = IList(activities);
-
-  const MyList.empty() : numbs = const IListConst([]);
-
-  @override
-  MyList<A> newInstance(IList<A> ilist) => MyList<A>(ilist);
-
-  @override
-  IList<A> get iter => numbs;
-}

@@ -1,8 +1,23 @@
+## [7.0.0] - 2021/09/12
+
+* Const `IMap`. Example: `const IMap<String, int> myMap = IMapConst({1:'a', 2:'b'});`
+  Example of const empty map: `const IMap<String, int> myMap = IMapConst({});`
+
+* Const `IMapOfSets`.
+  Example: `const IMapOfSets<String, int> myMapOfSets = IMapOfSetsConst(IMapConst({}));`
+  Example of const empty map of
+  sets: `const IMapOfSets<String, int> myMapOfSets = IMapOfSetsConst(IMapConst({'a': ISetConst({1, 2})}));`
+
+* Breaking change: If you use the `IListConst.withConfig()` or `ISetConst.withConfig()`
+  constructors, just remove the `.withConfig` and it will work. For example:
+  `IListConst.withConfig([], ConfigList(isDeepEquals: false))` should become
+  `IListConst([], ConfigList(isDeepEquals: false))`.
+
 ## [6.0.0] - 2021/09/05
 
-* Breaking change: Note, unless you know what an "async flush mode" is were using it explicitly,
-  this breaking change is not important to you, and you don't need to do anything to upgrade. If you
-  want to know the details, however, keep reading. I have removed the async flush mode. The
+* Breaking change: Note, unless you know what an "async flush mode" is, and use it explicitly, this
+  breaking change is not important to you, and you don't need to do anything to upgrade. If you want
+  to know the details, however, keep reading. I have removed the async flush mode. The
   **async** flush mode only flushed after the async gap, but since Dart does not allow
   **tail-call-optimization** (https://github.com/dart-lang/language/issues/1159) it was not possible
   to guarantee that very large collections created within the current microtask would not throw a
@@ -80,10 +95,10 @@
 ## [5.0.0] - 2021/05/24
 
 * Const `IList`. Example: `const IList<int> myList = IListConst([1, 2, 3]);`
-  Example of empty list: `const IList<String> myList = IListConst([]);`
+  Example of const empty list: `const IList<String> myList = IListConst([]);`
 
 * Const `ISet`. Example: `const ISet<int> mySet = ISetConst({1, 2, 3});`
-  Example of empty set: `const ISet<String> mySet = ISetConst({});`
+  Example of const empty set: `const ISet<String> mySet = ISetConst({});`
 
 * Methods `IList.get()`, `IList.getOrNull()` and `IList.getAndMap()`.
 

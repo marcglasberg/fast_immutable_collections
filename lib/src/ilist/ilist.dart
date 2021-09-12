@@ -21,16 +21,16 @@ import "unmodifiable_list_from_ilist.dart";
 class IListConst<T> // ignore: must_be_immutable
     extends IList<T> {
   //
-  /// To create an empty IList: `const IListConst([])`.
-  /// To create a list with items: `const IListConst([1, 2, 3])`.
+  /// To create an empty constant IList: `const IListConst([])`.
+  /// To create a constant list with items: `const IListConst([1, 2, 3])`.
   ///
-  /// IMPORTANT: You must always use this with the `const` keyword.
+  /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IListConst` which is not constant.
   ///
   @literal
   const IListConst(this._list,
       // Note: The _list can't be optional. This doesn't work: [this._list = const []]
-      // because when you do this _list will be List<Never> which will create problems.
+      // because when you do this _list will be List<Never> which is bad.
       [this.config = const ConfigList()])
       : super._gen();
 
@@ -38,8 +38,6 @@ class IListConst<T> // ignore: must_be_immutable
 
   @override
   final ConfigList config;
-
-  const IListConst.withConfig(this._list, this.config) : super._gen();
 
   /// A constant list is always flushed, by definition.
   @override
