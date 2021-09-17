@@ -1,4 +1,4 @@
-## [7.0.1] - 2021/09/12
+## [7.0.2] - 2021/09/12
 
 * Const `IMap`. Example: `const IMap<String, int> myMap = IMapConst({1:'a', 2:'b'});`
   Example of const empty map: `const IMap<String, int> myMap = IMapConst({});`

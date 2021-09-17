@@ -2561,7 +2561,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 # 19. Thanks
 
-<a href="turtleos.com">TurtleOS</a> (<a href="turtleos.com">turtleos.com</a>) sponsored the
+<a href="http://turtleos.com">TurtleOS</a> (<a href="http://turtleos.com">turtleos.com</a>) sponsored the
 development of `IMapConst` and `IMapOfSetsConst`  (the constant versions of `IMap` and `IMapOfSets`)
 .
 
