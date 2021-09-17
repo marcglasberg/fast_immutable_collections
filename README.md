@@ -286,7 +286,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
         <li><a href="#183-other-resources">18.3. Other Resources</a></li>
       </ul>
     </li>
-    <li><a href="#19-final-note">19. Final Note</a></li>
+    <li><a href="#19-thanks">19. Thanks</a></li>
   </ul>
 </div>
 
@@ -2559,12 +2559,14 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 <br>
 
-# 19. Final Note
+# 19. Thanks
 
-This package is very complex and still fairly new. I am using it myself in important projects of
-mine, so you can say I trust it, but bugs are still possible.
-<a href="https://github.com/psygo">Philippe Fanaro</a> was responsible for creating the tests, so if
-you find any bugs it's his fault! 😂 — I am only half kidding 😐.
+<a href="turtleos.com">TurtleOS</a> (<a href="turtleos.com">turtleos.com</a>) sponsored the
+development of `IMapConst` and `IMapOfSetsConst`  (the constant versions of `IMap` and `IMapOfSets`)
+.
+
+TurtleOS is a complete solution to online hiring. It brings together everything you and your team
+need to do your best work online, from team chat and task management to contracts and payments.
 
 ***
 
