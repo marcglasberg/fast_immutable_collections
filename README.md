@@ -2561,8 +2561,9 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 # 19. Thanks
 
-<a href="http://turtleos.com">TurtleOS</a> (<a href="http://turtleos.com">turtleos.com</a>) sponsored the
-development of `IMapConst` and `IMapOfSetsConst`  (the constant versions of `IMap` and `IMapOfSets`)
+<a href="http://turtleos.com">TurtleOS</a> (<a href="http://turtleos.com">turtleos.com</a>)
+sponsored the development of `IMapConst` and `IMapOfSetsConst`  (the constant versions of `IMap`
+and `IMapOfSets`)
 .
 
 TurtleOS is a complete solution to online hiring. It brings together everything you and your team
@@ -2584,6 +2585,7 @@ need to do your best work online, from team chat and task management to contract
 * <a href="https://pub.dev/packages/animated_size_and_fade">animated_size_and_fade</a>
 * <a href="https://pub.dev/packages/assorted_layout_widgets">assorted_layout_widgets</a>
 * <a href="https://pub.dev/packages/weak_map">weak_map</a>
+* <a href="https://pub.dev/packages/themed">themed</a>
 
 *My Medium Articles:*
 
@@ -2598,6 +2600,8 @@ need to do your best work online, from team chat and task management to contract
 * <a href="https://medium.com/flutter-community/flutter-the-advanced-layout-rule-even-beginners-must-know-edc9516d1a2">
   Flutter: The Advanced Layout Rule Even Beginners Must Know</a> 
   (versions: <a href="https://habr.com/ru/post/500210/">русский</a>)
+* <a href="https://medium.com/flutter-community/the-new-way-to-create-themes-in-your-flutter-app-7fdfc4f3df5f">
+  The New Way to create Themes in your Flutter App</a> 
 
 *My article in the official Flutter documentation*:
 
