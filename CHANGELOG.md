@@ -1,3 +1,7 @@
+## [7.0.4] - 2021/09/24
+                   
+* Extension `List.mapIndexedAndLast()`.
+
 ## [7.0.3] - 2021/09/12
 
 * Const `IMap`. Example: `const IMap<String, int> myMap = IMapConst({1:'a', 2:'b'});`
