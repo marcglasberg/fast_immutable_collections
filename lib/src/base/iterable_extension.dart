@@ -312,7 +312,7 @@ extension FicIterableExtension<T> on Iterable<T> {
 
   /// Maps each element and its index to a new value.
   /// This is similar to [mapIndexed] but also tells you which item is the last.
-  Iterable<R> mapIndexedAndLast<R>(R Function(int index, T item, bool isFirst) convert) sync* {
+  Iterable<R> mapIndexedAndLast<R>(R Function(int index, T item, bool isLast) convert) sync* {
     var index = 0;
     int _length = length; // In case length is not efficient.
     for (var item in this) {
