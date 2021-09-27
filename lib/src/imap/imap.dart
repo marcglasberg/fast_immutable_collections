@@ -147,8 +147,6 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   //
   ConfigMap get config;
 
-  set config(ConfigMap value) {}
-
   M<K, V> get _m;
 
   set _m(M<K, V> value) {}
@@ -206,6 +204,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
+  @useCopy
   IMap<K, V> withConfig(ConfigMap config) {
     if (config == this.config)
       return this;
@@ -223,6 +222,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a new map with the contents of the present [IMap],
   /// but the config of [other].
+  @useCopy
   IMap<K, V> withConfigFrom(IMap<K, V> other) => withConfig(other.config);
 
   /// Create an [IMap] from an [Iterable] of [MapEntry].
@@ -319,6 +319,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   ///
   /// See also: [IMap.fromIterables]
   ///
+  @useCopy
   static IMap<K, V> fromIterable<K, V, I>(
     Iterable<I> iterable, {
     K Function(I)? keyMapper,
@@ -399,6 +400,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   ///   Students(studentsPerId: studentsPerId ?? this.studentsPerId);
   /// ```
   ///
+  @useCopy
   static IMap<K, V>? orNull<K, V>(
     Map<K, V>? map, [
     ConfigMap? config,
@@ -492,10 +494,12 @@ abstract class IMap<K, V> // ignore: must_be_immutable
       IMapImpl._unsafeFromMap(map, config: config);
 
   /// Creates a map with `identityEquals` (compares the internals by `identity`).
+  @useCopy
   IMap<K, V> get withIdentityEquals =>
       config.isDeepEquals ? IMap._unsafe(_m, config: config.copyWith(isDeepEquals: false)) : this;
 
   /// Creates a map with `deepEquals` (compares all map entries by equality).
+  @useCopy
   IMap<K, V> get withDeepEquals =>
       config.isDeepEquals ? this : IMap._unsafe(_m, config: config.copyWith(isDeepEquals: true));
 
@@ -814,6 +818,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a new map containing the current map plus the given key:value.
   /// (if necessary, the given key:value pair will override the current).
+  @useCopy
   IMap<K, V> add(K key, V value) {
     IMap<K, V> result;
     result = config.sort
@@ -835,6 +840,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
 
   /// Returns a new map containing the current map plus the given key:value.
   /// (if necessary, the given entry will override the current one).
+  @useCopy
   IMap<K, V> addEntry(MapEntry<K, V> entry) => add(entry.key, entry.value);
 
   /// Returns a new map containing the current map plus the ones in the
@@ -850,6 +856,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Note: [keepOrder] only makes sense if your map is **NOT** ordered, that is
   /// `ConfigMap.sort == false`.
+  @useCopy
   IMap<K, V> addAll(IMap<K, V> imap, {bool keepOrder = false}) {
     IMap<K, V> result;
     result = config.sort
@@ -871,6 +878,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Returns a new map containing the current map plus the given [map] entries.
   /// Note: [map] entries that already exist in the original map will overwrite
   /// those of the original map, in place (keeping order).
+  @useCopy
   IMap<K, V> addMap(Map<K, V> map) {
     IMap<K, V> result = config.sort
         ? IMap._unsafe(MFlat.fromEntries(_m.entries.followedBy(map.entries), config: config),
@@ -886,6 +894,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Returns a new map containing the current map plus the given [entries].
   /// Note: [entries] that already exist in the original map will overwrite
   /// those of the original map, in place (keeping order).
+  @useCopy
   IMap<K, V> addEntries(Iterable<MapEntry<K, V>> entries) {
     IMap<K, V> result;
     result = config.sort
@@ -902,6 +911,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Returns a new map containing the current map minus the given key and its
   /// value. However, if the current map doesn't contain the key, it will
   /// return the current map (same instance).
+  @useCopy
   IMap<K, V> remove(K key) {
     M<K, V> result = _m.remove(key);
     return identical(result, _m) ? this : IMap<K, V>._unsafe(result, config: config);
@@ -910,6 +920,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Returns a new map containing the current map minus the entries that
   /// satisfy the given [predicate]. However, if nothing is removed, it will
   /// return the current map (same instance).
+  @useCopy
   IMap<K, V> removeWhere(bool Function(K key, V value) predicate) {
     M<K, V> result = _m.removeWhere(predicate);
     return identical(result, _m) ? this : IMap<K, V>._unsafe(result, config: config);
@@ -942,6 +953,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Entries added to the map must be valid for both an `IMap<K, V>` and an
   /// `IMap<RK, RV>`.
+  @useCopy
   IMap<RK, RV> cast<RK, RV>() {
     Object result = _m.cast<RK, RV>(config);
     if (result is M<RK, RV>)
@@ -996,6 +1008,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns an [IMap] with all elements that satisfy the predicate [test].
+  @useCopy
   IMap<K, V> where(bool Function(K key, V value) test) =>
       IMapImpl<K, V>._(_m.where(test), config: config);
 
@@ -1003,6 +1016,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// the given [mapper] function. However, if [ifRemove] is provided,
   /// the mapped value will first be tested with it and, if [ifRemove]
   /// returns true, the value will be removed from the result map.
+  @useCopy
   IMap<RK, RV> map<RK, RV>(
     MapEntry<RK, RV> Function(K key, V value) mapper, {
     bool Function(RK key, RV value)? ifRemove,
@@ -1049,6 +1063,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns an empty map with the same configuration.
+  @useCopy
   IMap<K, V> clear() => IMapImpl.empty<K, V>(config);
 
   /// Look up the value of [key], or add a new value if it isn't there.
@@ -1075,6 +1090,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Calling [ifAbsent] must not add or remove keys from the map.
   ///
   ///
+  @useCopy
   IMap<K, V> putIfAbsent(
     K key,
     V Function() ifAbsent, {
@@ -1115,6 +1131,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// If you want to get the original value before the update, you can provide the
   /// [previousValue] parameter.
   ///
+  @useCopy
   IMap<K, V> update(
     K key,
     V Function(V value) update, {
@@ -1158,6 +1175,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   ///
   /// Iterates over all entries in the map and updates them with the result
   /// of invoking [update].
+  @useCopy
   IMap<K, V> updateAll(
     V Function(K key, V value) update, {
     bool Function(K key, V value)? ifRemove,
@@ -1170,7 +1188,6 @@ abstract class IMap<K, V> // ignore: must_be_immutable
 
 // /////////////////////////////////////////////////////////////////////////////
 
-@visibleForOverriding
 abstract class M<K, V> {
   //
 
@@ -1239,6 +1256,7 @@ abstract class M<K, V> {
   ///
   /// Note: This will NOT sort anything.
   ///
+  @useCopy
   M<K, V> addAll(IMap<K, V> imap, {bool keepOrder = false}) {
     if (keepOrder) {
       Map<K, V> map = Map.fromEntries(entries.followedBy(imap.entries));

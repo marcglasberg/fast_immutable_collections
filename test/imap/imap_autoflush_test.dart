@@ -1,5 +1,5 @@
-import "package:test/test.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 extension TestExtension on IMap {
   int get counter => InternalsForTestingPurposesIMap(this).counter;

@@ -1,5 +1,9 @@
+## [7.0.5-dev0] - 2021/09/27
+
+* Added @UseResult annotation to signal that mutated copies should not be discarded.
+
 ## [7.0.4] - 2021/09/24
-                   
+
 * Extension `List.mapIndexedAndLast()`.
 
 ## [7.0.3] - 2021/09/12
@@ -26,12 +30,12 @@
   **tail-call-optimization** (https://github.com/dart-lang/language/issues/1159) it was not possible
   to guarantee that very large collections created within the current microtask would not throw a
   stack-overflow error when reading values from it. The solution to make it work async was to
-  tail-call-optimize by hand, which I played with a little bit. For example, check out the
-  new `IMap` implementations for `operator []` and `containsKey()`. However, I'd actually would have
-  to do that for each and every method that traverses the data tree, for each collection in FIC. The
-  amount of work was just too much, so I've decided to remove the async flush mode. The **sync
-  mode** was recommended anyway (which now is the only mode, meaning I have removed any references
-  to it in the docs), so I guess that won't make much of a difference to anyone.
+  tail-call-optimize by hand, which I played with a little. For example, check out the new `IMap`
+  implementations for `operator []` and `containsKey()`. However, I'd actually would have to do that
+  for each and every method that traverses the data tree, for each collection in FIC. The amount of
+  work was just too much, so I've decided to remove the async flush mode. The **sync mode** was
+  recommended anyway (which now is the only mode, meaning I have removed any references to it in the
+  docs), so I guess that won't make much of a difference to anyone.
 
 ## [5.1.3] - 2021/08/31
 

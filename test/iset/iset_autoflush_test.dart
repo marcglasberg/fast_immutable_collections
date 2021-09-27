@@ -1,6 +1,7 @@
 import "dart:math";
-import "package:test/test.dart";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:test/test.dart";
 
 extension TestExtension on ISet {
   int get counter => InternalsForTestingPurposesISet(this).counter;

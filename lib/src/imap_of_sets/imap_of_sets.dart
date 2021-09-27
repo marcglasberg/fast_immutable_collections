@@ -81,6 +81,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Note: If you want to create an empty immutable collection of the same
   /// type and same configuration as a source collection, simply call [clear]
   /// in the source collection.
+  @useCopy
   static IMapOfSets<K, V> empty<K, V>([ConfigMapOfSets? config]) {
     config ??= defaultConfig;
     return IMapOfSets<K, V>._unsafe(IMapImpl.empty(config.asConfigMap), config);
@@ -138,6 +139,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///   Students(studentsPerCourse: studentsPerCourse ?? this.studentsPerCourse);
   /// ```
   ///
+  @useCopy
   static IMapOfSets<K, V>? orNull<K, V>(
     Map<K, Iterable<V>>? map, [
     ConfigMapOfSets? config,
@@ -157,6 +159,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// If [ignore] is provided and return true, the entry will not be included.
   ///
+  @useCopy
   static IMapOfSets<K, V> fromIterable<K, V, I>(
     Iterable<I> iterable, {
     K Function(I)? keyMapper,
@@ -228,6 +231,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
+  @useCopy
   IMapOfSets<K, V> withConfig(ConfigMapOfSets config) {
     if (config == this.config)
       return this;
@@ -362,6 +366,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// and then add the [value] to it. If the [value] already exists in the
   /// [set], nothing happens.
   ///
+  @useCopy
   IMapOfSets<K, V> add(K key, V value) {
     ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
     ISet<V> newSet = set.add(value);
@@ -372,6 +377,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If the [key] doesn't  exist, will first create it with an empty [set],
   /// and then add the [values] to it.
   ///
+  @useCopy
   IMapOfSets<K, V> addValues(K key, Iterable<V> values) {
     ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
     ISet<V> newSet = set.addAll(values);
@@ -382,6 +388,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If the [key] doesn't exist, it will first create it with an empty [set],
   /// and then add the [values] to it.
   ///
+  @useCopy
   IMapOfSets<K, V> addValuesToKeys(Iterable<K> keys, Iterable<V> values) {
     IMapOfSets<K, V> result = this;
     for (K key in keys) {
@@ -396,6 +403,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// the [key] will be removed entirely. Otherwise, the [key] will be kept
   /// and the [set] will be empty (not `null`).
   ///
+  @useCopy
   IMapOfSets<K, V> remove(K key, V value) {
     ISet<V>? set = _mapOfSets[key];
     if (set == null) return this;
@@ -415,6 +423,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If you want, you can pass [numberOfRemovedValues] to get the number of
   /// removed values.
   ///
+  @useCopy
   IMapOfSets<K, V> removeValues(
     List<V> values, {
     Output<int>? numberOfRemovedValues,
@@ -460,6 +469,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// See also: [removeValuesWhere] that lets you remove values from many keys.
   ///
+  @useCopy
   IMapOfSets<K, V> removeValuesFromKeyWhere(
     K key,
     bool Function(V value) test,
@@ -472,6 +482,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// See also: [removeValuesFromKeyWhere] that lets you remove values from a single key.
   ///
+  @useCopy
   IMapOfSets<K, V> removeValuesWhere(
     bool Function(K key, V value) test, {
     Output<int>? numberOfRemovedValues,
@@ -520,6 +531,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// However, if can force the [value] to be added or removed by providing
   /// [state] true or false.
   ///
+  @useCopy
   IMapOfSets<K, V> toggle(K key, V value, {bool? state}) =>
       (state ?? !contains(key, value)) ? add(key, value) : remove(key, value);
 
@@ -533,6 +545,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Add the [key]/[set] entry. If the [key] already exists, replace it with
   /// the new [set] entirely.
   ///
+  @useCopy
   IMapOfSets<K, V> replaceSet(K key, ISet<V> set) {
     return (config.removeEmptySets && set.isEmpty)
         ? removeSet(key)
@@ -545,11 +558,13 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// When [removeEmptySets] is `false`, the [set] for the corresponding [key]
   /// will become empty.
   ///
+  @useCopy
   IMapOfSets<K, V> clearSet(K key) => replaceSet(key, ISetImpl.empty<V>());
 
   /// Remove the given [key], if it exists, and its corresponding [set].
   /// If the [key] doesn't exist, don't do anything.
   ///
+  @useCopy
   IMapOfSets<K, V> removeSet(K key) {
     IMap<K, ISet<V>> newMapOfSets = _mapOfSets.remove(key);
     return _mapOfSets.same(newMapOfSets) ? this : IMapOfSets<K, V>._unsafe(newMapOfSets, config);
@@ -694,6 +709,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// The operation is equivalent to doing [addValues] for each key:set in [map].
   ///
+  @useCopy
   IMapOfSets<K, V> addMap(Map<K, Set<V>> map) {
     return addEntries(map.entries);
   }
@@ -709,6 +725,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// The operation is equivalent to doing [addValues] for each key:set in [map].
   ///
+  @useCopy
   IMapOfSets<K, V> addIMap(IMap<K, Set<V>> map) {
     return addEntries(map.entries);
   }
@@ -724,6 +741,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// The operation is equivalent to doing [addValues] for each key:set in [entries].
   ///
+  @useCopy
   IMapOfSets<K, V> addEntries(Iterable<MapEntry<K, Set<V>>> entries) {
     IMapOfSets<K, V> imap = this;
     for (MapEntry<K, Set<V>> entry in entries) {
@@ -746,6 +764,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// Entries added to the map must be valid for both a `IMapOfSets<K, V>` and a
   /// `IMapOfSets<RK, RV>`.
+  @useCopy
   IMapOfSets<RK, RV> cast<RK, RV>() {
     IMap<RK, ISet<RV>> result = _mapOfSets.cast<RK, ISet<RV>>();
     return IMapOfSets._unsafe(result, config);
@@ -754,6 +773,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If [removeEmptySets] is `true`, returns an empty map of sets with the same
   /// configuration. However, if [removeEmptySets] is `false`, keep the keys,
   /// but make their sets empty.
+  @useCopy
   IMapOfSets<K, V> clear() {
     if (config.removeEmptySets)
       return empty<K, V>(config);
@@ -768,6 +788,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Returns a new map where all entries of this map are transformed by the given [mapper]
   /// function. You may provide a [config], otherwise it will be the same as the original map.
+  @useCopy
   IMapOfSets<RK, RV> map<RK, RV>(
     MapEntry<RK, ISet<RV>> Function(K key, ISet<V> set) mapper, {
     ConfigMapOfSets? config,
@@ -782,6 +803,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   }
 
   /// Removes all entries (key:set pair) of this map that satisfy the given [predicate].
+  @useCopy
   IMapOfSets<K, V> removeWhere(bool Function(K key, ISet<V> set) predicate) =>
       IMapOfSets<K, V>._unsafe(_mapOfSets.removeWhere(predicate), config);
 
@@ -800,6 +822,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// If you want to get the original set before the update, you can provide the
   /// [previousSet] parameter.
   ///
+  @useCopy
   IMapOfSets<K, V> update(
     K key,
     ISet<V> Function(ISet<V> set) update, {
@@ -824,6 +847,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   /// Iterates over all key:set entries in the map and updates them with the result
   /// of invoking [update].
+  @useCopy
   IMapOfSets<K, V> updateAll(ISet<V> Function(K key, ISet<V> set) update) {
     bool Function(K key, ISet<V> set)? ifRemove;
     if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
@@ -834,6 +858,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return a map where the keys are the values, and the values are the keys.
   /// Keys of empty sets will be removed.
   /// You can pass a new [config] for the map.
+  @useCopy
   IMapOfSets<V, K> invertKeysAndValues([ConfigMapOfSets? config]) {
     Map<V, Set<K>> result = {};
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
@@ -855,6 +880,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return a map where the keys are the values, and the values are the keys.
   /// Empty sets will become the key `null`.
   /// You can pass a new [config] for the map.
+  @useCopy
   IMapOfSets<V?, K> invertKeysAndValuesKeepingNullKeys([ConfigMapOfSets? config]) {
     Map<V?, Set<K>> result = {};
     for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
