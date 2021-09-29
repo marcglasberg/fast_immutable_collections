@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:json_serializable_e2e_test/src/model/ilist_model.dart';
 import 'package:test/test.dart';
@@ -54,6 +56,13 @@ void main() {
               'c': 'd',
             }
           });
+      expect(
+          jsonEncode(IMapWrapper2({
+            1: 'b',
+            2: 'd',
+          }.lock)
+              .toJson()),
+          '''{"iMap":{"1":"b","2":"d"}}''');
     });
 
     test('can deserialize IMap', () {
@@ -67,6 +76,14 @@ void main() {
           IMap({
             'a': 'b',
             'c': 'd',
+          }));
+          expect(
+          IMapWrapper2.fromJson(jsonDecode(
+            '''{"iMap":{"1":"b","2":"d"}}'''
+          )).iMap,
+          IMap({
+            1: 'b',
+            2: 'd',
           }));
     });
   });
