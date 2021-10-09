@@ -413,12 +413,13 @@ abstract class IMap<K, V> // ignore: must_be_immutable
     K Function(Object?) fromJsonK,
     V Function(Object?) fromJsonV,
   ) =>
-      json.map<K, V>((key, value) => MapEntry(fromJsonK(key), fromJsonV(value))).lock;
+      json.map<K, V>((key, value) => MapEntry(fromJsonK(_safeKeyFromJson<K>(key)), fromJsonV(value))).lock;
 
   /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
-  Object toJson(Object? Function(K) toJsonK, Object? Function(V) toJsonV) =>
-      unlock.map((key, value) => MapEntry(toJsonK(key), toJsonV(value)));
+  Object toJson<NewK extends Object?>(NewK Function(K) toJsonK, Object? Function(V) toJsonV) =>
+      unlock.map((key, value) => MapEntry(_safeKeyToJson(toJsonK(key)), toJsonV(value)));
 
+  
   /// See also: [ImmutableCollection], [ImmutableCollection.lockConfig],
   /// [ImmutableCollection.isConfigLocked],[flushFactor], [defaultConfig]
   static void resetAllConfigurations() {
@@ -1382,3 +1383,52 @@ class InternalsForTestingPurposesIMap {
 }
 
 // /////////////////////////////////////////////////////////////////////////////
+
+Object _safeKeyToJson<NewK extends Object?>(NewK key) {
+  if (key == null){
+    return '$key';
+  }
+  if (key is String) {
+    return key;
+  }
+  if (key is num || key is bool || key is DateTime || key is BigInt || key is Uri){
+    return '$key';
+  }
+  throw Exception('IMap key $key of type ${key.runtimeType} not serializable to/from json');
+}
+
+
+NewK _safeKeyFromJson<NewK extends Object?>(String key) {
+  if (key == 'null'){
+    return null as NewK;
+  }
+  if (_dummyBool is NewK){
+    return (key == 'true') as NewK;
+  }
+  if (_dummyDouble is NewK){
+    return double.parse(key) as NewK;
+  }
+  if (_dummyInt is NewK){
+    return int.parse(key) as NewK;
+  }
+  if (_dummyBigInt is NewK){
+    return BigInt.parse(key) as NewK;
+  }
+  if (_dummyDate is NewK){
+    return DateTime.parse(key) as NewK;
+  }
+  if (_dummyUri is NewK){
+    return Uri.parse(key) as NewK;
+  }
+  if (_dummyString is NewK){
+    return key as NewK;
+  }
+  return key as NewK;
+}
+const _dummyInt = 1;
+const _dummyDouble = 1.0;
+const _dummyString = '';
+const _dummyBool = true;
+final _dummyUri = Uri.parse('http://www.google.com');
+final _dummyDate = DateTime.now();
+final _dummyBigInt = BigInt.from(1);
