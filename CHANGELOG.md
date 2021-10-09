@@ -1,3 +1,11 @@
+## [7.0.6-dev0] - 2021/10/09
+
+* Improved JSON conversion: Added conversion of non-String keys for maps. This solves an issue where
+  keys of maps are not converted to Strings. Strings are the only valid json map keys, so only
+  primitive types or types convertible to a String can be keys if using json serialization.
+  Unfortunately, the current workaround is limited in what types can be supported, but hopefully the
+  underlying issue with json_serializable can be fixed, which would solve this in general.
+
 ## [7.0.5-dev0] - 2021/09/27
 
 * Added @UseResult annotation to signal that mutated copies should not be discarded.
