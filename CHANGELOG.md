@@ -1,4 +1,4 @@
-## [7.0.6-dev0] - 2021/10/09
+## [7.0.7-dev0] - 2021/10/09
 
 * Improved JSON conversion: Added conversion of non-String keys for maps. This solves an issue where
   keys of maps are not converted to Strings. Strings are the only valid json map keys, so only
