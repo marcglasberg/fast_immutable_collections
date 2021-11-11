@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 import "../base/hash.dart";
 
-/// An *immutable* list of only 3 items.
+/// An *immutable* list of only 4 items.
 @immutable
 class IListOf4<T> {
   final T first, second, third, fourth;
