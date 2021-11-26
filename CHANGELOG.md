@@ -1,3 +1,7 @@
+## [7.1.0-dev0] - 2021/11/26
+
+* Added `IMap.mapTo()` method, and `Map.mapTo()` extension.
+
 ## [7.0.7-dev0] - 2021/10/09
 
 * Improved JSON conversion: Added conversion of non-String keys for maps. This solves an issue where

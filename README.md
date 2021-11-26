@@ -1500,6 +1500,8 @@ These are some provided helpers and extensions:
 * `List.sortLike` sorts this list according to the order specified by an `ordering` iterable. Items
   which don't appear in `ordering` will be included in the end, in no particular order.
 
+* `List.sortReversed` sorts this list in reverse order in relation to the default sort method.
+
 * `List.moveToTheFront` moves the first occurrence of the item to the start of the list.
 
 * `List.moveToTheEnd` moves the first occurrence of the item to the end of the list.
@@ -1532,8 +1534,6 @@ These are some provided helpers and extensions:
 
 * `List.splitByLength` cuts the original list into one or more lists with at most `length` items.
 
-* `List.update` returns a list where new items are added or updated, by their id.
-
 * `List.distinct` removes all duplicates, leaving only the distinct items.
 
 * `List.reversedView` returns a list of the objects in this list, in reverse order.
@@ -1547,10 +1547,19 @@ These are some provided helpers and extensions:
 * `List.withNullsRemoved` returns a new list with all nulls removed (does not mutate the original
   list). This may return a list with a non-nullable type.
 
-## 8.3 List extensions
+## 8.3 Set extensions
 
 * `Set.toggle` If the item doesn't exist in the set, add it and return `true`. Otherwise, if the
   item already exists in the set, remove it and return `false`.
+
+* `Set.removeNulls` removes all `null`s from the Set.
+
+* `Set.diffAndIntersect` finds diffs and intersections between sets.
+
+## 8.3 Map extensions
+
+* `Map.mapTo` Returns a new lazy Iterable with elements that are created by calling a mapper
+  function.
 
 ## 8.4 Iterator Extensions
 

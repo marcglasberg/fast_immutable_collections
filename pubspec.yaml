@@ -1,6 +1,6 @@
 name: fast_immutable_collections
 description: Immutable lists, sets, maps, and multimaps, which are as fast as their native mutable counterparts. Extension methods and comparators for native Dart collections.
-version: 7.0.7-dev0
+version: 7.1.0-dev0
 homepage: https://github.com/marcglasberg/fast_immutable_collections
 
 environment:

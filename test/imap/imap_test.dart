@@ -1793,6 +1793,14 @@ void main() {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  test("mapTo", () {
+    IMap<String, int> imap = {"x": 1, "b": 2, "c": 3}.lock;
+    var imap1 = imap.mapTo<String>((String k, int? v) => "$k:$v");
+    expect(imap1, ["x:1", "b:2", "c:3"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
   test("where", () {
     IMap<String, int> imap =
         {"a": 1, "b": 2, "c": 3}.lock.add("d", 4).addAll(IMap({"e": 5, "f": 6}));

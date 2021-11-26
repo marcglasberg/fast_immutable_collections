@@ -26,6 +26,24 @@ extension FicMapExtension<K, V> on Map<K, V> {
   /// Creates an *immutable* map ([IMap]) from the map.
   IMap<K, V> toIMap([ConfigMap? config]) =>
       IMap<K, V>.withConfig(this, config ?? IMap.defaultConfig);
+
+  /// Returns a new lazy [Iterable] with elements that are created by
+  /// calling `mapper` on each entry of this `Map` in
+  /// iteration order.
+  ///
+  /// The returned iterable is lazy, so it won't iterate the elements of
+  /// this map until it is itself iterated, and then it will apply
+  /// [mapper] to create one element at a time.
+  /// The converted elements are not cached.
+  /// Iterating multiple times over the returned [Iterable]
+  /// will invoke the supplied [mapper] function once per element
+  /// for on each iteration.
+  ///
+  /// Note: While [map] returns a new `Map`, [mapTo] returns an `Iterable`
+  /// of elements created by combining the entries keys and values.
+  ///
+  Iterable<T> mapTo<T>(T Function(K key, V value) mapper) =>
+      entries.map((MapEntry<K, V> entry) => mapper(entry.key, entry.value));
 }
 
 // /////////////////////////////////////////////////////////////////////////////
