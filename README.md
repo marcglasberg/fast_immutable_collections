@@ -2618,8 +2618,11 @@ need to do your best work online, from team chat and task management to contract
 
 <br>_Marcelo Glasberg:_<br>
 
-<a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a><br>
-<a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a><br>
-<a href="https://stackoverflow.com/users/3411681/marcg">_
-stackoverflow.com/users/3411681/marcg_</a><br>
-<a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a><br>
+<a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a>
+<br>
+<a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a>
+<br>
+<a href="https://stackoverflow.com/users/3411681/marcg">_stackoverflow.com/users/3411681/marcg_</a>
+<br>
+<a href="https://medium.com/@marcglasberg">_medium.com/@marcglasberg_</a>
+<br>

@@ -6,13 +6,9 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
 
-import "ilist_of_2.dart";
 import "l_add.dart";
 import "l_add_all.dart";
 import "l_flat.dart";
-import "list_extension.dart";
-import "modifiable_list_from_ilist.dart";
-import "unmodifiable_list_from_ilist.dart";
 
 /// This is an [IList] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
@@ -1537,7 +1533,8 @@ abstract class IList<T> // ignore: must_be_immutable
     return IList._unsafeFromList(list, config: config);
   }
 
-  /// Pops and returns the last object in this list.
+  /// Removes the last object from this list.
+  /// This method reduces the length of `this` by one.
   ///
   /// The list must not be empty.
   ///

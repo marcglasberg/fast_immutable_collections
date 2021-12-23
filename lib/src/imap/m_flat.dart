@@ -1,9 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:fast_immutable_collections/src/list_map/list_map.dart";
 import 'package:meta/meta.dart';
-
-import "imap.dart";
 
 class MFlat<K, V> extends M<K, V> {
   //

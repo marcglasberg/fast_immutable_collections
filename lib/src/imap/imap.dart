@@ -4,16 +4,12 @@ import "dart:math";
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
-import "package:fast_immutable_collections/src/list_map/list_map.dart";
 import "package:meta/meta.dart";
 
-import "entry.dart";
 import "m_add.dart";
 import "m_add_all.dart";
 import "m_flat.dart";
 import "m_replace.dart";
-import "modifiable_map_from_imap.dart";
-import "unmodifiable_map_from_imap.dart";
 
 /// This is an [IMap] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
@@ -872,7 +868,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
     // If the outer map is used, it will be flushed before the source maps.
     // If the source maps are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((imap is IMap<K, V>) ? imap._counter : 0));
+    result._counter = max(_counter, imap._counter);
     result._count();
 
     return result;

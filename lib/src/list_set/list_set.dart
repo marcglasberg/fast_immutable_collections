@@ -2,7 +2,6 @@ import "dart:collection";
 import "dart:math";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/iterator/iterator_flat.dart";
-import "package:fast_immutable_collections/src/list_set/list_set_view.dart";
 
 /// A [ListSet] is, at the same time:
 /// 1) A mutable, fixed-sized, ordered, [Set].

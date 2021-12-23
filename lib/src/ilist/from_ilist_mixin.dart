@@ -3,8 +3,6 @@ import "dart:math";
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "ilist.dart";
-
 /// This mixin implements all [IList] methods (without `config` ([ConfigList])), plus
 /// `operator []`, but it does **NOT** implement [Iterable] nor [IList].
 ///

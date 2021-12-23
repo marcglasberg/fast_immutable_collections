@@ -1,8 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
-import "ilist.dart";
-
 /// This mixin implements all [Iterable] methods, plus `operator []`,
 /// but it does **NOT** implement [Iterable] nor [IList].
 ///

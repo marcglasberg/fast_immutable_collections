@@ -4,11 +4,9 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
-import "modifiable_set_from_iset.dart";
 import "s_add.dart";
 import "s_add_all.dart";
 import "s_flat.dart";
-import "unmodifiable_set_from_iset.dart";
 
 /// This is an [ISet] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.

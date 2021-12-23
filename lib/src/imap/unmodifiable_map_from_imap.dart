@@ -3,9 +3,6 @@ import "dart:collection";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 
-import "imap.dart";
-import "map_extension.dart";
-
 /// The [UnmodifiableMapFromIMap] is a relatively safe, unmodifiable [Map] that is built from an
 /// [IMap] or another [Map]. The construction of the [UnmodifiableMapFromIMap] is very fast,
 /// since it makes no copies of the given map items, but just uses it directly.

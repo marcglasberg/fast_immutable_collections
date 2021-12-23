@@ -2,7 +2,6 @@ import "dart:collection";
 import "dart:math";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:fast_immutable_collections/src/list_map/list_map_view.dart";
 
 /// A [ListMap] is a mutable, fixed-sized, and ordered map.
 ///

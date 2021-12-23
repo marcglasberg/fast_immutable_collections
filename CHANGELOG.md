@@ -1,3 +1,11 @@
+## [7.1.0] - 2021/12/23
+
+* Doc improvements.
+
+* Note: You may get false positive warnings for some methods annotated with `@UseResult`. This is a
+  Dart bug, which will be fixed in the future. It means nothing and you shouldn't pay attention to
+  it.
+
 ## [7.1.0-dev0] - 2021/11/26
 
 * Added `IMap.mapTo()` method, and `Map.mapTo()` extension.
