@@ -51,9 +51,9 @@
   to guarantee that very large collections created within the current microtask would not throw a
   stack-overflow error when reading values from it. The solution to make it work async was to
   tail-call-optimize by hand, which I played with a little. For example, check out the new `IMap`
-  implementations for `operator []` and `containsKey()`. However, I'd actually would have to do that
-  for each and every method that traverses the data tree, for each collection in FIC. The amount of
-  work was just too much, so I've decided to remove the async flush mode. The **sync mode** was
+  implementations for `operator []` and `containsKey()`. However, I'd actually have to do that for
+  each and every method that traverses the data tree, for each collection in FIC. The amount of work
+  was just too much, so I've decided to remove the async flush mode. The **sync mode** was
   recommended anyway (which now is the only mode, meaning I have removed any references to it in the
   docs), so I guess that won't make much of a difference to anyone.
 
