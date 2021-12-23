@@ -1,6 +1,7 @@
 import "package:fast_immutable_collections/src/iterator/iterator_add_all.dart";
 
 import "ilist.dart";
+import 'l.dart';
 
 /// First we have the items in [_l] and then the items in [_listOrL].
 ///

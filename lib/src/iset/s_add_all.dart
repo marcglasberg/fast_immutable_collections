@@ -1,5 +1,6 @@
 import "package:fast_immutable_collections/src/iterator/iterator_add_all.dart";
 import "iset.dart";
+import 's.dart';
 
 /// First we have the items in [_s] and then the items in [_setOrS].
 ///

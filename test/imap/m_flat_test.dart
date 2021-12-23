@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import 'package:fast_immutable_collections/src/imap/m.dart';
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:test/test.dart";
 
@@ -251,7 +252,7 @@ void main() {
 
     expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
 
-    m = mFlat.addAll(<String, int>{"c": 3, "d": 4}.lock);
+    m = mFlat.addAll(InternalsForTestingPurposesIMap(<String, int>{"c": 3, "d": 4}.lock).m);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
@@ -265,7 +266,7 @@ void main() {
     expect(mFlat1.unlock, <String, int>{"a": 1, "b": 2});
     expect(mFlat2.unlock, <String, int>{"a": 1, "b": 2});
 
-    m = mFlat1.addAll(IMap(mFlat2.unlock));
+    m = mFlat1.addAll(InternalsForTestingPurposesIMap(IMap(mFlat2.unlock)).m);
     original.addAll({"z": 5});
 
     expect(original, <String, int>{"a": 1, "b": 2, "z": 5});

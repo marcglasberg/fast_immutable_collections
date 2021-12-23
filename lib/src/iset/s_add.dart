@@ -1,5 +1,5 @@
 import '../iterator/iterator_add.dart';
-import "iset.dart";
+import 's.dart';
 
 /// The [SAdd] class does not check for duplicate elements. In other words,
 /// it's up to the caller (in this case [S]) to make sure [_s] does not
