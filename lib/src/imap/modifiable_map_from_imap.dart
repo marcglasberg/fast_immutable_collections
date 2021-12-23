@@ -2,6 +2,8 @@ import "dart:collection";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
+import 'imap.dart';
+
 /// The [ModifiableMapFromIMap] is a safe, modifiable [Map] that is built from an [IMap].
 /// The construction of the map is fast at first, since it makes no copies of the
 /// [IMap] items, but just uses it directly.

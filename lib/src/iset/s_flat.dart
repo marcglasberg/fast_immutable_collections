@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import 'package:fast_immutable_collections/src/iset/iset.dart';
 
 class SFlat<T> extends S<T> {
   final ListSet<T> _set;

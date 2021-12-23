@@ -1,4 +1,5 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import 'package:fast_immutable_collections/src/imap/imap.dart';
 import "package:fast_immutable_collections/src/imap/m_add_all.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:test/test.dart";
