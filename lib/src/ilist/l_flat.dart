@@ -1,6 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/src/iterator/iterator_flat.dart";
-import 'l.dart';
+import "ilist.dart";
 
 class LFlat<T> extends L<T> {
   final List<T> _list;

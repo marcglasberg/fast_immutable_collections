@@ -1,5 +1,5 @@
 import "../iterator/iterator_add.dart";
-import 'l.dart';
+import "ilist.dart";
 
 /// First we have the items in [_l] and then [_item].
 class LAdd<T> extends L<T> {

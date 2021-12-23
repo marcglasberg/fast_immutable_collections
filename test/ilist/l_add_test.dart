@@ -1,4 +1,4 @@
-import 'package:fast_immutable_collections/src/ilist/l.dart';
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/ilist/l_add.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 import "package:test/test.dart";

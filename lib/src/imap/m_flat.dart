@@ -2,8 +2,6 @@ import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:meta/meta.dart';
 
-import 'm.dart';
-
 class MFlat<K, V> extends M<K, V> {
   //
   static M<K, V> empty<K, V>() => MFlat<K, V>.unsafe(<K, V>{});

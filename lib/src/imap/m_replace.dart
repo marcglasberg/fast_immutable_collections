@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
-import 'm.dart';
+
+import "imap.dart";
 
 /// The [_m] already contains the [_key]. But the [_value] should be the new one.
 class MReplace<K, V> extends M<K, V> {

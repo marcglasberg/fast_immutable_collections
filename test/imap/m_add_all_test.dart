@@ -1,5 +1,4 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import 'package:fast_immutable_collections/src/imap/m.dart';
 import "package:fast_immutable_collections/src/imap/m_add_all.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:test/test.dart";
@@ -193,7 +192,7 @@ void main() {
 
     expect(mAddAll.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
 
-    m = mAddAll.addAll(InternalsForTestingPurposesIMap(<String, int>{"c": 3, "d": 4}.lock).m);
+    m = mAddAll.addAll(<String, int>{"c": 3, "d": 4}.lock);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mAddAll.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
@@ -209,7 +208,7 @@ void main() {
     expect(mAddAll1.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
     expect(mAddAll2.unlock, <String, int>{"a": 1, "b": 2, "d": 4});
 
-    m = mAddAll1.addAll(InternalsForTestingPurposesIMap(IMap(mAddAll2.unlock)).m);
+    m = mAddAll1.addAll(IMap(mAddAll2.unlock));
     original.addAll({"z": 5});
 
     expect(original, <String, int>{"a": 1, "b": 2, "z": 5});

@@ -1,5 +1,4 @@
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import 'package:fast_immutable_collections/src/imap/m.dart';
 import "package:fast_immutable_collections/src/imap/m_add.dart";
 import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:test/test.dart";
@@ -170,7 +169,7 @@ void main() {
 
     expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
 
-    m = mAdd.addAll(InternalsForTestingPurposesIMap(<String, int>{"c": 3, "d": 4}.lock).m);
+    m = mAdd.addAll(<String, int>{"c": 3, "d": 4}.lock);
 
     expect(original, <String, int>{"a": 1, "b": 2});
     expect(mAdd.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
@@ -185,7 +184,7 @@ void main() {
     expect(mAdd1.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
     expect(mAdd2.unlock, <String, int>{"a": 1, "b": 2, "d": 4});
 
-    m = mAdd1.addAll(InternalsForTestingPurposesIMap(IMap(mAdd2.unlock)).m);
+    m = mAdd1.addAll(IMap(mAdd2.unlock));
     original.addAll({"z": 5});
 
     expect(original, <String, int>{"a": 1, "b": 2, "z": 5});
@@ -227,7 +226,7 @@ void main() {
     // keepOrder: false
     expect(
         MFlat({"a": 1, "b": 2, "c": 3})
-            .addAll(InternalsForTestingPurposesIMap({"a": 1, "b": 8, "d": 10}.lock).m)
+            .addAll({"a": 1, "b": 8, "d": 10}.lock)
             .entries
             .asComparableEntries,
         [
@@ -240,10 +239,7 @@ void main() {
     // keepOrder: true
     expect(
         MFlat({"a": 1, "b": 2, "c": 3})
-            .addAll(
-              InternalsForTestingPurposesIMap({"a": 1, "b": 8, "d": 10}.lock).m,
-              keepOrder: true,
-            )
+            .addAll({"a": 1, "b": 8, "d": 10}.lock, keepOrder: true)
             .entries
             .asComparableEntries,
         [

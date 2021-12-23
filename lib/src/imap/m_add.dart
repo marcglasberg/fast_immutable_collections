@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/src/iterator/iterator_add.dart';
 import 'package:meta/meta.dart';
-import 'm.dart';
+
+import "imap.dart";
 
 class MAdd<K, V> extends M<K, V> {
   final M<K, V> _m;
