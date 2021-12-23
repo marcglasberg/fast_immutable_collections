@@ -1,12 +1,10 @@
-## [7.1.1] - 2021/12/23
+## [7.1.2] - 2021/12/23
 
 * Note: You may get false positive warnings for some methods annotated with `@UseResult`. This is a
   Dart bug, which will be fixed in the future. It means nothing and you shouldn't pay attention to
   it.
 
-* Doc improvements.
-
-* Better hiding internal classes.
+* Doc improvements. Better hiding internal classes. Better code dividers.
 
 ## [7.1.0-dev0] - 2021/11/26
 
