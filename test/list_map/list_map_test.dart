@@ -1,3 +1,5 @@
+// ignore_for_file: use_string_buffers
+
 import "dart:math";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
@@ -336,6 +338,31 @@ void main() {
     int result = 100;
     listMap.forEach((String k, int? v) => result *= 1 + v!);
     expect(result, 504000);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test('forEach again', () {
+    var listMap = ListMap.of({
+      'b': 1,
+      'a': 2,
+    });
+
+    var result1 = "";
+    listMap.forEach((key, value) => result1 += key);
+
+    var result2 = "";
+    for (var e in listMap.entries) {
+      result2 += e.key;
+    }
+    expect(result1, result2);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test('values', () {
+    var listMap = ListMap.of({'a': 1, 'b': 2, 'c': null});
+    expect(listMap.values, [1, 2, null]);
   });
 
   /////////////////////////////////////////////////////////////////////////////

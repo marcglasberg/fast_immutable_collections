@@ -1,3 +1,7 @@
+## [7.1.3] - 2022/01/30
+
+* Fixed `ListMap.forEach()` to return items in the correct order.
+
 ## [7.1.2] - 2021/12/23
 
 * Note: You may get false positive warnings for some methods annotated with `@UseResult`. This is a

@@ -138,7 +138,7 @@ class ListMap<K, V> implements Map<K, V> {
   ListMap.unsafeFrom({
     required Map<K, V> map,
     required List<K> list,
-  })   : _map = map,
+  })  : _map = map,
         _list = list {
     if (map.length != list.length)
       throw AssertionError('Map has ${map.length} but list has ${list.length} items.');
@@ -213,7 +213,7 @@ class ListMap<K, V> implements Map<K, V> {
   bool containsValue(Object? value) => _map.containsValue(value);
 
   @override
-  void forEach(void Function(K key, V value) f) => _map.forEach(f);
+  void forEach(void Function(K key, V value) f) => _list.forEach((key) => f(key, _map[key] as V));
 
   @override
   bool get isEmpty => _list.isEmpty;
@@ -225,7 +225,7 @@ class ListMap<K, V> implements Map<K, V> {
   Iterable<K> get keys => UnmodifiableListView(_list);
 
   @override
-  Iterable<V> get values => _list.map((key) => _map[key]!);
+  Iterable<V> get values => _list.map((key) => _map[key] as V);
 
   /// Return the key/value entry for the given [key], or throws if [key] is not in the map.
   MapEntry<K, V> entry(K key) => _map.containsKey(key) //
@@ -294,7 +294,7 @@ class ListMap<K, V> implements Map<K, V> {
   ///
   MapEntry<K, V> entryAt(int index) {
     K key = _list[index];
-    return MapEntry<K, V>(key, _map[key]!);
+    return MapEntry<K, V>(key, _map[key] as V);
   }
 
   /// Returns the [index]th key.
@@ -309,7 +309,7 @@ class ListMap<K, V> implements Map<K, V> {
   ///
   V valueAt(int index) {
     K key = _list[index];
-    return _map[key]!;
+    return _map[key] as V;
   }
 
   /// Creates a [ListMap] form the given [map].
