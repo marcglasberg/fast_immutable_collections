@@ -59,6 +59,7 @@ extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
 /// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtension<T> on Iterable<T> {
   //
+
   /// Creates an *immutable* set ([ISet]) from the iterable.
   ISet<T> toISet([ConfigSet? config]) => ISet<T>.withConfig(this, config ?? ISet.defaultConfig);
 
@@ -114,6 +115,41 @@ extension FicIterableExtension<T> on Iterable<T> {
     return ignoreOrder
         ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
         : const IterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other);
+  }
+
+  /// The sum of the values returned by the [mapper] function.
+  ///
+  /// Examples:
+  /// ```
+  /// expect([1, 2, 3, 4, 5].sumBy((e) => e), 15);
+  /// expect([1.5, 2.5, 3.3, 4, 5].sumBy((e) => e), 16.3);
+  /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
+  /// ```
+  N sumBy<N extends num>(N Function(T element) mapper) {
+    N result = 0 as N;
+    for (var value in this) {
+      result = result + mapper(value) as N;
+    }
+    return result;
+  }
+
+  /// The arithmetic mean of the elements of a non-empty iterable.
+  /// The arithmetic mean is the sum of the elements divided by the number of elements.
+  /// If iterable is empty it returns 0.
+  /// Examples:
+  /// ```
+  /// expect([1, 2, 3, 4, 5].sumBy((e) => e), 15);
+  /// expect([1.5, 2.5, 3.3, 4, 5].sumBy((e) => e), 16.3);
+  /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
+  /// ```
+  double averageBy<N extends num>(N Function(T element) mapper) {
+    double result = 0.0;
+    var count = 0;
+    for (var value in this) {
+      count += 1;
+      result += (mapper(value) - result) / count;
+    }
+    return result;
   }
 
   /// Restricts some item to one of those present in this iterable.

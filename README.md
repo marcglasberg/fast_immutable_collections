@@ -1442,7 +1442,7 @@ a `LinkedHashMap` does not.
 
 These are some provided helpers and extensions:
 
-## 8.1 Iterable Helpers and Extensions
+## 8.1 Iterable Extensions and Helpers
 
 * `whereNotNull` is similar to `.where((x) => x != null)`, but the returned iterable has a
   non-nullable type. (Note: This has been removed from FIC, because it's now present in package
@@ -1456,6 +1456,10 @@ These are some provided helpers and extensions:
 * `Iterable.deepEquals` compare all items, in order, using `operator ==`.
 
 * `Iterable.deepEqualsByIdentity` compare all items, in order, using `identical`.
+
+* `Iterable.sumBy()` calculates the sum of the values returned by a `mapper` function.
+
+* `Iterable.averageBy()` calculates the average of the values returned by a `mapper` function.
 
 * `Iterable.restrict()` restricts some item to one of those present in this iterable.
 

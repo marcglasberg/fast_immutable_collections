@@ -1,3 +1,7 @@
+## [7.2.0] - 2022/02/06
+
+* Added `Iterable.sumBy()` and `Iterable.averageBy()` extensions.
+
 ## [7.1.3] - 2022/01/30
 
 * Fixed `ListMap.forEach()` to return items in the correct order.

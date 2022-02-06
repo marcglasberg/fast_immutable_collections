@@ -28,6 +28,29 @@ void main() {
 
   // /////////////////////////////////////////////////////////////////////////////
 
+  test('sumBy', () {
+    expect([1, 2, 3, 4, 5].sumBy((e) => e), 15);
+    expect([1.5, 2.5, 3.3, 4, 5].sumBy((e) => e), 16.3);
+    expect([].sumBy((e) => (e is int) ? e : 0), 0);
+    expect([''].sumBy((e) => e.length), 0);
+    expect(['a'].sumBy((e) => e.length), 1);
+    expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
+  });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
+  test('averageBy', () {
+    expect([1, 2, 3, 4, 5].averageBy((e) => e), 3.0);
+    expect([1.5, 2.5, 3.3, 4, 5].averageBy((e) => e), 3.26);
+    expect([].averageBy((e) => (e is int) ? e : 0), 0);
+    expect([''].averageBy((e) => e.length), 0);
+    expect(['a'].averageBy((e) => e.length), 1);
+    expect(['a', 'ab', 'abc', 'abcd', 'abcd'].averageBy((e) => e.length), 2.8);
+    expect(['a', 'ab', 'abc', 'abcd', 'abcde'].averageBy((e) => e.length), 3.0);
+  });
+
+  // /////////////////////////////////////////////////////////////////////////////
+
   test('whereNotNull (removed this, now using it from collection package)', () {
     //
     List<String?> list1 = ["xxx", "xx", null, "x"];
