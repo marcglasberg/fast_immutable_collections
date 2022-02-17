@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
@@ -113,6 +115,13 @@ void main() {
 
     expect([1, 2].lock.deepEquals([1, 2].lock, ignoreOrder: true), isTrue);
     expect([1, 2].lock.deepEquals([2, 1].lock, ignoreOrder: true), isTrue);
+
+    // 5.1 Different objects with same value ordered
+    final a = utf8.decode(utf8.encode('f'));
+    final b = utf8.decode(utf8.encode('f'));
+    expect([a].lock.deepEquals([b].lock, ignoreOrder: false), true);
+    // 5.2 Different objects with same value unordered
+    expect([a].lock.deepEquals([b].lock, ignoreOrder: true), true);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
