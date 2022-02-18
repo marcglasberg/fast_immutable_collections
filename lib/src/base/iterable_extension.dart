@@ -94,8 +94,8 @@ extension FicIterableExtension<T> on Iterable<T> {
         (this is ImmutableCollection)) if (length != other.length) return false;
 
     return ignoreOrder
-        ? const UnorderedIterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other)
-        : const IterableEquality<dynamic>(IdentityEquality<dynamic>()).equals(this, other);
+        ? const UnorderedIterableEquality<dynamic>(DefaultEquality<dynamic>()).equals(this, other)
+        : const IterableEquality<dynamic>(DefaultEquality<dynamic>()).equals(this, other);
   }
 
   /// Return true if they are all the same, in the same order.
