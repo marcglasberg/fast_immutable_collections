@@ -35,6 +35,7 @@ void main() {
     expect([''].sumBy((e) => e.length), 0);
     expect(['a'].sumBy((e) => e.length), 1);
     expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
+    expect(['a', 'ab', 'abc', 'abcd', 'abcde'].map((e) => e.length).sum, 15);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
