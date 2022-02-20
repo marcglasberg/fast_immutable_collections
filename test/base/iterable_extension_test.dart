@@ -75,9 +75,9 @@ void main() {
     Iterable? iterable2;
     expect(iterable1?.deepEquals(iterable2), isNull);
 
-    // 1) Identical
-    List<int> listA = [1, 2, 3];
-    List<int> listB = listA;
+    // 1) Equal
+    final listA = [a(1), a(2), a(3)];
+    final listB = [a(1), a(2), a(3)];
 
     expect(listA.deepEquals(listB), isTrue);
 
@@ -85,9 +85,9 @@ void main() {
     expect([].deepEquals(null), isFalse);
 
     // 3) Different lengths
-    List<int> list1 = [1, 2], list2 = [1, 2, 3];
-    Set<int> set1 = {1, 2}, set2 = {1, 2, 3};
-    IList<int> ilist1 = [1, 2].lock, ilist2 = [1, 2, 3].lock;
+    final list1 = [a(1), a(2)], list2 = [a(1), a(2), a(3)];
+    final set1 = {1, 2}, set2 = {1, 2, 3};
+    final ilist1 = [a(1), a(2)].lock, ilist2 = [a(1), a(2), a(3)].lock;
 
     expect(list1.deepEquals(list2), isFalse);
     expect(set1.deepEquals(set2), isFalse);
@@ -96,24 +96,24 @@ void main() {
     // 4) Checking for equality
 
     // 4.1) Ordered Equality
-    expect([1, 2].deepEquals([1, 2]), isTrue);
-    expect([1, 2].deepEquals([2, 1]), isFalse);
+    expect([a(1), a(2)].deepEquals([a(1), a(2)]), isTrue);
+    expect([a(1), a(2)].deepEquals([a(2), a(1)]), isFalse);
 
-    expect({1, 2}.deepEquals({1, 2}), isTrue);
-    expect({1, 2}.deepEquals({2, 1}), isFalse);
+    expect({a(1), a(2)}.deepEquals({a(1), a(2)}), isTrue);
+    expect({a(1), a(2)}.deepEquals({a(2), a(1)}), isFalse);
 
-    expect([1, 2].lock.deepEquals([1, 2].lock), isTrue);
-    expect([1, 2].lock.deepEquals([2, 1].lock), isFalse);
+    expect([a(1), a(2)].lock.deepEquals([a(1), a(2)].lock), isTrue);
+    expect([a(1), a(2)].lock.deepEquals([a(2), a(1)].lock), isFalse);
 
     // 4.2) Unordered Equality
-    expect([1, 2].deepEquals([1, 2], ignoreOrder: true), isTrue);
-    expect([1, 2].deepEquals([2, 1], ignoreOrder: true), isTrue);
+    expect([a(1), a(2)].deepEquals([a(1), a(2)], ignoreOrder: true), isTrue);
+    expect([a(1), a(2)].deepEquals([a(2), a(1)], ignoreOrder: true), isTrue);
 
-    expect({1, 2}.deepEquals({1, 2}, ignoreOrder: true), isTrue);
-    expect({1, 2}.deepEquals({2, 1}, ignoreOrder: true), isTrue);
+    expect({a(1), a(2)}.deepEquals({a(1), a(2)}, ignoreOrder: true), isTrue);
+    expect({a(1), a(2)}.deepEquals({a(2), a(1)}, ignoreOrder: true), isTrue);
 
-    expect([1, 2].lock.deepEquals([1, 2].lock, ignoreOrder: true), isTrue);
-    expect([1, 2].lock.deepEquals([2, 1].lock, ignoreOrder: true), isTrue);
+    expect([a(1), a(2)].lock.deepEquals([a(1), a(2)].lock, ignoreOrder: true), isTrue);
+    expect([a(1), a(2)].lock.deepEquals([a(2), a(1)].lock, ignoreOrder: true), isTrue);
   });
 
   // /////////////////////////////////////////////////////////////////////////////
@@ -491,3 +491,24 @@ class WithId {
 }
 
 // /////////////////////////////////////////////////////////////////////////////
+
+/// Shortcut
+Wrapper a(Comparable a) => Wrapper(a);
+
+/// The simple wrapper.
+///
+/// Allows wrap built-in types which can be equal with different references
+class Wrapper implements Comparable<Wrapper> {
+  final Comparable value;
+
+  const Wrapper(this.value);
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  bool operator ==(Object other) => other is Wrapper && value == other.value;
+
+  @override
+  int compareTo(Wrapper other) => value.compareTo(other.value);
+}
