@@ -1,3 +1,7 @@
+## [7.2.1] - 2022/03/14
+
+* Fixed deepEquals extension method for Iterable.
+
 ## [7.2.0] - 2022/02/06
 
 * Added `Iterable.sumBy()` and `Iterable.averageBy()` extensions.
