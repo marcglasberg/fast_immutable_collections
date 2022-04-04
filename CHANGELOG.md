@@ -1,3 +1,7 @@
+## [7.3.0] - 2022/04/04
+
+* Added `ListMap.indexOf()` method. 
+
 ## [7.2.1] - 2022/03/14
 
 * Fixed deepEquals extension method for Iterable.

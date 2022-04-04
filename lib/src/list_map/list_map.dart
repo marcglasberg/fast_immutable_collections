@@ -277,7 +277,6 @@ class ListMap<K, V> implements Map<K, V> {
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
-  // TODO: Implement
   /// Shuffles the keys of this map randomly.
   void shuffle([Random? random]) {
     _list.shuffle(random);
@@ -302,6 +301,16 @@ class ListMap<K, V> implements Map<K, V> {
   /// Index zero represents the first key.
   ///
   K keyAt(int index) => _list[index];
+
+  /// The first index of [key] in this list.
+  ///
+  /// Searches the list from index [start] to the end of the list.
+  /// The first time an object `o` is encountered so that `o == element`,
+  /// the index of `o` is returned.
+  ///
+  /// Returns -1 if the [key] is not found.
+  ///
+  int indexOf(K key, [int start = 0]) => _list.indexOf(key, start);
 
   /// Returns the [index]th value.
   /// The [index] must be non-negative and less than [length].
