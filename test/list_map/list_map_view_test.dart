@@ -273,4 +273,46 @@ void main() {
   });
 
   /////////////////////////////////////////////////////////////////////////////
+
+  test("indexOfKey", () {
+    //
+    // Map is NOT a ListMap:
+    ListMapView<String, int> listMapView =
+        ListMapView({"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6});
+
+    expect(listMapView.indexOfKey("a"), 0);
+    expect(listMapView.indexOfKey("b"), 2);
+    expect(listMapView.indexOfKey("c"), 1);
+    expect(listMapView.indexOfKey("d"), 3);
+    expect(listMapView.indexOfKey("e"), 4);
+    expect(listMapView.indexOfKey("f"), 5);
+    expect(listMapView.indexOfKey("g"), -1);
+    expect(listMapView.indexOfKey(""), -1);
+
+    // 2) Empty
+    listMapView = ListMapView({});
+    expect(listMapView.indexOfKey(""), -1);
+    expect(listMapView.indexOfKey("a"), -1);
+
+    // --------------
+
+    // Map is a ListMap:
+    listMapView = ListMapView(ListMap.of({"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6}));
+
+    expect(listMapView.indexOfKey("a"), 0);
+    expect(listMapView.indexOfKey("b"), 2);
+    expect(listMapView.indexOfKey("c"), 1);
+    expect(listMapView.indexOfKey("d"), 3);
+    expect(listMapView.indexOfKey("e"), 4);
+    expect(listMapView.indexOfKey("f"), 5);
+    expect(listMapView.indexOfKey("g"), -1);
+    expect(listMapView.indexOfKey(""), -1);
+
+    // 2) Empty
+    listMapView = ListMapView({});
+    expect(listMapView.indexOfKey(""), -1);
+    expect(listMapView.indexOfKey("a"), -1);
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
 }

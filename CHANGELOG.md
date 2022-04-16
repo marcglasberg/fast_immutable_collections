@@ -1,6 +1,6 @@
-## [7.3.0] - 2022/04/04
+## [7.3.1] - 2022/16/04
 
-* Added `ListMap.indexOf()` method. 
+* Added `ListMap.indexOfKey()` method. 
 
 ## [7.2.1] - 2022/03/14
 

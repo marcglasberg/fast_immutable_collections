@@ -135,6 +135,22 @@ class ListMapView<K, V> implements ListMap<K, V> {
   V valueAt(int index) => _map.values.elementAt(index);
 
   @override
+  int indexOfKey(K key, [int start = 0]) {
+    final Map<K, V> map = _map;
+
+    if (map is ListMap<K, V>)
+      return map.indexOfKey(key, start);
+    else {
+      int count = 0;
+      for (K _key in _map.keys) {
+        if (count >= start && key == _key) return count;
+        count++;
+      }
+      return -1;
+    }
+  }
+
+  @override
   void shuffle([Random? random]) {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");

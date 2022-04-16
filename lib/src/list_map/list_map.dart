@@ -310,7 +310,7 @@ class ListMap<K, V> implements Map<K, V> {
   ///
   /// Returns -1 if the [key] is not found.
   ///
-  int indexOf(K key, [int start = 0]) => _list.indexOf(key, start);
+  int indexOfKey(K key, [int start = 0]) => _list.indexOf(key, start);
 
   /// Returns the [index]th value.
   /// The [index] must be non-negative and less than [length].
