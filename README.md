@@ -2599,6 +2599,7 @@ need to do your best work online, from team chat and task management to contract
 * <a href="https://pub.dev/packages/assorted_layout_widgets">assorted_layout_widgets</a>
 * <a href="https://pub.dev/packages/weak_map">weak_map</a>
 * <a href="https://pub.dev/packages/themed">themed</a>
+* <a href="https://pub.dev/packages/bdd_framework">bdd_framework</a>
 
 *My Medium Articles:*
 
@@ -2623,6 +2624,8 @@ need to do your best work online, from team chat and task management to contract
 <br>_Marcelo Glasberg:_<br>
 
 <a href="https://github.com/marcglasberg">_github.com/marcglasberg_</a>
+<br>
+<a href="https://www.linkedin.com/in/marcglasberg/">_linkedin.com/in/marcglasberg/_</a>
 <br>
 <a href="https://twitter.com/glasbergmarcelo">_twitter.com/glasbergmarcelo_</a>
 <br>
