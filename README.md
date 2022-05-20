@@ -12,10 +12,12 @@
 
 # 1. Fast Immutable Collections
 
-> _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and myself,
+> _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
+myself,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
 > The below documentation is very detailed. For an overview, go to my
-> <a href="https://medium.com/flutter-community/announcing-fic-fast-immutable-collections-5eb091d1e31f">Medium story</a>.
+> <a href="https://medium.com/flutter-community/announcing-fic-fast-immutable-collections-5eb091d1e31f">
+> Medium story</a>.
 > You may also check <a href="https://fanaro.io/articles/fic/fic.html">Philippe's article</a>.
 
 ## 1.1. Introduction
@@ -360,7 +362,6 @@ var ilist = [1, 2, 3].lock.add(4).remove(2);
 
 Since `IList` methods always return a new `IList`, it is a **mistake** to call a method on it and
 then discard the result:
-
 ```
 var ilist = [1, 2].lock;
                                                   
@@ -467,8 +468,8 @@ print(list1.lock == list2.lock); // True!
 ```
 
 This also means `IList`s can be used as **map keys**, which is a very useful property in itself, but
-can also help when implementing some other interesting data structures. For example, to implement **
-caches**:
+can also help when implementing some other interesting data structures. For example, to
+implement **caches**:
 
 ```
 Map<IList, int> sumResult = {};
@@ -722,9 +723,8 @@ improve on those here.
 
 - First is that some Dart mixins let you create inefficient methods
   (like fore example, a `length` getter which has to iterate through all items to yield a result).
-  All mixins within
-  **FIC** are as efficient as the underlying immutable collection, so you don't need to worry about
-  this problem.
+  All mixins within **FIC** are as efficient as the underlying immutable collection, so you don't
+  need to worry about this problem.
 
 - Second is that the native Dart mixins implement their respective collections. For example,
   a `ListMixin`
@@ -991,9 +991,9 @@ than for `IList`. Please read the `IList` explanation first, before trying to un
   classes based on the `ISet`. This helps you create more strongly typed collections, and add your
   own methods to them.
 
-- You can flush an `ISet` by using the getter `.flush`. Note flush just optimizes the set **
-  internally**, and no external difference will be visible. Depending on the global configuration,
-  the `ISet`s will flush automatically for you.
+- You can flush an `ISet` by using the getter `.flush`. Note flush just optimizes the
+  set **internally**, and no external difference will be visible. Depending on the global
+  configuration, the `ISet`s will flush automatically for you.
 
 - There are a few ways to lock and unlock a set, which will have different results in speed and
   safety. Getter `lock`
@@ -1157,9 +1157,9 @@ than for IList. Please read the IList explanation first, before trying to unders
   by using the following `IMap` methods:
   `equalItems`, `equalItemsAndConfig`, `unorderedEqualItems`, `equalItemsToIMap` and `same`.
 
-- You can flush an `IMap` by using the getter `.flush`. Note flush just optimizes the map **
-  internally**, and no external difference will be visible. Depending on the global configuration,
-  the `IMap`s will flush automatically for you.
+- You can flush an `IMap` by using the getter `.flush`. Note flush just optimizes the
+  map **internally**, and no external difference will be visible. Depending on the global
+  configuration, the `IMap`s will flush automatically for you.
 
 - There are a few ways to lock and unlock a map, which will have different results in speed and
   safety. Getter `lock`
@@ -1227,8 +1227,8 @@ because of the limitations of the Dart language._
 
 ## 4.2. Global IMap Configuration
 
-The **default** configuration of the `IMap` is
-`ConfigMap(isDeepEquals: true, sort: false, cacheHashCode: true)`:
+The **default** configuration of the `IMap`
+is `ConfigMap(isDeepEquals: true, sort: false, cacheHashCode: true)`:
 
 1. `isDeepEquals: true` compares by deep equality: They are equal if they have the same entries in
    the same order.
@@ -1480,11 +1480,15 @@ These are some provided helpers and extensions:
 * `Iterable.sortedReversed` returns a reversed sorted list of the elements of the iterable. Note
   that `Iterable.sorted` can be found in `package:collection/collection.dart`.
 
-* `updateById` returns a new list where new items are added or updated, by their id.
+* `Iterable.updateById` returns a new list where new items are added or updated, by their id.
 
-* `isFirst`, `isNotFirst`, `isLast` and `isNotLast` return true if the given item is the same (by
-  identity) as the first/last/not-first/not-last of the items. This is useful for non-indexed loops
-  where you need to know when you have the given item.
+* `Iterable.isFirst`, `isNotFirst`, `isLast` and `isNotLast` return true if the given item is the
+  same (by identity) as the first/last/not-first/not-last of the items. This is useful for
+  non-indexed loops where you need to know when you have the given item.
+
+* `Iterable.as` and `asSet` return a List or Set containing the elements of the iterable.
+  If the Iterable is already a List/Set, return the same instance (nothing new is created).
+  Otherwise, create a new List/Set from it.
 
 ## 8.2 List extensions
 
@@ -1607,13 +1611,11 @@ The `compareObject` function lets you easily compare `a` and `b`, as follows:
 You can use the comparator in sorts:
 
 ```
-
 // Results in: [1, 2, null]
 [1, 2, null, 3].sort(compareObject);
 
 // Results in: [null, 1, 2]
 [1, 2, null, 3].sort((a, b) => compareObject(a, b, nullsBefore: true));
-
 ```
 
 ## 9.2. CompareObjectTo extension
@@ -1623,13 +1625,11 @@ Besides the `compareObject` function above, you can also use the `compareObjectT
 For example:
 
 ```
-
 // Results in: [1, 2, null]
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b));
 
 // Results in: [null, 1, 2]
 [1, 2, null, 3].sort((a, b) => a.compareObjectTo(b, nullsBefore: true));
-
 ```
 
 ## 9.3. SortBy function
@@ -1651,12 +1651,10 @@ the `then` parameter:
 After all the rules are in place you have this:
 
 ```
-
 int Function(int, int) compareTo = sortBy((x) => x == 14, then: sortBy((x) => x == 15, then:
 sortBy((x) => x % 2 == 1, then: sortBy((x) => x % 3 == 0, then: sortBy((x) => x % 5 == 0, then: (int
 a, int b) => a.compareTo(b),
 )))));
-
 ```
 
 ## 9.4. SortLike function
@@ -1673,11 +1671,9 @@ implement the following rules:
 > 3. Otherwise, numbers come in their natural order.
 
 ```
-
 int Function(int, int) compareTo = sortLike([7, 3, 4, 21, 2], then: sortBy((x) => x % 2 == 1,
 then: (int a, int b) => a.compareTo(b),
 ));
-
 ```
 
 Important: When nested comparators are used, make sure you don't create inconsistencies. For
@@ -1704,7 +1700,6 @@ The `if0` function lets you nest comparators.
 You can think of `if0` as a "then", so that these two comparators are equivalent:
 
 ```
-
 /// This:
 var compareTo = (String a, String b)
 => a.length.compareTo(b.length).if0(a.compareTo(b));
@@ -1712,13 +1707,11 @@ var compareTo = (String a, String b)
 /// Is the same as this:
 var compareTo = (String a, String b) { int result = a.length.compareTo(b.length); if (result == 0)
 result = a.compareTo(b); return result; }
-
 ```
 
 Examples:
 
 ```
-
 var list = ["aaa", "ccc", "b", "c", "bbb", "a", "aa", "bb", "cc"];
 
 /// Example 1. /// String come in their natural order. var compareTo = (String a, String b) =>
@@ -1733,7 +1726,6 @@ list.sort(compareTo); expect(list, ["a", "b", "c", "aa", "bb", "cc", "aaa", "bbb
 natural order, inverted. compareTo = (String a, String b) => a.length.compareTo(b.length).if0(
 -a.compareTo(b)); list.sort(compareTo); expect(
 list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
-
 ```
 
 # 10. Flushing
@@ -1752,9 +1744,7 @@ If you call `flush` on an immutable collection, it will internally remove all th
 making sure it is perfectly optimized again. For example:
 
 ```
-
 var ilist = [1.2].lock.add([3, 4]).add(5); ilist.flush;
-
 ```
 
 Please note, `flush` is a getter which returns the exact same instance, just so you can chain other
@@ -2041,11 +2031,12 @@ create an immutable list?
 
 It is a misconception that immutability is just the absence of something: take a list, remove the
 mutating code, and you've got an immutable list. But that's not how it works. If we simply remove
-mutating methods from `List`, we end up with a list that is read-only. Or, as we can call it, an **
-unmodifiable list**. It can still change under you, it's just that you won't be the one changing it.
-Immutability, as a feature, is not an absence of mutation, it's a **guarantee**
-that there won't be mutation. A feature isn't necessarily something you can use to do good, it may
-also be the promise that something bad won't happen.
+mutating methods from `List`, we end up with a list that is read-only. Or, as we can call it,
+an **unmodifiable list**. It can still change under you, it's just that you won't be the one
+changing it.
+Immutability, as a feature, is not an absence of mutation, it's a **guarantee** that there won't be
+mutation. A feature isn't necessarily something you can use to do good, it may also be the promise
+that something bad won't happen.
 
 In Dart's `List.unmodifiable()` case, it actually
 <a href="https://stackoverflow.com/questions/50311900/in-dart-does-list-unmodifiable-create-an-unmodifiable-view-or-a-whole-new-in">
@@ -2124,9 +2115,9 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
 * Yet another example is comparing two collections. Comparing with **value equality** may require
   considering every item in each collection, on an O(N) time complexity. For large collections of
   values, this could become a costly operation, though if the two are not equal and hardly similar,
-  the inequality is determined very quickly. In contrast, when comparing two collections with **
-  reference equality**, only the references to memory need to be compared, which has an O(1) time
-  complexity.
+  the inequality is determined very quickly. In contrast, when comparing two collections
+  with **reference equality**, only the references to memory need to be compared, which has an O(1)
+  time complexity.
 
   In Flutter, as soon as you pass a collection of objects, typically a `List<Widget>`, to some
   widget, conceptually you are giving up write ownership to that list. In other words, you should
@@ -2182,8 +2173,8 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   where no change in value occurred. For this reason, if some state and its next state are immutable
   collections not equal by identity, they are almost certainly NOT value-equal, otherwise why would
   you have mutated the collection to begin with? If you are ok with doing some rare unnecessary
-  rebuilds, you can decide whether or not to rebuild the widget without having to compare each item
-  of the collections.
+  rebuilds, you can decide whether to rebuild the widget without having to compare each item of the
+  collections.
 
 * Caching can speed things up significantly. But how do you cache results of a function?
 
