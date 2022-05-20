@@ -67,6 +67,18 @@ extension FicIterableExtension<T> on Iterable<T> {
   IList<T> toIList([ConfigList? config]) =>
       IList<T>.withConfig(this, config ?? IList.defaultConfig);
 
+  /// Returns a [List] containing the elements of this iterable.
+  /// If the Iterable is already a [List], return the same instance (nothing new is created).
+  /// Otherwise, create a new List from it.
+  /// See also: Dart's native [toList], which always creates a new list.
+  List<T> asList() => (this is List<T>) ? (this as List<T>) : toList();
+
+  /// Creates a [Set] containing the same elements as this iterable.
+  /// If the Iterable is already a [Set], return the same instance (nothing new is created).
+  /// Otherwise, create a new Set from it.
+  /// See also: Dart's native [toSet], which always creates a new set.
+  Set<T> asSet() => (this is Set<T>) ? (this as Set<T>) : toSet();
+
   // Removed, since now you can: import "package:collection/collection.dart";
   // /// Returns the first element that satisfies the given predicate [test].
   // ///

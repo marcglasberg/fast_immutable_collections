@@ -1,5 +1,6 @@
-import "package:flutter/material.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:flutter/material.dart";
+
 import "../screens/code_screen.dart";
 import "../screens/graph_screen.dart";
 import "collection_button.dart";
@@ -40,9 +41,9 @@ class _BenchWidgetState extends State<BenchWidget> {
       );
 
   void _run() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() => _isRunning = true);
-      WidgetsBinding.instance!.addPostFrameCallback(
+      WidgetsBinding.instance.addPostFrameCallback(
         (_) => setState(() {
           _results = <RecordsTable>[];
           widget.benchmarks().forEach((MultiBenchmarkReporter benchmark) {

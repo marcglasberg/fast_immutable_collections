@@ -1,4 +1,8 @@
-## [7.3.1] - 2022/16/04
+## [7.4.0] - 2022/05/20
+
+* Added `asList` and `asSet` method extensions, to Iterable. 
+
+## [7.3.1] - 2022/04/16
 
 * Added `ListMap.indexOfKey()` method. 
 
