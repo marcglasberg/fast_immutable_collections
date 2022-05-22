@@ -1405,15 +1405,23 @@ class InternalsForTestingPurposesIMap {
 
 Object _safeKeyToJson<NewK extends Object?>(NewK key) {
   if (key == null) {
-    return '$key';
+    return 'null';
   }
-  if (key is String) {
+  //
+  else if (key is String) {
     return key;
   }
-  if (key is num || key is bool || key is DateTime || key is BigInt || key is Uri) {
-    return '$key';
+  //
+  else if (key is num || key is bool || key is DateTime || key is BigInt || key is Uri) {
+    return key.toString();
   }
-  throw Exception('IMap key $key of type ${key.runtimeType} not serializable to/from json');
+  //
+  else if (key is Enum) {
+    return key.name;
+  }
+  //
+  else
+    throw Exception('IMap key $key of type ${key.runtimeType} not serializable to/from json');
 }
 
 NewK _safeKeyFromJson<NewK extends Object?>(String key) {
@@ -1441,7 +1449,12 @@ NewK _safeKeyFromJson<NewK extends Object?>(String key) {
   if (_dummyString is NewK) {
     return key as NewK;
   }
-  return key as NewK;
+  try {
+    return key as NewK;
+  } catch (error) {
+    throw UnsupportedError("JSON deserialization of IMap keys "
+        "of type $NewK are not supported at the moment.");
+  }
 }
 
 const _dummyInt = 1;

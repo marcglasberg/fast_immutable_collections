@@ -1,10 +1,16 @@
+## [7.4.1] - 2022/05/22
+
+* Better error message when an IMap is deserialized from JSON, and its key type is unsupported by
+  the deserialization code. The error message
+  is: `JSON deserialization of IMap keys of type $type are not supported at the moment.`
+
 ## [7.4.0] - 2022/05/20
 
-* Added `asList` and `asSet` method extensions, to Iterable. 
+* Added `asList` and `asSet` method extensions, to Iterable.
 
 ## [7.3.1] - 2022/04/16
 
-* Added `ListMap.indexOfKey()` method. 
+* Added `ListMap.indexOfKey()` method.
 
 ## [7.2.1] - 2022/03/14
 

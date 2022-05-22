@@ -16,6 +16,18 @@ class IListWrapper {
 }
 
 @JsonSerializable()
+class IListWrapper2 {
+  final IList<TestEnum> iList;
+
+  IListWrapper2(this.iList);
+
+  factory IListWrapper2.fromJson(Map<String, dynamic> json) =>
+      _$IListWrapper2FromJson(json);
+
+  Map<String, dynamic> toJson() => _$IListWrapper2ToJson(this);
+}
+
+@JsonSerializable()
 class IMapWrapper {
   final IMap<String, String> iMap;
 
@@ -40,6 +52,18 @@ class IMapWrapper2 {
 }
 
 @JsonSerializable()
+class IMapWrapper3 {
+  final IMap<TestEnum, String> iMap;
+
+  IMapWrapper3(this.iMap);
+
+  factory IMapWrapper3.fromJson(Map<String, dynamic> json) =>
+      _$IMapWrapper3FromJson(json);
+
+  Map<String, dynamic> toJson() => _$IMapWrapper3ToJson(this);
+}
+
+@JsonSerializable()
 class ISetWrapper {
   final ISet<String> iSet;
 
@@ -50,3 +74,5 @@ class ISetWrapper {
 
   Map<String, dynamic> toJson() => _$ISetWrapperToJson(this);
 }
+
+enum TestEnum { valA, valB, valC }
