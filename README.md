@@ -55,8 +55,8 @@ Other valuable features are:
   `FicComparatorExtension`, `FicComparableExtension` and `FicBooleanExtension`. For example:
   `false.compareTo(true)`
 
-- Comparators and related helpers to be used with native or immutable collections, or any sort
-  algorithms, such as `compareObject`, `sortBy`, `sortLike`, `if0`, in `sort.dart`.
+- Comparators and related helpers to be used with native or immutable collections, or any [sort
+  algorithms](https://www.interviewbit.com/courses/programming/arrays/sorting-algorithms), such as `compareObject`, `sortBy`, `sortLike`, `if0`, in `sort.dart`.
 
 <br>
 
