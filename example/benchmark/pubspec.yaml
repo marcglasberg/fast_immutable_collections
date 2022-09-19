@@ -12,7 +12,7 @@ dependencies:
   path: ^1.8.0
 
   built_collection: ^5.1.1
-  kt_dart: ^0.9.1
+  kt_dart: ^0.10.0
 
   fast_immutable_collections:
     path: ../../

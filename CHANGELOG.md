@@ -1,3 +1,7 @@
+## [7.4.2] - 2022/09/19
+
+* Docs improvement.
+
 ## [7.4.1] - 2022/05/22
 
 * Better error message when an IMap is deserialized from JSON, and its key type is unsupported by

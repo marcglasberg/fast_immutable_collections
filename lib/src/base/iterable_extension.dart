@@ -150,9 +150,9 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// If iterable is empty it returns 0.
   /// Examples:
   /// ```
-  /// expect([1, 2, 3, 4, 5].sumBy((e) => e), 15);
-  /// expect([1.5, 2.5, 3.3, 4, 5].sumBy((e) => e), 16.3);
-  /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
+  /// expect([1, 2, 3, 4, 5].averageBy((e) => e), 3.0);
+  /// expect([1.5, 2.5, 3.3, 4, 5].averageBy((e) => e), 3.26);
+  /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 3.0);
   /// ```
   double averageBy<N extends num>(N Function(T element) mapper) {
     double result = 0.0;
