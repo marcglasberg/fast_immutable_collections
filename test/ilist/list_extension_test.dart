@@ -527,6 +527,23 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("concat | Efficiently concatenates lists. The resulting list has fixed size.", () {
+    //
+    // Concat lists can be sorted.
+    List x = [1, 5].where((_) => true).toList(growable: false);
+    List y = [2, 4].where((_) => true).toList(growable: false);
+    List z = x.concat(y);
+    expect(z, [1, 5, 2, 4]);
+    z.sort();
+    expect(z, [1, 2, 4, 5]);
+
+    // Empty concat lists can be sorted.
+    x = [].where((_) => true).toList(growable: false);
+    y = [].where((_) => true).toList(growable: false);
+    z = x.concat(y);
+    expect(z, []);
+    z.sort();
+    expect(z, []);
+
     expect([].concat([], []), []);
     expect([5].concat([1]), [5, 1]);
     expect([5].concat([], []), [5]);

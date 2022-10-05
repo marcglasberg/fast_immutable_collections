@@ -1,3 +1,7 @@
+## [7.4.3] - 2022/10/05
+
+* Small fix: Empty lists created with the `List.concat` extension can be sorted.
+
 ## [7.4.2] - 2022/09/19
 
 * Docs improvement.
