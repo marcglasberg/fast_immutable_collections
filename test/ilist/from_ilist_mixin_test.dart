@@ -2,7 +2,6 @@ import "dart:math";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
-
 import "package:test/test.dart";
 
 void main() {
@@ -863,7 +862,7 @@ void main() {
     expect(
         students
             .replaceFirstWhere(
-                (Student? student) => student!.name.length == 5, const Student("Bob"))
+                (Student? student) => student!.name.length == 5, (_) => const Student("Bob"))
             .iter,
         [const Student("Bob"), sara, lucy, james]);
   });

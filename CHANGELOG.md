@@ -1,3 +1,13 @@
+## [8.0.0] - 2021/10/27
+
+* Breaking change: `IList.replaceFirstWhere` signature is now 
+  `IList<T> replaceFirstWhere(bool Function(T item) test, T Function(T? item) replacement, {bool addIfNotFound = false})`
+  instead of
+  `IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false})`
+  In case this change breaks your code, the fix is simple. Instead of something like 
+  `ilist.replaceFirstWhere((String item) => item=="1", "2")`
+  do this: `ilist.replaceFirstWhere((String item) => item=="1", (_) => "2")`
+
 ## [7.4.3] - 2022/10/05
 
 * Small fix: Empty lists created with the `List.concat` extension can be sorted.

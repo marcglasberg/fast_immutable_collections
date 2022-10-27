@@ -299,8 +299,16 @@ void main() {
 
     // 1) Regular usage
     expect(ilist.equalItems(ISet([1, 2])), isTrue);
-    expect(ilist.equalItems({}..add(1)..add(2)), isTrue);
-    expect(() => ilist.equalItems(HashSet()..add(1)..add(2)), throwsStateError);
+    expect(
+        ilist.equalItems({}
+          ..add(1)
+          ..add(2)),
+        isTrue);
+    expect(
+        () => ilist.equalItems(HashSet()
+          ..add(1)
+          ..add(2)),
+        throwsStateError);
 
     // 2) Identity
     expect(ilist.equalItems(ilist), isTrue);
@@ -1281,14 +1289,40 @@ void main() {
     var ilist = ["do", "re", "mi", "re"].lock;
 
     // 1) Regular usage
-    expect(ilist.replaceFirstWhere((String? item) => item == "re", "x"), ["do", "x", "mi", "re"]);
-    expect(ilist.replaceFirstWhere((String? item) => item == "fa", "x"), ["do", "re", "mi", "re"]);
+    expect(ilist.replaceFirstWhere((String item) => item == "re", (_) => "x"),
+        ["do", "x", "mi", "re"]);
+    expect(ilist.replaceFirstWhere((String item) => item == "fa", (_) => "x"),
+        ["do", "re", "mi", "re"]);
 
     // 2) addIfNotFound
-    expect(ilist.replaceFirstWhere((String? item) => item == "y", "x", addIfNotFound: true),
+    expect(ilist.replaceFirstWhere((String item) => item == "y", (_) => "x", addIfNotFound: true),
         ["do", "re", "mi", "re", "x"]);
-    expect(ilist.replaceFirstWhere((String? item) => item == "y", "x", addIfNotFound: false),
+    expect(ilist.replaceFirstWhere((String item) => item == "y", (_) => "x", addIfNotFound: false),
         ["do", "re", "mi", "re"]);
+
+    expect(
+        ilist.replaceFirstWhere(
+            (String item) => item == "y", (String? item) => (item == null) ? "1" : item + "2",
+            addIfNotFound: true),
+        ["do", "re", "mi", "re", "1"]);
+
+    expect(
+        ilist.replaceFirstWhere(
+            (String item) => item == "y", (String? item) => (item == null) ? "1" : item + "2",
+            addIfNotFound: false),
+        ["do", "re", "mi", "re"]);
+
+    expect(
+        ilist.replaceFirstWhere(
+            (String item) => item == "re", (String? item) => (item == null) ? "1" : item + "2",
+            addIfNotFound: true),
+        ["do", "re2", "mi", "re"]);
+
+    expect(
+        ilist.replaceFirstWhere(
+            (String item) => item == "re", (String? item) => (item == null) ? "1" : item + "2",
+            addIfNotFound: false),
+        ["do", "re2", "mi", "re"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

@@ -222,8 +222,8 @@ mixin FromIListMixin<T, I extends FromIListMixin<T, I>> implements CanBeEmpty {
   I replaceFirst({required T from, required T to}) =>
       newInstance(iter.replaceFirst(from: from, to: to));
 
-  I replaceFirstWhere(bool Function(T item) test, T to) =>
-      newInstance(iter.replaceFirstWhere(test, to));
+  I replaceFirstWhere(bool Function(T item) test, T Function(T? item) replacement) =>
+      newInstance(iter.replaceFirstWhere(test, replacement));
 
   I replaceRange(int start, int end, Iterable<T> replacement) =>
       newInstance(iter.replaceRange(start, end, replacement));

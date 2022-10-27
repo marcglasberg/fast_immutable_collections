@@ -131,7 +131,7 @@ class IListImpl<T> // ignore: must_be_immutable
   IListImpl._(
     Iterable<T>? iterable, {
     required this.config,
-  })   : _l = iterable is IList<T> //
+  })  : _l = iterable is IList<T> //
             ? iterable._l
             : iterable == null
                 ? LFlat.empty<T>()
@@ -1206,19 +1206,25 @@ abstract class IList<T> // ignore: must_be_immutable
       map((element) => (element == from) ? to : element).toIList(config);
 
   /// Finds the first item that satisfies the provided [test],
-  /// and replace it with [to].
+  /// and replace it with the result of [replacement].
   ///
-  /// - If [addIfNotFound] is `false`,
-  /// return the unchanged list if no item satisfies the [test].
-  /// - If [addIfNotFound] is `true`, add the item to the end of the list
-  /// if no item satisfies the [test].
+  /// - If [addIfNotFound] is `false`, return the unchanged
+  /// list if no item satisfies the [test].
+  ///
+  /// - If [addIfNotFound] is `true`, add the [replacement]
+  /// to the end of the list if no item satisfies the [test].
+  ///
   @useCopy
-  IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false}) {
-    var index = indexWhere(test);
+  IList<T> replaceFirstWhere(
+    bool Function(T item) test,
+    T Function(T? item) replacement, {
+    bool addIfNotFound = false,
+  }) {
+    int index = indexWhere(test);
     return (index != -1)
-        ? put(index, to)
+        ? put(index, replacement(this[index]))
         : addIfNotFound
-            ? add(to)
+            ? add(replacement(null))
             : this;
   }
 
