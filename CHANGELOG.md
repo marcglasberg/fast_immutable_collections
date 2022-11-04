@@ -1,4 +1,4 @@
-## [8.0.0] - 2021/10/27
+## [8.0.0] - 2022/10/27
 
 * Breaking change: `IList.replaceFirstWhere` signature is now 
   `IList<T> replaceFirstWhere(bool Function(T item) test, T Function(T? item) replacement, {bool addIfNotFound = false})`
