@@ -367,4 +367,59 @@ extension FicIterableExtension<T> on Iterable<T> {
       yield convert(index++, item, index == _length);
     }
   }
+
+  /// Returns true if this [Iterable] has any items in common with the [other] Iterable.
+  /// This method is as performant as possible, but it will be faster if any of the Iterables
+  /// is a [Set] or an [ISet].
+  bool intersectsWith(Iterable<T> other) {
+    //
+    // Note: We could convert them to Sets, and check if Set.intersect is empty.
+    // But that's not performant.
+
+    // If both are Set/ISet we'll iterate the smaller one, because that's faster.
+    if ((this is Set || this is ISet) && (other is Set || other is ISet)) {
+      if (length > other.length) {
+        for (T item in other) {
+          if (contains(item)) return true;
+        }
+        return false;
+      }
+      //
+      else {
+        for (T item in this) {
+          if (other.contains(item)) return true;
+        }
+        return false;
+      }
+    }
+
+    // ---
+
+    Iterable<T> set;
+    Iterable<T> iterable;
+
+    // If none of them is a Set/ISet, convert one of them to a Set.
+    if ((this is! Set<T> && this is! ISet<T>) && (other is! Set<T> && other is! ISet<T>)) {
+      set = other.toSet();
+      iterable = this;
+    }
+    //
+    // If one of them is a Set/ISet, find it.
+    else {
+      if (this is Set<T> || this is ISet<T>) {
+        set = this;
+        iterable = other;
+      } else {
+        assert(other is Set<T> || other is ISet<T>);
+        set = other;
+        iterable = this;
+      }
+    }
+
+    /// Iterate the Iterable, searching the Set.
+    for (T item in iterable) {
+      if (set.contains(item)) return true;
+    }
+    return false;
+  }
 }

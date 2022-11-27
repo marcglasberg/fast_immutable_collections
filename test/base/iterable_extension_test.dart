@@ -456,6 +456,75 @@ void main() {
         ]);
   });
 
+  // ////////g/////////////////////////////////////////////////////////////////////
+
+  test("intersectsWith", () {
+    //
+
+    // 1) None of them are Sets/iSets.
+    Iterable<String> iter1 = ["a", "b", "c", "d"];
+    Iterable<String> iter2 = ["x", "c", "y"];
+    Iterable<String> iter3 = ["x", "y", "z"];
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 2) All of them are Sets.
+    iter1 = {"a", "b", "c", "d"};
+    iter2 = {"x", "c", "y"};
+    iter3 = {"x", "y", "z"};
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 3) All of them are ISets.
+    iter1 = {"a", "b", "c", "d"}.lock;
+    iter2 = {"x", "c", "y"}.lock;
+    iter3 = {"x", "y", "z"}.lock;
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 4) One of them is a Set.
+    iter1 = {"a", "b", "c", "d"};
+    iter2 = ["x", "c", "y"];
+    iter3 = ["x", "y", "z"];
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 5) One of them is an ISet.
+    iter1 = {"a", "b", "c", "d"}.lock;
+    iter2 = ["x", "c", "y"];
+    iter3 = ["x", "y", "z"];
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+  });
+
   // /////////////////////////////////////////////////////////////////////////////
 }
 

@@ -1,3 +1,7 @@
+## [8.1.0] - 2021/11/27
+
+* `Iterable.intersectsWith` extension.
+
 ## [8.0.0] - 2021/10/27
 
 * Breaking change: `IList.replaceFirstWhere` signature is now 
