@@ -1,8 +1,12 @@
-## [8.1.0] - 2021/11/27
+## [8.1.1] - 2023/01/06
+
+* `IList.indexOf` extension fix (doesn't break anymore when list is empty and start is zero).
+
+## [8.1.0] - 2022/11/27
 
 * `Iterable.intersectsWith` extension.
 
-## [8.0.0] - 2021/10/27
+## [8.0.0] - 2022/10/27
 
 * Breaking change: `IList.replaceFirstWhere` signature is now 
   `IList<T> replaceFirstWhere(bool Function(T item) test, T Function(T? item) replacement, {bool addIfNotFound = false})`

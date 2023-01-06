@@ -1213,6 +1213,13 @@ void main() {
     // 2) Argument error
     expect(() => ilist.indexOf("re", -1), throwsArgumentError);
     expect(() => ilist.indexOf("re", 4), throwsArgumentError);
+
+    // 3) Zero length
+    var emptyList = [].lock;
+    expect(emptyList.indexOf("do"), -1);
+    expect(() => emptyList.indexOf("do", 1), throwsArgumentError);
+    expect(() => emptyList.indexOf("do", 2), throwsArgumentError);
+    expect(() => emptyList.indexOf("do", -1), throwsArgumentError);
   });
 
   //////////////////////////////////////////////////////////////////////////////

@@ -1160,6 +1160,9 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// If [start] is not provided, this method searches from the start of the list.
   ///
+  /// If [start] is provided and is different than zero, it will throw an ArgumentError
+  /// in case it's `< 0` or `>= length`.
+  ///
   /// ```dart
   /// final IList<String> notes = ['do', 're', 'mi', 're'].lock;
   /// notes.indexOf('re');    // 1
@@ -1174,9 +1177,9 @@ abstract class IList<T> // ignore: must_be_immutable
   int indexOf(T element, [int start = 0]) {
     _count();
     var _length = length;
-    if (start < 0 || start >= _length)
+    if (start < 0 || (start > 0 && start >= _length))
       throw ArgumentError.value(start, "index", "Index out of range");
-    for (int i = start; i <= _length - 1; i++) if (this[i] == element) return i;
+    for (int i = start; i < _length; i++) if (this[i] == element) return i;
     return -1;
   }
 
