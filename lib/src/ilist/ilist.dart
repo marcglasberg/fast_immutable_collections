@@ -1066,7 +1066,7 @@ abstract class IList<T> // ignore: must_be_immutable
     );
   }
 
-  /// Return true if length match and all Eq are true
+  /// Return true if length match and all Eq are true.
   bool corresponds<U>(Iterable<U> others, EQ eq) {
     if (length != others.length) return false;
     final iterator = others.iterator;
@@ -1488,12 +1488,28 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// The [replace] method is the equivalent of `operator []=` for the [IList].
+  ///
+  /// See also: [replaceBy].
   @useCopy
   IList<T> replace(int index, T value) {
     // TODO: Still need to implement efficiently.
     var newList = toList(growable: false);
     newList[index] = value;
     return IList._unsafeFromList(newList, config: config);
+  }
+
+  /// Returns a new [IList], replacing the object at position [index] with the result of
+  /// calling the function [transform]. This function gets the previous object at position [index]
+  /// as a parameter.
+  ///
+  /// If the index doesn't exist (negative, or out of range), will throw an error.
+  ///
+  /// See also: [replace].
+  @useCopy
+  IList<T> replaceBy(int index, T Function(T item) transform) {
+    T originalValue = get(index);
+    T transformed = transform(originalValue);
+    return replace(index, transformed);
   }
 
   /// Inserts the object at position [index] in this list and returns a new immutable list.

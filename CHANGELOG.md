@@ -1,3 +1,7 @@
+## [8.2.0] - 2023/01/30
+
+* `IList.replaceBy` method lets you define a function to transform an item at a specific index location.
+ 
 ## [8.1.1] - 2023/01/06
 
 * `IList.indexOf` extension fix (doesn't break anymore when list is empty and start is zero).
