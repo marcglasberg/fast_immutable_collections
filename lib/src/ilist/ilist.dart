@@ -1183,17 +1183,15 @@ abstract class IList<T> // ignore: must_be_immutable
     return -1;
   }
 
-  /// This is the equivalent to `void operator []=(int index, T value);`
+  /// This is the equivalent to `void operator []=(int index, T value);` for the [IList].
   /// Sets the value at the given [index] in the list to [value]
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
+  /// See also: [replace] (same as [put]) and [replaceBy].
   @useCopy
   IList<T> put(int index, T value) {
     _count();
-    // TODO: Still need to implement efficiently.
-    var list = toList(growable: false);
-    list[index] = value;
-    return IList._unsafeFromList(list, config: config);
+    return replace(index, value);
   }
 
   /// Finds the first occurrence of [from], and replace it with [to].
@@ -1487,9 +1485,11 @@ abstract class IList<T> // ignore: must_be_immutable
     return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
   }
 
-  /// The [replace] method is the equivalent of `operator []=` for the [IList].
+  /// This is the equivalent to `void operator []=(int index, T value);` for the [IList].
+  /// Sets the value at the given [index] in the list to [value]
+  /// or throws a [RangeError] if [index] is out of bounds.
   ///
-  /// See also: [replaceBy].
+  /// See also: [put] (same as [replace]) and [replaceBy].
   @useCopy
   IList<T> replace(int index, T value) {
     // TODO: Still need to implement efficiently.
@@ -1498,9 +1498,9 @@ abstract class IList<T> // ignore: must_be_immutable
     return IList._unsafeFromList(newList, config: config);
   }
 
-  /// Returns a new [IList], replacing the object at position [index] with the result of
-  /// calling the function [transform]. This function gets the previous object at position [index]
-  /// as a parameter.
+  /// Returns a new [IList], replacing the object at position [index] with the result of calling
+  /// the function [transform]. This function gets the previous object at position [index] as a
+  /// parameter.
   ///
   /// If the index doesn't exist (negative, or out of range), will throw an error.
   ///
