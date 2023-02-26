@@ -1,9 +1,7 @@
-import "../utils/benchmarks_code.dart";
-import "../widgets/bench_widget.dart";
-
-import "package:flutter/material.dart";
-
+import "package:benchmark_app/utils/benchmarks_code.dart";
+import "package:benchmark_app/widgets/bench_widget.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:flutter/material.dart";
 
 /// Be careful with the parameters. If they are too big, you might encounter a difficult-to-debug
 /// error, probably due to insufficient memory.

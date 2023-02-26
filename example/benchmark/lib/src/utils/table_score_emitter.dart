@@ -38,7 +38,7 @@ class TableScoreEmitter implements ScoreEmitter {
   }
 
   @override
-  String toString() => "Table Score Emitter: ${_recordsColumn.toString()}";
+  String toString() => "Table Score Emitter: $_recordsColumn";
 }
 
 // /////////////////////////////////////////////////////////////////////////////

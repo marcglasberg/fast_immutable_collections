@@ -1,9 +1,10 @@
+// ignore_for_file: overridden_fields
 import "dart:math";
 
 import "package:built_collection/built_collection.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/collection.dart";
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 

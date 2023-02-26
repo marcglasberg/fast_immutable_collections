@@ -31,7 +31,7 @@ class ConfigList {
     bool? isDeepEquals,
     bool? cacheHashCode,
   }) {
-    var config = ConfigList(
+    final config = ConfigList(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
       cacheHashCode: cacheHashCode ?? this.cacheHashCode,
     );
@@ -93,7 +93,7 @@ class ConfigSet {
     bool? sort,
     bool? cacheHashCode,
   }) {
-    var config = ConfigSet(
+    final config = ConfigSet(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
       sort: sort ?? this.sort,
       cacheHashCode: cacheHashCode ?? this.cacheHashCode,
@@ -155,7 +155,7 @@ class ConfigMap {
     bool? sort,
     bool? cacheHashCode,
   }) {
-    var config = ConfigMap(
+    final config = ConfigMap(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
       sort: sort ?? this.sort,
       cacheHashCode: cacheHashCode ?? this.cacheHashCode,
@@ -244,7 +244,7 @@ class ConfigMapOfSets {
     bool? removeEmptySets,
     bool? cacheHashCode,
   }) {
-    var config = ConfigMapOfSets(
+    final config = ConfigMapOfSets(
       isDeepEquals: isDeepEquals ?? this.isDeepEquals,
       sortKeys: sortKeys ?? this.sortKeys,
       sortValues: sortValues ?? this.sortValues,

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_locals
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
@@ -70,11 +72,7 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("deepEquals", () {
-    // *) If both are null, then true
-    Iterable? iterable1;
-    Iterable? iterable2;
-    expect(iterable1?.deepEquals(iterable2), isNull);
-
+    //
     // 1) Equal
     final listA = [a(1), a(2), a(3)];
     final listB = [a(1), a(2), a(3)];

@@ -21,9 +21,9 @@ class BarChart extends StatelessWidget {
       ];
 
   List<StopwatchRecord> _normalizedAgainstMaxPrefixedByAbs(RecordsTable table) {
-    List<StopwatchRecord> records = [];
-    RecordsColumn resultsColumn = table.resultsColumn;
-    RecordsColumn normalizedAgainstMaxColumn = table.normalizedAgainstMax;
+    final List<StopwatchRecord> records = [];
+    final RecordsColumn resultsColumn = table.resultsColumn;
+    final RecordsColumn normalizedAgainstMaxColumn = table.normalizedAgainstMax;
 
     for (int i = 0; i < resultsColumn.records.length; i++) {
       records.add(_stopwatchRecord(resultsColumn, i, normalizedAgainstMaxColumn));

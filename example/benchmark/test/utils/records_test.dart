@@ -1,7 +1,8 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import "package:test/test.dart";
+// ignore_for_file: prefer_final_locals
 
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:test/test.dart";
 
 const TypeMatcher<AssertionError> isAssertionError = TypeMatcher<AssertionError>();
 final Matcher throwsAssertionError = throwsA(isAssertionError);
@@ -16,7 +17,7 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("Config | toString()", () {
-    const Config config = Config(size: 10);
+    var config = Config(size: 10);
 
     expect(config.toString(), "Config: (size: 10)");
   });
@@ -30,7 +31,7 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("StopwatchRecord | Simple usage", () {
-    const StopwatchRecord stopwatchRecord = StopwatchRecord(collectionName: "list", record: 10);
+    StopwatchRecord stopwatchRecord = StopwatchRecord(collectionName: "list", record: 10);
 
     expect(stopwatchRecord.collectionName, "list");
     expect(stopwatchRecord.record, 10);
@@ -39,7 +40,7 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("StopwatchRecord | == operator", () {
-    const StopwatchRecord listRecord1 = StopwatchRecord(collectionName: "list", record: 10),
+    StopwatchRecord listRecord1 = StopwatchRecord(collectionName: "list", record: 10),
         listRecord3 = StopwatchRecord(collectionName: "list", record: 11),
         iListRecord1 = StopwatchRecord(collectionName: "ilist", record: 11),
         iListRecord2 = StopwatchRecord(collectionName: "ilist", record: 10);
@@ -54,7 +55,7 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("StopwatchRecord | toString()", () {
-    const StopwatchRecord record = StopwatchRecord(collectionName: "list", record: 10);
+    StopwatchRecord record = StopwatchRecord(collectionName: "list", record: 10);
 
     expect(record.toString(), "StopwatchRecord: (collectionName: list, record: 10.0)");
   });
@@ -77,7 +78,7 @@ void main() {
 
   test("RecordsColumn | Adding a record", () {
     final RecordsColumn recordsColumn = RecordsColumn.empty();
-    const StopwatchRecord record = StopwatchRecord(collectionName: "list", record: 10);
+    StopwatchRecord record = StopwatchRecord(collectionName: "list", record: 10);
 
     final RecordsColumn newColumn = recordsColumn + record;
 
@@ -199,7 +200,7 @@ void main() {
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
     final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
+        RecordsTable(resultsColumn: recordsColumn, config: Config(size: 1000));
 
     expect(recordsTable.leftLegend, isA<LeftLegend>());
     expect(recordsTable.leftLegend.rows,
@@ -216,7 +217,7 @@ void main() {
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
     final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
+        RecordsTable(resultsColumn: recordsColumn, config: Config(size: 1000));
 
     RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
     recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .33);
@@ -238,7 +239,7 @@ void main() {
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
     final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
+        RecordsTable(resultsColumn: recordsColumn, config: Config(size: 1000));
 
     RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
     recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
@@ -260,7 +261,7 @@ void main() {
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
     final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
+        RecordsTable(resultsColumn: recordsColumn, config: Config(size: 1000));
 
     RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
     recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: 1);
@@ -282,7 +283,7 @@ void main() {
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
     final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
+        RecordsTable(resultsColumn: recordsColumn, config: Config(size: 1000));
 
     RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
     recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .01);
@@ -304,15 +305,14 @@ void main() {
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
     final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
+        RecordsTable(resultsColumn: recordsColumn, config: Config(size: 1000));
 
     const String correctTableAsString =
         "Collection,Time (μs),x Max Time,x Min Time,x Mutable Time,Time (μs) / Size\n"
         "List (Mutable),10.0,0.33,1.0,1.0,0.01\n"
         "IList,15.0,0.5,1.5,1.5,0.01\n"
         "KtList,20.0,0.67,2.0,2.0,0.02\n"
-        "BuiltList,30.0,1.0,3.0,3.0,0.03\n"
-        "";
+        "BuiltList,30.0,1.0,3.0,3.0,0.03\n";
 
     expect(recordsTable.toString(), correctTableAsString);
   });
@@ -327,7 +327,7 @@ void main() {
     recordsColumn += StopwatchRecord(collectionName: "BuiltList", record: 30);
 
     final RecordsTable recordsTable =
-        RecordsTable(resultsColumn: recordsColumn, config: const Config(size: 1000));
+        RecordsTable(resultsColumn: recordsColumn, config: Config(size: 1000));
 
     RecordsColumn recordsColumnAnswer = RecordsColumn.empty();
     recordsColumnAnswer += StopwatchRecord(collectionName: "List (Mutable)", record: .5);

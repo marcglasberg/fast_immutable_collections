@@ -8,7 +8,6 @@ extension FicObjectExtension on Object? {
   /// expect(<int>[1].isOfExactGenericType(num), isFalse);
   /// expect(<num>[1].isOfExactGenericType(int), isFalse);
   bool isOfExactGenericType(Type type) {
-    // ignore: no_runtimetype_tostring
     return runtimeType.toString().endsWith('<$type>');
   }
 
@@ -20,9 +19,8 @@ extension FicObjectExtension on Object? {
   /// expect(<int>[1].isOfExactGenericType(<num>[1]), isFalse);
   /// expect(<num>[1].isOfExactGenericType(<num>[1]), isFalse);
   bool isOfExactGenericTypeAs(Object? obj) {
-    var runtimeTypeStr = obj.runtimeType.toString();
-    var pos = runtimeTypeStr.lastIndexOf('<');
-    // ignore: no_runtimetype_tostring
+    final runtimeTypeStr = obj.runtimeType.toString();
+    final pos = runtimeTypeStr.lastIndexOf('<');
     return runtimeType.toString().endsWith('<${runtimeTypeStr.substring(pos + 1)}');
   }
 }

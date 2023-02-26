@@ -1,5 +1,6 @@
 import "dart:io";
-import "../widgets/collection_button.dart";
+
+import "package:benchmark_app/widgets/collection_button.dart";
 import "package:flutter/material.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -18,7 +19,7 @@ class CodeScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           "Code: $description",
-          style: TextStyle(color: Colors.white, height: 1.3),
+          style: const TextStyle(color: Colors.white, height: 1.3),
         ),
       ),
       body: Column(
@@ -76,7 +77,7 @@ class _CodeBlock extends StatelessWidget {
           child: Text(
             title,
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w800,
               fontSize: 18,

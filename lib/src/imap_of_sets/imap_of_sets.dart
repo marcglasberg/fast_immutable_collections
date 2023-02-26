@@ -103,8 +103,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     Map<K, Iterable<V>>? mapOfSets,
     ConfigMapOfSets config,
   ) {
-    ConfigSet configSet = config.asConfigSet;
-    ConfigMap configMap = config.asConfigMap;
+    final ConfigSet configSet = config.asConfigSet;
+    final ConfigMap configMap = config.asConfigMap;
 
     return (mapOfSets == null)
         ? empty<K, V>()
@@ -169,17 +169,18 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     bool Function(I)? ignore,
     ConfigMapOfSets? config,
   }) {
-    Map<K, Set<V>> map = _mutableMapOfSets<K, V, I>(
+    final Map<K, Set<V>> map = _mutableMapOfSets<K, V, I>(
       iterable,
       keyMapper: keyMapper,
       valueMapper: valueMapper,
       ignore: ignore,
     );
+
     return IMapOfSets.withConfig(map, config ?? defaultConfig);
   }
 
   /// **Unsafe**. Note: Does not sort.
-  IMapOfSets._unsafe(this._mapOfSets, this.config);
+  const IMapOfSets._unsafe(this._mapOfSets, this.config);
 
   /// Creates an [IMapOfSets] from an `IMap` of sets.
   /// The resulting map and its sets will be sorted according to [config], or,
@@ -193,8 +194,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     IMap<K, ISet<V>> mapOfSets,
     ConfigMapOfSets config,
   ) {
-    var configMap = config.asConfigMap;
-    var configSet = config.asConfigSet;
+    final configMap = config.asConfigMap;
+    final configSet = config.asConfigSet;
 
     if ((mapOfSets.config == configMap) &&
         (mapOfSets.values.every((set) => set.config == configSet))) return mapOfSets;
@@ -254,8 +255,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// [LinkedHashMap]. This map is "safe", in the sense that is independent from
   /// the original [IMap].
   Map<K, Set<V>> get unlock {
-    Map<K, Set<V>> result = {};
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+    final Map<K, Set<V>> result = {};
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
       result[entry.key] = entry.value.unlock;
     }
     return result;
@@ -296,8 +297,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Return all values of all sets, in order, including duplicates.
   Iterable<V> get values sync* {
-    for (ISet<V> sets in _mapOfSets.values) {
-      for (V value in sets) {
+    for (final ISet<V> sets in _mapOfSets.values) {
+      for (final V value in sets) {
         yield value!;
       }
     }
@@ -318,8 +319,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// For example, if the map is `{1: {a, b}, 2: {x, y}}`,
   /// it will return [(1:a), (1:b), (2:x), (2:y)].
   Iterable<MapEntry<K, V>> flatten() sync* {
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      for (V value in entry.value) {
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      for (final V value in entry.value) {
         yield MapEntry<K, V>(entry.key, value);
       }
     }
@@ -355,7 +356,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return `true` if the value set is empty or `null`, for the given [key].
   /// Return `false` if there are 1 or more values, for the given [key].
   bool isEmptyForKey(K key) {
-    ISet<V>? values = this[key];
+    final ISet<V>? values = this[key];
     return values == null || values.isEmpty;
   }
 
@@ -370,8 +371,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   @useCopy
   IMapOfSets<K, V> add(K key, V value) {
-    ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
-    ISet<V> newSet = set.add(value);
+    final ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
+    final ISet<V> newSet = set.add(value);
     return set.same(newSet) ? this : replaceSet(key, newSet);
   }
 
@@ -381,8 +382,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   @useCopy
   IMapOfSets<K, V> addValues(K key, Iterable<V> values) {
-    ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
-    ISet<V> newSet = set.addAll(values);
+    final ISet<V> set = _mapOfSets[key] ?? ISetImpl.empty<V>(config.asConfigSet);
+    final ISet<V> newSet = set.addAll(values);
     return set.same(newSet) ? this : replaceSet(key, newSet);
   }
 
@@ -393,7 +394,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   @useCopy
   IMapOfSets<K, V> addValuesToKeys(Iterable<K> keys, Iterable<V> values) {
     IMapOfSets<K, V> result = this;
-    for (K key in keys) {
+    for (final K key in keys) {
       result = result.addValues(key, values);
     }
     return result;
@@ -407,9 +408,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   @useCopy
   IMapOfSets<K, V> remove(K key, V value) {
-    ISet<V>? set = _mapOfSets[key];
+    final ISet<V>? set = _mapOfSets[key];
     if (set == null) return this;
-    ISet<V> newSet = set.remove(value);
+    final ISet<V> newSet = set.remove(value);
 
     return set.same(newSet)
         ? this
@@ -432,11 +433,11 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   }) {
     int countRemoved = 0;
 
-    Map<K, ISet<V>> map = {};
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      K key = entry.key;
-      ISet<V> set = entry.value;
-      int setLength = set.length;
+    final Map<K, ISet<V>> map = {};
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      final K key = entry.key;
+      final ISet<V> set = entry.value;
+      final int setLength = set.length;
 
       ISet<V> newSet;
       int newSetLength;
@@ -491,11 +492,11 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   }) {
     int countRemoved = 0;
 
-    Map<K, ISet<V>> map = {};
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      K key = entry.key;
-      ISet<V> set = entry.value;
-      int setLength = set.length;
+    final Map<K, ISet<V>> map = {};
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      final K key = entry.key;
+      final ISet<V> set = entry.value;
+      final int setLength = set.length;
 
       ISet<V> newSet;
       int newSetLength;
@@ -568,7 +569,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   ///
   @useCopy
   IMapOfSets<K, V> removeSet(K key) {
-    IMap<K, ISet<V>> newMapOfSets = _mapOfSets.remove(key);
+    final IMap<K, ISet<V>> newMapOfSets = _mapOfSets.remove(key);
     return _mapOfSets.same(newMapOfSets) ? this : IMapOfSets<K, V>._unsafe(newMapOfSets, config);
   }
 
@@ -590,8 +591,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return any `key:set` entry where the value exists in the set.
   /// If that entry doesn't exist, return `null`.
   MapEntry<K, ISet<V>>? getEntryWithValue(V value) {
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      var set = entry.value;
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      final set = entry.value;
       if (set.contains(value)) return entry;
     }
     return null;
@@ -604,9 +605,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// Return any `key:set` entry where the value exists in the set.
   /// If that entry doesn't exist, return `null`.
   Set<MapEntry<K, ISet<V>>> allEntriesWithValue(V value) {
-    Set<MapEntry<K, ISet<V>>> entriesWithValue = {};
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      var set = entry.value;
+    final Set<MapEntry<K, ISet<V>>> entriesWithValue = {};
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      final set = entry.value;
       if (set.contains(value)) entriesWithValue.add(entry);
     }
     return entriesWithValue;
@@ -614,9 +615,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Returns a [Set] of the keys which contain [value].
   Set<K> allKeysWithValue(V value) {
-    Set<K> keysWithValue = {};
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      var set = entry.value;
+    final Set<K> keysWithValue = {};
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      final set = entry.value;
       if (set.contains(value)) keysWithValue.add(entry.key);
     }
     return keysWithValue;
@@ -746,9 +747,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   @useCopy
   IMapOfSets<K, V> addEntries(Iterable<MapEntry<K, Set<V>>> entries) {
     IMapOfSets<K, V> imap = this;
-    for (MapEntry<K, Set<V>> entry in entries) {
-      var key = entry.key;
-      var setOfValues = entry.value;
+    for (final MapEntry<K, Set<V>> entry in entries) {
+      final key = entry.key;
+      final setOfValues = entry.value;
       imap = imap.addValues(key, setOfValues);
     }
     return imap;
@@ -768,7 +769,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// `IMapOfSets<RK, RV>`.
   @useCopy
   IMapOfSets<RK, RV> cast<RK, RV>() {
-    IMap<RK, ISet<RV>> result = _mapOfSets.cast<RK, ISet<RV>>();
+    final IMap<RK, ISet<RV>> result = _mapOfSets.cast<RK, ISet<RV>>();
     return IMapOfSets._unsafe(result, config);
   }
 
@@ -780,7 +781,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     if (config.removeEmptySets)
       return empty<K, V>(config);
     else {
-      var emptySet = ISetImpl.empty<V>(config.asConfigSet);
+      final emptySet = ISetImpl.empty<V>(config.asConfigSet);
       return updateAll((K key, ISet<V> set) => emptySet);
     }
   }
@@ -835,14 +836,15 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     if (config.removeEmptySets) ifRemove = (K key, ISet<V> set) => set.isEmpty;
 
     return IMapOfSets<K, V>._unsafe(
-        _mapOfSets.update(
-          key,
-          update,
-          ifAbsent: ifAbsent,
-          ifRemove: ifRemove,
-          previousValue: previousSet,
-        ),
-        config);
+      _mapOfSets.update(
+        key,
+        update,
+        ifAbsent: ifAbsent,
+        ifRemove: ifRemove,
+        previousValue: previousSet,
+      ),
+      config,
+    );
   }
 
   /// Updates all sets.
@@ -862,12 +864,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// You can pass a new [config] for the map.
   @useCopy
   IMapOfSets<V, K> invertKeysAndValues([ConfigMapOfSets? config]) {
-    Map<V, Set<K>> result = {};
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      K key = entry.key;
-      ISet<V> set = entry.value;
+    final Map<V, Set<K>> result = {};
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      final K key = entry.key;
+      final ISet<V> set = entry.value;
 
-      for (V value in set) {
+      for (final V value in set) {
         var destSet = result[value];
         if (destSet == null) {
           destSet = {};
@@ -884,10 +886,10 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// You can pass a new [config] for the map.
   @useCopy
   IMapOfSets<V?, K> invertKeysAndValuesKeepingNullKeys([ConfigMapOfSets? config]) {
-    Map<V?, Set<K>> result = {};
-    for (MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
-      K key = entry.key;
-      ISet<V> set = entry.value;
+    final Map<V?, Set<K>> result = {};
+    for (final MapEntry<K, ISet<V>> entry in _mapOfSets.entries) {
+      final K key = entry.key;
+      final ISet<V> set = entry.value;
 
       if (set.isEmpty) {
         var destSet = result[null];
@@ -897,7 +899,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
         }
         destSet.add(key);
       } else
-        for (V? value in set) {
+        for (final V? value in set) {
           var destSet = result[value];
           if (destSet == null) {
             destSet = {};
@@ -919,8 +921,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// See also: [firstValueWhereOrNull]
   ///
   V firstValueWhere(bool Function(V) test, {V Function()? orElse}) {
-    for (ISet<V> values in _mapOfSets.values) {
-      V? value = values.firstWhereOrNull(test);
+    for (final ISet<V> values in _mapOfSets.values) {
+      final V? value = values.firstWhereOrNull(test);
       if (value != null) return value;
     }
     if (orElse != null) return orElse();
@@ -936,8 +938,8 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// See also: [firstValueWhere]
   ///
   V? firstValueWhereOrNull(bool Function(V) test, {V? Function()? orElse}) {
-    for (ISet<V> values in _mapOfSets.values) {
-      V? value = values.firstWhereOrNull(test);
+    for (final ISet<V> values in _mapOfSets.values) {
+      final V? value = values.firstWhereOrNull(test);
       if (value != null) return value;
     }
     return orElse?.call();
@@ -952,12 +954,12 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     required V Function(I)? valueMapper,
     required bool Function(I)? ignore,
   }) {
-    Map<K, Set<V>> map = {};
-    for (I item in iterable) {
-      bool _ignore = ignore?.call(item) ?? false;
+    final Map<K, Set<V>> map = {};
+    for (final I item in iterable) {
+      final bool _ignore = ignore?.call(item) ?? false;
       if (!_ignore) {
-        K key = (keyMapper == null) ? (item as K) : keyMapper(item);
-        V value = (valueMapper == null) ? (item as V) : valueMapper(item);
+        final K key = (keyMapper == null) ? (item as K) : keyMapper(item);
+        final V value = (valueMapper == null) ? (item as V) : valueMapper(item);
         Set<V>? set = map[key];
         if (set == null) {
           set = <V>{};

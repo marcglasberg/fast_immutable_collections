@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals
+
 import "dart:collection";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";

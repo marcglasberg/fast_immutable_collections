@@ -1,9 +1,11 @@
 import "dart:collection";
 import "dart:math";
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:meta/meta.dart";
+
 import "s_add.dart";
 import "s_add_all.dart";
 import "s_flat.dart";
@@ -135,7 +137,7 @@ class ISetImpl<T> // ignore: must_be_immutable
   ISetImpl._(
     Iterable<T>? iterable, {
     required this.config,
-  })   : _s = iterable is ISet<T> //
+  })  : _s = iterable is ISet<T> //
             ? iterable._s
             : iterable == null
                 ? SFlat.empty<T>()
@@ -255,7 +257,8 @@ abstract class ISet<T> // ignore: must_be_immutable
     ConfigSet? config,
   }) {
     config ??= defaultConfig;
-    var result = ListSet.of(iterable.expand(mapper as Iterable<T> Function(I)), sort: config.sort);
+    final result =
+        ListSet.of(iterable.expand(mapper as Iterable<T> Function(I)), sort: config.sort);
     return ISetImpl<T>._unsafeFromSet(result, config: config);
   }
 
@@ -538,7 +541,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   int get hashCode {
     if (_hashCode != null) return _hashCode!;
 
-    var hashCode = isDeepEquals //
+    final hashCode = isDeepEquals //
         ? hash2((flush._s as SFlat<T>).deepSetHashcode(), config.hashCode)
         : hash2(identityHashCode(_s), config.hashCode);
 
@@ -559,7 +562,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Returns a new set containing the current set plus the given item.
   @useCopy
   ISet<T> add(T item) {
-    ISet<T> result = config.sort
+    final ISet<T> result = config.sort
         ? ISet._unsafe(SFlat(_s.followedBy([item]), config: config), config: config)
         : ISet<T>._unsafe(_s.add(item), config: config);
 
@@ -587,7 +590,7 @@ abstract class ISet<T> // ignore: must_be_immutable
     // If the outer set is used, it will be flushed before the source sets.
     // If the source sets are not used directly, they will not flush
     // unnecessarily, and also may be garbage collected.
-    result._counter = max(_counter, ((items is ISet<T>) ? items._counter : 0));
+    result._counter = max(_counter, (items is ISet<T>) ? items._counter : 0);
     result._count();
 
     return result;
@@ -796,7 +799,7 @@ abstract class ISet<T> // ignore: must_be_immutable
     if (config.sort && compare == null) {
       return (flush._s as SFlat<T>).toList(growable: growable);
     } else {
-      var result = _s.toList(growable: growable);
+      final result = _s.toList(growable: growable);
       if (compare != null) result.sort(compare);
       return result;
     }
@@ -821,11 +824,11 @@ abstract class ISet<T> // ignore: must_be_immutable
   @override
   Set<T> toSet({int Function(T a, T b)? compare}) {
     if (config.sort && compare == null) {
-      List<T> orderedList = (flush._s as SFlat<T>).toList(growable: false);
+      final List<T> orderedList = (flush._s as SFlat<T>).toList(growable: false);
       return LinkedHashSet.of(orderedList);
     } else {
       if (compare != null) {
-        var orderedList = toList(growable: false, compare: compare);
+        final orderedList = toList(growable: false, compare: compare);
         return LinkedHashSet.of(orderedList);
       } else {
         return LinkedHashSet.of(_s);
@@ -841,8 +844,8 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// See also: [ImmutableCollection]
   @override
   String toString([bool? prettyPrint]) {
-    if ((prettyPrint ?? ImmutableCollection.prettyPrint)) {
-      int length = _s.length;
+    if (prettyPrint ?? ImmutableCollection.prettyPrint) {
+      final int length = _s.length;
       if (length == 0) {
         return "{}";
       } else if (length == 1) {
@@ -882,7 +885,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// are not elements of [other] according to `other.contains`.
   @useCopy
   ISet<T> difference(Iterable<T> other) {
-    Set<T> otherSet = _setFromIterable(other);
+    final Set<T> otherSet = _setFromIterable(other);
     return ISet._unsafeFromSet(_s.difference(otherSet), config: config);
   }
 
@@ -892,7 +895,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// are also elements of [other] according to `other.contains`.
   @useCopy
   ISet<T> intersection(Iterable<T> other) {
-    Set<T> otherSet = _setFromIterable(other);
+    final Set<T> otherSet = _setFromIterable(other);
     return ISet._unsafeFromSet(_s.intersection(otherSet), config: config);
   }
 

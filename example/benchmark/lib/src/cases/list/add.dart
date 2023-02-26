@@ -1,9 +1,10 @@
+// ignore_for_file: overridden_fields
 import "dart:math";
+
 import "package:built_collection/built_collection.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/kt.dart";
-
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +52,7 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     list = getNextList();
-    var _innerRuns = innerRuns();
+    final _innerRuns = innerRuns();
     for (int i = 0; i < _innerRuns; i++) list.add(i);
   }
 
@@ -84,7 +85,7 @@ class IListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = iList;
-    var _innerRuns = innerRuns();
+    final _innerRuns = innerRuns();
     for (int i = 0; i < _innerRuns; i++) result = result.add(i);
   }
 }
@@ -108,7 +109,7 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = ktList;
-    var _innerRuns = innerRuns();
+    final _innerRuns = innerRuns();
     for (int i = 0; i < _innerRuns; i++) result = result.plusElement(i);
   }
 }
@@ -132,7 +133,7 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     result = builtList;
-    var _innerRuns = innerRuns();
+    final _innerRuns = innerRuns();
     for (int i = 0; i < _innerRuns; i++)
       result = result.rebuild((ListBuilder<int> listBuilder) => listBuilder.add(i));
   }
@@ -157,7 +158,7 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
   @override
   void run() {
     final ListBuilder<int> listBuilder = builtList.toBuilder();
-    var _innerRuns = innerRuns();
+    final _innerRuns = innerRuns();
     for (int i = 0; i < _innerRuns; i++) listBuilder.add(i);
     result = listBuilder.build();
   }

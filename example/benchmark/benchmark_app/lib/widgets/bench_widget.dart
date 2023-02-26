@@ -1,9 +1,8 @@
+import "package:benchmark_app/screens/code_screen.dart";
+import "package:benchmark_app/screens/graph_screen.dart";
+import "package:benchmark_app/widgets/collection_button.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:flutter/material.dart";
-
-import "../screens/code_screen.dart";
-import "../screens/graph_screen.dart";
-import "collection_button.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -67,7 +66,7 @@ class _BenchWidgetState extends State<BenchWidget> {
       child: Stack(
         children: <Widget>[
           _content,
-          if (_isRunning) _PleaseWait(),
+          if (_isRunning) const _PleaseWait(),
         ],
       ),
     );
@@ -83,7 +82,7 @@ class _BenchWidgetState extends State<BenchWidget> {
         children: <Widget>[
           Text(
             widget.title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w800,
               fontSize: 20,
@@ -144,7 +143,7 @@ class _PleaseWait extends StatelessWidget {
           Radius.circular(4),
         ),
       ),
-      child: Text(
+      child: const Text(
         "Please Wait.\nRunning the benchmarks...",
         textAlign: TextAlign.center,
         style: TextStyle(

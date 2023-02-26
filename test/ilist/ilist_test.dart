@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "dart:collection";
 import "dart:math";
 
@@ -267,7 +268,7 @@ void main() {
     expect(ilist.same(ilist), isTrue);
     expect(ilist.same(IList([1, 2])), isFalse);
     expect(ilist.same(IList([1])), isFalse);
-    expect(ilist.same(IList(([2, 1]))), isFalse);
+    expect(ilist.same(IList([2, 1])), isFalse);
     expect(ilist.same(IList([1, 2]).withIdentityEquals), isFalse);
     expect(ilist.same(IList([1, 2]).withConfig(ConfigList(cacheHashCode: false))), isFalse);
     expect(ilist.same(ilist.remove(3)), isTrue);
@@ -287,7 +288,7 @@ void main() {
     expect(ilist.equalItemsAndConfig(ilist), isTrue);
     expect(ilist.equalItemsAndConfig(IList([1, 2])), isTrue);
     expect(ilist.equalItemsAndConfig(IList([1])), isFalse);
-    expect(ilist.equalItemsAndConfig(IList(([2, 1]))), isFalse);
+    expect(ilist.equalItemsAndConfig(IList([2, 1])), isFalse);
     expect(ilist.equalItemsAndConfig(IList([1, 2]).withIdentityEquals), isFalse);
     expect(ilist.equalItemsAndConfig(ilist.remove(3)), isTrue);
   });
@@ -913,7 +914,7 @@ void main() {
 
   test("reduce", () {
     // 1) Regular usage
-    expect([1, 2, 3, 4, 5, 6].lock.reduce(((int p, int e) => p * (1 + e))), 2520);
+    expect([1, 2, 3, 4, 5, 6].lock.reduce((int p, int e) => p * (1 + e)), 2520);
     expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
 
     // 2) State Exception
@@ -1026,7 +1027,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("whereType", () {
-    expect((<num>[1, 2, 1.5].lock.whereType<double>()), [1.5]);
+    expect(<num>[1, 2, 1.5].lock.whereType<double>(), [1.5]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

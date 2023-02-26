@@ -51,10 +51,10 @@ extension FicMapEntryExtension<K, V> on MapEntry<K, V> {
   int compareKeyAndValue(MapEntry? other) => compareObject(this, other);
 
   String print([bool? prettyPrint]) {
-    String keyStr = (key is ImmutableCollection)
+    final String keyStr = (key is ImmutableCollection)
         ? (key as ImmutableCollection).toString(prettyPrint)
         : key.toString();
-    String valueStr = (value is ImmutableCollection)
+    final String valueStr = (value is ImmutableCollection)
         ? (value as ImmutableCollection).toString(prettyPrint)
         : value.toString();
 
@@ -75,7 +75,7 @@ class Entry<K, V> implements Comparable<Entry<K, V>> {
   static Entry<K, V> from<K, V>(MapEntry<K, V> entry) => Entry(entry.key, entry.value);
 
   @override
-  String toString() => "Entry(${key.toString()}: ${value.toString()})";
+  String toString() => "Entry($key: $value)";
 
   @override
   bool operator ==(Object other) =>

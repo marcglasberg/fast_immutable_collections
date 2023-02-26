@@ -1,7 +1,12 @@
+## [9.0.0] - 2023/02/26
+
+* Version bump of dependencies: collection: ^1.17.0, meta: ^1.8.0
+
 ## [8.2.0] - 2023/01/30
 
-* `IList.replaceBy` method lets you define a function to transform an item at a specific index location.
- 
+* `IList.replaceBy` method lets you define a function to transform an item at a specific index
+  location.
+
 ## [8.1.1] - 2023/01/06
 
 * `IList.indexOf` extension fix (doesn't break anymore when list is empty and start is zero).
@@ -12,11 +17,11 @@
 
 ## [8.0.0] - 2022/10/27
 
-* Breaking change: `IList.replaceFirstWhere` signature is now 
+* Breaking change: `IList.replaceFirstWhere` signature is now
   `IList<T> replaceFirstWhere(bool Function(T item) test, T Function(T? item) replacement, {bool addIfNotFound = false})`
   instead of
   `IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false})`
-  In case this change breaks your code, the fix is simple. Instead of something like 
+  In case this change breaks your code, the fix is simple. Instead of something like
   `ilist.replaceFirstWhere((String item) => item=="1", "2")`
   do this: `ilist.replaceFirstWhere((String item) => item=="1", (_) => "2")`
 

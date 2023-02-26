@@ -25,7 +25,7 @@ class SAdd<T> extends S<T> {
 
   @override
   bool containsAll(Iterable<T> other) {
-    for (var o in other) {
+    for (final o in other) {
       if ((_item != o) && (!_s.contains(o))) return false;
     }
     return true;
@@ -49,8 +49,8 @@ class SAdd<T> extends S<T> {
 
   @override
   Set<T> intersection(Set<T> other) {
-    var containsItem = other.contains(_item);
-    var result = _s.intersection(other);
+    final containsItem = other.contains(_item);
+    final result = _s.intersection(other);
     if (containsItem) result.add(_item);
     return result;
   }
@@ -75,7 +75,7 @@ class SAdd<T> extends S<T> {
 
   @override
   T operator [](int index) {
-    var sLength = _s.length;
+    final sLength = _s.length;
     if (index < 0 || index >= sLength + 1) throw RangeError.range(index, 0, sLength + 1, "index");
     return (index < sLength) ? _s[index] : _item;
   }

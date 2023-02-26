@@ -1,11 +1,11 @@
+// ignore_for_file: overridden_fields
 import "dart:math";
+
 import "package:built_collection/built_collection.dart";
-import "package:kt_dart/kt.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-
-import "../../utils/table_score_emitter.dart";
-import "../../utils/collection_benchmark_base.dart";
+import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
+import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
+import "package:kt_dart/kt.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 

@@ -142,7 +142,7 @@ class ListMapView<K, V> implements ListMap<K, V> {
       return map.indexOfKey(key, start);
     else {
       int count = 0;
-      for (K _key in _map.keys) {
+      for (final K _key in _map.keys) {
         if (count >= start && key == _key) return count;
         count++;
       }

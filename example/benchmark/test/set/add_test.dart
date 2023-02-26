@@ -1,6 +1,5 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:test/test.dart";
 
 void main() {
   // /////////////////////////////////////////////////////////////////////////////
@@ -60,8 +59,8 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("BuiltSet with ListBuilder", () {
-    final TableScoreEmitter tableScoreEmitter =
-        TableScoreEmitter(prefixName: "add_builtSet_with_listBuilder", config: Config(size: 100));
+    final TableScoreEmitter tableScoreEmitter = TableScoreEmitter(
+        prefixName: "add_builtSet_with_listBuilder", config: Config(size: 100));
     final BuiltSetAddWithSetBuilderBenchmark builtSetAddWithListBuilderBenchmark =
         BuiltSetAddWithSetBuilderBenchmark(emitter: tableScoreEmitter);
 

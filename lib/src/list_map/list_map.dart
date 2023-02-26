@@ -60,7 +60,7 @@ class ListMap<K, V> implements Map<K, V> {
     // Sorted:
     if (sort) {
       map = HashMap<K, V>();
-      for (MapEntry<K, V> entry in entries) {
+      for (final MapEntry<K, V> entry in entries) {
         map[entry.key] = entry.value;
       }
       list = map.entries.map((entry) => entry.key).toList(growable: false);
@@ -97,7 +97,7 @@ class ListMap<K, V> implements Map<K, V> {
     bool sort = false,
     int Function(K a, K b)? compare,
   }) {
-    Iterable<MapEntry<K, V>> combined =
+    final Iterable<MapEntry<K, V>> combined =
         combineIterables(keys, values, (K key, V value) => MapEntry(key, value));
 
     return ListMap.fromEntries(combined, sort: sort, compare: compare);
@@ -292,7 +292,7 @@ class ListMap<K, V> implements Map<K, V> {
   /// Index zero represents the first entry.
   ///
   MapEntry<K, V> entryAt(int index) {
-    K key = _list[index];
+    final K key = _list[index];
     return MapEntry<K, V>(key, _map[key] as V);
   }
 
@@ -317,7 +317,7 @@ class ListMap<K, V> implements Map<K, V> {
   /// Index zero represents the first value.
   ///
   V valueAt(int index) {
-    K key = _list[index];
+    final K key = _list[index];
     return _map[key] as V;
   }
 

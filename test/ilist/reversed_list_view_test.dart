@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 // ignore_for_file: unnecessary_type_check
 
 import "dart:math";

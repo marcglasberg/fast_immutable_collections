@@ -64,7 +64,7 @@ class SFlat<T> extends S<T> {
 
   bool deepSetEqualsToIterable(Iterable? other) {
     if (other == null) return false;
-    Set set = (other is Set) ? other : Set<dynamic>.of(other);
+    final Set set = (other is Set) ? other : Set<dynamic>.of(other);
     return const SetEquality<dynamic>(MapEntryEquality<dynamic>()).equals(_set, set);
   }
 

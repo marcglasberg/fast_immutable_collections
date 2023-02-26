@@ -1,6 +1,5 @@
-import "package:test/test.dart";
-
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:test/test.dart";
 
 void main() {
   // /////////////////////////////////////////////////////////////////////////////
@@ -68,8 +67,9 @@ void main() {
     addAllBenchmark.report();
 
     final Map<String, int> expectedMap = MapBenchmarkBase.getDummyGeneratedMap(size: 110);
-    addAllBenchmark.benchmarks
-        .forEach((MapBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedMap));
+    for (final benchmark in addAllBenchmark.benchmarks) {
+      expect(benchmark.toMutable(), expectedMap);
+    }
   });
 
   // /////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
-import "../widgets/collection_button.dart";
+import "package:benchmark_app/screens/multi_benchmark_screen.dart";
+import "package:benchmark_app/widgets/collection_button.dart";
 import "package:flutter/material.dart";
-import "multi_benchmark_screen.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +34,7 @@ class CollectionChoiceScreen extends StatelessWidget {
                     label: "List",
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => MultiBenchmarkScreen(
+                        builder: (_) => const MultiBenchmarkScreen(
                           collectionType: List,
                         ),
                       ),
@@ -45,7 +45,7 @@ class CollectionChoiceScreen extends StatelessWidget {
                     label: "Set",
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => MultiBenchmarkScreen(
+                        builder: (_) => const MultiBenchmarkScreen(
                           collectionType: Set,
                         ),
                       ),
@@ -56,7 +56,7 @@ class CollectionChoiceScreen extends StatelessWidget {
                     label: "Map",
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => MultiBenchmarkScreen(
+                        builder: (_) => const MultiBenchmarkScreen(
                           collectionType: Map,
                         ),
                       ),
