@@ -75,7 +75,7 @@ class MFlat<K, V> extends M<K, V> {
   /// Like the other [Map] equalities, it doesn't  take order into consideration.
   bool deepMapEqualsToIterable(Iterable<MapEntry>? entries) {
     if (entries == null) return false;
-    Map map = Map<dynamic, dynamic>.fromEntries(entries);
+    final Map map = Map<dynamic, dynamic>.fromEntries(entries);
     return const MapEquality<dynamic, dynamic>().equals(_map, map);
   }
 

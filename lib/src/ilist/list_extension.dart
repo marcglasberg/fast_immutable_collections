@@ -49,9 +49,9 @@ extension FicListExtension<T> on List<T> {
     int index,
     T Function(int index, bool inRange, T? value) map,
   ) {
-    bool inRange = (index >= 0 && index < length);
+    final bool inRange = (index >= 0 && index < length);
 
-    T? value = inRange ? this[index] : null;
+    final T? value = inRange ? this[index] : null;
     return map(index, inRange, value);
   }
 
@@ -71,7 +71,7 @@ extension FicListExtension<T> on List<T> {
   /// Items of [ordering] which are not found in the original list are ignored.
   ///
   void sortLike(Iterable ordering) {
-    List<T> result = sortedLike(ordering);
+    final List<T> result = sortedLike(ordering);
     clear();
     addAll(result);
   }
@@ -87,7 +87,7 @@ extension FicListExtension<T> on List<T> {
 
   /// Moves the first occurrence of the [item] to the start of the list.
   void moveToTheFront(T item) {
-    int pos = indexOf(item);
+    final int pos = indexOf(item);
     if (pos != -1 && pos != 0) {
       removeAt(pos);
       insert(0, item);
@@ -96,7 +96,7 @@ extension FicListExtension<T> on List<T> {
 
   /// Moves the first occurrence of the [item] to the end of the list.
   void moveToTheEnd(T item) {
-    int pos = indexOf(item);
+    final int pos = indexOf(item);
     if (pos != -1 && pos != length - 1) {
       removeAt(pos);
       add(item);
@@ -107,7 +107,7 @@ extension FicListExtension<T> on List<T> {
   /// Keeps the relative order of the moved items.
   void whereMoveToTheFront(bool Function(T item) test) {
     int compare(T f1, T f2) {
-      bool test1 = test(f1);
+      final bool test1 = test(f1);
       return (test1 == test(f2))
           ? 0
           : test1
@@ -122,7 +122,7 @@ extension FicListExtension<T> on List<T> {
   /// Keeps the relative order of the moved items.
   void whereMoveToTheEnd(bool Function(T item) test) {
     int compare(T f1, T f2) {
-      bool test1 = test(f1);
+      final bool test1 = test(f1);
       return (test1 == test(f2))
           ? 0
           : test1
@@ -136,7 +136,7 @@ extension FicListExtension<T> on List<T> {
   /// If the item does not exist in the list, add it and return `true`.
   /// If it already exists, remove the first instance of it and return `false`.
   bool toggle(T item) {
-    var result = contains(item);
+    final result = contains(item);
     if (result)
       remove(item);
     else
@@ -168,7 +168,7 @@ extension FicListExtension<T> on List<T> {
     if (isEmpty) return;
     int start = 0;
     for (int i = 0; i < length; i++) {
-      T element = this[i];
+      final T element = this[i];
       if (test(element)) {
         if (start < i || emptyParts) {
           yield sublist(start, i);
@@ -206,8 +206,8 @@ extension FicListExtension<T> on List<T> {
   ) {
     if (isEmpty) return [];
 
-    List<List<T>> result = [];
-    List<int> indexes = [];
+    final List<List<T>> result = [];
+    final List<int> indexes = [];
 
     for (int i = 0; i < length; i++) {
       if (test(this[i])) indexes.add(i);
@@ -217,9 +217,9 @@ extension FicListExtension<T> on List<T> {
       return [this];
     else {
       for (int i = 0; i < indexes.length; i++) {
-        var ini = i == 0 ? 0 : indexes[i];
-        var fim = i == indexes.length - 1 ? length - 1 : indexes[i + 1] - 1;
-        result.add(sublist(ini, fim + 1));
+        final ini = (i == 0) ? 0 : indexes[i];
+        final end = (i == indexes.length - 1) ? (length - 1) : (indexes[i + 1] - 1);
+        result.add(sublist(ini, end + 1));
       }
       return result;
     }
@@ -279,17 +279,17 @@ extension FicListExtension<T> on List<T> {
   }) {
     if (isEmpty) return {};
 
-    Map<G, List<T>> result = {};
-    List<int> indexes = [];
-    List<G> keys = [];
+    final Map<G, List<T>> result = {};
+    final List<int> indexes = [];
+    final List<G> keys = [];
 
     int? firstMatch;
     for (int i = 0; i < length; i++) {
-      T item = this[i];
+      final T item = this[i];
 
       if (test(item)) {
         indexes.add(i);
-        var _key = (key == null) ? (item as G) : key(item);
+        final _key = (key == null) ? (item as G) : key(item);
         keys.add(_key);
 
         if (!includeFirstItems) firstMatch ??= i;
@@ -302,9 +302,9 @@ extension FicListExtension<T> on List<T> {
       return {};
     else {
       for (int i = 0; i < indexes.length; i++) {
-        var ini = i == 0 ? firstMatch : indexes[i];
-        var fim = i == indexes.length - 1 ? length - 1 : indexes[i + 1] - 1;
-        var repeating = result[keys[i]];
+        final ini = i == 0 ? firstMatch : indexes[i];
+        final fim = i == indexes.length - 1 ? length - 1 : indexes[i + 1] - 1;
+        final repeating = result[keys[i]];
         result[keys[i]] = (repeating != null)
             ? //
             repeating + sublist(ini, fim + 1)
@@ -332,7 +332,7 @@ extension FicListExtension<T> on List<T> {
       return toList();
     //
     else {
-      List<T> newItems = <T>[];
+      final List<T> newItems = <T>[];
       for (int i = 0; i < length - 1; i++) {
         newItems.add(this[i]);
         newItems.add(separator);
@@ -357,18 +357,18 @@ extension FicListExtension<T> on List<T> {
   /// list = list1 + list2 + list3 + list4 + list5;
   /// ```
   List<T> concat(List<T>? list2, [List<T>? list3, List<T>? list4, List<T>? list5]) {
-    List<T> list1 = this;
+    final List<T> list1 = this;
     list2 ??= const [];
     list3 ??= const [];
     list4 ??= const [];
     list5 ??= const [];
 
-    var totalLength = list1.length + list2.length + list3.length + list4.length + list5.length;
+    final totalLength = list1.length + list2.length + list3.length + list4.length + list5.length;
 
     // Return a non-const list, so that it can be sorted.
     if (totalLength == 0) return [];
 
-    T anyItem = list1.isNotEmpty
+    final T anyItem = list1.isNotEmpty
         ? list1.first
         : list2.isNotEmpty
             ? list2.first
@@ -390,9 +390,9 @@ extension FicListExtension<T> on List<T> {
   /// Cut the original list into one or more lists with at most [length] items.
   List<List<T>> splitByLength(int length) {
     assert(length > 0);
-    List<List<T>> chunks = <List<T>>[];
+    final List<List<T>> chunks = <List<T>>[];
     for (var i = 0; i < this.length; i += length) {
-      var end = (i + length < this.length) ? i + length : this.length;
+      final end = (i + length < this.length) ? i + length : this.length;
       chunks.add(sublist(i, end));
     }
     return chunks;
@@ -427,14 +427,14 @@ extension FicListExtension<T> on List<T> {
     bool removeNulls = false,
   }) {
     if (by != null) {
-      Set<dynamic> ids = <dynamic>{};
+      final Set<dynamic> ids = <dynamic>{};
       removeWhere((item) {
         if (removeNulls && item == null) return true;
-        dynamic id = by(item);
+        final dynamic id = by(item);
         return !ids.add(id);
       });
     } else {
-      Set<T> items = {};
+      final Set<T> items = {};
       removeWhere((item) {
         if (removeNulls && item == null) return true;
         return !items.add(item);
@@ -491,7 +491,7 @@ extension FicListExtensionNullable<T> on List<T?> {
   ///
   List<T> withNullsRemoved() {
     Iterable<T> _whereNotNull() sync* {
-      for (var element in this) {
+      for (final element in this) {
         if (element != null) yield element;
       }
     }

@@ -1,7 +1,6 @@
-import "../widgets/bar_chart.dart";
-import "package:flutter/material.dart";
+import "package:benchmark_app/widgets/bar_chart.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
-
+import "package:flutter/material.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +27,7 @@ class _GraphScreenState extends State<GraphScreen> {
         color: Colors.grey.withOpacity(0.5),
         spreadRadius: 5,
         blurRadius: 7,
-        offset: Offset(0, 3), // changes position of shadow
+        offset: const Offset(0, 3), // changes position of shadow
       ),
     ],
   );
@@ -59,7 +58,7 @@ class _GraphScreenState extends State<GraphScreen> {
     );
   }
 
-  Text title() => Text("${widget.title}");
+  Text title() => Text(widget.title);
 
   Container body() {
     return Container(
@@ -67,7 +66,7 @@ class _GraphScreenState extends State<GraphScreen> {
       child: ListView(
         children: [
           _DropdownButton(showFilterDialog),
-          Container(
+          SizedBox(
             height: 460,
             child: BarChart(recordsTable: filterNTimes(currentTable)),
           ),
@@ -86,7 +85,6 @@ class _GraphScreenState extends State<GraphScreen> {
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: bottomItems(currentTableIndex),
           ),
         ],
@@ -100,7 +98,7 @@ class _GraphScreenState extends State<GraphScreen> {
     });
   }
 
-  List<InkWell> bottomItems(activeIndex) {
+  List<InkWell> bottomItems(int activeIndex) {
     return <InkWell>[
       for (int i = 0; i < widget.tables!.length; i++)
         InkWell(
@@ -117,7 +115,7 @@ class _GraphScreenState extends State<GraphScreen> {
     ];
   }
 
-  TextStyle bottomItemTextStyle(activeIndex, int i) => TextStyle(
+  TextStyle bottomItemTextStyle(int activeIndex, int i) => TextStyle(
         fontSize: 17,
         color: activeIndex == i ? Colors.white : Colors.black,
       );
@@ -152,7 +150,7 @@ class _DropdownButton extends StatelessWidget {
   //
   final VoidCallback onTap;
 
-  _DropdownButton(this.onTap);
+  const _DropdownButton(this.onTap);
 
   @override
   Widget build(BuildContext context) {
@@ -160,14 +158,14 @@ class _DropdownButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          margin: EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 8),
-          child: Container(
-            color: Color(0x22000000),
+          margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 8),
+          child: ColoredBox(
+            color: const Color(0x22000000),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: const [
                   Text("Filters", style: TextStyle(fontSize: 20)),
                   Icon(Icons.arrow_drop_down),
                 ],
@@ -187,7 +185,7 @@ class _FilterDialog extends StatefulWidget {
   final Map<String, bool> filters;
   final void Function(String newFilter) updateFilters;
 
-  _FilterDialog(this.filters, this.updateFilters);
+  const _FilterDialog(this.filters, this.updateFilters);
 
   @override
   _FilterDialogState createState() => _FilterDialogState();
@@ -204,7 +202,7 @@ class _FilterDialogState extends State<_FilterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Show:"),
+      title: const Text("Show:"),
       content: SingleChildScrollView(
         child: ListBody(
           children: items(),
@@ -213,7 +211,7 @@ class _FilterDialogState extends State<_FilterDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text("OK", style: TextStyle(fontSize: 21)),
+          child: const Text("OK", style: TextStyle(fontSize: 21)),
         ),
       ],
     );
@@ -231,13 +229,11 @@ class _FilterDialogState extends State<_FilterDialog> {
                 widget.updateFilters(filter);
               });
             },
-            child: Container(
-              child: Row(
-                children: <Widget>[
-                  _checkbox(filter),
-                  Text(filter, style: filterTextStyle),
-                ],
-              ),
+            child: Row(
+              children: <Widget>[
+                _checkbox(filter),
+                Text(filter, style: filterTextStyle),
+              ],
             ),
           ),
         );

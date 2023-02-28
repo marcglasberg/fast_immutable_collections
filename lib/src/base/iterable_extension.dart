@@ -18,8 +18,8 @@ Iterable<R> combineIterables<A, B, R>(
   R Function(A, B) combine, {
   bool allowDifferentSizes = false,
 }) sync* {
-  Iterator<A> iterA = a.iterator;
-  Iterator<B> iterB = b.iterator;
+  final Iterator<A> iterA = a.iterator;
+  final Iterator<B> iterB = b.iterator;
 
   while (iterA.moveNext()) {
     if (!iterB.moveNext()) {
@@ -139,7 +139,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// ```
   N sumBy<N extends num>(N Function(T element) mapper) {
     N result = 0 as N;
-    for (var value in this) {
+    for (final value in this) {
       result = result + mapper(value) as N;
     }
     return result;
@@ -157,7 +157,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   double averageBy<N extends num>(N Function(T element) mapper) {
     double result = 0.0;
     var count = 0;
-    for (var value in this) {
+    for (final value in this) {
       count += 1;
       result += (mapper(value) - result) / count;
     }
@@ -219,16 +219,16 @@ extension FicIterableExtension<T> on Iterable<T> {
     bool removeNulls = false,
   }) sync* {
     if (by != null) {
-      Set<dynamic> ids = <dynamic>{};
-      for (T item in this) {
+      final Set<dynamic> ids = <dynamic>{};
+      for (final T item in this) {
         if (removeNulls && item == null) continue;
-        dynamic id = by(item);
+        final dynamic id = by(item);
         if (!ids.contains(id)) yield item;
         ids.add(id);
       }
     } else {
-      Set<T> items = {};
-      for (T item in this) {
+      final Set<T> items = {};
+      for (final T item in this) {
         if (removeNulls && item == null) continue;
         if (!items.contains(item)) yield item;
         items.add(item);
@@ -250,10 +250,10 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Items of [ordering] which are not found in the original list are ignored.
   ///
   List<T> sortedLike(Iterable ordering) {
-    Set<T> thisSet = Set.of(this);
-    Set<dynamic> otherSet = Set<dynamic>.of(ordering);
+    final Set<T> thisSet = Set.of(this);
+    final Set<dynamic> otherSet = Set<dynamic>.of(ordering);
 
-    DiffAndIntersectResult<T, dynamic> result = thisSet.diffAndIntersect<dynamic>(
+    final DiffAndIntersectResult<T, dynamic> result = thisSet.diffAndIntersect<dynamic>(
       otherSet,
       diffThisMinusOther: true,
       diffOtherMinusThis: false,
@@ -261,8 +261,8 @@ extension FicIterableExtension<T> on Iterable<T> {
       intersectOtherWithThis: true,
     );
 
-    List<T> intersectOtherWithThis = result.intersectOtherWithThis ?? [];
-    List<T> diffThisMinusOther = result.diffThisMinusOther ?? [];
+    final List<T> intersectOtherWithThis = result.intersectOtherWithThis ?? [];
+    final List<T> diffThisMinusOther = result.diffThisMinusOther ?? [];
     return intersectOtherWithThis.followedBy(diffThisMinusOther).toList();
   }
 
@@ -282,15 +282,15 @@ extension FicIterableExtension<T> on Iterable<T> {
     Iterable<T> newItems,
     dynamic Function(T item) id,
   ) {
-    List<T> newList = [];
+    final List<T> newList = [];
 
-    Map<dynamic, T> idsPerNewItem = <dynamic, T>{for (T item in newItems) id(item): item};
+    final Map<dynamic, T> idsPerNewItem = <dynamic, T>{for (T item in newItems) id(item): item};
 
     // Replace those with the same id.
-    for (T item in this) {
-      var itemId = id(item);
+    for (final T item in this) {
+      final itemId = id(item);
       if (idsPerNewItem.containsKey(itemId)) {
-        T newItem = idsPerNewItem[itemId] as T;
+        final T newItem = idsPerNewItem[itemId] as T;
         newList.add(newItem);
         idsPerNewItem.remove(itemId);
       } else
@@ -362,9 +362,64 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// This is similar to [mapIndexed] but also tells you which item is the last.
   Iterable<R> mapIndexedAndLast<R>(R Function(int index, T item, bool isLast) convert) sync* {
     var index = 0;
-    int _length = length; // In case length is not efficient.
-    for (var item in this) {
+    final int _length = length; // In case length is not efficient.
+    for (final item in this) {
       yield convert(index++, item, index == _length);
     }
+  }
+
+  /// Returns true if this [Iterable] has any items in common with the [other] Iterable.
+  /// This method is as performant as possible, but it will be faster if any of the Iterables
+  /// is a [Set] or an [ISet].
+  bool intersectsWith(Iterable<T> other) {
+    //
+    // Note: We could convert them to Sets, and check if Set.intersect is empty.
+    // But that's not performant.
+
+    // If both are Set/ISet we'll iterate the smaller one, because that's faster.
+    if ((this is Set || this is ISet) && (other is Set || other is ISet)) {
+      if (length > other.length) {
+        for (final T item in other) {
+          if (contains(item)) return true;
+        }
+        return false;
+      }
+      //
+      else {
+        for (final T item in this) {
+          if (other.contains(item)) return true;
+        }
+        return false;
+      }
+    }
+
+    // ---
+
+    Iterable<T> set;
+    Iterable<T> iterable;
+
+    // If none of them is a Set/ISet, convert one of them to a Set.
+    if ((this is! Set<T> && this is! ISet<T>) && (other is! Set<T> && other is! ISet<T>)) {
+      set = other.toSet();
+      iterable = this;
+    }
+    //
+    // If one of them is a Set/ISet, find it.
+    else {
+      if (this is Set<T> || this is ISet<T>) {
+        set = this;
+        iterable = other;
+      } else {
+        assert(other is Set<T> || other is ISet<T>);
+        set = other;
+        iterable = this;
+      }
+    }
+
+    /// Iterate the Iterable, searching the Set.
+    for (final T item in iterable) {
+      if (set.contains(item)) return true;
+    }
+    return false;
   }
 }

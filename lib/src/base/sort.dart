@@ -101,8 +101,8 @@ int Function(T, T) sortBy<T>(
   int Function(T, T)? then,
 }) =>
     (T a, T b) {
-      var ta = test(a);
-      var tb = test(b);
+      final ta = test(a);
+      final tb = test(b);
       if (ta == tb) return (then == null) ? 0 : then(a, b);
       return ta ? -1 : 1;
     };
@@ -184,7 +184,7 @@ int Function(T, T) sortLike<T, E>(
         posA = order.indexOf(ma);
         posB = order.indexOf(mb);
       } else {
-        List<E> _order = order.toList();
+        final List<E> _order = order.toList();
         posA = _order.indexOf(ma);
         posB = _order.indexOf(mb);
       }

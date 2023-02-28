@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import "dart:math";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";

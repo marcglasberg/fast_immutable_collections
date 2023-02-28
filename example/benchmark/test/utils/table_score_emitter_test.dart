@@ -1,12 +1,13 @@
-import "package:test/test.dart";
+// ignore_for_file: prefer_final_locals
 
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
+import "package:test/test.dart";
 
 void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("TableScoreEmitter.emit adds values to the TableScoreEmitter.table", () {
-    const Config config = Config(size: 100);
+    Config config = Config(size: 100);
 
     final TableScoreEmitter tableScoreEmitter =
         TableScoreEmitter(prefixName: "report", config: config);

@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import "dart:math";
 import "package:benchmark_harness/benchmark_harness.dart";
 import "package:meta/meta.dart";
@@ -48,7 +50,7 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
       warmup();
     }, 100);
     // Run the benchmark for at least 900ms.
-    double result = BenchmarkBase.measureFor(() {
+    final result = BenchmarkBase.measureFor(() {
       exercise();
     }, 900);
     teardown();

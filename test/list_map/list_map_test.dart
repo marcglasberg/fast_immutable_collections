@@ -1,4 +1,4 @@
-// ignore_for_file: use_string_buffers
+// ignore_for_file: use_string_buffers, prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 
 import "dart:math";
 
@@ -153,8 +153,8 @@ void main() {
 
     // 2) Regular usage
 
-    Iterable<String> keys = ["a", "c", "b"];
-    Iterable<int> values = [1, 5, 2];
+    final Iterable<String> keys = ["a", "c", "b"];
+    final Iterable<int> values = [1, 5, 2];
 
     ListMap<String, int> listMap = ListMap.fromIterables(keys, values, sort: false);
     expect(listMap["a"], 1);

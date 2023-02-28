@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
+// ignore_for_file: non_const_call_to_literal_constructor
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
-// ignore_for_file: non_const_call_to_literal_constructor
 
 void main() {
   //////////////////////////////////////////////////////////////////////////////

@@ -126,7 +126,9 @@ void main() {
             'c': 'd',
           }));
       expect(
-          IMapWrapper2.fromJson(jsonDecode('''{"iMap":{"1":"b","2":"d"}}''')).iMap,
+          IMapWrapper2.fromJson(
+                  jsonDecode('''{"iMap":{"1":"b","2":"d"}}''') as Map<String, dynamic>)
+              .iMap,
           IMap({
             1: 'b',
             2: 'd',

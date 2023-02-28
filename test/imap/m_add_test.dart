@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/imap/imap.dart';
 import "package:fast_immutable_collections/src/imap/m_add.dart";

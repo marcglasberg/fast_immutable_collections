@@ -39,7 +39,7 @@ class SAddAll<T> extends S<T> {
 
   @override
   bool containsAll(Iterable<T> other) {
-    for (var o in other) {
+    for (final o in other) {
       if ((!_setOrS.contains(o)) && (!_s.contains(o))) return false;
     }
     return true;
@@ -47,7 +47,7 @@ class SAddAll<T> extends S<T> {
 
   @override
   T? lookup(T element) {
-    T? result = _s.lookup(element);
+    final T? result = _s.lookup(element);
 
     if (result != null)
       return result;
@@ -86,7 +86,7 @@ class SAddAll<T> extends S<T> {
 
   @override
   T operator [](int index) {
-    var sLength = _s.length;
+    final sLength = _s.length;
     return (index < sLength) ? _s[index] : _setOrS.elementAt(index - sLength);
   }
 }

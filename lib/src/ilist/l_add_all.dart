@@ -30,9 +30,9 @@ class LAddAll<T> extends L<T> {
 
   @override
   T operator [](int index) {
-    var length1 = _l.length;
-    var length2 = _listOrL.length;
-    var length = length1 + length2;
+    final length1 = _l.length;
+    final length2 = _listOrL.length;
+    final length = length1 + length2;
 
     if (index < 0 || index >= length) {
       return throw RangeError.range(index, 0, length - 1, "index");

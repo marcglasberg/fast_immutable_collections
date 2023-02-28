@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import 'package:fast_immutable_collections/src/ilist/ilist.dart';
 import "package:fast_immutable_collections/src/ilist/l_add.dart";
 import "package:fast_immutable_collections/src/ilist/l_flat.dart";

@@ -1,5 +1,5 @@
-import "../utils/benchmarks.dart";
-import "../widgets/release_mode_warning.dart";
+import "package:benchmark_app/utils/benchmarks.dart";
+import "package:benchmark_app/widgets/release_mode_warning.dart";
 import "package:flutter/material.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@ class MultiBenchmarkScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Choose a benchmark to test"),
       ),
-      body: Container(
+      body: ColoredBox(
         color: const Color(0xFFCCCCCC),
         child: Column(
           children: <Widget>[

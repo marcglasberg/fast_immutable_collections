@@ -26,7 +26,7 @@ extension FicSetExtension<T> on Set<T> {
   /// If the item doesn't exist in the set, add it and return `true`.
   /// Otherwise, if the item already exists in the set, remove it and return `false`.
   bool toggle(T item) {
-    var result = contains(item);
+    final result = contains(item);
     if (result)
       remove(item);
     else
@@ -56,13 +56,13 @@ extension FicSetExtension<T> on Set<T> {
     bool intersectThisWithOther = true,
     bool intersectOtherWithThis = true,
   }) {
-    List<T>? _diffThisMinusOther = diffThisMinusOther ? [] : null;
-    List<G>? _diffOtherMinusThis = diffOtherMinusThis ? [] : null;
-    List<T>? _intersectThisWithOther = intersectThisWithOther ? [] : null;
-    List<T>? _intersectOtherWithThis = intersectOtherWithThis ? [] : null;
+    final List<T>? _diffThisMinusOther = diffThisMinusOther ? [] : null;
+    final List<G>? _diffOtherMinusThis = diffOtherMinusThis ? [] : null;
+    final List<T>? _intersectThisWithOther = intersectThisWithOther ? [] : null;
+    final List<T>? _intersectOtherWithThis = intersectOtherWithThis ? [] : null;
 
     if (diffThisMinusOther || intersectThisWithOther)
-      for (var element in this) {
+      for (final element in this) {
         if (other.contains(element)) {
           _intersectThisWithOther?.add(element);
         } else
@@ -70,7 +70,7 @@ extension FicSetExtension<T> on Set<T> {
       }
 
     if (diffOtherMinusThis || intersectOtherWithThis)
-      for (var element in other) {
+      for (final element in other) {
         if (contains(element))
           _intersectOtherWithThis?.add(element as T);
         else

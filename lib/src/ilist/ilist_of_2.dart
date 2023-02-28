@@ -30,6 +30,7 @@ class IListOf2<T> {
 
 abstract class Tuple {
   final int arity;
+
   const Tuple(this.arity);
 }
 
@@ -49,8 +50,10 @@ class Tuple2<T1, T2> extends Tuple {
   Object? operator [](int i) {
     if (i == 0)
       return first;
-    else if (i == 1) return second;
-    throw IndexError(i, this);
+    else if (i == 1)
+      return second;
+    else
+      throw IndexError.withLength(i, 2, indexable: this);
   }
 
   /// Create a new tuple value with the specified list [items].
@@ -72,8 +75,7 @@ class Tuple2<T1, T2> extends Tuple {
   ///
   /// The elements are in item order. The list is variable-length
   /// if [growable] is true.
-  List toList({bool growable = false}) =>
-      List.from([first, second], growable: growable);
+  List toList({bool growable = false}) => List.from([first, second], growable: growable);
 
   @override
   String toString() => '($first, $second)';

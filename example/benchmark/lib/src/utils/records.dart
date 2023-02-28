@@ -4,11 +4,10 @@ import "package:meta/meta.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
-@immutable
 class Config {
   final int size;
 
-  const Config({required this.size}) : assert(size >= 0);
+  Config({required this.size}) : assert(size >= 0);
 
   @override
   String toString() => "Config: (size: $size)";
@@ -16,7 +15,6 @@ class Config {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-@immutable
 class StopwatchRecord {
   final String collectionName;
 
@@ -24,8 +22,8 @@ class StopwatchRecord {
   /// (µs).
   final double record;
 
-  const StopwatchRecord({required this.collectionName, required this.record})
-      : assert(collectionName.length > 0);
+  StopwatchRecord({required this.collectionName, required this.record})
+      : assert(collectionName.isNotEmpty);
 
   @override
   bool operator ==(Object other) =>
@@ -41,7 +39,6 @@ class StopwatchRecord {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-@immutable
 class RecordsColumn {
   final List<StopwatchRecord> records;
   final String title;
@@ -97,13 +94,13 @@ class RecordsColumn {
       identical(this, other) ||
       other is RecordsColumn &&
           runtimeType == other.runtimeType &&
-          ListEquality().equals(other.records, records);
+          const ListEquality().equals(other.records, records);
 
   @override
   int get hashCode => records.hashCode;
 
   @override
-  String toString() => "$runtimeType: ${records.toString()}";
+  String toString() => "$runtimeType: $records";
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -124,7 +121,6 @@ class LeftLegend {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-@immutable
 class RecordsTable {
   final RecordsColumn resultsColumn;
   final Config config;

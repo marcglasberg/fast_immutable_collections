@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:test/test.dart";
 

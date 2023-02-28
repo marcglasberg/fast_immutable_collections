@@ -1,10 +1,9 @@
+// ignore_for_file: overridden_fields
 import "package:built_collection/built_collection.dart";
-import "package:kt_dart/collection.dart";
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-
-import "../../utils/table_score_emitter.dart";
-import "../../utils/collection_benchmark_base.dart";
+import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
+import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
+import "package:kt_dart/collection.dart";
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +63,7 @@ class KtListEmptyBenchmark extends ListBenchmarkBase {
   List<int> toMutable() => ktList.asList();
 
   @override
-  void run() => ktList = KtList<int>.empty();
+  void run() => ktList = const KtList<int>.empty();
 }
 
 // /////////////////////////////////////////////////////////////////////////////

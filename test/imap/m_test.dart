@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:fast_immutable_collections/src/imap/imap.dart';
 import "package:meta/meta.dart";
 

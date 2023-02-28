@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_locals
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
@@ -70,11 +72,7 @@ void main() {
   // /////////////////////////////////////////////////////////////////////////////
 
   test("deepEquals", () {
-    // *) If both are null, then true
-    Iterable? iterable1;
-    Iterable? iterable2;
-    expect(iterable1?.deepEquals(iterable2), isNull);
-
+    //
     // 1) Equal
     final listA = [a(1), a(2), a(3)];
     final listB = [a(1), a(2), a(3)];
@@ -454,6 +452,75 @@ void main() {
           '1 false b',
           '2 true c',
         ]);
+  });
+
+  // ////////g/////////////////////////////////////////////////////////////////////
+
+  test("intersectsWith", () {
+    //
+
+    // 1) None of them are Sets/iSets.
+    Iterable<String> iter1 = ["a", "b", "c", "d"];
+    Iterable<String> iter2 = ["x", "c", "y"];
+    Iterable<String> iter3 = ["x", "y", "z"];
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 2) All of them are Sets.
+    iter1 = {"a", "b", "c", "d"};
+    iter2 = {"x", "c", "y"};
+    iter3 = {"x", "y", "z"};
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 3) All of them are ISets.
+    iter1 = {"a", "b", "c", "d"}.lock;
+    iter2 = {"x", "c", "y"}.lock;
+    iter3 = {"x", "y", "z"}.lock;
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 4) One of them is a Set.
+    iter1 = {"a", "b", "c", "d"};
+    iter2 = ["x", "c", "y"];
+    iter3 = ["x", "y", "z"];
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
+
+    // ---
+
+    // 5) One of them is an ISet.
+    iter1 = {"a", "b", "c", "d"}.lock;
+    iter2 = ["x", "c", "y"];
+    iter3 = ["x", "y", "z"];
+
+    expect(iter1.intersectsWith(iter2), isTrue);
+    expect(iter2.intersectsWith(iter1), isTrue);
+
+    expect(iter1.intersectsWith(iter3), isFalse);
+    expect(iter3.intersectsWith(iter1), isFalse);
   });
 
   // /////////////////////////////////////////////////////////////////////////////

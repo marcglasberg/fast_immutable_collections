@@ -1,7 +1,6 @@
+import "package:benchmark_app/screens/collection_choice_screen.dart";
+import "package:benchmark_app/widgets/release_mode_warning.dart";
 import "package:flutter/material.dart";
-
-import "screens/collection_choice_screen.dart";
-import "widgets/release_mode_warning.dart";
 
 // ////////////////////////////////////////////////////////////////////////////
 

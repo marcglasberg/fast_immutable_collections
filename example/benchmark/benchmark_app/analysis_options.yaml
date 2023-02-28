@@ -1,9 +1,26 @@
-include: package:pedantic/analysis_options.yaml
+include: package:lint/analysis_options.yaml
 
 linter:
   rules:
     curly_braces_in_flow_control_structures: false
-    equal_elements_in_set: false
     omit_local_variable_types: false
     prefer_single_quotes: false
-    prefer_double_quotes: true
+    prefer_double_quotes: false
+    no_leading_underscores_for_local_identifiers: false
+    no_runtimeType_toString: false
+    avoid_multiple_declarations_per_line: false
+    parameter_assignments: false
+    avoid_dynamic_calls: false
+    avoid_redundant_argument_values: false
+    avoid_print: false
+    always_use_package_imports: false
+    avoid_positional_boolean_parameters: false
+    prefer_const_literals_to_create_immutables: false
+    prefer_interpolation_to_compose_strings: false
+    avoid_function_literals_in_foreach_calls: false
+    cast_nullable_to_non_nullable: false
+    require_trailing_commas: false
+    join_return_with_assignment: false
+    unnecessary_parenthesis: false
+    use_is_even_rather_than_modulo: false
+    use_string_buffers: false

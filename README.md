@@ -362,6 +362,7 @@ var ilist = [1, 2, 3].lock.add(4).remove(2);
 
 Since `IList` methods always return a new `IList`, it is a **mistake** to call a method on it and
 then discard the result:
+
 ```
 var ilist = [1, 2].lock;
                                                   
@@ -401,6 +402,8 @@ IList<int> ilist = ['Bob', 'Alice', 'Dominic'].lock;
 // Results in ['Bob', 'John', 'Dominic'] 
 ilist = ilist.replace(1, 'John');     
 ```
+
+The `replaceBy` method lets you define a function to transform an item at a specific index location.
 
 ## 2.1. Const IList
 

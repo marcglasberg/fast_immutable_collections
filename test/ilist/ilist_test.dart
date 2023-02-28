@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "dart:collection";
 import "dart:math";
 
@@ -267,7 +268,7 @@ void main() {
     expect(ilist.same(ilist), isTrue);
     expect(ilist.same(IList([1, 2])), isFalse);
     expect(ilist.same(IList([1])), isFalse);
-    expect(ilist.same(IList(([2, 1]))), isFalse);
+    expect(ilist.same(IList([2, 1])), isFalse);
     expect(ilist.same(IList([1, 2]).withIdentityEquals), isFalse);
     expect(ilist.same(IList([1, 2]).withConfig(ConfigList(cacheHashCode: false))), isFalse);
     expect(ilist.same(ilist.remove(3)), isTrue);
@@ -287,7 +288,7 @@ void main() {
     expect(ilist.equalItemsAndConfig(ilist), isTrue);
     expect(ilist.equalItemsAndConfig(IList([1, 2])), isTrue);
     expect(ilist.equalItemsAndConfig(IList([1])), isFalse);
-    expect(ilist.equalItemsAndConfig(IList(([2, 1]))), isFalse);
+    expect(ilist.equalItemsAndConfig(IList([2, 1])), isFalse);
     expect(ilist.equalItemsAndConfig(IList([1, 2]).withIdentityEquals), isFalse);
     expect(ilist.equalItemsAndConfig(ilist.remove(3)), isTrue);
   });
@@ -913,7 +914,7 @@ void main() {
 
   test("reduce", () {
     // 1) Regular usage
-    expect([1, 2, 3, 4, 5, 6].lock.reduce(((int p, int e) => p * (1 + e))), 2520);
+    expect([1, 2, 3, 4, 5, 6].lock.reduce((int p, int e) => p * (1 + e)), 2520);
     expect([5].lock.reduce((int p, int e) => p * (1 + e)), 5);
 
     // 2) State Exception
@@ -1026,7 +1027,7 @@ void main() {
   //////////////////////////////////////////////////////////////////////////////
 
   test("whereType", () {
-    expect((<num>[1, 2, 1.5].lock.whereType<double>()), [1.5]);
+    expect(<num>[1, 2, 1.5].lock.whereType<double>(), [1.5]);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1213,6 +1214,13 @@ void main() {
     // 2) Argument error
     expect(() => ilist.indexOf("re", -1), throwsArgumentError);
     expect(() => ilist.indexOf("re", 4), throwsArgumentError);
+
+    // 3) Zero length
+    var emptyList = [].lock;
+    expect(emptyList.indexOf("do"), -1);
+    expect(() => emptyList.indexOf("do", 1), throwsArgumentError);
+    expect(() => emptyList.indexOf("do", 2), throwsArgumentError);
+    expect(() => emptyList.indexOf("do", -1), throwsArgumentError);
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1366,6 +1374,13 @@ void main() {
 
   test("replace", () {
     expect(["do", "re", "mi", "re"].lock.replace(2, "fa"), ["do", "re", "fa", "re"]);
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  test("replaceBy", () {
+    expect(["do", "re", "mi", "re"].lock.replaceBy(2, (String text) => "|$text|"),
+        ["do", "re", "|mi|", "re"]);
   });
 
   //////////////////////////////////////////////////////////////////////////////

@@ -25,7 +25,7 @@ class ReversedListView<T> implements List<T> {
 
   @override
   set length(int value) {
-    var newList = list.sublist(value - 1, length);
+    final newList = list.sublist(value - 1, length);
     list
       ..clear()
       ..addAll(newList);
@@ -39,13 +39,13 @@ class ReversedListView<T> implements List<T> {
 
   @override
   int indexWhere(Predicate<T> test, [int start = 0]) {
-    var index = list.lastIndexWhere(test, start == 0 ? null : start);
+    final index = list.lastIndexWhere(test, start == 0 ? null : start);
     return (index == -1) ? -1 : list.length - index - 1;
   }
 
   @override
   int lastIndexWhere(Predicate<T> test, [int? start]) {
-    var index = list.indexWhere(test, start ?? 0);
+    final index = list.indexWhere(test, start ?? 0);
     return (index == -1) ? -1 : list.length - index - 1;
   }
 
@@ -114,14 +114,14 @@ class ReversedListView<T> implements List<T> {
 
   @override
   int indexOf(T element, [int start = 0]) {
-    var pos = list.lastIndexOf(element, length - start - 1);
+    final pos = list.lastIndexOf(element, length - start - 1);
     return (pos == -1) ? -1 : length - pos - 1;
   }
 
   @override
   int lastIndexOf(T element, [int? start]) {
     start ??= length - 1;
-    var pos = list.indexOf(element, length - start - 1);
+    final pos = list.indexOf(element, length - start - 1);
     return (pos == -1) ? -1 : length - pos - 1;
   }
 
@@ -208,7 +208,7 @@ class ReversedListView<T> implements List<T> {
     if (compare == null) {
       list.sort();
       for (var i = 0; i < list.length / 2; i++) {
-        var temp = list[i];
+        final temp = list[i];
         list[i] = list[list.length - 1 - i];
         list[list.length - 1 - i] = temp;
       }
