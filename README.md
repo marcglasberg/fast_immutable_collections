@@ -450,7 +450,7 @@ var ilist1 = [1, 2, 3].lock;
 var ilist2 = [1, 2, 3].lock;
                                     
 // False!
-print(identical(ilist1 == ilist2));
+print(identical(ilist1, ilist2));
                          
 // True!
 print(ilist1 == ilist2);
@@ -463,7 +463,7 @@ var list1 = [1, 2, 3];
 var list2 = [1, 2, 3];
                       
 // Regular Lists compare by identity:
-print(identical(ilist1 == ilist2)); // False!
+print(identical(ilist1, ilist2)); // False!
 print(list1 == list2); // False!
 
 // While ILists compare by deep equals:
