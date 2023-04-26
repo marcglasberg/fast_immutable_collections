@@ -1,3 +1,7 @@
+## [9.1.0] - 2023/04/26
+
+* Function `compareObject` now also compares enums by their name.
+
 ## [9.0.0] - 2023/02/26
 
 * Version bump of dependencies: collection: ^1.17.0, meta: ^1.8.0

@@ -53,7 +53,7 @@ class Tuple2<T1, T2> extends Tuple {
     else if (i == 1)
       return second;
     else
-      throw IndexError(i, this, null, null, /* length: */ 2);
+      throw IndexError.withLength(i, 2, indexable: this);
   }
 
   /// Create a new tuple value with the specified list [items].
