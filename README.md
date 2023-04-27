@@ -2201,8 +2201,8 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   Structures</a>
 * <a href="https://groups.google.com/g/guava-discuss/c/hfyhraawwUc?pli=1">Performance of immutable
   collections</a>
-* <a href="http://www.javapractices.com/topic/TopicAction.do?Id=29">Java Practices: Immutable
-  objects</a>
+* <a href="https://tinyurl.com/javaPracticesCom">Java Practices: Immutable objects</a>
+  /* Original Like = "http://www.javapractices.com/topic/TopicAction.do?Id=29" */
 * <a href="https://softwareengineering.stackexchange.com/questions/221762/why-doesnt-java-8-include-immutable-collections">
   Why doesn't Java 8 include immutable collections?</a>
 * <a href="https://medium.com/@johnmcclean/dysfunctional-programming-in-java-2-immutability-a2cff487c224">
@@ -2506,13 +2506,6 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 - [Extreme Cleverness: Functional Data Structures in Scala - Daniel Spiewak][spiewak_lecture]
 - [Clojure Data Structures Part 1 - Rich Hickey (the creator of Clojure)][hickey_lecture]
 
-1. [How can List be faster than native arrays?][how_can_lists_be_faster_than_arrays]
-
-- Structural sharing makes an immutable list be faster than a native array in JS.
-- `List` is an implementation of an immutable data-structure called *relaxed radix balanced trees*.
-- Not all operations are faster...
-- [`List` on Github][list_github]
-
 [3_types_of_collections]: https://softwareengineering.stackexchange.com/a/222052/344810
 
 [arkanon_answer]: https://softwareengineering.stackexchange.com/a/222323/344810
@@ -2523,9 +2516,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 [hickey_lecture]: https://youtu.be/ketJlzX-254
 
-[how_can_lists_be_faster_than_arrays]: http://vindum.io/blog/how-can-list-be-faster-than-native-arrays/
-
-[immutable_collections_java_not_now_not_ever]: http://blog.codefx.org/java/immutable-collections-in-java/
+[immutable_collections_java_not_now_not_ever]: https://nipafx.dev/immutable-collections-in-java/
 
 [list_github]: https://github.com/funkia/list
 
@@ -2568,7 +2559,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 # 19. Thanks
 
-<a href="http://turtleos.com">TurtleOS</a> (<a href="http://turtleos.com">turtleos.com</a>)
+<a href="https://turtleos.com">TurtleOS</a> (<a href="https://turtleos.com">turtleos.com</a>)
 sponsored the development of `IMapConst` and `IMapOfSetsConst`  (the constant versions of `IMap`
 and `IMapOfSets`)
 .
