@@ -2200,8 +2200,8 @@ So, yes, mutable collections are generally faster. But sometimes they can be slo
   Structures</a>
 * <a href="https://groups.google.com/g/guava-discuss/c/hfyhraawwUc?pli=1">Performance of immutable
   collections</a>
-* <a href="https://tinyurl.com/javaPracticesCom">Java Practices: Immutable objects</a>
-  /* Original Like = "http://www.javapractices.com/topic/TopicAction.do?Id=29" */
+* <a href="https://tinyurl.com/javaPracticesCom" original="www.javapractices.com/topic/TopicAction.do?Id=29">
+  Java Practices: Immutable objects</a>
 * <a href="https://softwareengineering.stackexchange.com/questions/221762/why-doesnt-java-8-include-immutable-collections">
   Why doesn't Java 8 include immutable collections?</a>
 * <a href="https://medium.com/@johnmcclean/dysfunctional-programming-in-java-2-immutability-a2cff487c224">

@@ -1,4 +1,4 @@
-## [9.1.0] - 2023/04/26
+## [9.1.1] - 2023/04/27
 
 * Function `compareObject` now also compares enums by their name.
 
