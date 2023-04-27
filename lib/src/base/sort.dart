@@ -4,7 +4,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// provided by [Comparable] objects in their [Comparable.compareTo] method,
 /// to sort objects in their "natural order". The difference here is that
 /// [compareObject] is also able to compare some objects which are not
-/// [Comparable], such as [bool], [MapEntry], and nulls.
+/// [Comparable], such as [bool], [MapEntry], [Enum], and nulls.
 ///
 /// In more detail:
 ///
@@ -21,7 +21,9 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// 4. Otherwise, if [a] and [b] are booleans, compare them such as `true`
 /// comes after `false`.
 ///
-/// 5. Otherwise, return `0`, which means **unordered**.
+/// 5. Otherwise, if [a] and [b] are of the same enum type, compare them by their name.
+///
+/// 6. Otherwise, return `0`, which means **unordered**.
 ///
 /// Example:
 ///
@@ -47,6 +49,7 @@ int compareObject<T extends Object>(
   if (a is MapEntry && b is MapEntry)
     return compareObject(a.key, b.key).if0(compareObject(a.value, b.value));
   if (a is bool && b is bool) return a.compareTo(b);
+  if (a is Enum && b.runtimeType == a.runtimeType) return a.name.compareTo((b as Enum).name);
   return 0;
 }
 

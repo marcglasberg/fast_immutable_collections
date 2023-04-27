@@ -52,6 +52,12 @@ void main() {
           ..shuffle()
           ..sort(compareObject),
         [entryA10, entryA20]);
+
+    // 7) Enums are sorted
+    expect(
+      [TestEnum.foo, TestEnum.bar]..sort(compareObject),
+      [TestEnum.bar, TestEnum.foo]..sort(compareObject)
+    );
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -266,4 +272,8 @@ void main() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
+}
+
+enum TestEnum {
+  foo, bar
 }
