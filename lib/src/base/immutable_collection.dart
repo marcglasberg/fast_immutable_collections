@@ -42,8 +42,9 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   static bool _prettyPrint = true;
 
   static void resetAllConfigurations() {
-    if (ImmutableCollection.isConfigLocked)
+    if (ImmutableCollection.isConfigLocked) {
       throw StateError("Can't change the configuration of immutable collections.");
+    }
     _autoFlush = true;
     _disallowUnsafeConstructors = false;
     _prettyPrint = true;
@@ -56,8 +57,9 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// automatically. The default is `true`.
   static set autoFlush(bool value) {
     if (_autoFlush == value) return;
-    if (ImmutableCollection.isConfigLocked)
+    if (ImmutableCollection.isConfigLocked) {
       throw StateError("Can't change the configuration of immutable collections.");
+    }
     _autoFlush = value;
   }
 
