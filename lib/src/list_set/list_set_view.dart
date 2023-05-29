@@ -10,9 +10,8 @@ class ListSetView<T> implements ListSet<T> {
   ListSetView(this._set);
 
   /// Converts from JSon. Json serialization support for json_serializable with @JsonSerializable.
-  factory ListSetView.fromJson(dynamic json, T Function(Object?) fromJsonT) {
-    return ListSetView<T>((json as Iterable).map(fromJsonT).toSet());
-  }
+  factory ListSetView.fromJson(dynamic json, T Function(Object?) fromJsonT) =>
+      ListSetView<T>((json as Iterable).map(fromJsonT).toSet());
 
   /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
   @override

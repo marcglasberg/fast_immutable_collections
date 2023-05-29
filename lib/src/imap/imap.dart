@@ -412,7 +412,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
       json
           .map<K, V>(
               (key, value) => MapEntry(fromJsonK(_safeKeyFromJson<K>(key)), fromJsonV(value)))
-          .lock;
+          .lockUnsafe;
 
   /// Converts to JSon. Json serialization support for json_serializable with @JsonSerializable.
   Object toJson(Object? Function(K) toJsonK, Object? Function(V) toJsonV) =>

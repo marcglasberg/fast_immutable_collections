@@ -1,5 +1,6 @@
-## [9.1.2] - 2023/05/27
+## [9.1.3] - 2023/05/27
 
+* Removed unnecessary map creation when deserializing IMap from Json.
 * Bumped environment to '>=2.14.0 <3.0.0'
 
 ## [9.1.1] - 2023/04/27
