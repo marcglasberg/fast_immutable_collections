@@ -19,7 +19,7 @@ myself,
 > Medium story</a>.
 > You may also check <a href="https://fanaro.io/articles/fic/fic.html">Philippe's article</a>.
 
-> IntelliJ plugin that will soon support this package: 
+> There is an IntelliJ plugin that will soon support this package: 
 <a href="https://plugins.jetbrains.com/files/21898/340924/icon/pluginIcon.svg"><img src="https://plugins.jetbrains.com/files/21898/340924/icon/pluginIcon.svg" height="20px" style="position: relative;top: 5px;"/>
 https://plugins.jetbrains.com/plugin/21898-marcelo-s-flutter-dart-essentials
 </a>
