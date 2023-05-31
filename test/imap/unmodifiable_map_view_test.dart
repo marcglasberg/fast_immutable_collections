@@ -1,15 +1,15 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Empty Initialization", () {
     expect(UnmodifiableMapFromIMap({}.lock).isEmpty, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
@@ -29,8 +29,6 @@ void main() {
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("keys", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
@@ -47,8 +45,6 @@ void main() {
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("lock", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
@@ -61,8 +57,6 @@ void main() {
 
     views.forEach((UnmodifiableMapFromIMap<String, int> view) => expect(view.lock, baseMap.lock));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("[]=", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
@@ -78,8 +72,6 @@ void main() {
         expect(() => view["a"] = 10, throwsUnsupportedError));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("clear", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
@@ -94,8 +86,6 @@ void main() {
         expect(() => view.clear(), throwsUnsupportedError));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("remove", () {
     const Map<String, int> baseMap = {"a": 1, "b": 2, "c": 3};
     final UnmodifiableMapFromIMap<String, int> unmodifiableMapView =
@@ -109,6 +99,4 @@ void main() {
     views.forEach((UnmodifiableMapFromIMap<String, int> view) =>
         expect(() => view.remove("a"), throwsUnsupportedError));
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 }

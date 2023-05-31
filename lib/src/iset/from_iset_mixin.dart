@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// This mixin implements all [ISet] members (without config),
@@ -73,8 +77,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   T get single => iter.single;
 
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.firstWhere(test, orElse: orElse);
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => iter.firstWhere(test, orElse: orElse);
 
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
       iter.fold(initialValue, combine);
@@ -85,8 +88,7 @@ mixin FromISetMixin<T, I extends FromISetMixin<T, I>> implements CanBeEmpty {
 
   String join([String separator = ""]) => iter.join(separator);
 
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
-      iter.lastWhere(test, orElse: orElse);
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => iter.lastWhere(test, orElse: orElse);
 
   Iterable<E> map<E>(E Function(T element) f) => iter.map(f);
 

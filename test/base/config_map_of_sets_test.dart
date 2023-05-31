@@ -1,44 +1,35 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
   test("isDeepEquals", () {
     expect(ConfigMapOfSets().isDeepEquals, isTrue);
     expect(ConfigMapOfSets(isDeepEquals: false).isDeepEquals, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("sortKeys", () {
     expect(ConfigMapOfSets().sortKeys, isFalse);
     expect(ConfigMapOfSets(sortKeys: true).sortKeys, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("sortValues", () {
     expect(ConfigMapOfSets().sortValues, isFalse);
     expect(ConfigMapOfSets(sortValues: true).sortValues, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("removeEmptySets", () {
     expect(ConfigMapOfSets().removeEmptySets, isTrue);
     expect(ConfigMapOfSets(removeEmptySets: false).removeEmptySets, isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("cacheHashCode", () {
     expect(ConfigMapOfSets().cacheHashCode, isTrue);
     expect(ConfigMapOfSets(cacheHashCode: false).cacheHashCode, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("asConfigMap", () {
     expect(ConfigMapOfSets().asConfigMap, const ConfigMap());
@@ -55,8 +46,6 @@ void main() {
         ConfigMapOfSets(cacheHashCode: false).asConfigMap, const ConfigMap(cacheHashCode: false));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("asConfigSet", () {
     expect(ConfigMapOfSets().asConfigSet, const ConfigSet());
     expect(ConfigMapOfSets(isDeepEquals: false).asConfigSet, const ConfigSet(isDeepEquals: false));
@@ -71,8 +60,6 @@ void main() {
     expect(
         ConfigMapOfSets(cacheHashCode: false).asConfigSet, const ConfigSet(cacheHashCode: false));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("==", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
@@ -167,8 +154,6 @@ void main() {
     expect(configMapOfSets6 == configMapOfSets12, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("copyWith", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets();
     final ConfigMapOfSets configMapOfSetsIdentical = configMapOfSets1.copyWith(),
@@ -232,8 +217,6 @@ void main() {
     expect(configMapOfSets1.cacheHashCode, !configMapOfSets1WithAllFalse.cacheHashCode);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("hashCode", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
@@ -260,8 +243,6 @@ void main() {
     expect(configMapOfSets5.hashCode, isNot(configMapOfSets6.hashCode));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("toString", () {
     const ConfigMapOfSets configMapOfSets1 = ConfigMapOfSets(),
         configMapOfSets2 = ConfigMapOfSets(isDeepEquals: false),
@@ -282,8 +263,6 @@ void main() {
     expect(configMapOfSets6.toString(),
         "ConfigMapOfSets{isDeepEquals: true, sortKeys: false, sortValues: false, removeEmptySets: true, cacheHashCode: false}");
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigMapOfSets with all attributes true
@@ -310,6 +289,4 @@ void main() {
             removeEmptySets: false,
             cacheHashCode: false));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

@@ -1,17 +1,16 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 // ignore_for_file: non_const_call_to_literal_constructor
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = false;
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
     expect(const IListConst([]), isA<IListConst>());
@@ -20,8 +19,6 @@ void main() {
     expect(const IListConst([1]), isA<IListConst<int>>());
     expect(const IListConst<int>([]), isA<IListConst<int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     expect(const IListConst([]), isEmpty);
@@ -39,8 +36,6 @@ void main() {
     expect(const IListConst<int>([]).isEmpty, isTrue);
     expect(const IListConst<int>([]).isNotEmpty, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("hashCode", () {
     expect(const IListConst([]) == const IListConst([]), isTrue);
@@ -66,8 +61,6 @@ void main() {
     expect(x.hashCode, y.hashCode);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("withConfig", () {
     // 1) Regular usage
     const IList<int> ilist = IListConst([1, 2]);
@@ -91,8 +84,6 @@ void main() {
     expect(const IListConst(nonemptyList, ConfigList(cacheHashCode: false)), [1, 2, 3]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("unlock", () {
     const ilistConst = IListConst([1, 2, 3]);
     expect(ilistConst.unlock, [1, 2, 3]);
@@ -105,8 +96,6 @@ void main() {
     expect(() => ilistConst.unlockView..add(4), throwsUnsupportedError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("flush", () {
     const ilistConst = IListConst([1, 2, 3]);
     expect(ilistConst.isFlushed, isTrue);
@@ -115,8 +104,6 @@ void main() {
     expect(ilistConst.unlock, [1, 2, 3]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("add/addAll, remove/removeAll", () {
     const ilistConst = IListConst([1, 2, 3]);
     expect(ilistConst.add(4), [1, 2, 3, 4]);
@@ -124,8 +111,6 @@ void main() {
     expect(ilistConst.remove(2), [1, 3]);
     expect(ilistConst.removeAll([1, 2]), [3]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("IListConst", () {
     //
@@ -159,8 +144,6 @@ void main() {
     // None of the IListConst are const. So they are NOT the same.
     expect(IListConst([1, 2, 3]).same(IListConst([1, 2, 3])), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Interaction between IList and IListConst", () {
     //
@@ -218,8 +201,6 @@ void main() {
     expect(const IListConst([1, 2]).unorderedEqualItems(IList([2, 1])), isTrue);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("Make sure the internal list is List<int>, and not List<Never>", () {
     var l1 = const IListConst<int>([]);
     expect(l1.runtimeType.toString(), 'IListConst<int>');
@@ -234,8 +215,6 @@ void main() {
     expect(result, [2]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("Test we can cast from IListConst<Never>, when using FromIListMixin.", () {
     MyList<int> myList1 = MyList.empty();
     myList1 = myList1.add(1);
@@ -245,11 +224,7 @@ void main() {
     myList2 = myList2.addAll([1, 2, 3]);
     expect(myList2, [1, 2, 3]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }
-
-// ///////////////////////////////////////////////////////////////////////////////
 
 class MyList<A extends num> with FromIListMixin<A, MyList<A>> implements Iterable<A> {
   final IList<A> numbs;

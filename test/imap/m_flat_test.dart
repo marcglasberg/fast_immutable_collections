@@ -1,5 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/imap/imap.dart';
@@ -7,15 +9,12 @@ import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:test/test.dart";
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Runtime type", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     expect(mFlat, isA<MFlat<String, int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
@@ -25,8 +24,6 @@ void main() {
     expect(mFlat.unlock, originalMap);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -34,15 +31,11 @@ void main() {
     expect(mFlat.isNotEmpty, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("length", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     expect(mFlat.length, 3);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("cast", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
@@ -50,8 +43,6 @@ void main() {
     final mFlatAsNum = mFlat.cast<String, num>(IMap.defaultConfig);
     expect(mFlatAsNum, isA<Map<String, num>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("empty", () {
     final M<String, int?> empty = MFlat.empty();
@@ -61,15 +52,11 @@ void main() {
     expect(empty.isNotEmpty, isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("deepMapHashCode", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     expect(mFlat.deepMapHashcode(), MapEquality().hash(originalMap));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("deepMapEquals", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
@@ -79,8 +66,6 @@ void main() {
     expect(mFlat.deepMapEquals(MFlat<String, int>({"a": 1, "b": 2, "c": 3})), isTrue);
     expect(mFlat.deepMapEquals(MFlat<String, int>({"a": 1, "b": 2, "c": 4})), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("deepMapEqualsToIterable", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
@@ -101,8 +86,6 @@ void main() {
     expect(mFlat.deepMapEqualsToIterable(entries2), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("from", () {
     // 1) Regular usage
     final Map<String, int> original = {"a": 1, "c": 3, "b": 2};
@@ -114,8 +97,6 @@ void main() {
 
     expect(mFlat.keys, ["a", "c", "b"]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unsafe", () {
     final Map<String, int> original = {"a": 1, "c": 3, "b": 2};
@@ -130,28 +111,20 @@ void main() {
     expect(mFlat.keys.toList(), ["a", "c", "b", "d"]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("entries", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
     mFlat.entries.forEach((MapEntry<String, int?> entry) => expect(mFlat[entry.key], entry.value));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("keys", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
     expect(mFlat.keys.toSet(), IList(["a", "b", "c", "d"]).toSet());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("values", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
     expect(mFlat.values.toSet(), IList([1, 2, 3, 4]).toSet());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("any", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
@@ -161,8 +134,6 @@ void main() {
     expect(mFlat.any((String key, int? value) => value == 100), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("contains", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
     expect(mFlat.contains("a", 1), isTrue);
@@ -170,14 +141,10 @@ void main() {
     expect(mFlat.contains("b", 1), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("contains", () {
     expect(MFlat(<String, int?>{"a": 1, "b": 2, "c": 3, "d": 4}).contains("a", null), isFalse);
     expect(MFlat({"a": 1, "b": 2, "c": 3, "d": null}).contains("d", null), isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("containsKey", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
@@ -185,23 +152,17 @@ void main() {
     expect(mFlat.containsKey("z"), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("containsValue", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
     expect(mFlat.containsValue(1), isTrue);
     expect(mFlat.containsValue(100), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("[]", () {
     final MFlat<String, int> mFlat = MFlat({"a": 1, "b": 2, "c": 3, "d": 4});
     expect(mFlat["a"], 1);
     expect(mFlat["z"], isNull);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -301,6 +262,4 @@ void main() {
     expect(mFlat.unlock, <String, int>{"a": 1, "b": 2});
     expect(m.unlock, <String, int>{"a": 1});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 }

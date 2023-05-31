@@ -7,7 +7,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
@@ -23,7 +23,7 @@ class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableMapAddAllBenchmark extends MapBenchmarkBase {
   MutableMapAddAllBenchmark({required TableScoreEmitter emitter})
@@ -64,7 +64,7 @@ class MutableMapAddAllBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IMapAddAllBenchmark extends MapBenchmarkBase {
   IMapAddAllBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
@@ -86,7 +86,7 @@ class IMapAddAllBenchmark extends MapBenchmarkBase {
   void run() => result = iMap.addAll(toBeAdded);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtMapAddAllBenchmark extends MapBenchmarkBase {
   KtMapAddAllBenchmark({required TableScoreEmitter emitter})
@@ -110,7 +110,7 @@ class KtMapAddAllBenchmark extends MapBenchmarkBase {
   void run() => result = ktMap.plus(toBeAdded);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
   BuiltMapAddAllBenchmark({required TableScoreEmitter emitter})
@@ -135,4 +135,4 @@ class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
       .rebuild((MapBuilder<String, int> mapBuilder) => mapBuilder.addAll(toBeAdded.asMap()));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

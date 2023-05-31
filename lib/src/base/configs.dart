@@ -1,8 +1,11 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
-import "hash.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+import "hash.dart";
 
 /// - If [isDeepEquals] is `false`, the [IList] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IList] equals operator (`==`) compares all
@@ -54,8 +57,6 @@ class ConfigList {
       "isDeepEquals: $isDeepEquals, "
       "cacheHashCode: $cacheHashCode}";
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// The set configuration.
 /// - If [isDeepEquals] is `false`, the [ISet] equals operator (`==`) compares by identity.
@@ -120,8 +121,6 @@ class ConfigSet {
       "cacheHashCode: $cacheHashCode}";
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
 /// - If [sort] is `true`, will sort the list output of keys. Otherwise, it will keep the insertion order (the default).
@@ -185,8 +184,6 @@ class ConfigMap {
       "sort: $sort, "
       "cacheHashCode: $cacheHashCode}";
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// - If [isDeepEquals] is `false`, the [IMap] equals operator (`==`) compares by identity.
 /// - If [isDeepEquals] is `true` (the default), the [IMap] equals operator (`==`) compares all entries, ordered.
@@ -282,5 +279,3 @@ class ConfigMapOfSets {
       "removeEmptySets: $removeEmptySets, "
       "cacheHashCode: $cacheHashCode}";
 }
-
-// /////////////////////////////////////////////////////////////////////////////

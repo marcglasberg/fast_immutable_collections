@@ -8,13 +8,13 @@ const TypeMatcher<AssertionError> isAssertionError = TypeMatcher<AssertionError>
 final Matcher throwsAssertionError = throwsA(isAssertionError);
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Config | Only accepts sizes bigger or equal than 0", () {
     expect(() => Config(size: -1), throwsAssertionError);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Config | toString()", () {
     var config = Config(size: 10);
@@ -22,13 +22,13 @@ void main() {
     expect(config.toString(), "Config: (size: 10)");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("StopwatchRecord | The collection name has to have length bigger than 0", () {
     expect(() => StopwatchRecord(collectionName: "", record: 10), throwsAssertionError);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("StopwatchRecord | Simple usage", () {
     StopwatchRecord stopwatchRecord = StopwatchRecord(collectionName: "list", record: 10);
@@ -37,7 +37,7 @@ void main() {
     expect(stopwatchRecord.record, 10);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("StopwatchRecord | == operator", () {
     StopwatchRecord listRecord1 = StopwatchRecord(collectionName: "list", record: 10),
@@ -52,7 +52,7 @@ void main() {
     expect(listRecord1, isNot(iListRecord2));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("StopwatchRecord | toString()", () {
     StopwatchRecord record = StopwatchRecord(collectionName: "list", record: 10);
@@ -60,7 +60,7 @@ void main() {
     expect(record.toString(), "StopwatchRecord: (collectionName: list, record: 10.0)");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Empty initialization", () {
     final RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -68,13 +68,13 @@ void main() {
     expect(recordsColumn.records, allOf(isA<List<StopwatchRecord>>(), isEmpty));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Title cannot be null nor have length equal to zero", () {
     expect(() => RecordsColumn.empty(title: ""), throwsAssertionError);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Adding a record", () {
     final RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -88,7 +88,7 @@ void main() {
             isNotEmpty));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Extracting the column's maximum value", () {
     RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -100,7 +100,7 @@ void main() {
     expect(recordsColumn.max, 100);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Extracting the column's minimum value", () {
     RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -112,7 +112,7 @@ void main() {
     expect(recordsColumn.min, 10);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Extracting the column's List's value", () {
     RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -122,7 +122,7 @@ void main() {
     expect(recordsColumn.mutableRecord, 10);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | == operator", () {
     RecordsColumn recordsColumn1 = RecordsColumn.empty();
@@ -142,7 +142,7 @@ void main() {
     expect(recordsColumn2, recordsColumn1);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | toString()", () {
     RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -152,7 +152,7 @@ void main() {
         "RecordsColumn: [StopwatchRecord: (collectionName: list, record: 10.0)]");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Names of each row", () {
     RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -163,7 +163,7 @@ void main() {
     expect(recordsColumn.rowNames, ["list (mutable)", "ilist", "builtList"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsColumn | Filter", () {
     RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -178,7 +178,7 @@ void main() {
     expect(recordsColumn.filter("builtList"), recordsColumnAnswer);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("LeftLegend | The rows contain all of the collection names", () {
     RecordsColumn recordsColumn = RecordsColumn.empty();
@@ -190,7 +190,7 @@ void main() {
     expect(leftLegend.rows, ["Collection", "List (Mutable)", "IList"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsTable | Left, legend column", () {
     RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
@@ -207,7 +207,7 @@ void main() {
         ["Collection", "List (Mutable)", "IList", "KtList", "BuiltList"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsTable | Normalized against max Column", () {
     RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
@@ -229,7 +229,7 @@ void main() {
     expect(recordsTable.normalizedAgainstMax.title, "x Max Time");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsTable | Normalized against min column", () {
     RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
@@ -251,7 +251,7 @@ void main() {
     expect(recordsTable.normalizedAgainstMin.title, "x Min Time");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsTable | Normalized against the mutable result", () {
     RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
@@ -273,7 +273,7 @@ void main() {
     expect(recordsTable.normalizedAgainstMutable.title, "x Mutable Time");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsTable | Normalized against size", () {
     RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
@@ -295,7 +295,7 @@ void main() {
     expect(recordsTable.normalizedAgainstSize.title, "Time (μs) / Size");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsTable | toString() (for saving it as CSV)", () {
     RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
@@ -317,7 +317,7 @@ void main() {
     expect(recordsTable.toString(), correctTableAsString);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("RecordsTable | Filter", () {
     RecordsColumn recordsColumn = RecordsColumn.empty(title: "Time (μs)");
@@ -339,5 +339,5 @@ void main() {
     expect(recordsTableFiltered.normalizedAgainstMax, recordsColumnAnswer);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

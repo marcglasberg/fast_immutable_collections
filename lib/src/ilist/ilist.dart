@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
 import "dart:math";
 
@@ -69,8 +73,6 @@ class IListConst<T> // ignore: must_be_immutable
       (config == other.config);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 @immutable
 class IListImpl<T> // ignore: must_be_immutable
     extends IList<T> {
@@ -138,8 +140,6 @@ class IListImpl<T> // ignore: must_be_immutable
                 : LFlat<T>(iterable),
         super._gen();
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable** list.
 /// Note: The [replace] method is the equivalent of `operator []=` for the [IList].
@@ -1735,8 +1735,6 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 abstract class L<T> implements Iterable<T> {
   //
 
@@ -1938,8 +1936,6 @@ abstract class L<T> implements Iterable<T> {
   HashSet<T> toHashSet() => HashSet.of(iter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// **Don't use this class**.
 @visibleForTesting
 class InternalsForTestingPurposesIList {
@@ -1956,5 +1952,3 @@ class InternalsForTestingPurposesIList {
   /// ```
   int get counter => ilist._counter;
 }
-
-// /////////////////////////////////////////////////////////////////////////////

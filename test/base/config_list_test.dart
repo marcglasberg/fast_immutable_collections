@@ -1,16 +1,15 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
   test("isDeepEquals", () {
     expect(ConfigList().isDeepEquals, isTrue);
     expect(ConfigList(isDeepEquals: false).isDeepEquals, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("==", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
@@ -23,8 +22,6 @@ void main() {
     expect(configList2 == configList3, isFalse);
     expect(configList2 == configList4, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("copyWith", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
@@ -42,8 +39,6 @@ void main() {
     expect(configList2.isDeepEquals, !configList2WithTrue.isDeepEquals);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("hashCode", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     expect(configList1.hashCode, ConfigList().hashCode);
@@ -51,15 +46,11 @@ void main() {
     expect(configList1.hashCode, isNot(configList2.hashCode));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("toString", () {
     const ConfigList configList1 = ConfigList(), configList2 = ConfigList(isDeepEquals: false);
     expect(configList1.toString(), "ConfigList{isDeepEquals: true, cacheHashCode: true}");
     expect(configList2.toString(), "ConfigList{isDeepEquals: false, cacheHashCode: true}");
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigList with isDeepEquals = true
@@ -70,6 +61,4 @@ void main() {
     IList.defaultConfig = ConfigList(isDeepEquals: false);
     expect(IList.defaultConfig, const ConfigList(isDeepEquals: false));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

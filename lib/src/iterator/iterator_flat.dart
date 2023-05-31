@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 /// This iterator encapsulate Dart's native Iterator to give a better error message
 /// when current value is called before calling [moveNext].
 ///

@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
 import "dart:math";
 
@@ -70,8 +74,6 @@ class IMapConst<K, V> // ignore: must_be_immutable
       (config == other.config);
 }
 
-// ///////////////////////////////////////////////////////////////////////////////
-
 @immutable
 class IMapImpl<K, V> // ignore: must_be_immutable
     extends IMap<K, V> {
@@ -133,8 +135,6 @@ class IMapImpl<K, V> // ignore: must_be_immutable
       : _m = MFlat<K, V>.unsafe(map),
         super._gen();
 }
-
-// ///////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable**, **unordered** map.
 @immutable
@@ -1210,8 +1210,6 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 abstract class M<K, V> {
   //
 
@@ -1386,8 +1384,6 @@ abstract class M<K, V> {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// **Don't use this class**.
 @visibleForTesting
 class InternalsForTestingPurposesIMap {
@@ -1404,8 +1400,6 @@ class InternalsForTestingPurposesIMap {
   /// ```
   int get counter => imap._counter;
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 Object _safeKeyToJson<NewK extends Object?>(NewK key) {
   if (key == null) {

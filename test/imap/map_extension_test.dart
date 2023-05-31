@@ -1,11 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_locals
-
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("lock", () {
     // 1) Typical example
     IMap<String, int> imap = {"a": 1, "b": 2}.lock;
@@ -39,8 +40,6 @@ void main() {
     expect(imap, isA<IMap<String, int>>());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("lockUnsafe", () {
     final Map<String, int> map = {"a": 1, "b": 2};
     final IMap<String, int> imap = map.lockUnsafe;
@@ -52,8 +51,6 @@ void main() {
 
     expect(map, imap.unlock);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("toIMap", () {
     final Map<String, int> map = {"a": 1, "b": 2};
@@ -68,13 +65,9 @@ void main() {
     expect(map.toIMap(ConfigMap(sort: true)).config, ConfigMap(sort: true));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("mapTo", () {
     Map<String, int> imap = {"x": 1, "b": 2, "c": 3};
     var imap1 = imap.mapTo<String>((String k, int? v) => "$k:$v");
     expect(imap1, ["x:1", "b:2", "c:3"]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

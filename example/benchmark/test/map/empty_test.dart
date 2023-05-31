@@ -2,7 +2,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Map (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -15,7 +15,7 @@ void main() {
     expect(mapEmptyBenchmark.toMutable(), <String, int>{});
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("IMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -27,7 +27,7 @@ void main() {
     expect(iMapEmptyBenchmark.toMutable(), <String, int>{});
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("KtMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -39,7 +39,7 @@ void main() {
     expect(ktMapEmptyBenchmark.toMutable(), <String, int>{});
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -52,7 +52,7 @@ void main() {
     expect(builtMapEmptyBenchmark.toMutable(), <String, int>{});
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -65,5 +65,5 @@ void main() {
         .forEach((MapBenchmarkBase benchmark) => expect(benchmark.toMutable(), <String, int>{}));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

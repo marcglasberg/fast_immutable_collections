@@ -1,10 +1,12 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("distinct", () {
     expect(([].distinct()), []);
     expect(([5, 5, 5].distinct()), [5]);
@@ -24,8 +26,6 @@ void main() {
     expect(list2, [1, 2, 4]);
     expect(identical(list1, list2), isFalse);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("removeDuplicates", () {
     expect(([]..removeDuplicates()), []);
@@ -61,8 +61,6 @@ void main() {
     expect(([null, 1, null, 1]..removeDuplicates(removeNulls: true)), [1]);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("removeNulls", () {
     expect(([1, 2, null, 3, null, 4]..removeNulls()), [1, 2, 3, 4]);
     expect(([1, 2, null, 3, 2, 4]..removeNulls()), [1, 2, 3, 2, 4]);
@@ -70,8 +68,6 @@ void main() {
     expect(([null, null]..removeNulls()), []);
     expect(([null, 1, null, 1]..removeNulls()), [1, 1]);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("withNullsRemoved", () {
     List<String?> list = ["a", "b", null];
@@ -88,15 +84,11 @@ void main() {
     expect(other.withNullsRemoved().runtimeType.toString(), "List<String>");
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("sortOrdered", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
     list.sortOrdered((int a, int b) => a.compareTo(b));
     expect(list, [1, 2, 3, 4, 5, 10]);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("sortLike", () {
     List<int> list = [1, 2, 4, 10, 3, 5];
@@ -107,8 +99,6 @@ void main() {
     list.sortLike([]);
     expect(list, [1, 2, 4, 10, 3, 5]);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("sortReversed", () {
     List<int> list = [1, 2, 4, 10, 3, 5];
@@ -132,15 +122,11 @@ void main() {
     expect(listStr, ["aaaaa", "bbb", "cc", "a"]);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("moveToTheEnd", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
     list.moveToTheEnd(4);
     expect(list, [1, 2, 10, 3, 5, 4]);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("moveToTheFront", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
@@ -148,23 +134,17 @@ void main() {
     expect(list, [4, 1, 2, 10, 3, 5]);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("whereMoveToTheEnd", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
     list.whereMoveToTheEnd((int item) => item > 4);
     expect(list, [1, 2, 4, 3, 10, 5]);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("whereMoveToTheFront", () {
     final List<int> list = [1, 2, 4, 10, 3, 5];
     list.whereMoveToTheFront((int item) => item > 4);
     expect(list, [10, 5, 1, 2, 4, 3]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("toggle", () {
     List<int?> list = [1, 2, 3, 4, 5];
@@ -228,8 +208,6 @@ void main() {
     expect(list, <int?>[1, null, 1]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("compareAsSets", () {
     // 1) Identical
     const List<int> list1 = [1, 2, 3];
@@ -248,8 +226,6 @@ void main() {
     expect(list.compareAsSets([]), isTrue);
     expect([].compareAsSets(list), isTrue);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("splitList", () {
     expect([].splitList((dynamic v) => v == 3), []);
@@ -273,8 +249,6 @@ void main() {
       [1, 2, 3, 4, 5, 6]
     ]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("divideList", () {
     //
@@ -370,8 +344,6 @@ void main() {
     ]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("divideListAsMap", () {
     //
     expect(
@@ -395,8 +367,6 @@ void main() {
       {},
     );
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("divideListAsMap", () {
     //
@@ -516,16 +486,12 @@ void main() {
     });
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("addBetween", () {
     expect([].addBetween("|"), []);
     expect(["A"].addBetween("|"), ["A"]);
     expect(["A", "B"].addBetween("|"), ["A", "|", "B"]);
     expect(["A", "B", "C"].addBetween("|"), ["A", "|", "B", "|", "C"]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("concat | Efficiently concatenates lists. The resulting list has fixed size.", () {
     //
@@ -573,8 +539,6 @@ void main() {
     // The resulting list has fixed size.
     expect(() => [1, 2].concat([3, 4])..add(5), throwsA(isA<Error>()));
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("splitByLength", () {
     //
@@ -625,8 +589,6 @@ void main() {
     ]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("get, getOrNull, getAndMap", () {
     var list = ["a", "b", "c", "d", "e", "f"];
 
@@ -654,6 +616,4 @@ void main() {
     expect(list.getAndMap(6, (idx, inRange, value) => "$idx|$inRange|$value"), "6|false|null");
     expect(list.getAndMap(-1, (idx, inRange, value) => "$idx|$inRange|$value"), "-1|false|null");
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

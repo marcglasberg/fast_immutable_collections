@@ -1,8 +1,14 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/src/iterator/iterator_flat.dart";
+
 import "ilist.dart";
 
 class LFlat<T> extends L<T> {
+  //
   final List<T> _list;
 
   static L<T> empty<T>() => LFlat.unsafe(<T>[]);

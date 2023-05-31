@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
 import "dart:math";
 
@@ -76,8 +80,6 @@ class ISetConst<T> // ignore: must_be_immutable
       (config == other.config);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 @immutable
 class ISetImpl<T> // ignore: must_be_immutable
     extends ISet<T> {
@@ -144,8 +146,6 @@ class ISetImpl<T> // ignore: must_be_immutable
                 : SFlat<T>(iterable),
         super._gen();
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable**, **ordered** set.
 /// It can be configured to order by insertion order, or sort.
@@ -954,8 +954,6 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 abstract class S<T> implements Iterable<T> {
   //
 
@@ -1104,8 +1102,6 @@ abstract class S<T> implements Iterable<T> {
   T operator [](int index);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// **Don't use this class**.
 @visibleForTesting
 class InternalsForTestingPurposesISet {
@@ -1122,5 +1118,3 @@ class InternalsForTestingPurposesISet {
   /// ```
   int get counter => iset._counter;
 }
-
-// /////////////////////////////////////////////////////////////////////////////

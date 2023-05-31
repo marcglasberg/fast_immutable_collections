@@ -2,11 +2,11 @@ import "package:benchmark_app/screens/collection_choice_screen.dart";
 import "package:benchmark_app/widgets/release_mode_warning.dart";
 import "package:flutter/material.dart";
 
-// ////////////////////////////////////////////////////////////////////////////
+
 
 void main() => runApp(const BenchmarkApp());
 
-// ////////////////////////////////////////////////////////////////////////////
+
 
 class BenchmarkApp extends StatelessWidget {
   const BenchmarkApp();
@@ -30,4 +30,4 @@ class BenchmarkApp extends StatelessWidget {
   }
 }
 
-// ////////////////////////////////////////////////////////////////////////////
+

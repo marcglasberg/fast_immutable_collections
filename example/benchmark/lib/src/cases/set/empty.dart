@@ -5,7 +5,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/collection.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
@@ -21,7 +21,7 @@ class SetEmptyBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableSetEmptyBenchmark extends SetBenchmarkBase {
   MutableSetEmptyBenchmark({required TableScoreEmitter emitter})
@@ -36,7 +36,7 @@ class MutableSetEmptyBenchmark extends SetBenchmarkBase {
   void run() => set = <int>{};
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class ISetEmptyBenchmark extends SetBenchmarkBase {
   ISetEmptyBenchmark({required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
@@ -50,7 +50,7 @@ class ISetEmptyBenchmark extends SetBenchmarkBase {
   void run() => iSet = ISet<int>();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtSetEmptyBenchmark extends SetBenchmarkBase {
   KtSetEmptyBenchmark({required TableScoreEmitter emitter})
@@ -65,7 +65,7 @@ class KtSetEmptyBenchmark extends SetBenchmarkBase {
   void run() => ktSet = const KtSet<int>.empty();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
   BuiltSetEmptyBenchmark({required TableScoreEmitter emitter})
@@ -80,4 +80,4 @@ class BuiltSetEmptyBenchmark extends SetBenchmarkBase {
   void run() => builtSet = BuiltSet<int>();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

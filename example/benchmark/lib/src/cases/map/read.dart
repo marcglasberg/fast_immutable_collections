@@ -5,7 +5,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
@@ -21,7 +21,7 @@ class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableMapReadBenchmark extends MapBenchmarkBase {
   MutableMapReadBenchmark({required TableScoreEmitter emitter})
@@ -40,7 +40,7 @@ class MutableMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = _map[(config.size ~/ 2).toString()]!;
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IMapReadBenchmark extends MapBenchmarkBase {
   IMapReadBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
@@ -58,7 +58,7 @@ class IMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = iMap[(config.size ~/ 2).toString()]!;
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtMapReadBenchmark extends MapBenchmarkBase {
   KtMapReadBenchmark({required TableScoreEmitter emitter}) : super(name: "KtMap", emitter: emitter);
@@ -77,7 +77,7 @@ class KtMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = ktMap[(config.size ~/ 2).toString()]!;
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltMapReadBenchmark extends MapBenchmarkBase {
   BuiltMapReadBenchmark({required TableScoreEmitter emitter})
@@ -97,4 +97,4 @@ class BuiltMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = builtMap[(config.size ~/ 2).toString()]!;
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

@@ -1,4 +1,9 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// The [ModifiableListFromIList] is a safe, modifiable [List] that is built from an [IList].
@@ -16,6 +21,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 /// See also: [UnmodifiableListFromIList]
 ///
 class ModifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEmpty {
+  //
   IList<T>? _iList;
   List<T>? _list;
 

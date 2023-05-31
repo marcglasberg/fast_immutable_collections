@@ -1,30 +1,25 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
   test("isDeepEquals", () {
     expect(ConfigSet().isDeepEquals, isTrue);
     expect(ConfigSet(isDeepEquals: false).isDeepEquals, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("sort", () {
     expect(ConfigSet().sort, isFalse);
     expect(ConfigSet(sort: true).sort, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("cacheHashCode", () {
     expect(ConfigSet().cacheHashCode, isTrue);
     expect(ConfigSet(cacheHashCode: false).cacheHashCode, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("==", () {
     const ConfigSet configSet1 = ConfigSet(),
@@ -73,8 +68,6 @@ void main() {
     expect(configSet4 == configSet8, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("copyWith", () {
     const ConfigSet configSet1 = ConfigSet();
     final ConfigSet configSetIdentical = configSet1.copyWith(),
@@ -107,8 +100,6 @@ void main() {
     expect(configSet1.cacheHashCode, !configSet1WithDeepAndSortFalse.cacheHashCode);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("hashCode", () {
     const ConfigSet configSet1 = ConfigSet(),
         configSet2 = ConfigSet(isDeepEquals: false),
@@ -125,8 +116,6 @@ void main() {
     expect(configSet3.hashCode, isNot(configSet4.hashCode));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("toString", () {
     expect(
         ConfigSet().toString(), "ConfigSet{isDeepEquals: true, sort: false, cacheHashCode: true}");
@@ -137,8 +126,6 @@ void main() {
     expect(ConfigSet(cacheHashCode: false).toString(),
         "ConfigSet{isDeepEquals: true, sort: false, cacheHashCode: false}");
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigSet with isDeepEquals = true and sort = true
@@ -152,6 +139,4 @@ void main() {
     expect(
         ISet.defaultConfig, const ConfigSet(isDeepEquals: false, sort: true, cacheHashCode: false));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

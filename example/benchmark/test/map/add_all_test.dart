@@ -2,7 +2,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Map (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -16,7 +16,7 @@ void main() {
     expect(mapAddAllBenchmark.toMutable(), expectedMap);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("IMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -29,7 +29,7 @@ void main() {
     expect(iMapAddAllBenchmark.toMutable(), expectedMap);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("KtMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -43,7 +43,7 @@ void main() {
     expect(ktMapAddAllBenchmark.toMutable(), expectedMap);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -57,7 +57,7 @@ void main() {
     expect(builtMapAddAllBenchmark.toMutable(), expectedMap);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -72,5 +72,5 @@ void main() {
     }
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

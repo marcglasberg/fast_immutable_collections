@@ -2,7 +2,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("List (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -15,7 +15,7 @@ void main() {
     expect(listReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("IList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -27,7 +27,7 @@ void main() {
     expect(iListReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("KtList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -39,7 +39,7 @@ void main() {
     expect(ktListReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -52,7 +52,7 @@ void main() {
     expect(builtListReadBenchmark.newVar, ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -65,5 +65,5 @@ void main() {
         benchmark.toMutable()[500], ListBenchmarkBase.getDummyGeneratedList(size: 1000)[500]));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

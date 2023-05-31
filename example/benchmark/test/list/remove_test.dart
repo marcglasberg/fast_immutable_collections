@@ -2,7 +2,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("List (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -16,7 +16,7 @@ void main() {
         ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("IList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -30,7 +30,7 @@ void main() {
         ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("KtList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -44,7 +44,7 @@ void main() {
         ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -58,7 +58,7 @@ void main() {
         ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -71,5 +71,5 @@ void main() {
         benchmark.toMutable(), ListBenchmarkBase.getDummyGeneratedList(size: 100)..remove(50)));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

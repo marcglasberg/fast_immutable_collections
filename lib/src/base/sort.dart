@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// The [compareObject] comparator is similar to the *natural comparator*
@@ -53,8 +57,6 @@ int compareObject<T extends Object>(
   return 0;
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// The [sortBy] function can be used to create a comparator to sort
 /// collections, comparing [a] and [b] such that:
 ///
@@ -109,8 +111,6 @@ int Function(T, T) sortBy<T>(
       if (ta == tb) return (then == null) ? 0 : then(a, b);
       return ta ? -1 : 1;
     };
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// The [sortLike] function can be used to create a comparator to sort
 /// collections, comparing [a] and [b] such that:
@@ -199,8 +199,6 @@ int Function(T, T) sortLike<T, E>(
               : then(a, b);
     };
 
-// /////////////////////////////////////////////////////////////////////////////
-
 extension FicComparableExtension on Object? {
   //
   /// 1. If this object and [other] are both `null`, they don't have order. If
@@ -239,8 +237,6 @@ extension FicComparableExtension on Object? {
       compareObject(this, other, nullsBefore: nullsBefore);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// The [if0] `extension` lets you nest comparators. For example:
 ///
 /// ```dart
@@ -252,5 +248,3 @@ extension FicComparableExtension on Object? {
 extension FicComparatorExtension on int {
   int if0(int then) => this == 0 ? then : this;
 }
-
-// /////////////////////////////////////////////////////////////////////////////

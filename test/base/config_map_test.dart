@@ -1,16 +1,15 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
   test("isDeepEquals", () {
     expect(ConfigMap().isDeepEquals, isTrue);
     expect(ConfigMap(isDeepEquals: false).isDeepEquals, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("sort", () {
     expect(ConfigMap().sort, isFalse);
@@ -18,14 +17,10 @@ void main() {
     expect(ConfigMap(sort: true).sort, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("cacheHashCode", () {
     expect(ConfigMap().cacheHashCode, isTrue);
     expect(ConfigMap(cacheHashCode: false).cacheHashCode, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("==", () {
     const ConfigMap configMap1 = ConfigMap(),
@@ -74,8 +69,6 @@ void main() {
     expect(configMap4 == configMap8, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("copyWith", () {
     const ConfigMap configMap1 = ConfigMap();
     final ConfigMap configMapIdentical = configMap1.copyWith(),
@@ -108,8 +101,6 @@ void main() {
     expect(configMap1.cacheHashCode, !configMap1WithAllFalse.cacheHashCode);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("hashCode", () {
     const ConfigMap configMap1 = ConfigMap(),
         configMap2 = ConfigMap(isDeepEquals: false),
@@ -128,8 +119,6 @@ void main() {
     expect(configMap3.hashCode, isNot(configMap4.hashCode));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("toString", () {
     expect(
         ConfigMap().toString(), "ConfigMap{isDeepEquals: true, sort: false, cacheHashCode: true}");
@@ -140,8 +129,6 @@ void main() {
     expect(ConfigMap(cacheHashCode: false).toString(),
         "ConfigMap{isDeepEquals: true, sort: false, cacheHashCode: false}");
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("defaultConfig", () {
     // 1) Is initially a ConfigMap with all attributes true
@@ -155,6 +142,4 @@ void main() {
     expect(
         IMap.defaultConfig, const ConfigMap(isDeepEquals: false, sort: true, cacheHashCode: false));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

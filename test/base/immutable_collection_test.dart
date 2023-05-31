@@ -1,17 +1,16 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = true;
     ImmutableCollection.prettyPrint = true;
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("areSameImmutableCollection()", () {
     // 1) If both are null, then true
@@ -59,15 +58,11 @@ void main() {
     expect(areSameImmutableCollection(imapOfSets1, imapOfSets3), isTrue);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("areSameImmutableCollection | Different Collections", () {
     IList<int> ilistA = IList([1, 2]);
     ISet<int> isetA = ISet([1, 2]);
     expect(areSameImmutableCollection(ilistA, isetA), isFalse);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test(
       "areSameImmutableCollection | "
@@ -79,8 +74,6 @@ void main() {
 
     expect(areSameImmutableCollection(iListA, iListB), isFalse); // throws an error
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("areImmutableCollectionsWithEqualItems()", () {
     // 1) If both are null, then true
@@ -110,15 +103,11 @@ void main() {
         isFalse);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("FicIteratorExtension.toIterable", () {
     const List<int> list = [1, 2, 3];
     final Iterable<int> iterable = list.iterator.toIterable();
     expect(iterable, [1, 2, 3]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("FicIteratorExtension.toList", () {
     const List<int> list = [1, 2, 3];
@@ -132,16 +121,12 @@ void main() {
     expect(() => unmodifiableList.add(4), throwsUnsupportedError);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("FicIteratorExtension.toSet", () {
     const List<int> list = [1, 2, 3];
     final Set<int> mutableSet = list.iterator.toSet();
 
     expect(mutableSet, {1, 2, 3});
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("FicMapIteratorExtension.toIterable", () {
     const List<MapEntry<String, int>> entryList = [
@@ -159,8 +144,6 @@ void main() {
     expect(iterable.contains(null), isFalse);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("FicMapIteratorExtension.toMap", () {
     const List<MapEntry<String, int>> entryList = [
       MapEntry("a", 1),
@@ -171,8 +154,6 @@ void main() {
     final Map<String, int> map = iterator.toMap();
     expect(map, {"a": 1, "b": 2, "c": 3});
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("Output.value", () {
     // 1) is initially null
@@ -189,16 +170,12 @@ void main() {
     expect(() => output.save(1), throwsStateError);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("Output.toString", () {
     Output<int> output = Output();
     expect(output.toString(), "null");
     output.save(10);
     expect(output.toString(), "10");
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("Output.==", () {
     final Output<int> output1 = Output();
@@ -213,8 +190,6 @@ void main() {
     expect(output1 == output3, isFalse);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("Output.hashCode", () {
     final Output<int> output1 = Output();
     final Output<int> output2 = Output();
@@ -225,8 +200,6 @@ void main() {
     expect(output1.hashCode, allOf(output1.hashCode, output2.hashCode, isNot(output3.hashCode)));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("List.toIList() / List.toISet()", () {
     const List<int> list = [1, 2, 3, 3];
     final IList<int> ilist = list.toIList();
@@ -236,8 +209,6 @@ void main() {
     expect(iset, {1, 2, 3});
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("Set.toIList() / Set.toISet()", () {
     const Set<int> set = {1, 2, 3};
     final IList<int> ilist = set.toIList();
@@ -246,8 +217,6 @@ void main() {
     expect(ilist, [1, 2, 3]);
     expect(iset, [1, 2, 3]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("BooleanExtension.compareTo", () {
     // 1) Zero
@@ -263,8 +232,6 @@ void main() {
     expect(false.compareTo(true), -1);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("ImmutableCollection.disallowUnsafeConstructors", () {
     // 1) Is initially false
     expect(ImmutableCollection.disallowUnsafeConstructors, isFalse);
@@ -274,8 +241,6 @@ void main() {
     ImmutableCollection.disallowUnsafeConstructors = true;
     expect(ImmutableCollection.disallowUnsafeConstructors, isTrue);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("ImmutableCollection.autoFlush", () {
     // 1) default
@@ -293,8 +258,6 @@ void main() {
     expect(ImmutableCollection.autoFlush, isTrue);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("ImmutableCollection.prettyPrint", () {
     // 1) default
     expect(ImmutableCollection.prettyPrint, isTrue);
@@ -311,8 +274,6 @@ void main() {
     expect(ImmutableCollection.prettyPrint, isTrue);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("FicIteratorExtension.toIterable()", () {
     final Iterable<int> iter1 = [1, 2, 3].iterator.toIterable();
     expect(iter1, [1, 2, 3]);
@@ -320,6 +281,4 @@ void main() {
     final Iterable<int> iter2 = <int>[].iterator.toIterable();
     expect(iter2, isEmpty);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 }

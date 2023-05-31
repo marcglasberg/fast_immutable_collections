@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/iset/iset.dart';
@@ -6,14 +9,11 @@ import "package:fast_immutable_collections/src/iset/s_flat.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Runtime Type", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd, isA<SAdd<int>>());
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
     final SAdd<int> sAdd = SAdd<int>(SFlat<int>.unsafe({1, 2, 3}), 4);
@@ -21,22 +21,16 @@ void main() {
     expect(sAdd.unlock, isA<Set<int>>());
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("isEmpty | isNotEmpty", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.isEmpty, isFalse);
     expect(sAdd.isNotEmpty, isTrue);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("length", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.length, 4);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
@@ -45,15 +39,11 @@ void main() {
     expect(sAdd.contains(null), isFalse);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("lookup", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.lookup(1), 1);
     expect(sAdd.lookup(10), isNull);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("containsAll", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
@@ -64,8 +54,6 @@ void main() {
     expect(sAdd.containsAll({10, 20, 30, 40}), isFalse);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("difference", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.difference({1, 2, 5}), {3, 4});
@@ -74,23 +62,17 @@ void main() {
     expect(sAdd.difference({1, 2, 3, 4}), <int>{});
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("intersection", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.intersection({1, 2, 4, 5, 10}), {1, 2, 4});
     expect(sAdd.intersection({10, 20, 50}), <int>{});
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("union", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(sAdd.union({1}), {1, 2, 3, 4});
     expect(sAdd.union({1, 2, 5}), {1, 2, 3, 4, 5});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("iterator (IteratorSAdd)", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
@@ -113,8 +95,6 @@ void main() {
     expect(() => iter.current, throwsStateError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("[]", () {
     final SAdd<int> sAdd = SAdd(SFlat<int>.unsafe({1, 2, 3}), 4);
     expect(() => sAdd[-100], throwsRangeError);
@@ -126,8 +106,6 @@ void main() {
     expect(() => sAdd[4], throwsRangeError);
     expect(() => sAdd[100], throwsRangeError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -248,6 +226,4 @@ void main() {
     expect(sAdd, <int>{1, 2, 3});
     expect(s, <int>{2, 3});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 }

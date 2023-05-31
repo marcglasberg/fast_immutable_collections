@@ -5,7 +5,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
@@ -21,7 +21,7 @@ class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableListReadBenchmark extends ListBenchmarkBase {
   MutableListReadBenchmark({required TableScoreEmitter emitter})
@@ -40,7 +40,7 @@ class MutableListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = list[config.size ~/ 2];
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IListReadBenchmark extends ListBenchmarkBase {
   IListReadBenchmark({required TableScoreEmitter emitter}) : super(name: "IList", emitter: emitter);
@@ -58,7 +58,7 @@ class IListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = iList[config.size ~/ 2];
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtListReadBenchmark extends ListBenchmarkBase {
   KtListReadBenchmark({required TableScoreEmitter emitter})
@@ -78,7 +78,7 @@ class KtListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = ktList[config.size ~/ 2];
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltListReadBenchmark extends ListBenchmarkBase {
   BuiltListReadBenchmark({required TableScoreEmitter emitter})
@@ -98,4 +98,4 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = builtList[config.size ~/ 2];
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

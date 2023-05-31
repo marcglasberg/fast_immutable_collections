@@ -1,6 +1,8 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
-// /////////////////////////////////////////////////////////////////////////////
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// See also: [compareObject], [FicComparableExtension], [FicComparatorExtension], [sortBy], [sortLike]
 extension FicBooleanExtension on bool {
@@ -14,5 +16,3 @@ extension FicBooleanExtension on bool {
           ? 1
           : -1;
 }
-
-// /////////////////////////////////////////////////////////////////////////////

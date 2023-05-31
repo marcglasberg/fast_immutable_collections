@@ -7,7 +7,7 @@ import "package:meta/meta.dart";
 import "records.dart";
 import "table_score_emitter.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   final TableScoreEmitter emitter;
@@ -22,7 +22,7 @@ abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   void saveReports() => benchmarks.forEach((B benchmark) => benchmark.emitter.saveReport());
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   @override
@@ -58,7 +58,7 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   ListBenchmarkBase({
@@ -77,7 +77,7 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   SetBenchmarkBase({
@@ -96,7 +96,7 @@ abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>> {
   MapBenchmarkBase({
@@ -116,4 +116,4 @@ abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>
   int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

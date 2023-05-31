@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
@@ -6,8 +9,7 @@ import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 import "package:test/test.dart";
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("getFlushed", () {
     const List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat(original);
@@ -16,15 +18,11 @@ void main() {
     expect(identical(original, lFlat.getFlushed), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("Runtime Type", () {
     final List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat<int>(original);
     expect(lFlat, isA<LFlat<int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
     final List<int> original = [1, 2, 3];
@@ -33,8 +31,6 @@ void main() {
     expect(lFlat.unlock, isA<List<int>>());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("isEmpty | isNotEmpty", () {
     final List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat<int>(original);
@@ -42,15 +38,11 @@ void main() {
     expect(lFlat.isNotEmpty, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("length", () {
     final List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat<int>(original);
     expect(lFlat.length, 3);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
     // 1) Regular usage
@@ -65,16 +57,12 @@ void main() {
     expect(() => lFlat[4], throwsA(isA<RangeError>()));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("cast", () {
     final List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat<int>(original);
     final lFlatAsNum = lFlat.cast<num>();
     expect(lFlatAsNum, isA<Iterable<num>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
     final List<int> original = [1, 2, 3];
@@ -96,16 +84,12 @@ void main() {
     expect(() => iter.current, throwsStateError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("empty", () {
     final L<int> empty = LFlat.empty();
 
     expect(empty.unlock, <int>[]);
     expect(empty.isEmpty, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("deepListHashCode", () {
     // 1) Regular usage
@@ -119,8 +103,6 @@ void main() {
     expect(lFlat.deepListEquals(LFlat<int>(original)), isTrue);
     expect(lFlat.deepListEquals(LFlat<int>([1, 2, 3, 4])), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -231,8 +213,6 @@ void main() {
     expect(l, <int>[2]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("unsafe", () {
     final List<int> original = [1, 2, 3];
     final LFlat<int> lFlat = LFlat.unsafe(original);
@@ -245,15 +225,11 @@ void main() {
     expect(lFlat, [1, 2, 3, 4]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("any", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.any((int v) => v == 4), isTrue);
     expect(lFlat.any((int v) => v == 100), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
@@ -263,8 +239,6 @@ void main() {
     expect(lFlat.contains(100), isFalse);
     expect(lFlat.contains(null), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("elementAt", () {
     // 1) Regular element access
@@ -283,8 +257,6 @@ void main() {
     expect(() => lFlat.elementAt(-1), throwsRangeError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("every", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.every((int v) => v > 0), isTrue);
@@ -292,29 +264,21 @@ void main() {
     expect(lFlat.every((int v) => v != 4), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("expand", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.expand((int v) => [v, v]), [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]);
     expect(lFlat.expand((int v) => []), []);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("first", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.first, 1);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("last", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.last, 6);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("single", () {
     // 1) State exception
@@ -325,8 +289,6 @@ void main() {
     expect([10].lock.single, 10);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("firstWhere", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.firstWhere((int v) => v > 1, orElse: () => 100), 2);
@@ -335,22 +297,16 @@ void main() {
     expect(lFlat.firstWhere((int v) => v > 6, orElse: () => 100), 100);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("fold", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.fold(100, (int p, int e) => p * (1 + e)), 504000);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("followedBy", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.followedBy([7, 8]), [1, 2, 3, 4, 5, 6, 7, 8]);
     expect(lFlat.followedBy([7, 8, 9]), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("forEach", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
@@ -359,16 +315,12 @@ void main() {
     expect(result, 504000);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("join", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.join(","), "1,2,3,4,5,6");
     expect(LFlat(<int>[]).join(","), "");
     expect(LFlat.empty().join(","), "");
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("lastWhere", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
@@ -380,15 +332,11 @@ void main() {
     expect(lFlat.lastWhere((int v) => v < 1, orElse: () => 100), 100);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("map", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(LFlat([1, 2, 3]).map((int v) => v + 1), [2, 3, 4]);
     expect(lFlat.map((int v) => v + 1), [2, 3, 4, 5, 6, 7]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("reduce", () {
     // 1) Regular usage
@@ -400,8 +348,6 @@ void main() {
     expect(() => IList().reduce((dynamic p, dynamic e) => p * (1 + (e as num))), throwsStateError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("singleWhere", () {
     // 1) Regular usage
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
@@ -412,8 +358,6 @@ void main() {
     expect(() => lFlat.singleWhere((int v) => v < 4, orElse: () => 100), throwsStateError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("skip", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.skip(1), [2, 3, 4, 5, 6]);
@@ -422,8 +366,6 @@ void main() {
     expect(lFlat.skip(10), []);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("skipWhile", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.skipWhile((int v) => v < 3), [3, 4, 5, 6]);
@@ -431,8 +373,6 @@ void main() {
     expect(lFlat.skipWhile((int v) => v < 6), [6]);
     expect(lFlat.skipWhile((int v) => v < 100), []);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("take", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
@@ -443,8 +383,6 @@ void main() {
     expect(lFlat.take(10), [1, 2, 3, 4, 5, 6]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("takeWhile", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.takeWhile((int v) => v < 3), [1, 2]);
@@ -452,8 +390,6 @@ void main() {
     expect(lFlat.takeWhile((int v) => v < 6), [1, 2, 3, 4, 5]);
     expect(lFlat.takeWhile((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("toList", () {
     // 1) Regular usage
@@ -464,8 +400,6 @@ void main() {
     // 2) Unsupported exception
     expect(() => lFlat.toList(growable: false)..add(7), throwsUnsupportedError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("toSet", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
@@ -478,8 +412,6 @@ void main() {
     expect(lFlat.unlock, [1, 2, 3, 4, 5, 6]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("where", () {
     final LFlat<int> lFlat = LFlat([1, 2, 3, 4, 5, 6]);
     expect(lFlat.where((int v) => v < 0), []);
@@ -488,11 +420,7 @@ void main() {
     expect(lFlat.where((int v) => v < 100), [1, 2, 3, 4, 5, 6]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("whereType", () {
     expect((LFlat(<num>[1, 2, 1.5]).whereType<double>()), [1.5]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

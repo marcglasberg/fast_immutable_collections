@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "dart:math";
 
@@ -10,8 +13,7 @@ extension TestExtension on IList {
 }
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Sync auto-flush when the list is already flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
     IList.flushFactor = 4;
@@ -34,8 +36,6 @@ void main() {
     expect(ilist.isFlushed, isTrue);
     expect(ilist, [1, 2, 3, 4]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Sync auto-flush when the list is NOT flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
@@ -104,8 +104,6 @@ void main() {
     expect(ilist.isFlushed, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test(
       "Method 'add' makes counter equal to the source list counter, "
       "plus one.", () async {
@@ -125,8 +123,6 @@ void main() {
     expect(ilist2.counter, 2);
     expect(ilist3.counter, 3);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test(
       "Method 'addAll' makes counter equal to "
@@ -170,6 +166,4 @@ void main() {
     var ilist8 = ilist4.addAll(ilist4);
     expect(ilist8.counter, max(ilist4.counter, ilist4.counter) + 1);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

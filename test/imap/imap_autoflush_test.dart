@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/imap/imap.dart';
@@ -8,8 +11,7 @@ extension TestExtension on IMap {
 }
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Sync auto-flush when the map is already flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
     IMap.flushFactor = 4;
@@ -32,8 +34,6 @@ void main() {
     expect(imap.isFlushed, isTrue);
     expect(imap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Sync auto-flush when the map is NOT flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
@@ -103,8 +103,6 @@ void main() {
     expect(imap.isFlushed, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test(
       "Method 'add' makes counter equal to the source map counter, "
       "plus one.", () async {
@@ -124,8 +122,6 @@ void main() {
     expect(imap2.counter, 2);
     expect(imap3.counter, 3);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test(
       "Method 'addAll' makes counter equal to "
@@ -165,6 +161,4 @@ void main() {
     var imap8 = imap3.addAll(imap3);
     expect(imap8.counter > imap3.counter, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "package:collection/collection.dart";
 
 import "iset.dart";
@@ -86,8 +90,6 @@ extension FicSetExtension<T> on Set<T> {
   }
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-
 class DiffAndIntersectResult<T, G> {
   final List<T>? diffThisMinusOther;
   final List<G>? diffOtherMinusThis;
@@ -125,5 +127,3 @@ class DiffAndIntersectResult<T, G> {
       const ListEquality().hash(intersectThisWithOther) ^
       const ListEquality().hash(intersectOtherWithThis);
 }
-
-// ////////////////////////////////////////////////////////////////////////////

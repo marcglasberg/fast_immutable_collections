@@ -1,10 +1,11 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/src/base/hash.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
   test("hash2Obj", () {
     // 1) Repeating the hash yields the same result
     expect(hashObj2(1, 2), hashObj2(1, 2));
@@ -24,8 +25,6 @@ void main() {
     expect(h1, isNot(hashObj2(2, 1)));
     expect(h2, isNot(hashObj2(2, 1)));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("hashObj3", () {
     // 1) Repeating the hash yields the same result
@@ -52,8 +51,6 @@ void main() {
     expect(h2, isNot(h3));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("hashObj4", () {
     // 1) Repeating the hash yields the same result
     expect(hashObj4(1, 2, 3, 4), hashObj4(1, 2, 3, 4));
@@ -76,8 +73,6 @@ void main() {
     expect(h1, isNot(h3));
     expect(h2, isNot(h3));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("hashObj5", () {
     // 1) Repeating the hash yields the same result
@@ -103,8 +98,6 @@ void main() {
     expect(h2, isNot(h3));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("hash2", () {
     // 1) Repeating the hash yields the same result
     expect(hash2(1, 2), hash2(1, 2));
@@ -124,8 +117,6 @@ void main() {
     expect(h1, isNot(hash2(2, 1)));
     expect(h2, isNot(hash2(2, 1)));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("hash3", () {
     // 1) Repeating the hash yields the same result
@@ -149,8 +140,6 @@ void main() {
     expect(h2, isNot(h3));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("hash4", () {
     // 1) Repeating the hash yields the same result
     expect(hash4(1, 2, 3, 4), hash4(1, 2, 3, 4));
@@ -172,8 +161,6 @@ void main() {
     expect(h1, isNot(h3));
     expect(h2, isNot(h3));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("hash5", () {
     // 1) Repeating the hash yields the same result

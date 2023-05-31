@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/imap/imap.dart';
@@ -6,8 +9,7 @@ import "package:fast_immutable_collections/src/imap/m_flat.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -16,8 +18,6 @@ void main() {
     expect(mAddAll.isEmpty, isFalse);
     expect(mAddAll.isNotEmpty, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
     const Map<String, int> originalMap = {"a": 1};
@@ -29,8 +29,6 @@ void main() {
     expect(mAddAll.contains("c", 3), isTrue);
     expect(mAddAll.contains("d", 4), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("containsKey", () {
     const Map<String, int> originalMap = {"a": 1};
@@ -48,8 +46,6 @@ void main() {
     expect(mAddAll.containsKey(null), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("containsValue", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -62,8 +58,6 @@ void main() {
     expect(mAddAll.containsValue(null), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("entries", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -75,8 +69,6 @@ void main() {
         .forEach((MapEntry<String, int> entry) => expect(finalMap[entry.key], entry.value));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("keys", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -84,8 +76,6 @@ void main() {
     final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.keys.contains(null), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("values", () {
     const Map<String, int> originalMap = {"a": 1};
@@ -103,8 +93,6 @@ void main() {
     expect(mAddAll.values.contains(null), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("[]", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -116,8 +104,6 @@ void main() {
     expect(mAddAll["d"], isNull);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("length", () {
     const Map<String, int> originalMap = {"a": 1};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -125,8 +111,6 @@ void main() {
     final MAddAll<String, int> mAddAll = MAddAll.unsafe(mFlat, mFlatToAdd);
     expect(mAddAll.length, 3);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
     const Map<String, int> originalMap = {"a": 1};
@@ -137,8 +121,6 @@ void main() {
     Map<String, int> result = iterator.toMap();
     expect(result, {"a": 1, "b": 2, "c": 3});
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -245,6 +227,4 @@ void main() {
     expect(mAddAll.unlock, <String, int>{"a": 1, "b": 2, "c": 3});
     expect(m.unlock, <String, int>{"a": 1, "b": 2});
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

@@ -1,9 +1,11 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
 
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-
-// ////////////////////////////////////////////////////////////////////////////
 
 /// Combines iterables [a] and [b] into one, by applying the [combine] function.
 /// If [allowDifferentSizes] is true, it will stop as soon as one of the
@@ -35,8 +37,6 @@ Iterable<R> combineIterables<A, B, R>(
     throw StateError("Can't combine iterables of different sizes (a < b).");
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-
 /// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
   //
@@ -53,8 +53,6 @@ extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
   /// ```
   Iterable<E> mapNotNull<E>(E? Function(T? e) f) => map(f).cast();
 }
-
-// ////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicListExtension], [FicSetExtension]
 extension FicIterableExtension<T> on Iterable<T> {
