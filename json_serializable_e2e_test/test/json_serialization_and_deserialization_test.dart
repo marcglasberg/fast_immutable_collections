@@ -5,8 +5,6 @@ import 'package:json_serializable_e2e_test/src/model/ilist_model.dart';
 import 'package:test/test.dart';
 
 void main() {
-  
-
   group('iList:', () {
     test('can serialize IList', () {
       expect(IListWrapper(IList()).toJson(), {'iList': <String>[]});
@@ -41,8 +39,6 @@ void main() {
     });
   });
 
-  
-
   group('iSet:', () {
     test('can serialize ISet', () {
       expect(ISetWrapper(ISet()).toJson(), {'iSet': <String>[]});
@@ -60,8 +56,6 @@ void main() {
           ISet(<String>['a', 'b', 'c']));
     });
   });
-
-  
 
   group('iMap', () {
     test('can serialize IMap', () {
@@ -114,8 +108,6 @@ void main() {
           '''{"iMap":{"valA":"b","valC":"d"}}''');
     });
 
-    
-
     test('can deserialize IMap where enums are keys', () {
       expect(
           IMapWrapper.fromJson({
@@ -138,8 +130,6 @@ void main() {
           }));
     });
   });
-
-  
 
   test('can deserialize IMap where enums are keys', () {
     expect(
@@ -164,6 +154,4 @@ void main() {
     //       TestEnum.valC: 'd',
     //     }));
   });
-
-  
 }

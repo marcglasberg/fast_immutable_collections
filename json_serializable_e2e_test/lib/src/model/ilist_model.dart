@@ -9,8 +9,7 @@ class IListWrapper {
 
   IListWrapper(this.iList);
 
-  factory IListWrapper.fromJson(Map<String, dynamic> json) =>
-      _$IListWrapperFromJson(json);
+  factory IListWrapper.fromJson(Map<String, dynamic> json) => _$IListWrapperFromJson(json);
 
   Map<String, dynamic> toJson() => _$IListWrapperToJson(this);
 }
@@ -21,8 +20,7 @@ class IListWrapper2 {
 
   IListWrapper2(this.iList);
 
-  factory IListWrapper2.fromJson(Map<String, dynamic> json) =>
-      _$IListWrapper2FromJson(json);
+  factory IListWrapper2.fromJson(Map<String, dynamic> json) => _$IListWrapper2FromJson(json);
 
   Map<String, dynamic> toJson() => _$IListWrapper2ToJson(this);
 }
@@ -33,8 +31,7 @@ class IMapWrapper {
 
   IMapWrapper(this.iMap);
 
-  factory IMapWrapper.fromJson(Map<String, dynamic> json) =>
-      _$IMapWrapperFromJson(json);
+  factory IMapWrapper.fromJson(Map<String, dynamic> json) => _$IMapWrapperFromJson(json);
 
   Map<String, dynamic> toJson() => _$IMapWrapperToJson(this);
 }
@@ -45,8 +42,7 @@ class IMapWrapper2 {
 
   IMapWrapper2(this.iMap);
 
-  factory IMapWrapper2.fromJson(Map<String, dynamic> json) =>
-      _$IMapWrapper2FromJson(json);
+  factory IMapWrapper2.fromJson(Map<String, dynamic> json) => _$IMapWrapper2FromJson(json);
 
   Map<String, dynamic> toJson() => _$IMapWrapper2ToJson(this);
 }
@@ -57,8 +53,7 @@ class IMapWrapper3 {
 
   IMapWrapper3(this.iMap);
 
-  factory IMapWrapper3.fromJson(Map<String, dynamic> json) =>
-      _$IMapWrapper3FromJson(json);
+  factory IMapWrapper3.fromJson(Map<String, dynamic> json) => _$IMapWrapper3FromJson(json);
 
   Map<String, dynamic> toJson() => _$IMapWrapper3ToJson(this);
 }
@@ -69,8 +64,7 @@ class ISetWrapper {
 
   ISetWrapper(this.iSet);
 
-  factory ISetWrapper.fromJson(Map<String, dynamic> json) =>
-      _$ISetWrapperFromJson(json);
+  factory ISetWrapper.fromJson(Map<String, dynamic> json) => _$ISetWrapperFromJson(json);
 
   Map<String, dynamic> toJson() => _$ISetWrapperToJson(this);
 }
