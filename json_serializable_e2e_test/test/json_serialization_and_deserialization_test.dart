@@ -88,7 +88,10 @@ void main() {
           '''{"iMap":{"1":"b","2":"d"}}''');
     });
 
-    
+    test('can serialize and deserialize IMap', () {
+      final wrapper = IMapWrapper(IMap({'a': 'b', 'c': 'd'}));
+      expect(IMapWrapper.fromJson(wrapper.toJson()).iMap, wrapper.iMap);
+    });
 
     test('can serialize IMap of enums', () {
       expect(IMapWrapper3(IMap()).toJson(), {'iMap': {}});

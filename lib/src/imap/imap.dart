@@ -1401,7 +1401,7 @@ class InternalsForTestingPurposesIMap {
   int get counter => imap._counter;
 }
 
-Object _safeKeyToJson<NewK extends Object?>(NewK key) {
+String _safeKeyToJson<NewK extends Object?>(NewK key) {
   if (key == null) {
     return 'null';
   }
