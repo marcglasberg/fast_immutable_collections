@@ -1,18 +1,17 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 // ignore_for_file: non_const_call_to_literal_constructor
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
-
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = false;
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
     expect(const IMapConst({}), isA<IMapConst>());
@@ -21,8 +20,6 @@ void main() {
     expect(const IMapConst({'a': 1}), isA<IMapConst<String, int>>());
     expect(const IMapConst<String, int>({}), isA<IMapConst<String, int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     expect(const IMapConst({}), isEmpty);
@@ -40,8 +37,6 @@ void main() {
     expect(const IMapConst<String, int>({}).isEmpty, isTrue);
     expect(const IMapConst<String, int>({}).isNotEmpty, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("hashCode", () {
     expect(const IMapConst({}) == const IMapConst({}), isTrue);
@@ -67,8 +62,6 @@ void main() {
     expect(x.hashCode, y.hashCode);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("withConfig", () {
     // 1) Regular usage
     const IMap<String, int> imap = IMapConst({'a': 1, 'b': 2});
@@ -88,20 +81,16 @@ void main() {
     expect(const IMapConst(emptyMap, ConfigMap()), <String, int>{}.lock);
     expect(const IMapConst(emptyMap, ConfigMap(cacheHashCode: false)),
         <String, int>{}.lock.withConfig(ConfigMap(cacheHashCode: false)));
-    expect(const IMapConst(emptyMap, ConfigMap(cacheHashCode: false)),
-        isNot(<String, int>{}.lock));
+    expect(const IMapConst(emptyMap, ConfigMap(cacheHashCode: false)), isNot(<String, int>{}.lock));
 
     // 3) With non-empty map and different configs.
     const Map<String, int> nonemptyMap = <String, int>{'a': 1, 'b': 2, 'c': 3};
-    expect(const IMapConst(nonemptyMap, ConfigMap()),
-        <String, int>{'a': 1, 'b': 2, 'c': 3}.lock);
+    expect(const IMapConst(nonemptyMap, ConfigMap()), <String, int>{'a': 1, 'b': 2, 'c': 3}.lock);
     expect(const IMapConst(nonemptyMap, ConfigMap(cacheHashCode: false)),
         <String, int>{'a': 1, 'b': 2, 'c': 3}.lock.withConfig(ConfigMap(cacheHashCode: false)));
     expect(const IMapConst(nonemptyMap, ConfigMap(cacheHashCode: false)),
         isNot(<String, int>{'a': 1, 'b': 2, 'c': 3}.lock));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
     const imapConst = IMapConst({'a': 1, 'b': 2, 'c': 3});
@@ -122,8 +111,6 @@ void main() {
     expect(() => imapConst.unlockView['d'] = 4, throwsUnsupportedError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("flush", () {
     const imapConst = IMapConst({'a': 1, 'b': 2, 'c': 3});
     expect(imapConst.isFlushed, isTrue);
@@ -132,8 +119,6 @@ void main() {
     expect(imapConst.unlock, {'a': 1, 'b': 2, 'c': 3});
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("add/addAll, remove/removeAll", () {
     const imapConst = IMapConst({'a': 1, 'b': 2, 'c': 3});
     expect(imapConst.add('d', 4), {'a': 1, 'b': 2, 'c': 3, 'd': 4}.lock);
@@ -141,8 +126,6 @@ void main() {
         {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6}.lock);
     expect(imapConst.remove('b'), {'a': 1, 'c': 3}.lock);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("IMapConst", () {
     //
@@ -180,8 +163,6 @@ void main() {
     // None of the IMapConst are const. So they are NOT the same.
     expect(IMapConst({'a': 1, 'b': 2, 'c': 3}).same(IMapConst({'a': 1, 'b': 2, 'c': 3})), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Interaction between IMap and IMapConst", () {
     //
@@ -226,8 +207,6 @@ void main() {
     expect(const IMapConst({'a': 1, 'b': 2}).equalItemsAndConfig(IMap({'a': 1, 'b': 2})), isTrue);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("Make sure the internal map is Map<String, int>, and not Map<Never>", () {
     var l1 = const IMapConst<String, int>({});
     expect(l1.runtimeType.toString(), 'IMapConst<String, int>');
@@ -241,8 +220,4 @@ void main() {
     var result = l3.where((String key, int value) => value == 2);
     expect(result, {'b': 2}.lock);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }
-
-// ///////////////////////////////////////////////////////////////////////////////

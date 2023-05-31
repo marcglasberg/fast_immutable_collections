@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import 'package:fast_immutable_collections/src/ilist/ilist.dart';
 import "package:fast_immutable_collections/src/ilist/l_add.dart";
@@ -5,14 +8,11 @@ import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Runtime Type", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd, isA<LAdd<int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
@@ -20,15 +20,11 @@ void main() {
     expect(lAdd.unlock, isA<List<int>>());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("isEmpty | isNotEmpty", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd.isEmpty, isFalse);
     expect(lAdd.isNotEmpty, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("length, first, last, single", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([4, 2, 3]), 1);
@@ -38,8 +34,6 @@ void main() {
     expect(() => lAdd.single, throwsStateError);
     expect(LAdd<int>(LFlat<int>([]), 1).single, 1);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
     // 1. Regular usage
@@ -54,8 +48,6 @@ void main() {
     expect(() => lAdd[-1], throwsA(isA<RangeError>()));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("contains", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
     expect(lAdd.contains(1), isTrue);
@@ -63,14 +55,10 @@ void main() {
     expect(lAdd.contains(null), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("iter", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([4, 2, 3]), 1);
     expect(lAdd.iter, allOf(isA<Iterable<int>>(), [4, 2, 3, 1]));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
     final LAdd<int> lAdd = LAdd<int>(LFlat<int>([1, 2, 3]), 4);
@@ -92,8 +80,6 @@ void main() {
     // Throws StateError after last moveNext().
     expect(() => iter.current, throwsStateError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -213,6 +199,4 @@ void main() {
     expect(lAdd, <int>[1, 2, 3]);
     expect(l, <int>[2, 3]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

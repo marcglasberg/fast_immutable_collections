@@ -1,16 +1,16 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Empty Initialization", () {
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(null);
     expect(unmodifiableSetView.lock, allOf(isA<ISet<int>>(), <int>{}));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("length", () {
     const Set<int> baseSet = {1, 2, 3};
@@ -24,8 +24,6 @@ void main() {
     views.forEach((UnmodifiableSetFromISet<int> view) => expect(view.length, 3));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("lock", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
@@ -38,8 +36,6 @@ void main() {
     views.forEach(
         (UnmodifiableSetFromISet<int> view) => expect(view.lock, allOf(isA<ISet<int>>(), baseSet)));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     const Set<int> baseSet = {1, 2, 3};
@@ -56,8 +52,6 @@ void main() {
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("toSet", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
@@ -69,8 +63,6 @@ void main() {
 
     views.forEach((UnmodifiableSetFromISet<int> view) => expect(view.toSet(), baseSet));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
     const Set<int> baseSet = {1, 2, 3};
@@ -90,8 +82,6 @@ void main() {
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("lookup", () {
     const Set<int> baseSet = {1, 2, 3};
     final UnmodifiableSetFromISet<int> unmodifiableSetView = UnmodifiableSetFromISet(baseSet.lock),
@@ -108,8 +98,6 @@ void main() {
       expect(view.lookup(4), null);
     });
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
     const Set<int> baseSet = {1, 2, 3};
@@ -130,8 +118,6 @@ void main() {
       expect(result, baseSet);
     });
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("add", () {
     const Set<int> baseSet = {1, 2, 3};
@@ -158,6 +144,4 @@ void main() {
     views.forEach((UnmodifiableSetFromISet<int> view) =>
         expect(() => view.remove(2), throwsUnsupportedError));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/imap/imap.dart';
@@ -6,8 +9,7 @@ import "package:fast_immutable_collections/src/imap/m_replace.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("isEmpty | isNotEmpty", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -15,8 +17,6 @@ void main() {
     expect(mReplace.isEmpty, isFalse);
     expect(mReplace.isNotEmpty, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
     // 1) Regular usage
@@ -34,8 +34,6 @@ void main() {
     expect(mReplace.contains("c", 3), isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("containsKey", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -43,8 +41,6 @@ void main() {
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
     mReplace.keys.forEach((String key) => expect(finalMap.containsKey(key), isTrue));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("containsValue", () {
     // 1) simple usage
@@ -59,8 +55,6 @@ void main() {
     mReplace.values.forEach((int? value) => expect(finalMap.containsValue(value), isTrue));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("entries", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -70,8 +64,6 @@ void main() {
         .forEach((MapEntry<String, int?> entry) => expect(finalMap[entry.key], entry.value));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("keys", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -79,8 +71,6 @@ void main() {
     final Map<String, int> finalMap = {"a": 2, "b": 2, "c": 3};
     mReplace.keys.forEach((String key) => expect(finalMap.containsKey(key), isTrue));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("values", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
@@ -90,8 +80,6 @@ void main() {
     mReplace.values.forEach((int? value) => expect(finalMap.containsValue(value), isTrue));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("[]", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
@@ -100,16 +88,12 @@ void main() {
     mReplace.forEach((String key, int? value) => expect(value, finalMap[key]));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("length", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
     final MFlat<String, int> mFlat = MFlat(originalMap);
     final MReplace<String, int?> mReplace = MReplace(mFlat, "a", 2);
     expect(mReplace.length, 3);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
     const Map<String, int> originalMap = {"a": 1, "b": 2, "c": 3};
@@ -120,8 +104,6 @@ void main() {
     Map<String, int> result = iterator.toMap();
     expect(result, finalMap);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -230,6 +212,4 @@ void main() {
       "a": 1,
     });
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 }

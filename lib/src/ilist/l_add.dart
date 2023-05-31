@@ -1,8 +1,13 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "../iterator/iterator_add.dart";
 import "ilist.dart";
 
 /// First we have the items in [_l] and then [_item].
 class LAdd<T> extends L<T> {
+  //
   final L<T> _l;
   final T _item;
 

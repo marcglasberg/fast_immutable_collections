@@ -1,5 +1,10 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
 import "dart:math";
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/iterator/iterator_flat.dart";
 
@@ -102,12 +107,10 @@ class ListSet<T> implements Set<T>, List<T> {
   T get last => _list.last;
 
   @override
-  T firstWhere(Predicate<T> test, {T Function()? orElse}) =>
-      _list.firstWhere(test, orElse: orElse);
+  T firstWhere(Predicate<T> test, {T Function()? orElse}) => _list.firstWhere(test, orElse: orElse);
 
   @override
-  T lastWhere(Predicate<T> test, {T Function()? orElse}) =>
-      _list.lastWhere(test, orElse: orElse);
+  T lastWhere(Predicate<T> test, {T Function()? orElse}) => _list.lastWhere(test, orElse: orElse);
 
   @override
   E fold<E>(E initialValue, E Function(E previousValue, T element) combine) =>
@@ -254,8 +257,7 @@ class ListSet<T> implements Set<T>, List<T> {
   int lastIndexOf(T element, [int? start]) => _list.lastIndexOf(element, start);
 
   @override
-  int lastIndexWhere(Predicate<T> test, [int? start]) =>
-      _list.lastIndexWhere(test, start);
+  int lastIndexWhere(Predicate<T> test, [int? start]) => _list.lastIndexWhere(test, start);
 
   @override
   set length(int newLength) {

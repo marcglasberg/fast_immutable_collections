@@ -1,11 +1,11 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:meta/meta.dart';
 
-// /////////////////////////////////////////////////////////////////////////////
-
 const UseResult useCopy = UseResult('Modified copy is being discarded.');
-
-// /////////////////////////////////////////////////////////////////////////////
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   //
@@ -114,8 +114,6 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   String toString([bool? prettyPrint]);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// While `identical(collection1, collection2)` will compare the collections by
 /// identity, `areSameImmutableCollection(collection1, collection2)` will
 /// compare them by type, and then by their internal state. Note this is
@@ -147,16 +145,12 @@ bool areImmutableCollectionsWithEqualItems(ImmutableCollection? c1, ImmutableCol
   return false;
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// Your own classes can implement this so they may use [CanBeEmptyExtension].
 abstract class CanBeEmpty {
   bool get isEmpty;
 
   bool get isNotEmpty;
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// Meant to be used when you wish to save a value that's going to be tossed
 /// out of an immutable collection.
@@ -186,5 +180,3 @@ class Output<T> {
   @override
   int get hashCode => _value.hashCode;
 }
-
-// /////////////////////////////////////////////////////////////////////////////

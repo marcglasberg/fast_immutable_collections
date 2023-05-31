@@ -1,7 +1,9 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
-
-// /////////////////////////////////////////////////////////////////////////////
 
 extension FicIterableOfMapEntryExtension<K, V> on Iterable<MapEntry<K, V>> {
   /// [MapEntry] is **not** [Comparable].
@@ -11,8 +13,6 @@ extension FicIterableOfMapEntryExtension<K, V> on Iterable<MapEntry<K, V>> {
   /// ```
   Iterable<Entry<K, V>> get asComparableEntries => map((entry) => entry.asComparableEntry);
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 extension FicMapEntryExtension<K, V> on MapEntry<K, V> {
   //
@@ -62,8 +62,6 @@ extension FicMapEntryExtension<K, V> on MapEntry<K, V> {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// Similar to a [MapEntry], but correctly implements
 /// equals ([==] comparing [key] and [value]), [hashcode] and [Comparable.compareTo].
 class Entry<K, V> implements Comparable<Entry<K, V>> {
@@ -95,5 +93,3 @@ class Entry<K, V> implements Comparable<Entry<K, V>> {
     return result;
   }
 }
-
-// /////////////////////////////////////////////////////////////////////////////

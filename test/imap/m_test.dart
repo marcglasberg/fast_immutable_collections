@@ -1,30 +1,26 @@
-// ignore_for_file: prefer_const_constructors
-
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import 'package:fast_immutable_collections/src/imap/imap.dart';
 import "package:meta/meta.dart";
-
 import "package:test/test.dart";
 
 /// These tests are mainly for coverage purposes, it tests methods inside the [M] class which were
 /// not reached by its implementations.
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("keys", () {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     const List<String> keys = ["a", "b", "c"];
     expect(mExample.keys, keys.toSet());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("values", () {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     const List<int> values = [1, 2, 3];
     expect(mExample.values, values.toSet());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     expect(MExample().isEmpty, isTrue);
@@ -38,8 +34,6 @@ void main() {
     expect(MExample({"a": 1}).isNotEmpty, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("contains", () {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     expect(mExample.contains("a", 1), isTrue);
@@ -51,8 +45,6 @@ void main() {
     expect(mExample.contains("z", 100), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("containsKey", () {
     final MExample<String?, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     expect(mExample.containsKey("a"), isTrue);
@@ -60,16 +52,12 @@ void main() {
     expect(mExample.containsKey(null), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("containsValue", () {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     expect(mExample.containsValue(1), isTrue);
     expect(mExample.containsValue(100), isFalse);
     expect(mExample.containsValue(null), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("containsEntry", () {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
@@ -79,8 +67,6 @@ void main() {
     expect(mExample.containsEntry(MapEntry<String, int>("z", 100)), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("everyEntry", () {
     final MExample<String, int> mExample = MExample({"a": 1, "b": 2, "c": 3});
     expect(mExample.everyEntry((MapEntry<String, int?> entry) => entry.value! < 4), isTrue);
@@ -88,11 +74,7 @@ void main() {
     expect(mExample.everyEntry((MapEntry<String, int?> entry) => entry.value! > 10), isFalse);
     expect(mExample.everyEntry((MapEntry<String, int?> entry) => entry.key.length == 2), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 @visibleForTesting
 class MExample<K, V> extends M<K, V> {
@@ -135,5 +117,3 @@ class MExample<K, V> extends M<K, V> {
   @override
   bool containsKeyOrM(K? key) => _imap.containsKey(key);
 }
-
-//////////////////////////////////////////////////////////////////////////////

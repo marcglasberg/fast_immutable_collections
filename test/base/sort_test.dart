@@ -1,11 +1,12 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
   //
-  //////////////////////////////////////////////////////////////////////////////
-
   test("compareObject", () {
     //
     // 1) Natural order between "a" and "b".
@@ -58,8 +59,6 @@ void main() {
         [TestEnum.bar, TestEnum.foo]..sort(compareObject));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("if0 extension", () {
     var list = ["aaa", "ccc", "b", "c", "bbb", "a", "aa", "bb", "cc"];
 
@@ -86,8 +85,6 @@ void main() {
     list.sort(compareTo);
     expect(list, ["c", "b", "a", "cc", "bb", "aa", "ccc", "bbb", "aaa"]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("sortBy", () {
     List<int> list = [1, 15, 3, 21, 360, 9, 17, 300, 25, 5, 22, 10, 12, 27, 14, 5];
@@ -125,8 +122,6 @@ void main() {
     }
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("sortLike", () {
     IList<int?> list = [1, 9, 2, 27, 12, 3, 12, 14, 11, 7, 0, 4].lock;
 
@@ -145,8 +140,6 @@ void main() {
       expect(list, [1, 7, 3, 9, 11, 27, 0, 4, 2, 12, 12, 14]);
     }
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("sortLike with mapper", () {
     IList<String?> list = [
@@ -210,8 +203,6 @@ void main() {
     }
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("Sort with inconsistencies.", () {
     IList<int?> list = [3, 4, 9].lock;
 
@@ -244,8 +235,6 @@ void main() {
     expect(isInconsistent, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("compareObjectTo", () {
     //
     int? nullValue;
@@ -268,8 +257,6 @@ void main() {
     // Nulls go to the start.
     expect([2, null, 1]..sort((a, b) => a.compareObjectTo(b, nullsBefore: true)), [null, 1, 2]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }
 
 enum TestEnum { foo, bar }

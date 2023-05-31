@@ -1,6 +1,8 @@
-import "package:fast_immutable_collections/fast_immutable_collections.dart";
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
-// /////////////////////////////////////////////////////////////////////////////
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 
 /// See also: [FicMapOfSetsExtension]
 extension FicMapExtension<K, V> on Map<K, V> {
@@ -46,8 +48,6 @@ extension FicMapExtension<K, V> on Map<K, V> {
       entries.map((MapEntry<K, V> entry) => mapper(entry.key, entry.value));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 /// See also: [FicMapExtension]
 extension FicMapOfSetsExtension<K, V> on Map<K, Set<V>> {
   /// Locks the map of sets, returning an *immutable* map ([IMapOfSets]).
@@ -57,8 +57,6 @@ extension FicMapOfSetsExtension<K, V> on Map<K, Set<V>> {
   IMapOfSets<K, V>? toIMapOfSets([ConfigMapOfSets? config]) =>
       IMapOfSets<K, V>.withConfig(this, config ?? IMapOfSets.defaultConfig);
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// See also: [FicIterableExtension], [FicIteratorExtension]
 extension FicMapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
@@ -71,5 +69,3 @@ extension FicMapIteratorExtension<K, V> on Iterator<MapEntry<K, V>> {
   /// Converts the iterator of map entries into a map.
   Map<K, V> toMap() => Map.fromEntries(toIterable());
 }
-
-// /////////////////////////////////////////////////////////////////////////////

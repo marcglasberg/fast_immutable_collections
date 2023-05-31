@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/iset/iset.dart';
@@ -7,14 +10,11 @@ import "package:fast_immutable_collections/src/iset/s_flat.dart";
 import "package:test/test.dart";
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Runtime Type", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll, isA<SAddAll<int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
@@ -22,15 +22,11 @@ void main() {
     expect(sAddAll.unlock, isA<Set<int>>());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("isEmpty | isNotEmpty", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.isEmpty, isFalse);
     expect(sAddAll.isNotEmpty, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("length, first, last", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({3, 4}), {1, 2, 5});
@@ -39,8 +35,6 @@ void main() {
     expect(sAddAll.last, 5);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("contains", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.contains(1), isTrue);
@@ -48,15 +42,11 @@ void main() {
     expect(sAddAll.contains(null), isFalse);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("lookup", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.lookup(1), 1);
     expect(sAddAll.lookup(10), isNull);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("containsAll", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
@@ -67,15 +57,11 @@ void main() {
     expect(sAddAll.containsAll({10, 20, 30, 40}), isFalse);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("difference", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.difference({3, 4, 10, 11}), {1, 2});
     expect(sAddAll.difference({1, 2, 3, 4}), <int>{});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("intersection", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
@@ -86,15 +72,11 @@ void main() {
     expect(sAddAll.intersection({10, 20, 50}), isEmpty);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("union", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.union({1}), {1, 2, 3, 4, 5});
     expect(sAddAll.union({1, 2, 5, 10, 11}), {1, 2, 3, 4, 5, 10, 11});
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
@@ -108,8 +90,6 @@ void main() {
     expect(() => sAddAll[5], throwsRangeError);
     expect(() => sAddAll[100], throwsRangeError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("iterator (IteratorAddAll)", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
@@ -134,14 +114,10 @@ void main() {
     expect(() => iter.current, throwsStateError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("anyItem", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.anyItem, isA<int>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unsafe", () {
     // 1) Regular usage
@@ -155,15 +131,11 @@ void main() {
     expect(sAddAll, {1, 2, 3, 4, 5, 10});
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("Combining various SAddAlls and SAdds | Runtime Type", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     expect(sAddAll, isA<SAddAll<int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Combining various SAddAlls and SAdds | unlock", () {
     final sAddAll = SAddAll(
@@ -172,8 +144,6 @@ void main() {
     expect(sAddAll.unlock, isA<Set<int>>());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("Combining various SAddAlls and SAdds | isEmpty | isNotEmpty", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
@@ -181,15 +151,11 @@ void main() {
     expect(sAddAll.isNotEmpty, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("Combining various SAddAlls and SAdds | length", () {
     final sAddAll = SAddAll(
         SAddAll(SAddAll(SAdd(SAddAll(SFlat.unsafe({1, 2}), {3, 4}), 5), {6, 7}), <int>{}), {8});
     expect(sAddAll.length, 8);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Combining various SAddAlls and SAdds | contains", () {
     final sAddAll = SAddAll(
@@ -198,8 +164,6 @@ void main() {
     expect(sAddAll.contains(9), isFalse);
     expect(sAddAll.contains(null), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Combining various SAddAlls and SAdds | iterator (IteratorAddAll)", () {
     final sAddAll = SAddAll(
@@ -230,8 +194,6 @@ void main() {
     // Throws StateError after last moveNext().
     expect(() => iter.current, throwsStateError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -345,6 +307,4 @@ void main() {
     expect(sAddAll, <int>{1, 2, 3, 4, 5});
     expect(s, <int>{2, 3, 4, 5});
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

@@ -1,19 +1,16 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
-
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
-
   ImmutableCollection.autoFlush = false;
 
   Subtype obj1 = Subtype("1");
   Subtype obj2 = Subtype("2");
   Subtype obj3 = Subtype("3");
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("IList deep equality ignores type parameter.", () {
     //
@@ -40,8 +37,6 @@ void main() {
     expect(ilist2.unorderedEqualItems(ilist1), isTrue);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("ISet deep equality ignores type parameter.", () {
     //
     ISet<Supertype> iset1 = ISet(<Subtype>[obj1, obj2, obj3]);
@@ -65,8 +60,6 @@ void main() {
     expect(iset1.unorderedEqualItems(iset2), isTrue);
     expect(iset2.unorderedEqualItems(iset1), isTrue);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("IMap deep equality ignores type parameter of keys", () {
     //
@@ -92,8 +85,6 @@ void main() {
     expect(imap2.equalItemsAndConfig(imap1), isTrue);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("IMap deep equality ignores type parameter of values", () {
     //
     IMap<String, Supertype> imap1 = IMap(<String, Subtype>{"a": obj1, "b": obj2, "c": obj3});
@@ -117,8 +108,6 @@ void main() {
     expect(imap1.equalItemsAndConfig(imap2), isTrue);
     expect(imap2.equalItemsAndConfig(imap1), isTrue);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("IMapOfSets deep equality ignores type parameter of keys", () {
     //
@@ -152,8 +141,6 @@ void main() {
     expect(imapOfSets2.equalItemsAndConfig(imapOfSets1), isTrue);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("IMapOfSets deep equality ignores type parameter of values", () {
     //
     IMapOfSets<String, Supertype> imapOfSets1 = IMapOfSets(<String, Set<Subtype>>{
@@ -182,11 +169,7 @@ void main() {
     expect(imapOfSets1.equalItemsAndConfig(imapOfSets2), isTrue);
     expect(imapOfSets2.equalItemsAndConfig(imapOfSets1), isTrue);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 class Supertype {
   String nome;
@@ -202,10 +185,6 @@ class Supertype {
   int get hashCode => nome.hashCode;
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
 class Subtype extends Supertype {
   Subtype(String nome) : super(nome);
 }
-
-// /////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("TableScoreEmitter.emit adds values to the TableScoreEmitter.table", () {
     Config config = Config(size: 100);
@@ -21,7 +21,7 @@ void main() {
     ]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("TableScoreEmitter.toString method", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -33,5 +33,5 @@ void main() {
         "Table Score Emitter: RecordsColumn: [StopwatchRecord: (collectionName: Test1, record: 5.0)]");
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

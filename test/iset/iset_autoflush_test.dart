@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "dart:math";
 
@@ -10,8 +13,7 @@ extension TestExtension on ISet {
 }
 
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Sync auto-flush when the set is already flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
     ISet.flushFactor = 4;
@@ -34,8 +36,6 @@ void main() {
     expect(iset.isFlushed, isTrue);
     expect(iset, [1, 2, 3, 4]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Sync auto-flush when the set is NOT flushed.", () async {
     ImmutableCollection.resetAllConfigurations();
@@ -104,8 +104,6 @@ void main() {
     expect(iset.isFlushed, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test(
       "Method 'add' makes counter equal to the source set counter, "
       "plus one.", () async {
@@ -131,8 +129,6 @@ void main() {
     expect(iset.counter, 2);
     expect(iset.isFlushed, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test(
       "Method 'addAll' makes counter equal to "
@@ -174,6 +170,4 @@ void main() {
     var iset8 = iset4.addAll(iset4);
     expect(iset8.counter, max(iset4.counter, iset4.counter) + 1);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

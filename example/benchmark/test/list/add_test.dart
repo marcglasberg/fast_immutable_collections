@@ -2,7 +2,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("List (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -17,7 +17,7 @@ void main() {
     expect(listAddBenchmark.toMutable(), expectedList);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("IList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -31,7 +31,7 @@ void main() {
     expect(iListAddBenchmark.toMutable(), expectedList);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("KtList", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -45,7 +45,7 @@ void main() {
     expect(ktListAddBenchmark.toMutable(), expectedList);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltList with rebuild", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -60,7 +60,7 @@ void main() {
     expect(builtListAddWithRebuildBenchmark.toMutable(), expectedList);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltList with ListBuilder", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -75,7 +75,7 @@ void main() {
     expect(builtListAddWithListBuilderBenchmark.toMutable(), expectedList);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -90,5 +90,5 @@ void main() {
         .forEach((ListBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedList));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

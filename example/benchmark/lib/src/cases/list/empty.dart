@@ -5,7 +5,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/collection.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
@@ -21,7 +21,7 @@ class ListEmptyBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableListEmptyBenchmark extends ListBenchmarkBase {
   MutableListEmptyBenchmark({required TableScoreEmitter emitter})
@@ -36,7 +36,7 @@ class MutableListEmptyBenchmark extends ListBenchmarkBase {
   void run() => list = <int>[];
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IListEmptyBenchmark extends ListBenchmarkBase {
   IListEmptyBenchmark({required TableScoreEmitter emitter})
@@ -51,7 +51,7 @@ class IListEmptyBenchmark extends ListBenchmarkBase {
   void run() => iList = IList<int>();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtListEmptyBenchmark extends ListBenchmarkBase {
   KtListEmptyBenchmark({required TableScoreEmitter emitter})
@@ -66,7 +66,7 @@ class KtListEmptyBenchmark extends ListBenchmarkBase {
   void run() => ktList = const KtList<int>.empty();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltListEmptyBenchmark extends ListBenchmarkBase {
   BuiltListEmptyBenchmark({required TableScoreEmitter emitter})
@@ -81,4 +81,4 @@ class BuiltListEmptyBenchmark extends ListBenchmarkBase {
   void run() => builtList = BuiltList<int>();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

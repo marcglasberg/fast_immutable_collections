@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
@@ -18,8 +21,6 @@ void testAndPrint(dynamic description, dynamic Function() body) {
 void main() {
   print("THESE ARE THE EXAMPLES IN README.md");
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Creating IList", () {
     IList<int> ilist1 = IList([1, 2]);
     IList<int> ilist2 = [1, 2].lock;
@@ -36,8 +37,6 @@ void main() {
     print(ilist3);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Basic IList usage", () {
     var ilist1 = [1, 2].lock;
     var ilist2 = ilist1.add(3);
@@ -48,21 +47,15 @@ void main() {
     print(ilist3); // Prints 1, 3
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Chain methods", () {
     var ilist = [1, 2].lock.add(3).remove(4);
     print(ilist); // Prints 1, 2
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Iterating", () {
     var ilist = [1, 2, 3, 4].lock;
     for (int? value in ilist) print(value); // Prints 1, 2, 3, 4.
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Some IList methods (like map and take) return Iterable", () {
     IList<int> ilist = ["Bob", "Alice", "Dominic", "Carl"]
@@ -78,8 +71,6 @@ void main() {
     print(ilist.runtimeType); // Prints: IList<int>
     print(ilist); // Prints [3, 5, 2]
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("ILists can be used as map keys", () {
     Map<IList, int> sumResult = {};
@@ -101,8 +92,6 @@ void main() {
     print(getSum(5, 3));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Getters `withIdentityEquals` and `withDeepEquals`", () {
     var ilist = [1, 2].lock;
 
@@ -120,8 +109,6 @@ void main() {
     print(ilist == ilist3); // True!
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Method `withConfig`", () {
     var list = [1, 2];
     var ilist1 = list.lock.withConfig(ConfigList(isDeepEquals: true));
@@ -131,8 +118,6 @@ void main() {
     print(list.lock == ilist2); // False!
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Constructor `withConfig`", () {
     var list = [1, 2];
     var ilist1 = IList.withConfig(list, ConfigList(isDeepEquals: true));
@@ -141,8 +126,6 @@ void main() {
     print(list.lock == ilist1); // True!
     print(list.lock == ilist2); // False!
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Global IList configuration", () {
     var list = [1, 2];
@@ -171,8 +154,6 @@ void main() {
     print(ilistC1 == ilistC2); // True!
     expect(ilistC1 == ilistC2, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("Usage in tests", () {
     // ignore: unrelated_type_equality_checks
@@ -206,8 +187,6 @@ void main() {
     expect([2, 1].lock, {1, 2}); // IList with ordered Set in the WRONG order.
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("Reuse by composition", () {
     var james = Student("James");
     var sara = Student("Sara");
@@ -218,8 +197,6 @@ void main() {
     expect(students.iter, [james, sara, lucy]);
     expect(students.greetings(), "Hello James, Sara, Lucy.");
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("ISet sort", () {
     var originalSet = {2, 4, 1, 9, 3};
@@ -263,8 +240,6 @@ void main() {
     // This is unordered (HashSet).
     expect(iset.toSet(), originalSet);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   testAndPrint("IMapOfSets", () {
     var james = Student("James");
@@ -317,8 +292,6 @@ void main() {
         ["Bill", "James", "Lucy", "Megan", "Sara"]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   testAndPrint("compare", () {
     List<int> list = [1, 15, 3, 21, 360, 9, 17, 300, 25, 5, 22, 10, 12, 27, 14, 5];
 
@@ -353,8 +326,6 @@ void main() {
       22, // Even numbers, not multiples of 3 nor 5.
     ]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }
 
 class Student implements Comparable<Student> {
@@ -391,8 +362,6 @@ class Students with FromIListMixin<Student, Students> {
   String greetings() => "Hello ${_students.join(", ")}.";
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 class Course {
   final String name;
 
@@ -409,8 +378,6 @@ class Course {
   @override
   int get hashCode => name.hashCode;
 }
-
-////////////////////////////////////////////////////////////////////////////////
 
 class StudentsPerCourse {
   final IMapOfSets<Course, Student> imap;
@@ -457,5 +424,3 @@ class StudentsPerCourse {
 
   int get numberOfStudents => imap.lengthOfNonRepeatingValues;
 }
-
-////////////////////////////////////////////////////////////////////////////////

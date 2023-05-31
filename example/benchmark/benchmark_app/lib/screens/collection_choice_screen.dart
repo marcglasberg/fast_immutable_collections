@@ -2,8 +2,6 @@ import "package:benchmark_app/screens/multi_benchmark_screen.dart";
 import "package:benchmark_app/widgets/collection_button.dart";
 import "package:flutter/material.dart";
 
-// ////////////////////////////////////////////////////////////////////////////
-
 class CollectionChoiceScreen extends StatelessWidget {
   const CollectionChoiceScreen();
 
@@ -71,5 +69,3 @@ class CollectionChoiceScreen extends StatelessWidget {
     );
   }
 }
-
-// ////////////////////////////////////////////////////////////////////////////

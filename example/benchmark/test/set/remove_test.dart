@@ -2,7 +2,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Set (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -17,7 +17,7 @@ void main() {
     expect(mutableSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("ISet", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -31,7 +31,7 @@ void main() {
     expect(iSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("KtSet", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -46,7 +46,7 @@ void main() {
     expect(ktSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltSet", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -61,7 +61,7 @@ void main() {
     expect(builtSetRemoveBenchmark.toMutable(), expectedSet);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -76,5 +76,5 @@ void main() {
         .forEach((SetBenchmarkBase benchmark) => expect(benchmark.toMutable(), expectedSet));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

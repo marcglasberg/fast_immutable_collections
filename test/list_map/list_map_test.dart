@@ -1,21 +1,20 @@
-// ignore_for_file: use_string_buffers, prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
-
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "dart:math";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("empty", () {
     final ListMap<String, int> map = ListMap.empty();
     expect(map.isEmpty, isTrue);
     expect(map.isNotEmpty, isFalse);
     expect(map.length, 0);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("of", () {
     // 1) Simple
@@ -67,8 +66,6 @@ void main() {
     expect(listMap.entryAt(5).key, "a");
     expect(listMap.entryAt(5).value, 1);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("fromEntries", () {
     // 1) Simple
@@ -141,8 +138,6 @@ void main() {
     expect(listMap.entryAt(5).value, 1);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("fromIterables", () {
     // 1) State Error (keys and values must have the same size)
     expect(() => ListMap.fromIterables(<String>["a", "b"], <int>[4], compare: null, sort: true),
@@ -184,8 +179,6 @@ void main() {
     expect(listMap1.keys, ["c", "b", "a"]);
     expect(listMap2.keys, ["a", "b", "c"]);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("unsafe", () {
     // 1) Simple
@@ -262,8 +255,6 @@ void main() {
     expect(listMap.entryAt(6).value, 100);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("unsafeFrom", () {
     Map<String, int> map = {"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6};
     List<String> list = ["b", "e", "a", "d", "f", "c"];
@@ -285,8 +276,6 @@ void main() {
     expect(() => listMap.entryAt(6).key, throwsRangeError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("[]=", () {
     var listMap = ListMap.of({"b": 1, "a": 2, "c": 10});
     listMap["a"] = 100;
@@ -296,15 +285,11 @@ void main() {
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10})["x"] = 100, throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("addAll", () {
     // TODO: This is not yet supported, but will be in the future.
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).addAll({"a": 3, "d": 10}),
         throwsUnsupportedError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("addAll", () {
     // TODO: This is not yet supported, but will be in the future.
@@ -314,13 +299,9 @@ void main() {
         throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("clear", () {
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).clear(), throwsUnsupportedError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("map", () {
     final ListMap<String, int> listMap =
@@ -330,8 +311,6 @@ void main() {
     expect(mapped, {"a": 2, "b": 3, "c": 4, "d": 5, "e": 6, "f": 7});
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("forEach", () {
     final ListMap<String, int> listMap =
         ListMap.of({"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6});
@@ -339,8 +318,6 @@ void main() {
     listMap.forEach((String k, int? v) => result *= 1 + v!);
     expect(result, 504000);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test('forEach again', () {
     var listMap = ListMap.of({
@@ -358,14 +335,10 @@ void main() {
     expect(result1, result2);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test('values', () {
     var listMap = ListMap.of({'a': 1, 'b': 2, 'c': null});
     expect(listMap.values, [1, 2, null]);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("entry", () {
     final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
@@ -377,8 +350,6 @@ void main() {
     expect(() => listMap.entry("z").value, throwsStateError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("entryOrNull", () {
     final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
 
@@ -387,8 +358,6 @@ void main() {
 
     expect(listMap.entryOrNull("z"), isNull);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("entryOrNullValue", () {
     final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
@@ -400,20 +369,14 @@ void main() {
     expect(listMap.entryOrNullValue("z").value, isNull);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("putIfAbsent", () {
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).putIfAbsent("d", () => 10),
         throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("remove", () {
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).remove("d"), throwsUnsupportedError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("removeWhere", () {
     expect(
@@ -422,15 +385,11 @@ void main() {
         throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("update", () {
     // TODO: This is not yet supported, but will be in the future.
     expect(() => ListMap.of({"b": 1, "a": 2, "c": 10}).update("d", (int value) => 2 * value),
         throwsUnsupportedError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("shuffle", () {
     final ListMap<String, int> listMap =
@@ -454,8 +413,6 @@ void main() {
     expect(() => listMap.entryAt(-1), throwsRangeError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("sort", () {
     final ListMap<String, int> listMap =
         ListMap.of({"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6});
@@ -478,8 +435,6 @@ void main() {
     expect(() => listMap.entryAt(-1), throwsRangeError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("entryAt", () {
     final ListMap<String, int> listMap =
         ListMap.of({"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6});
@@ -501,8 +456,6 @@ void main() {
     expect(() => listMap.entryAt(-1), throwsRangeError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("keyAt", () {
     final ListMap<String, int> listMap =
         ListMap.of({"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6});
@@ -517,8 +470,6 @@ void main() {
     expect(() => listMap.keyAt(6), throwsRangeError);
     expect(() => listMap.keyAt(-1), throwsRangeError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("valueAt", () {
     final ListMap<String, int> listMap =
@@ -535,8 +486,6 @@ void main() {
     expect(() => listMap.valueAt(-1), throwsRangeError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("updateAll", () {
     // TODO: This is not yet supported, but will be in the future.
     expect(
@@ -544,21 +493,15 @@ void main() {
         throwsUnsupportedError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("get", () {
     final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
     expect(listMap.get("a"), 1);
     expect(listMap.get("z"), isNull);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("getOrThrow", () {
     final ListMap<String, int> listMap = ListMap.of({"a": 1, "b": 2, "c": 3});
     expect(listMap.getOrThrow("a"), 1);
     expect(() => listMap.getOrThrow("z"), throwsStateError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 }

@@ -1,13 +1,13 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 // ignore_for_file: unnecessary_type_check
-
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
   //
-  //////////////////////////////////////////////////////////////////////////////
-
   test("isOfExactGenericType / isOfExactGenericTypeAs", () {
     expect(<int>[1].isOfExactGenericType(int), isTrue);
     expect(<int>[1].isOfExactGenericTypeAs(<int>[1]), isTrue);
@@ -33,6 +33,4 @@ void main() {
     expect(<String>["1"].isOfExactGenericTypeAs(<String>["1"]), isTrue);
     expect(<String>["1"] is List<String>, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

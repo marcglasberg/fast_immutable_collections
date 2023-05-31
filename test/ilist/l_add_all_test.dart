@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import 'package:fast_immutable_collections/src/ilist/ilist.dart';
 import "package:fast_immutable_collections/src/ilist/l_add.dart";
@@ -6,14 +9,11 @@ import "package:fast_immutable_collections/src/ilist/l_flat.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("Runtime Type", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     expect(lAddAll, isA<LAddAll<int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("unlock", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
@@ -21,15 +21,11 @@ void main() {
     expect(lAddAll.unlock, isA<List<int>>());
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("isEmpty | isNotEmpty", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     expect(lAddAll.isEmpty, isFalse);
     expect(lAddAll.isNotEmpty, isTrue);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("length, first, last, single", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([5, 2]), [3, 4, 1]);
@@ -39,8 +35,6 @@ void main() {
     expect(() => lAddAll.single, throwsStateError);
     expect(LAddAll(LFlat<int>([]), [1]).single, 1);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("[]", () {
     // 1) Regular usage
@@ -56,8 +50,6 @@ void main() {
     expect(() => lAddAll[-1], throwsA(isA<RangeError>()));
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("contains", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     expect(lAddAll.contains(1), isTrue);
@@ -65,14 +57,10 @@ void main() {
     expect(lAddAll.contains(null), isFalse);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("iter", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
     expect(lAddAll.iter, allOf(isA<Iterable<int>>(), [1, 2, 3, 4, 5]));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 2]), [3, 4, 5]);
@@ -97,14 +85,10 @@ void main() {
     expect(() => iter.current, throwsStateError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("iter", () {
     final LAddAll<int> lAddAll = LAddAll(LFlat<int>([1, 3]), [2, 4, 5]);
     expect(lAddAll, allOf(isA<Iterable<int>>(), [1, 3, 2, 4, 5]));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   group("Combining various LAddAlls, LAdds, LFlats and Lists |", () {
     test("Runtime Type", () {
@@ -113,16 +97,12 @@ void main() {
       expect(lAddAll, isA<LAddAll<int>>());
     });
 
-    //////////////////////////////////////////////////////////////////////////////
-
     test("unlock", () {
       final lAddAll =
           LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
       expect(lAddAll.unlock, <int>[1, 2, 3, 4, 5, 6, 7, 8]);
       expect(lAddAll.unlock, isA<List<int>>());
     });
-
-    //////////////////////////////////////////////////////////////////////////////
 
     test("isEmpty | isNotEmpty", () {
       final lAddAll =
@@ -131,15 +111,11 @@ void main() {
       expect(lAddAll.isNotEmpty, isTrue);
     });
 
-    //////////////////////////////////////////////////////////////////////////////
-
     test("length", () {
       final lAddAll =
           LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
       expect(lAddAll.length, 8);
     });
-
-    //////////////////////////////////////////////////////////////////////////////
 
     test("[]", () {
       // 1) Regular usage
@@ -158,8 +134,6 @@ void main() {
       expect(() => lAddAll[-1], throwsA(isA<RangeError>()));
     });
 
-    //////////////////////////////////////////////////////////////////////////////
-
     test("contains", () {
       final lAddAll =
           LAddAll(LAddAll(LAddAll(LAdd(LAddAll(LFlat([1, 2]), [3, 4]), 5), [6, 7]), <int>[]), [8]);
@@ -167,8 +141,6 @@ void main() {
       expect(lAddAll.contains(8), isTrue);
       expect(lAddAll.contains(null), isFalse);
     });
-
-    //////////////////////////////////////////////////////////////////////////////
 
     test("iterator", () {
       final lAddAll =
@@ -199,11 +171,7 @@ void main() {
       // Throws StateError after last moveNext().
       expect(() => iter.current, throwsStateError);
     });
-
-    //////////////////////////////////////////////////////////////////////////////
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Ensuring Immutability", () {
     // 1) add
@@ -314,6 +282,4 @@ void main() {
     expect(lAddAll, <int>[1, 2, 3, 4, 5]);
     expect(l, <int>[2, 3, 4, 5]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }

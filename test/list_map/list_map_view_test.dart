@@ -1,3 +1,6 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "dart:math";
 
@@ -5,8 +8,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   test("ordering", () {
     // 1) Regular usage
     ListMapView<String, int> listMapView =
@@ -31,8 +33,6 @@ void main() {
     expect(listMapView.length, 0);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("[]=", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
 
@@ -42,15 +42,11 @@ void main() {
     expect(() => view["a"] = 2, throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("addAll", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     // TODO: This is not yet supported, but will be in the future.
     expect(() => view.addAll({"a": 3, "d": 10}), throwsUnsupportedError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("addAll", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
@@ -58,22 +54,16 @@ void main() {
     expect(() => view.addEntries([MapEntry("a", 3), MapEntry("d", 10)]), throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("clear", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     expect(() => view.clear(), throwsUnsupportedError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("containsValue", () {
     final ListMapView<String, int> listMapView = ListMapView({"a": 1, "b": 2, "c": 3});
     expect(listMapView.containsValue(1), isTrue);
     expect(listMapView.containsValue(100), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("entry", () {
     final ListMapView<String, int> listMapView = ListMapView({"a": 1, "b": 2, "c": 3});
@@ -85,8 +75,6 @@ void main() {
     expect(() => listMapView.entry("z").value, throwsStateError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("entryOrNull", () {
     final ListMapView<String, int> listMapView = ListMapView({"a": 1, "b": 2, "c": 3});
 
@@ -95,8 +83,6 @@ void main() {
 
     expect(listMapView.entryOrNull("z"), isNull);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("entryOrNullValue", () {
     final ListMapView<String, int> listMapView = ListMapView({"a": 1, "b": 2, "c": 3});
@@ -108,8 +94,6 @@ void main() {
     expect(listMapView.entryOrNullValue("z").value, isNull);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("forEach", () {
     final ListMapView<String, int> listMapView =
         ListMapView({"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6});
@@ -118,14 +102,10 @@ void main() {
     expect(result, 504000);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("putIfAbsent", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     expect(() => view.putIfAbsent("a", () => 10), throwsUnsupportedError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     expect(ListMapView({}).isEmpty, isTrue);
@@ -137,8 +117,6 @@ void main() {
     expect(ListMapView({"a": 1}).isNotEmpty, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("map", () {
     final ListMap<String, int> listMapView =
         ListMapView({"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6});
@@ -147,21 +125,15 @@ void main() {
     expect(mapped, {"a": 2, "b": 3, "c": 4, "d": 5, "e": 6, "f": 7});
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("remove", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     expect(() => view.remove("a"), throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("removeWhere", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     expect(() => view.removeWhere((String key, int value) => key == "a"), throwsUnsupportedError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("update", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
@@ -169,23 +141,17 @@ void main() {
     expect(() => view.update("a", (int value) => 2 * value), throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("updateAll", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     // TODO: This is not yet supported, but will be in the future.
     expect(() => view.updateAll((String key, int value) => 2 * value), throwsUnsupportedError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("shuffle", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     // TODO: This is not yet supported, but will be in the future.
     expect(() => view.shuffle(Random(0)), throwsUnsupportedError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("entryAt", () {
     final ListMapView<String, int> listMapView =
@@ -208,8 +174,6 @@ void main() {
     expect(() => listMapView.entryAt(-1), throwsRangeError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("keyAt", () {
     final ListMapView<String, int> listMapView =
         ListMapView({"a": 1, "c": 3, "b": 2, "d": 4, "e": 5, "f": 6});
@@ -224,8 +188,6 @@ void main() {
     expect(() => listMapView.keyAt(6), throwsRangeError);
     expect(() => listMapView.keyAt(-1), throwsRangeError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("valueAt", () {
     final ListMapView<String, int> listMapView =
@@ -242,15 +204,11 @@ void main() {
     expect(() => listMapView.valueAt(-1), throwsRangeError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("sort", () {
     final ListMapView<String, int> view = ListMapView({"b": 1, "a": 2, "c": 10});
     // TODO: This is not yet supported, but will be in the future.
     expect(() => view.sort(), throwsUnsupportedError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("get", () {
     final ListMapView<String, int> view = ListMapView({"a": 1, "b": 2, "c": 3});
@@ -258,22 +216,16 @@ void main() {
     expect(view.get("z"), isNull);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("getOrThrow", () {
     final ListMapView<String, int> view = ListMapView({"a": 1, "b": 2, "c": 3});
     expect(view.getOrThrow("a"), 1);
     expect(() => view.getOrThrow("z"), throwsStateError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("cast", () {
     final ListMapView<String, int> view = ListMapView({"a": 1, "b": 2, "c": 3});
     expect(view.cast<String, num>(), isA<ListMap<String, num>>());
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("indexOfKey", () {
     //
@@ -314,6 +266,4 @@ void main() {
     expect(listMapView.indexOfKey(""), -1);
     expect(listMapView.indexOfKey("a"), -1);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 }

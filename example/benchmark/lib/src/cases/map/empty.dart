@@ -5,7 +5,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/collection.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MapEmptyBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
@@ -21,7 +21,7 @@ class MapEmptyBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableMapEmptyBenchmark extends MapBenchmarkBase {
   MutableMapEmptyBenchmark({required TableScoreEmitter emitter})
@@ -36,7 +36,7 @@ class MutableMapEmptyBenchmark extends MapBenchmarkBase {
   void run() => map = <String, int>{};
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IMapEmptyBenchmark extends MapBenchmarkBase {
   IMapEmptyBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
@@ -50,7 +50,7 @@ class IMapEmptyBenchmark extends MapBenchmarkBase {
   void run() => iMap = IMap<String, int>();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtMapEmptyBenchmark extends MapBenchmarkBase {
   KtMapEmptyBenchmark({required TableScoreEmitter emitter})
@@ -65,7 +65,7 @@ class KtMapEmptyBenchmark extends MapBenchmarkBase {
   void run() => ktMap = const KtMap<String, int>.empty();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltMapEmptyBenchmark extends MapBenchmarkBase {
   BuiltMapEmptyBenchmark({required TableScoreEmitter emitter})
@@ -80,4 +80,4 @@ class BuiltMapEmptyBenchmark extends MapBenchmarkBase {
   void run() => builtMap = BuiltMap<String, int>();
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

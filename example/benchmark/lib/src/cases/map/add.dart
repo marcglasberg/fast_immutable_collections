@@ -7,7 +7,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MapAddBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
@@ -24,7 +24,7 @@ class MapAddBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableMapAddBenchmark extends MapBenchmarkBase {
   MutableMapAddBenchmark({required TableScoreEmitter emitter})
@@ -64,7 +64,7 @@ class MutableMapAddBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IMapAddBenchmark extends MapBenchmarkBase {
   IMapAddBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
@@ -90,7 +90,7 @@ class IMapAddBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtMapAddBenchmark extends MapBenchmarkBase {
   KtMapAddBenchmark({required TableScoreEmitter emitter}) : super(name: "KtMap", emitter: emitter);
@@ -113,7 +113,7 @@ class KtMapAddBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithRebuildBenchmark({required TableScoreEmitter emitter})
@@ -139,7 +139,7 @@ class BuiltMapAddWithRebuildBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
   BuiltMapAddWithListBuilderBenchmark({required TableScoreEmitter emitter})
@@ -165,4 +165,4 @@ class BuiltMapAddWithListBuilderBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

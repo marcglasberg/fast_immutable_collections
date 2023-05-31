@@ -1,17 +1,16 @@
-// ignore_for_file: prefer_const_constructors
-
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:meta/meta.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
+  //
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("Repeating elements doesn't include the copies in the set", () {
     const Student james = Student("James");
@@ -21,8 +20,6 @@ void main() {
 
     expect(students.iter, {james, sara, lucy});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("any", () {
     const Student james = Student("James");
@@ -34,15 +31,11 @@ void main() {
     expect(students.any((Student? student) => student!.name == "John"), isFalse);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("cast", () {
     final Students students = Students([Student("James")]);
 
     expect(() => students.cast<ProtoStudent>(), throwsUnsupportedError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("contains", () {
     const Student james = Student("James");
@@ -55,11 +48,7 @@ void main() {
     expect(students.contains(null), isFalse);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("elementAt", () => expect(() => Students([]).elementAt(0), throwsUnsupportedError));
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("every", () {
     const Student james = Student("James");
@@ -70,8 +59,6 @@ void main() {
     expect(students.every((Student? student) => student!.name.length > 1), isTrue);
     expect(students.every((Student? student) => student!.name.length > 4), isFalse);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("expand", () {
     const Student james = Student("James");
@@ -107,8 +94,6 @@ void main() {
             ].lock));
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("length, first, last and single", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -122,8 +107,6 @@ void main() {
     expect(students.last, Student("Lucy"));
     expect(() => students.single, throwsStateError);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("firstWhere", () {
     const Student james = Student("James");
@@ -145,8 +128,6 @@ void main() {
         const Student("John"));
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("fold", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -161,8 +142,6 @@ void main() {
         const Student("Class : James : Sara : Lucy"));
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("followedBy", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -172,8 +151,6 @@ void main() {
 
     expect(students.followedBy([bob]), {james, sara, lucy, bob});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("forEach", () {
     String concatenated = "";
@@ -188,8 +165,6 @@ void main() {
     expect(concatenated, "James, Sara, Lucy, ");
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("join", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -200,8 +175,6 @@ void main() {
     expect(students.join(", "), "Student: James, Student: Sara, Student: Lucy");
     expect(Students([]).join(", "), "");
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("lastWhere", () {
     const Student james = Student("James");
@@ -223,8 +196,6 @@ void main() {
         const Student("John"));
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("map", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -233,8 +204,6 @@ void main() {
     expect(students.map((Student student) => Student(student.name + student.name)),
         {const Student("JamesJames"), const Student("SaraSara")});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("reduce", () {
     const Student james = Student("James");
@@ -247,8 +216,6 @@ void main() {
             Student(currentStudent.name + " " + nextStudent.name)),
         Student("James Sara Lucy"));
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("singleWhere", () {
     const Student james = Student("James");
@@ -266,8 +233,6 @@ void main() {
         const Student("Bob"));
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("skip", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -278,8 +243,6 @@ void main() {
     expect(students.skip(10), <Student>{});
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("skipWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -289,8 +252,6 @@ void main() {
     expect(students.skipWhile((Student student) => student.name.length > 4),
         {const Student("Sara"), const Student("Lucy")});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("take", () {
     const Student james = Student("James");
@@ -307,8 +268,6 @@ void main() {
         <Student>{const Student("James"), const Student("Sara"), const Student("Lucy")});
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("takeWhile", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -319,8 +278,6 @@ void main() {
         {const Student("James")});
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("where", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -330,8 +287,6 @@ void main() {
     expect(students.where((Student student) => student.name.length == 5), {const Student("James")});
     expect(students.where((Student student) => student.name.length == 100), <Student>{});
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("whereType", () {
     const Student james = Student("James");
@@ -344,21 +299,15 @@ void main() {
     expect(students.whereType<String>(), <Student>{});
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("isEmpty", () {
     expect(Students([]).isEmpty, isTrue);
     expect(Students([Student("James")]).isEmpty, isFalse);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("isNotEmpty", () {
     expect(Students([]).isNotEmpty, isFalse);
     expect(Students([Student("James")]).isNotEmpty, isTrue);
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 
   test("iterator", () {
     const Student james = Student("James");
@@ -385,8 +334,6 @@ void main() {
     expect(() => iter.current, throwsStateError);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("toList", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -400,8 +347,6 @@ void main() {
     ]);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("toSet", () {
     const Student james = Student("James");
     const Student sara = Student("Sara");
@@ -414,8 +359,6 @@ void main() {
       const Student("Lucy"),
     });
   });
-
-  ///////////////////////////////////////////////////////////////////////////////
 
   test("toString", () {
     const Student james = Student("James");
@@ -437,11 +380,7 @@ void main() {
         "   Student: Lucy\n"
         "}");
   });
-
-  /////////////////////////////////////////////////////////////////////////////
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class Students with FromIterableISetMixin<Student> {
@@ -453,14 +392,10 @@ class Students with FromIterableISetMixin<Student> {
   ISet<Student> get iter => _students;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 @immutable
 abstract class ProtoStudent {
   const ProtoStudent();
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 @immutable
 class Student extends ProtoStudent implements Comparable<Student> {
@@ -482,5 +417,3 @@ class Student extends ProtoStudent implements Comparable<Student> {
   @override
   int compareTo(Student other) => name.compareTo(other.name);
 }
-
-///////////////////////////////////////////////////////////////////////////////

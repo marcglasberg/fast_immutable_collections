@@ -2,7 +2,7 @@ import "package:benchmark_app/widgets/bar_chart.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:flutter/material.dart";
 
-// ////////////////////////////////////////////////////////////////////////////
+
 
 class GraphScreen extends StatefulWidget {
   final String title;
@@ -17,7 +17,7 @@ class GraphScreen extends StatefulWidget {
   _GraphScreenState createState() => _GraphScreenState();
 }
 
-// ////////////////////////////////////////////////////////////////////////////
+
 
 class _GraphScreenState extends State<GraphScreen> {
   static final BoxDecoration bottomDecoration = BoxDecoration(
@@ -144,7 +144,7 @@ class _GraphScreenState extends State<GraphScreen> {
   }
 }
 
-// ////////////////////////////////////////////////////////////////////////////
+
 
 class _DropdownButton extends StatelessWidget {
   //
@@ -178,7 +178,7 @@ class _DropdownButton extends StatelessWidget {
   }
 }
 
-// ////////////////////////////////////////////////////////////////////////////
+
 
 class _FilterDialog extends StatefulWidget {
   //
@@ -191,7 +191,7 @@ class _FilterDialog extends StatefulWidget {
   _FilterDialogState createState() => _FilterDialogState();
 }
 
-// ////////////////////////////////////////////////////////////////////////////
+
 
 class _FilterDialogState extends State<_FilterDialog> {
   //
@@ -253,4 +253,4 @@ class _FilterDialogState extends State<_FilterDialog> {
   }
 }
 
-// ////////////////////////////////////////////////////////////////////////////
+

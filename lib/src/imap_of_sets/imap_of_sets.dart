@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
 
 import "package:collection/collection.dart";
@@ -6,8 +10,6 @@ import "package:fast_immutable_collections/src/base/hash.dart";
 import 'package:fast_immutable_collections/src/imap/imap.dart';
 import 'package:fast_immutable_collections/src/iset/iset.dart';
 import "package:meta/meta.dart";
-
-// ///////////////////////////////////////////////////////////////////////////////
 
 class IMapOfSetsConst<K, V> extends IMapOfSets<K, V> {
   //
@@ -27,8 +29,6 @@ class IMapOfSetsConst<K, V> extends IMapOfSets<K, V> {
       [ConfigMapOfSets config = const ConfigMapOfSets()])
       : super._(_mapOfSets, config);
 }
-
-// ///////////////////////////////////////////////////////////////////////////////
 
 /// An **immutable**, **unordered**, map of sets.
 @immutable

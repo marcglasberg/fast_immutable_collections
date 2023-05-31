@@ -7,7 +7,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/collection.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
@@ -23,7 +23,7 @@ class SetAddAllBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableSetAddAllBenchmark extends SetBenchmarkBase {
   MutableSetAddAllBenchmark({required TableScoreEmitter emitter})
@@ -61,7 +61,7 @@ class MutableSetAddAllBenchmark extends SetBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class ISetAddAllBenchmark extends SetBenchmarkBase {
   ISetAddAllBenchmark({required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
@@ -86,7 +86,7 @@ class ISetAddAllBenchmark extends SetBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtSetAddAllBenchmark extends SetBenchmarkBase {
   KtSetAddAllBenchmark({required TableScoreEmitter emitter})
@@ -113,7 +113,7 @@ class KtSetAddAllBenchmark extends SetBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
   BuiltSetAddAllBenchmark({required TableScoreEmitter emitter})
@@ -139,4 +139,4 @@ class BuiltSetAddAllBenchmark extends SetBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

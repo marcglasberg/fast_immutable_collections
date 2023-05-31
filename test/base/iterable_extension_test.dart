@@ -1,19 +1,17 @@
-// ignore_for_file: prefer_final_locals
-
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
 void main() {
-  /////////////////////////////////////////////////////////////////////////////
-
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = true;
     ImmutableCollection.prettyPrint = true;
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test('mapNotNull', () {
     //
@@ -28,8 +26,6 @@ void main() {
     expect(list1, isA<Iterable<int?>>());
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test('sumBy', () {
     expect([1, 2, 3, 4, 5].sumBy((e) => e), 15);
     expect([1.5, 2.5, 3.3, 4, 5].sumBy((e) => e), 16.3);
@@ -40,8 +36,6 @@ void main() {
     expect(['a', 'ab', 'abc', 'abcd', 'abcde'].map((e) => e.length).sum, 15);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test('averageBy', () {
     expect([1, 2, 3, 4, 5].averageBy((e) => e), 3.0);
     expect([1.5, 2.5, 3.3, 4, 5].averageBy((e) => e), 3.26);
@@ -51,8 +45,6 @@ void main() {
     expect(['a', 'ab', 'abc', 'abcd', 'abcd'].averageBy((e) => e.length), 2.8);
     expect(['a', 'ab', 'abc', 'abcd', 'abcde'].averageBy((e) => e.length), 3.0);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test('whereNotNull (removed this, now using it from collection package)', () {
     //
@@ -68,8 +60,6 @@ void main() {
     expect(list3, isA<List<String>>());
     expect(list3, ["xxx", "xx", "x"]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("deepEquals", () {
     //
@@ -113,8 +103,6 @@ void main() {
     expect([a(1), a(2)].lock.deepEquals([a(1), a(2)].lock, ignoreOrder: true), isTrue);
     expect([a(1), a(2)].lock.deepEquals([a(2), a(1)].lock, ignoreOrder: true), isTrue);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("deepEqualsByIdentity", () {
     // List
@@ -173,8 +161,6 @@ void main() {
     expect([1, 2].deepEqualsByIdentity([1, 2, 2].iterator.toIterable()), isFalse);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("whereNoDuplicates", () {
     expect(([].whereNoDuplicates()), []);
     expect(([5, 5, 5].whereNoDuplicates()), [5]);
@@ -201,8 +187,6 @@ void main() {
         ["a", "abc", "ab"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("sortedLike", () {
     expect([1, 2, 3].sortedLike([1, 2, 3]), [1, 2, 3]);
     expect([1, 2, 3].sortedLike(<int>[]), [1, 2, 3]);
@@ -218,15 +202,11 @@ void main() {
     expect([3, 2].sortedLike([1, 2, 3, 2, 1]), [2, 3]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("sortedReversed", () {
     expect([1, 2, 3].sortedReversed(), [3, 2, 1]);
     expect([3, 2, 1].sortedReversed(), [3, 2, 1]);
     expect([1, 3, 2].sortedReversed(), [3, 2, 1]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("updateById", () {
     //
@@ -357,8 +337,6 @@ void main() {
     ]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("isFirst", () {
     //
     var a = Object();
@@ -384,8 +362,6 @@ void main() {
     expect(list.isNotLast(c), isFalse);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("restrict", () {
     var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
     expect(primes.restrict(14, orElse: -1), -1);
@@ -400,8 +376,6 @@ void main() {
     expect(primesWithNull.restrict(100, orElse: -1), -1);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("findDuplicates", () {
     expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), {"C", "A"});
     expect(["A", "B", "C", "D", "C", "A", "E"].findDuplicates(), ["C", "A"]);
@@ -410,8 +384,6 @@ void main() {
     expect(["A", "B", "B", "B"].findDuplicates(), {"B"});
     expect(["A", "B", "B", "B"].findDuplicates(), ["B"]);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("everyIs", () {
     List<int> list1 = [1, 1, 1];
@@ -423,8 +395,6 @@ void main() {
     expect(list2.everyIs(2), isFalse);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
-
   test("anyIs", () {
     List<int> list1 = [1, 1, 1];
     List<int> list2 = [1, 1, 2];
@@ -435,8 +405,6 @@ void main() {
     expect(list2.anyIs(2), isTrue);
     expect(list2.anyIs(3), isFalse);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 
   test("mapIndexedAndLast", () {
     List<String> list = ["a", "b", "c"];
@@ -453,8 +421,6 @@ void main() {
           '2 true c',
         ]);
   });
-
-  // ////////g/////////////////////////////////////////////////////////////////////
 
   test("intersectsWith", () {
     //
@@ -522,11 +488,7 @@ void main() {
     expect(iter1.intersectsWith(iter3), isFalse);
     expect(iter3.intersectsWith(iter1), isFalse);
   });
-
-  // /////////////////////////////////////////////////////////////////////////////
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 class _ClassEqualsByValue {
   @override
@@ -536,8 +498,6 @@ class _ClassEqualsByValue {
   @override
   int get hashCode => 0;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 class WithId {
   String id;
@@ -556,8 +516,6 @@ class WithId {
   @override
   String toString() => "WithId{$id, $name}";
 }
-
-// /////////////////////////////////////////////////////////////////////////////
 
 /// Shortcut
 Wrapper a(Comparable a) => Wrapper(a);

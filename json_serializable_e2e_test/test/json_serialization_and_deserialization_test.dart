@@ -5,7 +5,7 @@ import 'package:json_serializable_e2e_test/src/model/ilist_model.dart';
 import 'package:test/test.dart';
 
 void main() {
-  // ///////////////////////////////////////////////////////////////////////////////////////////////
+  
 
   group('iList:', () {
     test('can serialize IList', () {
@@ -41,7 +41,7 @@ void main() {
     });
   });
 
-  // ///////////////////////////////////////////////////////////////////////////////////////////////
+  
 
   group('iSet:', () {
     test('can serialize ISet', () {
@@ -61,7 +61,7 @@ void main() {
     });
   });
 
-  // ///////////////////////////////////////////////////////////////////////////////////////////////
+  
 
   group('iMap', () {
     test('can serialize IMap', () {
@@ -93,8 +93,6 @@ void main() {
       expect(IMapWrapper.fromJson(wrapper.toJson()).iMap, wrapper.iMap);
     });
 
-    // ///////////////////////////////////////////////////////////////////////////////////////////////
-
     test('can serialize IMap of enums', () {
       expect(IMapWrapper3(IMap()).toJson(), {'iMap': {}});
 
@@ -116,7 +114,7 @@ void main() {
           '''{"iMap":{"valA":"b","valC":"d"}}''');
     });
 
-    // ///////////////////////////////////////////////////////////////////////////////////////////////
+    
 
     test('can deserialize IMap where enums are keys', () {
       expect(
@@ -141,7 +139,7 @@ void main() {
     });
   });
 
-  // ///////////////////////////////////////////////////////////////////////////////////////////////
+  
 
   test('can deserialize IMap where enums are keys', () {
     expect(
@@ -167,5 +165,5 @@ void main() {
     //     }));
   });
 
-  // ///////////////////////////////////////////////////////////////////////////////////////////////
+  
 }

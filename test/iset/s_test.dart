@@ -1,14 +1,15 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 // ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
 import 'package:fast_immutable_collections/src/iset/iset.dart';
 import "package:meta/meta.dart";
-
 import "package:test/test.dart";
 
 /// These tests are mainly for coverage purposes, it tests methods inside the [S] class which were
 /// not reached by its implementations.
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   test("isEmpty | isNotEmpty", () {
     expect(SExample().isEmpty, isTrue);
     expect(SExample({}).isEmpty, isTrue);
@@ -21,8 +22,6 @@ void main() {
     expect(SExample([1]).isNotEmpty, isTrue);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("length, first, last, single", () {
     expect(SExample({1, 2, 3}).length, 3);
     expect(SExample({1, 3}).first, 1);
@@ -31,13 +30,9 @@ void main() {
     expect(() => SExample({3}).add(1).single, throwsStateError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("whereType", () {
     expect((SExample(<num>{1, 2, 1.5}).whereType<double>()), {1.5});
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("elementAt", () {
     final SExample<int> iset = SExample({1, 20, 3});
@@ -54,11 +49,7 @@ void main() {
     expect(() => iset[-1], throwsRangeError);
     expect(() => iset[3], throwsRangeError);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 @visibleForTesting
 class SExample<T> extends S<T> {
@@ -96,5 +87,3 @@ class SExample<T> extends S<T> {
   @override
   T? lookup(T element) => _iset.lookup(element);
 }
-
-//////////////////////////////////////////////////////////////////////////////

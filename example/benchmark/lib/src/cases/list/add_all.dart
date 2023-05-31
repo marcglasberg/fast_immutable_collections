@@ -6,7 +6,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/collection.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
@@ -22,7 +22,7 @@ class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableListAddAllBenchmark extends ListBenchmarkBase {
   MutableListAddAllBenchmark({required TableScoreEmitter emitter})
@@ -63,7 +63,7 @@ class MutableListAddAllBenchmark extends ListBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IListAddAllBenchmark extends ListBenchmarkBase {
   IListAddAllBenchmark({required TableScoreEmitter emitter})
@@ -83,7 +83,7 @@ class IListAddAllBenchmark extends ListBenchmarkBase {
       result = iList.addAll(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtListAddAllBenchmark extends ListBenchmarkBase {
   KtListAddAllBenchmark({required TableScoreEmitter emitter})
@@ -105,7 +105,7 @@ class KtListAddAllBenchmark extends ListBenchmarkBase {
       .plus(KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10)));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltListAddAllBenchmark extends ListBenchmarkBase {
   BuiltListAddAllBenchmark({required TableScoreEmitter emitter})
@@ -126,4 +126,4 @@ class BuiltListAddAllBenchmark extends ListBenchmarkBase {
       listBuilder.addAll(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10)));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

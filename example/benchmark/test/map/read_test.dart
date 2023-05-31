@@ -2,7 +2,7 @@ import "package:fast_immutable_collections_benchmarks/fast_immutable_collections
 import "package:test/test.dart";
 
 void main() {
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Map (Mutable)", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -16,7 +16,7 @@ void main() {
         mutableMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("IMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -28,7 +28,7 @@ void main() {
     expect(iMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("KtMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -40,7 +40,7 @@ void main() {
     expect(ktMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("BuiltMap", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -53,7 +53,7 @@ void main() {
     expect(builtMapReadBenchmark.newVar, MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 
   test("Multiple Benchmarks", () {
     final TableScoreEmitter tableScoreEmitter =
@@ -66,5 +66,5 @@ void main() {
         benchmark.toMutable()["500"], MapBenchmarkBase.getDummyGeneratedMap(size: 1000)["500"]));
   });
 
-  // /////////////////////////////////////////////////////////////////////////////
+  
 }

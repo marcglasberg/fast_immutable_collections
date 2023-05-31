@@ -9,7 +9,7 @@
 
 ---
 
-# 1. Fast Immutable Collections
+# Fast Immutable Collections
 
 > _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
 myself,
@@ -19,7 +19,12 @@ myself,
 > Medium story</a>.
 > You may also check <a href="https://fanaro.io/articles/fic/fic.html">Philippe's article</a>.
 
-## 1.1. Introduction
+> IntelliJ plugin that will soon support this package: 
+<a href="https://plugins.jetbrains.com/files/21898/340924/icon/pluginIcon.svg"><img src="https://plugins.jetbrains.com/files/21898/340924/icon/pluginIcon.svg" height="20px" style="position: relative;top: 5px;"/>
+https://plugins.jetbrains.com/plugin/21898-marcelo-s-flutter-dart-essentials
+</a>
+
+&nbsp;<br>
 
 This package, called **FIC** for short, provides:
 
@@ -95,10 +100,7 @@ implementation details. Later in this document, we provide benchmarks so that yo
 <div id="user-content-toc">
   <ul>
     <li>
-      <a href="#1-fast-immutable-collections">1. Fast Immutable Collections</a>
-      <ul>
-        <li><a href="#11-introduction">1.1. Introduction</a></li>
-      </ul>
+      <a href="#fast-immutable-collections">1. Fast Immutable Collections</a>      
     </li>
     <li>
       <a href="#2-ilist">2. IList</a>

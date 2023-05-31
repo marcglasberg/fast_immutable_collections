@@ -8,7 +8,7 @@ import "package:kt_dart/collection.dart";
 import "../../utils/collection_benchmark_base.dart";
 import "../../utils/table_score_emitter.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
@@ -24,7 +24,7 @@ class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableMapRemoveBenchmark extends MapBenchmarkBase {
   MutableMapRemoveBenchmark({required TableScoreEmitter emitter})
@@ -63,7 +63,7 @@ class MutableMapRemoveBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IMapRemoveBenchmark extends MapBenchmarkBase {
   IMapRemoveBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
@@ -81,7 +81,7 @@ class IMapRemoveBenchmark extends MapBenchmarkBase {
   void run() => iMap = iMap.remove((config.size ~/ 2).toString());
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtMapRemoveBenchmark extends MapBenchmarkBase {
   KtMapRemoveBenchmark({required TableScoreEmitter emitter})
@@ -100,7 +100,7 @@ class KtMapRemoveBenchmark extends MapBenchmarkBase {
   void run() => ktMap = ktMap.minus((config.size ~/ 2).toString());
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   BuiltMapMapRemoveBenchmark({required TableScoreEmitter emitter})
@@ -120,4 +120,4 @@ class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
       (MapBuilder<String, int> mapBuilder) => mapBuilder.remove((config.size ~/ 2).toString()));
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

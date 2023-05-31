@@ -5,7 +5,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
@@ -21,7 +21,7 @@ class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase>
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
   MutableMapContainsValueBenchmark({required TableScoreEmitter emitter})
@@ -42,7 +42,7 @@ class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IMapContainsValueBenchmark extends MapBenchmarkBase {
   IMapContainsValueBenchmark({required TableScoreEmitter emitter})
@@ -64,7 +64,7 @@ class IMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtMapContainsValueBenchmark extends MapBenchmarkBase {
   KtMapContainsValueBenchmark({required TableScoreEmitter emitter})
@@ -85,7 +85,7 @@ class KtMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
   BuiltMapContainsValueBenchmark({required TableScoreEmitter emitter})
@@ -107,4 +107,4 @@ class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

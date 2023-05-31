@@ -1,3 +1,7 @@
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+
 import "dart:collection";
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
@@ -31,6 +35,7 @@ import "package:meta/meta.dart";
 ///
 @immutable
 class UnmodifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEmpty {
+  //
   final IList<T>? _iList;
   final List<T>? _list;
 

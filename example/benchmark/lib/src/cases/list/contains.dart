@@ -7,7 +7,7 @@ import "package:fast_immutable_collections_benchmarks/src/utils/collection_bench
 import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
@@ -23,7 +23,7 @@ class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
         super(emitter: emitter);
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class MutableListContainsBenchmark extends ListBenchmarkBase {
   MutableListContainsBenchmark({required TableScoreEmitter emitter})
@@ -65,7 +65,7 @@ class MutableListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class IListContainsBenchmark extends ListBenchmarkBase {
   IListContainsBenchmark({required TableScoreEmitter emitter})
@@ -86,7 +86,7 @@ class IListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class KtListContainsBenchmark extends ListBenchmarkBase {
   KtListContainsBenchmark({required TableScoreEmitter emitter})
@@ -107,7 +107,7 @@ class KtListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+
 
 class BuiltListContainsBenchmark extends ListBenchmarkBase {
   BuiltListContainsBenchmark({required TableScoreEmitter emitter})
@@ -129,4 +129,4 @@ class BuiltListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+

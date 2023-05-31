@@ -1,18 +1,17 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_locals
+// Developed by Marcelo Glasberg (2021) https://glasberg.dev and https://github.com/marcglasberg
+// and Philippe Fanaro https://github.com/psygo
+// For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
+// ignore_for_file: prefer_const_constructors, prefer_final_locals, prefer_final_in_for_each
+// ignore_for_file: non_const_call_to_literal_constructor
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:test/test.dart";
 
-// ignore_for_file: non_const_call_to_literal_constructor
-
 void main() {
-  //////////////////////////////////////////////////////////////////////////////
-
+  //
   setUp(() {
     ImmutableCollection.resetAllConfigurations();
     ImmutableCollection.autoFlush = false;
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Runtime Type", () {
     expect(const ISetConst({}), isA<ISetConst>());
@@ -21,8 +20,6 @@ void main() {
     expect(const ISetConst({1}), isA<ISetConst<int>>());
     expect(const ISetConst<int>({}), isA<ISetConst<int>>());
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("isEmpty | isNotEmpty", () {
     expect(ISetConst({}).isEmpty, isTrue);
@@ -37,8 +34,6 @@ void main() {
     expect(ISetConst<int>({}).isEmpty, isTrue);
     expect(ISetConst<int>({}).isNotEmpty, isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("hashCode", () {
     expect(const ISetConst({}) == const ISetConst({}), isTrue);
@@ -63,8 +58,6 @@ void main() {
     expect(x, y);
     expect(x.hashCode, y.hashCode);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("withConfig", () {
     // 1) Regular usage
@@ -95,8 +88,6 @@ void main() {
     expect(() => sortedConstISet, throwsUnsupportedError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("unlock", () {
     const isetConst = ISetConst({1, 2, 3});
     expect(isetConst.unlock, {1, 2, 3});
@@ -109,8 +100,6 @@ void main() {
     expect(() => isetConst.unlockView..add(4), throwsUnsupportedError);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("flush", () {
     const isetConst = ISetConst({1, 2, 3});
     expect(isetConst.isFlushed, isTrue);
@@ -119,8 +108,6 @@ void main() {
     expect(isetConst.unlock, {1, 2, 3});
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("add/addAll, remove/removeAll", () {
     const isetConst = ISetConst({1, 2, 3});
     expect(isetConst.add(4), [1, 2, 3, 4]);
@@ -128,8 +115,6 @@ void main() {
     expect(isetConst.remove(2), [1, 3]);
     expect(isetConst.removeAll({1, 2}), [3]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("ISetConst", () {
     //
@@ -163,8 +148,6 @@ void main() {
     // None of the ISetConst are const. So they are NOT the same.
     expect(ISetConst({1, 2, 3}).same(ISetConst({1, 2, 3})), isFalse);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 
   test("Interaction between ISet and ISetConst", () {
     //
@@ -222,8 +205,6 @@ void main() {
     expect(const ISetConst({1, 2}).unorderedEqualItems(ISet([2, 1])), isTrue);
   });
 
-  /////////////////////////////////////////////////////////////////////////////
-
   test("Make sure the internal set is Set<int>, and not Set<Never>", () {
     var l1 = const ISetConst<int>({});
     expect(l1.runtimeType.toString(), 'ISetConst<int>');
@@ -238,8 +219,6 @@ void main() {
     expect(result, [2]);
   });
 
-  //////////////////////////////////////////////////////////////////////////////
-
   test("Test we can cast from ISetConst<Never>, when using FromISetMixin.", () {
     MySet<int> mySet1 = MySet.empty();
     mySet1 = mySet1.add(1);
@@ -249,13 +228,7 @@ void main() {
     mySet2 = mySet2.addAll([1, 2, 3]);
     expect(mySet2, [1, 2, 3]);
   });
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  //////////////////////////////////////////////////////////////////////////////
 }
-
-// ///////////////////////////////////////////////////////////////////////////////
 
 class MySet<A extends num> with FromISetMixin<A, MySet<A>> implements Iterable<A> {
   final ISet<A> numbs;
