@@ -1,3 +1,7 @@
+## [9.1.6] - 2023/10/08
+
+* Small docs improvement.
+
 ## [9.1.5] - 2023/05/31
 
 * Fixed type erasure in IMap.toJson and build issue for benchmark app.

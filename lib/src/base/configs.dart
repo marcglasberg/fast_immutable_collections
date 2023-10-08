@@ -134,7 +134,7 @@ class ConfigMap {
   final bool isDeepEquals;
 
   /// If `false` (the default), will keep the insertion order.
-  /// If `true` (the default), will sort the list output of keys.
+  /// If `true`, will sort the list output of keys.
   final bool sort;
 
   /// If `false`, the [hashCode] will be calculated each time it's used.
