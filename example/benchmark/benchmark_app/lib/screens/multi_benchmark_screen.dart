@@ -2,8 +2,6 @@ import "package:benchmark_app/utils/benchmarks.dart";
 import "package:benchmark_app/widgets/release_mode_warning.dart";
 import "package:flutter/material.dart";
 
-
-
 class MultiBenchmarkScreen extends StatelessWidget {
   final Type collectionType;
 
@@ -35,8 +33,6 @@ class MultiBenchmarkScreen extends StatelessWidget {
     );
   }
 
-  
-
   List<Widget> get _benchmarks {
     switch (collectionType) {
       case List:
@@ -50,5 +46,3 @@ class MultiBenchmarkScreen extends StatelessWidget {
     }
   }
 }
-
-
