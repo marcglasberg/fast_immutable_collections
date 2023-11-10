@@ -4,30 +4,23 @@ import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
-import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
-
-
 
 class ListContainsBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListContainsBenchmark({required TableScoreEmitter emitter})
+  ListContainsBenchmark({required super.emitter})
       : benchmarks = <ListBenchmarkBase>[
           MutableListContainsBenchmark(emitter: emitter),
           IListContainsBenchmark(emitter: emitter),
           KtListContainsBenchmark(emitter: emitter),
           BuiltListContainsBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableListContainsBenchmark extends ListBenchmarkBase {
-  MutableListContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "List (Mutable)", emitter: emitter);
+  MutableListContainsBenchmark({required super.emitter}) : super(name: "List (Mutable)");
 
   late List<int> list;
   late bool contains;
@@ -65,11 +58,8 @@ class MutableListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class IListContainsBenchmark extends ListBenchmarkBase {
-  IListContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "IList", emitter: emitter);
+  IListContainsBenchmark({required super.emitter}) : super(name: "IList");
 
   late IList<int> _iList;
   late bool contains;
@@ -86,11 +76,8 @@ class IListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class KtListContainsBenchmark extends ListBenchmarkBase {
-  KtListContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtList", emitter: emitter);
+  KtListContainsBenchmark({required super.emitter}) : super(name: "KtList");
 
   late KtList<int> _ktList;
   late bool contains;
@@ -107,11 +94,8 @@ class KtListContainsBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class BuiltListContainsBenchmark extends ListBenchmarkBase {
-  BuiltListContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltList", emitter: emitter);
+  BuiltListContainsBenchmark({required super.emitter}) : super(name: "BuiltList");
 
   late BuiltList<int> _builtList;
   late bool contains;
@@ -128,5 +112,3 @@ class BuiltListContainsBenchmark extends ListBenchmarkBase {
     for (int i = 0; i < _builtList.length + 1; i++) contains = _builtList.contains(i);
   }
 }
-
-

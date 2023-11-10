@@ -6,27 +6,21 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/collection.dart";
 
-
-
 class SetRemoveBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
 
-  SetRemoveBenchmark({required TableScoreEmitter emitter})
+  SetRemoveBenchmark({required super.emitter})
       : benchmarks = <SetBenchmarkBase>[
           MutableSetRemoveBenchmark(emitter: emitter),
           ISetRemoveBenchmark(emitter: emitter),
           KtSetRemoveBenchmark(emitter: emitter),
           BuiltSetRemoveBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableSetRemoveBenchmark extends SetBenchmarkBase {
-  MutableSetRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "Set (Mutable)", emitter: emitter);
+  MutableSetRemoveBenchmark({required super.emitter}) : super(name: "Set (Mutable)");
 
   late Set<int> set;
   late int count;
@@ -58,10 +52,8 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class ISetRemoveBenchmark extends SetBenchmarkBase {
-  ISetRemoveBenchmark({required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
+  ISetRemoveBenchmark({required super.emitter}) : super(name: "ISet");
 
   late ISet<int> fixedSet;
   late ISet<int> iSet;
@@ -79,11 +71,8 @@ class ISetRemoveBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class KtSetRemoveBenchmark extends SetBenchmarkBase {
-  KtSetRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtSet", emitter: emitter);
+  KtSetRemoveBenchmark({required super.emitter}) : super(name: "KtSet");
 
   late KtSet<int> fixedSet;
   late KtSet<int> ktSet;
@@ -101,11 +90,11 @@ class KtSetRemoveBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
-  BuiltSetRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltSet", emitter: emitter);
+  BuiltSetRemoveBenchmark({required super.emitter}) : super(name: "BuiltSet") {
+    // TODO: implement BuiltSetRemoveBenchmark
+    throw UnimplementedError();
+  }
 
   late BuiltSet<int> fixedSet;
   late BuiltSet<int> builtSet;
@@ -123,5 +112,3 @@ class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
         fixedSet.rebuild((SetBuilder<int> setBuilder) => setBuilder.remove(config.size ~/ 2));
   }
 }
-
-

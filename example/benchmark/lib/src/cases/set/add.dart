@@ -6,28 +6,22 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/kt.dart";
 
-
-
 class SetAddBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
 
-  SetAddBenchmark({required TableScoreEmitter emitter})
+  SetAddBenchmark({required super.emitter})
       : benchmarks = <SetBenchmarkBase>[
           MutableSetAddBenchmark(emitter: emitter),
           ISetAddBenchmark(emitter: emitter),
           KtSetAddBenchmark(emitter: emitter),
           BuiltSetAddWithRebuildBenchmark(emitter: emitter),
           BuiltSetAddWithSetBuilderBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableSetAddBenchmark extends SetBenchmarkBase {
-  MutableSetAddBenchmark({required TableScoreEmitter emitter})
-      : super(name: "Set (Mutable)", emitter: emitter);
+  MutableSetAddBenchmark({required super.emitter}) : super(name: "Set (Mutable)");
 
   late Set<int> set;
 
@@ -65,10 +59,8 @@ class MutableSetAddBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class ISetAddBenchmark extends SetBenchmarkBase {
-  ISetAddBenchmark({required TableScoreEmitter emitter}) : super(name: "ISet", emitter: emitter);
+  ISetAddBenchmark({required super.emitter}) : super(name: "ISet");
 
   late ISet<int> iSet;
   late ISet<int> result;
@@ -90,10 +82,8 @@ class ISetAddBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class KtSetAddBenchmark extends SetBenchmarkBase {
-  KtSetAddBenchmark({required TableScoreEmitter emitter}) : super(name: "KtSet", emitter: emitter);
+  KtSetAddBenchmark({required super.emitter}) : super(name: "KtSet");
 
   late KtSet<int> ktSet;
   late KtSet<int> result;
@@ -115,11 +105,8 @@ class KtSetAddBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
-  BuiltSetAddWithRebuildBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltSet (Rebuild)", emitter: emitter);
+  BuiltSetAddWithRebuildBenchmark({required super.emitter}) : super(name: "BuiltSet (Rebuild)");
 
   late BuiltSet<int> builtSet;
   late BuiltSet<int> result;
@@ -142,11 +129,9 @@ class BuiltSetAddWithRebuildBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
-  BuiltSetAddWithSetBuilderBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltSet (ListBuilder)", emitter: emitter);
+  BuiltSetAddWithSetBuilderBenchmark({required super.emitter})
+      : super(name: "BuiltSet (ListBuilder)");
 
   late BuiltSet<int> builtSet;
   late BuiltSet<int> result;
@@ -168,5 +153,3 @@ class BuiltSetAddWithSetBuilderBenchmark extends SetBenchmarkBase {
     result = setBuilder.build();
   }
 }
-
-

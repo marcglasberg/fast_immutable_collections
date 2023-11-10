@@ -1,13 +1,12 @@
 // ignore_for_file: overridden_fields
 
 import "dart:math";
+
 import "package:benchmark_harness/benchmark_harness.dart";
 import "package:meta/meta.dart";
 
 import "records.dart";
 import "table_score_emitter.dart";
-
-
 
 abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
   final TableScoreEmitter emitter;
@@ -21,8 +20,6 @@ abstract class MultiBenchmarkReporter<B extends CollectionBenchmarkBase> {
 
   void saveReports() => benchmarks.forEach((B benchmark) => benchmark.emitter.saveReport());
 }
-
-
 
 abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   @override
@@ -58,13 +55,11 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   }
 }
 
-
-
 abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   ListBenchmarkBase({
-    required String name,
-    required TableScoreEmitter emitter,
-  }) : super(name: name, emitter: emitter);
+    required super.name,
+    required super.emitter,
+  });
 
   static List<int> getDummyGeneratedList({required int size}) =>
       List<int>.generate(size, (int index) => index);
@@ -77,13 +72,14 @@ abstract class ListBenchmarkBase extends CollectionBenchmarkBase<List<int>> {
   int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
-
-
 abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   SetBenchmarkBase({
-    required String name,
-    required TableScoreEmitter emitter,
-  }) : super(name: name, emitter: emitter);
+    required super.name,
+    required super.emitter,
+  }) {
+    // TODO: implement SetBenchmarkBase
+    throw UnimplementedError();
+  }
 
   static Set<int> getDummyGeneratedSet({required int size}) =>
       Set<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: size));
@@ -96,13 +92,11 @@ abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
 
-
-
 abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>> {
   MapBenchmarkBase({
-    required String name,
-    required TableScoreEmitter emitter,
-  }) : super(name: name, emitter: emitter);
+    required super.name,
+    required super.emitter,
+  });
 
   static Map<String, int> getDummyGeneratedMap({required int size}) =>
       Map<String, int>.fromEntries(List<MapEntry<String, int>>.generate(
@@ -115,5 +109,3 @@ abstract class MapBenchmarkBase extends CollectionBenchmarkBase<Map<String, int>
 
   int innerRuns() => min(1000, max(1, config.size ~/ 10));
 }
-
-

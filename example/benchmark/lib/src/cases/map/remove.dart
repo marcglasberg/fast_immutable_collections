@@ -6,29 +6,22 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:kt_dart/collection.dart";
 
 import "../../utils/collection_benchmark_base.dart";
-import "../../utils/table_score_emitter.dart";
-
-
 
 class MapRemoveBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
 
-  MapRemoveBenchmark({required TableScoreEmitter emitter})
+  MapRemoveBenchmark({required super.emitter})
       : benchmarks = <MapBenchmarkBase>[
           MutableMapRemoveBenchmark(emitter: emitter),
           IMapRemoveBenchmark(emitter: emitter),
           KtMapRemoveBenchmark(emitter: emitter),
           BuiltMapMapRemoveBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableMapRemoveBenchmark extends MapBenchmarkBase {
-  MutableMapRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "Map (Mutable)", emitter: emitter);
+  MutableMapRemoveBenchmark({required super.emitter}) : super(name: "Map (Mutable)");
 
   late Map<String, int> map;
 
@@ -63,10 +56,8 @@ class MutableMapRemoveBenchmark extends MapBenchmarkBase {
   }
 }
 
-
-
 class IMapRemoveBenchmark extends MapBenchmarkBase {
-  IMapRemoveBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
+  IMapRemoveBenchmark({required super.emitter}) : super(name: "IMap");
 
   late IMap<String, int> iMap;
 
@@ -81,11 +72,8 @@ class IMapRemoveBenchmark extends MapBenchmarkBase {
   void run() => iMap = iMap.remove((config.size ~/ 2).toString());
 }
 
-
-
 class KtMapRemoveBenchmark extends MapBenchmarkBase {
-  KtMapRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+  KtMapRemoveBenchmark({required super.emitter}) : super(name: "KtMap");
 
   late KtMap<String, int> ktMap;
 
@@ -100,11 +88,8 @@ class KtMapRemoveBenchmark extends MapBenchmarkBase {
   void run() => ktMap = ktMap.minus((config.size ~/ 2).toString());
 }
 
-
-
 class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
-  BuiltMapMapRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltMap", emitter: emitter);
+  BuiltMapMapRemoveBenchmark({required super.emitter}) : super(name: "BuiltMap");
 
   late BuiltMap<String, int> builtMap;
 
@@ -119,5 +104,3 @@ class BuiltMapMapRemoveBenchmark extends MapBenchmarkBase {
   void run() => builtMap = builtMap.rebuild(
       (MapBuilder<String, int> mapBuilder) => mapBuilder.remove((config.size ~/ 2).toString()));
 }
-
-

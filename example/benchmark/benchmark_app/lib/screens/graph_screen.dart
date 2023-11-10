@@ -2,8 +2,6 @@ import "package:benchmark_app/widgets/bar_chart.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:flutter/material.dart";
 
-
-
 class GraphScreen extends StatefulWidget {
   final String title;
   final List<RecordsTable>? tables;
@@ -16,8 +14,6 @@ class GraphScreen extends StatefulWidget {
   @override
   _GraphScreenState createState() => _GraphScreenState();
 }
-
-
 
 class _GraphScreenState extends State<GraphScreen> {
   static final BoxDecoration bottomDecoration = BoxDecoration(
@@ -144,8 +140,6 @@ class _GraphScreenState extends State<GraphScreen> {
   }
 }
 
-
-
 class _DropdownButton extends StatelessWidget {
   //
   final VoidCallback onTap;
@@ -159,13 +153,13 @@ class _DropdownButton extends StatelessWidget {
         onTap: onTap,
         child: Container(
           margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 8),
-          child: ColoredBox(
-            color: const Color(0x22000000),
+          child: const ColoredBox(
+            color: Color(0x22000000),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text("Filters", style: TextStyle(fontSize: 20)),
                   Icon(Icons.arrow_drop_down),
                 ],
@@ -178,8 +172,6 @@ class _DropdownButton extends StatelessWidget {
   }
 }
 
-
-
 class _FilterDialog extends StatefulWidget {
   //
   final Map<String, bool> filters;
@@ -190,8 +182,6 @@ class _FilterDialog extends StatefulWidget {
   @override
   _FilterDialogState createState() => _FilterDialogState();
 }
-
-
 
 class _FilterDialogState extends State<_FilterDialog> {
   //
@@ -252,5 +242,3 @@ class _FilterDialogState extends State<_FilterDialog> {
     );
   }
 }
-
-

@@ -4,30 +4,23 @@ import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
-import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/collection.dart";
-
-
 
 class ListRemoveBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListRemoveBenchmark({required TableScoreEmitter emitter})
+  ListRemoveBenchmark({required super.emitter})
       : benchmarks = <ListBenchmarkBase>[
           MutableListRemoveBenchmark(emitter: emitter),
           IListRemoveBenchmark(emitter: emitter),
           KtListRemoveBenchmark(emitter: emitter),
           BuiltListRemoveBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableListRemoveBenchmark extends ListBenchmarkBase {
-  MutableListRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "List (Mutable)", emitter: emitter);
+  MutableListRemoveBenchmark({required super.emitter}) : super(name: "List (Mutable)");
 
   late List<int> list;
 
@@ -64,11 +57,8 @@ class MutableListRemoveBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class IListRemoveBenchmark extends ListBenchmarkBase {
-  IListRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "IList", emitter: emitter);
+  IListRemoveBenchmark({required super.emitter}) : super(name: "IList");
 
   late IList<int> iList;
 
@@ -82,11 +72,8 @@ class IListRemoveBenchmark extends ListBenchmarkBase {
   void run() => iList = iList.remove(config.size ~/ 2);
 }
 
-
-
 class KtListRemoveBenchmark extends ListBenchmarkBase {
-  KtListRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtList", emitter: emitter);
+  KtListRemoveBenchmark({required super.emitter}) : super(name: "KtList");
 
   late KtList<int> ktList;
 
@@ -101,11 +88,8 @@ class KtListRemoveBenchmark extends ListBenchmarkBase {
   void run() => ktList = ktList.minusElement(config.size ~/ 2);
 }
 
-
-
 class BuiltListRemoveBenchmark extends ListBenchmarkBase {
-  BuiltListRemoveBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltList", emitter: emitter);
+  BuiltListRemoveBenchmark({required super.emitter}) : super(name: "BuiltList");
 
   late BuiltList<int> builtList;
 
@@ -120,5 +104,3 @@ class BuiltListRemoveBenchmark extends ListBenchmarkBase {
   void run() => builtList =
       builtList.rebuild((ListBuilder<int> listBuilder) => listBuilder.remove(config.size ~/ 2));
 }
-
-

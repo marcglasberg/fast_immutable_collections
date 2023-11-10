@@ -223,7 +223,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
-  @useCopy
+  @useResult
   ISet<T> withConfig(ConfigSet config) {
     if (config == this.config)
       return this;
@@ -241,7 +241,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Returns a new set with the contents of the present [ISet],
   /// but the config of [other].
-  @useCopy
+  @useResult
   ISet<T> withConfigFrom(ISet<T> other) => withConfig(other.config);
 
   /// Creates a set in which the items are computed from the [iterable].
@@ -250,7 +250,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// by applying [mapper]. The items of this resulting iterable will be added
   /// to the set.
   ///
-  @useCopy
+  @useResult
   static ISet<T> fromIterable<T, I>(
     Iterable<I> iterable, {
     required Iterable<T>? Function(I) mapper,
@@ -301,7 +301,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   ///   Students(names: names ?? this.names);
   /// ```
   ///
-  @useCopy
+  @useResult
   static ISet<T>? orNull<T>(
     Iterable<T>? iterable, [
     ConfigSet? config,
@@ -389,12 +389,12 @@ abstract class ISet<T> // ignore: must_be_immutable
       ISetImpl._unsafeFromSet(set, config: config);
 
   /// Creates a set with `identityEquals` (compares the internals by `identity`).
-  @useCopy
+  @useResult
   ISet<T> get withIdentityEquals =>
       config.isDeepEquals ? ISet._unsafe(_s, config: config.copyWith(isDeepEquals: false)) : this;
 
   /// Creates a set with `deepEquals` (compares all set items by equality).
-  @useCopy
+  @useResult
   ISet<T> get withDeepEquals =>
       config.isDeepEquals ? this : ISet._unsafe(_s, config: config.copyWith(isDeepEquals: true));
 
@@ -470,7 +470,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Returns the concatenation of this set and [other].
   /// Returns a new set containing the elements of this set followed by
   /// the elements of [other].
-  @useCopy
+  @useResult
   ISet<T> operator +(Iterable<T> other) => addAll(other);
 
   /// Will return `true` only if the [ISet] has the same number of items as the
@@ -560,7 +560,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   bool get isFlushed => _s is SFlat;
 
   /// Returns a new set containing the current set plus the given item.
-  @useCopy
+  @useResult
   ISet<T> add(T item) {
     final ISet<T> result = config.sort
         ? ISet._unsafe(SFlat(_s.followedBy([item]), config: config), config: config)
@@ -578,7 +578,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Returns a new set containing the current set plus all the given items.
-  @useCopy
+  @useResult
   ISet<T> addAll(Iterable<T>? items) {
     ISet<T> result;
     result = config.sort
@@ -599,7 +599,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Returns a new set containing the current set minus the given item.
   /// However, if the given item didn't exist in the current set,
   /// it will return the current set (same instance).
-  @useCopy
+  @useResult
   ISet<T> remove(T item) {
     final S<T> result = _s.remove(item);
     return identical(result, _s)
@@ -612,7 +612,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Removes the element, if it exists in the set.
   /// Otherwise, adds it to the set.
-  @useCopy
+  @useResult
   ISet<T> toggle(T item) => contains(item) ? remove(item) : add(item);
 
   /// Checks whether any element of this iterable satisfies [test].
@@ -859,7 +859,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Returns an empty set with the same configuration.
-  @useCopy
+  @useResult
   ISet<T> clear() => ISetImpl.empty<T>(config);
 
   /// Returns whether this [ISet] contains all the elements of [other].
@@ -883,7 +883,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are not elements of [other] according to `other.contains`.
-  @useCopy
+  @useResult
   ISet<T> difference(Iterable<T> other) {
     final Set<T> otherSet = _setFromIterable(other);
     return ISet._unsafeFromSet(_s.difference(otherSet), config: config);
@@ -893,7 +893,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   ///
   /// That is, the returned set contains all the elements of this [ISet] that
   /// are also elements of [other] according to `other.contains`.
-  @useCopy
+  @useResult
   ISet<T> intersection(Iterable<T> other) {
     final Set<T> otherSet = _setFromIterable(other);
     return ISet._unsafeFromSet(_s.intersection(otherSet), config: config);
@@ -903,7 +903,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   ///
   /// That is, the returned set contains all the elements of this [ISet] and
   /// all the elements of [other].
-  @useCopy
+  @useResult
   ISet<T> union(Iterable<T> other) => addAll(other);
 
   /// If an object equal to [object] is in the set, return it.
@@ -925,13 +925,13 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 
   /// Removes each element of [elements] from this set.
-  @useCopy
+  @useResult
   ISet<T> removeAll(Iterable<Object?> elements) {
     return ISet._unsafeFromSet(unlock..removeAll(elements), config: config);
   }
 
   /// Removes all elements of this set that satisfy [test].
-  @useCopy
+  @useResult
   ISet<T> removeWhere(Predicate<T> test) {
     return ISet._unsafeFromSet(unlock..removeWhere(test), config: config);
   }
@@ -942,13 +942,13 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// set that is equal to it (according to `this.contains`), and if so, the
   /// equal element in this set is retained, and elements that are not equal
   /// to any element in `elements` are removed.
-  @useCopy
+  @useResult
   ISet<T> retainAll(Iterable<Object?> elements) {
     return ISet._unsafeFromSet(unlock..retainAll(elements), config: config);
   }
 
   /// Removes all elements of this set that fail to satisfy [test].
-  @useCopy
+  @useResult
   ISet<T> retainWhere(Predicate<T> test) {
     return ISet._unsafeFromSet(unlock..retainWhere(test), config: config);
   }

@@ -6,28 +6,22 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/kt.dart";
 
-
-
 class ListAddBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListAddBenchmark({required TableScoreEmitter emitter})
+  ListAddBenchmark({required super.emitter})
       : benchmarks = <ListBenchmarkBase>[
           MutableListAddBenchmark(emitter: emitter),
           IListAddBenchmark(emitter: emitter),
           KtListAddBenchmark(emitter: emitter),
           BuiltListAddWithRebuildBenchmark(emitter: emitter),
           BuiltListAddWithListBuilderBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableListAddBenchmark extends ListBenchmarkBase {
-  MutableListAddBenchmark({required TableScoreEmitter emitter})
-      : super(name: "List (Mutable)", emitter: emitter);
+  MutableListAddBenchmark({required super.emitter}) : super(name: "List (Mutable)");
 
   late List<int> list;
 
@@ -65,10 +59,8 @@ class MutableListAddBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class IListAddBenchmark extends ListBenchmarkBase {
-  IListAddBenchmark({required TableScoreEmitter emitter}) : super(name: "IList", emitter: emitter);
+  IListAddBenchmark({required super.emitter}) : super(name: "IList");
 
   late IList<int> iList;
   late IList<int> result;
@@ -90,11 +82,8 @@ class IListAddBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class KtListAddBenchmark extends ListBenchmarkBase {
-  KtListAddBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtList", emitter: emitter);
+  KtListAddBenchmark({required super.emitter}) : super(name: "KtList");
 
   late KtList<int> ktList;
   late KtList<int> result;
@@ -114,11 +103,8 @@ class KtListAddBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
-  BuiltListAddWithRebuildBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltList (Rebuild)", emitter: emitter);
+  BuiltListAddWithRebuildBenchmark({required super.emitter}) : super(name: "BuiltList (Rebuild)");
 
   late BuiltList<int> builtList;
   late BuiltList<int> result;
@@ -139,11 +125,9 @@ class BuiltListAddWithRebuildBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
-  BuiltListAddWithListBuilderBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltList (ListBuilder)", emitter: emitter);
+  BuiltListAddWithListBuilderBenchmark({required super.emitter})
+      : super(name: "BuiltList (ListBuilder)");
 
   late BuiltList<int> builtList;
   late BuiltList<int> result;
@@ -163,5 +147,3 @@ class BuiltListAddWithListBuilderBenchmark extends ListBenchmarkBase {
     result = listBuilder.build();
   }
 }
-
-

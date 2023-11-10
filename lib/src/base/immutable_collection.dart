@@ -3,9 +3,6 @@
 // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
-import 'package:meta/meta.dart';
-
-const UseResult useCopy = UseResult('Modified copy is being discarded.');
 
 abstract class ImmutableCollection<C> implements CanBeEmpty {
   //

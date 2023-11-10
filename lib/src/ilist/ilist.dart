@@ -226,14 +226,14 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// See also: [withIdentityEquals] and [withDeepEquals].
   ///
-  @useCopy
+  @useResult
   IList<T> withConfig(ConfigList config) {
     return (config == this.config) ? this : IList._unsafe(_l, config: config);
   }
 
   /// Returns a new list with the contents of the present [IList],
   /// but the config of [other].
-  @useCopy
+  @useResult
   IList<T> withConfigFrom(IList<T> other) => withConfig(other.config);
 
   /// Special [IList] constructor from [ISet].
@@ -286,7 +286,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///   Students(names: names ?? this.names);
   /// ```
   ///
-  @useCopy
+  @useResult
   static IList<T>? orNull<T>(
     Iterable<T>? iterable, [
     ConfigList? config,
@@ -310,7 +310,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Apply Op on previous state of base and return all results
-  @useCopy
+  @useResult
   static IList<U> iterate<U>(U base, int count, Op<U> op) {
     IList<U> iterations() {
       final l = List.filled(count, base, growable: false);
@@ -331,7 +331,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Apply Op on previous state of base while predicate pass then return all results
-  @useCopy
+  @useResult
   static IList<U> iterateWhile<U>(U base, Predicate<U> test, Op<U> op) {
     final l = <U>[];
     U acc = base;
@@ -454,12 +454,12 @@ abstract class IList<T> // ignore: must_be_immutable
       IListImpl._unsafeFromList(list, config: config);
 
   /// Creates a list with `identityEquals` (compares the internals by `identity`).
-  @useCopy
+  @useResult
   IList<T> get withIdentityEquals =>
       config.isDeepEquals ? IList._unsafe(_l, config: config.copyWith(isDeepEquals: false)) : this;
 
   /// Creates a list with `deepEquals` (compares all list items by equality).
-  @useCopy
+  @useResult
   IList<T> get withDeepEquals =>
       config.isDeepEquals ? this : IList._unsafe(_l, config: config.copyWith(isDeepEquals: true));
 
@@ -607,7 +607,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Return a new list with [item] added to the end of the current list,
   /// (thus extending the [length] by one).
-  @useCopy
+  @useResult
   IList<T> add(T item) {
     final result = IList<T>._unsafe(_l.add(item), config: config);
 
@@ -624,7 +624,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Returns a new list with all [items] added to the end of the current list,
   /// (thus extending the [length] by the [length] of items).
-  @useCopy
+  @useResult
   IList<T> addAll(Iterable<T> items) {
     if (_l is L<Never>) return IListImpl.unsafe(_l.cast<T>().toList(), config: config);
     final result = IList<T>._unsafe(_l.addAll(items), config: config);
@@ -652,7 +652,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// item with the same [id], the last one will be used, and the previous
   /// discarded.
   ///
-  @useCopy
+  @useResult
   IList<T> updateById(
     Iterable<T> newItems,
     dynamic Function(T item) id,
@@ -669,7 +669,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// The method has no effect if [item] was not in the list.
   ///
-  @useCopy
+  @useResult
   IList<T> remove(T item) {
     final L<T> result = _l.remove(item);
     return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
@@ -680,7 +680,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// The method has no effect if [item] was not in the list.
   ///
-  @useCopy
+  @useResult
   IList<T> removeAll(Iterable<T?> items) {
     final L<T> result = _l.removeAll(items);
     return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
@@ -696,19 +696,19 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// The method has no effect if [item] was not in the list.
   ///
-  @useCopy
+  @useResult
   IList<T> removeMany(T item) {
     final L<T> result = _l.removeMany(item);
     return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all nulls from this list.
-  @useCopy
+  @useResult
   IList<T> removeNulls() => removeAll([null]);
 
   /// Removes duplicates (but keeps items which appear only
   /// once, plus the first time other items appear).
-  @useCopy
+  @useResult
   IList<T> removeDuplicates() {
     final LinkedHashSet<T> set = _l.toLinkedHashSet();
     return IList<T>.withConfig(set, config);
@@ -716,7 +716,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Removes duplicates (but keeps items which appear only
   /// once, plus the first time other items appear).
-  @useCopy
+  @useResult
   IList<T> removeNullsAndDuplicates() {
     final LinkedHashSet<T> set = _l.toLinkedHashSet();
     set.remove(null);
@@ -725,7 +725,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Removes the first instance of the element, if it exists in the list.
   /// Otherwise, adds it to the list.
-  @useCopy
+  @useResult
   IList<T> toggle(T element) => contains(element) ? remove(element) : add(element);
 
   /// Returns the object at the given [index] in the list or throws a [RangeError] if [index] is out
@@ -951,7 +951,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// If you want, you can provide a [priority] comparator, such as the elements to be removed are
   /// the ones that would be in the end of a list sorted with this comparator (the order of the
   /// remaining elements won't change).
-  @useCopy
+  @useResult
   IList<T> maxLength(
     int maxLength, {
     int Function(T a, T b)? priority,
@@ -1012,7 +1012,7 @@ abstract class IList<T> // ignore: must_be_immutable
       IList._unsafe(_l.sort(compare), config: config);
 
   /// Sorts this list in reverse order in relation to the default [sort] method.
-  @useCopy
+  @useResult
   IList<T> sortReversed([int Function(T a, T b)? compare]) {
     return (compare != null)
         ? sort((T a, T b) => compare(b, a))
@@ -1031,7 +1031,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// numbers = numbers.sort((a, b) => a.length.compareTo(b.length));
   /// print(numbers);  // [one, two, four, three]
   /// ```
-  @useCopy
+  @useResult
   IList<T> sortOrdered([int Function(T a, T b)? compare]) =>
       IList._unsafe(_l.sortOrdered(compare), config: config);
 
@@ -1041,7 +1041,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Note: Not very efficient at the moment (will be improved in the future).
   /// Please use for a small number of items.
   ///
-  @useCopy
+  @useResult
   IList<T> sortLike(Iterable<T> ordering) => IList._unsafe(_l.sortLike(ordering), config: config);
 
   /// Divides the list into two.
@@ -1050,7 +1050,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// The relative order of the items will be maintained.
   ///
   /// See also: [IListOf2]
-  @useCopy
+  @useResult
   IListOf2<IList<T>> divideIn2(bool Function(T item) test) {
     final List<T> first = [];
     final List<T> last = [];
@@ -1084,7 +1084,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Moves all items that satisfy the provided [test] to the end of the list.
   /// Keeps the relative order of the moved items.
-  @useCopy
+  @useResult
   IList<T> whereMoveToTheEnd(bool Function(T item) test) {
     final IListOf2<IList<T>> lists = divideIn2(test);
     return lists.last + lists.first;
@@ -1092,7 +1092,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Moves all items that satisfy the provided [test] to the start of the list.
   /// Keeps the relative order of the moved items.
-  @useCopy
+  @useResult
   IList<T> whereMoveToTheStart(bool Function(T item) test) {
     final IListOf2<IList<T>> lists = divideIn2(test);
     return lists.first + lists.last;
@@ -1131,7 +1131,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Returns the concatenation of this list and [other].
   /// Returns a new list containing the elements of this list followed by
   /// the elements of [other].
-  @useCopy
+  @useResult
   IList<T> operator +(Iterable<T> other) => addAll(other);
 
   /// Returns an [IMap] view of this list.
@@ -1145,11 +1145,11 @@ abstract class IList<T> // ignore: must_be_immutable
   /// print(imap[0] + imap[1]); // Prints 'hello';
   /// imap.keys.toList(); // [0, 1, 2, 3]
   /// ```
-  @useCopy
+  @useResult
   IMap<int, T> asMap() => IMap<int, T>(UnmodifiableListFromIList(this).asMap());
 
   /// Returns an empty list with the same configuration.
-  @useCopy
+  @useResult
   IList<T> clear() => IListImpl.empty<T>(config);
 
   /// Returns the index of the first [element] in the list.
@@ -1188,21 +1188,21 @@ abstract class IList<T> // ignore: must_be_immutable
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
   /// See also: [replace] (same as [put]) and [replaceBy].
-  @useCopy
+  @useResult
   IList<T> put(int index, T value) {
     _count();
     return replace(index, value);
   }
 
   /// Finds the first occurrence of [from], and replace it with [to].
-  @useCopy
+  @useResult
   IList<T> replaceFirst({required T from, required T to}) {
     final index = indexOf(from);
     return (index == -1) ? this : put(index, to);
   }
 
   /// Finds all occurrences of [from], and replace them with [to].
-  @useCopy
+  @useResult
   IList<T> replaceAll({required T from, required T to}) =>
       map((element) => (element == from) ? to : element).toIList(config);
 
@@ -1215,7 +1215,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// - If [addIfNotFound] is `true`, add the [replacement]
   /// to the end of the list if no item satisfies the [test].
   ///
-  @useCopy
+  @useResult
   IList<T> replaceFirstWhere(
     bool Function(T item) test,
     T Function(T? item) replacement, {
@@ -1231,7 +1231,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Finds all items that satisfy the provided [test],
   /// and replace it with [to].
-  @useCopy
+  @useResult
   IList<T> replaceAllWhere(Predicate<T> test, T to) =>
       map((element) => test(element) ? to : element).toIList(config);
 
@@ -1252,7 +1252,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// If no [item]s satisfy the [test], or if [convert] kept items unchanged,
   /// [process] will return the same list instance.
   ///
-  @useCopy
+  @useResult
   IList<T> process({
     bool Function(IList<T> list, int index, T item)? test,
     required Iterable<T>? Function(IList<T> list, int index, T item) convert,
@@ -1392,7 +1392,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// has the same number of elements as the replaced range. In that case use
   /// [setRange] instead.
   ///
-  @useCopy
+  @useResult
   IList<T> replaceRange(int start, int end, Iterable<T> replacement) {
     // TODO: Still need to implement efficiently.
     return IList._unsafeFromList(toList(growable: true)..replaceRange(start, end, replacement),
@@ -1426,7 +1426,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// If the element type is not nullable, omitting [fillValue] or passing `null`
   /// as [fillValue] will make the `fillRange` fail.
   ///
-  @useCopy
+  @useResult
   IList<T> fillRange(int start, int end, [T? fillValue]) {
     // TODO: Still need to implement efficiently.
     return IList._unsafeFromList(toList(growable: false)..fillRange(start, end, fillValue),
@@ -1453,7 +1453,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// the `List`, but to get a range here you should probably use the
   /// `IList.sublist()` method instead.
   ///
-  @useCopy
+  @useResult
   Iterable<T> getRange(int start, int end) {
     // TODO: Still need to implement efficiently.
     return toList(growable: false).getRange(start, end);
@@ -1479,7 +1479,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// The `start` and `end` positions must satisfy the relations
   /// 0 ≤ `start` ≤ `end` ≤ `this.length`
   /// If `end` is equal to `start`, then the returned list is empty.
-  @useCopy
+  @useResult
   IList<T> sublist(int start, [int? end]) {
     // TODO: Still need to implement efficiently.
     return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
@@ -1490,7 +1490,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
   /// See also: [put] (same as [replace]) and [replaceBy].
-  @useCopy
+  @useResult
   IList<T> replace(int index, T value) {
     // TODO: Still need to implement efficiently.
     final newList = toList(growable: false);
@@ -1505,7 +1505,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// If the index doesn't exist (negative, or out of range), will throw an error.
   ///
   /// See also: [replace].
-  @useCopy
+  @useResult
   IList<T> replaceBy(int index, T Function(T item) transform) {
     final T originalValue = get(index);
     final T transformed = transform(originalValue);
@@ -1519,7 +1519,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// The list must be growable.
   /// The [index] value must be non-negative and no greater than [length].
-  @useCopy
+  @useResult
   IList<T> insert(int index, T element) {
     // TODO: Still need to implement efficiently.
     return IList._unsafeFromList(toList(growable: true)..insert(index, element), config: config);
@@ -1532,7 +1532,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// The list must be growable.
   /// The [index] value must be non-negative and no greater than [length].
-  @useCopy
+  @useResult
   IList<T> insertAll(int index, Iterable<T> iterable) {
     // TODO: Still need to implement efficiently.
     return IList._unsafeFromList(toList(growable: true)..insertAll(index, iterable),
@@ -1549,7 +1549,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// The [index] must be in the range `0 ≤ index < length`.
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
-  @useCopy
+  @useResult
   IList<T> removeAt(int index, [Output<T>? removedItem]) {
     // TODO: Still need to implement efficiently.
     final list = toList(growable: true);
@@ -1565,7 +1565,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// If you want to recover the removed item, you can pass a mutable [removedItem].
   ///
-  @useCopy
+  @useResult
   IList<T> removeLast([Output<T>? removedItem]) => removeAt(length - 1, removedItem);
 
   /// Removes the objects in the range [start] inclusive to [end] exclusive.
@@ -1575,7 +1575,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// `len` is this list's `length`. The range starts at `start` and has length
   /// `end - start`. An empty range (with `end == start`) is valid.
   ///
-  @useCopy
+  @useResult
   IList<T> removeRange(int start, int end) {
     // TODO: Still need to implement efficiently.
     final list = toList(growable: true);
@@ -1592,7 +1592,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// final IList<String> newNumbers = numbers.removeWhere((item) => item.length == 3);
   /// newNumbers.join(', '); // 'three, four'
   /// ```
-  @useCopy
+  @useResult
   IList<T> removeWhere(Predicate<T> test) {
     // TODO: Still need to implement efficiently.
     final list = toList(growable: true);
@@ -1609,7 +1609,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// final IList<String> newNumbers = numbers.retainWhere((item) => item.length == 3);
   /// newNumbers.join(', '); // 'one, two'
   /// ```
-  @useCopy
+  @useResult
   IList<T> retainWhere(Predicate<T> test) {
     // TODO: Still need to implement efficiently.
     final list = toList(growable: true);
@@ -1618,7 +1618,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Returns an [Iterable] of the objects in this list in reverse order.
-  @useCopy
+  @useResult
   IList<T> get reversed {
     // TODO: Still need to implement efficiently.
     final Iterable<T> list = UnmodifiableListFromIList(this).reversed;
@@ -1642,7 +1642,7 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   /// If `iterable` is based on this list, its values may change *during* the
   /// `setAll` operation.
-  @useCopy
+  @useResult
   IList<T> setAll(int index, Iterable<T> iterable) {
     // TODO: Still need to implement efficiently.
     final list = toList(growable: true);
@@ -1675,7 +1675,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// If [iterable] depends on this list in some other way, no guarantees are
   /// made.
   ///
-  @useCopy
+  @useResult
   IList<T> setRange(int start, int end, Iterable<T> iterable, [int skipCount = 0]) {
     // TODO: Still need to implement efficiently.
     final list = toList(growable: true);
@@ -1684,7 +1684,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Shuffles the elements of this list randomly.
-  @useCopy
+  @useResult
   IList<T> shuffle([Random? random]) =>
       IList._unsafeFromList(toList()..shuffle(random), config: config);
 

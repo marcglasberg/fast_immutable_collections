@@ -2,30 +2,23 @@
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
-import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
-
-
 
 class MapContainsValueBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
 
-  MapContainsValueBenchmark({required TableScoreEmitter emitter})
+  MapContainsValueBenchmark({required super.emitter})
       : benchmarks = <MapBenchmarkBase>[
           MutableMapContainsValueBenchmark(emitter: emitter),
           IMapContainsValueBenchmark(emitter: emitter),
           KtMapContainsValueBenchmark(emitter: emitter),
           BuiltMapContainsValueBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
-  MutableMapContainsValueBenchmark({required TableScoreEmitter emitter})
-      : super(name: "Map (Mutable)", emitter: emitter);
+  MutableMapContainsValueBenchmark({required super.emitter}) : super(name: "Map (Mutable)");
 
   late Map<String, int> map;
   late bool contains;
@@ -42,11 +35,8 @@ class MutableMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
-
-
 class IMapContainsValueBenchmark extends MapBenchmarkBase {
-  IMapContainsValueBenchmark({required TableScoreEmitter emitter})
-      : super(name: "IMap", emitter: emitter);
+  IMapContainsValueBenchmark({required super.emitter}) : super(name: "IMap");
 
   late IMap<String, int> iMap;
   late bool contains;
@@ -64,11 +54,8 @@ class IMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
-
-
 class KtMapContainsValueBenchmark extends MapBenchmarkBase {
-  KtMapContainsValueBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+  KtMapContainsValueBenchmark({required super.emitter}) : super(name: "KtMap");
 
   late KtMap<String, int> ktMap;
   late bool contains;
@@ -85,11 +72,8 @@ class KtMapContainsValueBenchmark extends MapBenchmarkBase {
   }
 }
 
-
-
 class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
-  BuiltMapContainsValueBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltMap", emitter: emitter);
+  BuiltMapContainsValueBenchmark({required super.emitter}) : super(name: "BuiltMap");
 
   late BuiltMap<String, int> builtMap;
   late bool contains;
@@ -106,5 +90,3 @@ class BuiltMapContainsValueBenchmark extends MapBenchmarkBase {
     for (int i = 0; i < builtMap.length + 1; i++) contains = builtMap.containsValue(i);
   }
 }
-
-

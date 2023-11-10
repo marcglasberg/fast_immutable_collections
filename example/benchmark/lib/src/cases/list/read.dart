@@ -2,30 +2,23 @@
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
-import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
-
-
 
 class ListReadBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListReadBenchmark({required TableScoreEmitter emitter})
+  ListReadBenchmark({required super.emitter})
       : benchmarks = <ListBenchmarkBase>[
           MutableListReadBenchmark(emitter: emitter),
           IListReadBenchmark(emitter: emitter),
           KtListReadBenchmark(emitter: emitter),
           BuiltListReadBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableListReadBenchmark extends ListBenchmarkBase {
-  MutableListReadBenchmark({required TableScoreEmitter emitter})
-      : super(name: "List (Mutable)", emitter: emitter);
+  MutableListReadBenchmark({required super.emitter}) : super(name: "List (Mutable)");
 
   late List<int> list;
   late int newVar;
@@ -40,10 +33,8 @@ class MutableListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = list[config.size ~/ 2];
 }
 
-
-
 class IListReadBenchmark extends ListBenchmarkBase {
-  IListReadBenchmark({required TableScoreEmitter emitter}) : super(name: "IList", emitter: emitter);
+  IListReadBenchmark({required super.emitter}) : super(name: "IList");
 
   late IList<int> iList;
   late int newVar;
@@ -58,11 +49,8 @@ class IListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = iList[config.size ~/ 2];
 }
 
-
-
 class KtListReadBenchmark extends ListBenchmarkBase {
-  KtListReadBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtList", emitter: emitter);
+  KtListReadBenchmark({required super.emitter}) : super(name: "KtList");
 
   late KtList<int> ktList;
   late int newVar;
@@ -78,11 +66,8 @@ class KtListReadBenchmark extends ListBenchmarkBase {
   void run() => newVar = ktList[config.size ~/ 2];
 }
 
-
-
 class BuiltListReadBenchmark extends ListBenchmarkBase {
-  BuiltListReadBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltList", emitter: emitter);
+  BuiltListReadBenchmark({required super.emitter}) : super(name: "BuiltList");
 
   late BuiltList<int> builtList;
   late int newVar;
@@ -97,5 +82,3 @@ class BuiltListReadBenchmark extends ListBenchmarkBase {
   @override
   void run() => newVar = builtList[config.size ~/ 2];
 }
-
-

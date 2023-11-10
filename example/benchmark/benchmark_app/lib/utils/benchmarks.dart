@@ -6,8 +6,6 @@ import "package:flutter/material.dart";
 /// Be careful with the parameters. If they are too big, you might encounter a difficult-to-debug
 /// error, probably due to insufficient memory.
 
-
-
 final List<Widget> listBenchmarks = [
   BenchWidget(
     title: "List.add",
@@ -112,8 +110,6 @@ final List<Widget> listBenchmarks = [
     ],
   ),
 ];
-
-
 
 final List<Widget> setBenchmarks = [
   BenchWidget(
@@ -220,8 +216,6 @@ final List<Widget> setBenchmarks = [
   ),
 ];
 
-
-
 final List<Widget> mapBenchmarks = [
   BenchWidget(
     title: "Map.add",
@@ -308,5 +302,3 @@ final List<Widget> mapBenchmarks = [
     ],
   ),
 ];
-
-

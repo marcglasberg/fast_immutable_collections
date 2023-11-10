@@ -6,27 +6,21 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/collection.dart";
 
-
-
 class ListAddAllBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListAddAllBenchmark({required TableScoreEmitter emitter})
+  ListAddAllBenchmark({required super.emitter})
       : benchmarks = <ListBenchmarkBase>[
           MutableListAddAllBenchmark(emitter: emitter),
           IListAddAllBenchmark(emitter: emitter),
           KtListAddAllBenchmark(emitter: emitter),
           BuiltListAddAllBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableListAddAllBenchmark extends ListBenchmarkBase {
-  MutableListAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "List (Mutable)", emitter: emitter);
+  MutableListAddAllBenchmark({required super.emitter}) : super(name: "List (Mutable)");
 
   late List<int> list;
 
@@ -63,11 +57,8 @@ class MutableListAddAllBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class IListAddAllBenchmark extends ListBenchmarkBase {
-  IListAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "IList", emitter: emitter);
+  IListAddAllBenchmark({required super.emitter}) : super(name: "IList");
 
   late IList<int> iList;
   late IList<int> result;
@@ -83,11 +74,8 @@ class IListAddAllBenchmark extends ListBenchmarkBase {
       result = iList.addAll(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10));
 }
 
-
-
 class KtListAddAllBenchmark extends ListBenchmarkBase {
-  KtListAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtList", emitter: emitter);
+  KtListAddAllBenchmark({required super.emitter}) : super(name: "KtList");
 
   late KtList<int> ktList;
   late KtList<int> result;
@@ -105,11 +93,8 @@ class KtListAddAllBenchmark extends ListBenchmarkBase {
       .plus(KtList<int>.from(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10)));
 }
 
-
-
 class BuiltListAddAllBenchmark extends ListBenchmarkBase {
-  BuiltListAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltList", emitter: emitter);
+  BuiltListAddAllBenchmark({required super.emitter}) : super(name: "BuiltList");
 
   late BuiltList<int> builtList;
   late BuiltList<int> result;
@@ -125,5 +110,3 @@ class BuiltListAddAllBenchmark extends ListBenchmarkBase {
   void run() => result = builtList.rebuild((ListBuilder<int> listBuilder) =>
       listBuilder.addAll(ListBenchmarkBase.getDummyGeneratedList(size: config.size ~/ 10)));
 }
-
-

@@ -2,30 +2,23 @@
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
-import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
-
-
 
 class MapReadBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
 
-  MapReadBenchmark({required TableScoreEmitter emitter})
+  MapReadBenchmark({required super.emitter})
       : benchmarks = <MapBenchmarkBase>[
           MutableMapReadBenchmark(emitter: emitter),
           IMapReadBenchmark(emitter: emitter),
           KtMapReadBenchmark(emitter: emitter),
           BuiltMapReadBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableMapReadBenchmark extends MapBenchmarkBase {
-  MutableMapReadBenchmark({required TableScoreEmitter emitter})
-      : super(name: "Map (Mutable)", emitter: emitter);
+  MutableMapReadBenchmark({required super.emitter}) : super(name: "Map (Mutable)");
 
   late Map<String, int> _map;
   late int newVar;
@@ -40,10 +33,8 @@ class MutableMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = _map[(config.size ~/ 2).toString()]!;
 }
 
-
-
 class IMapReadBenchmark extends MapBenchmarkBase {
-  IMapReadBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
+  IMapReadBenchmark({required super.emitter}) : super(name: "IMap");
 
   late IMap<String, int> iMap;
   late int newVar;
@@ -58,10 +49,8 @@ class IMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = iMap[(config.size ~/ 2).toString()]!;
 }
 
-
-
 class KtMapReadBenchmark extends MapBenchmarkBase {
-  KtMapReadBenchmark({required TableScoreEmitter emitter}) : super(name: "KtMap", emitter: emitter);
+  KtMapReadBenchmark({required super.emitter}) : super(name: "KtMap");
 
   late KtMap<String, int> ktMap;
   late int newVar;
@@ -77,11 +66,8 @@ class KtMapReadBenchmark extends MapBenchmarkBase {
   void run() => newVar = ktMap[(config.size ~/ 2).toString()]!;
 }
 
-
-
 class BuiltMapReadBenchmark extends MapBenchmarkBase {
-  BuiltMapReadBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltMap", emitter: emitter);
+  BuiltMapReadBenchmark({required super.emitter}) : super(name: "BuiltMap");
 
   late BuiltMap<String, int> builtMap;
   late int newVar;
@@ -96,5 +82,3 @@ class BuiltMapReadBenchmark extends MapBenchmarkBase {
   @override
   void run() => newVar = builtMap[(config.size ~/ 2).toString()]!;
 }
-
-

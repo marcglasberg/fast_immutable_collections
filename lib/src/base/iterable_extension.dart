@@ -282,7 +282,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   ) {
     final List<T> newList = [];
 
-    final Map<dynamic, T> idsPerNewItem = <dynamic, T>{for (T item in newItems) id(item): item};
+    final Map<dynamic, T> idsPerNewItem = <dynamic, T>{for (final T item in newItems) id(item): item};
 
     // Replace those with the same id.
     for (final T item in this) {

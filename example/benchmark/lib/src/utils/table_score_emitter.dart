@@ -5,8 +5,6 @@ import "package:path/path.dart" as p;
 
 import "records.dart";
 
-
-
 class TableScoreEmitter implements ScoreEmitter {
   final String prefixName;
   final Config config;
@@ -40,5 +38,3 @@ class TableScoreEmitter implements ScoreEmitter {
   @override
   String toString() => "Table Score Emitter: $_recordsColumn";
 }
-
-

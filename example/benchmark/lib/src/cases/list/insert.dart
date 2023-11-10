@@ -6,29 +6,23 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:kt_dart/kt.dart";
 
-
-
 class ListInsertBenchmark extends MultiBenchmarkReporter<ListBenchmarkBase> {
   @override
   final List<ListBenchmarkBase> benchmarks;
 
-  ListInsertBenchmark({required TableScoreEmitter emitter, int? seed})
+  ListInsertBenchmark({required super.emitter, int? seed})
       : benchmarks = <ListBenchmarkBase>[
           MutableListInsertBenchmark(emitter: emitter, seed: seed),
           IListInsertBenchmark(emitter: emitter, seed: seed),
           KtListInsertBenchmark(emitter: emitter, seed: seed),
           BuiltListInsertBenchmark(emitter: emitter, seed: seed),
-        ],
-        super(emitter: emitter);
+        ];
 }
-
-
 
 class MutableListInsertBenchmark extends ListBenchmarkBase {
   final int? seed;
 
-  MutableListInsertBenchmark({required TableScoreEmitter emitter, this.seed})
-      : super(name: "List (Mutable)", emitter: emitter);
+  MutableListInsertBenchmark({required super.emitter, this.seed}) : super(name: "List (Mutable)");
 
   late List<int> list;
 
@@ -66,13 +60,10 @@ class MutableListInsertBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class IListInsertBenchmark extends ListBenchmarkBase {
   final int? seed;
 
-  IListInsertBenchmark({required TableScoreEmitter emitter, this.seed})
-      : super(name: "IList", emitter: emitter);
+  IListInsertBenchmark({required super.emitter, this.seed}) : super(name: "IList");
 
   late IList<int> iList;
   late IList<int> result;
@@ -92,13 +83,10 @@ class IListInsertBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class KtListInsertBenchmark extends ListBenchmarkBase {
   final int? seed;
 
-  KtListInsertBenchmark({required TableScoreEmitter emitter, this.seed})
-      : super(name: "KtList", emitter: emitter);
+  KtListInsertBenchmark({required super.emitter, this.seed}) : super(name: "KtList");
 
   late KtList<int> ktList;
   late KtList<int> result;
@@ -120,13 +108,10 @@ class KtListInsertBenchmark extends ListBenchmarkBase {
   }
 }
 
-
-
 class BuiltListInsertBenchmark extends ListBenchmarkBase {
   final int? seed;
 
-  BuiltListInsertBenchmark({required TableScoreEmitter emitter, this.seed})
-      : super(name: "BuiltList", emitter: emitter);
+  BuiltListInsertBenchmark({required super.emitter, this.seed}) : super(name: "BuiltList");
 
   late BuiltList<int> builtList;
   late BuiltList<int> result;
@@ -146,5 +131,3 @@ class BuiltListInsertBenchmark extends ListBenchmarkBase {
     result = listBuilder.build();
   }
 }
-
-

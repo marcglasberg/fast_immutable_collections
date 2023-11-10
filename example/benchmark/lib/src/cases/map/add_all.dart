@@ -4,30 +4,23 @@ import "dart:math";
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
-import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/kt.dart";
-
-
 
 class MapAddAllBenchmark extends MultiBenchmarkReporter<MapBenchmarkBase> {
   @override
   final List<MapBenchmarkBase> benchmarks;
 
-  MapAddAllBenchmark({required TableScoreEmitter emitter})
+  MapAddAllBenchmark({required super.emitter})
       : benchmarks = <MapBenchmarkBase>[
           MutableMapAddAllBenchmark(emitter: emitter),
           IMapAddAllBenchmark(emitter: emitter),
           KtMapAddAllBenchmark(emitter: emitter),
           BuiltMapAddAllBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableMapAddAllBenchmark extends MapBenchmarkBase {
-  MutableMapAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "Map (Mutable)", emitter: emitter);
+  MutableMapAddAllBenchmark({required super.emitter}) : super(name: "Map (Mutable)");
 
   late Map<String, int> map;
   late Map<String, int> toBeAdded;
@@ -64,10 +57,8 @@ class MutableMapAddAllBenchmark extends MapBenchmarkBase {
   }
 }
 
-
-
 class IMapAddAllBenchmark extends MapBenchmarkBase {
-  IMapAddAllBenchmark({required TableScoreEmitter emitter}) : super(name: "IMap", emitter: emitter);
+  IMapAddAllBenchmark({required super.emitter}) : super(name: "IMap");
 
   late IMap<String, int> iMap;
   late IMap<String, int> result;
@@ -86,11 +77,8 @@ class IMapAddAllBenchmark extends MapBenchmarkBase {
   void run() => result = iMap.addAll(toBeAdded);
 }
 
-
-
 class KtMapAddAllBenchmark extends MapBenchmarkBase {
-  KtMapAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtMap", emitter: emitter);
+  KtMapAddAllBenchmark({required super.emitter}) : super(name: "KtMap");
 
   late KtMap<String, int> ktMap;
   late KtMap<String, int> result;
@@ -110,11 +98,8 @@ class KtMapAddAllBenchmark extends MapBenchmarkBase {
   void run() => result = ktMap.plus(toBeAdded);
 }
 
-
-
 class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
-  BuiltMapAddAllBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltMap", emitter: emitter);
+  BuiltMapAddAllBenchmark({required super.emitter}) : super(name: "BuiltMap");
 
   late BuiltMap<String, int> builtMap;
   late BuiltMap<String, int> result;
@@ -134,5 +119,3 @@ class BuiltMapAddAllBenchmark extends MapBenchmarkBase {
   void run() => result = builtMap
       .rebuild((MapBuilder<String, int> mapBuilder) => mapBuilder.addAll(toBeAdded.asMap()));
 }
-
-

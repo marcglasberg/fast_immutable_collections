@@ -2,30 +2,23 @@
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
-import "package:fast_immutable_collections_benchmarks/src/utils/table_score_emitter.dart";
 import "package:kt_dart/collection.dart";
-
-
 
 class SetContainsBenchmark extends MultiBenchmarkReporter<SetBenchmarkBase> {
   @override
   final List<SetBenchmarkBase> benchmarks;
 
-  SetContainsBenchmark({required TableScoreEmitter emitter})
+  SetContainsBenchmark({required super.emitter})
       : benchmarks = <SetBenchmarkBase>[
           MutableSetContainsBenchmark(emitter: emitter),
           ISetContainsBenchmark(emitter: emitter),
           KtSetContainsBenchmark(emitter: emitter),
           BuiltSetContainsBenchmark(emitter: emitter),
-        ],
-        super(emitter: emitter);
+        ];
 }
 
-
-
 class MutableSetContainsBenchmark extends SetBenchmarkBase {
-  MutableSetContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "Set (Mutable)", emitter: emitter);
+  MutableSetContainsBenchmark({required super.emitter}) : super(name: "Set (Mutable)");
 
   late Set<int> set;
   late bool contains;
@@ -42,11 +35,8 @@ class MutableSetContainsBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class ISetContainsBenchmark extends SetBenchmarkBase {
-  ISetContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "ISet", emitter: emitter);
+  ISetContainsBenchmark({required super.emitter}) : super(name: "ISet");
 
   late ISet<int> iSet;
   late bool contains;
@@ -63,11 +53,8 @@ class ISetContainsBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class KtSetContainsBenchmark extends SetBenchmarkBase {
-  KtSetContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "KtSet", emitter: emitter);
+  KtSetContainsBenchmark({required super.emitter}) : super(name: "KtSet");
 
   late KtSet<int> ktSet;
   late bool contains;
@@ -84,11 +71,8 @@ class KtSetContainsBenchmark extends SetBenchmarkBase {
   }
 }
 
-
-
 class BuiltSetContainsBenchmark extends SetBenchmarkBase {
-  BuiltSetContainsBenchmark({required TableScoreEmitter emitter})
-      : super(name: "BuiltSet", emitter: emitter);
+  BuiltSetContainsBenchmark({required super.emitter}) : super(name: "BuiltSet");
 
   late BuiltSet<int> builtSet;
   late bool contains;
@@ -105,5 +89,3 @@ class BuiltSetContainsBenchmark extends SetBenchmarkBase {
     for (int i = 0; i < builtSet.length + 1; i++) contains = builtSet.contains(i);
   }
 }
-
-

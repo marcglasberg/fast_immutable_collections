@@ -186,5 +186,5 @@ class Supertype {
 }
 
 class Subtype extends Supertype {
-  Subtype(String nome) : super(nome);
+  Subtype(super.nome);
 }

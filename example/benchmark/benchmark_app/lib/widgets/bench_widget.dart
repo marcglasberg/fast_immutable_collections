@@ -4,8 +4,6 @@ import "package:benchmark_app/widgets/collection_button.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:flutter/material.dart";
 
-
-
 class BenchWidget extends StatefulWidget {
   final String title;
   final Map<String, String> code;
@@ -23,8 +21,6 @@ class BenchWidget extends StatefulWidget {
   @override
   _BenchWidgetState createState() => _BenchWidgetState();
 }
-
-
 
 class _BenchWidgetState extends State<BenchWidget> {
   bool _isRunning = false;
@@ -126,10 +122,8 @@ class _BenchWidgetState extends State<BenchWidget> {
   }
 }
 
-
-
 class _PleaseWait extends StatelessWidget {
-  const _PleaseWait({Key? key}) : super(key: key);
+  const _PleaseWait({super.key});
 
   @override
   Widget build(_) {
@@ -156,5 +150,3 @@ class _PleaseWait extends StatelessWidget {
     );
   }
 }
-
-

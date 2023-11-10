@@ -1,5 +1,3 @@
-
-
 abstract class ListCode {
   static const Map<String, String> add = {
     "List (Mutable)": "for (int i = 0; i < innerRuns; i++)\n" "  _list.add(i);",
@@ -67,8 +65,6 @@ abstract class ListCode {
   };
 }
 
-
-
 abstract class SetCode {
   static const Map<String, String> add = {
     "Set (Mutable)": "_set = Set<int>.of(_fixedSet);\n"
@@ -120,8 +116,6 @@ abstract class SetCode {
         "  setBuilder.remove(config.size ~/ 2));",
   };
 }
-
-
 
 abstract class MapCode {
   static const Map<String, String> add = {
@@ -178,5 +172,3 @@ abstract class MapCode {
         " => mapBuilder.remove((config.size ~/ 2).toString()));",
   };
 }
-
-

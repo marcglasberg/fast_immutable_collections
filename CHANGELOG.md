@@ -1,3 +1,8 @@
+## [9.2.0] - 2023/11/10
+
+* @useResult annotation to signal that a method should return a copy of the collection, instead of
+  mutating it.
+
 ## [9.1.6] - 2023/10/08
 
 * Small docs improvement.

@@ -1,7 +1,5 @@
 import "package:flutter/material.dart";
 
-
-
 class CollectionButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -22,5 +20,3 @@ class CollectionButton extends StatelessWidget {
     );
   }
 }
-
-
