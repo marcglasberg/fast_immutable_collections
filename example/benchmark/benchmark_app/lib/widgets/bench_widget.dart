@@ -123,7 +123,7 @@ class _BenchWidgetState extends State<BenchWidget> {
 }
 
 class _PleaseWait extends StatelessWidget {
-  const _PleaseWait({super.key});
+  const _PleaseWait();
 
   @override
   Widget build(_) {

@@ -55,7 +55,7 @@ class UnmodifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty 
 
   @override
   T? lookup(covariant T element) =>
-      _iSet != null && _iSet!.contains(element) || _set != null && _set!.contains(element)
+      _iSet != null && _iSet.contains(element) || _set != null && _set.contains(element)
           ? element
           : null;
 

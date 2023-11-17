@@ -504,8 +504,6 @@ void main() {
     expect(<int?>[null, 1, null, 3].lock.add(10), [null, 1, null, 3, 10]);
     expect([1, 2, 3].lock.add(4), [1, 2, 3, 4]);
 
-    IList<dynamic> l = [].lock;
-    l.remove(1);
     // 2) Adding null
     expect(<int?>[null].lock.add(null), [null, null]);
     expect(<int?>[null, null, null].lock.add(null), [null, null, null, null]);
@@ -898,11 +896,7 @@ void main() {
   test("toSet", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
     expect(ilist.toSet()..add(7), {1, 2, 3, 4, 5, 6, 7});
-    expect(
-        ilist
-          ..add(6)
-          ..toSet(),
-        {1, 2, 3, 4, 5, 6});
+    expect(ilist.add(6).toSet(), {1, 2, 3, 4, 5, 6});
     expect(ilist.unlock, [1, 2, 3, 4, 5, 6]);
   });
 

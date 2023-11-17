@@ -51,14 +51,14 @@ class UnmodifiableListFromIList<T> with ListMixin<T> implements List<T>, CanBeEm
 
   @override
   T operator [](int index) {
-    return (_iList != null) ? _iList![index] : _list![index];
+    return (_iList != null) ? _iList[index] : _list![index];
   }
 
   @override
   void operator []=(int index, T? value) => throw UnsupportedError("List in unmodifiable.");
 
   @override
-  int get length => (_iList != null) ? _iList!.length : _list!.length;
+  int get length => (_iList != null) ? _iList.length : _list!.length;
 
   @override
   set length(int newLength) => throw UnsupportedError("List in unmodifiable.");

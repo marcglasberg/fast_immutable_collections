@@ -52,7 +52,7 @@ class UnmodifiableMapFromIMap<K, V> with MapMixin<K, V> implements Map<K, V>, Ca
   void operator []=(K key, V value) => throw UnsupportedError("Map is unmodifiable.");
 
   @override
-  V? operator [](covariant K key) => _iMap != null ? _iMap![key] : _map![key];
+  V? operator [](covariant K key) => _iMap != null ? _iMap[key] : _map![key];
 
   @override
   void clear() => throw UnsupportedError("Map is unmodifiable.");

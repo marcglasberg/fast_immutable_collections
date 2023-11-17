@@ -530,7 +530,7 @@ void main() {
 
     iMapOfSets = original.lock;
 
-    iMapOfSets.removeValues([2], numberOfRemovedValues: numberOfRemovedValues);
+    var _ = iMapOfSets.removeValues([2], numberOfRemovedValues: numberOfRemovedValues);
 
     expect(numberOfRemovedValues.value, 5);
   });
@@ -602,7 +602,7 @@ void main() {
 
     iMapOfSets = original.lock;
 
-    iMapOfSets.removeValuesWhere((String key, int? value) => value == 2,
+    var _ = iMapOfSets.removeValuesWhere((String key, int? value) => value == 2,
         numberOfRemovedValues: numberOfRemovedValues);
 
     expect(numberOfRemovedValues.value, 5);
@@ -2154,7 +2154,7 @@ void main() {
       "b": {11, 12},
     });
 
-    mapOfSets.asIMap().addAll(IMap<String, ISet<int>>({
+    var _ = mapOfSets.asIMap().addAll(IMap<String, ISet<int>>({
           "a": {100, 101}.lock
         }));
 
