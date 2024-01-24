@@ -1,4 +1,4 @@
-## [9.2.0] - 2023/11/10
+## [9.2.1] - 2023/11/10
 
 * @useResult annotation to signal that a method should return a copy of the collection, instead of
   mutating it.
