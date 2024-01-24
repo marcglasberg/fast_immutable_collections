@@ -2326,14 +2326,13 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 - Follows Kotlin conventions.
 - Doesn't use a persistent data structure.
 - Not that many worries about speed.
-- Features interesting annotations, though some will become unnecessary after NNBD.
+- Featured some interesting annotations that became unnecessary after NNBD.
 
 1. [built_collection][built_collection]
 
-- Each of the core SDK collections is split into two: a mutable builder class and an immutable "
-  built"
-  class. Builders are for computation, "built" classes are for safely sharing with no need of a
-  defensive copy.
+- Each of the core SDK collections is split into two: a mutable builder class and an
+  immutable "built" class. Builders are for computation, "built" classes are for safely sharing with
+  no need of a defensive copy.
 - Uses the [Builder Pattern][builder_pattern], which simplifies the creation of objects, and even
   allows for lazy optimizations.
 - Uses (deep) hash codes.
