@@ -10,7 +10,7 @@ void main() {
   print('Original List: $iList');
 
   // Access elements in the list.
-  int firstElement = iList.first;
+  final int firstElement = iList.first;
   print('First Element: $firstElement');
 
   // Remove an element from the list.
@@ -18,7 +18,7 @@ void main() {
   print('List after removing 20: $iList');
 
   // Find an element in the list.
-  bool containsThirty = iList.contains(30);
+  final bool containsThirty = iList.contains(30);
   print('Does the list contain 30? $containsThirty');
 
   // Example usage of ISet.
@@ -34,12 +34,12 @@ void main() {
   print('Set after removing orange: $iSet');
 
   // Check if the set contains an element.
-  bool containsBanana = iSet.contains('banana');
+  final bool containsBanana = iSet.contains('banana');
   print('Does the set contain banana? $containsBanana');
 
   // Iterate over the elements in the set.
   print('Iterating over the set:');
-  for (String fruit in iSet) {
+  for (final String fruit in iSet) {
     print(fruit);
   }
 }
