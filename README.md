@@ -2046,9 +2046,9 @@ In Dart's `List.unmodifiable()` case, it actually
 <a href="https://stackoverflow.com/questions/50311900/in-dart-does-list-unmodifiable-create-an-unmodifiable-view-or-a-whole-new-in">
 creates a defensive copy</a>, so the resulting list is in fact immutable, though performance will be
 bad. However, it does have the mutating methods, only that they will throw an error if used. Ideally
-you don't want mutable methods to appear in front of the programmer if the object is supposed to *
-not* change, it will inevitably result in more confusion and debugging. All in all, this constructor
-is basically an unfortunate workaround when it comes to the language design.
+you don't want mutable methods to appear in front of the programmer if the object is supposed
+to **not** change, it will inevitably result in more confusion and debugging. All in all, this
+constructor is basically an unfortunate workaround when it comes to the language design.
 
 If you pass around an **unmodifiable list**, other code that accepts a `List` can't assume it's
 immutable. There are now, in fact, more ways to fail, because calling any mutating method of an
@@ -2464,8 +2464,7 @@ the `ISet`. An analogous data structure for maps was also created, called `ListM
 
 1. [Why doesn't Java 8 include immutable collections?][why_no_immutable_on_java_8]
 
-- [The difference between *readable*, *read-only* and *
-  immutable* collections][3_types_of_collections].
+- [The difference between readable, read-only and immutable collections][3_types_of_collections].
 - Basically, the `UnmodifiableListMixin` also exists in Java. For more,
   check [Arkanon's answer][arkanon_answer].
 - I enjoy entertaining the idea that of all the code written in Java and running on millions of
