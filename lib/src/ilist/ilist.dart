@@ -1080,7 +1080,7 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 
   /// Split the List at specified index
-  Tuple2<Iterable<T>, Iterable<T>> splitAt(int index) => Tuple2(take(index), skip(index));
+  (Iterable<T>, Iterable<T>) splitAt(int index) => (take(index), skip(index));
 
   /// Moves all items that satisfy the provided [test] to the end of the list.
   /// Keeps the relative order of the moved items.
@@ -1692,26 +1692,26 @@ abstract class IList<T> // ignore: must_be_immutable
   int count(Predicate<T> p) => where(p).length;
 
   /// Split list based on predicate p. (takeWhile p, dropWhile p)
-  Tuple2<Iterable<T>, Iterable<T>> span(Predicate<T> p) {
+  (Iterable<T>, Iterable<T>) span(Predicate<T> p) {
     final i = indexWhere((e) => !p(e));
     final idx = i < 0 ? length : i;
-    return Tuple2(getRange(0, idx), getRange(idx, length));
+    return (getRange(0, idx), getRange(idx, length));
   }
 
   /// Aggregate each element with corresponding index
-  Iterable<Tuple2<int, T>> zipWithIndex() =>
-      Iterable.generate(length, (index) => Tuple2(index, _l[index])).toIList(config);
+  Iterable<(int, T)> zipWithIndex() =>
+      Iterable.generate(length, (index) => (index, _l[index])).toIList(config);
 
   /// Aggregate two sources trimming by the shortest source
-  Iterable<Tuple2<T, T>> zip(Iterable<T> otherIterable) {
+  Iterable<(T, T)> zip(Iterable<T> otherIterable) {
     final other = otherIterable.toList();
     final minLength = min(length, other.length);
-    return Iterable.generate(minLength, (index) => Tuple2(_l[index], other[index])).toIList(config);
+    return Iterable.generate(minLength, (index) => (_l[index], other[index])).toIList(config);
   }
 
   /// Aggregate two sources based on the longest source.
   /// Missing elements can be completed by passing a [currentFill] and [otherFill] methods or will be at null by default
-  Iterable<Tuple2<T?, U?>> zipAll<U>(
+  Iterable<(T?, U?)> zipAll<U>(
     Iterable<U> otherIterable, {
     T Function(int index)? currentFill,
     U Function(int index)? otherFill,
@@ -1728,7 +1728,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
     return Iterable.generate(
         maxLength,
-        (index) => Tuple2<T?, U?>(
+        (index) => (
               getOrFill(current, index, currentFill) as T?,
               getOrFill(other, index, otherFill) as U?,
             )).toIList(config);

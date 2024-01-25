@@ -33,16 +33,10 @@ class MultiBenchmarkScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> get _benchmarks {
-    switch (collectionType) {
-      case List:
-        return listBenchmarks;
-      case Set:
-        return setBenchmarks;
-      case Map:
-        return mapBenchmarks;
-      default:
-        throw UnimplementedError("No benchmarks for this collection type.");
-    }
-  }
+  List<Widget> get _benchmarks => switch (collectionType) {
+        const (List) => listBenchmarks,
+        const (Set) => setBenchmarks,
+        const (Map) => mapBenchmarks,
+        _ => throw UnimplementedError("No benchmarks for this collection type."),
+      };
 }

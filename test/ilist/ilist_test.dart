@@ -1505,16 +1505,22 @@ void main() {
     final ilist = [0, 2, 4, 6, 7, 8, 9, 2].lock;
 
     final evenSpan = ilist.span((e) => e % 2 == 0);
-    expect(evenSpan.first.toIList(), [0, 2, 4, 6]);
-    expect(evenSpan.second.toIList(), [7, 8, 9, 2]);
+    expect(evenSpan.$1.toIList(), [0, 2, 4, 6]);
+    expect(evenSpan.$2.toIList(), [7, 8, 9, 2]);
   });
 
   test("Zip with Index", () {
     //
     final ilist1 = ['red', 'green', 'blue', 'alpha'].lock;
     final indexZipped = ilist1.zipWithIndex();
-    expect(indexZipped,
-        IList([Tuple2(0, 'red'), Tuple2(1, 'green'), Tuple2(2, 'blue'), Tuple2(3, 'alpha')]));
+    expect(
+        indexZipped,
+        IList([
+          (0, 'red'),
+          (1, 'green'),
+          (2, 'blue'),
+          (3, 'alpha'),
+        ]));
   });
 
   test("Zip with another source of same or different length ignoring the longer Iterable", () {
@@ -1522,32 +1528,32 @@ void main() {
     final countries = ['France', 'Germany', 'Brazil', 'Japan'].lock;
     final capitals = ['Paris', 'Berlin', 'Brasilia', 'Tokyo'].lock;
 
-    final Iterable<Tuple2> zipped = countries.zip(capitals);
+    final Iterable<(String, String)> zipped = countries.zip(capitals);
     expect(
         zipped,
         IList([
-          Tuple2('France', 'Paris'),
-          Tuple2('Germany', 'Berlin'),
-          Tuple2('Brazil', 'Brasilia'),
-          Tuple2('Japan', 'Tokyo')
+          ('France', 'Paris'),
+          ('Germany', 'Berlin'),
+          ('Brazil', 'Brasilia'),
+          ('Japan', 'Tokyo')
         ]));
 
     // Ignore Brazil Japan
-    final Iterable<Tuple2> subIn = countries.take(2).toIList().zip(capitals);
+    final Iterable<(String, String)> subIn = countries.take(2).toIList().zip(capitals);
     expect(
         subIn,
         IList([
-          Tuple2('France', 'Paris'),
-          Tuple2('Germany', 'Berlin'),
+          ('France', 'Paris'),
+          ('Germany', 'Berlin'),
         ]));
 
     // Ignore Brazil Japan
-    final Iterable<Tuple2> subOut = countries.zip(capitals.take(2));
+    final Iterable<(String, String)> subOut = countries.zip(capitals.take(2));
     expect(
         subOut,
         IList([
-          Tuple2('France', 'Paris'),
-          Tuple2('Germany', 'Berlin'),
+          ('France', 'Paris'),
+          ('Germany', 'Berlin'),
         ]));
   });
 
@@ -1559,19 +1565,19 @@ void main() {
     expect(
         countries.zipAll(capitals),
         IList([
-          Tuple2('France', 'Paris'),
-          Tuple2('Germany', 'Berlin'),
-          Tuple2('Brazil', 'Brasilia'),
-          Tuple2('Japan', 'Tokyo')
+          ('France', 'Paris'),
+          ('Germany', 'Berlin'),
+          ('Brazil', 'Brasilia'),
+          ('Japan', 'Tokyo')
         ]));
 
     expect(
         countries.zipAll(capitals.take(2)),
         IList([
-          Tuple2('France', 'Paris'),
-          Tuple2('Germany', 'Berlin'),
-          Tuple2('Brazil', null),
-          Tuple2('Japan', null)
+          ('France', 'Paris'),
+          ('Germany', 'Berlin'),
+          ('Brazil', null),
+          ('Japan', null),
         ]));
 
     expect(
@@ -1580,10 +1586,10 @@ void main() {
               currentFill: (idx) => 'Country $idx',
             ),
         IList([
-          Tuple2('France', 'Paris'),
-          Tuple2('Germany', 'Berlin'),
-          Tuple2('Country 2', 'Brasilia'),
-          Tuple2('Country 3', 'Tokyo')
+          ('France', 'Paris'),
+          ('Germany', 'Berlin'),
+          ('Country 2', 'Brasilia'),
+          ('Country 3', 'Tokyo')
         ]));
 
     expect(
@@ -1592,15 +1598,15 @@ void main() {
           otherFill: (idx) => (idx + 1) * 100,
         ),
         IList([
-          Tuple2('France', 100),
-          Tuple2('Germany', 200),
-          Tuple2('Brazil', 300),
-          Tuple2('Japan', 400)
+          ('France', 100),
+          ('Germany', 200),
+          ('Brazil', 300),
+          ('Japan', 400),
         ]));
 
     final unzipped = countries.zipAll(capitals).unzip();
-    expect(unzipped.first.toIList(), countries);
-    expect(unzipped.second.toIList(), capitals);
+    expect(unzipped.$1.toIList(), countries);
+    expect(unzipped.$2.toIList(), capitals);
   });
 
   test("Iterate apply ops n times to create a list", () {
@@ -1615,8 +1621,8 @@ void main() {
     final base = [1, 2, 3, 4, 5, 6, 7, 8, 9].lock;
     final split = base.splitAt(4);
 
-    expect(split.first.toIList(), base.sublist(0, 4));
-    expect(split.second.toIList(), base.sublist(4));
+    expect(split.$1.toIList(), base.sublist(0, 4));
+    expect(split.$2.toIList(), base.sublist(4));
   });
 
   test("Count on predicates", () {
