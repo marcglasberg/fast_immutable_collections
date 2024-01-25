@@ -1,3 +1,7 @@
+## [10.0.0] - 2024/01/24
+
+* Removed tuples in favor of records.
+
 ## [9.2.1] - 2023/11/10
 
 * @useResult annotation to signal that a method should return a copy of the collection, instead of
