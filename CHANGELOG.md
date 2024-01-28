@@ -1,3 +1,7 @@
+## [10.1.0] - 2024/01/28
+
+* Fixed https://github.com/marcglasberg/fast_immutable_collections/issues/68
+
 ## [10.0.0] - 2024/01/24
 
 * Removed tuples in favor of records.

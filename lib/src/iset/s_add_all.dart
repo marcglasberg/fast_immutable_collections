@@ -65,7 +65,7 @@ class SAddAll<T> extends S<T> {
   }
 
   @override
-  Set<T> difference(Set<T> other) => _s.difference(other)..removeAll(_setOrS);
+  Set<T> difference(Set<T> other) => Set.of(_s.followedBy(_setOrS))..removeAll(other);
 
   @override
   Set<T> intersection(Set<T> other) =>

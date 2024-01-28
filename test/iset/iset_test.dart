@@ -1309,4 +1309,71 @@ void main() {
     ISet<int> iset8 = ISet(iset7);
     expect(identical(iset7, iset8), isTrue);
   });
+
+  test("Testing SAddAll.difference, SAdd.difference, and SFlat.difference", () {
+    //
+    expect((<int>{}.lock.addAll({1}.lock)).difference({}), {1});
+    expect((<int>{}.lock.add(1)).difference({}), {1});
+    expect(<int>{1}.difference({}), {1});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).difference({}), {1, 2});
+    expect((<int>{1}.lock.add(2)).difference({}), {1, 2});
+    expect(<int>{1, 2}.difference({}), {1, 2});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).difference({3, 4}), {1, 2});
+    expect((<int>{1}.lock.add(2)).difference({3, 4}), {1, 2});
+    expect(<int>{1, 2}.difference({3, 4}), {1, 2});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).difference({1}), {2});
+    expect((<int>{1}.lock.add(2)).difference({1}), {2});
+    expect(<int>{1, 2}.difference({1}), {2});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).difference({2, 1}), <int>{});
+    expect((<int>{1}.lock.add(2)).difference({2, 1}), <int>{});
+    expect(<int>{1, 2}.difference({2, 1}), <int>{});
+  });
+
+  test("Testing SAddAll.intersection, SAdd.intersection, and SFlat.intersection", () {
+    //
+    expect((<int>{}.lock.addAll(<int>{}.lock)).intersection({}), <int>{});
+    expect(<int>{}.intersection({}), <int>{});
+
+    expect((<int>{}.lock.addAll({1}.lock)).intersection({}), <int>{});
+    expect((<int>{}.lock.add(1)).intersection({}), <int>{});
+    expect(<int>{1}.intersection({}), <int>{});
+
+    expect((<int>{}.lock.addAll({1}.lock)).intersection({1}), {1});
+    expect((<int>{}.lock.add(1)).intersection({1}), {1});
+    expect(<int>{1}.intersection({1}), {1});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).intersection({}), <int>{});
+    expect((<int>{1}.lock.add(2)).intersection({}), <int>{});
+    expect(<int>{1, 2}.intersection({}), <int>{});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).intersection({3, 4}), <int>{});
+    expect((<int>{1}.lock.add(2)).intersection({3, 4}), <int>{});
+    expect(<int>{1, 2}.intersection({3, 4}), <int>{});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).intersection({2, 4}), {2});
+    expect((<int>{1}.lock.add(2)).intersection({2, 4}), {2});
+    expect(<int>{1, 2}.intersection({2, 4}), {2});
+  });
+
+  test("Testing SAddAll.union, SAdd.union, and SFlat.union", () {
+    //
+    expect((<int>{}.lock.addAll(<int>{}.lock)).union({}), <int>{});
+    expect(<int>{}.union({}), <int>{});
+
+    expect((<int>{}.lock.addAll({1}.lock)).union({}), {1});
+    expect((<int>{}.lock.add(1)).union({}), {1});
+    expect(<int>{}.union({1}), {1});
+
+    expect((<int>{1}.lock.addAll({2}.lock)).union({}), {1, 2});
+    expect((<int>{1}.lock.add(2)).union({}), {1, 2});
+    expect(<int>{1}.union({2}), {1, 2});
+
+    expect((<int>{1, 3}.lock.addAll({2, 4}.lock)).union({}), {1, 3, 2, 4});
+    expect((<int>{1, 3}.lock.add(2).add(4)).union({}), {1, 3, 2, 4});
+    expect(<int>{1, 3}.union({2, 4}), {1, 3, 2, 4});
+  });
 }

@@ -59,8 +59,8 @@ void main() {
 
   test("difference", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
-    expect(sAddAll.difference({3, 4, 10, 11}), {1, 2});
-    expect(sAddAll.difference({1, 2, 3, 4}), <int>{});
+    expect(sAddAll.difference({3, 4, 10, 11}), {1, 2, 5});
+    expect(sAddAll.difference({1, 2, 3, 4}), <int>{5});
   });
 
   test("intersection", () {
