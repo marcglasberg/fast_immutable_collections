@@ -43,7 +43,7 @@ This package, called **FIC** for short, provides:
 
 Other valuable features are:
 
-- It's possible to create const `IList` and `ISet`.
+- It's possible to create const `IList`, `ISet` and `IMap`.
 
 - `ListSet`, a very efficient fixed-size mutable collection which is at the same time an
   ordered `Set` and a `List`.
