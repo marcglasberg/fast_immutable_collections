@@ -1164,8 +1164,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
     if (containsKey(key)) {
       final Map<K, V> map = unlock;
 
-      // ignore: null_check_on_nullable_type_parameter
-      final V originalValue = map[key]!;
+      final originalValue = map[key] as V;
 
       final updatedValue = update(originalValue);
       if (ifRemove != null && ifRemove(key, updatedValue)) {
