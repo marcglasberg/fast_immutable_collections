@@ -1779,6 +1779,13 @@ void main() {
         .update("c", ((int value) => 0), ifAbsent: () => 3);
     expect(imap.keys, ["a", "c", "z"]);
     expect(imap.values, [40, 3, 100]);
+
+    // 6) Nullable value
+    IMap<String, int?> nullableMap = <String, int?>{'foo': null}.lock;
+
+    nullableMap = nullableMap.update('foo', (_) => 1);
+
+    expect(nullableMap.get('foo'), 1);
   });
 
   test("updateAll", () {
