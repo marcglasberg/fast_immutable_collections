@@ -1165,7 +1165,6 @@ abstract class IMap<K, V> // ignore: must_be_immutable
       final Map<K, V> map = unlock;
 
       final originalValue = map[key] as V;
-
       final updatedValue = update(originalValue);
       if (ifRemove != null && ifRemove(key, updatedValue)) {
         map.remove(key);

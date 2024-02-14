@@ -1,3 +1,7 @@
+## [10.1.1] - 2024/02/14
+
+* Fixed https://github.com/marcglasberg/fast_immutable_collections/issues/69
+
 ## [10.1.0] - 2024/01/28
 
 * Fixed https://github.com/marcglasberg/fast_immutable_collections/issues/68
