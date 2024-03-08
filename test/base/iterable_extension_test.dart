@@ -29,6 +29,7 @@ void main() {
   test('sumBy', () {
     expect([1, 2, 3, 4, 5].sumBy((e) => e), 15);
     expect([1.5, 2.5, 3.3, 4, 5].sumBy((e) => e), 16.3);
+    expect([1.5, 2.5, 3.3, 4.2, 5.9].sumBy((e) => e), 17.4);
     expect([].sumBy((e) => (e is int) ? e : 0), 0);
     expect([''].sumBy((e) => e.length), 0);
     expect(['a'].sumBy((e) => e.length), 1);
