@@ -136,11 +136,11 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
   /// ```
   N sumBy<N extends num>(N Function(T element) mapper) {
-    N result = 0 as N;
+    num result = 0;
     for (final value in this) {
-      result = result + mapper(value) as N;
+      result = result + mapper(value);
     }
-    return result;
+    return result as N;
   }
 
   /// The arithmetic mean of the elements of a non-empty iterable.
