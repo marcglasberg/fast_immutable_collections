@@ -26,6 +26,10 @@ void main() {
     expect(IList<int>.empty(), isA<IList<int>>());
     expect(const IList.empty(), isA<IList>());
     expect(const IList<int>.empty(), isA<IList<int>>());
+    const IList untypedList = IList.empty();
+    expect(untypedList, isA<IList>());
+    const IList<int> intList = IList.empty();
+    expect(intList, isA<IList<int>>());
   });
 
   test("isEmpty | isNotEmpty", () {
