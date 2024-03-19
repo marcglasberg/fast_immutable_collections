@@ -36,6 +36,14 @@ class IListConst<T> // ignore: must_be_immutable
 
   final List<T> _list;
 
+  /// Creates a empty constant list.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's always wrong to use an `IListConst.empty()` which is not constant.
+  const IListConst.empty([this.config = const ConfigList()])
+      : _list = const [],
+        super._gen();
+
   @override
   final ConfigList config;
 
@@ -189,6 +197,11 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   factory IList([Iterable<T>? iterable]) => //
       IList.withConfig(iterable ?? const [], defaultConfig);
+
+
+  /// Create an empty [IList].
+  /// It is always a constant list.
+  const factory IList.empty() = IListConst<T>.empty;
 
   const IList._gen();
 
