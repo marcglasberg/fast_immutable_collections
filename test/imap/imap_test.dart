@@ -25,9 +25,9 @@ void main() {
     expect(const IMap.empty(), isA<IMap>());
     expect(const IMap<String, int>.empty(), isA<IMap<String, int>>());
     const IMap untypedMap = IMap.empty();
-    expect(untypedMap, isA<IList>());
+    expect(untypedMap, isA<IMap>());
     const IMap<String, int> typedMap = IMap.empty();
-    expect(typedMap, isA<IList<int>>());
+    expect(typedMap, isA<IMap<String, int>>());
   });
 
   test("isEmpty | isNotEmpty", () {
