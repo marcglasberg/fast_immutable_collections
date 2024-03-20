@@ -22,6 +22,12 @@ void main() {
     expect(IMap<String, int>({}), isA<IMap<String, int>>());
     expect(IMap({"a": 1}), isA<IMap<String, int>>());
     expect(IMapImpl.empty<String, int>(), isA<IMap<String, int>>());
+    expect(const IMap.empty(), isA<IMap>());
+    expect(const IMap<String, int>.empty(), isA<IMap<String, int>>());
+    const IMap untypedMap = IMap.empty();
+    expect(untypedMap, isA<IList>());
+    const IMap<String, int> typedMap = IMap.empty();
+    expect(typedMap, isA<IList<int>>());
   });
 
   test("isEmpty | isNotEmpty", () {
@@ -30,12 +36,16 @@ void main() {
     expect(IMap<String, int>({}).isEmpty, isTrue);
     expect(IMap({"a": 1}).isEmpty, isFalse);
     expect(IMapImpl.empty<String, int>().isEmpty, isTrue);
+    expect(const IMap.empty().isEmpty, isTrue);
+    expect(const IMap<String, int>.empty().isEmpty, isTrue);
 
     expect(IMap().isNotEmpty, isFalse);
     expect(IMap({}).isNotEmpty, isFalse);
     expect(IMap<String, int>({}).isNotEmpty, isFalse);
     expect(IMap({"a": 1}).isNotEmpty, isTrue);
     expect(IMapImpl.empty<String, int>().isNotEmpty, isFalse);
+    expect(const IMap.empty().isNotEmpty, isFalse);
+    expect(const IMap<String, int>.empty().isNotEmpty, isFalse);
   });
 
   test("unlock", () {

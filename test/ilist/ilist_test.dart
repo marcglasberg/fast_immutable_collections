@@ -22,14 +22,12 @@ void main() {
     expect(IList([1]), isA<IList<int>>());
     expect(IList<int>(), isA<IList<int>>());
     expect([].lock, isA<IList>());
-    expect(IList.empty(), isA<IList>());
-    expect(IList<int>.empty(), isA<IList<int>>());
     expect(const IList.empty(), isA<IList>());
     expect(const IList<int>.empty(), isA<IList<int>>());
     const IList untypedList = IList.empty();
     expect(untypedList, isA<IList>());
-    const IList<int> intList = IList.empty();
-    expect(intList, isA<IList<int>>());
+    const IList<int> typedList = IList.empty();
+    expect(typedList, isA<IList<int>>());
   });
 
   test("isEmpty | isNotEmpty", () {
@@ -51,14 +49,8 @@ void main() {
     expect([].lock.isEmpty, isTrue);
     expect([].lock.isNotEmpty, isFalse);
 
-    expect(IList.empty().isEmpty, isTrue);
-    expect(IList.empty().isNotEmpty, isFalse);
-
     expect(const IList.empty().isEmpty, isTrue);
     expect(const IList.empty().isNotEmpty, isFalse);
-
-    expect(IList<String>.empty().isEmpty, isTrue);
-    expect(IList<String>.empty().isNotEmpty, isFalse);
 
     expect(const IList<String>.empty().isEmpty, isTrue);
     expect(const IList<String>.empty().isNotEmpty, isFalse);

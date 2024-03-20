@@ -21,6 +21,12 @@ void main() {
     expect(ISet([1]), isA<ISet<int>>());
     expect(ISet<int>(), isA<ISet<int>>());
     expect(<int>{}.lock, isA<ISet>());
+    expect(const ISet.empty(), isA<ISet>());
+    expect(const ISet<int>.empty(), isA<ISet<int>>());
+    const ISet untypedList = ISet.empty();
+    expect(untypedList, isA<ISet>());
+    const ISet<int> typedList = ISet.empty();
+    expect(typedList, isA<ISet<int>>());
   });
 
   test("fromIterable", () {
@@ -62,6 +68,8 @@ void main() {
     expect(ISet([1]).isEmpty, isFalse);
     expect(ISet<int>().isEmpty, isTrue);
     expect(<int>{}.lock.isEmpty, isTrue);
+    expect(const ISet.empty().isEmpty, isTrue);
+    expect(const ISet<String>.empty().isEmpty, isTrue);
 
     expect(ISet().isNotEmpty, isFalse);
     expect(ISet({}).isNotEmpty, isFalse);
@@ -69,6 +77,8 @@ void main() {
     expect(ISet([1]).isNotEmpty, isTrue);
     expect(ISet<int>().isNotEmpty, isFalse);
     expect(<int>{}.lock.isNotEmpty, isFalse);
+    expect(const ISet.empty().isNotEmpty, isFalse);
+    expect(const ISet<String>.empty().isNotEmpty, isFalse);
   });
 
   test("Ensuring Immutability", () {
