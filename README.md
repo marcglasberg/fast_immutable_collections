@@ -312,6 +312,9 @@ IList<String> ilist = [1, 2].lock;
                           
 // Locking a set as list
 IList<String> ilist = {1, 2}.toIList();
+
+// Creating an empty IList
+IList<String> ilist = const IList.empty();
 ```
 
 To create a regular `List` from an `IList`, you can use `List.of`, or simply "unlock" an immutable
@@ -900,6 +903,9 @@ ISet<String> iset = {1, 2}.lock;
                           
 // Locking a list as set
 ISet<String> iset = [1, 2].toISet();
+
+// Creating an empty ISet
+ISet<String> iset = const ISet.empty();
 ```
 
 To create a regular `Set` from an `ISet`, you can use `Set.of`, or simply "unlock" an immutable set:
@@ -1069,6 +1075,9 @@ IMap<String, int> imap = {"a": 1, "b": 2}.lock;
                           
 // From map entries
 IMap<String, int> imap = IMap.fromEntries([MapEntry("a", 1), MapEntry("b", 2)]);
+
+// Creating an empty IMap
+IMap<String> imap = const IMap.empty();
 
 // From keys and a value-mapper
 // This results in {"Jim": 3, "David": 5}
