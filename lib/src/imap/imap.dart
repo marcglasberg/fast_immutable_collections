@@ -35,6 +35,16 @@ class IMapConst<K, V> // ignore: must_be_immutable
       [this.config = const ConfigMap()])
       : super._gen();
 
+
+  /// Creates a empty constant map.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's always wrong to use an `IMapConst.empty()` which is not constant.
+  @literal
+  const IMapConst.empty([this.config = const ConfigMap()])
+      : _map = const {},
+        super._gen();
+
   final Map<K, V> _map;
 
   @override
@@ -171,6 +181,10 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Create an [IMap] from a [Map].
   factory IMap([Map<K, V>? map]) => //
       IMap.withConfig(map, defaultConfig);
+
+  /// Create an empty [IMap].
+  /// It is always a [IMapConst].
+  const factory IMap.empty() = IMapConst<K, V>.empty;
 
   const IMap._gen();
 

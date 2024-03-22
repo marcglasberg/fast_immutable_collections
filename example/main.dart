@@ -21,6 +21,12 @@ void main() {
   final bool containsThirty = iList.contains(30);
   print('Does the list contain 30? $containsThirty');
 
+  // Creating a empty IList
+  const emptyIList = IList<String>.empty();
+  print("Empty IList is empty? ${emptyIList.isEmpty}");
+
+
+
   // Example usage of ISet.
   print('\nISet Example:');
   ISet<String> iSet = ISet<String>();
@@ -42,4 +48,41 @@ void main() {
   for (final String fruit in iSet) {
     print(fruit);
   }
+
+  // Creating a empty ISet
+  const emptyISet = ISet<String>.empty();
+  print("Empty ISet is empty? ${emptyISet.isEmpty}");
+
+
+
+  // Example usage of IMap
+  print('\nIMap Example:');
+  IMap<String, String> iMap = IMap<String, String>();
+
+  // Add elements to the map.
+  iMap = iMap.add('apple', 'red');
+  iMap = iMap.addEntries([
+    const MapEntry('banana', 'yellow'),
+    const MapEntry('orange', 'orange'),
+    const MapEntry('grape', 'green')
+  ]);
+  print('Original Map: $iMap');
+
+  // Remove an element from the map.
+  iMap = iMap.remove('orange');
+  print('Map after removing orange: $iMap');
+
+  // Check if the map contains an element.
+  final bool containsApple = iMap.containsKey('apple');
+  print('Does the map contain apple as a key? $containsApple');
+
+  // Iterate over the elements in the map.
+  print('Iterating over the map:');
+  for (final MapEntry<String, String> fruitAndColor in iMap.entries) {
+    print("${fruitAndColor.key}: ${fruitAndColor.value}");
+  }
+
+  // Creating a empty IMap
+  const emptyIMap = IMap<String, String>.empty();
+  print("Empty IMap is empty? ${emptyIMap.isEmpty}");
 }
