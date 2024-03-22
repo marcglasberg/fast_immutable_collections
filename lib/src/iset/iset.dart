@@ -36,7 +36,7 @@ class ISetConst<T> // ignore: must_be_immutable
       // because when you do this _set will be Set<Never> which is bad.
       [this.config = const ConfigSet()])
       : super._gen();
-      
+
   /// Creates a empty constant set.
   ///
   /// IMPORTANT: You must always use the `const` keyword.
@@ -197,7 +197,7 @@ abstract class ISet<T> // ignore: must_be_immutable
       ISet.withConfig(iterable, defaultConfig);
 
   /// Create an empty [ISet].
-  /// It is always a [ISetConst].
+  /// Use it with const: `const ISet.empty()` (It's always an [ISetConst]).
   const factory ISet.empty() = ISetConst<T>.empty;
 
   const ISet._gen();

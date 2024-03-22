@@ -1,3 +1,17 @@
+## 10.2.0
+
+* You can now declare empty lists, sets and maps like
+  this (https://github.com/marcglasberg/fast_immutable_collections/pull/74):
+
+  ```dart
+  const IList<String>.empty();
+  const ISet<String>.empty();
+  const IMap<String, int>.empty();
+  ```         
+
+* Better inference for sumBy returning
+  zero (https://github.com/marcglasberg/fast_immutable_collections/pull/71).
+
 ## 10.1.2
 
 * Fixed https://github.com/marcglasberg/fast_immutable_collections/pull/71
