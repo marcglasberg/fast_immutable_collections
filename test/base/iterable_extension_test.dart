@@ -35,6 +35,8 @@ void main() {
     expect(['a'].sumBy((e) => e.length), 1);
     expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
     expect(['a', 'ab', 'abc', 'abcd', 'abcde'].map((e) => e.length).sum, 15);
+    expect(<double>[].sumBy((e) => e), 0.0);
+    expect(<int>[].sumBy((e) => e), 0);
   });
 
   test('averageBy', () {

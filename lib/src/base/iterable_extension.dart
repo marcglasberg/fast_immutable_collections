@@ -136,11 +136,30 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
   /// ```
   N sumBy<N extends num>(N Function(T element) mapper) {
+    // If the iterable is empty but N is double
+    // then result will be an int because 0 is an int
+    // therefore result as N (which in this case will be: 0 as double)
+    // will throw an error
+    if (isEmpty) {
+      return _zeroOf<N>();
+    }
+
     num result = 0;
     for (final value in this) {
       result = result + mapper(value);
     }
     return result as N;
+  }
+
+  /// Returns a zero of type [N]. 
+  N _zeroOf<N extends num>() {
+    // num is a sealed class with only two subclasses: int and double
+    // therefore this function should never throw
+    return switch (N) {
+      const (int) => 0 as N,
+      const (double) => 0.0 as N,
+      _ => throw UnsupportedError("Unsupported type: $N"),
+    };
   }
 
   /// The arithmetic mean of the elements of a non-empty iterable.
