@@ -1470,6 +1470,6 @@ const _dummyInt = 1;
 const _dummyDouble = 1.0;
 const _dummyString = '';
 const _dummyBool = true;
-final _dummyUri = Uri.parse('http://www.google.com');
+final _dummyUri = Uri.parse('https://www.google.com');
 final _dummyDate = DateTime.now();
 final _dummyBigInt = BigInt.from(1);
