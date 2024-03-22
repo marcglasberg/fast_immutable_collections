@@ -201,6 +201,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
   /// Create an empty [IList].
   /// Use it with const: `const IList.empty()` (It's always an [IListConst]).
+  @literal
   const factory IList.empty() = IListConst<T>.empty;
 
   const IList._gen();

@@ -183,6 +183,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
 
   /// Create an empty [IMap].
   /// Use it with const: `const IMap.empty()` (It's always an [IMapConst]).
+  @literal
   const factory IMap.empty() = IMapConst<K, V>.empty;
 
   const IMap._gen();

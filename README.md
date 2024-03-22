@@ -413,24 +413,26 @@ The `replaceBy` method lets you define a function to transform an item at a spec
 
 It's actually possible to create a const `IList`, but you must follow these rules:
 
-1. Instantiate an `IListConst`.
+1. Instantiate an `IListConst` (or use `IListConst.empty()`).
 2. Explicitly assign it to an `IList`.
 3. Use the const keyword.
 
 Examples:
 
 ```
-const IList<int> ilist1 = IListConst([1, 2, 3]);
+const IList<int> ilist1 = IList.empty();
 const IList<int> ilist2 = IListConst([]);
-const IList<int> ilist3 = IListConst([1, 2], ConfigList(isDeepEquals: false));
+const IList<int> ilist3 = IListConst([1, 2, 3]);
+const IList<int> ilist4 = IListConst([1, 2], ConfigList(isDeepEquals: false));
 ```
 
-If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
-example, those are wrong:
+If you don't follow the above rules, it may seem to work, but you will have problems later.
+So, for example, those are wrong:
 
 ```
 // Wrong: Not using the const keyword.
 IList<int> ilist = IListConst([]);
+IList<int> ilist = IList.empty();
 
 // Wrong: Not explicitly assigning it to an `IList`.
 const ilist = IListConst([]);
@@ -517,7 +519,7 @@ or **deep equals**, as desired. There are 3 main ways to do it:
     print(ilist == ilist3); // True!
     ```
 
-1. You can also use the `withConfig` method and the `ConfigList` class to change the configuration:
+2. You can also use the `withConfig` method and the `ConfigList` class to change the configuration:
 
     ```
     var list = [1, 2];
@@ -528,7 +530,7 @@ or **deep equals**, as desired. There are 3 main ways to do it:
     print(list.lock == ilist2); // False!
     ```
 
-1. Or you can use the `withConfig` constructor to explicitly create the `IList` already with your
+3. Or you can use the `withConfig` constructor to explicitly create the `IList` already with your
    desired configuration:
 
     ```
@@ -926,7 +928,7 @@ Set<String> set = iset.unlock;
 
 It's actually possible to create a const `ISet`, but you must follow these rules:
 
-1. Instantiate an `ISetConst`.
+1. Instantiate an `ISetConst` (or use `ISet.empty()`).
 2. Explicitly assign it to an `ISet`.
 3. Use the const keyword.
 4. You can only create a sorted set (`ConfigSet(sort: true)`) if the set is empty.
@@ -934,10 +936,11 @@ It's actually possible to create a const `ISet`, but you must follow these rules
 Examples:
 
 ```
-const ISet<int> iset1 = ISetConst({1, 2, 3});
+const ISet<int> iset1 = ISet.empty();
 const ISet<int> iset2 = ISetConst({});
-const ISet<int> iset3 = ISetConst({1, 2}, ConfigSet(isDeepEquals: false));
-const ISet<int> iset4 = ISetConst({}, ConfigSet(sort: true));
+const ISet<int> iset3 = ISetConst({1, 2, 3});
+const ISet<int> iset4 = ISetConst({1, 2}, ConfigSet(isDeepEquals: false));
+const ISet<int> iset5 = ISetConst({}, ConfigSet(sort: true));
 ```
 
 If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
@@ -946,6 +949,7 @@ example, those are wrong:
 ```
 // Wrong: Not using the const keyword.
 ISet<int> iset = ISetConst({});
+ISet<int> iset = ISet.empty();
 
 // Wrong: Not explicitly assigning it to an `ISet`.
 const iset = ISetConst({});
@@ -1197,7 +1201,7 @@ than for IList. Please read the IList explanation first, before trying to unders
 
 It's actually possible to create a const `IMap`, but you must follow these rules:
 
-1. Instantiate an `IMapConst`.
+1. Instantiate an `IMapConst` (or use `IMap.empty()`).
 2. Explicitly assign it to an `IMap`.
 3. Use the const keyword.
 4. You can only create a sorted map (`ConfigMap(sort: true)`) if the map is empty.
@@ -1205,18 +1209,20 @@ It's actually possible to create a const `IMap`, but you must follow these rules
 Examples:
 
 ```
-const IMap<String, int> imap1 = IMapConst({'a': 1, 'b':2});
+const IMap<String, int> imap1 = IMap.empty();
 const IMap<String, int> imap2 = IMapConst({});
-const IMap<String, int> imap3 = IMapConst({'a': 1, 'b':2}, ConfigMap(isDeepEquals: false));
-const IMap<String, int> imap4 = IMapConst({}, ConfigMap(sort: true));
+const IMap<String, int> imap3 = IMapConst({'a': 1, 'b':2});
+const IMap<String, int> imap4 = IMapConst({'a': 1, 'b':2}, ConfigMap(isDeepEquals: false));
+const IMap<String, int> imap5 = IMapConst({}, ConfigMap(sort: true));
 ```
 
-If you don't follow the above rules, it may seem to work, but you will have problems later. So, for
-example, those are wrong:
+If you don't follow the above rules, it may seem to work, but you will have problems later.
+So, for example, those are wrong:
 
 ```
 // Wrong: Not using the const keyword.
-IMap<int> imap = IMapConst({});
+IMap<String, int> imap = IMapConst({});
+IMap<String, int> imap = IMap.empty();
 
 // Wrong: Not explicitly assigning it to an `IMap`.
 const imap = IMapConst({});
@@ -1225,14 +1231,14 @@ const imap = IMapConst({});
 const IMap<int> imap = IMapConst({1, 2}, ConfigMap(sort: true));
 ```
 
-The reason you can't have a non-empty const map is that we can't sort it in the constructor (
-since it's constant). If you try to create a non-empty const map it will seem to work, but will
+The reason you can't have a non-empty const map is that we can't sort it in the constructor
+(since it's constant). If you try to create a non-empty const map it will seem to work, but will
 throw an error when you try to use it.
 
 One other thing to keep in mind is that the `IMapConst()` constructor always uses
 `ConfigMap(isDeepEquals: true, sort: false, cacheHashCode: true)`, completely ignoring the global
-`defaultConfig` (which will be explained below). This means if you want a specific a config you must
-provide it in the constructor.
+`defaultConfig` (which will be explained below). This means if you want a specific a config you 
+must provide it in the constructor.
 
 _Note: While the FIC collections are generally intuitive to use, the **const** `IMap` is a bit
 cumbersome to use, because of these rules you have to remember. Unfortunately it can't be avoided
@@ -1248,7 +1254,7 @@ is `ConfigMap(isDeepEquals: true, sort: false, cacheHashCode: true)`:
 
 2. `sort: false` means it keeps insertion order, while `sort: true` means it will sort by keys.
 
-4. `cacheHashCode: true` means the `hashCode` is cached. It's not recommended turning this cache off
+3. `cacheHashCode: true` means the `hashCode` is cached. It's not recommended turning this cache off
    for maps.
 
 You can globally change this default if you want, by using the `defaultConfig` setter:

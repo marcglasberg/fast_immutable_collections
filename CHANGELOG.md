@@ -1,4 +1,4 @@
-## 10.2.0
+## 10.2.1
 
 * You can now declare empty lists, sets and maps like
   this (https://github.com/marcglasberg/fast_immutable_collections/pull/74):

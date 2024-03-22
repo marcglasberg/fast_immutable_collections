@@ -198,6 +198,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
   /// Create an empty [ISet].
   /// Use it with const: `const ISet.empty()` (It's always an [ISetConst]).
+  @literal
   const factory ISet.empty() = ISetConst<T>.empty;
 
   const ISet._gen();
