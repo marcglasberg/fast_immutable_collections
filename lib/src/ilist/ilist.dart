@@ -14,6 +14,50 @@ import "l_add.dart";
 import "l_add_all.dart";
 import "l_flat.dart";
 
+@immutable
+class IListEmpty<T> extends IList<T> {
+  @literal
+  const IListEmpty([this.config = const ConfigList()])
+      : super._gen();
+
+  @override
+  final ConfigList config;
+
+  /// A empty list is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a empty list, by definition.
+  @override
+  // ignore: non_const_call_to_literal_constructor
+  IListEmpty<T> get flush => this;
+
+  @override
+  int get _counter => 0;
+
+  @override
+  L<T> get _l => LFlat<T>.unsafe([]);
+
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
+  @override
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const ListEquality<dynamic>().hash([]), config.hashCode)
+        : hash2(identityHashCode(_l), config.hashCode);
+  }
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(IList<T>? other) =>
+      (other != null) &&
+      (other is IListConst) &&
+      identical([], (other as IListConst)._list) &&
+      (config == other.config);
+}
+
 /// This is an [IList] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -202,7 +246,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Create an empty [IList].
   /// Use it with const: `const IList.empty()` (It's always an [IListConst]).
   @literal
-  const factory IList.empty() = IListConst<T>.empty;
+  const factory IList.empty() = IListEmpty<T>;
 
   const IList._gen();
 
