@@ -15,7 +15,12 @@ import "l_add_all.dart";
 import "l_flat.dart";
 
 @immutable
-class IListEmpty<T> extends IList<T> {
+class IListEmpty<T> // ignore: must_be_immutable
+    extends IList<T> {
+  /// Creates a empty list.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's always wrong to use an `IListEmpty()` which is not constant.
   @literal
   const IListEmpty([this.config = const ConfigList()])
       : super._gen();
@@ -29,7 +34,6 @@ class IListEmpty<T> extends IList<T> {
 
   /// Nothing happens when you flush a empty list, by definition.
   @override
-  // ignore: non_const_call_to_literal_constructor
   IListEmpty<T> get flush => this;
 
   @override
@@ -77,15 +81,6 @@ class IListConst<T> // ignore: must_be_immutable
       // because when you do this _list will be List<Never> which is bad.
       [this.config = const ConfigList()])
       : super._gen();
-
-  /// Creates a empty constant list.
-  ///
-  /// IMPORTANT: You must always use the `const` keyword.
-  /// It's always wrong to use an `IListConst.empty()` which is not constant.
-  @literal
-  const IListConst.empty([this.config = const ConfigList()])
-      : _list = const [],
-        super._gen();
 
   final List<T> _list;
 
