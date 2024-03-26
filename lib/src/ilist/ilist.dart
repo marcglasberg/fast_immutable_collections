@@ -239,7 +239,7 @@ abstract class IList<T> // ignore: must_be_immutable
       IList.withConfig(iterable ?? const [], defaultConfig);
 
   /// Create an empty [IList].
-  /// Use it with const: `const IList.empty()` (It's always an [IListConst]).
+  /// Use it with const: `const IList.empty()` (It's always an [IListEmpty]).
   @literal
   const factory IList.empty() = IListEmpty<T>;
 
