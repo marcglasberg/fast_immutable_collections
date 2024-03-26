@@ -7,11 +7,11 @@ environment:
 dependencies:
   fast_immutable_collections:
     path: ../
-  json_annotation: ^4.1.0
+  json_annotation: ^4.8.1
 
 dev_dependencies:
-  build_runner: ^2.1.2
-  json_serializable: ^6.3.2
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.1
   lint: ^2.0.1
   test: ^1.17.12
 
