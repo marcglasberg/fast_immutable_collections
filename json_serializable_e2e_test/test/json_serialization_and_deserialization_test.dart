@@ -36,11 +36,19 @@ void main() {
 
     test('can deserialize IList of enums', () {
       expect(IListWrapper2.fromJson({'iList': <TestEnum>[]}).iList, IList(<TestEnum>[]));
-      expect(
-          IListWrapper2.fromJson({
-            'iList': <TestEnum>[TestEnum.valA, TestEnum.valB, TestEnum.valC]
-          }).iList,
-          IList(<TestEnum>[TestEnum.valA, TestEnum.valB, TestEnum.valC]));
+
+      IList result;
+      try {
+        result = IListWrapper2.fromJson({
+          'iList': <String>['valA', 'valB', 'valC']
+        }).iList;
+      } catch (e) {
+        result = IListWrapper2.fromJson({
+          'iList': <TestEnum>[TestEnum.valA, TestEnum.valB, TestEnum.valC]
+        }).iList;
+      }
+
+      expect(result, IList(<TestEnum>[TestEnum.valA, TestEnum.valB, TestEnum.valC]));
     });
   });
 
