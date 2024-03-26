@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: cirrusci/flutter
+      image: ghcr.io/cirruslabs/flutter:3.19.4
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Changing channels so we have access to NNBD
         run: bash tool/flutter_beta.sh
