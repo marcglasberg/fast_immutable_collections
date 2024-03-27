@@ -60,4 +60,25 @@ void main() {
   test(".same() is working properly", () {
     expect(const IMap.empty().same(const IMap.empty()), isTrue);
   });
+
+  test("equality", () {
+    // equalItems
+    expect(IMap({1: "a", 2: "b"}).equalItems(const IMap.empty().entries), isFalse);
+    expect(const IMapConst({1: "a", 2: "b"}).equalItems(const IMap.empty().entries), isFalse);
+
+    expect(IMap().equalItems(const IMap.empty().entries), isTrue);
+    expect(const IMapConst({}).equalItems(const IMap.empty().entries), isTrue);
+    expect(const IMap.empty().equalItems(const IMap.empty().entries), isTrue);
+    expect(const IMap.empty().equalItems(const IMapEmpty().entries), isTrue);
+
+
+    // equalItemsAndConfig
+    expect(IMap({1: "a", 2: "b"}).equalItemsAndConfig(const IMap.empty()), isFalse);
+    expect(const IMapConst({1: "a", 2: "b"}).equalItemsAndConfig(const IMap.empty()), isFalse);
+
+    expect(IMap().equalItemsAndConfig(const IMap.empty()), isTrue);
+    expect(const IMapConst({}).equalItemsAndConfig(const IMap.empty()), isTrue);
+    expect(const IMap.empty().equalItemsAndConfig(const IMap.empty()), isTrue);
+    expect(const IMap.empty().equalItemsAndConfig(const IMapEmpty()), isTrue);
+  });
 }

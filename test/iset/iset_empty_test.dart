@@ -51,4 +51,25 @@ void main() {
   test(".same() is working properly", () {
     expect(const ISet.empty().same(const ISet.empty()), isTrue);
   });
+
+  test("equality", () {
+    // equalItems
+    expect(ISet({"a", "b"}).equalItems(const ISet.empty()), isFalse);
+    expect(const ISetConst({"a", "b"}).equalItems(const ISet.empty()), isFalse);
+
+    expect(ISet().equalItems(const ISet.empty()), isTrue);
+    expect(const ISetConst({}).equalItems(const ISet.empty()), isTrue);
+    expect(const ISet.empty().equalItems(const ISet.empty()), isTrue);
+    expect(const ISet.empty().equalItems(const ISetEmpty()), isTrue);
+
+
+    // equalItemsAndConfig
+    expect(ISet({"a", "b"}).equalItemsAndConfig(const ISet.empty()), isFalse);
+    expect(const ISetConst({"a", "b"}).equalItemsAndConfig(const ISet.empty()), isFalse);
+
+    expect(ISet().equalItemsAndConfig(const ISet.empty()), isTrue);
+    expect(const ISetConst({}).equalItemsAndConfig(const ISet.empty()), isTrue);
+    expect(const ISet.empty().equalItemsAndConfig(const ISet.empty()), isTrue);
+    expect(const ISet.empty().equalItemsAndConfig(const ISetEmpty()), isTrue);
+  });
 }

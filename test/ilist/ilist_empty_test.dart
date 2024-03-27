@@ -51,4 +51,25 @@ void main() {
   test(".same() is working properly", () {
     expect(const IList.empty().same(const IList.empty()), isTrue);
   });
+
+  test("equality", () {
+    // equalItems
+    expect(IList(["a", "b"]).equalItems(const IList.empty()), isFalse);
+    expect(const IListConst(["a", "b"]).equalItems(const IList.empty()), isFalse);
+
+    expect(IList().equalItems(const IList.empty()), isTrue);
+    expect(const IListConst([]).equalItems(const IList.empty()), isTrue);
+    expect(const IList.empty().equalItems(const IList.empty()), isTrue);
+    expect(const IList.empty().equalItems(const IListEmpty()), isTrue);
+
+
+    // equalItemsAndConfig
+    expect(IList(["a", "b"]).equalItemsAndConfig(const IList.empty()), isFalse);
+    expect(const IListConst(["a", "b"]).equalItemsAndConfig(const IList.empty()), isFalse);
+
+    expect(IList().equalItemsAndConfig(const IList.empty()), isTrue);
+    expect(const IListConst([]).equalItemsAndConfig(const IList.empty()), isTrue);
+    expect(const IList.empty().equalItemsAndConfig(const IList.empty()), isTrue);
+    expect(const IList.empty().equalItemsAndConfig(const IListEmpty()), isTrue);
+  });
 }
