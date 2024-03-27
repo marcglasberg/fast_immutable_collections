@@ -14,6 +14,90 @@ import "l_add.dart";
 import "l_add_all.dart";
 import "l_flat.dart";
 
+/// This is an [IList] which is always empty.
+@immutable
+class IListEmpty<T> // ignore: must_be_immutable
+    extends IList<T> {
+  /// Creates an empty list. In most cases, you should use `const IList.empty()`.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's always wrong to use an `IListEmpty()` which is not constant.
+  @literal
+  const IListEmpty._([this.config = const ConfigList()])
+      : super._gen();
+
+  @override
+  final ConfigList config;
+
+  /// An empty list is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a empty list, by definition.
+  @override
+  IListEmpty<T> get flush => this;
+
+  /// An empty list is always empty, by definition
+  @override
+  bool get isEmpty => true;
+
+  /// An empty list is always empty, by definition
+  @override
+  bool get isNotEmpty => false;
+
+  /// An empty list does not contain anything, by definition
+  @override
+  bool contains(covariant T? element) => false;
+
+  /// An empty list is always of length `0`, by definition
+  @override
+  int get length => 0;
+
+  /// An empty list has no first element, by definition
+  @override
+  Never get first => throw StateError("No element");
+
+  /// An empty list has no last element, by definition
+  @override
+  Never get last => throw StateError("No element");
+
+  /// An empty list has no single element, by definition
+  @override
+  Never get single => throw StateError("No element");
+
+  /// An empty list is always the reversed version of itself, by definition
+  @override
+  IListEmpty<T> get reversed => this;
+
+  /// An empty list is always the cleared version of itself, by definition
+  @override
+  IListEmpty<T> clear() => this;
+
+  @override
+  int get _counter => 0;
+
+  @override
+  L<T> get _l => LFlat<T>.unsafe([]);
+
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
+  @override
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const ListEquality<dynamic>().hash([]), config.hashCode)
+        : hash2(identityHashCode(_l), config.hashCode);
+  }
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(IList<T>? other) =>
+      (other != null) &&
+      (other is IListEmpty) &&
+      (config == other.config);
+}
+
 /// This is an [IList] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -33,15 +117,6 @@ class IListConst<T> // ignore: must_be_immutable
       // because when you do this _list will be List<Never> which is bad.
       [this.config = const ConfigList()])
       : super._gen();
-
-  /// Creates a empty constant list.
-  ///
-  /// IMPORTANT: You must always use the `const` keyword.
-  /// It's always wrong to use an `IListConst.empty()` which is not constant.
-  @literal
-  const IListConst.empty([this.config = const ConfigList()])
-      : _list = const [],
-        super._gen();
 
   final List<T> _list;
 
@@ -200,9 +275,9 @@ abstract class IList<T> // ignore: must_be_immutable
       IList.withConfig(iterable ?? const [], defaultConfig);
 
   /// Create an empty [IList].
-  /// Use it with const: `const IList.empty()` (It's always an [IListConst]).
+  /// Use it with const: `const IList.empty()` (It's always an [IListEmpty]).
   @literal
-  const factory IList.empty() = IListConst<T>.empty;
+  const factory IList.empty() = IListEmpty<T>._;
 
   const IList._gen();
 

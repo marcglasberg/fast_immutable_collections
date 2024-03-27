@@ -14,6 +14,86 @@ import "s_add.dart";
 import "s_add_all.dart";
 import "s_flat.dart";
 
+/// This is an [ISet] which is always empty.
+@immutable
+class ISetEmpty<T> // ignore: must_be_immutable
+    extends ISet<T> {
+  /// Creates an empty set. In most cases, you should use `const ISet.empty()`.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's always wrong to use an `ISetEmpty()` which is not constant.
+  @literal
+  const ISetEmpty._([this.config = const ConfigSet()])
+      : super._gen();
+
+  @override
+  final ConfigSet config;
+
+  /// An empty set is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a empty set, by definition.
+  @override
+  ISetEmpty<T> get flush => this;
+
+  /// An empty set is always empty, by definition
+  @override
+  bool get isEmpty => true;
+
+  /// An empty set is always empty, by definition
+  @override
+  bool get isNotEmpty => false;
+
+  /// An empty set does not contain anything, by definition
+  @override
+  bool contains(covariant T? element) => false;
+
+  /// An empty set is always of length `0`, by definition
+  @override
+  int get length => 0;
+
+  /// An empty set has no first element, by definition
+  @override
+  Never get first => throw StateError("No element");
+
+  /// An empty set has no last element, by definition
+  @override
+  Never get last => throw StateError("No element");
+
+  /// An empty set has no single element, by definition
+  @override
+  Never get single => throw StateError("No element");
+
+  /// An empty set is always the cleared version of itself, by definition
+  @override
+  ISetEmpty<T> clear() => this;
+
+  @override
+  int get _counter => 0;
+
+  @override
+  S<T> get _s => SFlat<T>.unsafe({});
+
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
+  @override
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const SetEquality<dynamic>().hash({}), config.hashCode)
+        : hash2(identityHashCode(_s), config.hashCode);
+  }
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(ISet<T>? other) =>
+      (other != null) &&
+      (other is ISetEmpty) &&
+      (config == other.config);
+}
+
 /// This is an [ISet] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -36,15 +116,6 @@ class ISetConst<T> // ignore: must_be_immutable
       // because when you do this _set will be Set<Never> which is bad.
       [this.config = const ConfigSet()])
       : super._gen();
-
-  /// Creates a empty constant set.
-  ///
-  /// IMPORTANT: You must always use the `const` keyword.
-  /// It's always wrong to use an `ISetConst.empty()` which is not constant.
-  @literal
-  const ISetConst.empty([this.config = const ConfigSet()])
-      : _set = const {},
-        super._gen();
 
   final Set<T> _set;
 
@@ -197,9 +268,9 @@ abstract class ISet<T> // ignore: must_be_immutable
       ISet.withConfig(iterable, defaultConfig);
 
   /// Create an empty [ISet].
-  /// Use it with const: `const ISet.empty()` (It's always an [ISetConst]).
+  /// Use it with const: `const ISet.empty()` (It's always an [ISetEmpty]).
   @literal
-  const factory ISet.empty() = ISetConst<T>.empty;
+  const factory ISet.empty() = ISetEmpty<T>._;
 
   const ISet._gen();
 
