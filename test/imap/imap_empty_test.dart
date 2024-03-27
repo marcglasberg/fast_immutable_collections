@@ -11,15 +11,15 @@ void main() {
   });
 
   test("Runtime Type", () {
-    expect(const IMapEmpty(), isA<IMapEmpty>());
-    expect(const IMapEmpty(), isA<IMapEmpty>());
-    expect(const IMapEmpty<String, String>(), isA<IMapEmpty<String, String>>());
-    expect(const IMapEmpty<int, String>(), isA<IMapEmpty<int, String>>());
+    expect(const IMap.empty(), isA<IMapEmpty>());
+    expect(const IMap.empty(), isA<IMapEmpty>());
+    expect(const IMap<String, String>.empty(), isA<IMapEmpty<String, String>>());
+    expect(const IMap<int, String>.empty(), isA<IMap<int, String>>());
 
-    expect(const IMapEmpty(), isA<IMap>());
-    expect(const IMapEmpty(), isA<IMap>());
-    expect(const IMapEmpty<String, String>(), isA<IMap<String, String>>());
-    expect(const IMapEmpty<int, String>(), isA<IMap<int, String>>());
+    expect(const IMap.empty(), isA<IMap>());
+    expect(const IMap.empty(), isA<IMap>());
+    expect(const IMap<String, String>.empty(), isA<IMap<String, String>>());
+    expect(const IMap<int, String>.empty(), isA<IMap<int, String>>());
   });
 
   test("Make sure the IMapEmpty can be modified and later iterated", () {
@@ -44,7 +44,7 @@ void main() {
   });
 
   test("Make sure the internal map is Map<int, String>, and not Map<Never>", () {
-    const m1 = IMapEmpty<String, int>();
+    const m1 = IMap<String, int>.empty();
     expect(m1.runtimeType.toString(), 'IMapEmpty<String, int>');
 
     const m2 = IMapConst<String, int>({'a': 1, 'b': 2, 'c': 3});
@@ -69,7 +69,6 @@ void main() {
     expect(IMap().equalItems(const IMap.empty().entries), isTrue);
     expect(const IMapConst({}).equalItems(const IMap.empty().entries), isTrue);
     expect(const IMap.empty().equalItems(const IMap.empty().entries), isTrue);
-    expect(const IMap.empty().equalItems(const IMapEmpty().entries), isTrue);
 
 
     // equalItemsAndConfig
@@ -79,7 +78,6 @@ void main() {
     expect(IMap().equalItemsAndConfig(const IMap.empty()), isTrue);
     expect(const IMapConst({}).equalItemsAndConfig(const IMap.empty()), isTrue);
     expect(const IMap.empty().equalItemsAndConfig(const IMap.empty()), isTrue);
-    expect(const IMap.empty().equalItemsAndConfig(const IMapEmpty()), isTrue);
   });
 
   test("isEmpty | isNotEmpty", () {

@@ -24,7 +24,7 @@ class IMapEmpty<K, V> // ignore: must_be_immutable
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IMapEmpty()` which is not constant.
   @literal
-  const IMapEmpty([this.config = const ConfigMap()])
+  const IMapEmpty._([this.config = const ConfigMap()])
       : super._gen();
 
   @override
@@ -255,7 +255,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Create an empty [IMap].
   /// Use it with const: `const IMap.empty()` (It's always an [IMapEmpty]).
   @literal
-  const factory IMap.empty() = IMapEmpty<K, V>;
+  const factory IMap.empty() = IMapEmpty<K, V>._;
 
   const IMap._gen();
 
