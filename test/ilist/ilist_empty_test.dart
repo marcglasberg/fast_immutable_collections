@@ -46,4 +46,8 @@ void main() {
     final result = l3.where((int i) => i == 2).toList();
     expect(result, [2]);
   });
+
+  test(".same() is working properly", () {
+    expect(const IList.empty().same(const IList.empty()), isTrue);
+  });
 }

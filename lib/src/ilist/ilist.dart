@@ -57,8 +57,7 @@ class IListEmpty<T> // ignore: must_be_immutable
   @override
   bool same(IList<T>? other) =>
       (other != null) &&
-      (other is IListConst) &&
-      identical([], (other as IListConst)._list) &&
+      (other is IListEmpty) &&
       (config == other.config);
 }
 
