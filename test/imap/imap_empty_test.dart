@@ -81,4 +81,9 @@ void main() {
     expect(const IMap.empty().equalItemsAndConfig(const IMap.empty()), isTrue);
     expect(const IMap.empty().equalItemsAndConfig(const IMapEmpty()), isTrue);
   });
+
+  test(".isEmpty() | .isNotEmpty()", () {
+    expect(const IMap.empty().isEmpty, isTrue);
+    expect(const IMap.empty().isNotEmpty, isFalse);
+  });
 }

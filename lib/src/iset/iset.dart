@@ -18,7 +18,7 @@ import "s_flat.dart";
 @immutable
 class ISetEmpty<T> // ignore: must_be_immutable
     extends ISet<T> {
-  /// Creates a empty set. In most cases, you should use `const ISet.empty()`.
+  /// Creates an empty set. In most cases, you should use `const ISet.empty()`.
   ///
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `ISetEmpty()` which is not constant.
@@ -29,13 +29,21 @@ class ISetEmpty<T> // ignore: must_be_immutable
   @override
   final ConfigSet config;
 
-  /// A empty set is always flushed, by definition.
+  /// An empty set is always flushed, by definition.
   @override
   bool get isFlushed => true;
 
   /// Nothing happens when you flush a empty set, by definition.
   @override
   ISetEmpty<T> get flush => this;
+
+  /// An empty set is always empty, by definition
+  @override
+  bool get isEmpty => true;
+
+  /// An empty set is always empty, by definition
+  @override
+  bool get isNotEmpty => false;
 
   @override
   int get _counter => 0;

@@ -18,7 +18,7 @@ import "l_flat.dart";
 @immutable
 class IListEmpty<T> // ignore: must_be_immutable
     extends IList<T> {
-  /// Creates a empty list. In most cases, you should use `const IList.empty()`.
+  /// Creates an empty list. In most cases, you should use `const IList.empty()`.
   ///
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IListEmpty()` which is not constant.
@@ -29,13 +29,21 @@ class IListEmpty<T> // ignore: must_be_immutable
   @override
   final ConfigList config;
 
-  /// A empty list is always flushed, by definition.
+  /// An empty list is always flushed, by definition.
   @override
   bool get isFlushed => true;
 
   /// Nothing happens when you flush a empty list, by definition.
   @override
   IListEmpty<T> get flush => this;
+
+  /// An empty list is always empty, by definition
+  @override
+  bool get isEmpty => true;
+
+  /// An empty list is always empty, by definition
+  @override
+  bool get isNotEmpty => false;
 
   @override
   int get _counter => 0;

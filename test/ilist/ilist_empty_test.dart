@@ -72,4 +72,9 @@ void main() {
     expect(const IList.empty().equalItemsAndConfig(const IList.empty()), isTrue);
     expect(const IList.empty().equalItemsAndConfig(const IListEmpty()), isTrue);
   });
+
+  test(".isEmpty() | .isNotEmpty()", () {
+    expect(const IList.empty().isEmpty, isTrue);
+    expect(const IList.empty().isNotEmpty, isFalse);
+  });
 }

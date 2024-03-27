@@ -19,7 +19,7 @@ import "m_replace.dart";
 @immutable
 class IMapEmpty<K, V> // ignore: must_be_immutable
     extends IMap<K, V> {
-  /// Creates a empty map. In most cases, you should use `const IMap.empty()`.
+  /// Creates an empty map. In most cases, you should use `const IMap.empty()`.
   ///
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IMapEmpty()` which is not constant.
@@ -30,13 +30,21 @@ class IMapEmpty<K, V> // ignore: must_be_immutable
   @override
   final ConfigMap config;
 
-  /// A empty map is always flushed, by definition.
+  /// An empty map is always flushed, by definition.
   @override
   bool get isFlushed => true;
 
   /// Nothing happens when you flush a empty map, by definition.
   @override
   IMapEmpty<K, V> get flush => this;
+
+  /// An empty map is always empty, by definition
+  @override
+  bool get isEmpty => true;
+
+  /// An empty map is always empty, by definition
+  @override
+  bool get isNotEmpty => false;
 
   @override
   int get _counter => 0;
