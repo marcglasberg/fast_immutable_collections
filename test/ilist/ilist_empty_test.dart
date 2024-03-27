@@ -11,15 +11,15 @@ void main() {
   });
 
   test("Runtime Type", () {
-    expect(const IListEmpty(), isA<IListEmpty>());
-    expect(const IListEmpty(), isA<IListEmpty>());
-    expect(const IListEmpty<String>(), isA<IListEmpty<String>>());
-    expect(const IListEmpty<int>(), isA<IListEmpty<int>>());
+    expect(const IList.empty(), isA<IListEmpty>());
+    expect(const IList.empty(), isA<IListEmpty>());
+    expect(const IList<String>.empty(), isA<IListEmpty<String>>());
+    expect(const IList<int>.empty(), isA<IListEmpty<int>>());
 
-    expect(const IListEmpty(), isA<IList>());
-    expect(const IListEmpty(), isA<IList>());
-    expect(const IListEmpty<String>(), isA<IList<String>>());
-    expect(const IListEmpty<int>(), isA<IList<int>>());
+    expect(const IList.empty(), isA<IList>());
+    expect(const IList.empty(), isA<IList>());
+    expect(const IList<String>.empty(), isA<IList<String>>());
+    expect(const IList<int>.empty(), isA<IList<int>>());
   });
 
   test("Make sure the IListEmpty can be modified and later iterated", () {
@@ -35,7 +35,7 @@ void main() {
   });
 
   test("Make sure the internal list is List<int>, and not List<Never>", () {
-    const l1 = IListEmpty<int>();
+    const l1 = IList<int>.empty();
     expect(l1.runtimeType.toString(), 'IListEmpty<int>');
 
     const l2 = IListConst<int>([1, 2, 3]);
@@ -60,7 +60,7 @@ void main() {
     expect(IList().equalItems(const IList.empty()), isTrue);
     expect(const IListConst([]).equalItems(const IList.empty()), isTrue);
     expect(const IList.empty().equalItems(const IList.empty()), isTrue);
-    expect(const IList.empty().equalItems(const IListEmpty()), isTrue);
+    expect(const IList.empty().equalItems(const IList.empty()), isTrue);
 
 
     // equalItemsAndConfig
@@ -70,7 +70,7 @@ void main() {
     expect(IList().equalItemsAndConfig(const IList.empty()), isTrue);
     expect(const IListConst([]).equalItemsAndConfig(const IList.empty()), isTrue);
     expect(const IList.empty().equalItemsAndConfig(const IList.empty()), isTrue);
-    expect(const IList.empty().equalItemsAndConfig(const IListEmpty()), isTrue);
+    expect(const IList.empty().equalItemsAndConfig(const IList.empty()), isTrue);
   });
 
   test("isEmpty | isNotEmpty", () {

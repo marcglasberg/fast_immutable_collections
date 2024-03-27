@@ -23,7 +23,7 @@ class IListEmpty<T> // ignore: must_be_immutable
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IListEmpty()` which is not constant.
   @literal
-  const IListEmpty([this.config = const ConfigList()])
+  const IListEmpty._([this.config = const ConfigList()])
       : super._gen();
 
   @override
@@ -277,7 +277,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Create an empty [IList].
   /// Use it with const: `const IList.empty()` (It's always an [IListEmpty]).
   @literal
-  const factory IList.empty() = IListEmpty<T>;
+  const factory IList.empty() = IListEmpty<T>._;
 
   const IList._gen();
 
