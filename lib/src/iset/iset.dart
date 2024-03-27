@@ -23,7 +23,7 @@ class ISetEmpty<T> // ignore: must_be_immutable
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `ISetEmpty()` which is not constant.
   @literal
-  const ISetEmpty([this.config = const ConfigSet()])
+  const ISetEmpty._([this.config = const ConfigSet()])
       : super._gen();
 
   @override
@@ -270,7 +270,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Create an empty [ISet].
   /// Use it with const: `const ISet.empty()` (It's always an [ISetEmpty]).
   @literal
-  const factory ISet.empty() = ISetEmpty<T>;
+  const factory ISet.empty() = ISetEmpty<T>._;
 
   const ISet._gen();
 

@@ -11,15 +11,15 @@ void main() {
   });
 
   test("Runtime Type", () {
-    expect(const ISetEmpty(), isA<ISetEmpty>());
-    expect(const ISetEmpty(), isA<ISetEmpty>());
-    expect(const ISetEmpty<String>(), isA<ISetEmpty<String>>());
-    expect(const ISetEmpty<int>(), isA<ISetEmpty<int>>());
+    expect(const ISet.empty(), isA<ISetEmpty>());
+    expect(const ISet.empty(), isA<ISetEmpty>());
+    expect(const ISet<String>.empty(), isA<ISetEmpty<String>>());
+    expect(const ISet<int>.empty(), isA<ISetEmpty<int>>());
 
-    expect(const ISetEmpty(), isA<ISet>());
-    expect(const ISetEmpty(), isA<ISet>());
-    expect(const ISetEmpty<String>(), isA<ISet<String>>());
-    expect(const ISetEmpty<int>(), isA<ISet<int>>());
+    expect(const ISet.empty(), isA<ISet>());
+    expect(const ISet.empty(), isA<ISet>());
+    expect(const ISet<String>.empty(), isA<ISet<String>>());
+    expect(const ISet<int>.empty(), isA<ISet<int>>());
   });
 
   test("Make sure the ISetEmpty can be modified and later iterated", () {
@@ -35,7 +35,7 @@ void main() {
   });
 
   test("Make sure the internal set is Set<int>, and not Set<Never>", () {
-    const s1 = ISetEmpty<int>();
+    const s1 = ISet<int>.empty();
     expect(s1.runtimeType.toString(), 'ISetEmpty<int>');
 
     const s2 = ISetConst<int>({1, 2, 3});
@@ -60,7 +60,6 @@ void main() {
     expect(ISet().equalItems(const ISet.empty()), isTrue);
     expect(const ISetConst({}).equalItems(const ISet.empty()), isTrue);
     expect(const ISet.empty().equalItems(const ISet.empty()), isTrue);
-    expect(const ISet.empty().equalItems(const ISetEmpty()), isTrue);
 
 
     // equalItemsAndConfig
@@ -70,7 +69,6 @@ void main() {
     expect(ISet().equalItemsAndConfig(const ISet.empty()), isTrue);
     expect(const ISetConst({}).equalItemsAndConfig(const ISet.empty()), isTrue);
     expect(const ISet.empty().equalItemsAndConfig(const ISet.empty()), isTrue);
-    expect(const ISet.empty().equalItemsAndConfig(const ISetEmpty()), isTrue);
   });
 
   test("isEmpty | isNotEmpty", () {
