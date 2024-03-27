@@ -82,8 +82,31 @@ void main() {
     expect(const IMap.empty().equalItemsAndConfig(const IMapEmpty()), isTrue);
   });
 
-  test(".isEmpty() | .isNotEmpty()", () {
+  test("isEmpty | isNotEmpty", () {
     expect(const IMap.empty().isEmpty, isTrue);
     expect(const IMap.empty().isNotEmpty, isFalse);
+  });
+
+  test("contains | -Key | -Value | -Entry", () {
+    expect(const IMap.empty().contains(Object(), Object()), isFalse);
+    expect(const IMap.empty().contains(null, null), isFalse);
+
+    expect(const IMap.empty().containsKey(Object()), isFalse);
+    expect(const IMap.empty().containsKey(null), isFalse);
+
+    expect(const IMap.empty().containsValue(Object()), isFalse);
+    expect(const IMap.empty().containsValue(null), isFalse);
+
+    expect(const IMap.empty().containsEntry(const MapEntry(Object(), Object())), isFalse);
+    expect(const IMap.empty().containsEntry(const MapEntry(null, null)), isFalse);
+  });
+
+  test("length", () {
+    expect(const IMap.empty().length, 0);
+  });
+
+  test("clear()", () {
+    const list = IMap.empty();
+    expect(identical(list, list.clear()), isTrue);
   });
 }

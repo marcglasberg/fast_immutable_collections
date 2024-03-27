@@ -45,6 +45,34 @@ class IListEmpty<T> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => false;
 
+  /// An empty list does not contain anything, by definition
+  @override
+  bool contains(covariant T? element) => false;
+
+  /// An empty list is always of length `0`, by definition
+  @override
+  int get length => 0;
+
+  /// An empty list has no first element, by definition
+  @override
+  Never get first => throw StateError("No element");
+
+  /// An empty list has no last element, by definition
+  @override
+  Never get last => throw StateError("No element");
+
+  /// An empty list has no single element, by definition
+  @override
+  Never get single => throw StateError("No element");
+
+  /// An empty list is always the reversed version of itself, by definition
+  @override
+  IListEmpty<T> get reversed => this;
+
+  /// An empty list is always the cleared version of itself, by definition
+  @override
+  IListEmpty<T> clear() => this;
+
   @override
   int get _counter => 0;
 

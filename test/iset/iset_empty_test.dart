@@ -73,8 +73,28 @@ void main() {
     expect(const ISet.empty().equalItemsAndConfig(const ISetEmpty()), isTrue);
   });
 
-  test(".isEmpty() | .isNotEmpty()", () {
+  test("isEmpty | isNotEmpty", () {
     expect(const ISet.empty().isEmpty, isTrue);
     expect(const ISet.empty().isNotEmpty, isFalse);
+  });
+
+  test("contains", () {
+    expect(const ISet.empty().contains(Object()), isFalse);
+    expect(const ISet.empty().contains(null), isFalse);
+  });
+
+  test("length", () {
+    expect(const ISet.empty().length, 0);
+  });
+
+  test("fist | last | single", () {
+    expect(() => const ISet.empty().first, throwsStateError);
+    expect(() => const ISet.empty().last, throwsStateError);
+    expect(() => const ISet.empty().single, throwsStateError);
+  });
+
+  test("clear()", () {
+    const list = ISet.empty();
+    expect(identical(list, list.clear()), isTrue);
   });
 }

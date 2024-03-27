@@ -46,6 +46,30 @@ class IMapEmpty<K, V> // ignore: must_be_immutable
   @override
   bool get isNotEmpty => false;
 
+  /// An empty map does not contain anything, by definition
+  @override
+  bool contains(K key, V value) => false;
+
+  /// An empty map does not contain anything, by definition
+  @override
+  bool containsKey(K? key) => false;
+
+  /// An empty map does not contain anything, by definition
+  @override
+  bool containsValue(V? value) => false;
+
+  /// An empty map does not contain anything, by definition
+  @override
+  bool containsEntry(MapEntry<K, V> entry) => false;
+
+  /// An empty map is always of length `0`, by definition
+  @override
+  int get length => 0;
+
+  /// An empty map is always the cleared version of itself, by definition
+  @override
+  IMapEmpty<K, V> clear() => this;
+
   @override
   int get _counter => 0;
 

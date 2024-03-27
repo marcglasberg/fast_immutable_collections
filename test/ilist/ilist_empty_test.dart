@@ -73,8 +73,33 @@ void main() {
     expect(const IList.empty().equalItemsAndConfig(const IListEmpty()), isTrue);
   });
 
-  test(".isEmpty() | .isNotEmpty()", () {
+  test("isEmpty | isNotEmpty", () {
     expect(const IList.empty().isEmpty, isTrue);
     expect(const IList.empty().isNotEmpty, isFalse);
+  });
+
+  test("contains", () {
+    expect(const IList.empty().contains(Object()), isFalse);
+    expect(const IList.empty().contains(null), isFalse);
+  });
+
+  test("length", () {
+    expect(const IList.empty().length, 0);
+  });
+
+  test("fist | last | single", () {
+    expect(() => const IList.empty().first, throwsStateError);
+    expect(() => const IList.empty().last, throwsStateError);
+    expect(() => const IList.empty().single, throwsStateError);
+  });
+
+  test("reversed", () {
+    const list = IList.empty();
+    expect(identical(list, list.reversed), isTrue);
+  });
+
+  test("clear()", () {
+    const list = IList.empty();
+    expect(identical(list, list.clear()), isTrue);
   });
 }
