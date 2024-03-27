@@ -10,7 +10,6 @@ void main() {
     ImmutableCollection.autoFlush = false;
   });
 
-
   test("Runtime Type", () {
     expect(const IListEmpty(), isA<IListEmpty>());
     expect(const IListEmpty(), isA<IListEmpty>());
@@ -24,12 +23,14 @@ void main() {
   });
 
   test("Make sure the IListEmpty can be modified and later iterated", () {
+    // LAddAll
     IList<String> list = const IList.empty();
     list = list.addAll(["a", "b", "c"]);
     list.forEach((_) { });
+
+    // LAdd
+    list = const IList.empty();
     list = list.add("d");
-    list.forEach((_) { });
-    list = list.remove("a");
     list.forEach((_) { });
   });
 

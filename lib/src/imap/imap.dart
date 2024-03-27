@@ -15,6 +15,54 @@ import "m_add_all.dart";
 import "m_flat.dart";
 import "m_replace.dart";
 
+/// This is an [IMap] which is always empty.
+@immutable
+class IMapEmpty<K, V> // ignore: must_be_immutable
+    extends IMap<K, V> {
+  /// Creates a empty map. In most cases, you should use `const IMap.empty()`.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's always wrong to use an `IMapEmpty()` which is not constant.
+  @literal
+  const IMapEmpty([this.config = const ConfigMap()])
+      : super._gen();
+
+  @override
+  final ConfigMap config;
+
+  /// A empty map is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a empty map, by definition.
+  @override
+  IMapEmpty<K, V> get flush => this;
+
+  @override
+  int get _counter => 0;
+
+  @override
+  M<K, V> get _m => MFlat<K, V>.unsafe({});
+
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
+  @override
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const MapEquality<dynamic, dynamic>().hash({}), config.hashCode)
+        : hash2(identityHashCode(_m), config.hashCode);
+  }
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(IMap<K, V>? other) =>
+      (other != null) &&
+      (other is IMapEmpty) &&
+      (config == other.config);
+}
+
 /// This is an [IMap] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -34,15 +82,6 @@ class IMapConst<K, V> // ignore: must_be_immutable
       // because when you do this _map will be Map<Never, Never> which is bad.
       [this.config = const ConfigMap()])
       : super._gen();
-
-  /// Creates a empty constant map.
-  ///
-  /// IMPORTANT: You must always use the `const` keyword.
-  /// It's always wrong to use an `IMapConst.empty()` which is not constant.
-  @literal
-  const IMapConst.empty([this.config = const ConfigMap()])
-      : _map = const {},
-        super._gen();
 
   final Map<K, V> _map;
 
@@ -182,9 +221,9 @@ abstract class IMap<K, V> // ignore: must_be_immutable
       IMap.withConfig(map, defaultConfig);
 
   /// Create an empty [IMap].
-  /// Use it with const: `const IMap.empty()` (It's always an [IMapConst]).
+  /// Use it with const: `const IMap.empty()` (It's always an [IMapEmpty]).
   @literal
-  const factory IMap.empty() = IMapConst<K, V>.empty;
+  const factory IMap.empty() = IMapEmpty<K, V>;
 
   const IMap._gen();
 

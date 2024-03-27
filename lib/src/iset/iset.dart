@@ -14,6 +14,54 @@ import "s_add.dart";
 import "s_add_all.dart";
 import "s_flat.dart";
 
+/// This is an [ISet] which is always empty.
+@immutable
+class ISetEmpty<T> // ignore: must_be_immutable
+    extends ISet<T> {
+  /// Creates a empty set. In most cases, you should use `const ISet.empty()`.
+  ///
+  /// IMPORTANT: You must always use the `const` keyword.
+  /// It's always wrong to use an `ISetEmpty()` which is not constant.
+  @literal
+  const ISetEmpty([this.config = const ConfigSet()])
+      : super._gen();
+
+  @override
+  final ConfigSet config;
+
+  /// A empty set is always flushed, by definition.
+  @override
+  bool get isFlushed => true;
+
+  /// Nothing happens when you flush a empty set, by definition.
+  @override
+  ISetEmpty<T> get flush => this;
+
+  @override
+  int get _counter => 0;
+
+  @override
+  S<T> get _s => SFlat<T>.unsafe({});
+
+  /// Hash codes must be the same for objects that are equal to each other
+  /// according to operator ==.
+  @override
+  int? get _hashCode {
+    return isDeepEquals
+        ? hash2(const SetEquality<dynamic>().hash({}), config.hashCode)
+        : hash2(identityHashCode(_s), config.hashCode);
+  }
+
+  @override
+  set _hashCode(int? value) {}
+
+  @override
+  bool same(ISet<T>? other) =>
+      (other != null) &&
+      (other is ISetEmpty) &&
+      (config == other.config);
+}
+
 /// This is an [ISet] which can be made constant.
 /// Note: Don't ever use it without the "const" keyword, because it will be unsafe.
 ///
@@ -36,15 +84,6 @@ class ISetConst<T> // ignore: must_be_immutable
       // because when you do this _set will be Set<Never> which is bad.
       [this.config = const ConfigSet()])
       : super._gen();
-
-  /// Creates a empty constant set.
-  ///
-  /// IMPORTANT: You must always use the `const` keyword.
-  /// It's always wrong to use an `ISetConst.empty()` which is not constant.
-  @literal
-  const ISetConst.empty([this.config = const ConfigSet()])
-      : _set = const {},
-        super._gen();
 
   final Set<T> _set;
 
@@ -197,9 +236,9 @@ abstract class ISet<T> // ignore: must_be_immutable
       ISet.withConfig(iterable, defaultConfig);
 
   /// Create an empty [ISet].
-  /// Use it with const: `const ISet.empty()` (It's always an [ISetConst]).
+  /// Use it with const: `const ISet.empty()` (It's always an [ISetEmpty]).
   @literal
-  const factory ISet.empty() = ISetConst<T>.empty;
+  const factory ISet.empty() = ISetEmpty<T>;
 
   const ISet._gen();
 

@@ -14,10 +14,11 @@ import "l_add.dart";
 import "l_add_all.dart";
 import "l_flat.dart";
 
+/// This is an [IList] which is always empty.
 @immutable
 class IListEmpty<T> // ignore: must_be_immutable
     extends IList<T> {
-  /// Creates a empty list.
+  /// Creates a empty list. In most cases, you should use `const IList.empty()`.
   ///
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IListEmpty()` which is not constant.
