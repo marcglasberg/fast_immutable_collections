@@ -25,22 +25,18 @@ void main() {
   test("Make sure the IMapEmpty can be modified and later iterated", () {
     // MAddAll
     IMap<String, int> map = const IMap.empty();
-    map = map.addEntries([
-      const MapEntry("a", 1),
-      const MapEntry("b", 2),
-      const MapEntry("c", 3)
-    ]);
-    map.forEach((_, __) { });
+    map = map.addEntries([const MapEntry("a", 1), const MapEntry("b", 2), const MapEntry("c", 3)]);
+    map.forEach((_, __) {});
 
     // MAdd
     map = const IMap.empty();
     map = map.add("d", 4);
-    map.forEach((_, __) { });
+    map.forEach((_, __) {});
 
     // MReplace
     map = const IMap.empty();
     map = map.add("d", 42);
-    map.forEach((_, __) { });
+    map.forEach((_, __) {});
   });
 
   test("Make sure the internal map is Map<int, String>, and not Map<Never>", () {
@@ -59,6 +55,10 @@ void main() {
 
   test(".same() is working properly", () {
     expect(const IMap.empty().same(const IMap.empty()), isTrue);
+    expect(const IMap.empty().same(const IMap.empty()), isTrue);
+    expect(const IMap.empty().same(const IMapConst({})), isTrue);
+    expect(const IMapConst({}).same(const IMap.empty()), isTrue);
+    expect(const IMapConst({}).hashCode, const IMap.empty().hashCode);
   });
 
   test("equality", () {
@@ -69,7 +69,6 @@ void main() {
     expect(IMap().equalItems(const IMap.empty().entries), isTrue);
     expect(const IMapConst({}).equalItems(const IMap.empty().entries), isTrue);
     expect(const IMap.empty().equalItems(const IMap.empty().entries), isTrue);
-
 
     // equalItemsAndConfig
     expect(IMap({1: "a", 2: "b"}).equalItemsAndConfig(const IMap.empty()), isFalse);

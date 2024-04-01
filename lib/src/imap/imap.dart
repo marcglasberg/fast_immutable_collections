@@ -24,8 +24,7 @@ class IMapEmpty<K, V> // ignore: must_be_immutable
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IMapEmpty()` which is not constant.
   @literal
-  const IMapEmpty._([this.config = const ConfigMap()])
-      : super._gen();
+  const IMapEmpty._([this.config = const ConfigMap()]) : super._gen();
 
   @override
   final ConfigMap config;
@@ -91,7 +90,7 @@ class IMapEmpty<K, V> // ignore: must_be_immutable
   @override
   bool same(IMap<K, V>? other) =>
       (other != null) &&
-      (other is IMapEmpty) &&
+      (other is IMapEmpty || (other is IMapConst && (other as IMapConst)._map.isEmpty)) &&
       (config == other.config);
 }
 
@@ -149,8 +148,8 @@ class IMapConst<K, V> // ignore: must_be_immutable
   @override
   bool same(IMap<K, V>? other) =>
       (other != null) &&
-      (other is IMapConst) &&
-      identical(_map, (other as IMapConst)._map) &&
+      (((other is IMapConst) && identical(_map, (other as IMapConst)._map)) ||
+          (((other is IMapEmpty) && _map.isEmpty))) &&
       (config == other.config);
 }
 
@@ -887,9 +886,13 @@ abstract class IMap<K, V> // ignore: must_be_immutable
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
 
-  /// Will return `true` only if the maps internals are the same instances
+  /// Will return `true` if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn't  compare each entry.
+  /// since it doesn't compare each entry.
+  ///
+  /// May can also return `true` under some other situations where it's very
+  /// cheap to determine that the maps are equal even if the maps internals
+  /// are NOT the same.
   ///
   /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the

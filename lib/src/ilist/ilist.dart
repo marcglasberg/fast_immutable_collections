@@ -23,8 +23,7 @@ class IListEmpty<T> // ignore: must_be_immutable
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `IListEmpty()` which is not constant.
   @literal
-  const IListEmpty._([this.config = const ConfigList()])
-      : super._gen();
+  const IListEmpty._([this.config = const ConfigList()]) : super._gen();
 
   @override
   final ConfigList config;
@@ -94,7 +93,7 @@ class IListEmpty<T> // ignore: must_be_immutable
   @override
   bool same(IList<T>? other) =>
       (other != null) &&
-      (other is IListEmpty) &&
+      (other is IListEmpty || (other is IListConst && (other as IListConst)._list.isEmpty)) &&
       (config == other.config);
 }
 
@@ -152,8 +151,8 @@ class IListConst<T> // ignore: must_be_immutable
   @override
   bool same(IList<T>? other) =>
       (other != null) &&
-      (other is IListConst) &&
-      identical(_list, (other as IListConst)._list) &&
+      (((other is IListConst) && identical(_list, (other as IListConst)._list)) ||
+          (((other is IListEmpty) && _list.isEmpty))) &&
       (config == other.config);
 }
 
@@ -674,9 +673,13 @@ abstract class IList<T> // ignore: must_be_immutable
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
 
-  /// Will return `true` only if the lists internals are the same instances
+  /// Will return `true` if the lists internals are the same instances
   /// (comparing by identity). This will be fast even for very large lists,
   /// since it doesn't compare each item.
+  ///
+  /// May can also return `true` under some other situations where it's very
+  /// cheap to determine that the lists are equal even if the lists internals
+  /// are NOT the same.
   ///
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the

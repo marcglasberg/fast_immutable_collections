@@ -26,12 +26,12 @@ void main() {
     // LAddAll
     IList<String> list = const IList.empty();
     list = list.addAll(["a", "b", "c"]);
-    list.forEach((_) { });
+    list.forEach((_) {});
 
     // LAdd
     list = const IList.empty();
     list = list.add("d");
-    list.forEach((_) { });
+    list.forEach((_) {});
   });
 
   test("Make sure the internal list is List<int>, and not List<Never>", () {
@@ -50,6 +50,10 @@ void main() {
 
   test(".same() is working properly", () {
     expect(const IList.empty().same(const IList.empty()), isTrue);
+    expect(const IList.empty().same(const IList.empty()), isTrue);
+    expect(const IList.empty().same(const IListConst([])), isTrue);
+    expect(const IListConst([]).same(const IList.empty()), isTrue);
+    expect(const IListConst([]).hashCode, const IList.empty().hashCode);
   });
 
   test("equality", () {
@@ -61,7 +65,6 @@ void main() {
     expect(const IListConst([]).equalItems(const IList.empty()), isTrue);
     expect(const IList.empty().equalItems(const IList.empty()), isTrue);
     expect(const IList.empty().equalItems(const IList.empty()), isTrue);
-
 
     // equalItemsAndConfig
     expect(IList(["a", "b"]).equalItemsAndConfig(const IList.empty()), isFalse);

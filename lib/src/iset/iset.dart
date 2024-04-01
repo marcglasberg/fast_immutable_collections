@@ -23,8 +23,7 @@ class ISetEmpty<T> // ignore: must_be_immutable
   /// IMPORTANT: You must always use the `const` keyword.
   /// It's always wrong to use an `ISetEmpty()` which is not constant.
   @literal
-  const ISetEmpty._([this.config = const ConfigSet()])
-      : super._gen();
+  const ISetEmpty._([this.config = const ConfigSet()]) : super._gen();
 
   @override
   final ConfigSet config;
@@ -90,7 +89,7 @@ class ISetEmpty<T> // ignore: must_be_immutable
   @override
   bool same(ISet<T>? other) =>
       (other != null) &&
-      (other is ISetEmpty) &&
+      (other is ISetEmpty || (other is ISetConst && (other as ISetConst)._set.isEmpty)) &&
       (config == other.config);
 }
 
@@ -155,8 +154,8 @@ class ISetConst<T> // ignore: must_be_immutable
   @override
   bool same(ISet<T>? other) =>
       (other != null) &&
-      (other is ISetConst) &&
-      identical(_set, (other as ISetConst)._set) &&
+      (((other is ISetConst) && identical(_set, (other as ISetConst)._set)) ||
+          (((other is ISetEmpty) && _set.isEmpty))) &&
       (config == other.config);
 }
 
@@ -611,9 +610,13 @@ abstract class ISet<T> // ignore: must_be_immutable
         (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
   }
 
-  /// Will return `true` only if the sets internals are the same instances
+  /// Will return `true` if the sets internals are the same instances
   /// (comparing by identity). This will be fast even for very large sets,
   /// since it doesn't  compare each item.
+  ///
+  /// May can also return `true` under some other situations where it's very
+  /// cheap to determine that the sets are equal even if the sets internals
+  /// are NOT the same.
   ///
   /// Note: This is not the same as `identical(set1, set2)` since it doesn't
   /// compare the sets themselves, but their internal state. Comparing the

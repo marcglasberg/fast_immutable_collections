@@ -644,7 +644,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
   /// - If [isDeepEquals] configuration is `false`:
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn't  compare each entry.
+  /// since it doesn't compare each entry.
   ///
   /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the
@@ -683,7 +683,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
   /// Will return `true` only if the maps internals are the same instances
   /// (comparing by identity). This will be fast even for very large maps,
-  /// since it doesn't  compare each entry.
+  /// since it doesn't compare each entry.
   ///
   /// Note: This is not the same as `identical(map1, map2)` since it doesn't
   /// compare the maps themselves, but their internal state. Comparing the

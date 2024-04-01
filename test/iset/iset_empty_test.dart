@@ -50,6 +50,10 @@ void main() {
 
   test(".same() is working properly", () {
     expect(const ISet.empty().same(const ISet.empty()), isTrue);
+    expect(const ISet.empty().same(const ISet.empty()), isTrue);
+    expect(const ISet.empty().same(const ISetConst({})), isTrue);
+    expect(const ISetConst({}).same(const ISet.empty()), isTrue);
+    expect(const ISetConst({}).hashCode, const ISet.empty().hashCode);
   });
 
   test("equality", () {
