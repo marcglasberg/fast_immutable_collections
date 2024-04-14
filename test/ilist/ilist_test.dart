@@ -1567,6 +1567,17 @@ void main() {
           ('France', 'Paris'),
           ('Germany', 'Berlin'),
         ]));
+
+    // different type
+    final Iterable<(String, int)> zipped = countries.zip([10, 20, 30, 40]);
+    expect(
+        zipped,
+        IList([
+          ('France', 10),
+          ('Germany', 20),
+          ('Brazil', 30),
+          ('Japan', 40)
+        ]));
   });
 
   test("ZipAll with another source replacing with fill method value if available or else null", () {

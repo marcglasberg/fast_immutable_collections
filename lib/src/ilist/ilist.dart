@@ -1795,7 +1795,7 @@ abstract class IList<T> // ignore: must_be_immutable
       Iterable.generate(length, (index) => (index, _l[index])).toIList(config);
 
   /// Aggregate two sources trimming by the shortest source
-  Iterable<(T, T)> zip(Iterable<T> otherIterable) {
+  Iterable<(T, U)> zip<U>(Iterable<U> otherIterable) {
     final other = otherIterable.toList();
     final minLength = min(length, other.length);
     return Iterable.generate(minLength, (index) => (_l[index], other[index])).toIList(config);
