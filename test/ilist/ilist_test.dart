@@ -1569,9 +1569,9 @@ void main() {
         ]));
 
     // different type
-    final Iterable<(String, int)> zipped = countries.zip([10, 20, 30, 40]);
+    final Iterable<(String, int)> zippedWithInt = countries.zip([10, 20, 30, 40]);
     expect(
-        zipped,
+        zippedWithInt,
         IList([
           ('France', 10),
           ('Germany', 20),
