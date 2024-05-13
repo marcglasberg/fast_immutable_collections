@@ -1,3 +1,7 @@
+## 10.2.3
+
+* Improved `IList.zip()` generic typing.
+
 ## 10.2.2
 
 * You can now declare empty lists, sets and maps like
