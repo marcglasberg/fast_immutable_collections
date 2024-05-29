@@ -1,3 +1,7 @@
+## 10.2.4
+
+* Optimized `IMap.update()`.
+
 ## 10.2.3
 
 * Improved `IList.zip()` generic typing.

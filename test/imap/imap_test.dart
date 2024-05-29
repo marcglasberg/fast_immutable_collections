@@ -1798,6 +1798,19 @@ void main() {
     expect(nullableMap.get('foo'), 1);
   });
 
+  test("update returns same instance", () {
+    // 1) Existent key
+    IMap<String, Age> scores = {"Bob": Age(36), "Mary": Age(18)}.lock;
+
+    // Update with same instance (identical).
+    IMap<String, Age> updatedScores1 = scores.update("Bob", (Age age) => age);
+    expect(identical(scores, updatedScores1), isTrue);
+
+    // Update with equal instance (equals).
+    IMap<String, Age> updatedScores2 = scores.update("Bob", (Age age) => Age(age.value));
+    expect(identical(scores, updatedScores2), isFalse);
+  });
+
   test("updateAll", () {
     final IMap<String, int> scores = {"Bob": 36, "Joe": 100}.lock;
     final IMap<String, int?> updatedScores =
@@ -1818,4 +1831,21 @@ void main() {
     expect(() => IMap.flushFactor = 0, throwsStateError);
     expect(() => IMap.flushFactor = -100, throwsStateError);
   });
+}
+
+class Age {
+  final int value;
+
+  Age(this.value);
+
+  @override
+  String toString() => 'Age{value: $value}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Age && runtimeType == other.runtimeType && value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
 }

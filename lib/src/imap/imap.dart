@@ -1226,19 +1226,26 @@ abstract class IMap<K, V> // ignore: must_be_immutable
 
   /// Updates the value for the provided [key].
   ///
-  /// If the key is present, invokes [update] with the current value and stores
-  /// the new value in the map. However, if [ifRemove] is provided, the updated value will
-  /// first be tested with it and, if [ifRemove] returns true, the value will be
-  /// removed from the map, instead of updated.
+  /// 1. If the key is present:
   ///
-  /// If the key is not present and [ifAbsent] is provided, calls [ifAbsent]
-  /// and adds the key with the returned value to the map.
-  /// If the key is not present and [ifAbsent] is not provided, return the original map
-  /// without modification. Note: If you want [ifAbsent] to throw an error, pass it like
+  /// Invokes [update] with the current value and stores the new value in the
+  /// map. However, if [ifRemove] is provided, the updated value will first
+  /// be tested with it and, if [ifRemove] returns true, the value will be
+  /// removed from the map, instead of updated. Note: If [update] returns
+  /// the same INSTANCE as the current value, the original map instance will
+  /// be returned, unchanged.
+  ///
+  /// 2. If the key is NOT present:
+  ///
+  /// If [ifAbsent] is provided, calls [ifAbsent] and adds the key with the
+  /// returned value to the map. If the key is not present and [ifAbsent] is
+  /// not provided, return the original map instance, without modification.
+  /// Note: If you want [ifAbsent] to throw an error, pass it like
   /// this: `ifAbsent: () => throw ArgumentError();`.
   ///
-  /// If you want to get the original value before the update, you can provide the
-  /// [previousValue] parameter.
+  /// If you want to get the original value before the update/removal,
+  /// you can provide the mutable [previousValue] parameter, which is
+  /// of type [Output].
   ///
   @useResult
   IMap<K, V> update(
@@ -1248,34 +1255,46 @@ abstract class IMap<K, V> // ignore: must_be_immutable
     V Function()? ifAbsent,
     Output<V>? previousValue,
   }) {
-    // Contains key.
+    // 1. If the key is present:
     if (containsKey(key)) {
       final Map<K, V> map = unlock;
 
       final originalValue = map[key] as V;
       final updatedValue = update(originalValue);
+
+      previousValue?.save(originalValue);
+
+      // 1.1 Value removed
       if (ifRemove != null && ifRemove(key, updatedValue)) {
         map.remove(key);
-      } else {
-        map[key] = updatedValue;
+        return IMap._unsafeFromMap(map, config: config);
       }
+      // 1.2 Value updated
+      else {
+        map[key] = updatedValue;
 
-      if (previousValue != null) previousValue.save(originalValue);
-      return IMap._unsafeFromMap(map, config: config);
+        return identical(updatedValue, originalValue)
+            ? this
+            : IMap._unsafeFromMap(map, config: config);
+      }
     }
     //
-    // Does not contain key.
+    // 2. If the key is NOT present:
     else {
+      previousValue?.save(null);
+
+      // 2.1 IfAbsent is provided
       if (ifAbsent != null) {
         final updatedValue = ifAbsent();
-        if (previousValue != null) previousValue.save(null);
         final Map<K, V> map = ListMap.fromEntries(
           entries.followedBy([MapEntry(key, updatedValue)]),
           sort: config.sort,
         );
         return IMap._unsafeFromMap(map, config: config);
-      } else {
-        if (previousValue != null) previousValue.save(null);
+      }
+      //
+      // 2.2 IfAbsent NOT provided
+      else {
         return this;
       }
     }
