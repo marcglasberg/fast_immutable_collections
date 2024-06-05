@@ -165,4 +165,10 @@ class ListMapView<K, V> implements ListMap<K, V> {
     // TODO: Implement
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
+
+  @override
+  void insert(int index, K key, V value) {
+    // TODO: Implement
+    throw UnsupportedError("This is not yet supported, but will be in the future.");
+  }
 }

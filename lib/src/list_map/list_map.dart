@@ -197,6 +197,21 @@ class ListMap<K, V> implements Map<K, V> {
     throw UnsupportedError("This is not yet supported, but will be in the future.");
   }
 
+  /// Inserts [key]/[value] at position [index].
+  ///
+  /// If the [key] already exists, the previous one will first be removed.
+  ///
+  /// Then, it will shift all objects at or after the index towards the end of the list,
+  /// and add it at the given position.
+  ///
+  /// This only works if the `ListMap` is growable.
+  /// The [index] value must be non-negative and no greater than [length].
+  ///
+  void insert(int index, K key, V value) {
+    // TODO: Implement
+    throw UnsupportedError("This is not yet supported, but will be in the future.");
+  }
+
   @override
   void addEntries(Iterable<MapEntry<K, V>> newEntries) {
     // TODO: Implement
