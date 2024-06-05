@@ -105,7 +105,7 @@ class ListMapView<K, V> implements ListMap<K, V> {
   }
 
   @override
-  V remove(Object? key) {
+  V? remove(Object? key) {
     throw UnsupportedError("Can't remove from a ListMap.");
   }
 

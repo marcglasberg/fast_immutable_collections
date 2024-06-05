@@ -260,7 +260,7 @@ class ListMap<K, V> implements Map<K, V> {
   }
 
   @override
-  V remove(Object? key) {
+  V? remove(Object? key) {
     throw UnsupportedError("Can't remove from a ListMap.");
   }
 
