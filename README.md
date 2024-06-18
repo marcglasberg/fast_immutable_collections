@@ -1997,7 +1997,7 @@ To create an immutable object **in Dart** you must follow these 5 rules:
    improving performance).
 
 6. Make classes `final` or `sealed` **(Dart 3+ only)** to prevent classes outside the current library to subclass it.
-   The prevents subclasses adding mutable fields. It also prevents the <a href="https://en.wikipedia.org/wiki/Fragile_base_class#:~:text=The%20fragile%20base%20class%20problem,the%20derived%20classes%20to%20malfunction.">Fragile base class</a> problem.
+   This prevents subclasses adding mutable fields. It also prevents the <a href="https://en.wikipedia.org/wiki/Fragile_base_class#:~:text=The%20fragile%20base%20class%20problem,the%20derived%20classes%20to%20malfunction.">Fragile base class</a> problem.
 
 <br>
 
