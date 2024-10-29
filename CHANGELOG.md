@@ -1,3 +1,9 @@
+## 11.0.0
+
+* Sponsored by [MyText.ai](https://mytext.ai)
+
+[![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
+
 ## 10.2.4
 
 * Optimized `IMap.update()`.
@@ -88,6 +94,3 @@
 ## 1.0.0
 
 * Initial version: 2021/01/12
-
-
-

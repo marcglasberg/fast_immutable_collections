@@ -59,7 +59,7 @@ void main() {
     expect(list2, isNot(isA<List<String>>()));
     expect(list2, ["xxx", "xx", "x"]);
 
-    List<String> list3 = list1.whereNotNull().toList();
+    List<String> list3 = list1.nonNulls.toList();
     expect(list3, isA<List<String>>());
     expect(list3, ["xxx", "xx", "x"]);
   });

@@ -1,3 +1,7 @@
+[![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
+
+# Fast Immutable Collections
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/logo.png" alt="Logo" />
 </p>
@@ -6,10 +10,6 @@
   <a href="https://pub.dartlang.org/packages/fast_immutable_collections"><img src="https://img.shields.io/pub/v/fast_immutable_collections.svg"></a>
   <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
 </p>
-
----
-
-# Fast Immutable Collections
 
 > _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
 myself,
