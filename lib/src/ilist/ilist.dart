@@ -736,7 +736,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// (and the [id] is a function of the item), like so:
   ///
   /// 1) Items with the same [id] will be replaced, in place.
-  /// 2) Items with new [id]s will be added go to the end of the list.
+  /// 2) Items with new [id]s will be added to the end of the list.
   ///
   /// Note: If the original list contains more than one item with the same
   /// [id] as some item in [newItems], the first will be replaced, and the
