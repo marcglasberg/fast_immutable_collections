@@ -1449,13 +1449,15 @@ it, then turn it back into a `Set`.
 
 A `ListMap`  is a mutable, fixed-sized, and ordered map.
 
-Compared to a `LinkedHashMap`, a `ListMap` is also ordered, has a slightly worse performance, but
-uses less memory. It is not a `List`, but has some very efficient list methods, like `sort` and
-`shuffle`.
+Compared to a `LinkedHashMap`, a `ListMap` is also ordered, has a slightly worse 
+performance when used as a map to retrieve elements by key, but uses less memory. 
+
+A `ListMap` does not implement `List`, but it has some very efficient list methods, 
+like `sort` and `shuffle`.
 
 Also, you can efficiently read its information by index, by using the `entryAt`, `keyAt`
-and `valueAt` methods. The disadvantage, of course, is that `ListMap` has a fixed size, while
-a `LinkedHashMap` does not.
+and `valueAt` methods. The disadvantage, of course, is that `ListMap` has a fixed size, 
+while a `LinkedHashMap` does not.
 
 # 8. Extensions and Helpers
 
