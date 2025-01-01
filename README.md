@@ -1,14 +1,24 @@
 [![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
 
+[![Pub popularity](https://badgen.net/pub/popularity/fast_immutable_collections)](https://pub.dev/packages/fast_immutable_collections)
+<a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
+[![Pub Version](https://img.shields.io/pub/v/fast_immutable_collections?style=flat-square&logo=dart)](https://pub.dev/packages/fast_immutable_collections)
+[![GitHub stars](https://img.shields.io/github/stars/marcglasberg/fast_immutable_collections?style=social)](https://github.com/woltapp/fast_immutable_collections)
+![Code Climate issues](https://img.shields.io/github/issues/marcglasberg/fast_immutable_collections?style=flat-square)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/marcglasberg/fast_immutable_collections?style=flat-square)
+![GitHub contributors](https://img.shields.io/github/contributors/marcglasberg/fast_immutable_collections?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/marcglasberg/fast_immutable_collections?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/marcglasberg/fast_immutable_collections?style=flat-square)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
+[![Developed by Marcelo Glasberg](https://img.shields.io/badge/Developed%20by%20Marcelo%20Glasberg-blue.svg)](https://glasberg.dev/)
+[![Wolt on pub.dev](https://img.shields.io/pub/publisher/fast_immutable_collections.svg)](https://pub.dev/packages/glasberg.dev/publisher)
+[![Platforms](https://badgen.net/pub/flutter-platform/fast_immutable_collections)](https://pub.dev/packages/fast_immutable_collections)
+
+
 # Fast Immutable Collections
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/marcglasberg/fast_immutable_collections/master/assets/logo.png" alt="Logo" />
-</p>
-
-<p align="center">
-  <a href="https://pub.dartlang.org/packages/fast_immutable_collections"><img src="https://img.shields.io/pub/v/fast_immutable_collections.svg"></a>
-  <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
 </p>
 
 > _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
