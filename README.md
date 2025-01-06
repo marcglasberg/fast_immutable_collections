@@ -1,9 +1,8 @@
-[![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
 
 [![Pub popularity](https://badgen.net/pub/popularity/fast_immutable_collections)](https://pub.dev/packages/fast_immutable_collections)
 <a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
 [![Pub Version](https://img.shields.io/pub/v/fast_immutable_collections?style=flat-square&logo=dart)](https://pub.dev/packages/fast_immutable_collections)
-[![GitHub stars](https://img.shields.io/github/stars/marcglasberg/fast_immutable_collections?style=social)](https://github.com/woltapp/fast_immutable_collections)
+[![GitHub stars](https://img.shields.io/github/stars/marcglasberg/fast_immutable_collections?style=social)](https://github.com/marcglasberg/fast_immutable_collections)
 ![Code Climate issues](https://img.shields.io/github/issues/marcglasberg/fast_immutable_collections?style=flat-square)
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/marcglasberg/fast_immutable_collections?style=flat-square)
 ![GitHub contributors](https://img.shields.io/github/contributors/marcglasberg/fast_immutable_collections?style=flat-square)
@@ -11,9 +10,18 @@
 ![GitHub forks](https://img.shields.io/github/forks/marcglasberg/fast_immutable_collections?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
 [![Developed by Marcelo Glasberg](https://img.shields.io/badge/Developed%20by%20Marcelo%20Glasberg-blue.svg)](https://glasberg.dev/)
-[![Wolt on pub.dev](https://img.shields.io/pub/publisher/fast_immutable_collections.svg)](https://pub.dev/packages/glasberg.dev/publisher)
+[![Glasberg.dev on pub.dev](https://img.shields.io/pub/publisher/async_redux.svg)](https://pub.dev/publishers/glasberg.dev/packages)
 [![Platforms](https://badgen.net/pub/flutter-platform/fast_immutable_collections)](https://pub.dev/packages/fast_immutable_collections)
 
+#### Contributors
+
+<a href="https://github.com/marcglasberg/fast_immutable_collections/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=marcglasberg/fast_immutable_collections" alt="contributors"/>
+</a>
+
+#### Sponsor
+
+[![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
 
 # Fast Immutable Collections
 
@@ -22,7 +30,7 @@
 </p>
 
 > _This package is brought to you by <a href="https://github.com/psygo">Philippe Fanaro</a>, and
-myself,
+me,
 <a href="https://github.com/marcglasberg">Marcelo Glasberg</a>._
 > The below documentation is very detailed. For an overview, go to my
 > <a href="https://medium.com/flutter-community/announcing-fic-fast-immutable-collections-5eb091d1e31f">
@@ -1714,10 +1722,9 @@ means inconsistent rules may not be followed precisely.
 
 Please note, your order list may be of a different type than the values you are sorting. If this is
 the case, you can provide a `mapper` function, to convert the values into the `order` type. See
-the [`sort_test.dart`][sort_test]
+the [sort_test](https://github.com/marcglasberg/fast_immutable_collections/tree/master/test/base/sort_test.dart)
 file for more information and runnable examples.
 
-[sort_test]: https://github.com/marcglasberg/fast_immutable_collections/tree/master/test/base/sort_test.dart
 
 ## 9.5. SortReversed function
 
