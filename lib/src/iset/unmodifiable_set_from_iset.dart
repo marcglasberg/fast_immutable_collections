@@ -27,7 +27,7 @@ import 'iset.dart';
 /// [UnmodifiableSetFromISet] accepts both a [Set] and an [ISet]. Note both are views, so they
 /// are fast to create, but if you create them from a regular [Set] and then modify that original
 /// [Set], you will also be modifying the views. Also note, if you create an
-/// [UnmodifiableSetFromISet] from an [ISt], then it's totally safe because the original [ISet]
+/// [UnmodifiableSetFromISet] from an [ISet], then it's totally safe because the original [ISet]
 /// can't be modified.
 ///
 /// See also: [ModifiableSetFromISet]
