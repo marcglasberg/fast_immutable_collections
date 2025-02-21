@@ -22,7 +22,7 @@ class IMapOfSetsConst<K, V> extends IMapOfSets<K, V> {
   /// `const IMapOfSetsConst(IMapConst({'a': ISetConst({1, 2})}))`.
   ///
   /// IMPORTANT: You must always use the `const` keyword.
-  /// It's ALWAYS wrong to use an `IMapConst` which is not constant.
+  /// It's ALWAYS wrong to use an `IMapOfSetsConst` which is not constant.
   ///
   @literal
   const IMapOfSetsConst(super._mapOfSets, [super.config]) : super._();
