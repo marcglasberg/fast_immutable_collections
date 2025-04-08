@@ -225,7 +225,7 @@ class IListImpl<T> // ignore: must_be_immutable
 }
 
 /// An **immutable** list.
-/// Note: The [replace] method is the equivalent of `operator []=` for the [IList].
+/// Note: The [replace] method is the equivalent of `operator []=` for the [List].
 ///
 @immutable
 abstract class IList<T> // ignore: must_be_immutable
@@ -1275,7 +1275,7 @@ abstract class IList<T> // ignore: must_be_immutable
     return -1;
   }
 
-  /// This is the equivalent to `void operator []=(int index, T value);` for the [IList].
+  /// This is the equivalent to `void operator []=(int index, T value);` for the [List].
   /// Sets the value at the given [index] in the list to [value]
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
@@ -1577,7 +1577,7 @@ abstract class IList<T> // ignore: must_be_immutable
     return IList._unsafeFromList(toList(growable: false).sublist(start, end), config: config);
   }
 
-  /// This is the equivalent to `void operator []=(int index, T value);` for the [IList].
+  /// This is the equivalent to `void operator []=(int index, T value);` for the [List].
   /// Sets the value at the given [index] in the list to [value]
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
