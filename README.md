@@ -2048,13 +2048,8 @@ To create an immutable object **in Dart** you must follow these 5 rules:
    changes have no external effects (this may be useful for lazy initialization, caching and
    improving performance).
 
-_Note:_ There should also be a 6th rule stating that the class should be `final` (in the Java sense)
-, but in Dart it's impossible to prevent a class from being subclassed. The problem is that one can
-always subclass an otherwise immutable class and then add mutable fields to it, as well as override
-public methods to return changed values according to those mutable fields. This means that in Dart
-it's impossible to create strictly immutable classes. However, you can make it as close as possible
-to the real thing by at least not invoking overridable methods from the constructor (which in Dart
-means not invoking public non-static methods).
+6. Make classes `final` or `sealed` **(Dart 3+ only)** to prevent classes outside the current library to subclass it.
+   This prevents subclasses adding mutable fields. It also prevents the <a href="https://en.wikipedia.org/wiki/Fragile_base_class#:~:text=The%20fragile%20base%20class%20problem,the%20derived%20classes%20to%20malfunction.">Fragile base class</a> problem.
 
 <br>
 
