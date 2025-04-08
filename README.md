@@ -784,8 +784,8 @@ to use these mixins in detail.
 
 ## 2.5. Advanced usage
 
-There are a few ways to lock and unlock a list, which will have different results in speed and
-safety.
+There are a few ways to lock and unlock a list, which will have different 
+results in speed and safety.
 
 ```
 IList<int> ilist = [1, 2, 3].lock;       // Safe
@@ -798,8 +798,8 @@ List<int> list = ilist.unlockLazy;       // Safe, fast and mutable
 
 Suppose you have a `List`. These are your options to create an `IList` from it:
 
-- Getter `lock` will create an internal defensive copy of the original list, which will be used to
-  back the `IList`. This is the same as doing: `IList(list)`.
+- Getter `lock` will create an internal defensive copy of the original list, 
+  which will be used to back the `IList`. This is the same as doing: `IList(list)`.
 
 - Getter `lockUnsafe` is fast, since it makes no defensive copies of the list. However, you should
   only use this with a new list you've created yourself, when you are sure no external copies exist.
@@ -827,10 +827,43 @@ These are your options to obtain a regular `List` back from an `IList`:
   it will unlock the `IList` lazily, only if necessary. If you never mutate the list, it will be
   very fast to lock this list back into an `IList`.
 
+## Type inference details
+
+Keep in mind that type inference with immutable collections may be a bit 
+different than when using regular collections. For example, when doing 
+"inline initialization" of an `IList` created with its constructor and with 
+the `lock` extensions:
+
+```dart
+// Using the List constructor
+List<Animal> list = [Dog()];
+print(list.runtimeType); // IList<Animal>
+
+// Using the IList constructor
+IList<Animal> ilist1 = IList([Dog()]);
+print(ilist1.runtimeType); // IList<Animal>
+
+// Using the lock extension
+IList<Animal> ilist2 = [Dog()].lock;
+print(ilist2.runtimeType); // IList<Dog>
+
+// Using the lock extension while specifying the type
+IList<Animal> ilist3 = <Animal>[Dog()].lock;
+print(ilist3.runtimeType); // IList<Animal>
+```
+
+Note similar problems can also happen with regular mutable collections:
+
+```dart
+var list = <Animal>[];
+list = <Dog>[];
+list.add(Cat()); // Throws a compile-time error
+```
+
 ## 2.6. Iterables to create IList fields
 
-If you have a class that has an `IList` field, you may be tempted to accept an `IList` in its
-constructor:
+If you have a class that has an `IList` field, you may be tempted to accept 
+an `IList` in its constructor:
 
 ```
 class Students {
@@ -848,8 +881,8 @@ class Students {
 }
 ```
 
-Note, this constructor is very fast, because `IList(names)` will return the same `names` instance
-if `names` is already an `IList`.
+Note, this constructor is very fast, because `IList(names)` will return the 
+same `names` instance if `names` is already an `IList`.
 
 ### 2.6.1. Forcing non-default configurations
 

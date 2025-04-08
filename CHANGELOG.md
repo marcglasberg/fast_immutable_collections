@@ -1,8 +1,10 @@
-## 11.0.3
-
-* Sponsored by [MyText.ai](https://mytext.ai)
+Sponsored by [MyText.ai](https://mytext.ai)
 
 [![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
+
+## 11.0.4
+
+* Doc improvements.
 
 ## 10.2.4
 
@@ -44,7 +46,8 @@
 
 ## 9.2.1
 
-* @useResult annotation to signal that a method should return a copy of the collection, instead of
+* @useResult annotation to signal that a method should return a copy of the
+  collection, instead of
   mutating it.
 
 ## 9.1.6
@@ -70,12 +73,14 @@
 
 ## 8.2.0
 
-* `IList.replaceBy` method lets you define a function to transform an item at a specific index
+* `IList.replaceBy` method lets you define a function to transform an item at a
+  specific index
   location.
 
 ## 8.1.1
 
-* `IList.indexOf` extension fix (doesn't break anymore when list is empty and start is zero).
+* `IList.indexOf` extension fix (doesn't break anymore when list is empty and
+  start is zero).
 
 ## 8.1.0
 
@@ -87,7 +92,8 @@
   `IList<T> replaceFirstWhere(bool Function(T item) test, T Function(T? item) replacement, {bool addIfNotFound = false})`
   instead of
   `IList<T> replaceFirstWhere(bool Function(T item) test, T to, {bool addIfNotFound = false})`
-  In case this change breaks your code, the fix is simple. Instead of something like
+  In case this change breaks your code, the fix is simple. Instead of something
+  like
   `ilist.replaceFirstWhere((String item) => item=="1", "2")`
   do this: `ilist.replaceFirstWhere((String item) => item=="1", (_) => "2")`
 
