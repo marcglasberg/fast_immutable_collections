@@ -2,6 +2,11 @@ Sponsored by [MyText.ai](https://mytext.ai)
 
 [![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
 
+## 11.1.0
+
+* Added helper extension method `IList<IList<T>>.putXY()` for setting values in   
+  2D lists, using x,y coordinates.
+
 ## 11.0.4
 
 * Doc improvements.

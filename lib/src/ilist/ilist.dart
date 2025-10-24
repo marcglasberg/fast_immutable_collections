@@ -1279,6 +1279,10 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Sets the value at the given [index] in the list to [value]
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
+  /// Note: In the special case where you have an IList of ILists
+  /// (Like `IList<IList<String>>`) you can use the
+  /// extension [IList2dExtension.putXY].
+  ///
   /// See also: [replace] (same as [put]) and [replaceBy].
   @useResult
   IList<T> put(int index, T value) {
@@ -1581,7 +1585,8 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Sets the value at the given [index] in the list to [value]
   /// or throws a [RangeError] if [index] is out of bounds.
   ///
-  /// See also: [put] (same as [replace]) and [replaceBy].
+  /// See also: [put] (same as [replace]), [replaceBy]
+  /// and [IList2dExtension.putXY].
   @useResult
   IList<T> replace(int index, T value) {
     // TODO: Still need to implement efficiently.
@@ -2043,4 +2048,32 @@ class InternalsForTestingPurposesIList {
   /// }
   /// ```
   int get counter => ilist._counter;
+}
+
+extension IList2dExtension<T> on IList<IList<T>> {
+
+  /// For a list of lists like this:
+  ///
+  /// ```dart
+  /// IList<IList<String>> array = [[v00, v10, v20, v30],
+  ///  [v01, v11, v21, v31],
+  ///  [v02, v12, v22, v32],
+  ///  ].lock;
+  /// ```
+  ///
+  /// We can replace value `v21` like this:
+  ///
+  /// ```dart
+  /// var newArray = array.putXY(x: 2, y: 1, value: 'newValue');
+  /// ```
+  ///
+  /// This is the equivalent to `put(y, this[y].put(x, value))`.
+  /// Sets the value at the given [x] and [y] indexes of the lists to [value],
+  /// or throws a [RangeError] if any of the indexes is out of bounds.
+  ///
+  /// See also: [put].
+  @useResult
+  IList<IList<T>> putXY({required int x, required int y, required T value}) {
+    return put(y, this[y].put(x, value));
+  }
 }
