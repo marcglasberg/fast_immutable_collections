@@ -805,6 +805,18 @@ void main() {
     expect([1, 2, 3, 4, 5, 6].lock.fold(100, (int p, int e) => p * (1 + e)), 504000);
   });
 
+  test("scan", () {
+    expect([1, 2, -8, 24, -5, 6].lock.scan(10, (int p, int e) => p + e), [
+      10,
+      10 + 1,
+      10 + 1 + 2,
+      10 + 1 + 2 - 8,
+      10 + 1 + 2 - 8 + 24,
+      10 + 1 + 2 - 8 + 24 - 5,
+      10 + 1 + 2 - 8 + 24 - 5 + 6,
+    ]);
+  });
+
   test("followedBy", () {
     final IList<int> ilist = [1, 2, 3, 4, 5, 6].lock;
     expect(ilist.followedBy([7, 8]), [1, 2, 3, 4, 5, 6, 7, 8]);
