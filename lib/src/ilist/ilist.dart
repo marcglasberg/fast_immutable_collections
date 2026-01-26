@@ -350,29 +350,72 @@ abstract class IList<T> // ignore: must_be_immutable
   factory IList.unsafe(List<T> list, {required ConfigList config}) =>
       IListImpl.unsafe(list, config: config);
 
-  /// If [Iterable] is `null`, return `null`.
+  /// Constructor [IList.orNull] accepts an [Iterable] or `null`.
   ///
-  /// Otherwise, create an [IList] from the [Iterable].
-  /// Fast, if the Iterable is another [IList].
+  /// Behavior:
+  /// - If [iterable] is `null`, it returns `null`.
+  /// - If [iterable] is an [IList], it returns the same instance. No copy is created.
+  /// - If [iterable] is any other [Iterable], it creates a new [IList] from it.
   ///
-  /// This static factory is useful for implementing a `copyWith` method
-  /// that accepts an [Iterable]. For example:
+  /// This static factory is the recommended way to write constructors
+  /// and `copyWith` methods that accept both [IList] and [Iterable].
   ///
-  /// ```dart
-  /// IList<String> names;
+  /// ## The problem
   ///
-  /// Students copyWith({Iterable<String>? names}) =>
-  ///   Students(names: IList.orNull(names) ?? this.names);
-  /// ```
-  ///
-  /// Of course, if your `copyWith` accepts an [IList], this is not necessary:
+  /// Consider this code:
   ///
   /// ```dart
-  /// IList<String> names;
+  /// class NotesState {
+  ///   final IList<Note> notes;
   ///
-  /// Students copyWith({IList<String>? names}) =>
-  ///   Students(names: names ?? this.names);
+  ///   NotesState({
+  ///     this.notes = const IList.empty(),
+  ///   });
+  /// }
+  ///
+  /// NotesState copyWith({IList<Note>? notes})
+  ///   => NotesState(
+  ///     notes: notes ?? this.notes,
+  ///   );
+  ///
+  /// // To use it, you must instantiate an IList.
+  /// var notes = NotesState(notes: IList<Note>([note1, note2]));
   /// ```
+  ///
+  /// Here, callers must always create an [IList] themselves.
+  ///
+  /// ## Solution
+  ///
+  /// Use [IList.orNull] so your API can accept any [Iterable], or `null`:
+  ///
+  /// ```dart
+  /// class NotesState {
+  ///   final IList<Note> notes;
+  ///
+  ///   NotesState({
+  ///     Iterable<Note>? notes,
+  ///   }) : notes = IList.orNull(notes) ?? const IList.empty();
+  ///
+  ///   NotesState copyWith({Iterable<Note>? notes})
+  ///     => NotesState(
+  ///       notes: IList.orNull(notes) ?? this.notes,
+  ///     );
+  /// }
+  ///
+  /// // Use it
+  /// var notes = NotesState(); // Creates an empty list
+  /// var notes = NotesState(null); // Creates an empty list
+  /// var notes = NotesState(notes: []); // List works
+  /// var notes = NotesState(notes: IList<Note>([note1, note2])); // IList works
+  /// var notes = NotesState(notes: [note1, note2]); // List works
+  /// var notes = NotesState(notes: {note1, note2}); // Set works
+  /// ```
+  ///
+  /// Summary:
+  /// - If `notes` is `null` or omitted, an empty [IList] is used.
+  /// - If `notes` is an [IList], the same instance is reused.
+  ///   The exact object you pass in is kept.
+  /// - If `notes` is any other [Iterable], a new [IList] is created.
   ///
   @useResult
   static IList<T>? orNull<T>(
