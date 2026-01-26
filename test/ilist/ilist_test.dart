@@ -806,6 +806,7 @@ void main() {
   });
 
   test("scan", () {
+    // Basic addition
     expect([1, 2, -8, 24, -5, 6].lock.scan(10, (int p, int e) => p + e), [
       10,
       10 + 1,
@@ -815,6 +816,25 @@ void main() {
       10 + 1 + 2 - 8 + 24 - 5,
       10 + 1 + 2 - 8 + 24 - 5 + 6,
     ]);
+
+    // Empty list returns only initial value
+    expect(<int>[].lock.scan(10, (p, e) => p + e), [10]);
+
+    // Single element list
+    expect([5].lock.scan(0, (p, e) => p + e), [0, 5]);
+
+    // Multiplication instead of addition
+    expect([2, 3, 4].lock.scan(1, (p, e) => p * e), [1, 2, 6, 24]);
+
+    // String concatenation
+    expect(['a', 'b', 'c'].lock.scan('', (p, e) => p + e), ['', 'a', 'ab', 'abc']);
+
+    // Type transformation (accumulator type differs from element type)
+    expect([1, 2, 3].lock.scan<String>('', (p, e) => '$p$e'), ['', '1', '12', '123']);
+
+    // Verify return type is IList
+    final result = [1, 2].lock.scan(0, (p, e) => p + e);
+    expect(result, isA<IList<int>>());
   });
 
   test("followedBy", () {
