@@ -911,7 +911,7 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// (comparing by identity). This will be fast even for very large maps,
   /// since it doesn't compare each entry.
   ///
-  /// May can also return `true` under some other situations where it's very
+  /// It can also return `true` under some other situations where it's very
   /// cheap to determine that the maps are equal even if the maps internals
   /// are NOT the same.
   ///
@@ -957,8 +957,8 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   /// Returns a new map containing the current map plus the ones in the
   /// given [imap].
   ///
-  /// Note: [imap] entries that already exist in the original map will overwrite
-  /// those of the original map.
+  /// Note: [imap] entries that already exist in the original map will be overwritten
+  /// with new values.
   ///
   /// - If [keepOrder] is `false` (the default), those entries that already exist
   /// will be replaced at the end of the new map.
@@ -990,8 +990,8 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   }
 
   /// Returns a new map containing the current map plus the given [map] entries.
-  /// Note: [map] entries that already exist in the original map will overwrite
-  /// those of the original map, in place (keeping order).
+  /// Note: [map] entries that already exist in the original map will be overwritten
+  /// with new values, in place (keeping order).
   @useResult
   IMap<K, V> addMap(Map<K, V> map) {
     final IMap<K, V> result = config.sort
@@ -1413,8 +1413,8 @@ abstract class M<K, V> {
   }
 
   /// The entries of the given [imap] will be added to the original map.
-  /// Note: [imap] entries that already exist in the original map will overwrite
-  /// those of the original map.
+  /// Note: [imap] entries that already exist in the original map will be overwritten
+  /// with new values.
   ///
   /// If the current map is sorted, then if [keepOrder] is `false` (the default),
   /// those entries that already exist will go to the end of the new map. If
@@ -1445,8 +1445,8 @@ abstract class M<K, V> {
   }
 
   /// The [map] entries will be added to the original map.
-  /// Note: [map] entries that already exist in the original map will overwrite
-  /// those of the original map, in place (keeping order).
+  /// Note: [map] entries that already exist in the original map will be overwritten
+  /// with new values, in place (keeping order).
   ///
   /// Note: This will NOT sort anything.
   ///

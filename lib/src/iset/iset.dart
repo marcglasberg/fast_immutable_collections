@@ -614,7 +614,7 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// (comparing by identity). This will be fast even for very large sets,
   /// since it doesn't  compare each item.
   ///
-  /// May can also return `true` under some other situations where it's very
+  /// It can also return `true` under some other situations where it's very
   /// cheap to determine that the sets are equal even if the sets internals
   /// are NOT the same.
   ///
