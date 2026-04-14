@@ -937,6 +937,69 @@ class Students {
 }
 ```
 
+## 2.7. Caching Derived Data
+
+Since immutable collections never change, any value derived from their contents is stable. The
+`cached` method lets you lazily compute and store a derived value (like an index map) inside the
+collection instance itself, so subsequent calls return the cached result in O(1).
+
+You first define a `CacheKey` that pairs a cache identity with a typed computation:
+
+```dart
+class PairState {
+  final IList<Pair> pairs;
+
+  // Use static final so the same key object is reused across calls.
+  static final _byId = CacheKey<IList<Pair>, Map<Id, Pair>>(
+    (list) => {for (var p in list) p.id: p},
+  );
+
+  Pair? findById(Id id) => pairs.cached(_byId)[id];
+}
+```
+
+The first call to `cached` builds the map in O(n) and caches it. Every subsequent call is O(1) — 
+just a map lookup. When the state is replaced with a new `PairState` holding a different `IList`, 
+the old cache is garbage-collected with the old instance.
+
+You can use multiple cache keys on the same collection, each caching independently:
+
+```dart
+static final _byId = CacheKey<IList<User>, Map<String, User>>(
+  (list) => {for (var u in list) u.id: u},
+);
+
+static final _byEmail = CacheKey<IList<User>, Map<String, User>>(
+  (list) => {for (var u in list) u.email: u},
+);
+
+User? findById(String id) => users.cached(_byId)[id];
+User? findByEmail(String email) => users.cached(_byEmail)[email];
+```
+
+The `cached` method is also available on `ISet` and `IMap`:
+
+```dart
+// ISet example: cache a sorted list derived from a set.
+static final _sorted = CacheKey<ISet<String>, List<String>>(
+  (set) => set.toList()..sort(),
+);
+
+// IMap example: cache a reverse lookup (value -> key).
+static final _reverse = CacheKey<IMap<String, int>, Map<int, String>>(
+  (map) => {for (var e in map.entries) e.value: e.key},
+);
+```
+
+Notes:
+
+- Zero overhead for collections that don't use `cached` (just a single null pointer internally).
+- The cache survives `flush()` since the collection instance is preserved.
+- **Important:** Always use `static final` or top-level variables for `CacheKey` instances. Creating
+  a new `CacheKey` on every call defeats caching, because identity is used to look up cached values.
+- Constant collections (`const IList.empty()`, `const IListConst(...)`, etc.) support `cached` but
+  compute the value each time without caching, since they cannot hold mutable state.
+
 # 3. ISet
 
 An `ISet` is an immutable set, meaning once it's created it cannot be modified. An `ISet` may keep

@@ -6,6 +6,7 @@
 library fast_immutable_collections;
 
 // Base:
+export "src/base/cache_key.dart";
 export "src/base/configs.dart";
 export "src/base/fp.dart";
 export "src/base/immutable_collection.dart";

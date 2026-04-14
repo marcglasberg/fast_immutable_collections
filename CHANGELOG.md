@@ -2,6 +2,57 @@ Sponsored by [MyText.ai](https://mytext.ai)
 
 [![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
 
+## 11.2.0
+
+* Added `cached` method and `CacheKey` class for caching derived computations
+  on `IList`, `ISet`, and `IMap`.
+
+  Since immutable collections never change, any value derived from their contents
+  is stable and can be safely cached. The new `cached` method lets you lazily compute
+  and cache a derived value (like an index map) inside the collection instance itself,
+  so subsequent calls return the cached result in O(1).
+
+  Define a `CacheKey<C, R>` that pairs a cache identity with a typed computation
+  function. Use `static final` or top-level variables for keys so the same object
+  reference is reused across calls:
+
+  ```dart
+  class PairState {
+    final IList<Pair> pairs;
+  
+    static final _byId = CacheKey<IList<Pair>, Map<Id, Pair>>(
+      (list) => {for (var p in list) p.id: p},
+    );
+  
+    Pair? findById(Id id) => pairs.cached(_byId)[id];
+  }
+  ```
+
+  The first call to `cached` builds the map in O(n) and caches it. Every subsequent
+  call is O(1). When the collection is replaced with a new instance (e.g., an item
+  is added), the old cache is garbage-collected with the old instance, and the new
+  one builds its own cache on first access.
+
+  Multiple cache keys can be used on the same collection, each caching independently:
+
+  ```dart
+  static final _byId = CacheKey<IList<User>, Map<String, User>>(
+    (list) => {for (var u in list) u.id: u},
+  );
+
+  static final _byEmail = CacheKey<IList<User>, Map<String, User>>(
+    (list) => {for (var u in list) u.email: u},
+  );
+  ```
+
+  Notes:
+  - The cache adds zero overhead to collections that don't use it (a single null pointer).
+  - The cache survives `flush()` since the collection identity is preserved.
+  - Constant collections (`const IList.empty()`, `const IListConst(...)`, etc.) support
+    `cached` but compute the value each time without caching, since they cannot hold
+    mutable state.
+  - `CacheKey` can be `const` when using a static or top-level function reference.
+
 ## 11.1.0
 
 * Added helper extension method `IList<IList<T>>.putXY()` for setting values in   
