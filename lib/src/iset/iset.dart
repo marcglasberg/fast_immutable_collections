@@ -87,12 +87,6 @@ class ISetEmpty<T> // ignore: must_be_immutable
   set _hashCode(int? value) {}
 
   @override
-  Map<Object, Object?>? get _cache => null;
-
-  @override
-  set _cache(Map<Object, Object?>? value) {}
-
-  @override
   bool same(ISet<T>? other) =>
       (other != null) &&
       (other is ISetEmpty || (other is ISetConst && (other as ISetConst)._set.isEmpty)) &&
@@ -158,12 +152,6 @@ class ISetConst<T> // ignore: must_be_immutable
   set _hashCode(int? value) {}
 
   @override
-  Map<Object, Object?>? get _cache => null;
-
-  @override
-  set _cache(Map<Object, Object?>? value) {}
-
-  @override
   bool same(ISet<T>? other) =>
       (other != null) &&
       (((other is ISetConst) && identical(_set, (other as ISetConst)._set)) ||
@@ -188,10 +176,6 @@ class ISetImpl<T> // ignore: must_be_immutable
   @override
   // ignore: use_late_for_private_fields_and_variables
   int? _hashCode;
-
-  @override
-  // ignore: use_late_for_private_fields_and_variables
-  Map<Object, Object?>? _cache;
 
   /// Flushes the set, if necessary. Chainable method.
   /// If the set is already flushed, don't do anything.
@@ -266,48 +250,6 @@ abstract class ISet<T> // ignore: must_be_immutable
   int? get _hashCode;
 
   set _hashCode(int? value);
-
-  Map<Object, Object?>? get _cache;
-
-  set _cache(Map<Object, Object?>? value);
-
-  /// Returns a cached value derived from this set, computing it on first access.
-  ///
-  /// Since [ISet] is immutable, any value derived from its contents is stable and
-  /// can be safely cached. Use a [CacheKey] to define the computation and retrieve
-  /// the cached result.
-  ///
-  /// The [CacheKey] should be a `static final` or top-level variable so that the
-  /// same object is reused across calls. Creating a new [CacheKey] on each call
-  /// defeats caching.
-  ///
-  /// Example:
-  ///
-  /// ```dart
-  /// class TagState {
-  ///   final ISet<Tag> tags;
-  ///
-  ///   static final _byName = CacheKey<ISet<Tag>, Map<String, Tag>>(
-  ///     (set) => {for (var t in set) t.name: t},
-  ///   );
-  ///
-  ///   Tag? findByName(String name) => tags.cached(_byName)[name];
-  /// }
-  /// ```
-  ///
-  /// Note: Caching is supported only in regular [ISet] instances. Constant sets
-  /// created with `const ISet.empty()` or `const ISetConst(...)` will compute
-  /// the value each time without caching, since they cannot hold mutable state.
-  ///
-  R cached<R>(CacheKey<ISet<T>, R> key) {
-    _cache ??= {};
-    final cache = _cache;
-    if (cache == null) return key.computeFrom(this);
-    if (cache.containsKey(key)) return cache[key] as R;
-    final result = key.computeFrom(this);
-    cache[key] = result;
-    return result;
-  }
 
   /// Create an [ISet] from an [iterable], with the default configuration.
   /// Fast, if the iterable is another [ISet].

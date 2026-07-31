@@ -84,16 +84,6 @@ void main() {
     expect(set.cached(_sumKey), 0);
   });
 
-  test("cached | const ISet.empty() computes every time", () {
-    _computeCount = 0;
-    const set = ISet<int>.empty();
-
-    set.cached(_countingKey);
-    set.cached(_countingKey);
-
-    expect(_computeCount, 2);
-  });
-
   test("cached | cache survives flush", () {
     _computeCount = 0;
 

@@ -997,8 +997,6 @@ Notes:
 - The cache survives `flush()` since the collection instance is preserved.
 - **Important:** Always use `static final` or top-level variables for `CacheKey` instances. Creating
   a new `CacheKey` on every call defeats caching, because identity is used to look up cached values.
-- Constant collections (`const IList.empty()`, `const IListConst(...)`, etc.) support `cached` but
-  compute the value each time without caching, since they cannot hold mutable state.
 
 # 3. ISet
 

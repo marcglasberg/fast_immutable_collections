@@ -91,12 +91,6 @@ class IListEmpty<T> // ignore: must_be_immutable
   set _hashCode(int? value) {}
 
   @override
-  Map<Object, Object?>? get _cache => null;
-
-  @override
-  set _cache(Map<Object, Object?>? value) {}
-
-  @override
   bool same(IList<T>? other) =>
       (other != null) &&
       (other is IListEmpty || (other is IListConst && (other as IListConst)._list.isEmpty)) &&
@@ -155,12 +149,6 @@ class IListConst<T> // ignore: must_be_immutable
   set _hashCode(int? value) {}
 
   @override
-  Map<Object, Object?>? get _cache => null;
-
-  @override
-  set _cache(Map<Object, Object?>? value) {}
-
-  @override
   bool same(IList<T>? other) =>
       (other != null) &&
       (((other is IListConst) && identical(_list, (other as IListConst)._list)) ||
@@ -186,10 +174,6 @@ class IListImpl<T> // ignore: must_be_immutable
   // HashCode cache. Must be null if hashCode is not cached.
   // ignore: use_late_for_private_fields_and_variables
   int? _hashCode;
-
-  @override
-  // ignore: use_late_for_private_fields_and_variables
-  Map<Object, Object?>? _cache;
 
   /// Flushes the list, if necessary. Chainable getter.
   /// If the list is already flushed, don't do anything.
@@ -260,48 +244,6 @@ abstract class IList<T> // ignore: must_be_immutable
   int? get _hashCode;
 
   set _hashCode(int? value);
-
-  Map<Object, Object?>? get _cache;
-
-  set _cache(Map<Object, Object?>? value);
-
-  /// Returns a cached value derived from this list, computing it on first access.
-  ///
-  /// Since [IList] is immutable, any value derived from its contents is stable and
-  /// can be safely cached. Use a [CacheKey] to define the computation and retrieve
-  /// the cached result.
-  ///
-  /// The [CacheKey] should be a `static final` or top-level variable so that the
-  /// same object is reused across calls. Creating a new [CacheKey] on each call
-  /// defeats caching.
-  ///
-  /// Example:
-  ///
-  /// ```dart
-  /// class UserState {
-  ///   final IList<User> users;
-  ///
-  ///   static final _byId = CacheKey<IList<User>, Map<String, User>>(
-  ///     (list) => {for (var u in list) u.id: u},
-  ///   );
-  ///
-  ///   User? findById(String id) => users.cached(_byId)[id];
-  /// }
-  /// ```
-  ///
-  /// Note: Caching is supported only in regular [IList] instances. Constant lists
-  /// created with `const IList.empty()` or `const IListConst(...)` will compute
-  /// the value each time without caching, since they cannot hold mutable state.
-  ///
-  R cached<R>(CacheKey<IList<T>, R> key) {
-    _cache ??= {};
-    final cache = _cache;
-    if (cache == null) return key.computeFrom(this);
-    if (cache.containsKey(key)) return cache[key] as R;
-    final result = key.computeFrom(this);
-    cache[key] = result;
-    return result;
-  }
 
   @override
   int get hashCode {

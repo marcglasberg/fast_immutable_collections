@@ -83,16 +83,6 @@ void main() {
     expect(map.cached(_sumValues), 0);
   });
 
-  test("cached | const IMap.empty() computes every time", () {
-    _computeCount = 0;
-    const map = IMap<String, int>.empty();
-
-    map.cached(_countingKey);
-    map.cached(_countingKey);
-
-    expect(_computeCount, 2);
-  });
-
   test("cached | cache survives flush", () {
     _computeCount = 0;
 

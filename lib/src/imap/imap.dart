@@ -88,12 +88,6 @@ class IMapEmpty<K, V> // ignore: must_be_immutable
   set _hashCode(int? value) {}
 
   @override
-  Map<Object, Object?>? get _cache => null;
-
-  @override
-  set _cache(Map<Object, Object?>? value) {}
-
-  @override
   bool same(IMap<K, V>? other) =>
       (other != null) &&
       (other is IMapEmpty ||
@@ -154,12 +148,6 @@ class IMapConst<K, V> // ignore: must_be_immutable
   set _hashCode(int? value) {}
 
   @override
-  Map<Object, Object?>? get _cache => null;
-
-  @override
-  set _cache(Map<Object, Object?>? value) {}
-
-  @override
   bool same(IMap<K, V>? other) =>
       (other != null) &&
       (((other is IMapConst) && identical(_map, (other as IMapConst)._map)) ||
@@ -185,10 +173,6 @@ class IMapImpl<K, V> // ignore: must_be_immutable
   // HashCode cache. Must be null if hashCode is not cached.
   // ignore: use_late_for_private_fields_and_variables
   int? _hashCode;
-
-  @override
-  // ignore: use_late_for_private_fields_and_variables
-  Map<Object, Object?>? _cache;
 
   /// Flushes the map, if necessary. Chainable method.
   /// If the map is already flushed, doesn't do anything.
@@ -252,54 +236,6 @@ abstract class IMap<K, V> // ignore: must_be_immutable
   int? get _hashCode;
 
   set _hashCode(int? value);
-
-  Map<Object, Object?>? get _cache;
-
-  set _cache(Map<Object, Object?>? value);
-
-  /// Returns a cached value derived from this map, computing it on first access.
-  ///
-  /// Since [IMap] is immutable, any value derived from its contents is stable and
-  /// can be safely cached. Use a [CacheKey] to define the computation and retrieve
-  /// the cached result.
-  ///
-  /// The [CacheKey] should be a `static final` or top-level variable so that the
-  /// same object is reused across calls. Creating a new [CacheKey] on each call
-  /// defeats caching.
-  ///
-  /// Example:
-  ///
-  /// ```dart
-  /// class SettingsState {
-  ///   final IMap<String, Setting> settings;
-  ///
-  ///   static final _byCategory = CacheKey<IMap<String, Setting>, Map<Category, List<Setting>>>(
-  ///     (map) {
-  ///       final result = <Category, List<Setting>>{};
-  ///       for (var entry in map.entries) {
-  ///         (result[entry.value.category] ??= []).add(entry.value);
-  ///       }
-  ///       return result;
-  ///     },
-  ///   );
-  ///
-  ///   List<Setting> findByCategory(Category cat) => settings.cached(_byCategory)[cat] ?? [];
-  /// }
-  /// ```
-  ///
-  /// Note: Caching is supported only in regular [IMap] instances. Constant maps
-  /// created with `const IMap.empty()` or `const IMapConst(...)` will compute
-  /// the value each time without caching, since they cannot hold mutable state.
-  ///
-  R cached<R>(CacheKey<IMap<K, V>, R> key) {
-    _cache ??= {};
-    final cache = _cache;
-    if (cache == null) return key.computeFrom(this);
-    if (cache.containsKey(key)) return cache[key] as R;
-    final result = key.computeFrom(this);
-    cache[key] = result;
-    return result;
-  }
 
   @override
   int get hashCode {
