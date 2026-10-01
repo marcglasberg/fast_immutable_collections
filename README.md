@@ -35,7 +35,7 @@ me,
 > The below documentation is very detailed. For an overview, go to my
 > <a href="https://medium.com/flutter-community/announcing-fic-fast-immutable-collections-5eb091d1e31f">
 > Medium story</a>.
-> You may also check <a href="https://fanaro.io/articles/fic/fic.html">Philippe's article</a>.
+> You may also check <a href="https://web.archive.org/web/20220815032128/https://fanaro.io/articles/fic/fic.html">Philippe's article</a>.
 
 > IntelliJ plugin that supports this package coming soon:<br>
 <a href="https://plugins.jetbrains.com/files/21898/340924/icon/pluginIcon.svg"><img src="https://plugins.jetbrains.com/files/21898/340924/icon/pluginIcon.svg" height="20px" style="position: relative;top: 5px;"/>
