@@ -15,13 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/cirruslabs/flutter:3.19.4
+      image: ghcr.io/cirruslabs/flutter:3.47.5
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Changing channels so we have access to NNBD
-        run: bash tool/flutter_beta.sh
 
       - name: Removing CI/CD unnecessary folders
         run: bash tool/delete_noncicd_dirs.sh
@@ -32,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Static Analysis (also installs inner packages' dependencies)
+      - name: Static Analysis
         run: bash tool/static_analysis.sh
 
       - name: Run tests

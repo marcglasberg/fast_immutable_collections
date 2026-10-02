@@ -1,5 +1,5 @@
 #!/bin/bash
 
-dartanalyzer --fatal-infos --fatal-warnings .
+set -euo pipefail
 
-exit 0
+dart analyze --fatal-infos --fatal-warnings .
