@@ -2,6 +2,12 @@ Sponsored by [MyText.ai](https://mytext.ai)
 
 [![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
 
+## 11.2.1
+
+* Fixed the outdated benchmarks in `example/benchmark`
+  (https://github.com/marcglasberg/fast_immutable_collections/issues/85).
+  The package code itself is unchanged.
+
 ## 11.2.0
 
 * Added `cached` method and `CacheKey` class for caching derived computations
@@ -10,7 +16,7 @@ Sponsored by [MyText.ai](https://mytext.ai)
   Since immutable collections never change, any value derived from their contents
   is stable and can be safely cached. The new `cached` method lets you lazily compute
   and cache a derived value (like an index map) inside the collection instance itself,
-  so subsequent calls return the cached result in O(1).
+  so subsequent calls return the cached result in O (1).
 
   Define a `CacheKey<C, R>` that pairs a cache identity with a typed computation
   function. Use `static final` or top-level variables for keys so the same object
@@ -28,8 +34,8 @@ Sponsored by [MyText.ai](https://mytext.ai)
   }
   ```
 
-  The first call to `cached` builds the map in O(n) and caches it. Every subsequent
-  call is O(1). When the collection is replaced with a new instance (e.g., an item
+  The first call to `cached` builds the map in O (n) and caches it. Every subsequent
+  call is O (1). When the collection is replaced with a new instance (e.g., an item
   is added), the old cache is garbage-collected with the old instance, and the new
   one builds its own cache on first access.
 
@@ -46,12 +52,13 @@ Sponsored by [MyText.ai](https://mytext.ai)
   ```
 
   Notes:
-  - The cache adds zero overhead to collections that don't use it (a single null pointer).
-  - The cache survives `flush()` since the collection identity is preserved.
-  - Constant collections (`const IList.empty()`, `const IListConst(...)`, etc.) support
-    `cached` but compute the value each time without caching, since they cannot hold
-    mutable state.
-  - `CacheKey` can be `const` when using a static or top-level function reference.
+    - The cache adds zero overhead to collections that don't use it (a single null
+      pointer).
+    - The cache survives `flush()` since the collection identity is preserved.
+    - Constant collections (`const IList.empty()`, `const IListConst(...)`, etc.) support
+      `cached` but compute the value each time without caching, since they cannot hold
+      mutable state.
+    - `CacheKey` can be `const` when using a static or top-level function reference.
 
 ## 11.1.0
 

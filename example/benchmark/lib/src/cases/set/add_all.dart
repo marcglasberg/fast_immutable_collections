@@ -1,6 +1,4 @@
 // ignore_for_file: overridden_fields
-import "dart:math";
-
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
@@ -24,33 +22,24 @@ class MutableSetAddAllBenchmark extends SetBenchmarkBase {
 
   late Set<int> set;
   late Set<int> toBeAdded;
-  late List<Set<int>> initialSet;
-  late int count;
+
+  @override
+  late FreshCopies<Set<int>> freshCopies;
 
   @override
   Set<int> toMutable() => set;
 
   @override
   void setup() {
-    count = 0;
-    initialSet = [];
     toBeAdded = SetBenchmarkBase.getDummyGeneratedSet(size: config.size + config.size ~/ 10);
-    for (int i = 0; i <= max(1, 10000000 ~/ config.size); i++)
-      initialSet.add(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+    final Set<int> initial = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+    freshCopies = FreshCopies(() => Set<int>.of(initial), capacity: 1000000 ~/ config.size);
   }
 
   @override
   void run() {
-    set = getNextSet();
+    set = freshCopies.next();
     set.addAll(toBeAdded);
-  }
-
-  Set<int> getNextSet() {
-    if (count >= initialSet.length - 1)
-      count = 0;
-    else
-      count++;
-    return initialSet[count];
   }
 }
 

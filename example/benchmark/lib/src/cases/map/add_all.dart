@@ -1,6 +1,4 @@
 // ignore_for_file: overridden_fields
-import "dart:math";
-
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/src/utils/collection_benchmark_base.dart";
@@ -25,35 +23,23 @@ class MutableMapAddAllBenchmark extends MapBenchmarkBase {
   late Map<String, int> map;
   late Map<String, int> toBeAdded;
 
-  late int count;
-
-  // Saves many copies of the initial list (created during setup).
-  late List<Map<String, int>> initialMaps;
+  @override
+  late FreshCopies<Map<String, int>> freshCopies;
 
   @override
   Map<String, int> toMutable() => map;
 
   @override
   void setup() {
-    count = 0;
-    initialMaps = [];
     toBeAdded = MapBenchmarkBase.getDummyGeneratedMap(size: config.size + config.size ~/ 10);
-    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
-      initialMaps.add(MapBenchmarkBase.getDummyGeneratedMap(size: config.size));
+    final Map<String, int> initial = MapBenchmarkBase.getDummyGeneratedMap(size: config.size);
+    freshCopies = FreshCopies(() => Map<String, int>.of(initial), capacity: 1000000 ~/ config.size);
   }
 
   @override
   void run() {
-    map = getNextMap();
+    map = freshCopies.next();
     map.addAll(toBeAdded);
-  }
-
-  Map<String, int> getNextMap() {
-    if (count >= initialMaps.length - 1)
-      count = 0;
-    else
-      count++;
-    return initialMaps[count];
   }
 }
 

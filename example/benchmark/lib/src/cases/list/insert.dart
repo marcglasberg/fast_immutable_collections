@@ -26,37 +26,23 @@ class MutableListInsertBenchmark extends ListBenchmarkBase {
 
   late List<int> list;
 
-  // Saves many copies of the initial list (created during setup).
-  late List<List<int>> initialLists;
-
-  late int count;
+  @override
+  late FreshCopies<List<int>> freshCopies;
 
   @override
   List<int> toMutable() => list;
 
-  /// Since List is mutable, we have to create many copied of the original list during setup.
-  /// Note the setup does not count for the measurements.
   @override
   void setup() {
-    count = 0;
-    initialLists = [];
-    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
-      initialLists.add(ListBenchmarkBase.getDummyGeneratedList(size: config.size));
+    final List<int> initial = ListBenchmarkBase.getDummyGeneratedList(size: config.size);
+    freshCopies = FreshCopies(() => List<int>.of(initial), capacity: 1000000 ~/ config.size);
   }
 
   @override
   void run() {
-    list = getNextList();
+    list = freshCopies.next();
     final int randomInt = Random(seed).nextInt(emitter.config.size);
     list.insert(randomInt, randomInt);
-  }
-
-  List<int> getNextList() {
-    if (count >= initialLists.length - 1)
-      count = 0;
-    else
-      count++;
-    return initialLists[count];
   }
 }
 

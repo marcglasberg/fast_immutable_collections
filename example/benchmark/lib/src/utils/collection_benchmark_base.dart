@@ -38,20 +38,76 @@ abstract class CollectionBenchmarkBase<T> extends BenchmarkBase {
   @visibleForOverriding
   T toMutable();
 
+  /// Benchmarks that mutate their collection must override this, so that each
+  /// run gets a fresh copy of the initial collection. The copies are replenished
+  /// by [measure] while the stopwatch is paused, so creating them is not measured.
+  @visibleForOverriding
+  FreshCopies<T>? get freshCopies => null;
+
   // Measures the score for the benchmark and returns it.
   @override
   double measure() {
     setup();
     // Warmup for at least 100ms. Discard result.
-    BenchmarkBase.measureFor(() {
-      warmup();
-    }, 100);
+    _measureFor(warmup, 100);
     // Run the benchmark for at least 900ms.
-    final result = BenchmarkBase.measureFor(() {
-      exercise();
-    }, 900);
+    final result = _measureFor(exercise, 900);
     teardown();
     return result;
+  }
+
+  /// Same as [BenchmarkBase.measureFor], but pauses the stopwatch to replenish
+  /// the [freshCopies], when needed.
+  double _measureFor(void Function() f, int minimumMillis) {
+    final int minimumMicros = minimumMillis * 1000;
+    final FreshCopies<T>? copies = freshCopies;
+    final Stopwatch watch = Stopwatch();
+    int iterations = 2;
+    while (true) {
+      watch
+        ..reset()
+        ..start();
+      for (int i = 0; i < iterations; i++) {
+        if (copies != null && copies.isRunningLow) {
+          watch.stop();
+          copies.replenish();
+          watch.start();
+        }
+        f();
+      }
+      watch.stop();
+      final int elapsed = watch.elapsedMicroseconds;
+      if (elapsed >= minimumMicros) return elapsed / iterations;
+      iterations = (elapsed < 1000)
+          ? iterations * 1000
+          : (iterations * max(minimumMicros / elapsed, 1.5)).ceil();
+    }
+  }
+}
+
+/// Mutable collections are modified by the benchmarked operation, so each run
+/// needs its own fresh copy of the initial collection. Creating those copies
+/// during the run would distort the results, so they are created in advance.
+class FreshCopies<T> {
+  /// [BenchmarkBase.exercise] calls [BenchmarkBase.run] 10 times.
+  static const int _runsPerExercise = 10;
+
+  final T Function() _createCopy;
+  final int _capacity;
+  final List<T> _copies = [];
+
+  FreshCopies(this._createCopy, {required int capacity})
+      : _capacity = max(capacity, _runsPerExercise) {
+    replenish();
+  }
+
+  /// Returns a fresh copy, never returned before.
+  T next() => _copies.isEmpty ? _createCopy() : _copies.removeLast();
+
+  bool get isRunningLow => _copies.length < _runsPerExercise;
+
+  void replenish() {
+    while (_copies.length < _capacity) _copies.add(_createCopy());
   }
 }
 
@@ -76,10 +132,7 @@ abstract class SetBenchmarkBase extends CollectionBenchmarkBase<Set<int>> {
   SetBenchmarkBase({
     required super.name,
     required super.emitter,
-  }) {
-    // TODO: implement SetBenchmarkBase
-    throw UnimplementedError();
-  }
+  });
 
   static Set<int> getDummyGeneratedSet({required int size}) =>
       Set<int>.of(ListBenchmarkBase.getDummyGeneratedList(size: size));

@@ -33,10 +33,10 @@ class MultiBenchmarkScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> get _benchmarks => switch (collectionType) {
-        List => listBenchmarks,
-        Set => setBenchmarks,
-        Map => mapBenchmarks,
-        _ => throw UnimplementedError("No benchmarks for this collection type: $collectionType"),
-      };
+  List<Widget> get _benchmarks {
+    if (collectionType == List) return listBenchmarks;
+    if (collectionType == Set) return setBenchmarks;
+    if (collectionType == Map) return mapBenchmarks;
+    throw UnimplementedError("No benchmarks for this collection type: $collectionType");
+  }
 }

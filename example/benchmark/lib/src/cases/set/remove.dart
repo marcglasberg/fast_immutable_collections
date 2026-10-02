@@ -1,6 +1,4 @@
 // ignore_for_file: overridden_fields
-import "dart:math";
-
 import "package:built_collection/built_collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
@@ -23,32 +21,23 @@ class MutableSetRemoveBenchmark extends SetBenchmarkBase {
   MutableSetRemoveBenchmark({required super.emitter}) : super(name: "Set (Mutable)");
 
   late Set<int> set;
-  late int count;
-  late List<Set<int>> initialSets;
+
+  @override
+  late FreshCopies<Set<int>> freshCopies;
 
   @override
   Set<int> toMutable() => set;
 
   @override
   void setup() {
-    count = 0;
-    initialSets = [];
-    for (int i = 0; i <= max(1, 1000000 ~/ config.size); i++)
-      initialSets.add(SetBenchmarkBase.getDummyGeneratedSet(size: config.size));
+    final Set<int> initial = SetBenchmarkBase.getDummyGeneratedSet(size: config.size);
+    freshCopies = FreshCopies(() => Set<int>.of(initial), capacity: 1000000 ~/ config.size);
   }
 
   @override
   void run() {
-    set = getNextSet();
+    set = freshCopies.next();
     set.remove(config.size ~/ 2);
-  }
-
-  Set<int> getNextSet() {
-    if (count >= initialSets.length - 1)
-      count = 0;
-    else
-      count++;
-    return initialSets[count];
   }
 }
 
@@ -91,10 +80,7 @@ class KtSetRemoveBenchmark extends SetBenchmarkBase {
 }
 
 class BuiltSetRemoveBenchmark extends SetBenchmarkBase {
-  BuiltSetRemoveBenchmark({required super.emitter}) : super(name: "BuiltSet") {
-    // TODO: implement BuiltSetRemoveBenchmark
-    throw UnimplementedError();
-  }
+  BuiltSetRemoveBenchmark({required super.emitter}) : super(name: "BuiltSet");
 
   late BuiltSet<int> fixedSet;
   late BuiltSet<int> builtSet;

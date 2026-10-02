@@ -1,22 +1,12 @@
-import "package:charts_flutter/flutter.dart" as charts;
 import "package:fast_immutable_collections_benchmarks/fast_immutable_collections_benchmarks.dart";
 import "package:flutter/material.dart";
 
+/// Horizontal bars, one per collection, with lengths normalized against the
+/// maximum value. Each bar is labeled with its absolute time in microseconds.
 class BarChart extends StatelessWidget {
   final RecordsTable recordsTable;
 
   const BarChart({required this.recordsTable});
-
-  List<charts.Series<StopwatchRecord, String>> _seriesList() => [
-        charts.Series<StopwatchRecord, String>(
-          id: "Normalized Against\nthe Maximum Value",
-          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-          domainFn: (StopwatchRecord record, _) => record.collectionName,
-          measureFn: (StopwatchRecord record, _) => record.record,
-          data: _normalizedAgainstMaxPrefixedByAbs(recordsTable),
-          displayName: "displayName",
-        ),
-      ];
 
   List<StopwatchRecord> _normalizedAgainstMaxPrefixedByAbs(RecordsTable table) {
     final List<StopwatchRecord> records = [];
@@ -45,12 +35,39 @@ class BarChart extends StatelessWidget {
 
   @override
   Widget build(_) {
-    return charts.BarChart(
-      _seriesList(),
-      animate: true,
-      animationDuration: const Duration(milliseconds: 100),
-      barRendererDecorator: charts.BarLabelDecorator<String>(),
-      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final StopwatchRecord record in _normalizedAgainstMaxPrefixedByAbs(recordsTable))
+          _Bar(record),
+      ],
+    );
+  }
+}
+
+class _Bar extends StatelessWidget {
+  final StopwatchRecord record;
+
+  const _Bar(this.record);
+
+  @override
+  Widget build(_) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(record.collectionName, style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 4),
+          AnimatedFractionallySizedBox(
+            duration: const Duration(milliseconds: 100),
+            widthFactor: record.record.isFinite ? record.record.clamp(0.005, 1.0) : 0.005,
+            alignment: Alignment.centerLeft,
+            child: const SizedBox(height: 24, child: ColoredBox(color: Colors.blue)),
+          ),
+        ],
+      ),
     );
   }
 }
