@@ -2,7 +2,7 @@
 // and Philippe Fanaro https://github.com/psygo
 // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
-import "package:fast_immutable_collections/src/iterator/iterator_add_all.dart";
+import "package:fast_immutable_collections/src/iterator/chain_iterator.dart";
 
 import "iset.dart";
 
@@ -28,70 +28,69 @@ class SAddAll<T> extends S<T> {
   SAddAll.unsafe(this._s, Set<T> items) : _setOrS = items;
 
   @override
-  bool get isEmpty => false;
+  bool get isEmpty => chainItems.isEmpty;
 
   @override
-  Iterator<T> get iterator => IteratorAddAll(_s.iterator, _setOrS.iterator);
+  S<T> get below => _s;
 
   @override
-  Iterable<T> get iter => _s.followedBy(_setOrS);
+  int fillOwnItemsBefore(List<Object?> target, int end) {
+    final Iterable<T> items = _setOrS;
+    if (items is S<T>) return items.fillBefore(target, end);
 
-  @override
-  bool contains(covariant T? element) {
-    // Check the real set first (It's probably faster).
-    return _setOrS.contains(element) || _s.contains(element);
+    final int start = end - items.length;
+    target.setRange(start, end, items);
+    return start;
   }
 
   @override
-  bool containsAll(Iterable<T> other) {
-    for (final o in other) {
-      if ((!_setOrS.contains(o)) && (!_s.contains(o))) return false;
-    }
-    return true;
-  }
+  int get ownLength => _setOrS.length;
 
   @override
-  T? lookup(T element) {
-    final T? result = _s.lookup(element);
+  void sendOwnItemsTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveIterable(_setOrS);
 
-    if (result != null)
-      return result;
-    else if (_setOrS is S)
-      return (_setOrS as S<T>).lookup(element);
-    else if (_setOrS is Set)
-      return (_setOrS as Set<T>).lookup(element);
-    else
-      throw AssertionError();
-  }
+  // The methods below use [chainItems], which doesn't use recursion,
+  // so that they work for chains of any length.
 
   @override
-  Set<T> difference(Set<T> other) => Set.of(_s.followedBy(_setOrS))..removeAll(other);
+  Iterator<T> get iterator => chainItems.iterator;
 
   @override
-  Set<T> intersection(Set<T> other) =>
-      _s.intersection(other)..addAll(_setOrS.toSet().intersection(other));
+  Iterable<T> get iter => chainItems;
 
   @override
-  Set<T> union(Set<T> other) => _s.union(_setOrS.toSet())..addAll(other);
+  List<T> toList({bool growable = true}) => chainItems.toList(growable: growable);
 
   @override
-  int get length => _s.length + _setOrS.length;
+  Set<T> toSet() => chainItems.toSet();
 
   @override
-  T get anyItem => _s.first;
+  bool contains(covariant T? element) => chainContains(element);
 
   @override
-  T get first => _s.isNotEmpty ? _s.first : _setOrS.first;
+  bool ownContains(Object? element) => _setOrS.contains(element);
 
   @override
-  T get last => _setOrS.isNotEmpty ? _setOrS.last : _s.last;
+  bool containsAll(Iterable<T> other) => chainContainsAll(other);
 
   @override
-  T get single => _s.isNotEmpty ? _s.single : _setOrS.single;
+  T? lookup(T element) => chainLookup(element);
 
   @override
-  T operator [](int index) {
-    final sLength = _s.length;
-    return (index < sLength) ? _s[index] : _setOrS.elementAt(index - sLength);
-  }
+  int get length => chainItems.length;
+
+  @override
+  T get anyItem => chainItems.anyItem;
+
+  @override
+  T get first => chainItems.first;
+
+  @override
+  T get last => chainItems.last;
+
+  @override
+  T get single => chainItems.single;
+
+  @override
+  T operator [](int index) => chainItems.elementAt(index);
 }

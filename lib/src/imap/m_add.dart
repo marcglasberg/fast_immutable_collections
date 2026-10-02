@@ -2,7 +2,7 @@
 // and Philippe Fanaro https://github.com/psygo
 // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
-import 'package:fast_immutable_collections/src/iterator/iterator_add.dart';
+import 'package:fast_immutable_collections/src/iterator/chain_iterator.dart';
 import 'package:meta/meta.dart';
 
 import "imap.dart";
@@ -17,14 +17,20 @@ class MAdd<K, V> extends M<K, V> {
   @override
   bool get isEmpty => false;
 
-  @override
-  Iterable<MapEntry<K, V>> get entries => _m.entries.followedBy([MapEntry<K, V>(_key, _value)]);
+  // The methods below use the chain members of [M], which don't use
+  // recursion, so that they work for chains of any length.
 
   @override
-  Iterable<K> get keys => _m.keys.followedBy(<K>[_key]);
+  Iterable<MapEntry<K, V>> get entries => chainEntries;
 
   @override
-  Iterable<V> get values => _m.values.followedBy(<V>[_value]);
+  Iterable<K> get keys => chainKeys;
+
+  @override
+  Iterable<V> get values => chainValues;
+
+  @override
+  Iterator<MapEntry<K, V>> get iterator => chainEntries.iterator;
 
   /// This may be used to help avoid stack-overflow.
   @protected
@@ -70,14 +76,35 @@ class MAdd<K, V> extends M<K, V> {
   }
 
   @override
-  bool contains(K key, V value) => (key == _key && value == _value) || _m.contains(key, value);
+  bool contains(K key, V value) => chainContains(key, value);
 
   @override
-  bool containsValue(V? value) => (value == _value) || _m.containsValue(value);
+  bool containsValue(V? value) => chainValues.contains(value);
 
   @override
-  int get length => _m.length + 1;
+  int get length => chainKeys.length;
 
   @override
-  Iterator<MapEntry<K, V>> get iterator => IteratorAdd(_m.iterator, MapEntry(_key, _value));
+  M<K, V> get below => _m;
+
+  @override
+  int fillOwnEntriesBefore(
+      Map<Object?, Object?> map, List<Object?> keys, int end, Map<Object?, Object?> replacements) {
+    map[_key] = _value;
+    keys[end - 1] = _key;
+    return end - 1;
+  }
+
+  @override
+  int get ownLength => 1;
+
+  @override
+  void sendOwnEntriesTo(ChainItemsReceiver<Object?> receiver) =>
+      receiver.receiveItem(MapEntry<K, V>(_key, _value));
+
+  @override
+  void sendOwnKeysTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveItem(_key);
+
+  @override
+  void sendOwnValuesTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveItem(_value);
 }

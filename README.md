@@ -487,7 +487,7 @@ var list1 = [1, 2, 3];
 var list2 = [1, 2, 3];
                       
 // Regular Lists compare by identity:
-print(identical(ilist1, ilist2)); // False!
+print(identical(list1, list2)); // False!
 print(list1 == list2); // False!
 
 // While ILists compare by deep equals:
@@ -519,9 +519,9 @@ print(getSum(8, 9)); // Newly calculated: 8 + 9 = 17
 print(getSum(5, 3)); // Got from cache: 5 + 3 = 8
 ```
 
-However, `IList`s are configurable, and you can actually create `IList`s which compare their
-internals by **identity**
-or **deep equals**, as desired. There are 3 main ways to do it:
+However, `IList`s are configurable, and you can actually create `IList`s which compare by
+**identity** (two lists are equal only if they are the same object, as in `identical(list1, list2)`)
+or by **deep equals**, as desired. There are 3 main ways to do it:
 
 1. You can use getters `withIdentityEquals` and `withDeepEquals`:
 
@@ -580,7 +580,9 @@ to compare lists by using the following `IList` methods:
   (comparing by identity). This will be fast even for very large lists, since it doesn't compare
   each item. Note: This is not the same as `identical(list1, list2)` since it doesn't compare the
   lists themselves, but their internal state. Comparing the internal state is better, because it
-  will return `true` more often.
+  will return `true` more often. Note the internal state changes when a list is flushed, so if
+  only one of two lists that share the same internal state is flushed, they will no longer be
+  the same.
 
 ## 2.1.1 Cached HashCode
 
@@ -1101,8 +1103,8 @@ than for `IList`. Please read the `IList` explanation first, before trying to un
   They can be used as **map keys**, which is a very useful property in itself, but can also help
   when implementing some other interesting data structures.
 
-- However, `ISet`s are configurable, and you can actually create `ISet`s which compare their
-  internals by identity or deep equals, as desired.
+- However, `ISet`s are configurable, and you can actually create `ISet`s which compare by identity
+  (two sets are equal only if they are the same object) or by deep equals, as desired.
 
 - To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`; or else
   use the `withConfig`
@@ -1276,8 +1278,8 @@ than for IList. Please read the IList explanation first, before trying to unders
 - `IMap`s with "deep equals" configuration are equal if they have the same entries in **any** order.
   These maps can be used as **map keys** themselves.
 
-- However, `IMap`s are configurable, and you can actually create `IMap`s which compare their
-  internals by identity or deep equals, as desired.
+- However, `IMap`s are configurable, and you can actually create `IMap`s which compare by identity
+  (two maps are equal only if they are the same object) or by deep equals, as desired.
 
 - To choose a configuration, you can use getters `withIdentityEquals` and `withDeepEquals`; or else
   use the `withConfig`

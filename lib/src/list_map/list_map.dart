@@ -267,7 +267,8 @@ class ListMap<K, V> implements Map<K, V> {
   int get length => _list.length;
 
   @override
-  Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(K key, V value) f) => _map.map(f);
+  Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(K key, V value) f) =>
+      Map<K2, V2>.fromEntries(_list.map((key) => f(key, _map[key] as V)));
 
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {

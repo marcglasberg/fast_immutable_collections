@@ -14,7 +14,7 @@ extension TestExtension on ISet {
 
 void main() {
   //
-  test("Sync auto-flush when the set is already flushed.", () async {
+  test("Sync auto-flush when the set is already flushed.", () {
     ImmutableCollection.resetAllConfigurations();
     ISet.flushFactor = 4;
 
@@ -37,7 +37,7 @@ void main() {
     expect(iset, [1, 2, 3, 4]);
   });
 
-  test("Sync auto-flush when the set is NOT flushed.", () async {
+  test("Sync auto-flush when the set is NOT flushed.", () {
     ImmutableCollection.resetAllConfigurations();
     ISet.flushFactor = 4;
 
@@ -106,7 +106,7 @@ void main() {
 
   test(
       "Method 'add' makes counter equal to the source set counter, "
-      "plus one.", () async {
+      "plus one.", () {
     ImmutableCollection.resetAllConfigurations();
     ISet.flushFactor = 4;
 
@@ -132,7 +132,7 @@ void main() {
 
   test(
       "Method 'addAll' makes counter equal to "
-      "the larger counter of its source sets, plus one.", () async {
+      "the larger counter of its source sets, plus one.", () {
     ImmutableCollection.resetAllConfigurations();
     ISet.flushFactor = 100;
 

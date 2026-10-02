@@ -2,6 +2,142 @@ Sponsored by [MyText.ai](https://mytext.ai)
 
 [![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
 
+## 12.0.0
+
+* **Breaking change:** `IList`, `ISet` and `IMap` that compare by identity
+  (`isDeepEquals: false` in the constructor) now compare the collection objects
+  themselves. In other words, `collection1 == collection2` is now the same as
+  `identical(collection1, collection2)` when deep equals is turned off.
+  Previously, they compared their internal structure, so two different collections that
+  shared the same internal structure were considered equal.
+  However, this internal structure changes when a collection is flushed (which may also
+  happen automatically, just by reading it), so their `==` and `hashCode` could change,
+  and they could be lost in a `Set` or as `Map` keys. The `hashCode` of constant ones also
+  changed each time it was read. Note: You can still use `same()` to check if two
+  collections share the same internal structure. Collections that compare by deep equals
+  (`isDeepEquals: true` in the constructor) are the default, and are not affected.
+
+* Fixed `IMap.fromJson` and `IMap.toJson` for non-String keys when used with
+  `json_serializable`. IMap keys now work the same as regular `Map` keys, including
+  enums (https://github.com/marcglasberg/fast_immutable_collections/issues/39),
+  `DateTime`, `BigInt` and `Uri`
+  (https://github.com/marcglasberg/fast_immutable_collections/issues/58), and custom
+  key types with a `JsonConverter` or their own `fromJson`/`toJson`
+  (https://github.com/marcglasberg/fast_immutable_collections/issues/82).
+  For example:
+
+  ```dart
+  @JsonSerializable()
+  class MyClass {
+    final IMap<MyEnum, bool> byEnum;
+    final IMap<DateTime, String> byDate;    
+  }
+  ```
+
+  The `fromJsonK` function now receives the JSON key string, except when the key
+  type is `bool`, `int`, `double` or `num`, in which case it receives the parsed value (as
+  `json_serializable` expects). If the key is not a string, number, bool, `DateTime`,
+  `BigInt`, `Uri` or enum, `IMap.toJson` now calls the key's own `toJson` method.
+
+  Note: For `IMap<Object, V>` and `IMap<dynamic, V>`, `fromJsonK` now receives the JSON
+  key string. Previously, the key was wrongly converted into a `bool`.
+
+* Much faster iteration (like `for (final item in ilist)`) of `IList`, `ISet` and `IMap`
+  that were not yet flushed. Previously, each item went through the iterators of all
+  internal nodes created by `add` and `addAll`. Now each item is read only once, using
+  very little extra memory, and without creating any lists. For example, iterating an
+  `IList` of 10,000 items after 500 `add` calls is now about 480 times faster, and an
+  `ISet` or `IMap` after 50 `add` calls, about 9 to 45 times faster. The same is true
+  for `IMap.entries`, `IMap.keys` and `IMap.values`, including maps updated with `add`
+  or `update` of existing keys, and for methods like `join`, `elementAt` and `[]`. For
+  example, after 200 `add` calls, `IList.join` is about 48 times faster, and `IList[]`
+  about 90 times faster.
+
+* Much faster `flush` (and `unlock`) of `IList`, `ISet`, `IMap` and `IMapOfSets`
+  created by many `add`, `addAll` and `update` calls. These calls create a chain of
+  internal nodes, and flushing used to iterate this chain, which was slow because each
+  item went through the iterators of all the nodes above it. Now flushing walks down the
+  chain only once, without iterating it. Since flushing happens automatically after a
+  number of operations, this also makes many consecutive additions much faster. For
+  example, adding 1000 items to an `IList` of 10,000 items is now about 800 times faster,
+  and to an `ISet` or `IMap` of 10,000 items, about 12 to 20 times faster.
+
+* Faster `where`, `map`, `any`, `every`, `forEach`, `fold`, `toList` and `toSet` of
+  `IList` and `ISet` (and of the `keys` and `values` of `IMap`) that were not yet
+  flushed, since they no longer go through the iterators of all internal nodes. For
+  example, `where` and `any` are now 16 to 50 times faster after 20 `add` calls,
+  `IList.toList` is 3 to 12 times faster, and `toList(growable: false)` is 1.5 to 2.9
+  times faster.
+
+* `ISet.toList` is about 5 times faster for sets that are already flushed.
+
+* Fixed `ISet.anyItem` throwing `StateError` for a non-empty set created by adding
+  items to an empty set. For example: `ISet<int>([]).addAll([1]).anyItem`.
+
+* Fixed `IList.single` and `ISet.single` returning an item, instead of throwing
+  `StateError`, after adding items to a list or set with a single item. For example:
+  `IList([1]).addAll([2]).single` returned `1`.
+
+* `ISet.difference` and `ISet.intersection` are about 1.4 times faster for sets that
+  were not yet flushed, and their results now keep the iteration order of the set.
+
+* Prevented the possibility of stack overflows in many methods (like `length`, `contains`,
+  `[]`, `first`, `entries` and iteration) of `IList`, `ISet` and `IMap` with a large
+  number of unflushed operations. Note that this was only possible when
+  `ImmutableCollection.autoFlush` was `false`.
+
+* Fixed `ImmutableCollection.resetAllConfigurations()` not resetting
+  `IList.defaultConfig`, `ISet.defaultConfig` and `IMap.defaultConfig`. It now also
+  resets `IMapOfSets.defaultConfig`.
+
+* Fixed `equalItems` of `IList` and `ISet`, and `equalItemsToIMap` of `IMap`, returning
+  `false` for collections with equal items but different configurations, after their
+  `hashCode` was calculated. Also fixed `equalItemsAndConfig` returning `false` for
+  collections that compare by identity and have equal items and configurations, after
+  their `hashCode` was calculated.
+
+* Fixed `ISet.withConfig(iset, config)` not sorting the set when `config.sort` is `true`
+  and `iset` is an `ISet`. For example,
+  `ISet.withConfig({3, 1, 2}.lock, ConfigSet(sort: true))` returned `[3, 1, 2]`.
+
+* Fixed `IMap.cast()` throwing a `TypeError` for maps that were not yet flushed (for
+  example, after `add`). Now, as documented, if the map is already an `IMap<RK, RV>`,
+  it's returned unchanged.
+
+* Fixed `IMap.toValueSet(compare: ...)` failing an assertion. Now it sorts the values
+  with the given `compare` function.
+
+* Fixed `IMap.unlockSorted` not sorting the map when the map's `ConfigMap.sort` is
+  `false`.
+
+* Fixed `IMap.entryOrNull` throwing for a key that exists with a `null` value.
+
+* Fixed `IMapOfSets.withConfig(null, config)` ignoring the given `config`, and
+  `IMapOfSets.removeValues` and `IMapOfSets.removeValuesWhere` losing the map
+  configuration (like `sortKeys`).
+
+* Fixed `remove`, `removeAll` and `removeMany` of constant and empty lists, `remove` of
+  constant and empty sets, and `remove` and `removeWhere` of constant and empty maps,
+  returning a new collection instead of the same instance when nothing is removed.
+
+* Fixed `IList<Never>().addAll(...)` throwing when
+  `ImmutableCollection.disallowUnsafeConstructors` is `true`.
+
+* Fixed `sumBy` throwing `UnsupportedError` for empty iterables when the result type is
+  `num`. For example, `<num>[].sumBy((e) => e)` now returns `0`.
+
+* Fixed `compareObject` ignoring `nullsBefore: true` when comparing the keys and values
+  of `MapEntry`s.
+
+* Fixed `ListMap.map` not keeping the order of the `ListMap`.
+
+* Fixed `lookup` of `ModifiableSetFromISet` and `UnmodifiableSetFromISet` (returned by
+  `ISet.unlockLazy` and `ISet.unlockView`) returning the given element, instead of the
+  element that is in the set.
+
+* Fixed the docs of `isFirst`, `isNotFirst`, `isLast` and `isNotLast`, which said
+  they return `null` for empty iterables.
+
 ## 11.2.1
 
 * Fixed the outdated benchmarks in `example/benchmark`

@@ -2,7 +2,7 @@
 // and Philippe Fanaro https://github.com/psygo
 // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
-import '../iterator/iterator_add.dart';
+import '../iterator/chain_iterator.dart';
 import "iset.dart";
 
 /// The [SAdd] class does not check for duplicate elements. In other words,
@@ -19,68 +19,62 @@ class SAdd<T> extends S<T> {
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorAdd(_s.iterator, _item);
+  S<T> get below => _s;
 
   @override
-  Iterable<T> get iter => _s.followedBy([_item]);
-
-  @override
-  bool contains(covariant T? element) => _s.contains(element) || _item == element;
-
-  @override
-  bool containsAll(Iterable<T> other) {
-    for (final o in other) {
-      if ((_item != o) && (!_s.contains(o))) return false;
-    }
-    return true;
+  int fillOwnItemsBefore(List<Object?> target, int end) {
+    target[end - 1] = _item;
+    return end - 1;
   }
 
   @override
-  T? lookup(T element) {
-    T? result = _s.lookup(element);
-    result ??= (_item == element) ? _item : null;
-    return result;
-  }
+  int get ownLength => 1;
 
   @override
-  Set<T> difference(Set<T> other) {
-    if (other.contains(_item)) {
-      return _s.difference(other);
-    } else {
-      return _s.difference(other)..add(_item);
-    }
-  }
+  void sendOwnItemsTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveItem(_item);
+
+  // The methods below use [chainItems], which doesn't use recursion,
+  // so that they work for chains of any length.
 
   @override
-  Set<T> intersection(Set<T> other) {
-    final containsItem = other.contains(_item);
-    final result = _s.intersection(other);
-    if (containsItem) result.add(_item);
-    return result;
-  }
+  Iterator<T> get iterator => chainItems.iterator;
 
   @override
-  Set<T> union(Set<T> other) => _s.union({_item})..addAll(other);
+  Iterable<T> get iter => chainItems;
 
   @override
-  int get length => _s.length + 1;
+  List<T> toList({bool growable = true}) => chainItems.toList(growable: growable);
 
   @override
-  T get anyItem => _item;
+  Set<T> toSet() => chainItems.toSet();
 
   @override
-  T get first => _s.isEmpty ? _item : _s.first;
+  bool contains(covariant T? element) => chainContains(element);
+
+  @override
+  bool ownContains(Object? element) => _item == element;
+
+  @override
+  bool containsAll(Iterable<T> other) => chainContainsAll(other);
+
+  @override
+  T? lookup(T element) => chainLookup(element);
+
+  @override
+  int get length => chainItems.length;
+
+  @override
+  T get anyItem => chainItems.anyItem;
+
+  @override
+  T get first => chainItems.first;
 
   @override
   T get last => _item;
 
   @override
-  T get single => _s.isEmpty ? _item : throw StateError("Too many elements");
+  T get single => chainItems.single;
 
   @override
-  T operator [](int index) {
-    final sLength = _s.length;
-    if (index < 0 || index >= sLength + 1) throw RangeError.range(index, 0, sLength + 1, "index");
-    return (index < sLength) ? _s[index] : _item;
-  }
+  T operator [](int index) => chainItems.elementAt(index);
 }

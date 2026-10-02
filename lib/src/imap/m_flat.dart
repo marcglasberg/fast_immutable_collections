@@ -73,6 +73,15 @@ class MFlat<K, V> extends M<K, V> {
   int get length => _map.length;
 
   @override
+  int fillOwnEntriesBefore(
+      Map<Object?, Object?> map, List<Object?> keys, int end, Map<Object?, Object?> replacements) {
+    final int start = end - _map.length;
+    keys.setRange(start, end, _map.keys);
+    map.addAll(_map);
+    return start;
+  }
+
+  @override
   Iterator<MapEntry<K, V>> get iterator => entries.iterator;
 
   /// Map equality but with an [Iterable] of [MapEntry].

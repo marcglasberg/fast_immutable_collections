@@ -8,6 +8,7 @@ import "dart:math";
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
+import "package:fast_immutable_collections/src/iterator/chain_iterator.dart";
 import "package:meta/meta.dart";
 
 import "s_add.dart";
@@ -78,9 +79,8 @@ class ISetEmpty<T> // ignore: must_be_immutable
   /// according to operator ==.
   @override
   int? get _hashCode {
-    return isDeepEquals
-        ? hash2(const SetEquality<dynamic>().hash({}), config.hashCode)
-        : hash2(identityHashCode(_s), config.hashCode);
+    // All empty collections with the same config are equal, also when comparing by identity.
+    return hash2(const SetEquality<dynamic>().hash({}), config.hashCode);
   }
 
   @override
@@ -149,9 +149,10 @@ class ISetConst<T> // ignore: must_be_immutable
   /// according to operator ==.
   @override
   int? get _hashCode {
+    // When comparing by identity, == compares the collection objects themselves.
     return isDeepEquals
         ? hash2(const SetEquality<dynamic>().hash(_set), config.hashCode)
-        : hash2(identityHashCode(_s), config.hashCode);
+        : identityHashCode(this);
   }
 
   @override
@@ -229,17 +230,6 @@ class ISetImpl<T> // ignore: must_be_immutable
   /// on the source collection.
   static ISetImpl<T> empty<T>([ConfigSet? config]) =>
       ISetImpl._unsafe(SFlat.empty<T>(), config: config ?? ISet.defaultConfig);
-
-  /// **Safe**. Fast if the [Iterable] is an [ISet].
-  ISetImpl._(
-    Iterable<T>? iterable, {
-    required this.config,
-  })  : _s = iterable is ISet<T> //
-            ? iterable._s
-            : iterable == null
-                ? SFlat.empty<T>()
-                : SFlat<T>(iterable),
-        super._gen();
 }
 
 /// An **immutable**, **ordered** set.
@@ -343,7 +333,8 @@ abstract class ISet<T> // ignore: must_be_immutable
             ? iterable
             : iterable.isEmpty
                 ? ISetImpl.empty<T>(config)
-                : ISetImpl<T>._(iterable, config: config)
+                // Uses the `withConfig` method, since it sorts the set if necessary.
+                : iterable.withConfig(config)
         : (iterable == null)
             ? ISetImpl.empty<T>(config)
             : ISetImpl<T>._unsafe(SFlat<T>(iterable, config: config), config: config);
@@ -463,7 +454,7 @@ abstract class ISet<T> // ignore: must_be_immutable
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration of immutable collections.");
     ISet.flushFactor = _defaultFlushFactor;
-    ISet.defaultConfig = _defaultConfig;
+    ISet.defaultConfig = const ConfigSet();
   }
 
   /// Global configuration that specifies if, by default, the [ISet]s
@@ -591,23 +582,22 @@ abstract class ISet<T> // ignore: must_be_immutable
   bool get isNotEmpty => !isEmpty;
 
   /// - If [isDeepEquals] configuration is `true`:
-  /// Will return `true` only if the set items are equal (and in the same order),
+  /// Will return `true` only if the set items are equal (in any order),
   /// and the set configurations are equal. This may be slow for very
   /// large sets, since it compares each item, one by one.
   ///
   /// - If [isDeepEquals] configuration is `false`:
-  /// Will return `true` only if the sets internals are the same instances
-  /// (comparing by identity). This will be fast even for very large sets,
-  /// since it doesn't  compare each item.
+  /// Will return `true` only if the sets are the same object, as in
+  /// `identical(set1, set2)`. This will be fast even for very large sets,
+  /// since it doesn't compare each item.
   ///
-  /// Note: This is not the same as `identical(set1, set2)` since it doesn't
-  /// compare the sets themselves, but their internal state. Comparing the
-  /// internal state is better, because it will return true more often.
+  /// Note: To check if two sets share the same internal state, use [same].
   ///
   @override
   bool operator ==(Object other) => (other is ISet) && isDeepEquals
       ? equalItemsAndConfig(other)
-      : (other is ISet<T>) && same(other);
+      // Compares the ISet objects themselves (not their internals, which change when flushed).
+      : identical(this, other);
 
   /// Returns the concatenation of this set and [other].
   /// Returns a new set containing the elements of this set followed by
@@ -664,8 +654,15 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Note: We use the **CACHED** hashCodes. If any of the hashCodes is null it
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(ISet? other) {
-    return (other == null) ||
-        (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
+    if (other == null) return true;
+
+    // The hashCode also depends on the config, and when comparing by identity it
+    // depends on the identity of the internals. So it can only be used to compare
+    // the items when both collections compare by equality, with the same config.
+    if (!isDeepEquals || config != other.config) return false;
+
+    final int? hashCode1 = _hashCode, hashCode2 = other._hashCode;
+    return hashCode1 != null && hashCode2 != null && hashCode1 != hashCode2;
   }
 
   /// Will return `true` if the sets internals are the same instances
@@ -679,6 +676,10 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// Note: This is not the same as `identical(set1, set2)` since it doesn't
   /// compare the sets themselves, but their internal state. Comparing the
   /// internal state is better, because it will return true more often.
+  ///
+  /// Note: The internal state changes when a collection is flushed. So, if only
+  /// one of two collections that share the same internal state is flushed, they
+  /// will no longer be the same.
   @override
   bool same(ISet<T>? other) =>
       (other != null) && identical(_s, other._s) && (config == other.config);
@@ -689,7 +690,7 @@ abstract class ISet<T> // ignore: must_be_immutable
 
     final hashCode = isDeepEquals //
         ? hash2((flush._s as SFlat<T>).deepSetHashcode(), config.hashCode)
-        : hash2(identityHashCode(_s), config.hashCode);
+        : identityHashCode(this);
 
     if (config.cacheHashCode) _hashCode = hashCode;
 
@@ -747,8 +748,10 @@ abstract class ISet<T> // ignore: must_be_immutable
   /// it will return the current set (same instance).
   @useResult
   ISet<T> remove(T item) {
-    final S<T> result = _s.remove(item);
-    return identical(result, _s)
+    // Note: Reads `_s` only once, since const sets create a new `_s` each time.
+    final S<T> s = _s;
+    final S<T> result = s.remove(item);
+    return identical(result, s)
         ? this
         : ISet<T>._unsafe(
             result,
@@ -977,7 +980,7 @@ abstract class ISet<T> // ignore: must_be_immutable
         final orderedList = toList(growable: false, compare: compare);
         return LinkedHashSet.of(orderedList);
       } else {
-        return LinkedHashSet.of(_s);
+        return _s.toSet();
       }
     }
   }
@@ -1100,7 +1103,10 @@ abstract class ISet<T> // ignore: must_be_immutable
   }
 }
 
-abstract class S<T> implements Iterable<T> {
+void _sendOwnItemsOfS(ChainNode node, ChainItemsReceiver<Object?> receiver) =>
+    (node as S<Object?>).sendOwnItemsTo(receiver);
+
+abstract class S<T> implements Iterable<T>, ChainNode {
   //
 
   /// The [S] class provides the default fallback methods of `Iterable`, but
@@ -1113,12 +1119,114 @@ abstract class S<T> implements Iterable<T> {
   /// Returns the flushed set (flushes it only once).
   /// It is an error to use the flushed set outside of the [S] class.
   ListSet<T> getFlushed(ConfigSet? config) {
-    _flushed ??= ListSet.of(this, sort: (config ?? ISet.defaultConfig).sort);
+    _flushed ??= ListSet.of(_orderedItems, sort: (config ?? ISet.defaultConfig).sort);
     return _flushed!;
   }
 
   /// Returns a Dart [Set] (*mutable, ordered, of type [LinkedHashSet]*).
-  Set<T> get unlock => LinkedHashSet.of(this);
+  Set<T> get unlock => LinkedHashSet.of(_orderedItems);
+
+  /// The items of this set, in iteration order.
+  ///
+  /// Sets created by `add` and `addAll` are chains of nodes, each one pointing
+  /// to the node [below] it. Iterating such a chain is slow, because each item
+  /// goes through the iterators of all the nodes above it. Instead, we create
+  /// a list with the final length, and then fill it from the end, while
+  /// walking down the chain.
+  ///
+  /// Note: Unlike [IList], we can't reuse the flushed set of a node below,
+  /// because it may be sorted, while the iteration order is the insertion order.
+  Iterable<T> get _orderedItems {
+    if (_isShallow) return this;
+
+    final int length = this.length;
+    if (length == 0) return const [];
+
+    // All positions are overwritten with items of type T.
+    final List<T?> result = List<T?>.filled(length, null);
+    fillBefore(result, length);
+    return result.cast<T>();
+  }
+
+  /// Whether this node has at most 2 nodes below it. Iterating such a short chain
+  /// is faster than filling a list.
+  bool get _isShallow {
+    final S<T>? below1 = below;
+    return (below1 == null) || (below1.below?.below == null);
+  }
+
+  /// Copies the items of this set into [target], in iteration order, ending
+  /// right before index [end], and returns the index where they start.
+  int fillBefore(List<Object?> target, int end) {
+    S<T>? node = this;
+    while (node != null) {
+      end = node.fillOwnItemsBefore(target, end);
+      node = node.below;
+    }
+    return end;
+  }
+
+  /// The node below this one, in a chain of nodes created by `add` and `addAll`.
+  /// Returns `null` if there is no node below this one.
+  @override
+  S<T>? get below => null;
+
+  /// The number of items of this node only (not counting the nodes [below] it).
+  /// By default, all the items, which is correct for the bottom node of a chain.
+  @override
+  int get ownLength => length;
+
+  /// Sends the items of this node only (not counting the nodes [below] it) to
+  /// the [receiver]. By default, all the items, which is correct for the bottom
+  /// node of a chain.
+  void sendOwnItemsTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveIterable(this);
+
+  /// The items of this node and of the nodes [below] it. The nodes of a chain
+  /// (like [SAdd] and [SAddAll]) use it to implement their methods without
+  /// recursion, so that they work for chains of any length.
+  ChainIterable<T> get chainItems => ChainIterable<T>(this, _sendOwnItemsOfS);
+
+  /// Same as [lookup], but without recursion, for the nodes of a chain.
+  T? chainLookup(Object? element) {
+    final _LookupReceiver<T> receiver = _LookupReceiver<T>(element);
+    for (S<T>? node = this; node != null; node = node.below) {
+      node.sendOwnItemsTo(receiver);
+      if (receiver.found) return receiver.result;
+    }
+    return null;
+  }
+
+  /// Whether the items of this node only (not counting the nodes [below] it)
+  /// contain the [element]. By default, all the items, which is correct for the
+  /// bottom node of a chain.
+  bool ownContains(Object? element) => (element is T?) && contains(element);
+
+  /// Same as [contains], but without recursion, for the nodes of a chain.
+  /// Note: This is used by `add`, so it calls [ownContains] directly, which is
+  /// faster than using [chainItems].
+  bool chainContains(Object? element) {
+    for (S<T>? node = this; node != null; node = node.below) {
+      if (node.ownContains(element)) return true;
+    }
+    return false;
+  }
+
+  /// Same as [containsAll], but without recursion, for the nodes of a chain.
+  bool chainContainsAll(Iterable<T> other) {
+    for (final T item in other) {
+      if (!chainContains(item)) return false;
+    }
+    return true;
+  }
+
+  /// Copies the items of this node only (not the items of the nodes [below] it)
+  /// into [target], ending right before index [end], and returns the index where
+  /// they start.
+  int fillOwnItemsBefore(List<Object?> target, int end) {
+    final int start = end - length;
+    target.setRange(start, end, this);
+    return start;
+  }
 
   /// Returns a new [Iterator] that allows iterating the items of the [ISet].
   @override
@@ -1165,11 +1273,33 @@ abstract class S<T> implements Iterable<T> {
 
   T? lookup(T element);
 
-  Set<T> difference(Set<T> other);
+  // Note: The set operations below create the result from the items of this
+  // node (with a single `forEach`, which doesn't go through nested iterators),
+  // instead of using the result of the node below it. That's because a node
+  // below may be of a more specific type (like `S<int>` below an `S<int?>`), so
+  // its result could not contain the items of the nodes above it.
 
-  Set<T> intersection(Set<T> other);
+  Set<T> difference(Set<Object?> other) {
+    final Set<T> result = {};
+    iter.forEach((T item) {
+      if (!other.contains(item)) result.add(item);
+    });
+    return result;
+  }
 
-  Set<T> union(Set<T> other);
+  Set<T> intersection(Set<Object?> other) {
+    final Set<T> result = {};
+    iter.forEach((T item) {
+      if (other.contains(item)) result.add(item);
+    });
+    return result;
+  }
+
+  Set<T> union(Set<T> other) {
+    final Set<T> result = {};
+    iter.forEach(result.add);
+    return result..addAll(other);
+  }
 
   @override
   bool every(Predicate<T> test) => iter.every(test);
@@ -1263,4 +1393,50 @@ class InternalsForTestingPurposesISet {
   /// }
   /// ```
   int get counter => iset._counter;
+}
+
+/// Finds an item equal to the [element] in the own items of a node. See [S.chainLookup].
+class _LookupReceiver<T> implements ChainItemsReceiver<T> {
+  final Object? element;
+  bool found = false;
+  T? result;
+
+  _LookupReceiver(this.element);
+
+  @override
+  void receiveList(List<T> list) => _lookup(list);
+
+  @override
+  void receiveItem(T item) {
+    if (item == element) {
+      found = true;
+      result = item;
+    }
+  }
+
+  @override
+  void receiveIterable(Iterable<T> iterable) => _lookup(iterable);
+
+  void _lookup(Iterable<T> items) {
+    if (items is Set<T>) {
+      if (items.contains(element)) {
+        found = true;
+        result = items.lookup(element);
+      }
+    } else if (items is S<T>) {
+      final Object? element = this.element;
+      if (element is T && items.contains(element)) {
+        found = true;
+        result = items.lookup(element);
+      }
+    } else {
+      for (final T item in items) {
+        if (item == element) {
+          found = true;
+          result = item;
+          return;
+        }
+      }
+    }
+  }
 }

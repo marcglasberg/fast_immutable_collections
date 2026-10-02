@@ -2,6 +2,9 @@
 // and Philippe Fanaro https://github.com/psygo
 // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
+import 'dart:collection';
+
+import 'package:fast_immutable_collections/src/iterator/chain_iterator.dart';
 import 'package:meta/meta.dart';
 
 import "imap.dart";
@@ -17,15 +20,17 @@ class MReplace<K, V> extends M<K, V> {
   @override
   bool get isEmpty => false;
 
-  @override
-  Iterable<MapEntry<K, V>> get entries =>
-      _m.entries.map((entry) => (entry.key == _key) ? MapEntry(_key, _value) : entry);
+  // The methods below use the chain members of [M], which don't use
+  // recursion, so that they work for chains of any length.
 
   @override
-  Iterable<K> get keys => _m.keys;
+  Iterable<MapEntry<K, V>> get entries => chainEntries;
 
   @override
-  Iterable<V> get values => entries.map((entry) => entry.value);
+  Iterable<K> get keys => chainKeys;
+
+  @override
+  Iterable<V> get values => chainValues;
 
   /// This may be used to help avoid stack-overflow.
   @protected
@@ -71,16 +76,42 @@ class MReplace<K, V> extends M<K, V> {
   }
 
   @override
-  bool contains(K key, V value) => (key == _key) //
-      ? value == _value
-      : _m.contains(key, value);
+  bool contains(K key, V value) => chainContains(key, value);
 
   @override
-  bool containsValue(V? value) => entries.any((entry) => entry.value == value);
+  bool containsValue(V? value) => chainValues.contains(value);
 
   @override
-  int get length => _m.length;
+  int get length => chainKeys.length;
 
   @override
-  Iterator<MapEntry<K, V>> get iterator => entries.iterator;
+  M<K, V> get below => _m;
+
+  /// Doesn't add any entries. It only replaces the value of an entry below it.
+  @override
+  int fillOwnEntriesBefore(
+      Map<Object?, Object?> map, List<Object?> keys, int end, Map<Object?, Object?> replacements) {
+    replacements.putIfAbsent(_key, () => _value);
+    return end;
+  }
+
+  @override
+  Iterator<MapEntry<K, V>> get iterator => chainEntries.iterator;
+
+  /// Has no entries of its own. It only replaces the value of an entry below it.
+  @override
+  int get ownLength => 0;
+
+  @override
+  void sendOwnEntriesTo(ChainItemsReceiver<Object?> receiver) {}
+
+  @override
+  void sendOwnKeysTo(ChainItemsReceiver<Object?> receiver) {}
+
+  @override
+  void sendOwnValuesTo(ChainItemsReceiver<Object?> receiver) {}
+
+  @override
+  Map<Object?, Object?>? addReplacementTo(Map<Object?, Object?>? replacements) =>
+      (replacements ?? HashMap<Object?, Object?>())..putIfAbsent(_key, () => _value);
 }

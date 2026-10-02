@@ -47,6 +47,7 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
     IList.resetAllConfigurations();
     ISet.resetAllConfigurations();
     IMap.resetAllConfigurations();
+    IMapOfSets.defaultConfig = const ConfigMapOfSets();
   }
 
   /// Global configuration that specifies if the collections should flush
@@ -105,6 +106,10 @@ abstract class ImmutableCollection<C> implements CanBeEmpty {
   /// compare the collection instances themselves, but their internal state.
   /// Comparing the internal state is better, because it's also fast but will
   /// return `true` more often.
+  ///
+  /// Note: The internal state may change when a collection is flushed. So, if only
+  /// one of two collections that share the same internal state is flushed, they
+  /// may no longer be the same.
   bool same(C other);
 
   @override

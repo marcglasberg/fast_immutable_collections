@@ -9,6 +9,7 @@ extension FicIterableOfMapEntryExtension<K, V> on Iterable<MapEntry<K, V>> {
   /// [MapEntry] is **not** [Comparable].
   /// If you need to compare two iterables of [MapEntry] you can do this:
   ///
+  /// ```dart
   /// expect(entries1.asComparableEntries, entries2.asComparableEntries);
   /// ```
   Iterable<Entry<K, V>> get asComparableEntries => map((entry) => entry.asComparableEntry);

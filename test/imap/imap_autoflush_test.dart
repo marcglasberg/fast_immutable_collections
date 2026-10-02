@@ -12,7 +12,7 @@ extension TestExtension on IMap {
 
 void main() {
   //
-  test("Sync auto-flush when the map is already flushed.", () async {
+  test("Sync auto-flush when the map is already flushed.", () {
     ImmutableCollection.resetAllConfigurations();
     IMap.flushFactor = 4;
 
@@ -35,7 +35,7 @@ void main() {
     expect(imap.unlock, {"a": 1, "b": 2, "c": 3, "d": 4});
   });
 
-  test("Sync auto-flush when the map is NOT flushed.", () async {
+  test("Sync auto-flush when the map is NOT flushed.", () {
     ImmutableCollection.resetAllConfigurations();
     IMap.flushFactor = 4;
 
@@ -105,7 +105,7 @@ void main() {
 
   test(
       "Method 'add' makes counter equal to the source map counter, "
-      "plus one.", () async {
+      "plus one.", () {
     ImmutableCollection.resetAllConfigurations();
     IMap.flushFactor = 4;
 
@@ -125,7 +125,7 @@ void main() {
 
   test(
       "Method 'addAll' makes counter equal to "
-      "the larger counter of its source maps, plus one.", () async {
+      "the larger counter of its source maps, plus one.", () {
     ImmutableCollection.resetAllConfigurations();
     IMap.flushFactor = 4;
 

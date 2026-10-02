@@ -14,7 +14,7 @@ extension TestExtension on IList {
 
 void main() {
   //
-  test("Sync auto-flush when the list is already flushed.", () async {
+  test("Sync auto-flush when the list is already flushed.", () {
     ImmutableCollection.resetAllConfigurations();
     IList.flushFactor = 4;
 
@@ -37,7 +37,7 @@ void main() {
     expect(ilist, [1, 2, 3, 4]);
   });
 
-  test("Sync auto-flush when the list is NOT flushed.", () async {
+  test("Sync auto-flush when the list is NOT flushed.", () {
     ImmutableCollection.resetAllConfigurations();
     IList.flushFactor = 4;
 
@@ -106,7 +106,7 @@ void main() {
 
   test(
       "Method 'add' makes counter equal to the source list counter, "
-      "plus one.", () async {
+      "plus one.", () {
     ImmutableCollection.resetAllConfigurations();
     IList.flushFactor = 4;
 
@@ -126,7 +126,7 @@ void main() {
 
   test(
       "Method 'addAll' makes counter equal to "
-      "the larger counter of its source lists, plus one.", () async {
+      "the larger counter of its source lists, plus one.", () {
     ImmutableCollection.resetAllConfigurations();
     IList.flushFactor = 100;
 

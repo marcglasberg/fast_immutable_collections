@@ -54,10 +54,10 @@ class UnmodifiableSetFromISet<T> with SetMixin<T> implements Set<T>, CanBeEmpty 
   bool contains(covariant T? element) => _iSet?.contains(element) ?? _set!.contains(element);
 
   @override
-  T? lookup(covariant T element) =>
-      _iSet != null && _iSet.contains(element) || _set != null && _set.contains(element)
-          ? element
-          : null;
+  T? lookup(covariant T element) {
+    final ISet<T>? iSet = _iSet;
+    return (iSet != null) ? iSet.lookup(element) : _set!.lookup(element);
+  }
 
   @override
   bool remove(covariant Object value) => throw UnsupportedError("Set is unmodifiable.");

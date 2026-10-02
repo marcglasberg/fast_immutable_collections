@@ -786,6 +786,11 @@ void main() {
     expect([10].lock.single, 10);
     expect(() => ilist.single, throwsStateError);
 
+    // Single after addAll.
+    expect(IList<int>([]).addAll([2]).single, 2);
+    expect(IList<int>([1]).addAll(<int>[]).single, 1);
+    expect(() => IList<int>([1]).addAll([2]).single, throwsStateError);
+
     // 2) Flush optimization for length: When length is zero and the underlying _l is not LFlat
     ImmutableCollection.autoFlush = false;
     ilist = [1, 2, 3].lock.addAll([4, 5]).removeAll([1, 2, 3, 4, 5]);
@@ -1602,14 +1607,7 @@ void main() {
 
     // different type
     final Iterable<(String, int)> zippedWithInt = countries.zip([10, 20, 30, 40]);
-    expect(
-        zippedWithInt,
-        IList([
-          ('France', 10),
-          ('Germany', 20),
-          ('Brazil', 30),
-          ('Japan', 40)
-        ]));
+    expect(zippedWithInt, IList([('France', 10), ('Germany', 20), ('Brazil', 30), ('Japan', 40)]));
   });
 
   test("ZipAll with another source replacing with fill method value if available or else null", () {

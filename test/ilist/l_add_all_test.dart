@@ -34,6 +34,11 @@ void main() {
     expect(lAddAll.last, 1);
     expect(() => lAddAll.single, throwsStateError);
     expect(LAddAll(LFlat<int>([]), [1]).single, 1);
+
+    // One item in the list, and one item in the added items.
+    expect(() => LAddAll(LFlat<int>([1]), [2]).single, throwsStateError);
+    expect(LAddAll(LFlat<int>([1]), <int>[]).single, 1);
+    expect(() => LAddAll(LFlat<int>([]), <int>[]).single, throwsStateError);
   });
 
   test("[]", () {

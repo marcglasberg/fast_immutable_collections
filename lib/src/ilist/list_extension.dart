@@ -159,7 +159,7 @@ extension FicListExtension<T> on List<T> {
   /// Split a list, according to a predicate,
   /// removing the list item that satisfies the predicate.
   ///
-  /// ```
+  /// ```dart
   /// [1,2,3,4,5].splitList((v)=>v==2 || v==4) ➜ [[1], [3], [5]]
   /// ```
   ///
@@ -191,7 +191,7 @@ extension FicListExtension<T> on List<T> {
   /// Example: Suppose you have a list with Chapters, Texts and Images.
   /// You can break it into separate chapters, like this:
   ///
-  /// ```
+  /// ```dart
   /// bookInfo.divideList((item) => item is Chapter);
   /// ```
   ///
@@ -199,7 +199,7 @@ extension FicListExtension<T> on List<T> {
   /// this list into 2 lists, one containing `2`, and another containing `4`.
   /// The `4` will be the first item in its part:
   ///
-  /// ```
+  /// ```dart
   /// [1,2,3,4,5].divideList((v)=>v==2 || v==4) ➜ [[1,2,3], [4,5]]
   /// ```
   ///
@@ -242,7 +242,7 @@ extension FicListExtension<T> on List<T> {
   /// Example: Suppose you have a list with Chapters, Texts and Images.
   /// You can break it into chapters, by the chapter's id, like this:
   ///
-  /// ```
+  /// ```dart
   /// bookInfo.divideListAsMap(
   ///         (item) => item is Chapter,
   ///         key: (item) => (item as Chapter).id);
@@ -252,20 +252,20 @@ extension FicListExtension<T> on List<T> {
   /// the following list into 2, one containing `2`, and another containing `4`.
   /// Note `2` and `4` will be the first items in their part:
   ///
-  /// ```
+  /// ```dart
   /// [1,2,3,4,5].divideListAsMap((v)=>v==2 || v==4, (v)=>v) ➜ {2:[2,3], 4:[4,5]}
   /// ```
   ///
   /// However, if we do `includeFirstItems: true`, the number `1` will be included:
   ///
-  /// ```
+  /// ```dart
   /// [1,2,3,4,5].divideListAsMap((v)=>v==2 || v==4, (v)=>v, includeFirstItems: true)
   ///   ➜ {2:[1,2,3], 4:[4,5]}
   /// ```
   ///
   /// If there is no matching item, the result list will be empty:
   ///
-  /// ```
+  /// ```dart
   /// [1,2,3].divideListAsMap((v)=>v==10, (v)=>v) ➜ {}
   /// ```
   ///
@@ -319,13 +319,13 @@ extension FicListExtension<T> on List<T> {
   /// Return a new list, adding a separator between the original list items
   /// (but not before the first and after the last).
   ///
-  /// ```
+  /// ```dart
   /// ["A", "B", "C"].addBetween("|") = ["A", "|", "B", "|", "C"];
   /// ```
   ///
   /// It may be used with widgets:
   ///
-  /// ```
+  /// ```dart
   /// [Container(), Container()].addBetween(SizedBox());
   /// ```
   ///

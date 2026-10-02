@@ -3,6 +3,7 @@
 // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/src/iterator/chain_iterator.dart";
 import "package:fast_immutable_collections/src/iterator/iterator_flat.dart";
 
 import "ilist.dart";
@@ -20,6 +21,19 @@ class LFlat<T> extends L<T> {
 
   @override
   List<T> get getFlushed => _list;
+
+  @override
+  List<T> get unlock => List<T>.of(_list, growable: true);
+
+  @override
+  int fillOwnItemsBefore(List<Object?> target, int end) {
+    final int start = end - _list.length;
+    target.setRange(start, end, _list);
+    return start;
+  }
+
+  @override
+  void sendOwnItemsTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveList(_list);
 
   @override
   Iterator<T> get iterator => IteratorFlat(_list.iterator);

@@ -42,7 +42,7 @@ extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
   //
   /// Similar to [map], but MAY return a non-nullable type.
   ///
-  /// ```
+  /// ```dart
   /// int? f(String? e) => (e == null) ? 0 : e.length;
   ///
   /// List<int?> list1 = ["xxx", "xx", null, "x"].map(f).toList();
@@ -130,7 +130,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// The sum of the values returned by the [mapper] function.
   ///
   /// Examples:
-  /// ```
+  /// ```dart
   /// expect([1, 2, 3, 4, 5].sumBy((e) => e), 15);
   /// expect([1.5, 2.5, 3.3, 4, 5].sumBy((e) => e), 16.3);
   /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 15);
@@ -151,14 +151,13 @@ extension FicIterableExtension<T> on Iterable<T> {
     return result as N;
   }
 
-  /// Returns a zero of type [N]. 
+  /// Returns a zero of type [N].
   N _zeroOf<N extends num>() {
-    // num is a sealed class with only two subclasses: int and double
-    // therefore this function should never throw
+    // num is a sealed class with only two subclasses: int and double.
+    // N may also be num itself, in which case the int 0 is returned.
     return switch (N) {
-      const (int) => 0 as N,
       const (double) => 0.0 as N,
-      _ => throw UnsupportedError("Unsupported type: $N"),
+      _ => 0 as N,
     };
   }
 
@@ -166,7 +165,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// The arithmetic mean is the sum of the elements divided by the number of elements.
   /// If iterable is empty it returns 0.
   /// Examples:
-  /// ```
+  /// ```dart
   /// expect([1, 2, 3, 4, 5].averageBy((e) => e), 3.0);
   /// expect([1.5, 2.5, 3.3, 4, 5].averageBy((e) => e), 3.26);
   /// expect(['a', 'ab', 'abc', 'abcd', 'abcde'].sumBy((e) => e.length), 3.0);
@@ -186,7 +185,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Returns the [item] itself, if it's present in this iterable. Otherwise,
   /// return [orElse]. For example:
   ///
-  /// ```
+  /// ```dart
   /// var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
   /// primes.restrict(14, orElse: -1); // Returns -1.
   /// primes.restrict(7, orElse: -1); // Returns 7.
@@ -301,7 +300,9 @@ extension FicIterableExtension<T> on Iterable<T> {
   ) {
     final List<T> newList = [];
 
-    final Map<dynamic, T> idsPerNewItem = <dynamic, T>{for (final T item in newItems) id(item): item};
+    final Map<dynamic, T> idsPerNewItem = <dynamic, T>{
+      for (final T item in newItems) id(item): item
+    };
 
     // Replace those with the same id.
     for (final T item in this) {
@@ -320,7 +321,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   }
 
   /// Return true if the given [item] is the same (by identity) as the first iterable item.
-  /// If this iterable is empty, always return null.
+  /// If this iterable is empty, always return false.
   /// This is useful for non-indexed loops where you need to know when you have the first item.
   /// For example:
   ///
@@ -334,7 +335,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   bool isFirst(T item) => length > 0 && identical(first, item);
 
   /// Return true if the given [item] is NOT the same (by identity) as the first iterable item.
-  /// If this iterable is empty, always return null.
+  /// If this iterable is empty, always return true.
   /// This is useful for non-indexed loops where you need to know when you don't have the first
   /// item. For example:
   ///
@@ -348,7 +349,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   bool isNotFirst(T item) => !isFirst(item);
 
   /// Return true if the given [item] is the same (by identity) as the last iterable item.
-  /// If this iterable is empty, always return null.
+  /// If this iterable is empty, always return false.
   /// This is useful for non-indexed loops where you need to know when you have the last item.
   /// For example:
   ///
@@ -362,7 +363,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   bool isLast(T item) => length > 0 && identical(last, item);
 
   /// Return true if the given [item] is NOT the same (by identity) as the last iterable item.
-  /// If this iterable is empty, always return null.
+  /// If this iterable is empty, always return true.
   /// This is useful for non-indexed loops where you need to know when you don't have the last
   /// item. For example:
   ///

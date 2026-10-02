@@ -51,7 +51,8 @@ int compareObject<T extends Object>(
   else if (b == null) return (nullsBefore ? 1 : -1);
   if (a is Comparable && b is Comparable) return a.compareTo(b);
   if (a is MapEntry && b is MapEntry)
-    return compareObject(a.key, b.key).if0(compareObject(a.value, b.value));
+    return compareObject(a.key, b.key, nullsBefore: nullsBefore)
+        .if0(compareObject(a.value, b.value, nullsBefore: nullsBefore));
   if (a is bool && b is bool) return a.compareTo(b);
   if (a is Enum && b.runtimeType == a.runtimeType) return a.name.compareTo((b as Enum).name);
   return 0;

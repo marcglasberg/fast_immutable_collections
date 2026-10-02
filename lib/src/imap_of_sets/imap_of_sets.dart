@@ -105,7 +105,7 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
     final ConfigMap configMap = config.asConfigMap;
 
     return (mapOfSets == null)
-        ? empty<K, V>()
+        ? empty<K, V>(config)
         : IMapOfSets._unsafe(
             IMap.fromIterables(
               mapOfSets.keys,
@@ -462,7 +462,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config);
+    return (countRemoved == 0)
+        ? this
+        : IMapOfSets<K, V>._unsafe(IMap.withConfig(map, config.asConfigMap), config);
   }
 
   /// Remove, from the given [key] set, all values that satisfy the given [test].
@@ -521,7 +523,9 @@ class IMapOfSets<K, V> // ignore: must_be_immutable,
 
     if (numberOfRemovedValues != null) numberOfRemovedValues.save(countRemoved);
 
-    return (countRemoved == 0) ? this : IMapOfSets<K, V>._unsafe(map.lock, config);
+    return (countRemoved == 0)
+        ? this
+        : IMapOfSets<K, V>._unsafe(IMap.withConfig(map, config.asConfigMap), config);
   }
 
   /// Removes the [value] from the set of the corresponding [key],

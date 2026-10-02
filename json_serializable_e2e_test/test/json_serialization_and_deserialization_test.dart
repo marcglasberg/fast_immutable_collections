@@ -144,27 +144,18 @@ void main() {
     });
   });
 
+  // Issue #39. See also `imap_keys_test.dart`.
   test('can deserialize IMap where enums are keys', () {
     expect(
-        () => IMapWrapper3.fromJson({
-              'iMap': {
-                'valA': 'b',
-                'valC': 'd',
-              }
-            }).iMap,
-        throwsUnsupportedError);
-
-    // When enum IMap keys are implemented, uncomment this:
-    // expect(
-    //     IMapWrapper3.fromJson({
-    //       'iMap': {
-    //         'valA': 'b',
-    //         'valC': 'd',
-    //       }
-    //     }).iMap,
-    //     IMap({
-    //       TestEnum.valA: 'b',
-    //       TestEnum.valC: 'd',
-    //     }));
+        IMapWrapper3.fromJson({
+          'iMap': {
+            'valA': 'b',
+            'valC': 'd',
+          }
+        }).iMap,
+        IMap({
+          TestEnum.valA: 'b',
+          TestEnum.valC: 'd',
+        }));
   });
 }

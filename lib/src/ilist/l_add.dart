@@ -2,7 +2,7 @@
 // and Philippe Fanaro https://github.com/psygo
 // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
-import "../iterator/iterator_add.dart";
+import "../iterator/chain_iterator.dart";
 import "ilist.dart";
 
 /// First we have the items in [_l] and then [_item].
@@ -18,31 +18,50 @@ class LAdd<T> extends L<T> {
   bool get isEmpty => false;
 
   @override
-  Iterator<T> get iterator => IteratorAdd(_l.iterator, _item);
+  L<T> get below => _l;
 
   @override
-  Iterable<T> get iter => _l.followedBy([_item]);
+  int fillOwnItemsBefore(List<Object?> target, int end) {
+    target[end - 1] = _item;
+    return end - 1;
+  }
 
   @override
-  bool contains(covariant T? element) => _l.contains(element) || _item == element;
-
-  /// Implicitly uniting the list and the item.
-  @override
-  T operator [](int index) => index < 0 || index >= length
-      ? throw RangeError.range(index, 0, length - 1, "index")
-      : index == length - 1
-          ? _item
-          : _l[index];
+  int get ownLength => 1;
 
   @override
-  int get length => _l.length + 1;
+  void sendOwnItemsTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveItem(_item);
+
+  // The methods below use [chainItems], which doesn't use recursion,
+  // so that they work for chains of any length.
 
   @override
-  T get first => _l.isEmpty ? _item : _l.first;
+  Iterator<T> get iterator => chainItems.iterator;
+
+  @override
+  Iterable<T> get iter => chainItems;
+
+  @override
+  List<T> toList({bool growable = true}) => chainItems.toList(growable: growable);
+
+  @override
+  Set<T> toSet() => chainItems.toSet();
+
+  @override
+  bool contains(covariant T? element) => chainItems.contains(element);
+
+  @override
+  T operator [](int index) => chainItems.elementAt(index);
+
+  @override
+  int get length => chainItems.length;
+
+  @override
+  T get first => chainItems.first;
 
   @override
   T get last => _item;
 
   @override
-  T get single => _l.isEmpty ? _item : throw StateError("Too many elements");
+  T get single => chainItems.single;
 }

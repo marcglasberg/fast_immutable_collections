@@ -5,6 +5,7 @@
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import 'package:fast_immutable_collections/src/iset/iset.dart';
+import 'package:fast_immutable_collections/src/iterator/chain_iterator.dart';
 
 class SFlat<T> extends S<T> {
   final ListSet<T> _set;
@@ -20,6 +21,28 @@ class SFlat<T> extends S<T> {
 
   @override
   ListSet<T> getFlushed(ConfigSet? config) => _set;
+
+  /// Copies the list of the [ListSet] directly, which is faster than iterating it.
+  @override
+  List<T> toList({bool growable = true}) => _set.toList(growable: growable);
+
+  /// Reading a [ListSet] by index is faster than using its iterator. However,
+  /// a [ListSetView] reads by index in O(n), so we use its iterator instead.
+  @override
+  void sendOwnItemsTo(ChainItemsReceiver<Object?> receiver) {
+    final ListSet<T> set = _set;
+    if (set is ListSetView<T>)
+      receiver.receiveIterable(set);
+    else
+      receiver.receiveList(set);
+  }
+
+  @override
+  int fillOwnItemsBefore(List<Object?> target, int end) {
+    final int start = end - _set.length;
+    target.setRange(start, end, _set);
+    return start;
+  }
 
   @override
   Iterator<T> get iterator => _set.iterator;
@@ -43,10 +66,12 @@ class SFlat<T> extends S<T> {
   T? lookup(Object? object) => _set.lookup(object);
 
   @override
-  Set<T> difference(Set<T> other) => _set.difference(other);
+  Set<T> difference(Set<Object?> other) =>
+      (other is Set<T?>) ? _set.difference(other) : super.difference(other);
 
   @override
-  Set<T> intersection(Set<T> other) => _set.intersection(other);
+  Set<T> intersection(Set<Object?> other) =>
+      (other is Set<T?>) ? _set.intersection(other) : super.intersection(other);
 
   @override
   Set<T> union(Set<T> other) => _set.union(other);

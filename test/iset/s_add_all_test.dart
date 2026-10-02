@@ -26,6 +26,33 @@ void main() {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.isEmpty, isFalse);
     expect(sAddAll.isNotEmpty, isTrue);
+
+    // Empty set and empty items.
+    final SAddAll<int> empty = SAddAll(SFlat<int>.unsafe({}), <int>{});
+    expect(empty.isEmpty, isTrue);
+    expect(empty.isNotEmpty, isFalse);
+
+    // Only one of them is empty.
+    expect(SAddAll(SFlat<int>.unsafe({}), {1}).isEmpty, isFalse);
+    expect(SAddAll(SFlat<int>.unsafe({1}), <int>{}).isEmpty, isFalse);
+  });
+
+  test("first | last | single, when the set or the items are empty", () {
+    final SAddAll<int> empty = SAddAll(SFlat<int>.unsafe({}), <int>{});
+    expect(SAdd(empty, 1).first, 1);
+    expect(SAdd(empty, 1).last, 1);
+    expect(SAdd(empty, 1).single, 1);
+
+    expect(SAddAll(SFlat<int>.unsafe({}), {1, 2}).first, 1);
+    expect(SAddAll(SFlat<int>.unsafe({1, 2}), <int>{}).last, 2);
+  });
+
+  test("single", () {
+    expect(SAddAll(SFlat<int>.unsafe({}), {1}).single, 1);
+    expect(SAddAll(SFlat<int>.unsafe({1}), <int>{}).single, 1);
+    expect(() => SAddAll(SFlat<int>.unsafe({1}), {2}).single, throwsStateError);
+    expect(() => SAddAll(SFlat<int>.unsafe({}), {1, 2}).single, throwsStateError);
+    expect(() => SAddAll(SFlat<int>.unsafe({}), <int>{}).single, throwsStateError);
   });
 
   test("length, first, last", () {
@@ -117,6 +144,10 @@ void main() {
   test("anyItem", () {
     final SAddAll<int> sAddAll = SAddAll(SFlat<int>.unsafe({1, 2}), {3, 4, 5});
     expect(sAddAll.anyItem, isA<int>());
+
+    // When the set below is empty, the item must come from the added items.
+    expect(SAddAll(SFlat<int>.unsafe({}), {3}).anyItem, 3);
+    expect(SAddAll(SAddAll(SFlat<int>.unsafe({}), <int>{}), {3}).anyItem, 3);
   });
 
   test("unsafe", () {

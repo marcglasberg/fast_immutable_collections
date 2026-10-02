@@ -780,6 +780,21 @@ void main() {
     }.lock.add([100, 101]);
 
     expect(iset.anyItem.isEmpty, isFalse);
+
+    // Adding items to an empty set.
+    expect(ISet<int>([]).addAll([1]).anyItem, 1);
+    expect(ISet<int>().addAll([1, 2]).anyItem, isIn([1, 2]));
+    expect(ISet<int>([1]).remove(1).addAll([2]).anyItem, 2);
+  });
+
+  test("single", () {
+    expect({10}.lock.single, 10);
+    expect(() => {1, 2}.lock.single, throwsStateError);
+
+    // Single after addAll.
+    expect(ISet<int>({}).addAll({2}).single, 2);
+    expect(ISet<int>({1}).addAll({1}).single, 1);
+    expect(() => ISet<int>({1}).addAll({2}).single, throwsStateError);
   });
 
   test("firstOrNull", () {

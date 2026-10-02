@@ -8,6 +8,7 @@ import "dart:math";
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:fast_immutable_collections/src/base/hash.dart";
+import "package:fast_immutable_collections/src/iterator/chain_iterator.dart";
 import "package:meta/meta.dart";
 
 import "l_add.dart";
@@ -82,9 +83,8 @@ class IListEmpty<T> // ignore: must_be_immutable
   /// according to operator ==.
   @override
   int? get _hashCode {
-    return isDeepEquals
-        ? hash2(const ListEquality<dynamic>().hash([]), config.hashCode)
-        : hash2(identityHashCode(_l), config.hashCode);
+    // All empty collections with the same config are equal, also when comparing by identity.
+    return hash2(const ListEquality<dynamic>().hash([]), config.hashCode);
   }
 
   @override
@@ -146,9 +146,10 @@ class IListConst<T> // ignore: must_be_immutable
   /// according to operator ==.
   @override
   int? get _hashCode {
+    // When comparing by identity, == compares the collection objects themselves.
     return isDeepEquals
         ? hash2(const ListEquality<dynamic>().hash(_list), config.hashCode)
-        : hash2(identityHashCode(_l), config.hashCode);
+        : identityHashCode(this);
   }
 
   @override
@@ -309,7 +310,7 @@ abstract class IList<T> // ignore: must_be_immutable
 
     final hashCode = isDeepEquals
         ? hash2((flush._l as LFlat<T>).deepListHashcode(), config.hashCode)
-        : hash2(identityHashCode(_l), config.hashCode);
+        : identityHashCode(this);
 
     if (config.cacheHashCode) _hashCode = hashCode;
 
@@ -495,7 +496,7 @@ abstract class IList<T> // ignore: must_be_immutable
     if (ImmutableCollection.isConfigLocked)
       throw StateError("Can't change the configuration  of immutable collections.");
     IList.flushFactor = _defaultFlushFactor;
-    IList.defaultConfig = _defaultConfig;
+    IList.defaultConfig = const ConfigList();
   }
 
   /// Apply Op on previous state of base and return all results
@@ -702,18 +703,17 @@ abstract class IList<T> // ignore: must_be_immutable
   /// large lists, since it compares each item, one by one.
   ///
   /// - If [isDeepEquals] configuration is `false`:
-  /// Will return `true` only if the lists internals are the same instances
-  /// (comparing by identity). This will be fast even for very large lists,
+  /// Will return `true` only if the lists are the same object, as in
+  /// `identical(list1, list2)`. This will be fast even for very large lists,
   /// since it doesn't compare each item.
   ///
-  /// Note: This is not the same as `identical(list1, list2)` since it doesn't
-  /// compare the lists themselves, but their internal state. Comparing the
-  /// internal state is better, because it will return `true` more often.
+  /// Note: To check if two lists share the same internal state, use [same].
   ///
   @override
   bool operator ==(Object other) => (other is IList) && isDeepEquals
       ? equalItemsAndConfig(other)
-      : (other is IList<T>) && same(other);
+      // Compares the IList objects themselves (not their internals, which change when flushed).
+      : identical(this, other);
 
   /// Will return `true` only if the [IList] items are equal to the iterable items,
   /// and in the same order. This may be slow for very large lists, since it
@@ -770,8 +770,15 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Note: We use the CACHED [hashCode]. If any of the [hashCode] is `null` it
   /// means we don't have this information yet, and we don't calculate it.
   bool _isUnequalByHashCode(IList? other) {
-    return (other == null) ||
-        (_hashCode != null && other._hashCode != null && _hashCode != other._hashCode);
+    if (other == null) return true;
+
+    // The hashCode also depends on the config, and when comparing by identity it
+    // depends on the identity of the internals. So it can only be used to compare
+    // the items when both collections compare by equality, with the same config.
+    if (!isDeepEquals || config != other.config) return false;
+
+    final int? hashCode1 = _hashCode, hashCode2 = other._hashCode;
+    return hashCode1 != null && hashCode2 != null && hashCode1 != hashCode2;
   }
 
   /// Will return `true` if the lists internals are the same instances
@@ -785,6 +792,10 @@ abstract class IList<T> // ignore: must_be_immutable
   /// Note: This is not the same as `identical(list1, list2)` since it doesn't
   /// compare the lists themselves, but their internal state. Comparing the
   /// internal state is better, because it will return `true` more often.
+  ///
+  /// Note: The internal state changes when a collection is flushed. So, if only
+  /// one of two collections that share the same internal state is flushed, they
+  /// will no longer be the same.
   @override
   bool same(IList<T>? other) =>
       (other != null) && identical(_l, other._l) && (config == other.config);
@@ -819,7 +830,7 @@ abstract class IList<T> // ignore: must_be_immutable
   /// (thus extending the [length] by the [length] of items).
   @useResult
   IList<T> addAll(Iterable<T> items) {
-    if (_l is L<Never>) return IListImpl.unsafe(_l.cast<T>().toList(), config: config);
+    if (_l is L<Never>) return IListImpl._unsafeFromList(_l.cast<T>().toList(), config: config);
     final result = IList<T>._unsafe(_l.addAll(items), config: config);
 
     // A list created with `addAll` has a larger counter than both its source
@@ -864,8 +875,10 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   @useResult
   IList<T> remove(T item) {
-    final L<T> result = _l.remove(item);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    // Note: Reads `_l` only once, since const lists create a new `_l` each time.
+    final L<T> l = _l;
+    final L<T> result = l.remove(item);
+    return identical(result, l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of all [items] from this list.
@@ -875,8 +888,9 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   @useResult
   IList<T> removeAll(Iterable<T?> items) {
-    final L<T> result = _l.removeAll(items);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    final L<T> l = _l;
+    final L<T> result = l.removeAll(items);
+    return identical(result, l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all occurrences of [item] from this list.
@@ -891,8 +905,9 @@ abstract class IList<T> // ignore: must_be_immutable
   ///
   @useResult
   IList<T> removeMany(T item) {
-    final L<T> result = _l.removeMany(item);
-    return identical(result, _l) ? this : IList<T>._unsafe(result, config: config);
+    final L<T> l = _l;
+    final L<T> result = l.removeMany(item);
+    return identical(result, l) ? this : IList<T>._unsafe(result, config: config);
   }
 
   /// Removes all nulls from this list.
@@ -1964,7 +1979,10 @@ abstract class IList<T> // ignore: must_be_immutable
   }
 }
 
-abstract class L<T> implements Iterable<T> {
+void _sendOwnItemsOfL(ChainNode node, ChainItemsReceiver<Object?> receiver) =>
+    (node as L<Object?>).sendOwnItemsTo(receiver);
+
+abstract class L<T> implements Iterable<T>, ChainNode {
   //
 
   /// The [L] class provides the default fallback methods of `Iterable`, but
@@ -1982,7 +2000,99 @@ abstract class L<T> implements Iterable<T> {
   }
 
   /// Returns a regular Dart (*mutable*, `growable`) List.
-  List<T> get unlock => List<T>.of(this, growable: true);
+  ///
+  /// Lists created by `add` and `addAll` are chains of nodes, each one pointing
+  /// to the node [below] it. Iterating such a chain is slow, because each item
+  /// goes through the iterators of all the nodes above it. Instead, we create
+  /// the list with its final length, and then fill it from the end, while
+  /// walking down the chain.
+  List<T> get unlock {
+    if (below == null && _flushed == null) return List<T>.of(this, growable: true);
+
+    final int length = this.length;
+    if (length == 0) return <T>[];
+
+    // The base is the first node that was already flushed, or that has no node below it.
+    L<T> base = this;
+    while (base._flushed == null) {
+      final L<T>? next = base.below;
+      if (next == null) break;
+      base = next;
+    }
+    final List<T>? flushed = base._flushed;
+    final int baseLength = flushed?.length ?? base.length;
+
+    // Any item works as the initial value, since all those positions are overwritten.
+    final T filler = last;
+
+    // When most items are in the base, it's faster to copy the base directly
+    // and then grow it. Otherwise, it's faster to create the whole list at once.
+    if (baseLength >= length - baseLength) {
+      // Note: The base may have a more specific type (like `int` for `int?`),
+      // so we copy it into a list of type T.
+      final List<T> result = List<T>.of(base.getFlushed, growable: true);
+      if (length > baseLength) result.addAll(List<T>.filled(length - baseLength, filler));
+
+      int end = length;
+      for (L<T> node = this; !identical(node, base); node = node.below!) {
+        end = node.fillOwnItemsBefore(result, end);
+      }
+      return result;
+    }
+    //
+    else {
+      final List<T> result = List<T>.filled(length, filler, growable: true);
+      fillBefore(result, length);
+      return result;
+    }
+  }
+
+  /// Copies the items of this list into [target], ending right before index
+  /// [end], and returns the index where they start.
+  int fillBefore(List<Object?> target, int end) {
+    L<T>? node = this;
+    while (node != null) {
+      // If a node was already flushed, we copy its flushed list and stop.
+      final List<T>? flushed = node._flushed;
+      if (flushed != null) {
+        final int start = end - flushed.length;
+        target.setRange(start, end, flushed);
+        return start;
+      }
+      end = node.fillOwnItemsBefore(target, end);
+      node = node.below;
+    }
+    return end;
+  }
+
+  /// The node below this one, in a chain of nodes created by `add` and `addAll`.
+  /// Returns `null` if there is no node below this one.
+  @override
+  L<T>? get below => null;
+
+  /// The number of items of this node only (not counting the nodes [below] it).
+  /// By default, all the items, which is correct for the bottom node of a chain.
+  @override
+  int get ownLength => length;
+
+  /// Sends the items of this node only (not counting the nodes [below] it) to
+  /// the [receiver]. By default, all the items, which is correct for the bottom
+  /// node of a chain.
+  void sendOwnItemsTo(ChainItemsReceiver<Object?> receiver) => receiver.receiveIterable(this);
+
+  /// The items of this node and of the nodes [below] it. The nodes of a chain
+  /// (like [LAdd] and [LAddAll]) use it to implement their methods without
+  /// recursion, so that they work for chains of any length.
+  ChainIterable<T> get chainItems => ChainIterable<T>(this, _sendOwnItemsOfL);
+
+  /// Copies the items of this node only (not the items of the nodes [below] it)
+  /// into [target], ending right before index [end], and returns the index where
+  /// they start.
+  int fillOwnItemsBefore(List<Object?> target, int end) {
+    final int start = end - length;
+    target.setRange(start, end, this);
+    return start;
+  }
 
   /// Returns a new `Iterator` that allows iterating the items of the [IList].
   @override
@@ -2183,7 +2293,6 @@ class InternalsForTestingPurposesIList {
 }
 
 extension IList2dExtension<T> on IList<IList<T>> {
-
   /// For a list of lists like this:
   ///
   /// ```dart
