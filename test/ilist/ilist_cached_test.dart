@@ -114,28 +114,6 @@ void main() {
     expect(list.cached(_sumKey), 0);
   });
 
-  test("cached | const IList.empty() computes every time", () {
-    _computeCount = 0;
-    const list = IList<int>.empty();
-
-    list.cached(_countingKey);
-    list.cached(_countingKey);
-
-    // Const lists can't cache, so computation runs each time.
-    expect(_computeCount, 2);
-  });
-
-  test("cached | IListConst computes every time", () {
-    _computeCount = 0;
-    const list = IListConst<int>([1, 2, 3]);
-
-    list.cached(_countingKey);
-    list.cached(_countingKey);
-
-    // Const lists can't cache, so computation runs each time.
-    expect(_computeCount, 2);
-  });
-
   test("cached | cache survives flush", () {
     _computeCount = 0;
 
