@@ -1,6 +1,5 @@
 
 [![Pub popularity](https://badgen.net/pub/popularity/fast_immutable_collections)](https://pub.dev/packages/fast_immutable_collections)
-<a href="https://codecov.io/gh/marcglasberg/fast_immutable_collections/"><img src="https://codecov.io/gh/marcglasberg/fast_immutable_collections/branch/master/graphs/badge.svg" alt="Codecov.io Coverage" /></a>
 [![Pub Version](https://img.shields.io/pub/v/fast_immutable_collections?style=flat-square&logo=dart)](https://pub.dev/packages/fast_immutable_collections)
 [![GitHub stars](https://img.shields.io/github/stars/marcglasberg/fast_immutable_collections?style=social)](https://github.com/marcglasberg/fast_immutable_collections)
 ![Code Climate issues](https://img.shields.io/github/issues/marcglasberg/fast_immutable_collections?style=flat-square)
