@@ -43,4 +43,5 @@ jobs:
         with:
           files: lcov.info
           disable_search: true
+          disable_file_fixes: true
           fail_ci_if_error: true
