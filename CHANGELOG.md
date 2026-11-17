@@ -1,8 +1,8 @@
 Sponsored by [MyText.ai](https://mytext.ai)
 
-[![](./example/SponsoredByMyTextAi.png)](https://mytext.ai)
+[![](./example/SponsoredByMyTextAi.jpg)](https://mytext.ai)
 
-## 12.0.0
+## 12.0.1
 
 * **Breaking change:** `IList`, `ISet` and `IMap` that compare by identity
   (`isDeepEquals: false` in the constructor) now compare the collection objects
